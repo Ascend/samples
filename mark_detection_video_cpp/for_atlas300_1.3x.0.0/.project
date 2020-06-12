@@ -1,0 +1,8 @@
+{
+  "type": "AscendApp",
+  "project_type": "Custom",
+  "project_desc": "",
+  "target": "EP",
+  "target_id": "EP",
+  "ddk_version": "1.32.0.B080"
+}
