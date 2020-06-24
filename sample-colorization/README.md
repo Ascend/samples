@@ -11,15 +11,13 @@
 
 1.  <a name="zh-cn_topic_0228757084_section8534138124114"></a>获取源码包。
 
-    1. 下载压缩包方式获取。
-
-        将 **https://gitee.com/chen68/colorization_c7x(要更换)** 仓中的代码下载至Ubuntu服务器的任意目录。例如代码存放路径为：$HOME/AscendProjects/sample-colorization。
-
-    2. 命令行使用git命令方式获取。
-
-        在命令行中：$HOME/AscendProjects目录下执行以下命令下载代码。
-
-        **git clone https://gitee.com/chen68/colorization_c7x.git(要更换)**
+    **cd $HOME/AscendProjects**  
+    - centos系统：  
+    wget
+    - ubuntu系统：  
+    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/ubuntu/sample-classification.zip** 
+ 
+    **unzip sample-classification.zip**
     
 2.  <a name="zh-cn_topic_0219108795_li2074865610364"></a>获取此应用中所需要的原始网络模型。
 
@@ -66,8 +64,11 @@
 **注：服务器上已安装opencv库和ffmpeg库可跳过此步骤。**  
     
 
-- 安装opencv和ffmpeg      
-  请参考 **https://gitee.com/atlasdevelop/c7x_samples/blob/master/Ai1_sample/sample-colorization/INSTALL_OPENCV.md(要更换)**
+- 安装opencv和ffmpeg  
+    - centos系统：  
+    请参考 **https://gitee.com/ascend/common/blob/master/centos_install_opencv/CENTOS_INSTALL_OPENCV.md**  
+    - ubuntu系统：  
+    请参考 **https://gitee.com/ascend/common/blob/master/ubuntu_install_opencv/UBUNTU_INSTALL_OPENCV.md**
 
 ## 编译<a name="zh-cn_topic_0219108795_section3723145213347"></a>
 
