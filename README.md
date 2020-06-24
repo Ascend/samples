@@ -1,14 +1,15 @@
-# tools
+# sample
 
 #### 介绍
 
-Ascend tools，请根据自己的需要进入对应文件夹获取工具，或者点击下面的说明链接选择需要的工具进行使用。
+Ascend sample，请根据自己的需要进入对应文件夹获取应用，或者点击下面的说明链接选择需要的应用。
 
-#### 使用说明
+#### 链接地址
 
-1.  [AMEXEC](https://gitee.com/ascend/tools/tree/master/AMEXEC)
+1.  mark_detection_video_cpp：c++版本的口罩识别样例
+[](https://gitee.com/ascend/samples/tree/master/mark_detection_video_cpp)
 
-    **模型推理工具**:输入.om模型和模型所需要的输入bin文件，输出模型的输出数据文件。
+
 
 2.  [img2bin](https://gitee.com/ascend/tools/tree/master/img2bin)
 
