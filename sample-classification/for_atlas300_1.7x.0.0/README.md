@@ -12,7 +12,7 @@
 
     **cd $HOME/AscendProjects**  
     - centos系统：  
-    wget
+    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/centos/sample-classification.zip**
     - ubuntu系统：  
     **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/ubuntu/sample-classification.zip** 
  
