@@ -3,14 +3,6 @@
 #  分类网络应用（C++）<a name="ZH-CN_TOPIC_0219122211"></a>
 
 本应用支持运行在AI云上加速环境(Atlas300)， 实现了googlenet网络的推理功能并输出带有推理结果标签的图片。 
-## 前提条件<a name="zh-cn_topic_0228461856_section137245294533"></a>
-
-部署此Sample前，需要准备好以下环境：
-
--   在开发环境与运行环境合设场景下，完成所有软件包的安装。
-    - centos aarch64系统参考： 
-    - ubuntu x86系统参考：  
-        https://gitee.com/ascend/common/blob/master/c7x_env_install_doc/AI加速型服务器上搭建C72环境指导书.docx
 
 ## 软件准备<a name="zh-cn_topic_0219108795_section181111827718"></a>
 
