@@ -11,15 +11,14 @@
 
 1.  <a name="zh-cn_topic_0228757084_section8534138124114"></a>获取源码包。
 
-    1. 下载压缩包方式获取。
-
-        将 **https://gitee.com/chen68/colorization_c7x(要更换)** 仓中的代码下载至Ubuntu服务器的任意目录。例如代码存放路径为：$HOME/AscendProjects/sample-classification。
-
-    2. 命令行使用git命令方式获取。
-
-        在命令行中：$HOME/AscendProjects目录下执行以下命令下载代码。
-
-        **git clone https://gitee.com/chen68/colorization_c7x.git(要更换)**
+    **cd $HOME/AscendProjects**  
+    - centos系统：  
+    wget
+    - ubuntu系统：  
+    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/ubuntu/sample-classification.zip** 
+ 
+    **unzip sample-classification.zip**
+    
     
 2.  <a name="zh-cn_topic_0219108795_li2074865610364"></a>获取此应用中所需要的原始网络模型。
 
