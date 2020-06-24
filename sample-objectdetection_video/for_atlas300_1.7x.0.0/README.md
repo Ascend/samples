@@ -14,7 +14,7 @@
 
     **cd $HOME/AscendProjects**  
     - centos系统：  
-    wget
+    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/centos/sample-objectdetection_video.zip**
     - ubuntu系统：  
     **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/ubuntu/sample-objectdetection_video.zip** 
  
@@ -56,7 +56,16 @@
   2.  切换到root用户。      
 
       **su root**  
-  3.  编译并安装PresentAgent。    
+  3.  安装tornado包。  
+      **python3.7.5 pip install tornado==5.1.0 -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com --user**  
+  4.  安装protobuf。  
+      **cd $HOME/Downloads/common/protobuf-3.8.0/**   
+      **bash configure**  
+      **make**  
+      **make install**  
+      **ldconfig**  
+        
+  5.  编译并安装PresentAgent。    
 
       **cd $HOME/Downloads/common/presentagent/**   
       **make**  
