@@ -70,8 +70,11 @@
 **注：服务器上已安装opencv库和ffmpeg库可跳过此步骤。**  
     
 
-- 安装opencv和ffmpeg      
-  请参考 **https://gitee.com/atlasdevelop/c7x_samples/blob/master/Ai1_sample/sample-colorization/INSTALL_OPENCV.md(要更换)**
+- 安装opencv和ffmpeg  
+    - centos系统：  
+    请参考 **https://gitee.com/ascend/common/blob/master/centos_install_opencv/CENTOS_INSTALL_OPENCV.md**  
+    - ubuntu系统：  
+    请参考 **https://gitee.com/ascend/common/blob/master/ubuntu_install_opencv/UBUNTU_INSTALL_OPENCV.md**
 
 ## 编译<a name="zh-cn_topic_0219108795_section3723145213347"></a>
 
