@@ -116,7 +116,6 @@
     - 作业日志路径：选择一个空的OBS路径，用来存储作业训练日志。如/modelarts-course/mask_detection_500/log/，该路径需要自己创建。
 
     ![](imgs/create_train2.png)
-    ![](imgs/create_train3.png)
 
     - 资源池：公共资源池
     - 类型：GPU
