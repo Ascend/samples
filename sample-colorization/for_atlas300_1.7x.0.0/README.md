@@ -15,9 +15,9 @@
     - centos系统：  
     wget
     - ubuntu系统：  
-    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/ubuntu/sample-classification.zip** 
+    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/ubuntu/sample-colorization.zip** 
  
-    **unzip sample-classification.zip**
+    **unzip sample-colorization.zip**
     
 2.  <a name="zh-cn_topic_0219108795_li2074865610364"></a>获取此应用中所需要的原始网络模型。
 
