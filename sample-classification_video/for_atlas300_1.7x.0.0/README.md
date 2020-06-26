@@ -112,7 +112,6 @@
 
      >![](public_sys-resources/icon-note.gif) **说明：**   
             **1.请将/home/HwHiAiUser/Ascend替换为ACLlib标准形态安装包的实际安装路径。**  
-
             **2.注意LD\_LIBRARY_PATH环境变量相较于官网案例增加了\\$HOME/ascend_ddk/host/lib，如果不加则运行时会报错。** 
     
     输入:wq!保存退出。
