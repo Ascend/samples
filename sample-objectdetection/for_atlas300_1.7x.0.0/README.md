@@ -14,9 +14,9 @@
 
     **cd $HOME/AscendProjects**  
     - centos系统：  
-    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/centos/sample-colorization.zip**
+    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/centos/sample-objectdetection_video.zip**
     - ubuntu系统：  
-    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/ubuntu/sample-objectdetection.zip** 
+    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/ubuntu/sample-objectdetection_video.zip** 
  
     **unzip sample-objectdetection.zip**
     
