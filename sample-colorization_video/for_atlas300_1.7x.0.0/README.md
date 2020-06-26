@@ -4,6 +4,8 @@
 
 本应用支持运行在AI云上加速环境(Atlas300)，实现了对黑白图像自动上色的功能。
 
+**注：如果centos中无法使用wget，请手动下载包后传入centos中**
+
 
 ## 软件准备<a name="zh-cn_topic_0219108795_section181111827718"></a>
 
@@ -87,7 +89,7 @@
         
   5.  编译并安装PresentAgent。    
 
-      **cd $HOME/Downloads/common/presentagent/**   
+      **cd $HOME/Downloads/common/presenteragent/**   
       **make**  
       **make install**
 
@@ -110,9 +112,9 @@
      **export LD\_LIBRARY_PATH=\\$DDK\_PATH/acllib/lib64:/usr/local/Ascend/add-ons:\\$HOME/ascend_ddk/host/lib:\\$DDK_PATH/atc/lib64** 
 
      >![](public_sys-resources/icon-note.gif) **说明：**   
-            **请将/home/HwHiAiUser/Ascend替换为ACLlib标准形态安装包的实际安装路径。** 
+            **1.请将/home/HwHiAiUser/Ascend替换为ACLlib标准形态安装包的实际安装路径。**  
+            **2.注意LD\_LIBRARY_PATH环境变量相较于官网案例增加了\\$HOME/ascend_ddk/host/lib，如果不加则运行时会报错。**  
     
-
     输入:wq!保存退出。
 
     执行如下命令使环境变量生效。
