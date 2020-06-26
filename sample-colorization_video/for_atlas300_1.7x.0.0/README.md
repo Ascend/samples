@@ -81,6 +81,7 @@
   3.  安装tornado包。  
       **python3.7.5 pip install tornado==5.1.0 -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com --user**  
   4.  安装protobuf。  
+      **unzip $HOME/Downloads/common/protobuf-3.8.0.zip** 
       **cd $HOME/Downloads/common/protobuf-3.8.0/**   
       **bash configure**  
       **make**  
