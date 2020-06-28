@@ -14,11 +14,7 @@
 1.  <a name="zh-cn_topic_0228757084_section8534138124114"></a>获取源码包。
 
     **cd $HOME/AscendProjects**  
-    - centos系统：  
-    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/centos/sample-objectdetection_video.zip**
-    - ubuntu系统：  
-    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/ubuntu/sample-objectdetection_video.zip** 
- 
+    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/ubuntu/sample-objectdetection_video.zip**   
     **unzip sample-objectdetection_video.zip**
     
 2.  <a name="zh-cn_topic_0219108795_li2074865610364"></a>获取此应用中所需要的原始网络模型。    
@@ -60,8 +56,10 @@
   3.  安装tornado包。  
       **python3.7.5 pip install tornado==5.1.0 -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com --user**  
   4.  安装protobuf。  
-      **unzip $HOME/Downloads/common/protobuf-3.8.0.zip**   
-      **cd $HOME/Downloads/common/protobuf-3.8.0/**   
+      **git clone https://gitee.com/mirrors/protobufsource.git protobuf**   
+      **cd protobuf**   
+      **git submodule update --init --recursive**  
+      **./autogen.sh**   
       **bash configure**  
       **make**  
       **make install**  
