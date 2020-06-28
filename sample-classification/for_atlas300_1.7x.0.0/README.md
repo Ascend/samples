@@ -13,11 +13,7 @@
 1.  <a name="zh-cn_topic_0228757084_section8534138124114"></a>获取源码包。
 
     **cd $HOME/AscendProjects**  
-    - centos系统：  
-    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/centos/sample-classification.zip**
-    - ubuntu系统：  
-    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/ubuntu/sample-classification.zip** 
- 
+    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/ubuntu/sample-classification.zip**   
     **unzip sample-classification.zip**
     
     
