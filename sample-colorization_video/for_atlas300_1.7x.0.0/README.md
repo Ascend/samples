@@ -76,7 +76,12 @@
       **su root**  
   3.  安装tornado包。  
       **python3.7.5 pip install tornado==5.1.0 -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com --user**  
-  4.  安装protobuf。  
+  4.  安装autoconf、automake、libtool。
+      - centos  
+        **yum install autoconf automake libtool**  
+      - ubuntu  
+        **apt-get install autoconf automake libtool**  
+  5.  安装protobuf。  
       **git clone https://gitee.com/mirrors/protobufsource.git protobuf**   
       **cd protobuf**   
       **git submodule update --init --recursive**  
@@ -84,9 +89,9 @@
       **bash configure**  
       **make**  
       **make install**  
-      **ldconfig**   
+      **ldconfig**  
         
-  5.  编译并安装PresentAgent。    
+  6.  编译并安装PresentAgent。    
 
       **cd $HOME/Downloads/common/presenteragent/**   
       **make**  
