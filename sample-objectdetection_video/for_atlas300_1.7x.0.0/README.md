@@ -4,7 +4,6 @@
 
 本应用支持运行在AI云上加速环境(Atlas300)，实现了对yolov3目标检测网络的推理功能。 
 
-**注：如果centos中无法使用wget，请手动下载包后传入centos中**
 
 ## 软件准备<a name="zh-cn_topic_0219108795_section181111827718"></a>
 
