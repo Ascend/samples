@@ -16,7 +16,7 @@
 >  **curl -OL https://c7xcode.obs.myhuaweicloud.com/DVPP-sample/vdec.zip** 
 >- 如果curl也下载失败，可复制下载链接到浏览器，手动上传至服务器。
 
-- 
+
 
 ### 编译代码
 
