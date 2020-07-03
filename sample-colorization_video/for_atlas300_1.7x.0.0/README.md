@@ -188,7 +188,7 @@
     **chmod +x main**   
 
 3.  运行可执行文件。  
-    **./main  ../data/heibai.mp4**
+    **./main  ../data/black-white_video.mp4**
 
 4.  查看运行结果。 
 
