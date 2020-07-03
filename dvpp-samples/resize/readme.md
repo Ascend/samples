@@ -40,4 +40,4 @@
 
 ### 查看结果
 
-1、out目录有一个output.yuv他是根据resize的宽度高度生成的yuv420文件，可以用工具转成jpg查看。
+1、out目录有一个output.yuv,他是根据resize的宽度高度生成的yuv420文件。
