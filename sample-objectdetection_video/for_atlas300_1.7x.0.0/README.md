@@ -167,7 +167,7 @@
     **chmod +x main**   
 
 3.  运行可执行文件。  
-    **./main  ../data/tbhdqx128046m.h265**
+    **./main  ../data/person.mp4**
 
 4.  查看运行结果。 
 
