@@ -41,7 +41,8 @@
 
 **bash runcropandpaste.sh**
 
-注意：执行时可能会报：No module named  ‘PIL’。是因为缺少pillow模块。
+注意：执行时可能会报：No module named  ‘PIL’。是因为缺少pillow模块。  
+
 **pip install pillow**
 
 安装pillow时如果报错：ERROR setup.py install for pillow ...error...等一长串可以执行一下代码安装依赖
@@ -50,8 +51,10 @@
 
 **sudo yum install zlib-devel**
 
-**sudo yum install libjpeg-turbo-devel**
-再执行安装命令**pip install pillow**
+**sudo yum install libjpeg-turbo-devel**  
+
+再执行安装命令  
+**pip install pillow**
 
 ### 查看结果
 
