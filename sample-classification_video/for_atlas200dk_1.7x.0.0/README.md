@@ -86,11 +86,11 @@
     ![](figures/打开classification_video工程.png "打开classification_video工程")
 
 2.  修改Presenter Server的ip。  
-    -  将Script/presentserver/display/config/config.conf中的presenter_server_ip修改为Mind Studio所在Ubuntu服务器的虚拟网卡的ip地址，如[图 presenter_server_ip](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig1110624110)所示。
+    -  将**Script/presentserver/display/config/config.conf**中的**presenter_server_ip**修改为Mind Studio所在Ubuntu服务器的虚拟网卡的ip地址，如[图 presenter_server_ip](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig1110624110)所示。
 
       **图 2**  修改presenter_server_ip<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig1110624110"></a>  
       ![](figures/presenter_server_ip.png "修改presenter_server_ip")      
-    -  将src/sample_process.cpp中的sample_process修改为Mind Studio所在Ubuntu服务器的虚拟网卡的ip地址，如[图 param_host_ip](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11)所示。
+    -  将**src/sample_process.cpp**中的 **sample_process** 修改为Mind Studio所在Ubuntu服务器的虚拟网卡的ip地址，如[图 param_host_ip](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11)所示。
 
       **图 3**  修改param_host_ip<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11"></a>  
       ![](figures/param_host_ip.png "修改param_host_ip")    
@@ -98,12 +98,12 @@
     >![](public_sys-resources/icon-note.gif) **说明：**    
     >-  虚拟网卡的ip地址请通过ifconfig命令查看。    
 3.  开始编译，打开Mind Studio工具，在工具栏中点击**Build \> Edit Build Configuration**。  
-    选择Target OS 为Euleros2.8，如[图 配置编译](#zh-cn_topic_0203223265_fig17414647130)所示。
+    选择**Target OS** 为**Euleros2.8**，如[图 配置编译](#zh-cn_topic_0203223265_fig17414647130)所示。
 
     **图 4**  配置编译<a name="zh-cn_topic_0203223265_fig17414647130"></a>  
     ![](figures/配置build.png "配置编译")  
     
-    之后点击Build，如[图 编译操作及生成文件](#zh-cn_topic_0203223265_fig1741464713019)所示，会在目录下生成build和out文件夹。
+    之后点击**Build \> Build \> Build Configuration**，如[图 编译操作及生成文件](#zh-cn_topic_0203223265_fig1741464713019)所示，会在目录下生成build和out文件夹。
 
     **图 5**  编译操作及生成文件<a name="zh-cn_topic_0203223265_fig1741464713019"></a>  
     ![](figures/编译操作及生成文件.png "编译操作及生成文件")
