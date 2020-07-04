@@ -128,9 +128,10 @@
 5.  查看运行结果。
 
     将result目录拷贝到Mind Studio所在Ubuntu服务器中，查看推理结果。  
-    **scp -r result** user@host\_ip **~**  
+    **scp -r result** user@host\_ip **\~**  
     >![](public_sys-resources/icon-note.gif) **说明：**   
     >-   user为Mind Studio的安装用户。  
-    >-   对于Atlas 200 DK，host\_ip默认为192.168.1.2（USB连接）或者192.168.0.2（NIC连接）。  
+    >-   对于Atlas 200 DK，host\_ip默认为192.168.1.2（USB连接）或者192.168.0.2（NIC连接）。 
+ 
 ![结果1](figures/dog.png)  
 
