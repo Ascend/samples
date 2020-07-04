@@ -73,7 +73,7 @@
 
     在最后一行添加INC_PATH环境变量。
 
-     **export INC_PATH=/home/c72/Ascend/ascend-toolkit/20.0.0.B002/arm64-linux_gcc7.3.0** 
+     **export INC_PATH=$HOME/Ascend/ascend-toolkit/20.0.0.B002/arm64-linux_gcc7.3.0** 
 
     
 
