@@ -95,7 +95,7 @@
     **图 2**  配置编译<a name="zh-cn_topic_0203223265_fig17414647130"></a>  
     ![](figures/配置build.png "配置编译")  
     
-    之后点击Build，如[图 编译操作及生成文件](#zh-cn_topic_0203223265_fig1741464713019)所示，会在目录下生成build和out文件夹。
+    之后点击**Build \> Build \> Build Configuration**，如[图 编译操作及生成文件](#zh-cn_topic_0203223265_fig1741464713019)所示，会在目录下生成build和out文件夹。
 
     **图 3**  编译操作及生成文件<a name="zh-cn_topic_0203223265_fig1741464713019"></a>  
     ![](figures/编译操作及生成文件.png "编译操作及生成文件")
