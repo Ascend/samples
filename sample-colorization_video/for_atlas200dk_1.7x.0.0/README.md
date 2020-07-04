@@ -10,18 +10,18 @@
 
     **cd $HOME/AscendProjects**  
 
-    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/200dk/sample-colorization_video.zip** 
+    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/200dk/sample-colorization-video.zip** 
               
     **unzip sample-colorization.zip**  
     
     >![](public_sys-resources/icon-note.gif) **说明：**   
     >- 如果使用wget下载失败，可使用如下命令下载代码。  
-    **curl -OL https://c7xcode.obs.cn-north-4.myhuaweicloud.com/200dk/sample-colorization_video.zip** 
+    **curl -OL https://c7xcode.obs.cn-north-4.myhuaweicloud.com/200dk/sample-colorization-video.zip** 
     >- 如果curl也下载失败，可复制下载链接到浏览器，手动上传至服务器。
     
 2.  <a name="zh-cn_topic_0219108795_li2074865610364"></a>获取此应用中所需要的原始网络模型。
 
-    参考[表 黑白图像上色应用使用模型](#zh-cn_topic_0219108795_table19942111763710)获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到Ubuntu服务器的任意目录，例如：$HOME/models/sample-colorization_video。
+    参考[表 黑白图像上色应用使用模型](#zh-cn_topic_0219108795_table19942111763710)获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到Ubuntu服务器的任意目录，例如：$HOME/models/sample-colorization-video。
 
     **表 1**  黑白图像上色应用使用模型
 
@@ -47,15 +47,15 @@
 3.  将原始网络模型转换为适配昇腾AI处理器的模型。
     1.  切换到模型所在目录。  
         
-         **cd $HOME/models/sample-colorization_video/** 
+         **cd $HOME/models/sample-colorization-video/** 
 
     2.  执行模型转换的命令。  
         
          **atc --model=colorization.prototxt --weight=colorization.caffemodel --framework=0 --output=colorization --soc_version=Ascend310** 
     
-3.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0219108795_li953280133816)中源码所在路径下的“**sample-colorization_video/model**”目录下。
+3.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0219108795_li953280133816)中源码所在路径下的“**sample-colorization-video/model**”目录下。
     
-     **cp colorization.om $HOME/AscendProjects/sample-colorization_video/model/**    
+     **cp colorization.om $HOME/AscendProjects/sample-colorization-video/model/**    
 
 ## 环境配置   
 
@@ -75,10 +75,10 @@
 
     **./MindStudio.sh**
 
-    启动成功后，打开**sample-colorization_video**工程，如[图 打开sample-colorization_video工程](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810)所示。
+    启动成功后，打开**sample-colorization-video**工程，如[图 打开sample-colorization-video工程](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810)所示。
 
-    **图 1**  打开sample-colorization_video工程<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810"></a>  
-    ![](figures/打开colorization_video工程.png "打开colorization_video工程")
+    **图 1**  打开sample-colorization-video工程<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810"></a>  
+    ![](figures/打开colorization-video工程.png "打开colorization-video工程")
 
 2.  修改Presenter Server的ip。  
     -  将**Script/presentserver/display/config/config.conf**中的**presenter_server_ip**修改为Mind Studio所在Ubuntu服务器的虚拟网卡的ip地址，如[图 presenter_server_ip](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig1110624110)所示。
@@ -108,7 +108,7 @@
 
 4.  启动Presenter Server。
 
-    打开Mind Studio工具的Terminal，在应用代码存放路径下，执行如下命令在后台启动colorization_video应用的Presenter Server主程序。如[图 启动PresenterServer](#zh-cn_topic_0228461904_zh-cn_topic_0203223294_fig423515251067)所示。
+    打开Mind Studio工具的Terminal，在应用代码存放路径下，执行如下命令在后台启动colorization-video应用的Presenter Server主程序。如[图 启动PresenterServer](#zh-cn_topic_0228461904_zh-cn_topic_0203223294_fig423515251067)所示。
 
     **python3 script/presenterserver/presenter_server.py --app=display &**
 
