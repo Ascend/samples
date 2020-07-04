@@ -64,25 +64,7 @@
 4.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0219108795_li953280133816)中源码所在路径下的“**sample-classification/model**”目录下。
     
      **cp googlenet_BRG.om $HOME/AscendProjects/sample-classification/model/**  
-
-5.  设置环境变量。 
-   
-    执行如下命令。 
-
-     **vim ~/.bashrc** 
-
-    在最后一行添加INC_PATH环境变量。
-
-     **export INC_PATH=$HOME/Ascend/ascend-toolkit/20.0.0.B002/arm64-linux_gcc7.3.0** 
-
-    
-
-    输入:wq!保存退出。
-
-    执行如下命令使环境变量生效。
-
-     **source ~/.bashrc**   
- 
+  
 
 ## 环境配置   
 
