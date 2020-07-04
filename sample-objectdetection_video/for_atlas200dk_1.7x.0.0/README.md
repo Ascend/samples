@@ -13,18 +13,18 @@
 
     **cd $HOME/AscendProjects**    
 
-    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/200dk/sample-objectdetection_video.zip** 
+    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/200dk/sample-objectdetection-video.zip** 
   
-    **unzip sample-objectdetection_video.zip**    
+    **unzip sample-objectdetection-video.zip**    
     
     >![](public_sys-resources/icon-note.gif) **说明：**   
     >- 如果使用wget下载失败，可使用如下命令下载代码。  
-    **curl -OL https://c7xcode.obs.cn-north-4.myhuaweicloud.com/200dk/sample-objectdetection_video.zip** 
+    **curl -OL https://c7xcode.obs.cn-north-4.myhuaweicloud.com/200dk/sample-objectdetection-video.zip** 
     >- 如果curl也下载失败，可复制下载链接到浏览器，手动上传至服务器。
     
 2.  <a name="zh-cn_topic_0219108795_li2074865610364"></a>获取此应用中所需要的原始网络模型。    
     1.  切换目录。  
-        **cd $HOME/AscendProjects/sample-objectdetection_video/caffe_model**     
+        **cd $HOME/AscendProjects/sample-objectdetection-video/caffe_model**     
     2.  下载原始网络模型及权重文件。  
         **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/yolov3/yolov3.caffemodel**  
         **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/yolov3/yolov3.prototxt**
@@ -34,9 +34,9 @@
     执行模型转换的命令。         
     **atc --model=yolov3.prototxt --weight=yolov3.caffemodel --framework=0 --output=yolov3_BGR --soc_version=Ascend310 --insert_op_conf=aipp_bgr.cfg**
     
-4.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0219108795_li953280133816)中源码所在路径下的“**sample-objectdetection_video/model**”目录下。
+4.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0219108795_li953280133816)中源码所在路径下的“**sample-objectdetection-video/model**”目录下。
     
-     **cp yolov3_BGR.om $HOME/AscendProjects/sample-objectdetection_video/model/**  
+     **cp yolov3_BGR.om $HOME/AscendProjects/sample-objectdetection-video/model/**  
 
 ## 环境配置   
 
@@ -55,10 +55,10 @@
 
     **./MindStudio.sh**
 
-    启动成功后，打开**sample-objectdetection_video**工程，如[图 打开objectdetection_video工程](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810)所示。
+    启动成功后，打开**sample-objectdetection-video**工程，如[图 打开objectdetection-video工程](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810)所示。
 
-    **图 1**  打开objectdetection_video工程<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810"></a>  
-    ![](figures/打开objectdetection_video工程.png "打开objectdetection_video工程")
+    **图 1**  打开objectdetection-video工程<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810"></a>  
+    ![](figures/打开objectdetection-video工程.png "打开objectdetection-video工程")
 
 2.  修改Presenter Server的ip。  
     -  将**Script/presentserver/display/config/config.conf**中的**presenter_server_ip**修改为Mind Studio所在Ubuntu服务器的虚拟网卡的ip地址，如[图 presenter_server_ip](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig1110624110)所示。
@@ -88,7 +88,7 @@
 
 4.  启动Presenter Server。
 
-    打开Mind Studio工具的Terminal，在应用代码存放路径下，执行如下命令在后台启动objectdetection_video应用的Presenter Server主程序。如[图 启动PresenterServer](#zh-cn_topic_0228461904_zh-cn_topic_0203223294_fig423515251067)所示。
+    打开Mind Studio工具的Terminal，在应用代码存放路径下，执行如下命令在后台启动objectdetection-video应用的Presenter Server主程序。如[图 启动PresenterServer](#zh-cn_topic_0228461904_zh-cn_topic_0203223294_fig423515251067)所示。
 
     **python3 script/presenterserver/presenter_server.py --app=display &**
 
@@ -107,7 +107,7 @@
     **图 8**  配置运行<a name="zh-cn_topic_0203223265_fig93931954162720"></a>   
     ![](figures/配置run.png "配置运行")
  
-2.  单击  **Run \> Run 'sample-objectdetection_video'**，如[图 程序已执行示意图](#zh-cn_topic_0203223265_fig93931954162719)所示，可执行程序已经在开发者板执行。  
+2.  单击  **Run \> Run 'sample-objectdetection-video'**，如[图 程序已执行示意图](#zh-cn_topic_0203223265_fig93931954162719)所示，可执行程序已经在开发者板执行。  
 
     **图 9**  程序已执行示意图<a name="zh-cn_topic_0203223265_fig93931954162719"></a>  
     ![](figures/程序已执行示意图.png "程序已执行示意图")  
