@@ -1,9 +1,9 @@
 中文|[English](Readme_EN.md)
 
-#  分类网络应用（C++）<a name="ZH-CN_TOPIC_0219122211"></a>
+# 分类网络应用（C++）<a name="ZH-CN_TOPIC_0232337690"></a>  
 
-本应用支持运行在AI云上加速环境(Atlas300)， 实现了googlenet网络的推理功能并输出带有推理结果标签的图片。 
 
+本Application支持运行在Atlas 200 DK或者AI加速云服务器上，实现了对常见的分类网络的推理功能并输出前n个推理结果。
 
 ## 软件准备<a name="zh-cn_topic_0219108795_section181111827718"></a>
 
@@ -13,13 +13,13 @@
 
     **cd $HOME/AscendProjects**  
 
-    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/ubuntu/sample-classification.zip**   
-
+    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/200dk/sample-classification.zip** 
+              
     **unzip sample-classification.zip**  
     
     >![](public_sys-resources/icon-note.gif) **说明：**   
     >- 如果使用wget下载失败，可使用如下命令下载代码。  
-    **curl -OL https://c7xcode.obs.cn-north-4.myhuaweicloud.com/ubuntu/sample-classification.zip** 
+    **curl -OL https://c7xcode.obs.cn-north-4.myhuaweicloud.com/200dk/sample-classification.zip** 
     >- 如果curl也下载失败，可复制下载链接到浏览器，手动上传至服务器。
     
 2.  <a name="zh-cn_topic_0219108795_li2074865610364"></a>获取此应用中所需要的原始网络模型。
@@ -65,39 +65,16 @@
     
      **cp googlenet_BRG.om $HOME/AscendProjects/sample-classification/model/**  
 
-
-
-## 环境配置   
-
-**注：服务器上已安装opencv库和ffmpeg库可跳过此步骤。**  
-    
-
-- 安装opencv和ffmpeg  
-    - centos系统：  
-    请参考 **https://gitee.com/ascend/common/blob/master/centos_install_opencv/CENTOS_INSTALL_OPENCV.md**  
-    - ubuntu系统：  
-    请参考 **https://gitee.com/ascend/common/blob/master/ubuntu_install_opencv/UBUNTU_INSTALL_OPENCV.md**
-
-## 编译<a name="zh-cn_topic_0219108795_section3723145213347"></a>
-
-1.  以HwHiAiUser（运行用户）登录开发环境。
-
-2.  设置环境变量。 
+5.  设置环境变量。 
    
     执行如下命令。 
 
      **vim ~/.bashrc** 
 
-    在最后一行添加DDK_PATH及NPU_HOST_LIB的环境变量。
+    在最后一行添加INC_PATH环境变量。
 
-     **export DDK\_PATH=/home/HwHiAiUser/Ascend** 
+     **export INC_PATH=/home/c72/Ascend/ascend-toolkit/20.0.0.B002/arm64-linux_gcc7.3.0** 
 
-     **export NPU\_HOST\_LIB=/home/HwHiAiUser/Ascend/acllib/lib64/stub**  
-
-     **export LD\_LIBRARY_PATH=\\$DDK\_PATH/acllib/lib64:/usr/local/Ascend/add-ons:\\$HOME/ascend_ddk/host/lib:\\$DDK_PATH/atc/lib64** 
-
-     >![](public_sys-resources/icon-note.gif) **说明：**   
-            **请将/home/HwHiAiUser/Ascend替换为ACLlib标准形态安装包的实际安装路径。** 
     
 
     输入:wq!保存退出。
@@ -105,43 +82,71 @@
     执行如下命令使环境变量生效。
 
      **source ~/.bashrc**   
+ 
 
-3.  创建用于存放编译文件的目录。  
+## 环境配置   
 
-
-    **cd $HOME/AscendProjects/sample-classification**  
+**注：服务器上已安装OpenCV和PresentAgent可跳过此步骤。**  
     
-    **mkdir -p build/intermediates/host**  
 
-4.  执行cmake生成编译文件。
+- 安装OpenCV和PresentAgent  
+      
+    请参考 **https://gitee.com/ascend/common/blob/master/200dk_install_opencv/200DK_INSTALL_OPENCV_PRESENTAGENT.md**  
+  
 
-     **cd build/intermediates/host**   
+## 编译<a name="zh-cn_topic_0219108795_section3723145213347"></a>
 
-    **cmake ../../../src -DCMAKE_CXX_COMPILER=g++ -DCMAKE_SKIP_RPATH=TRUE**  
+1.  打开对应的工程。
 
-5.  执行make命令，生成的可执行文件main在“$HOME/AscendProjects/sample-classification/out”目录下。 
+    以Mind Studio安装用户在命令行进入安装包解压后的“MindStudio-ubuntu/bin”目录，如：$HOME/MindStudio-ubuntu/bin。执行如下命令启动Mind Studio。
 
-    **make**
+    **./MindStudio.sh**
+
+    启动成功后，打开**sample-classification**工程，如[图 打开classification工程](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810)所示。
+
+    **图 1**  打开classification工程<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810"></a>  
+    ![](figures/打开classification工程.png "打开classification工程")
+
+2.  开始编译，打开Mind Studio工具，在工具栏中点击**Build \> Edit Build Configuration**。  
+    选择Target OS 为Euleros2.8，如[图 配置编译](#zh-cn_topic_0203223265_fig17414647130)所示。
+
+    **图 2**  配置编译<a name="zh-cn_topic_0203223265_fig17414647130"></a>  
+    ![](figures/配置build.png "配置编译")  
+    
+    之后点击Build，如[图 编译操作及生成文件](#zh-cn_topic_0203223265_fig1741464713019)所示，会在目录下生成build和out文件夹。
+
+    **图 3**  编译操作及生成文件<a name="zh-cn_topic_0203223265_fig1741464713019"></a>  
+    ![](figures/编译操作及生成文件.png "编译操作及生成文件")
+
+    >![](public_sys-resources/icon-notice.gif) **须知：**   
+    >首次编译工程时，**Build \> Build**为灰色不可点击状态。需要点击**Build \> Edit Build Configuration**，配置编译参数后再进行编译。  
 ## 运行<a name="zh-cn_topic_0219108795_section1620073406"></a>
+1.  在Mind Studio工具的工具栏中找到Run按钮，单击  **Run \> Edit Configurations**。  
+    在Command Arguments 中添加运行参数 **../data**（输入图片的路径），之后分别点击Apply、OK。  
+    如[图 配置运行](#zh-cn_topic_0203223265_fig93931954162720)所示。   
+    **图 4**  配置运行<a name="zh-cn_topic_0203223265_fig93931954162720"></a> 
+ 
+2.  单击  **Run \> Run 'sample-classification'**，如[图 程序已执行示意图](#zh-cn_topic_0203223265_fig93931954162719)所示，可执行程序已经在开发者板执行。  
+    **图 5**  程序已执行示意图<a name="zh-cn_topic_0203223265_fig93931954162719"></a>  
+    ![](figures/程序已执行示意图.png "程序已执行示意图")
+3.  在Mind Studio所在Ubuntu服务器中，以HwHiAiUser用户SSH登录到Host侧。
 
+    **ssh HwHiAiUser@**_host\_ip_
 
-1.  将需要上色的黑白图片上传至“$HOME/AscendProjects/sample-classification/data/”目录下。  
+    对于Atlas 200 DK，host\_ip默认为192.168.1.2（USB连接）或者192.168.0.2（NIC连接）。  
+4.  进入通用分类网络应用的可执行文件所在路径。
 
-2.  切换到可执行文件main所在的目录，给该目录下的main文件加执行权限。  
-   
-    **cd $HOME/AscendProjects/sample-classification/out**  
-    
-    **chmod +x main**   
+    **cd \~/HIAI\_PROJECTS/workspace\_mind\_studio/sample-classification\_XXXXX/out**
 
-3.  运行可执行文件。  
-    **./main \.\./data/**
+    >![](public_sys-resources/icon-note.gif) **说明：**   
+    >-   此路径中sample-classification\_XXXXX的XXXXX是一串字母和数字的随机组合，每次重新编译运行时都会随机生成。  
 
-4.  查看运行结果。 
+5.  查看运行结果。
 
-    **cd result**  
-
-    进入result目录，查看推理结果的图片。
-
-
-![结果1](figures/dog.png)
+    将result目录拷贝到Mind Studio所在Ubuntu服务器中，查看推理结果。  
+    **scp -r result user@host\_ip ~**  
+    >![](public_sys-resources/icon-note.gif) **说明：**   
+    >-   user为Mind Studio的安装用户。  
+    >-   对于Atlas 200 DK，host\_ip默认为192.168.1.2（USB连接）或者192.168.0.2（NIC连接）。  
+![结果1](figures/dog.png)  
 
