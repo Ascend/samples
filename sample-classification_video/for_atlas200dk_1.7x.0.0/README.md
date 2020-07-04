@@ -13,18 +13,18 @@
 
     **cd $HOME/AscendProjects**    
 
-    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/200dk/sample-classification_video.zip** 
+    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/200dk/sample-classification-video.zip** 
   
-    **unzip sample-classification_video.zip**    
+    **unzip sample-classification-video.zip**    
     
     >![](public_sys-resources/icon-note.gif) **说明：**   
     >- 如果使用wget下载失败，可使用如下命令下载代码。  
-    **curl -OL https://c7xcode.obs.cn-north-4.myhuaweicloud.com/200dk/sample-classification_video.zip** 
+    **curl -OL https://c7xcode.obs.cn-north-4.myhuaweicloud.com/200dk/sample-classification-video.zip** 
     >- 如果curl也下载失败，可复制下载链接到浏览器，手动上传至服务器。
     
 2. <a name="zh-cn_topic_0219108795_li2074865610364"></a>获取此应用中所需要的原始网络模型。
 
-   参考[表 分类网络应用使用模型](#zh-cn_topic_0219108795_table19942111763710)获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到"$HOME/AscendProjects/sample-classification_video/caffe_model/"目录下。
+   参考[表 分类网络应用使用模型](#zh-cn_topic_0219108795_table19942111763710)获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到"$HOME/AscendProjects/sample-classification-video/caffe_model/"目录下。
 
     **表 1**  分类网络应用使用模型
 
@@ -52,15 +52,15 @@
 3.  将原始网络模型转换为适配昇腾AI处理器的模型。
     1.  切换到模型所在目录。  
         
-         **cd $HOME/AscendProjects/sample-classification_video/caffe_model/** 
+         **cd $HOME/AscendProjects/sample-classification-video/caffe_model/** 
 
     2.  执行模型转换的命令。  
         
          **atc --model=googlenet.prototxt --weight=googlenet.caffemodel --framework=0 --output=googlenet_BRG --soc_version=Ascend310 --input_shape="data:1,3,224,224" --insert_op_conf=aipp.cfg** 
     
-3.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0219108795_li953280133816)中源码所在路径下的“**sample-classification_video/model**”目录下。
+3.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0219108795_li953280133816)中源码所在路径下的“**sample-classification-video/model**”目录下。
     
-    **cp googlenet_BRG.om $HOME/AscendProjects/sample-classification_video/model/**
+    **cp googlenet_BRG.om $HOME/AscendProjects/sample-classification-video/model/**
 
 ## 环境配置   
 
@@ -80,10 +80,10 @@
 
     **./MindStudio.sh**
 
-    启动成功后，打开**sample-classification_video**工程，如[图 打开classification_video工程](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810)所示。
+    启动成功后，打开**sample-classification-video**工程，如[图 打开classification-video工程](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810)所示。
 
-    **图 1**  打开classification_video工程<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810"></a>  
-    ![](figures/打开classification_video工程.png "打开classification_video工程")
+    **图 1**  打开classification-video工程<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810"></a>  
+    ![](figures/打开classification-video工程.png "打开classification-video工程")
 
 2.  修改Presenter Server的ip。  
     -  将**Script/presentserver/display/config/config.conf**中的**presenter_server_ip**修改为Mind Studio所在Ubuntu服务器的虚拟网卡的ip地址，如[图 presenter_server_ip](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig1110624110)所示。
@@ -113,7 +113,7 @@
 
 4.  启动Presenter Server。
 
-    打开Mind Studio工具的Terminal，在应用代码存放路径下，执行如下命令在后台启动classification_video应用的Presenter Server主程序。如[图 启动PresenterServer](#zh-cn_topic_0228461904_zh-cn_topic_0203223294_fig423515251067)所示。
+    打开Mind Studio工具的Terminal，在应用代码存放路径下，执行如下命令在后台启动classification-video应用的Presenter Server主程序。如[图 启动PresenterServer](#zh-cn_topic_0228461904_zh-cn_topic_0203223294_fig423515251067)所示。
 
     **python3 script/presenterserver/presenter_server.py --app=display &**
 
@@ -132,7 +132,7 @@
     **图 8**  配置运行<a name="zh-cn_topic_0203223265_fig93931954162720"></a>   
     ![](figures/配置run.png "配置运行")
  
-2.  单击  **Run \> Run 'sample-classification_video'**，如[图 程序已执行示意图](#zh-cn_topic_0203223265_fig93931954162719)所示，可执行程序已经在开发者板执行。  
+2.  单击  **Run \> Run 'sample-classification-video'**，如[图 程序已执行示意图](#zh-cn_topic_0203223265_fig93931954162719)所示，可执行程序已经在开发者板执行。  
 
     **图 9**  程序已执行示意图<a name="zh-cn_topic_0203223265_fig93931954162719"></a>  
     ![](figures/程序已执行示意图.png "程序已执行示意图")  
