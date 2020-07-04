@@ -15,7 +15,7 @@
 
     **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/200dk/sample-objectdetection_video.zip** 
   
-    **unzip sample-classification_video.zip**    
+    **unzip sample-objectdetection_video.zip**    
     
     >![](public_sys-resources/icon-note.gif) **说明：**   
     >- 如果使用wget下载失败，可使用如下命令下载代码。  
@@ -107,7 +107,7 @@
     **图 8**  配置运行<a name="zh-cn_topic_0203223265_fig93931954162720"></a>   
     ![](figures/配置run.png "配置运行")
  
-2.  单击  **Run \> Run 'sample-classification_video'**，如[图 程序已执行示意图](#zh-cn_topic_0203223265_fig93931954162719)所示，可执行程序已经在开发者板执行。  
+2.  单击  **Run \> Run 'sample-objectdetection_video'**，如[图 程序已执行示意图](#zh-cn_topic_0203223265_fig93931954162719)所示，可执行程序已经在开发者板执行。  
 
     **图 9**  程序已执行示意图<a name="zh-cn_topic_0203223265_fig93931954162719"></a>  
     ![](figures/程序已执行示意图.png "程序已执行示意图")  
