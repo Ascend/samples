@@ -56,7 +56,7 @@
         
          **atc --model=colorization.prototxt --weight=colorization.caffemodel --framework=0 --output=colorization --soc_version=Ascend310** 
     
-3.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0219108795_li953280133816)中源码所在路径下的“**sample\_colorization/model**”目录下。
+3.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0219108795_li953280133816)中源码所在路径下的“**sample-colorization_video/model**”目录下。
     
      **cp colorization.om $HOME/AscendProjects/sample-colorization_video/model/**  
 
