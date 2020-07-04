@@ -3,7 +3,7 @@
 # 分类网络应用（C++）<a name="ZH-CN_TOPIC_0232337690"></a>  
 
 
-本Application支持运行在Atlas 200 DK或者AI加速云服务器上，实现了对常见的分类网络的推理功能并输出前n个推理结果。
+本Application支持运行在Atlas 200 DK或者AI加速云服务器上，实现了对常见的分类网络的推理功能。
 
 ## 软件准备<a name="zh-cn_topic_0219108795_section181111827718"></a>
 
