@@ -14,12 +14,12 @@ Ascend sample，请根据自己的需要进入对应文件夹获取应用，或�
 
 4. [sample-classification](https://gitee.com/ascend/samples/tree/master/sample-classification):通用分类网络图片的样例链接。
 
-5. [sample-classification_video](https://gitee.com/ascend/samples/tree/master/sample-classification_video):通用分类网络视频的样例链接。
+5. [sample-classification-video](https://gitee.com/ascend/samples/tree/master/sample-classification-video):通用分类网络视频的样例链接。
 
 6. [sample-colorization](https://gitee.com/ascend/samples/tree/master/sample-colorization):黑白图像上色图片的样例链接。
 
-7. [sample-colorization_python](https://gitee.com/ascend/samples/tree/master/sample-colorization_video)：黑白图像上色视频的样例链接。
+7. [sample-colorization-video](https://gitee.com/ascend/samples/tree/master/sample-colorization-video)：黑白图像上色视频的样例链接。
 
 8. [sample-objectdetection](https://gitee.com/ascend/samples/tree/master/sample-objectdetection):通用分类网络的样例链接
 
-9. [sample-objectdetection_video](https://gitee.com/ascend/samples/tree/master/sample-objectdetection_video)：通用分类网络视频的网路链接
+9. [sample-objectdetection-video](https://gitee.com/ascend/samples/tree/master/sample-objectdetection-video)：通用分类网络视频的样例链接
