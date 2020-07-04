@@ -115,7 +115,7 @@
     ![](figures/程序已执行示意图.png "程序已执行示意图")
 3.  在Mind Studio所在Ubuntu服务器中，以HwHiAiUser用户SSH登录到Host侧。
 
-    **ssh HwHiAiUser@**_host\_ip_
+    **ssh HwHiAiUser\@**_host\_ip_
 
     对于Atlas 200 DK，host\_ip默认为192.168.1.2（USB连接）或者192.168.0.2（NIC连接）。  
 4.  进入通用分类网络应用的可执行文件所在路径。
