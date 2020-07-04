@@ -127,7 +127,7 @@
     **图 8**  配置运行<a name="zh-cn_topic_0203223265_fig93931954162720"></a>   
     ![](figures/配置run.png "配置运行")
  
-2.  单击  **Run \> Run 'sample-classification_video'**，如[图 程序已执行示意图](#zh-cn_topic_0203223265_fig93931954162719)所示，可执行程序已经在开发者板执行。  
+2.  单击  **Run \> Run 'sample-colorization-video'**，如[图 程序已执行示意图](#zh-cn_topic_0203223265_fig93931954162719)所示，可执行程序已经在开发者板执行。  
 
     **图 9**  程序已执行示意图<a name="zh-cn_topic_0203223265_fig93931954162719"></a>  
     ![](figures/程序已执行示意图.png "程序已执行示意图")  
