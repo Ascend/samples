@@ -44,7 +44,7 @@
 
 
 
-​    >![](public_sys-resources/icon-note.gif) **说明：**   
+​    ![](public_sys-resources/icon-note.gif) **说明：**   
 
 > - input.jpg、output.yuv文件名自行更改，./crop ../data/input.jpg   w   h  output.yuv  x  y  w  h。w、h分别为照片宽度和高度。x、y为位置。
 >   
