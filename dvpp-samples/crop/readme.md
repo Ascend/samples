@@ -42,7 +42,6 @@
 
 **./crop ../data/input.jpg 1024 1061 output.yuv 350 280 200 200**
 
-注：input.jpg、output.jpg自行更改，./crop ../data/input.jpg   w   h  output.yuv  x  y  w  h。w、h分别为照片宽度和高度。x、y为位置。
 
 
 ​    >![](public_sys-resources/icon-note.gif) **说明：**   
