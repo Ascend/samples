@@ -15,7 +15,7 @@
 
 ### 编译代码
  
-1、以HwHiAiUser登陆开发环境
+1、以HwHiAiUser登陆开发环境 
 
 2、切换到“cropandpaste”目录，创建目录用于存放编译文件
 
