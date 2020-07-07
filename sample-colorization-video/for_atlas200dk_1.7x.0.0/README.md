@@ -12,7 +12,7 @@
 
     **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/200dk/sample-colorization-video.zip** 
               
-    **unzip sample-colorization.zip**  
+    **unzip sample-colorization-video.zip**  
     
     >![](public_sys-resources/icon-note.gif) **说明：**   
     >- 如果使用wget下载失败，可使用如下命令下载代码。  
