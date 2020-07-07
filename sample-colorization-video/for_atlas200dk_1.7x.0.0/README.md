@@ -78,7 +78,7 @@
     启动成功后，打开**sample-colorization-video**工程，如[图 打开sample-colorization-video工程](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810)所示。
 
     **图 1**  打开sample-colorization-video工程<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810"></a>  
-    ![](figures/打开colorization-video工程.png "打开colorization-video工程")
+    ![](figures/打开colorization_video工程.png "打开colorization-video工程")
 
 2.  修改Presenter Server的ip。  
     -  将**Script/presentserver/display/config/config.conf**中的**presenter_server_ip**修改为Mind Studio所在Ubuntu服务器的虚拟网卡的ip地址，如[图 presenter_server_ip](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig1110624110)所示。
