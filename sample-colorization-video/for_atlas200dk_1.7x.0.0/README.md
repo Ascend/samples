@@ -59,13 +59,15 @@
 
 ## 环境配置   
 
-**注：服务器上已安装OpenCV和PresentAgent可跳过此步骤。**  
+**注：服务器上已安装OpenCV、PresentAgent、交叉编译工具可跳过此步骤。**  
     
 
 - 安装OpenCV和PresentAgent  
       
-    请参考 **https://gitee.com/ascend/common/blob/master/200dk_install_opencv/200DK_INSTALL_OPENCV_PRESENTAGENT.md**  
+    请参考 **https://gitee.com/ascend/common/blob/master/200dk_install_opencv/200DK_INSTALL_OPENCV_PRESENTAGENT.md**   
 
+- 安装交叉编译工具  
+  **sudo apt-get install -y g++-5-aarch64-linux-gnu**
 
 ## 编译<a name="zh-cn_topic_0219108795_section3723145213347"></a>
 
