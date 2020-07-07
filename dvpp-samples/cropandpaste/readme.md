@@ -9,13 +9,13 @@
 ​     **unzip cropandpaste.zip**
 
  >![](public_sys-resources/icon-note.gif) **说明：**   
-    >- 如果使用wget下载失败，可使用如下命令下载代码。  
+   >- 如果使用wget下载失败，可使用如下命令下载代码。  
     **curl -OL https://c7xcode.obs.myhuaweicloud.com/DVPP-sample/cropandpaste.zip** 
-    >- 如果curl也下载失败，可复制下载链接到浏览器，手动上传至服务器。
+   >- 如果curl也下载失败，可复制下载链接到浏览器，手动上传至服务器。
 
 ### 编译代码
-
-1、以HwHiAiUser登陆开发环境
+ 
+1、以HwHiAiUser登陆开发环境 
 
 2、切换到“cropandpaste”目录，创建目录用于存放编译文件
 

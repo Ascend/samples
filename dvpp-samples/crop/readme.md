@@ -10,7 +10,7 @@
   **unzip crop.zip**
 
  >![](public_sys-resources/icon-note.gif) **说明：**   
-    >- 如果使用wget下载失败，可使用如下命令下载代码。  
+   >- 如果使用wget下载失败，可使用如下命令下载代码。  
     **curl -OL https://c7xcode.obs.myhuaweicloud.com/DVPP-sample/crop.zip** 
    >- 如果curl也下载失败，可复制下载链接到浏览器，手动上传至服务器。
 
@@ -42,10 +42,9 @@
 
 **./crop ../data/input.jpg 1024 1061 output.yuv 350 280 200 200**
 
-注：input.jpg、output.jpg自行更改，./crop ../data/input.jpg   w   h  output.yuv  x  y  w  h。w、h分别为照片宽度和高度。x、y为位置。
 
 
-​    >![](public_sys-resources/icon-note.gif) **说明：**   
+​    ![](public_sys-resources/icon-note.gif) **说明：**   
 
 > - input.jpg、output.yuv文件名自行更改，./crop ../data/input.jpg   w   h  output.yuv  x  y  w  h。w、h分别为照片宽度和高度。x、y为位置。
 >   
