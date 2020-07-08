@@ -66,7 +66,7 @@
       - ubuntu  
         **apt-get install autoconf automake libtool**  
   5.  安装protobuf。  
-      **git clone https://gitee.com/mirrors/protobufsource.git protobuf**   
+     **git clone -b 3.8.x https://gitee.com/mirrors/protobufsource.git protobuf**    
       **cd protobuf**   
       **git submodule update --init --recursive**  
       **./autogen.sh**   
