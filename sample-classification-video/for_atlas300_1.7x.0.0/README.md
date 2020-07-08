@@ -95,8 +95,13 @@
       **make**  
       **make install**  
       **ldconfig**  
-        
-  6.  编译并安装PresentAgent。    
+  6.  切换到运行用户。  
+      **su HwHiAiUser**
+  7.  将securec.h和securectype.h放置到$HOME/Ascend目录下  
+      **cp \\$HOME/Downloads/common/presenteragent/securec.h \\$HOME/Ascend**  
+      **cp \\$HOME/Downloads/common/presenteragent/securectype.h \\$HOME/Ascend**   
+    
+  8.  编译并安装PresentAgent。    
 
       **cd $HOME/Downloads/common/presenteragent/**   
       **make**  
