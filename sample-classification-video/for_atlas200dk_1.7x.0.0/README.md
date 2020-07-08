@@ -49,18 +49,48 @@
 </tbody>
 </table>
 
-3.  将原始网络模型转换为适配昇腾AI处理器的模型。
-    1.  切换到模型所在目录。  
-        
-         **cd $HOME/AscendProjects/sample-classification-video/caffe_model/** 
+3.  设置环境变量。
 
-    2.  执行模型转换的命令。  
-        
-         **atc --model=googlenet.prototxt --weight=googlenet.caffemodel --framework=0 --output=googlenet_BRG --soc_version=Ascend310 --input_shape="data:1,3,224,224" --insert_op_conf=aipp.cfg** 
+    **vim \~/.bashrc**
+
+    执行如下命令在最后一行添加DDK\_HOME及LD\_LIBRARY\_PATH的环境变量。  
+
+    **export install_path=\$HOME/Ascend/ascend-toolkit/20.0.0.B002/x86_64-linux_gcc7.3.0**  
+
+    **export PATH=/usr/local/python3.7.5/bin:\\${install_path}/atc/ccec_compiler/bin:\\${install_path}/atc/bin:\\$PATH**  
+
+    **export PYTHONPATH=\\${install_path}/atc/python/site-packages/te:\\${install_path}/atc/python/site-    packages/topi:\\$PYTHONPATH**  
+
+    **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64:\\$LD_LIBRARY_PATH**  
+
+    **export ASCEND_OPP_PATH=\\${install_path}/opp**
+
+
+    >![](public_sys-resources/icon-note.gif) **说明：**   
+    >-   **install_path请替换成软件包的安装路径。**  
+    >-   **如果此环境变量已经添加，则此步骤可跳过。**
+
+    输入:wq!保存退出。
+
+    执行如下命令使环境变量生效。
+
+    **source \~/.bashrc**  
+
+4.  将原始网络模型转换为适配昇腾AI处理器的模型。  
+
+    1.  在Mind Studio操作界面的顶部菜单栏中选择**Tools \> Model Convert**，进入模型转换界面。
+    2.  在弹出的**Model Conversion**操作界面中，进行模型转换配置。
+    3.  参照以下图片进行参数配置。    
+        -   Model File选择[步骤2](#zh-cn_topic_0219108795_li2074865610364)中下载的模型文件，此时会自动匹配到权重文件并填写在Weight File中。
+
+    ![](figures/模型转换1.png "模型转换1")  
+    ![](figures/模型转换2.png "模型转换2")  
+    ![](figures/模型转换3.png "模型转换3")
+
     
-3.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0219108795_li953280133816)中源码所在路径下的“**sample-classification-video/model**”目录下。
+5.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0228757084_section8534138124114)中源码所在路径下的“**sample-classification-video/model**”目录下。
     
-    **cp googlenet_BRG.om $HOME/AscendProjects/sample-classification-video/model/**
+     **cp \\$HOME/modelzoo/googlenet/device/googlenet.om \\$HOME/AscendProjects/sample-classification-video/model/**  
 
 ## 环境配置   
 
