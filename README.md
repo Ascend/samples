@@ -6,20 +6,64 @@ Ascend sample，请根据自己的需要进入对应文件夹获取应用，或�
 
 #### 链接地址
 
-1. [mark_detection_python](https://gitee.com/ascend/samples/tree/master/mark_detection_python):python版本的口罩识别图片的样例链接。
 
-2. [mark_detection_video_cpp](https://gitee.com/ascend/samples/tree/master/mark_detection_video_cpp)：c++版本的口罩识别视频的样例链接。
+<details open><summary>mark_detection_python：口罩识别图片Python版</summary><blockquote>
 
-3. [mark_detection_video_python](https://gitee.com/ascend/samples/tree/master/mark_detection_video_python):python版本的口罩识别视频的样例链接。
+- [for_atlas200dk_1.3x.0.0](https://gitee.com/ascend/samples/tree/master/mark_detection_python/for_atlas200dk_1.3x.0.0)
+</blockquote></details>
 
-4. [sample-classification](https://gitee.com/ascend/samples/tree/master/sample-classification):通用分类网络图片的样例链接。
 
-5. [sample-classification-video](https://gitee.com/ascend/samples/tree/master/sample-classification-video):通用分类网络视频的样例链接。
+<details open><summary>mark_detection_video_cpp：口罩识别视频C++版</summary><blockquote>
 
-6. [sample-colorization](https://gitee.com/ascend/samples/tree/master/sample-colorization):黑白图像上色图片的样例链接。
+- [for_atlas200dk_1.3x.0.0](https://gitee.com/ascend/samples/tree/master/mark_detection_video_cpp/for_atlas200dk_1.3x.0.0)
+- [for_atlas300_1.3x.0.0](https://gitee.com/ascend/samples/tree/master/mark_detection_video_cpp/for_atlas300_1.3x.0.0)
+</blockquote></details>
 
-7. [sample-colorization-video](https://gitee.com/ascend/samples/tree/master/sample-colorization-video)：黑白图像上色视频的样例链接。
 
-8. [sample-objectdetection](https://gitee.com/ascend/samples/tree/master/sample-objectdetection):检测网络的样例链接
+<details open><summary>mark_detection_video_python：口罩识别视频Python版</summary><blockquote>
 
-9. [sample-objectdetection-video](https://gitee.com/ascend/samples/tree/master/sample-objectdetection-video)：检测网络网络视频的样例链接
+- [for_atlas200dk_1.3x.0.0](https://gitee.com/ascend/samples/tree/master/mark_detection_video_python)
+</blockquote></details>
+
+
+<details open><summary>sample-classification：通用分类网络图片</summary><blockquote>
+
+- [for_atlas200dk_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/sample-classification/for_atlas200dk_1.7x.0.0)  
+- [for_atlas300_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/sample-classification/for_atlas300_1.7x.0.0)
+</blockquote></details>  
+
+
+<details open><summary>sample-classification-video：通用分类网络视频</summary><blockquote>
+
+- [for_atlas200dk_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/sample-classification-video/for_atlas200dk_1.7x.0.0)  
+- [for_atlas300_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/sample-classification-video/for_atlas300_1.7x.0.0)
+</blockquote></details>
+
+
+<details open><summary>sample-colorization：黑白图像上色图片</summary><blockquote>
+
+- [for_atlas200dk_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/sample-colorization/for_atlas200dk_1.7x.0.0)  
+- [for_atlas300_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/sample-colorization/for_atlas300_1.7x.0.0)
+</blockquote></details>  
+
+
+<details open><summary>sample-colorization-video：黑白图像上色视频</summary><blockquote>
+
+- [for_atlas200dk_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/sample-colorization-video/for_atlas200dk_1.7x.0.0)  
+- [for_atlas300_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/sample-colorization-video/for_atlas300_1.7x.0.0)
+</blockquote></details>
+
+
+<details open><summary>sample-objectdetection：检测网络图片</summary><blockquote>
+
+- [for_atlas200dk_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/sample-objectdetection/for_atlas200dk_1.7x.0.0)  
+- [for_atlas300_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/sample-objectdetection/for_atlas300_1.7x.0.0)
+</blockquote></details>
+
+
+<details open><summary>sample-objectdetection-video：检测网络视频</summary><blockquote>
+
+- [for_atlas200dk_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/sample-objectdetection-video/for_atlas200dk_1.7x.0.0)  
+- [for_atlas300_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/sample-objectdetection-video/for_atlas300_1.7x.0.0)
+</blockquote></details>
+
