@@ -20,6 +20,6 @@ Ascend sample，请根据自己的需要进入对应文件夹获取应用，或�
 
 7. [sample-colorization-video](https://gitee.com/ascend/samples/tree/master/sample-colorization-video)：黑白图像上色视频的样例链接。
 
-8. [sample-objectdetection](https://gitee.com/ascend/samples/tree/master/sample-objectdetection):通用分类网络的样例链接
+8. [sample-objectdetection](https://gitee.com/ascend/samples/tree/master/sample-objectdetection):检测网络的样例链接
 
-9. [sample-objectdetection-video](https://gitee.com/ascend/samples/tree/master/sample-objectdetection-video)：通用分类网络视频的样例链接
+9. [sample-objectdetection-video](https://gitee.com/ascend/samples/tree/master/sample-objectdetection-video)：检测网络网络视频的样例链接
