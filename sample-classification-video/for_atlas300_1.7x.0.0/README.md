@@ -48,7 +48,9 @@
 </tr>
 </tbody>
 </table>
-3.  将原始网络模型转换为适配昇腾AI处理器的模型。
+
+3.  将原始网络模型转换为适配昇腾AI处理器的模型。  
+
     1.  切换到模型所在目录。  
         
          **cd $HOME/AscendProjects/sample-classification_video/caffe_model/** 
@@ -57,7 +59,7 @@
         
          **atc --model=googlenet.prototxt --weight=googlenet.caffemodel --framework=0 --output=googlenet_BGR --soc_version=Ascend310 --input_shape="data:1,3,224,224" --insert_op_conf=aipp.cfg** 
     
-3.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0219108795_li953280133816)中源码所在路径下的“**sample-classification_video/model**”目录下。
+4.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0219108795_li953280133816)中源码所在路径下的“**sample-classification_video/model**”目录下。
     
     **cp googlenet_BGR.om $HOME/AscendProjects/sample-classification_video/model/**
 
