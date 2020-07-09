@@ -59,7 +59,7 @@
 
     2.  执行模型转换的命令。  
         
-         **atc --model=googlenet.prototxt --weight=googlenet.caffemodel --framework=0 --output=googlenet_BRG --soc_version=Ascend310 --input_shape="data:1,3,224,224" --insert_op_conf=aipp.cfg** 
+         **atc --model=googlenet.prototxt --weight=googlenet.caffemodel --framework=0 --output=googlenet_BGR --soc_version=Ascend310 --input_shape="data:1,3,224,224" --insert_op_conf=aipp.cfg** 
     
 4.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0219108795_li953280133816)中源码所在路径下的“**sample-classification/model**”目录下。
     
