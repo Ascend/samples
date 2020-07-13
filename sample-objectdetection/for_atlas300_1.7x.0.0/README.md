@@ -31,11 +31,11 @@
 3.  将原始网络模型转换为适配昇腾AI处理器的模型。  
 
     执行模型转换的命令。         
-    **atc --model=yolov3.prototxt --weight=yolov3.caffemodel --framework=0 --output=yolov3_BGR --soc_version=Ascend310 --insert_op_conf=aipp_bgr.cfg** 
+    **atc --model=yolov3.prototxt --weight=yolov3.caffemodel --framework=0 --output=yolov3 --soc_version=Ascend310 --insert_op_conf=aipp_bgr.cfg** 
     
 3.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0219108795_li953280133816)中源码所在路径下的“**sample-objectdetection/model**”目录下。
     
-     **cp yolov3_BGR.om $HOME/AscendProjects/sample-objectdetection/model/**  
+     **cp yolov3.om $HOME/AscendProjects/sample-objectdetection/model/**  
 
 
 
@@ -109,9 +109,9 @@
 
 4.  查看运行结果。 
 
-    **cd result**  
+    **cd out**  
 
-    进入result目录，查看推理结果的图片。
+    进入out目录，查看推理结果的图片。
 
 
 ![结果1](figures/result.png)
