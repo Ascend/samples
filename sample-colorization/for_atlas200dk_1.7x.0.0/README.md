@@ -137,19 +137,8 @@
 
     **图 5**  程序已执行示意图<a name="zh-cn_topic_0203223265_fig93931954162719"></a>  
     ![](figures/程序已执行示意图.png "程序已执行示意图")
-3.  在Mind Studio所在Ubuntu服务器中，以HwHiAiUser用户SSH登录到Host侧。
 
-    **ssh HwHiAiUser\@**_host\_ip_
-
-    对于Atlas 200 DK，host\_ip默认为192.168.1.2（USB连接）或者192.168.0.2（NIC连接）。  
-4.  进入黑白图像上色应用的可执行文件所在路径。
-
-    **cd \~/HIAI\_PROJECTS/workspace\_mind\_studio/sample-colorization\_XXXXX/out**
-
-    >![](public_sys-resources/icon-note.gif) **说明：**   
-    >-   此路径中sample-colorization\_XXXXX的XXXXX是一串字母和数字的随机组合，每次重新编译运行时都会随机生成。  
-
-5.  查看运行结果。
+3.  查看运行结果。
 
     上色图片保存在工程下的“output \> outputs”目录下以时间戳命名的文件夹内。  
 
