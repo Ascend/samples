@@ -37,11 +37,11 @@
 
     **export PATH=/usr/local/python3.7.5/bin:\\${install_path}/atc/ccec_compiler/bin:\\${install_path}/atc/bin:\\$PATH**  
 
-    **export PYTHONPATH=\\${install_path}/atc/python/site-packages/te:\\${install_path}/atc/python/site- packages/topi:\\$PYTHONPATH**  
+    **export PYTHONPATH=\\${install_path}/atc/python/site-packages/te:\\${install_path}/atc/python/site-    packages/topi:\\$PYTHONPATH**  
 
     **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64:\\$LD_LIBRARY_PATH**  
 
-    **export ASCEND_OPP_PATH=\${install_path}/opp**
+    **export ASCEND_OPP_PATH=\\${install_path}/opp**
 
 
     >![](public_sys-resources/icon-note.gif) **说明：**   
@@ -53,6 +53,7 @@
     执行如下命令使环境变量生效。
 
     **source \~/.bashrc**  
+
 
 4.  将原始网络模型转换为适配昇腾AI处理器的模型。  
 
