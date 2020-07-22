@@ -39,7 +39,7 @@
 
     **export PYTHONPATH=\\${install_path}/atc/python/site-packages/te:\\${install_path}/atc/python/site- packages/topi:\\$PYTHONPATH**  
 
-    **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64:\$LD_LIBRARY_PATH**  
+    **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64:\\$LD_LIBRARY_PATH**  
 
     **export ASCEND_OPP_PATH=\${install_path}/opp**
 
