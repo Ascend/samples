@@ -41,7 +41,7 @@
 
     **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64:\\$LD_LIBRARY_PATH**  
 
-    **export ASCEND_OPP_PATH=\\${install_path}/opp**
+    **export ASCEND_OPP_PATH=\${install_path}/opp**
 
 
     >![](public_sys-resources/icon-note.gif) **说明：**   
