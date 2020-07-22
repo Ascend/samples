@@ -32,6 +32,7 @@
 
     执行如下命令在最后一行添加DDK\_HOME及LD\_LIBRARY\_PATH的环境变量。  
 
+  
     **export install_path=\$HOME/Ascend/ascend-toolkit/20.0.0.B002/x86_64-linux_gcc7.3.0**  
 
     **export PATH=/usr/local/python3.7.5/bin:\\${install_path}/atc/ccec_compiler/bin:\\${install_path}/atc/bin:\\$PATH**  
