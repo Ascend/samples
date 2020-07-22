@@ -25,19 +25,19 @@
         **cd $HOME/AscendProjects/sample-objectdetection/caffe_model**     
     2.  下载原始网络模型及权重文件。  
         **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/yolov3/yolov3.caffemodel**  
-        **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/yolov3/yolov3.prototxt**
+        **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/yolov3/yolov3.prototxt**  
+
 3.  设置环境变量。
 
     **vim \~/.bashrc**
 
     执行如下命令在最后一行添加DDK\_HOME及LD\_LIBRARY\_PATH的环境变量。  
 
-  
     **export install_path=\$HOME/Ascend/ascend-toolkit/20.0.0.B002/x86_64-linux_gcc7.3.0**  
 
     **export PATH=/usr/local/python3.7.5/bin:\\${install_path}/atc/ccec_compiler/bin:\\${install_path}/atc/bin:\\$PATH**  
 
-    **export PYTHONPATH=\\${install_path}/atc/python/site-packages/te:\\${install_path}/atc/python/site-    packages/topi:\\$PYTHONPATH**  
+    **export PYTHONPATH=\\${install_path}/atc/python/site-packages/te:\\${install_path}/atc/python/site- packages/topi:\\$PYTHONPATH**  
 
     **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64:\\$LD_LIBRARY_PATH**  
 
