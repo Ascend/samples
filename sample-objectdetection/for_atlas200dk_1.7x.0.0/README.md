@@ -35,7 +35,7 @@
 
     **export install_path=\$HOME/Ascend/ascend-toolkit/20.0.0.B002/x86_64-linux_gcc7.3.0**  
 
-    **export PATH=/usr/local/python3.7.5/bin:\${install_path}/atc/ccec_compiler/bin:\\${install_path}/atc/bin:\\$PATH**  
+    **export PATH=/usr/local/python3.7.5/bin:\\${install_path}/atc/ccec_compiler/bin:\\${install_path}/atc/bin:\\$PATH**  
 
     **export PYTHONPATH=\\${install_path}/atc/python/site-packages/te:\\${install_path}/atc/python/site-    packages/topi:\\$PYTHONPATH**  
 
