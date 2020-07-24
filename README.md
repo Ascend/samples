@@ -26,14 +26,14 @@ Ascend sample，请根据自己的需要进入对应文件夹获取应用，或�
 </blockquote></details>
 
 
-<details open><summary>sample-classification：通用分类网络图片</summary><blockquote>
+<details open><summary>sample-classification：分类网络图片</summary><blockquote>
 
 - [for_atlas200dk_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/sample-classification/for_atlas200dk_1.7x.0.0)  
 - [for_atlas300_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/sample-classification/for_atlas300_1.7x.0.0)
 </blockquote></details>  
 
 
-<details open><summary>sample-classification-video：通用分类网络视频</summary><blockquote>
+<details open><summary>sample-classification-video：分类网络视频</summary><blockquote>
 
 - [for_atlas200dk_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/sample-classification-video/for_atlas200dk_1.7x.0.0)  
 - [for_atlas300_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/sample-classification-video/for_atlas300_1.7x.0.0)
