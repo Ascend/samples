@@ -11,45 +11,49 @@ Ascend sample，请根据自己的需要进入对应文件夹获取应用，或�
 
 <details open><summary>classification：分类网络图片</summary><blockquote>
 
-- [for_atlas200dk_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/sample-classification/for_atlas200dk_1.7x.0.0)  
-- [for_atlas300_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/sample-classification/for_atlas300_1.7x.0.0)
+- [for_atlas200dk_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/classification/for_atlas200dk_1.7x.0.0)  
+- [for_atlas300_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/classification/for_atlas300_1.7x.0.0)
 </blockquote></details>  
 
 
 <details open><summary>classification_video：分类网络视频</summary><blockquote>
 
-- [for_atlas200dk_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/sample-classification-video/for_atlas200dk_1.7x.0.0)  
-- [for_atlas300_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/sample-classification-video/for_atlas300_1.7x.0.0)
+- [for_atlas200dk_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/classification-video/for_atlas200dk_1.7x.0.0)  
+- [for_atlas300_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/classification-video/for_atlas300_1.7x.0.0)
 </blockquote></details>
 
 
 <details open><summary>colorization：黑白图像上色图片</summary><blockquote>
 
-- [for_atlas200dk_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/sample-colorization/for_atlas200dk_1.7x.0.0)  
-- [for_atlas300_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/sample-colorization/for_atlas300_1.7x.0.0)
+- [for_atlas200dk_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/colorization/for_atlas200dk_1.7x.0.0)  
+- [for_atlas300_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/colorization/for_atlas300_1.7x.0.0)
 </blockquote></details>  
 
 
 <details open><summary>colorization_video：黑白图像上色视频</summary><blockquote>
 
-- [for_atlas200dk_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/sample-colorization-video/for_atlas200dk_1.7x.0.0)  
-- [for_atlas300_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/sample-colorization-video/for_atlas300_1.7x.0.0)
+- [for_atlas200dk_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/colorization-video/for_atlas200dk_1.7x.0.0)  
+- [for_atlas300_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/colorization-video/for_atlas300_1.7x.0.0)
 </blockquote></details>
 
 
 <details open><summary>objectdetection：检测网络图片</summary><blockquote>
 
-- [for_atlas200dk_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/sample-objectdetection/for_atlas200dk_1.7x.0.0)  
-- [for_atlas300_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/sample-objectdetection/for_atlas300_1.7x.0.0)
+- [for_atlas200dk_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/objectdetection/for_atlas200dk_1.7x.0.0)  
+- [for_atlas300_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/objectdetection/for_atlas300_1.7x.0.0)
 </blockquote></details>
 
 
 <details open><summary>objectdetection_video：检测网络视频</summary><blockquote>
 
-- [for_atlas200dk_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/sample-objectdetection-video/for_atlas200dk_1.7x.0.0)  
-- [for_atlas300_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/sample-objectdetection-video/for_atlas300_1.7x.0.0)
+- [for_atlas200dk_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/objectdetection-video/for_atlas200dk_1.7x.0.0)  
+- [for_atlas300_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/objectdetection-video/for_atlas300_1.7x.0.0)
 </blockquote></details>
 
+<details open><summary>cameradetect：检测网络摄像头版</summary><blockquote>
+
+- [for_atlas200dk_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/cameradetect/for_atlas200dk_1.7x.0.0)  
+</blockquote></details> 
 
 <details open><summary>mark_detection：口罩识别图片版</summary><blockquote>
 
@@ -63,6 +67,4 @@ Ascend sample，请根据自己的需要进入对应文件夹获取应用，或�
 - [for_atlas300_1.3x.0.0_c++](https://gitee.com/ascend/samples/tree/master/mark_detection_video_cpp/for_atlas300_1.3x.0.0_c++)
 - [for_atlas200dk_1.3x.0.0_python](https://gitee.com/ascend/samples/tree/master/mark_detection_video/for_atlas200dk_1.3x.0.0_python)
 </blockquote></details>
-
-
 
