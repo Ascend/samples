@@ -13,18 +13,18 @@
 
     **cd $HOME/AscendProjects**    
 
-    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/200dk/sample-classification-video.zip** 
+    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/classification_video.zip** 
   
-    **unzip sample-classification-video.zip**    
+    **unzip classification-video.zip**    
     
     >![](public_sys-resources/icon-note.gif) **说明：**   
     >- 如果使用wget下载失败，可使用如下命令下载代码。  
-    **curl -OL https://c7xcode.obs.cn-north-4.myhuaweicloud.com/200dk/sample-classification-video.zip** 
+    **curl -OL https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/classification_video.zip** 
     >- 如果curl也下载失败，可复制下载链接到浏览器，手动上传至服务器。
     
 2. <a name="zh-cn_topic_0219108795_li2074865610364"></a>获取此应用中所需要的原始网络模型。
 
-   参考[表 分类网络应用使用模型](#zh-cn_topic_0219108795_table19942111763710)获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到"$HOME/AscendProjects/sample-classification-video/caffe_model/"目录下。
+   参考[表 分类网络应用使用模型](#zh-cn_topic_0219108795_table19942111763710)获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到"$HOME/AscendProjects/classification-video/caffe_model/"目录下。
 
     **表 1**  分类网络应用使用模型
 
@@ -88,9 +88,9 @@
     ![](figures/模型转换3.png "模型转换3")
 
     
-5.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0228757084_section8534138124114)中源码所在路径下的“**sample-classification-video/model**”目录下。
+5.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0228757084_section8534138124114)中源码所在路径下的“**classification-video/model**”目录下。
     
-     **cp \\$HOME/modelzoo/googlenet/device/googlenet.om \\$HOME/AscendProjects/sample-classification-video/model/**  
+     **cp \\$HOME/modelzoo/googlenet/device/googlenet.om \\$HOME/AscendProjects/classification-video/model/**  
 
 ## 环境配置   
 
@@ -113,7 +113,7 @@
 
     **./MindStudio.sh**
 
-    启动成功后，打开**sample-classification-video**工程，如[图 打开classification-video工程](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810)所示。
+    启动成功后，打开**classification-video**工程，如[图 打开classification-video工程](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810)所示。
 
     **图 1**  打开classification-video工程<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810"></a>  
     ![](figures/打开classification_video工程.png "打开classification-video工程")
@@ -165,7 +165,7 @@
     **图 8**  配置运行<a name="zh-cn_topic_0203223265_fig93931954162720"></a>   
     ![](figures/配置run.png "配置运行")
  
-2.  单击  **Run \> Run 'sample-classification-video'**，如[图 程序已执行示意图](#zh-cn_topic_0203223265_fig93931954162719)所示，可执行程序已经在开发者板执行。  
+2.  单击  **Run \> Run 'classification-video'**，如[图 程序已执行示意图](#zh-cn_topic_0203223265_fig93931954162719)所示，可执行程序已经在开发者板执行。  
 
     **图 9**  程序已执行示意图<a name="zh-cn_topic_0203223265_fig93931954162719"></a>  
     ![](figures/程序已执行示意图.png "程序已执行示意图")  
