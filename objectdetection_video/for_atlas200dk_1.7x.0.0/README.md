@@ -55,7 +55,7 @@
 
     2.  执行以下命令转换模型。
 
-        atc --model=yolov3.prototxt --weight=yolov3.caffemodel --framework=0 --output=yolov3 --soc_version=Ascend310 --insert_op_conf=aipp_nv12.cfg
+        **atc --model=yolov3.prototxt --weight=yolov3.caffemodel --framework=0 --output=yolov3 --soc_version=Ascend310 --insert_op_conf=aipp_nv12.cfg**
     
 4.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0219108795_li953280133816)中源码所在路径下的“**objectdetection_video/model**”目录下。
     
@@ -94,7 +94,7 @@
 
       **图 2**  修改presenter_server_ip<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig1110624110"></a>  
       ![](figures/presenter_server_ip.png "修改presenter_server_ip")      
-    -  将**src/sample_process.cpp**中的 **sample_process** 修改为Mind Studio所在Ubuntu服务器的虚拟网卡的ip地址，如[图 param_host_ip](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11)所示。
+    -  将**src/sample_process.cpp**中的 **param.host_ip** 修改为Mind Studio所在Ubuntu服务器的虚拟网卡的ip地址，如[图 param_host_ip](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11)所示。
 
       **图 3**  修改param_host_ip<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11"></a>  
       ![](figures/param_host_ip.png "修改param_host_ip")    
@@ -102,7 +102,7 @@
     >![](public_sys-resources/icon-note.gif) **说明：**    
     >-  虚拟网卡的ip地址请通过ifconfig命令查看。    
 3.  开始编译，打开Mind Studio工具，在工具栏中点击**Build \> Edit Build Configuration**。  
-    选择**Target OS** 为**Euleros2.8**，如[图 配置编译](#zh-cn_topic_0203223265_fig17414647130)所示。
+    选择**Target OS** 为**Centos7.6**，如[图 配置编译](#zh-cn_topic_0203223265_fig17414647130)所示。
 
     **图 4**  配置编译<a name="zh-cn_topic_0203223265_fig17414647130"></a>  
     ![](figures/配置build.png "配置编译")  
