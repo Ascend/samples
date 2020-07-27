@@ -1,0 +1,5 @@
+-- env INC_PATH: /home/ascend/Ascend/ascend-toolkit/20.0.RC1/acllib_centos7.6.aarch64
+-- set default LIB_PATH: /usr/local/Ascend/acllib/lib64/stub/
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/ascend/c7x_samples/200dk_sample/cameradetect/build/cmake

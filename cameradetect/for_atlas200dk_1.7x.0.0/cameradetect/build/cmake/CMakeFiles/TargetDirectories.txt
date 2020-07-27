@@ -1,0 +1,13 @@
+/home/ascend/c7x_samples/200dk_sample/cameradetect/build/cmake/CMakeFiles/install/strip.dir
+/home/ascend/c7x_samples/200dk_sample/cameradetect/build/cmake/CMakeFiles/install/local.dir
+/home/ascend/c7x_samples/200dk_sample/cameradetect/build/cmake/CMakeFiles/edit_cache.dir
+/home/ascend/c7x_samples/200dk_sample/cameradetect/build/cmake/CMakeFiles/rebuild_cache.dir
+/home/ascend/c7x_samples/200dk_sample/cameradetect/build/cmake/CMakeFiles/list_install_components.dir
+/home/ascend/c7x_samples/200dk_sample/cameradetect/build/cmake/CMakeFiles/install.dir
+/home/ascend/c7x_samples/200dk_sample/cameradetect/build/cmake/src/CMakeFiles/install/strip.dir
+/home/ascend/c7x_samples/200dk_sample/cameradetect/build/cmake/src/CMakeFiles/install/local.dir
+/home/ascend/c7x_samples/200dk_sample/cameradetect/build/cmake/src/CMakeFiles/main.dir
+/home/ascend/c7x_samples/200dk_sample/cameradetect/build/cmake/src/CMakeFiles/edit_cache.dir
+/home/ascend/c7x_samples/200dk_sample/cameradetect/build/cmake/src/CMakeFiles/rebuild_cache.dir
+/home/ascend/c7x_samples/200dk_sample/cameradetect/build/cmake/src/CMakeFiles/install.dir
+/home/ascend/c7x_samples/200dk_sample/cameradetect/build/cmake/src/CMakeFiles/list_install_components.dir

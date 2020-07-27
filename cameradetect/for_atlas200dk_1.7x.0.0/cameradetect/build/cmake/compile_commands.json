@@ -1,0 +1,62 @@
+[
+{
+  "directory": "/home/ascend/c7x_samples/200dk_sample/cameradetect/build/cmake/src",
+  "command": "/usr/bin/c++  -DENABLE_DVPP_INTERFACE -I/home/ascend/c7x_samples/200dk_sample/cameradetect/src/. -I/home/ascend/c7x_samples/200dk_sample/cameradetect/src/./common -I/home/ascend/Ascend/ascend-toolkit/20.0.RC1/acllib_centos7.6.aarch64/acllib/include -I/home/ascend/ascend_ddk/arm/include -I/home/ascend/Ascend/ascenddk/arm/include -I/home/ascend/ascend_ddk/arm/include/ascenddk -I/home/ascend/Ascend    -std=c++11 -o CMakeFiles/main.dir/camera.cpp.o -c /home/ascend/c7x_samples/200dk_sample/cameradetect/src/camera.cpp",
+  "file": "/home/ascend/c7x_samples/200dk_sample/cameradetect/src/camera.cpp"
+},
+{
+  "directory": "/home/ascend/c7x_samples/200dk_sample/cameradetect/build/cmake/src",
+  "command": "/usr/bin/c++  -DENABLE_DVPP_INTERFACE -I/home/ascend/c7x_samples/200dk_sample/cameradetect/src/. -I/home/ascend/c7x_samples/200dk_sample/cameradetect/src/./common -I/home/ascend/Ascend/ascend-toolkit/20.0.RC1/acllib_centos7.6.aarch64/acllib/include -I/home/ascend/ascend_ddk/arm/include -I/home/ascend/Ascend/ascenddk/arm/include -I/home/ascend/ascend_ddk/arm/include/ascenddk -I/home/ascend/Ascend    -std=c++11 -o CMakeFiles/main.dir/face_detection_inference.cpp.o -c /home/ascend/c7x_samples/200dk_sample/cameradetect/src/face_detection_inference.cpp",
+  "file": "/home/ascend/c7x_samples/200dk_sample/cameradetect/src/face_detection_inference.cpp"
+},
+{
+  "directory": "/home/ascend/c7x_samples/200dk_sample/cameradetect/build/cmake/src",
+  "command": "/usr/bin/c++  -DENABLE_DVPP_INTERFACE -I/home/ascend/c7x_samples/200dk_sample/cameradetect/src/. -I/home/ascend/c7x_samples/200dk_sample/cameradetect/src/./common -I/home/ascend/Ascend/ascend-toolkit/20.0.RC1/acllib_centos7.6.aarch64/acllib/include -I/home/ascend/ascend_ddk/arm/include -I/home/ascend/Ascend/ascenddk/arm/include -I/home/ascend/ascend_ddk/arm/include/ascenddk -I/home/ascend/Ascend    -std=c++11 -o CMakeFiles/main.dir/face_detection_postprocess.cpp.o -c /home/ascend/c7x_samples/200dk_sample/cameradetect/src/face_detection_postprocess.cpp",
+  "file": "/home/ascend/c7x_samples/200dk_sample/cameradetect/src/face_detection_postprocess.cpp"
+},
+{
+  "directory": "/home/ascend/c7x_samples/200dk_sample/cameradetect/build/cmake/src",
+  "command": "/usr/bin/c++  -DENABLE_DVPP_INTERFACE -I/home/ascend/c7x_samples/200dk_sample/cameradetect/src/. -I/home/ascend/c7x_samples/200dk_sample/cameradetect/src/./common -I/home/ascend/Ascend/ascend-toolkit/20.0.RC1/acllib_centos7.6.aarch64/acllib/include -I/home/ascend/ascend_ddk/arm/include -I/home/ascend/Ascend/ascenddk/arm/include -I/home/ascend/ascend_ddk/arm/include/ascenddk -I/home/ascend/Ascend    -std=c++11 -o CMakeFiles/main.dir/dvpp_jpege.cpp.o -c /home/ascend/c7x_samples/200dk_sample/cameradetect/src/dvpp_jpege.cpp",
+  "file": "/home/ascend/c7x_samples/200dk_sample/cameradetect/src/dvpp_jpege.cpp"
+},
+{
+  "directory": "/home/ascend/c7x_samples/200dk_sample/cameradetect/build/cmake/src",
+  "command": "/usr/bin/c++  -DENABLE_DVPP_INTERFACE -I/home/ascend/c7x_samples/200dk_sample/cameradetect/src/. -I/home/ascend/c7x_samples/200dk_sample/cameradetect/src/./common -I/home/ascend/Ascend/ascend-toolkit/20.0.RC1/acllib_centos7.6.aarch64/acllib/include -I/home/ascend/ascend_ddk/arm/include -I/home/ascend/Ascend/ascenddk/arm/include -I/home/ascend/ascend_ddk/arm/include/ascenddk -I/home/ascend/Ascend    -std=c++11 -o CMakeFiles/main.dir/dvpp_process.cpp.o -c /home/ascend/c7x_samples/200dk_sample/cameradetect/src/dvpp_process.cpp",
+  "file": "/home/ascend/c7x_samples/200dk_sample/cameradetect/src/dvpp_process.cpp"
+},
+{
+  "directory": "/home/ascend/c7x_samples/200dk_sample/cameradetect/build/cmake/src",
+  "command": "/usr/bin/c++  -DENABLE_DVPP_INTERFACE -I/home/ascend/c7x_samples/200dk_sample/cameradetect/src/. -I/home/ascend/c7x_samples/200dk_sample/cameradetect/src/./common -I/home/ascend/Ascend/ascend-toolkit/20.0.RC1/acllib_centos7.6.aarch64/acllib/include -I/home/ascend/ascend_ddk/arm/include -I/home/ascend/Ascend/ascenddk/arm/include -I/home/ascend/ascend_ddk/arm/include/ascenddk -I/home/ascend/Ascend    -std=c++11 -o CMakeFiles/main.dir/dvpp_resize.cpp.o -c /home/ascend/c7x_samples/200dk_sample/cameradetect/src/dvpp_resize.cpp",
+  "file": "/home/ascend/c7x_samples/200dk_sample/cameradetect/src/dvpp_resize.cpp"
+},
+{
+  "directory": "/home/ascend/c7x_samples/200dk_sample/cameradetect/build/cmake/src",
+  "command": "/usr/bin/c++  -DENABLE_DVPP_INTERFACE -I/home/ascend/c7x_samples/200dk_sample/cameradetect/src/. -I/home/ascend/c7x_samples/200dk_sample/cameradetect/src/./common -I/home/ascend/Ascend/ascend-toolkit/20.0.RC1/acllib_centos7.6.aarch64/acllib/include -I/home/ascend/ascend_ddk/arm/include -I/home/ascend/Ascend/ascenddk/arm/include -I/home/ascend/ascend_ddk/arm/include/ascenddk -I/home/ascend/Ascend    -std=c++11 -o CMakeFiles/main.dir/model_process.cpp.o -c /home/ascend/c7x_samples/200dk_sample/cameradetect/src/model_process.cpp",
+  "file": "/home/ascend/c7x_samples/200dk_sample/cameradetect/src/model_process.cpp"
+},
+{
+  "directory": "/home/ascend/c7x_samples/200dk_sample/cameradetect/build/cmake/src",
+  "command": "/usr/bin/c++  -DENABLE_DVPP_INTERFACE -I/home/ascend/c7x_samples/200dk_sample/cameradetect/src/. -I/home/ascend/c7x_samples/200dk_sample/cameradetect/src/./common -I/home/ascend/Ascend/ascend-toolkit/20.0.RC1/acllib_centos7.6.aarch64/acllib/include -I/home/ascend/ascend_ddk/arm/include -I/home/ascend/Ascend/ascenddk/arm/include -I/home/ascend/ascend_ddk/arm/include/ascenddk -I/home/ascend/Ascend    -std=c++11 -o CMakeFiles/main.dir/common/atlas_thread_mgr.cpp.o -c /home/ascend/c7x_samples/200dk_sample/cameradetect/src/common/atlas_thread_mgr.cpp",
+  "file": "/home/ascend/c7x_samples/200dk_sample/cameradetect/src/common/atlas_thread_mgr.cpp"
+},
+{
+  "directory": "/home/ascend/c7x_samples/200dk_sample/cameradetect/build/cmake/src",
+  "command": "/usr/bin/c++  -DENABLE_DVPP_INTERFACE -I/home/ascend/c7x_samples/200dk_sample/cameradetect/src/. -I/home/ascend/c7x_samples/200dk_sample/cameradetect/src/./common -I/home/ascend/Ascend/ascend-toolkit/20.0.RC1/acllib_centos7.6.aarch64/acllib/include -I/home/ascend/ascend_ddk/arm/include -I/home/ascend/Ascend/ascenddk/arm/include -I/home/ascend/ascend_ddk/arm/include/ascenddk -I/home/ascend/Ascend    -std=c++11 -o CMakeFiles/main.dir/common/atlas_app.cpp.o -c /home/ascend/c7x_samples/200dk_sample/cameradetect/src/common/atlas_app.cpp",
+  "file": "/home/ascend/c7x_samples/200dk_sample/cameradetect/src/common/atlas_app.cpp"
+},
+{
+  "directory": "/home/ascend/c7x_samples/200dk_sample/cameradetect/build/cmake/src",
+  "command": "/usr/bin/c++  -DENABLE_DVPP_INTERFACE -I/home/ascend/c7x_samples/200dk_sample/cameradetect/src/. -I/home/ascend/c7x_samples/200dk_sample/cameradetect/src/./common -I/home/ascend/Ascend/ascend-toolkit/20.0.RC1/acllib_centos7.6.aarch64/acllib/include -I/home/ascend/ascend_ddk/arm/include -I/home/ascend/Ascend/ascenddk/arm/include -I/home/ascend/ascend_ddk/arm/include/ascenddk -I/home/ascend/Ascend    -std=c++11 -o CMakeFiles/main.dir/common/atlas_utils.cpp.o -c /home/ascend/c7x_samples/200dk_sample/cameradetect/src/common/atlas_utils.cpp",
+  "file": "/home/ascend/c7x_samples/200dk_sample/cameradetect/src/common/atlas_utils.cpp"
+},
+{
+  "directory": "/home/ascend/c7x_samples/200dk_sample/cameradetect/build/cmake/src",
+  "command": "/usr/bin/c++  -DENABLE_DVPP_INTERFACE -I/home/ascend/c7x_samples/200dk_sample/cameradetect/src/. -I/home/ascend/c7x_samples/200dk_sample/cameradetect/src/./common -I/home/ascend/Ascend/ascend-toolkit/20.0.RC1/acllib_centos7.6.aarch64/acllib/include -I/home/ascend/ascend_ddk/arm/include -I/home/ascend/Ascend/ascenddk/arm/include -I/home/ascend/ascend_ddk/arm/include/ascenddk -I/home/ascend/Ascend    -std=c++11 -o CMakeFiles/main.dir/common/atlas_utils_common.cpp.o -c /home/ascend/c7x_samples/200dk_sample/cameradetect/src/common/atlas_utils_common.cpp",
+  "file": "/home/ascend/c7x_samples/200dk_sample/cameradetect/src/common/atlas_utils_common.cpp"
+},
+{
+  "directory": "/home/ascend/c7x_samples/200dk_sample/cameradetect/build/cmake/src",
+  "command": "/usr/bin/c++  -DENABLE_DVPP_INTERFACE -I/home/ascend/c7x_samples/200dk_sample/cameradetect/src/. -I/home/ascend/c7x_samples/200dk_sample/cameradetect/src/./common -I/home/ascend/Ascend/ascend-toolkit/20.0.RC1/acllib_centos7.6.aarch64/acllib/include -I/home/ascend/ascend_ddk/arm/include -I/home/ascend/Ascend/ascenddk/arm/include -I/home/ascend/ascend_ddk/arm/include/ascenddk -I/home/ascend/Ascend    -std=c++11 -o CMakeFiles/main.dir/main.cpp.o -c /home/ascend/c7x_samples/200dk_sample/cameradetect/src/main.cpp",
+  "file": "/home/ascend/c7x_samples/200dk_sample/cameradetect/src/main.cpp"
+}
+]
