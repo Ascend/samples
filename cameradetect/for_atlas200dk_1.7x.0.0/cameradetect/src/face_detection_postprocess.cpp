@@ -71,7 +71,7 @@ void FaceDetectionPostprocess::FasterYolov3PostProcess(vector<DetectionResult>& 
     }
     uint32_t imageWidth = detectResult->image.width;
     uint32_t imageHeight = detectResult->image.height;
-    float *boxNum = reinterpret_cast<float *>(outputs[1].data.get());
+    uint32_t *boxNum = reinterpret_cast<uint32_t *>(outputs[1].data.get());
     uint32_t num = (uint32_t)(boxNum[0]);
     float *objectInfo = reinterpret_cast<float *>(outputs[0].data.get());
 
