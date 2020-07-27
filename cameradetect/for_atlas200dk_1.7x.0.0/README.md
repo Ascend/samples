@@ -128,9 +128,14 @@
     **图 5**  程序已执行示意图<a name="zh-cn_topic_0203223265_fig93931954162719"></a>  
     ![](figures/程序已执行示意图1.png "程序已执行示意图")
 
-2.  查看运行结果。
+2.  使用启动Presenter Server服务时提示的URL登录 Presenter Server 网站。
 
-    推理结果图片保存在工程下的“output \> outputs”目录下以时间戳命名的文件夹内。
+    等待Presenter Agent传输数据给服务端，单击“Refresh“刷新，当有数据时相应的Channel 的Status变成绿色，如下图所示。
+
+    **图 10**  Presenter Server界面<a name="zh-cn_topic_0228461904_zh-cn_topic_0203223294_fig113691556202312"></a>  
+    ![](figures/Presenter-Server界面.png "Presenter-Server界面") 
+
+3.  单击右侧对应的View Name链接，比如上图的“video”，查看结果。
  
 ## 结束应用
 
