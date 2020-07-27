@@ -20,56 +20,59 @@
     **curl -OL https://c7xcode.obs.cn-north-4.myhuaweicloud.com/200dk/sample-objectdetection.zip** 
     >- 如果curl也下载失败，可复制下载链接到浏览器，手动上传至服务器。
     
-2.  <a name="zh-cn_topic_0219108795_li2074865610364"></a>获取此应用中所需要的原始网络模型。    
-    1.  切换目录。  
-        **cd $HOME/AscendProjects/sample-objectdetection/caffe_model**     
-    2.  下载原始网络模型及权重文件。  
-        **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/yolov3/yolov3.caffemodel**  
-        **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/yolov3/yolov3.prototxt**  
+2.  <a name="zh-cn_topic_0219108795_li2074865610364"></a>获取此应用中所需要的原始网络模型。
 
-3.  设置环境变量。
+    参考[表 yolov3目标检测应用使用模型](#zh-cn_topic_0219108795_table19942111763710)获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到Ubuntu服务器的任意目录，例如：$HOME/models/sample-colorization。
 
-    **vim \~/.bashrc**
+    **表 1**  yolov3目标检测应用使用模型
 
-    执行如下命令在最后一行添加DDK\_HOME及LD\_LIBRARY\_PATH的环境变量。  
+    <a name="zh-cn_topic_0219108795_table19942111763710"></a>
+    <table><thead align="left"><tr id="zh-cn_topic_0219108795_row611318123710"><th class="cellrowborder" valign="top" width="11.959999999999999%" id="mcps1.2.4.1.1"><p id="zh-cn_topic_0219108795_p81141820376"><a name="zh-cn_topic_0219108795_p81141820376"></a><a name="zh-cn_topic_0219108795_p81141820376"></a>模型名称</p>
+    </th>
+    <th class="cellrowborder" valign="top" width="8.07%" id="mcps1.2.4.1.2"><p id="zh-cn_topic_0219108795_p13181823711"><a name="zh-cn_topic_0219108795_p13181823711"></a><a name="zh-cn_topic_0219108795_p13181823711"></a>模型说明</p>
+    </th>
+    <th class="cellrowborder" valign="top" width="79.97%" id="mcps1.2.4.1.3"><p id="zh-cn_topic_0219108795_p1717182378"><a name="zh-cn_topic_0219108795_p1717182378"></a><a name="zh-cn_topic_0219108795_p1717182378"></a>模型下载路径</p>
+    </th>
+    </tr>
+    </thead>
+    <tbody><tr id="zh-cn_topic_0219108795_row1119187377"><td class="cellrowborder" valign="top" width="11.959999999999999%" headers="mcps1.2.4.1.1 "><p id="zh-cn_topic_0219108795_p4745165253920"><a name="zh-cn_topic_0219108795_p4745165253920"></a><a name="zh-cn_topic_0219108795_p4745165253920"></a>yolov3</p>
+    </td>
+    <td class="cellrowborder" valign="top" width="8.07%" headers="mcps1.2.4.1.2 "><p id="zh-cn_topic_0219108795_p1874515218391"><a name="zh-cn_topic_0219108795_p1874515218391"></a><a name="zh-cn_topic_0219108795_p1874515218391"></a>yolov3模型</p>
+    </td>
+    <td class="cellrowborder" valign="top" width="79.97%" headers="mcps1.2.4.1.3 "><p id="zh-cn_topic_0219108795_p611318163718"><a name="zh-cn_topic_0219108795_p611318163718"></a><a name="zh-cn_topic_0219108795_p611318163718"></a>请参考<a href="https://gitee.com/HuaweiAscend/models/tree/master/computer_vision/object_detect/yolov3" target="_blank" rel="noopener noreferrer">https://gitee.com/HuaweiAscend/models/tree/master/computer_vision/object_detect/yolov3</a>目录中README.md下载原始网络模型文件及其对应的权重文件。</p>
+    </td>
+    </tr>
+    </tbody>
+    </table>
 
-    **export install_path=\\$HOME/Ascend/ascend-toolkit/20.0.0.B002/x86_64-linux_gcc7.3.0**  
+3.  将原始网络模型转换为适配昇腾AI处理器的模型。    
 
-    **export PATH=\\${install_path}/atc/ccec_compiler/bin:\\${install_path}/atc/bin:\\$PATH:/usr/local/python3.7.5/bin**  
+    1.  在Mind Studio操作界面的顶部菜单栏中选择**Tools \> Model Convert**，进入模型转换界面。
+    2.  在弹出的**Model Conversion**操作界面中，进行模型转换配置。
+    3.  参照以下图片和说明进行参数配置。    
+        -   Model File选择[步骤2](#zh-cn_topic_0219108795_li2074865610364)中下载的模型文件，此时会自动匹配到权重文件并填写在Weight File中。  
+        -   Input Type填写为FP32。
 
-    **export PYTHONPATH=\\${install_path}/atc/python/site-packages/te:\\${install_path}/atc/python/site-packages/topi:\\$PYTHONPATH**  
+        -   Input Node:img_info中N和C的取值分别填写为1和3。
 
-    **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64:\$LD_LIBRARY_PATH**  
+        -   Model Image Format填写为BGR。
 
-    **export ASCEND_OPP_PATH=\${install_path}/opp**
+        -   Data Normalization中Mean填写为0、0、0，Variance填写为0.003922、0.003922、0.003922。
 
-
-    >![](public_sys-resources/icon-note.gif) **说明：**   
-    >-   **install_path请替换成软件包的安装路径。**  
-    >-   **如果此环境变量已经添加，则此步骤可跳过。**
-
-    输入:wq!保存退出。
-
-    执行如下命令使环境变量生效。
-
-    **source \~/.bashrc**  
-
-
-4.  将原始网络模型转换为适配昇腾AI处理器的模型。  
-
-    执行模型转换的命令。         
-    **atc --model=yolov3.prototxt --weight=yolov3.caffemodel --framework=0 --output=yolov3_BGR --soc_version=Ascend310 --insert_op_conf=aipp_bgr.cfg** 
+    ![](figures/objectdetciton_convert1.png "模型转换1")  
+    ![](figures/objectdetciton_convert2.png "模型转换2")  
+    ![](figures/objectdetciton_convert3.png "模型转换3")
     
 5.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0219108795_li953280133816)中源码所在路径下的“**sample-objectdetection/model**”目录下。
     
-     **cp yolov3_BGR.om $HOME/AscendProjects/sample-objectdetection/model/**  
+     **cp yolov3.om $HOME/AscendProjects/sample-objectdetection/model/**  
 
 ## 环境配置   
 
 **注：服务器上已安装OpenCV、PresentAgent、交叉编译工具可跳过此步骤。**  
     
 
-- 安装OpenCV和PresentAgent  
+- 安装OpenCV  
       
     请参考 **https://gitee.com/ascend/common/blob/master/200dk_install_opencv/200DK_INSTALL_OPENCV_PRESENTAGENT.md**   
 
