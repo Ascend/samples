@@ -24,30 +24,42 @@
     
 2.  <a name="zh-cn_topic_0219108795_li2074865610364"></a>获取此应用中所需要的原始网络模型。    
  
-     -  下载原始网络模型及权重文件至ubuntu服务器任意目录。  
-        **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/yolov3/yolov3.caffemodel**  
-        **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/yolov3/yolov3.prototxt** 
-3.  将原始网络模型转换为适配昇腾AI处理器的模型。    
+     -  下载原始网络模型及权重文件至ubuntu服务器任意目录，如:$HOME/yolov3。
 
-    1.  在Mind Studio操作界面的顶部菜单栏中选择**Tools \> Model Converter**，进入模型转换界面。
-    2.  在弹出的**Model Conversion**操作界面中，进行模型转换配置。
-    3.  参照以下图片和说明进行参数配置。    
-        -   Model File选择[步骤2](#zh-cn_topic_0219108795_li2074865610364)中下载的模型文件，此时会自动匹配到权重文件并填写在Weight File中。  
-        -   Input Type填写为FP32。
+        **mkdir -p $HOME/yolov3**
 
-        -   Input Node:img_info中N和C的取值分别填写为1和3。
+        **wget -P $HOME/yolov3 https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/yolov3/yolov3.caffemodel** 
+ 
+        **wget -P $HOME/yolov3 https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/yolov3/yolov3.prototxt**
 
-        -   Model Image Format填写为BGR。
+        **wget -P $HOME/yolov3 https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/yolov3/aipp_nv12.cfg** 
 
-        -   Data Normalization中Mean填写为0、0、0，Variance填写为0.003922、0.003922、0.003922。
 
-    ![](figures/objectdetciton_convert1.png "模型转换1")  
-    ![](figures/objectdetciton_convert2.png "模型转换2")  
-    ![](figures/objectdetciton_convert3.png "模型转换3")
+3.  将原始网络模型转换为适配昇腾AI处理器的模型。  
+
+    1.  设置环境变量
+        
+        命令行中输入以下命令设置环境变量。
+
+        **cd \$HOME/yolov3**
+        
+        **export install_path=\$HOME/Ascend/ascend-toolkit/20.0.RC1/x86_64-linux_gcc7.3.0**  
+
+        **export PATH=/usr/local/python3.7.5/bin:\\${install_path}/atc/ccec_compiler/bin:\\${install_path}/atc/bin:\\$PATH**  
+
+        **export PYTHONPATH=\\${install_path}/atc/python/site-packages/te:\\${install_path}/atc/python/site-packages/topi:\\$PYTHONPATH**  
+
+        **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64:\\$LD_LIBRARY_PATH**  
+
+        **export ASCEND_OPP_PATH=\\${install_path}/opp**  
+
+    2.  执行以下命令转换模型。
+
+        atc --model=yolov3.prototxt --weight=yolov3.caffemodel --framework=0 --output=yolov3 --soc_version=Ascend310 --insert_op_conf=aipp_nv12.cfg
     
 4.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0219108795_li953280133816)中源码所在路径下的“**objectdetection_video/model**”目录下。
     
-    **cp \\$HOME/modelzoo/yolov3/device/yolov3.om \\$HOME/AscendProjects/objectdetection_video/model/**
+    **cp ./yolov3.om \$HOME/AscendProjects/objectdetection_video/model/**
     
 
 ## 环境配置   
