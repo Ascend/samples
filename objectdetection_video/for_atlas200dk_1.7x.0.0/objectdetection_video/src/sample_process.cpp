@@ -75,7 +75,7 @@ Result SampleProcess::InitResource()
 
 Result SampleProcess::VideoProcess(string input_path)
 {
-    const char* omModelPath = "../model/yolov3_BGR.om";
+    const char* omModelPath = "../model/yolov3.om";
     
     Mat frame;
 
