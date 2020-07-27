@@ -97,9 +97,8 @@ void ModelProcess::DestroyDesc()
     }
 }
 
-const float ModelInput2[4]={MODEL_INPUT_WIDTH,MODEL_INPUT_HEIGHT,MODEL_INPUT_WIDTH,MODEL_INPUT_HEIGHT};
-
-Result ModelProcess::CreateInput(void *inputDataBuffer, size_t bufferSize)
+Result ModelProcess::CreateInput(void *input1, size_t input1size, 
+                                 void* input2, size_t input2size)
 {
     input_ = aclmdlCreateDataset();
     if (input_ == nullptr) {
@@ -107,7 +106,7 @@ Result ModelProcess::CreateInput(void *inputDataBuffer, size_t bufferSize)
         return FAILED;
     }
 
-    aclDataBuffer* inputData = aclCreateDataBuffer(inputDataBuffer, bufferSize);
+    aclDataBuffer* inputData = aclCreateDataBuffer(input1, input1size);
     if (inputData == nullptr) {
         ERROR_LOG("can't create data buffer, create input failed");
         return FAILED;
@@ -121,15 +120,12 @@ Result ModelProcess::CreateInput(void *inputDataBuffer, size_t bufferSize)
         return FAILED;
     }
 
-    void *dataDev;
-    uint32_t dataSize=sizeof(ModelInput2);
-    aclrtMalloc(&dataDev, dataSize,ACL_MEM_MALLOC_HUGE_FIRST);
-    aclrtMemcpy(dataDev, dataSize, ModelInput2, sizeof(ModelInput2), ACL_MEMCPY_DEVICE_TO_DEVICE);
-    aclDataBuffer* inputData2 = aclCreateDataBuffer(dataDev, dataSize);
+    aclDataBuffer* inputData2 = aclCreateDataBuffer(input2, input2size);
     if (inputData == nullptr) {
         ERROR_LOG("can't create data buffer, create input failed");
         return FAILED;
     }
+
     ret = aclmdlAddDatasetBuffer(input_, inputData2);
     if (inputData == nullptr) {
         ERROR_LOG("can't add data buffer, create input failed");
@@ -137,7 +133,6 @@ Result ModelProcess::CreateInput(void *inputDataBuffer, size_t bufferSize)
         inputData = nullptr;
         return FAILED;
     }
-	INFO_LOG("aclmdlGetDatasetNumBuffers(input_)=%zu",aclmdlGetDatasetNumBuffers(input_));
 
     return SUCCESS;
 }

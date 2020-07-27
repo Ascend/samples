@@ -32,98 +32,14 @@
 
 using namespace std;
 
-const static std::vector<std::string> yolov3Label = {"person", "bicycle", "car", "motorbike",
-"aeroplane","bus", "train", "truck", "boat", 
-"traffic light", "fire hydrant", "stop sign", "parking meter", 
-"bench", "bird", "cat", "dog", "horse", 
-"sheep", "cow", "elephant", "bear", "zebra", 
-"giraffe", "backpack", "umbrella", "handbag","tie", 
-"suitcase", "frisbee", "skis", "snowboard", "sports ball",
-"kite", "baseball bat", "baseball glove", "skateboard", "surfboard",
-"tennis racket", "bottle", "wine glass", "cup", 
-"fork", "knife", "spoon", "bowl", "banana", 
-"apple", "sandwich", "orange", "broccoli", "carrot", 
-"hot dog", "pizza", "donut", "cake", "chair", 
-"sofa", "potted plant", "bed", "dining table", "toilet", 
-"TV monitor", "laptop", "mouse", "remote", "keyboard", 
-"cell phone", "microwave", "oven", "toaster", "sink", 
-"refrigerator", "book", "clock", "vase","scissors", 
-"teddy bear", "hair drier", "toothbrush"};
+namespace {
+const std::string kImagePathSeparator = ",";
+const int kStatSuccess = 0;
+const std::string kFileSperator = "/";
+const std::string kPathSeparator = "/";
+// output image prefix
+const std::string kOutputFilePrefix = "out_";
 
-enum BBoxIndex {TOPLEFTX=0,TOPLEFTY,BOTTOMRIGHTX,BOTTOMRIGHTY,SCORE,LABEL};
-
-Result Utils::PostProcess(const string &path, aclmdlDataset *modelOutput)
-{
-    size_t outDatasetNum = aclmdlGetDatasetNumBuffers(modelOutput);
-	if (outDatasetNum != 2) {
-		ERROR_LOG("outDatasetNum=%zu must be 2",outDatasetNum);
-		return FAILED;
-	}
-	aclDataBuffer* dataBuffer = aclmdlGetDatasetBuffer(modelOutput, 1);
-	if (dataBuffer == nullptr) {
-		ERROR_LOG("get model output aclmdlGetDatasetBuffer failed");
-		return FAILED;
-	}
-	void* data = aclGetDataBufferAddr(dataBuffer);
-	if (data == nullptr) {
-		ERROR_LOG("aclGetDataBufferAddr from dataBuffer failed.");
-		return FAILED;
-	}
-	uint32_t count;
-	aclError ret = aclrtMemcpy(&count, sizeof(count), data, sizeof(count), ACL_MEMCPY_DEVICE_TO_DEVICE);
-	if (ret != ACL_ERROR_NONE) {
-	  ERROR_LOG("box count aclrtMemcpy failed!");
-	  return FAILED;
-	}
-	INFO_LOG("box count=%d",count);
-	dataBuffer = aclmdlGetDatasetBuffer(modelOutput, 0);
-	if (dataBuffer == nullptr) {
-		ERROR_LOG("get model output aclmdlGetDatasetBuffer failed");
-		return FAILED;
-	}
-	data = aclGetDataBufferAddr(dataBuffer);
-	if (data == nullptr) {
-		ERROR_LOG("aclGetDataBufferAddr from dataBuffer failed.");
-	}
-	float outInfo[count*6];
-	ret = aclrtMemcpy(&outInfo, sizeof(outInfo), data, sizeof(outInfo), ACL_MEMCPY_DEVICE_TO_DEVICE);
-	if (ret != ACL_ERROR_NONE) {
-	  ERROR_LOG("box outInfo aclrtMemcpy failed!");
-	  return FAILED;
-	}
-	cv::Rect rect;
-	int font_face = 0; 
-	double font_scale = 1;
-	int thickness = 2;
-	int baseline;
-	cv::Mat resultImage = cv::imread(path, CV_LOAD_IMAGE_COLOR);
-	for(uint32_t b=0;b<count;b++){
-		uint32_t score=uint32_t(outInfo[count*SCORE+b]*100);
-		if(score<90)continue;
-		rect.x=outInfo[count*TOPLEFTX+b]*resultImage.cols/MODEL_INPUT_WIDTH;
-		rect.y=outInfo[count*TOPLEFTY+b]*resultImage.rows/MODEL_INPUT_HEIGHT;
-		rect.width=outInfo[count*BOTTOMRIGHTX+b]*resultImage.cols/MODEL_INPUT_WIDTH-rect.x;
-		rect.height=outInfo[count*BOTTOMRIGHTY+b]*resultImage.rows/MODEL_INPUT_HEIGHT-rect.y;
-		uint32_t objIndex = (uint32_t)outInfo[count*LABEL+b];
-		string text = yolov3Label[objIndex]+std::to_string(score)+"\%";
-      	cv::Point origin; 
-      	origin.x = rect.x;
-      	origin.y = rect.y;
-      	cv::putText(resultImage, text, origin, font_face, font_scale, cv::Scalar(0, 255, 255), thickness, 4, 0);
-		cv::rectangle(resultImage, rect, cv::Scalar(0, 255, 255),1, 8,0);
-	}
-	// generate result image
-    int pos = path.find_last_of(kFileSperator);
-    string file_name(path.substr(pos + 1));
-    stringstream sstream;
-    sstream.str("");
-    sstream << "./output" << kFileSperator
-      << kOutputFilePrefix << file_name;
-
-    string outputPath = sstream.str();
-    cv::imwrite(outputPath, resultImage);
-
-    return SUCCESS;
 }
 
 bool Utils::IsDirectory(const string &path) {
@@ -137,7 +53,7 @@ bool Utils::IsDirectory(const string &path) {
     if (S_ISDIR(buf.st_mode)) {
         return true;
     } else {
-        return false;
+    return false;
     }
 }
 
@@ -203,43 +119,115 @@ void Utils::GetPathFiles(const string &path, vector<string> &file_vec) {
     }
 }
 
-bool Utils::PreProcess(shared_ptr<ImageDesc> &image_path,
-                                    const string &path) {
-    // read image using OPENCV
-    cv::Mat mat = cv::imread(path, CV_LOAD_IMAGE_COLOR);
-    //resize
-    cv::Mat mat_rs;
-    cv::resize(mat, mat_rs, cv::Size(MODEL_INPUT_WIDTH, MODEL_INPUT_HEIGHT));
- 
-    if (mat.empty()) {
-        ERROR_LOG("read image failed.");
-        return false;
+void* Utils::CopyDataDeviceToLocal(void* deviceData, uint32_t dataSize) {
+    uint8_t* buffer = new uint8_t[dataSize];
+    if (buffer == nullptr) {
+        ERROR_LOG("New malloc memory failed");
+        return nullptr;
     }
 
-    // set property
-    image_path->input_path = path;
-    image_path->img_width = mat_rs.cols;
-    image_path->img_height = mat_rs.rows;
-
-    // set image data
-    uint32_t size = mat_rs.rows * mat_rs.cols*3;
-    void *image_buf_ptr = nullptr;
-    aclError mem_ret = aclrtMalloc(&image_buf_ptr, (size_t)(size), ACL_MEM_MALLOC_HUGE_FIRST);
-  
-    if (image_buf_ptr == nullptr) {
-        ERROR_LOG("new image buffer failed.");
-        return false;
+    aclError aclRet = aclrtMemcpy(buffer, dataSize, deviceData, dataSize, ACL_MEMCPY_DEVICE_TO_HOST);
+    if (aclRet != ACL_ERROR_NONE) {
+        ERROR_LOG("Copy device data to local failed, aclRet is %d", aclRet);
+        delete[](buffer);
+        return nullptr;
     }
-    mem_ret = aclrtMemcpy(image_buf_ptr, size, mat_rs.ptr<u_int8_t>(), size, ACL_MEMCPY_DEVICE_TO_DEVICE);
 
-    if (mem_ret != ACL_ERROR_NONE) {
-        aclrtFree(image_buf_ptr);
-        delete[] (u_int8_t *)image_buf_ptr;
-        ERROR_LOG("memcpy_s failed.");
-        image_buf_ptr = nullptr;
-        return false;
+    return (void*)buffer;
+}
+
+void* Utils::CopyDataToDevice(void* data, uint32_t dataSize, aclrtMemcpyKind policy) {
+    void* buffer = nullptr;
+    aclError aclRet = aclrtMalloc(&buffer, dataSize, ACL_MEM_MALLOC_HUGE_FIRST);
+    if (aclRet != ACL_ERROR_NONE) {
+        ERROR_LOG("malloc device data buffer failed, aclRet is %d", aclRet);
+        return nullptr;
     }
-    image_path->size = size;
-    image_path->data.reset((u_int8_t *)image_buf_ptr,[](u_int8_t* p){aclrtFree(p);});
-    return true;
+
+    aclRet = aclrtMemcpy(buffer, dataSize, data, dataSize, policy);
+    if (aclRet != ACL_ERROR_NONE) {
+        ERROR_LOG("Copy data to device failed, aclRet is %d", aclRet);
+        (void)aclrtFree(buffer);
+        return nullptr;
+    }
+
+    return buffer;
+}
+
+void* Utils::CopyDataDeviceToDevice(void* deviceData, uint32_t dataSize) {
+    return CopyDataToDevice(deviceData, dataSize, ACL_MEMCPY_DEVICE_TO_DEVICE);
+}
+
+void* Utils::CopyDataHostToDevice(void* deviceData, uint32_t dataSize) {
+    return CopyDataToDevice(deviceData, dataSize, ACL_MEMCPY_HOST_TO_DEVICE);
+}
+
+Result Utils::CopyImageDataToDevice(ImageData& imageDevice, ImageData srcImage, aclrtRunMode mode) {
+    void * buffer;
+    if (mode == ACL_HOST)
+        buffer = Utils::CopyDataHostToDevice(srcImage.data.get(), srcImage.size);
+    else
+        buffer = Utils::CopyDataDeviceToDevice(srcImage.data.get(), srcImage.size);
+
+    if (buffer == nullptr) {
+        ERROR_LOG("Copy image to device failed");
+        return FAILED;
+    }
+
+    imageDevice.width = srcImage.width;
+    imageDevice.height = srcImage.height;
+    imageDevice.size = srcImage.size;
+    imageDevice.data.reset((uint8_t*)buffer, [](uint8_t* p) { aclrtFree((void *)p); });
+
+    return SUCCESS;
+}
+
+int Utils::ReadImageFile(ImageData& image, std::string fileName)
+{
+    //uint32_t width = 0, height = 0;
+    //GetJPEGWidthHeight(fileName.c_str(), &width, &height);
+    //INFO_LOG("jpeg width %d, height %d", width, height);
+
+    struct stat sBuf;
+    int fileStatus = stat(fileName.data(), &sBuf);
+    if (fileStatus == -1) {
+        ERROR_LOG("failed to get file");
+        return FAILED;
+    }
+    if (S_ISREG(sBuf.st_mode) == 0) {
+        ERROR_LOG("%s is not a file, please enter a file", fileName.c_str());
+        return FAILED;
+    }
+    std::ifstream binFile(fileName, std::ifstream::binary);
+    if (binFile.is_open() == false) {
+        ERROR_LOG("open file %s failed", fileName.c_str());
+        return FAILED;
+    }
+
+    binFile.seekg(0, binFile.end);
+    uint32_t binFileBufferLen = binFile.tellg();
+    if (binFileBufferLen == 0) {
+        ERROR_LOG("binfile is empty, filename is %s", fileName.c_str());
+        binFile.close();
+        return FAILED;
+    }
+
+    binFile.seekg(0, binFile.beg);
+
+    uint8_t* binFileBufferData = new(std::nothrow) uint8_t[binFileBufferLen];
+    if (binFileBufferData == nullptr) {
+        ERROR_LOG("malloc binFileBufferData failed");
+        binFile.close();
+        return FAILED;
+    }
+    binFile.read((char *)binFileBufferData, binFileBufferLen);
+    binFile.close();
+
+    int32_t ch = 0;
+    acldvppJpegGetImageInfo(binFileBufferData, binFileBufferLen,
+              &(image.width), &(image.height), &ch);
+    image.data.reset(binFileBufferData, [](uint8_t* p) { delete[](p); });
+    image.size = binFileBufferLen;
+
+    return SUCCESS;
 }

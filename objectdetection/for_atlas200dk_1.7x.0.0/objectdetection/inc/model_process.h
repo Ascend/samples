@@ -65,7 +65,8 @@ public:
     * @param [in] bufferSize: input buffer size
     * @return result
     */
-    Result CreateInput(void *inputDataBuffer, size_t bufferSize);
+    Result CreateInput(void *input1, size_t input1size,
+                       void* input2, size_t input2size);
 
     /**
     * @brief destroy input resource
