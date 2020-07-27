@@ -144,7 +144,7 @@
 
 打印如下：
 
-__HwHiAiU+  2417  2415  7 08:05 ?        00:00:05 ./workspace_mind_studio_cameradetect__
+*HwHiAiU+  2417  2415  7 08:05 ?        00:00:05 ./workspace_mind_studio_cameradetect*
 
 杀死进程：
 
