@@ -13,18 +13,18 @@
 
     **cd $HOME/AscendProjects**  
 
-    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/200dk/sample-classification.zip** 
+    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/classification.zip** 
               
     **unzip sample-classification.zip**  
     
     >![](public_sys-resources/icon-note.gif) **说明：**   
     >- 如果使用wget下载失败，可使用如下命令下载代码。  
-    **curl -OL https://c7xcode.obs.cn-north-4.myhuaweicloud.com/200dk/sample-classification.zip** 
+    **curl -OL https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/classification.zip** 
     >- 如果curl也下载失败，可复制下载链接到浏览器，手动上传至服务器。
     
 2.  <a name="zh-cn_topic_0219108795_li2074865610364"></a>获取此应用中所需要的原始网络模型。
 
-    参考[表 分类网络应用使用模型](#zh-cn_topic_0219108795_table19942111763710)获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到“$HOME/AscendProjects/sample-classification/caffe_model”目录下。
+    参考[表 分类网络应用使用模型](#zh-cn_topic_0219108795_table19942111763710)获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到Mind Studio所在Ubuntu服务器的任意目录。
 
     **表 1**  分类网络应用使用模型
 
@@ -49,34 +49,8 @@
 </tbody>
 </table>
 
-3.  设置环境变量。
 
-    **vim \~/.bashrc**
-
-    执行如下命令在最后一行添加DDK\_HOME及LD\_LIBRARY\_PATH的环境变量。  
-
-    **export install_path=\$HOME/Ascend/ascend-toolkit/20.0.0.B002/x86_64-linux_gcc7.3.0**  
-
-    **export PATH=/usr/local/python3.7.5/bin:\\${install_path}/atc/ccec_compiler/bin:\\${install_path}/atc/bin:\\$PATH**  
-
-    **export PYTHONPATH=\\${install_path}/atc/python/site-packages/te:\\${install_path}/atc/python/site-    packages/topi:\\$PYTHONPATH**  
-
-    **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64:\\$LD_LIBRARY_PATH**  
-
-    **export ASCEND_OPP_PATH=\\${install_path}/opp**
-
-
-    >![](public_sys-resources/icon-note.gif) **说明：**   
-    >-   **install_path请替换成软件包的安装路径。**  
-    >-   **如果此环境变量已经添加，则此步骤可跳过。**
-
-    输入:wq!保存退出。
-
-    执行如下命令使环境变量生效。
-
-    **source \~/.bashrc**  
-
-4.  将原始网络模型转换为适配昇腾AI处理器的模型。  
+3.  将原始网络模型转换为适配昇腾AI处理器的模型。  
 
     1.  在Mind Studio操作界面的顶部菜单栏中选择**Tools \> Model Convert**，进入模型转换界面。
     2.  在弹出的**Model Conversion**操作界面中，进行模型转换配置。
@@ -95,15 +69,17 @@
 
 ## 环境配置   
 
-**注：服务器上已安装OpenCV、PresentAgent、交叉编译工具可跳过此步骤。**  
-    
-
-- 安装OpenCV和PresentAgent  
+**注：服务器上已安装OpenCV、PresenterAgent、交叉编译工具可跳过此步骤。**   
       
-    请参考 **https://gitee.com/ascend/common/blob/master/200dk_install_opencv/200DK_INSTALL_OPENCV_PRESENTAGENT.md**   
+- 安装编译工具  
+  **sudo apt-get install -y g++\-aarch64-linux-gnu g++\-5-aarch64-linux-gnu** 
 
-- 安装交叉编译工具  
-  **sudo apt-get install -y g++-5-aarch64-linux-gnu**
+- 安装OpenCV 
+      
+    请参考 **https://gitee.com/ascend/common/blob/master/install_opencv/for_atlas200dk/README.md**   
+
+- 安装PresenterAgent   
+    请参考 **https://gitee.com/ascend/common/blob/master/install_presenteragent/for_atlas200dk/README.md**  
   
 
 ## 编译<a name="zh-cn_topic_0219108795_section3723145213347"></a>
@@ -123,7 +99,7 @@
     选择Target OS 为Euleros2.8，如[图 配置编译](#zh-cn_topic_0203223265_fig17414647130)所示。
 
     **图 2**  配置编译<a name="zh-cn_topic_0203223265_fig17414647130"></a>  
-    ![](figures/配置build.png "配置编译")  
+    ![](figures/配置build1.png "配置编译")  
     
     之后点击**Build \> Build \> Build Configuration**，如[图 编译操作及生成文件](#zh-cn_topic_0203223265_fig1741464713019)所示，会在目录下生成build和out文件夹。
 
