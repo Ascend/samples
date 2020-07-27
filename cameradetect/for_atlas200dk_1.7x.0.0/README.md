@@ -82,13 +82,13 @@
     启动成功后，打开**cameradetect**工程，如[图 打开cameradetect工程](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810)所示。
 
     **图 1**  打开cameradetect工程<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810"></a>  
-    ![](figures/打开cameradetect工程1.png "打开cameradetect工程")
+    ![](figures/Mindstudio_open.png "打开cameradetect工程")
 
 2.  修改配置文件
 
     将data/face_detection.conf中的presenter_server_ip、presenter_view_ip、presenter_agent_ip修改为Mind Studio所在Ubuntu服务器的虚拟网卡的ip地址，如下图所示。
 
-    ![](figures/presenter_server_ip.png "修改presenter_server_ip")
+    ![](figures/conf.png "修改conf")
 
     >![](public_sys-resources/icon-note.gif) **说明：**    
     >-  虚拟网卡的ip地址请通过ifconfig命令查看。
@@ -102,7 +102,7 @@
     之后点击**Build \> Build \> Build Configuration**，如[图 编译操作及生成文件](#zh-cn_topic_0203223265_fig1741464713019)所示，会在目录下生成build和out文件夹。
 
     **图 3**  编译操作及生成文件<a name="zh-cn_topic_0203223265_fig1741464713019"></a>  
-    ![](figures/编译操作及生成文件1.png "编译操作及生成文件")
+    ![](figures/build.png "编译操作及生成文件")
 
     >![](public_sys-resources/icon-notice.gif) **须知：**   
     >首次编译工程时，**Build \> Build**为灰色不可点击状态。需要点击**Build \> Edit Build Configuration**，配置编译参数后再进行编译。 
@@ -114,26 +114,26 @@
     **bash script/run_presenter_server.sh**
 
     **图 4**  启动PresenterServer<a name="zh-cn_topic_0228461904_zh-cn_topic_0203223294_fig423515251067"></a>  
-    ![](figures/presentserver1.png)
+    ![](figures/present.png)
    
   
     如[图 启动PresenterServer](#zh-cn_topic_0228461904_zh-cn_topic_0203223294_fig423)所示，表示presenter_server的服务启动成功。  
     **图 5**  启动PresenterServer<a name="zh-cn_topic_0228461904_zh-cn_topic_0203223294_fig423"></a>    
-    ![](figures/presentserver2.png)
+    ![](figures/present_ok.png)
  
 ## 运行<a name="zh-cn_topic_0219108795_section1620073406"></a>
 
 1.  单击  **Run \> Run 'cameradetect'**，如[图 程序已执行示意图](#zh-cn_topic_0203223265_fig93931954162719)所示，可执行程序已经在开发者板执行。  
 
     **图 6**  程序已执行示意图<a name="zh-cn_topic_0203223265_fig93931954162719"></a>  
-    ![](figures/程序已执行示意图1.png "程序已执行示意图")
+    ![](figures/run_ok.png "程序已执行示意图")
 
 2.  使用启动Presenter Server服务时提示的URL登录 Presenter Server 网站。
 
     等待Presenter Agent传输数据给服务端，单击“Refresh“刷新，当有数据时相应的Channel 的Status变成绿色，如下图所示。
 
     **图 7**  Presenter Server界面<a name="zh-cn_topic_0228461904_zh-cn_topic_0203223294_fig113691556202312"></a>  
-    ![](figures/Presenter-Server界面.png "Presenter-Server界面") 
+    ![](figures/presenter.png "Presenter-Server界面") 
 
 3.  单击右侧对应的View Name链接，比如上图的“video”，查看结果。
  
