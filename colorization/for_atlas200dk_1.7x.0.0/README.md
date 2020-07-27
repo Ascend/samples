@@ -59,8 +59,8 @@
     ![](figures/模型转换2.png "模型转换2")  
     ![](figures/模型转换3.png "模型转换3")
 
-4.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0228757084_section8534138124114)中源码所在路径下的“**colorization/model**”目录下。 
- **cp \\$HOME/modelzoo/colorization/device/colorization.om \\$HOME/AscendProjects/colorization/model/**  
+4.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0228757084_section8534138124114)中源码所在路径下的“**colorization/model**”目录下。   
+    **cp \\$HOME/modelzoo/colorization/device/colorization.om \\$HOME/AscendProjects/colorization/model/**  
 
 ## 环境配置   
 
