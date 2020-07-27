@@ -32,7 +32,7 @@
  
         **wget -P $HOME/yolov3 https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/yolov3/yolov3.prototxt**
 
-        **wget -P $HOME/yolov3 https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/yolov3/aipp_nv12.cfg** 
+        **wget -P $HOME/yolov3 https://c7xcode.obs.myhuaweicloud.com/models/yolov3/aipp_bgr.cfg** 
 
 
 3.  将原始网络模型转换为适配昇腾AI处理器的模型。  
@@ -55,7 +55,7 @@
 
     2.  执行以下命令转换模型。
 
-        **atc --model=yolov3.prototxt --weight=yolov3.caffemodel --framework=0 --output=yolov3 --soc_version=Ascend310 --insert_op_conf=aipp_nv12.cfg**
+        **atc --model=yolov3.prototxt --weight=yolov3.caffemodel --framework=0 --output=yolov3 --soc_version=Ascend310 --insert_op_conf=aipp_bgr.cfg**
     
 4.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0219108795_li953280133816)中源码所在路径下的“**objectdetection_video/model**”目录下。
     
