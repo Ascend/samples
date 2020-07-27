@@ -1,0 +1,22 @@
+[
+{
+  "directory": "/home/ascend/c7x_samples/200dk_sample/objectdetection-video/build/cmake/src",
+  "command": "/usr/bin/c++  -DENABLE_DVPP_INTERFACE -I/home/ascend/c7x_samples/200dk_sample/objectdetection-video/src/../inc -I/home/ascend/ascend_ddk/arm/include -I/home/ascend/ascend_ddk/arm/include/opencv4 -I/home/ascend/Ascend/ascend-toolkit/20.0.RC1/acllib_centos7.6.aarch64/acllib/include    -std=c++11 -o CMakeFiles/main.dir/utils.cpp.o -c /home/ascend/c7x_samples/200dk_sample/objectdetection-video/src/utils.cpp",
+  "file": "/home/ascend/c7x_samples/200dk_sample/objectdetection-video/src/utils.cpp"
+},
+{
+  "directory": "/home/ascend/c7x_samples/200dk_sample/objectdetection-video/build/cmake/src",
+  "command": "/usr/bin/c++  -DENABLE_DVPP_INTERFACE -I/home/ascend/c7x_samples/200dk_sample/objectdetection-video/src/../inc -I/home/ascend/ascend_ddk/arm/include -I/home/ascend/ascend_ddk/arm/include/opencv4 -I/home/ascend/Ascend/ascend-toolkit/20.0.RC1/acllib_centos7.6.aarch64/acllib/include    -std=c++11 -o CMakeFiles/main.dir/model_process.cpp.o -c /home/ascend/c7x_samples/200dk_sample/objectdetection-video/src/model_process.cpp",
+  "file": "/home/ascend/c7x_samples/200dk_sample/objectdetection-video/src/model_process.cpp"
+},
+{
+  "directory": "/home/ascend/c7x_samples/200dk_sample/objectdetection-video/build/cmake/src",
+  "command": "/usr/bin/c++  -DENABLE_DVPP_INTERFACE -I/home/ascend/c7x_samples/200dk_sample/objectdetection-video/src/../inc -I/home/ascend/ascend_ddk/arm/include -I/home/ascend/ascend_ddk/arm/include/opencv4 -I/home/ascend/Ascend/ascend-toolkit/20.0.RC1/acllib_centos7.6.aarch64/acllib/include    -std=c++11 -o CMakeFiles/main.dir/sample_process.cpp.o -c /home/ascend/c7x_samples/200dk_sample/objectdetection-video/src/sample_process.cpp",
+  "file": "/home/ascend/c7x_samples/200dk_sample/objectdetection-video/src/sample_process.cpp"
+},
+{
+  "directory": "/home/ascend/c7x_samples/200dk_sample/objectdetection-video/build/cmake/src",
+  "command": "/usr/bin/c++  -DENABLE_DVPP_INTERFACE -I/home/ascend/c7x_samples/200dk_sample/objectdetection-video/src/../inc -I/home/ascend/ascend_ddk/arm/include -I/home/ascend/ascend_ddk/arm/include/opencv4 -I/home/ascend/Ascend/ascend-toolkit/20.0.RC1/acllib_centos7.6.aarch64/acllib/include    -std=c++11 -o CMakeFiles/main.dir/main.cpp.o -c /home/ascend/c7x_samples/200dk_sample/objectdetection-video/src/main.cpp",
+  "file": "/home/ascend/c7x_samples/200dk_sample/objectdetection-video/src/main.cpp"
+}
+]

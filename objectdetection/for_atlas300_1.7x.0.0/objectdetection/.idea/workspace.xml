@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="7938a20a-c19d-4812-a015-65ddf45b22b7" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.build_project" beforeDir="false" afterPath="$PROJECT_DIR$/.build_project" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.project" beforeDir="false" afterPath="$PROJECT_DIR$/.project" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/dog1_1024_683.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/dvpp_jpegd.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/dvpp_process.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/dvpp_resize.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/model_process.h" beforeDir="false" afterPath="$PROJECT_DIR$/inc/model_process.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/object_detect.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/utils.h" beforeDir="false" afterPath="$PROJECT_DIR$/inc/utils.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/objectdetection.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/acl.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/acl.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dvpp_jpegd.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dvpp_process.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dvpp_resize.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model_process.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/model_process.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/object_detect.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sample-objectdetection/.project" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sample-objectdetection/CMakeLists.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sample-objectdetection/caffe_model/aipp_bgr.cfg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sample-objectdetection/data/bird.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sample-objectdetection/data/boat.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sample-objectdetection/inc/model_process.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sample-objectdetection/inc/sample_process.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sample-objectdetection/inc/utils.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sample-objectdetection/model/.keep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sample-objectdetection/src/CMakeLists.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sample-objectdetection/src/acl.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sample-objectdetection/src/main.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sample-objectdetection/src/model_process.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sample-objectdetection/src/sample_process.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sample-objectdetection/src/utils.cpp" beforeDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/CMakeLists.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="313">
+              <caret line="48" column="29" selection-start-line="48" selection-start-column="29" selection-end-line="48" selection-end-column="29" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="205">
+              <caret line="53" column="5" selection-start-line="53" selection-start-column="5" selection-end-line="53" selection-end-column="5" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="120">
+              <caret line="6" column="8" selection-start-line="6" selection-start-column="8" selection-end-line="6" selection-end-column="8" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/model_process.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="125">
+              <caret line="219" column="28" selection-start-line="219" selection-start-column="21" selection-end-line="219" selection-end-column="28" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/utils.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-29" />
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/inc/utils.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="307">
+              <caret line="21" selection-start-line="21" selection-end-line="21" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/src/sample_process.cpp" />
+        <option value="$PROJECT_DIR$/CMakeLists.txt" />
+        <option value="$PROJECT_DIR$/src/CMakeLists.txt" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectConfigurationFiles">
+    <option name="files">
+      <list>
+        <option value="$PROJECT_DIR$/.idea/vcs.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="1" />
+    <option name="y" value="15" />
+    <option name="width" value="933" />
+    <option name="height" value="575" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="OperatorsViewPane" />
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="objectdetection" type="b2602c69:ProjectViewProjectNode" />
+              <item name="objectdetection" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="objectdetection" type="b2602c69:ProjectViewProjectNode" />
+              <item name="objectdetection" type="462c0819:PsiDirectoryNode" />
+              <item name="out" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="PackagesPane" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Ascend App.sample-objectdetection">
+    <configuration default="true" type="Ascend App Configuration Type" factoryName="Ascend App" hostip="192.168.1.2" commandArguments="">
+      <method v="2" />
+    </configuration>
+    <configuration name="objectdetection" type="Ascend App Configuration Type" factoryName="Ascend App" hostip="192.168.1.2" commandArguments="">
+      <method v="2" />
+    </configuration>
+    <configuration name="sample-objectdetection" type="Ascend App Configuration Type" factoryName="Ascend App" hostip="121.37.255.64" commandArguments="../data" ProfilingParams="{&quot;--ai_core_profiling_mode&quot;:&quot;sample-based&quot;,&quot;ProfilingStatus&quot;:&quot;off&quot;,&quot;--ai_core_metrics&quot;:&quot;aicorePipeline&quot;,&quot;hasError&quot;:&quot;off&quot;,&quot;--profiling_options&quot;:&quot;task_trace&quot;,&quot;ai_core_sample_based&quot;:&quot;off&quot;,&quot;--aicore_sampling_interval&quot;:&quot;10&quot;,&quot;ai_core_task_based&quot;:&quot;off&quot;}">
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Ascend App.sample-objectdetection" />
+      <item itemvalue="Ascend App.objectdetection" />
+    </list>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="7938a20a-c19d-4812-a015-65ddf45b22b7" name="Default Changelist" comment="" />
+      <created>1595839790578</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1595839790578</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="67" y="25" width="1651" height="901" extended-state="6" />
+    <layout>
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.41453567" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Tail" order="7" />
+      <window_info anchor="bottom" id="Version Control" order="8" />
+      <window_info anchor="bottom" id="Log" order="9" />
+      <window_info anchor="bottom" id="Output" order="10" weight="0.32974428" />
+      <window_info anchor="bottom" id="Pylint" order="11" />
+      <window_info anchor="bottom" id="Terminal" order="12" />
+      <window_info anchor="bottom" id="Event Log" order="13" side_tool="true" />
+      <window_info anchor="bottom" id="Build" order="14" weight="0.52220726" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+    </layout>
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/main.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="205">
+          <caret line="53" column="5" selection-start-line="53" selection-start-column="5" selection-end-line="53" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sample_process.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="160">
+          <caret line="75" column="46" lean-forward="true" selection-start-line="75" selection-start-column="46" selection-end-line="75" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="6" column="8" selection-start-line="6" selection-start-column="8" selection-end-line="6" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/CMakeLists.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="313">
+          <caret line="48" column="29" selection-start-line="48" selection-start-column="29" selection-end-line="48" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>
