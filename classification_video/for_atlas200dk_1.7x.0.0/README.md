@@ -67,7 +67,7 @@
 
 ## 环境配置   
 
-**注：服务器上已安装OpenCV、PresentAgent、交叉编译工具可跳过此步骤。**  
+**注：服务器上已安装OpenCV、PresenterAgent、交叉编译工具可跳过此步骤。**  
     
 - 安装编译工具  
   **sudo apt-get install -y g++\-aarch64-linux-gnu g++\-5-aarch64-linux-gnu** 
