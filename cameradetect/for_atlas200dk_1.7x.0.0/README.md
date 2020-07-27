@@ -79,12 +79,21 @@
 
     **./MindStudio.sh**
 
-    启动成功后，打开**classification**工程，如[图 打开classification工程](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810)所示。
+    启动成功后，打开**cameradetect**工程，如[图 打开cameradetect工程](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810)所示。
 
-    **图 1**  打开classification工程<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810"></a>  
-    ![](figures/打开classification工程1.png "打开classification工程")
+    **图 1**  打开cameradetect工程<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810"></a>  
+    ![](figures/打开cameradetect工程1.png "打开cameradetect工程")
 
-2.  开始编译，打开Mind Studio工具，在工具栏中点击**Build \> Edit Build Configuration**。  
+2.  修改配置文件
+
+    将data/face_detection.conf中的presenter_server_ip、presenter_view_ip、presenter_agent_ip修改为Mind Studio所在Ubuntu服务器的虚拟网卡的ip地址，如下图所示。
+
+    ![](figures/presenter_server_ip.png "修改presenter_server_ip")
+
+    >![](public_sys-resources/icon-note.gif) **说明：**    
+    >-  虚拟网卡的ip地址请通过ifconfig命令查看。
+
+3.  开始编译，打开Mind Studio工具，在工具栏中点击**Build \> Edit Build Configuration**。  
     选择Target OS 为Centos7.6，如[图 配置编译](#zh-cn_topic_0203223265_fig17414647130)所示。
 
     **图 2**  配置编译<a name="zh-cn_topic_0203223265_fig17414647130"></a>  
@@ -96,22 +105,48 @@
     ![](figures/编译操作及生成文件1.png "编译操作及生成文件")
 
     >![](public_sys-resources/icon-notice.gif) **须知：**   
-    >首次编译工程时，**Build \> Build**为灰色不可点击状态。需要点击**Build \> Edit Build Configuration**，配置编译参数后再进行编译。  
-## 运行<a name="zh-cn_topic_0219108795_section1620073406"></a>
-1.  在Mind Studio工具的工具栏中找到Run按钮，单击  **Run \> Edit Configurations**。  
-    在Command Arguments 中添加运行参数 **../data**（输入图片的路径），之后分别点击Apply、OK。如[图 配置运行](#zh-cn_topic_0203223265_fig93931954162720)所示。   
+    >首次编译工程时，**Build \> Build**为灰色不可点击状态。需要点击**Build \> Edit Build Configuration**，配置编译参数后再进行编译。 
 
-    **图 4**  配置运行<a name="zh-cn_topic_0203223265_fig93931954162720"></a>   
-    ![](figures/配置run1.png "配置运行")
+4.  启动Presenter Server。
+
+    打开Mind Studio工具的Terminal，在应用代码存放路径下，执行如下命令在后台启动cameradetect应用的Presenter Server主程序。如[图 启动PresenterServer](#zh-cn_topic_0228461904_zh-cn_topic_0203223294_fig423515251067)所示。
+
+    **bash script/run_presenter_server.sh**
+
+    **图 6**  启动PresenterServer<a name="zh-cn_topic_0228461904_zh-cn_topic_0203223294_fig423515251067"></a>  
+    ![](figures/presentserver1.png)
+   
+  
+    如[图 启动PresenterServer](#zh-cn_topic_0228461904_zh-cn_topic_0203223294_fig423)所示，表示presenter_server的服务启动成功。  
+    **图 7**  启动PresenterServer<a name="zh-cn_topic_0228461904_zh-cn_topic_0203223294_fig423"></a>    
+    ![](figures/presentserver2.png)
  
-2.  单击  **Run \> Run 'classification'**，如[图 程序已执行示意图](#zh-cn_topic_0203223265_fig93931954162719)所示，可执行程序已经在开发者板执行。  
+## 运行<a name="zh-cn_topic_0219108795_section1620073406"></a>
+
+1.  单击  **Run \> Run 'cameradetect'**，如[图 程序已执行示意图](#zh-cn_topic_0203223265_fig93931954162719)所示，可执行程序已经在开发者板执行。  
 
     **图 5**  程序已执行示意图<a name="zh-cn_topic_0203223265_fig93931954162719"></a>  
     ![](figures/程序已执行示意图1.png "程序已执行示意图")
 
-3.  查看运行结果。
+2.  查看运行结果。
 
     推理结果图片保存在工程下的“output \> outputs”目录下以时间戳命名的文件夹内。
  
-![结果1](figures/dog.png)  
+## 结束应用
+
+命令行执行以下命令登陆开发板（密码：Mind@123）。
+
+**ssh HwHiAiUser@192.168.1.2**
+
+执行以下指令查找仍在运行的进程。
+
+**ps -ef|grep ./workspace_mind_studio_cameradetect**
+
+打印如下：
+
+__HwHiAiU+  2417  2415  7 08:05 ?        00:00:05 ./workspace_mind_studio_cameradetect__
+
+杀死进程：
+
+kill -9 2417
 
