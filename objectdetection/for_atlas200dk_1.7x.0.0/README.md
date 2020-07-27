@@ -27,7 +27,7 @@
         **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/yolov3/yolov3.prototxt** 
 3.  将原始网络模型转换为适配昇腾AI处理器的模型。    
 
-    1.  在Mind Studio操作界面的顶部菜单栏中选择**Tools \> Model Convert**，进入模型转换界面。
+    1.  在Mind Studio操作界面的顶部菜单栏中选择**Tools \> Model Converter**，进入模型转换界面。
     2.  在弹出的**Model Conversion**操作界面中，进行模型转换配置。
     3.  参照以下图片和说明进行参数配置。    
         -   Model File选择[步骤2](#zh-cn_topic_0219108795_li2074865610364)中下载的模型文件，此时会自动匹配到权重文件并填写在Weight File中。  
@@ -71,7 +71,7 @@
     ![](figures/打开objectdetection工程1.png "打开objectdetection工程")
 
 2.  开始编译，打开Mind Studio工具，在工具栏中点击**Build \> Edit Build Configuration**。  
-    选择Target OS 为Euleros2.8，如[图 配置编译](#zh-cn_topic_0203223265_fig17414647130)所示。
+    选择Target OS 为Centos7.6，如[图 配置编译](#zh-cn_topic_0203223265_fig17414647130)所示。
 
     **图 2**  配置编译<a name="zh-cn_topic_0203223265_fig17414647130"></a>  
     ![](figures/配置build1.png "配置编译")  
