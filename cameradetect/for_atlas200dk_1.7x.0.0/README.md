@@ -13,9 +13,9 @@
 
     **cd $HOME/AscendProjects**  
 
-    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/classification.zip** 
+    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/cameradetect.zip** 
               
-    **unzip classification.zip**  
+    **unzip cameradetect.zip**  
     
     >![](public_sys-resources/icon-note.gif) **说明：**   
     >- 如果使用wget下载失败，可使用如下命令下载代码。  
@@ -135,7 +135,7 @@
     **图 7**  Presenter Server界面<a name="zh-cn_topic_0228461904_zh-cn_topic_0203223294_fig113691556202312"></a>  
     ![](figures/presenter.png "Presenter-Server界面") 
 
-3.  单击右侧对应的View Name链接，比如上图的“video”，查看结果。
+3.  单击右侧对应的View Name链接，比如上图的“person”，查看结果。
  
 ## 结束应用
 
