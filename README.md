@@ -49,22 +49,18 @@ Ascend sample，请根据自己的需要进入对应文件夹获取应用，或�
 </blockquote></details>
 
 
-<details open><summary>mark_detection_python：口罩识别图片Python版</summary><blockquote>
+<details open><summary>mark_detection：口罩识别图片版</summary><blockquote>
 
-- [for_atlas200dk_1.3x.0.0](https://gitee.com/ascend/samples/tree/master/mark_detection_python/for_atlas200dk_1.3x.0.0)
+- [for_atlas200dk_1.3x.0.0_python](https://gitee.com/ascend/samples/tree/master/mark_detection/for_atlas200dk_1.3x.0.0_python)
 </blockquote></details>
 
 
-<details open><summary>mark_detection_video_cpp：口罩识别视频C++版</summary><blockquote>
+<details open><summary>mark_detection_video：口罩识别视频版</summary><blockquote>
 
-- [for_atlas200dk_1.3x.0.0](https://gitee.com/ascend/samples/tree/master/mark_detection_video_cpp/for_atlas200dk_1.3x.0.0)
-- [for_atlas300_1.3x.0.0](https://gitee.com/ascend/samples/tree/master/mark_detection_video_cpp/for_atlas300_1.3x.0.0)
+- [for_atlas200dk_1.3x.0.0_c++](https://gitee.com/ascend/samples/tree/master/mark_detection_video_cpp/for_atlas200dk_1.3x.0.0_c++)
+- [for_atlas300_1.3x.0.0_c++](https://gitee.com/ascend/samples/tree/master/mark_detection_video_cpp/for_atlas300_1.3x.0.0_c++)
+- [for_atlas200dk_1.3x.0.0_python](https://gitee.com/ascend/samples/tree/master/mark_detection_video/for_atlas200dk_1.3x.0.0_python)
 </blockquote></details>
 
-
-<details open><summary>mark_detection_video_python：口罩识别视频Python版</summary><blockquote>
-
-- [for_atlas200dk_1.3x.0.0](https://gitee.com/ascend/samples/tree/master/mark_detection_video_python)
-</blockquote></details>
 
 
