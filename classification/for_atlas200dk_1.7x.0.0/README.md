@@ -15,7 +15,7 @@
 
     **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/classification.zip** 
               
-    **unzip sample-classification.zip**  
+    **unzip classification.zip**  
     
     >![](public_sys-resources/icon-note.gif) **说明：**   
     >- 如果使用wget下载失败，可使用如下命令下载代码。  
@@ -62,9 +62,9 @@
     ![](figures/模型转换3.png "模型转换3")
 
     
-5.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0228757084_section8534138124114)中源码所在路径下的“**sample-classification/model**”目录下。
+5.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0228757084_section8534138124114)中源码所在路径下的“**classification/model**”目录下。
     
-     **cp \\$HOME/modelzoo/googlenet/device/googlenet.om \\$HOME/AscendProjects/sample-classification/model/**  
+     **cp \\$HOME/modelzoo/googlenet/device/googlenet.om \\$HOME/AscendProjects/classification/model/**  
   
 
 ## 环境配置   
@@ -90,13 +90,13 @@
 
     **./MindStudio.sh**
 
-    启动成功后，打开**sample-classification**工程，如[图 打开classification工程](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810)所示。
+    启动成功后，打开**classification**工程，如[图 打开classification工程](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810)所示。
 
     **图 1**  打开classification工程<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810"></a>  
-    ![](figures/打开classification工程.png "打开classification工程")
+    ![](figures/打开classification工程1.png "打开classification工程")
 
 2.  开始编译，打开Mind Studio工具，在工具栏中点击**Build \> Edit Build Configuration**。  
-    选择Target OS 为Euleros2.8，如[图 配置编译](#zh-cn_topic_0203223265_fig17414647130)所示。
+    选择Target OS 为Centos7.6，如[图 配置编译](#zh-cn_topic_0203223265_fig17414647130)所示。
 
     **图 2**  配置编译<a name="zh-cn_topic_0203223265_fig17414647130"></a>  
     ![](figures/配置build1.png "配置编译")  
@@ -104,7 +104,7 @@
     之后点击**Build \> Build \> Build Configuration**，如[图 编译操作及生成文件](#zh-cn_topic_0203223265_fig1741464713019)所示，会在目录下生成build和out文件夹。
 
     **图 3**  编译操作及生成文件<a name="zh-cn_topic_0203223265_fig1741464713019"></a>  
-    ![](figures/编译操作及生成文件.png "编译操作及生成文件")
+    ![](figures/编译操作及生成文件1.png "编译操作及生成文件")
 
     >![](public_sys-resources/icon-notice.gif) **须知：**   
     >首次编译工程时，**Build \> Build**为灰色不可点击状态。需要点击**Build \> Edit Build Configuration**，配置编译参数后再进行编译。  
@@ -113,12 +113,12 @@
     在Command Arguments 中添加运行参数 **../data**（输入图片的路径），之后分别点击Apply、OK。如[图 配置运行](#zh-cn_topic_0203223265_fig93931954162720)所示。   
 
     **图 4**  配置运行<a name="zh-cn_topic_0203223265_fig93931954162720"></a>   
-    ![](figures/配置run.png "配置运行")
+    ![](figures/配置run1.png "配置运行")
  
-2.  单击  **Run \> Run 'sample-classification'**，如[图 程序已执行示意图](#zh-cn_topic_0203223265_fig93931954162719)所示，可执行程序已经在开发者板执行。  
+2.  单击  **Run \> Run 'classification'**，如[图 程序已执行示意图](#zh-cn_topic_0203223265_fig93931954162719)所示，可执行程序已经在开发者板执行。  
 
     **图 5**  程序已执行示意图<a name="zh-cn_topic_0203223265_fig93931954162719"></a>  
-    ![](figures/程序已执行示意图.png "程序已执行示意图")
+    ![](figures/程序已执行示意图1.png "程序已执行示意图")
 
 3.  查看运行结果。
 
