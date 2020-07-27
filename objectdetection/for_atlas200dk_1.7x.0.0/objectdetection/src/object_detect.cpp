@@ -251,7 +251,7 @@ Result ObjectDetect::Postprocess(ImageData& image, aclmdlDataset* modelOutput,
     float* detectData = (float *)GetInferenceOutputItem(dataSize, modelOutput,
                                                         kBBoxDataBufId);
 
-    float* boxNum = (float *)GetInferenceOutputItem(dataSize, modelOutput,
+    uint32_t* boxNum = (uint32_t *)GetInferenceOutputItem(dataSize, modelOutput,
                                                     kBoxNumDataBufId);
     if (boxNum == nullptr) return FAILED;
 
