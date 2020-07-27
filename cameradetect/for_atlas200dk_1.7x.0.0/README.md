@@ -1,9 +1,9 @@
 中文|[English](Readme_EN.md)
 
-# 分类网络应用（C++）<a name="ZH-CN_TOPIC_0232337690"></a>  
+# 检测网络应用摄像头版（C++）<a name="ZH-CN_TOPIC_0232337690"></a>  
 
 
-本Application支持运行在Atlas 200 DK上，实现了googlenet网络的推理功能并输出带有推理结果标签的图片。 
+本Application支持运行在Atlas 200 DK上，实现了摄像头读入图片，yolov3网络的推理并输出带有推理结果标签的视频。 
 
 ## 软件准备<a name="zh-cn_topic_0219108795_section181111827718"></a>
 
@@ -22,61 +22,49 @@
     **curl -OL https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/classification.zip** 
     >- 如果curl也下载失败，可复制下载链接到浏览器，手动上传至服务器。
     
-2.  <a name="zh-cn_topic_0219108795_li2074865610364"></a>获取此应用中所需要的原始网络模型。
-
-    参考[表 分类网络应用使用模型](#zh-cn_topic_0219108795_table19942111763710)获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到Mind Studio所在Ubuntu服务器的任意目录。
-
-    **表 1**  分类网络应用使用模型
-
-<a name="zh-cn_topic_0219108795_table19942111763710"></a>
-<table><thead align="left"><tr id="zh-cn_topic_0219108795_row611318123710"><th class="cellrowborder" valign="top" width="11.959999999999999%" id="mcps1.2.4.1.1"><p id="zh-cn_topic_0219108795_p81141820376"><a name="zh-cn_topic_0219108795_p81141820376"></a><a name="zh-cn_topic_0219108795_p81141820376"></a>模型名称</p>
-</th>
-<th class="cellrowborder" valign="top" width="8.07%" id="mcps1.2.4.1.2"><p id="zh-cn_topic_0219108795_p13181823711"><a name="zh-cn_topic_0219108795_p13181823711"></a><a name="zh-cn_topic_0219108795_p13181823711"></a>模型说明</p>
-</th>
-<th class="cellrowborder" valign="top" width="79.97%" id="mcps1.2.4.1.3"><p id="zh-cn_topic_0219108795_p1717182378"><a name="zh-cn_topic_0219108795_p1717182378"></a><a name="zh-cn_topic_0219108795_p1717182378"></a>模型下载路径</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="zh-cn_topic_0219108795_row1119187377"><td class="cellrowborder" valign="top" width="11.959999999999999%" headers="mcps1.2.4.1.1 "><p id="zh-cn_topic_0219108795_p4745165253920"><a name="zh-cn_topic_0219108795_p4745165253920"></a><a name="zh-cn_topic_0219108795_p4745165253920"></a>googlenet</p>
-</td>
-<td class="cellrowborder" valign="top" width="8.07%" headers="mcps1.2.4.1.2 "><p id="zh-cn_topic_0219108795_p1874515218391"><a name="zh-cn_topic_0219108795_p1874515218391"></a><a name="zh-cn_topic_0219108795_p1874515218391"></a>图片分类推理模型。
-
-是基于Caffe的GoogLeNet模型。</p>
-</td>
-<td class="cellrowborder" valign="top" width="79.97%" headers="mcps1.2.4.1.3 "><p id="zh-cn_topic_0219108795_p611318163718"><a name="zh-cn_topic_0219108795_p611318163718"></a><a name="zh-cn_topic_0219108795_p611318163718"></a>请参考<a href="https://gitee.com/HuaweiAscend/models/tree/master/computer_vision/classification/googlenet" target="_blank" rel="noopener noreferrer">https://gitee.com/HuaweiAscend/models/tree/master/computer_vision/classification/googlenet</a>目录中README.md下载原始网络模型文件及其对应的权重文件。</p>
-</td>
-</tr>
-</tbody>
-</table>
+2.  <a name="zh-cn_topic_0219108795_li2074865610364"></a>获取此应用中所需要的原始网络模型。    
+ 
+     -  下载原始网络模型及权重文件至ubuntu服务器任意目录，如:$HOME/yolov3。
+        **mkdir -p $HOME/yolov3**
+        **wget -P $HOME/yolov3 https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/yolov3/yolov3.caffemodel**  
+        **wget -P $HOME/yolov3 https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/yolov3/yolov3.prototxt**
+        **wget -P $HOME/yolov3 https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/yolov3/aipp_nv12.cfg** 
 
 
 3.  将原始网络模型转换为适配昇腾AI处理器的模型。  
 
-    1.  在Mind Studio操作界面的顶部菜单栏中选择**Tools \> Model Convert**，进入模型转换界面。
-    2.  在弹出的**Model Conversion**操作界面中，进行模型转换配置。
-    3.  参照以下图片进行参数配置。    
-        -   Model File选择[步骤2](#zh-cn_topic_0219108795_li2074865610364)中下载的模型文件，此时会自动匹配到权重文件并填写在Weight File中。
+    1.  设置环境变量
+        
+        命令行中输入以下命令设置环境变量。
 
-    ![](figures/模型转换1.png "模型转换1")  
-    ![](figures/模型转换2.png "模型转换2")  
-    ![](figures/模型转换3.png "模型转换3")
+        **cd \$HOME/yolov3**
+        
+        **export install_path=\$HOME/Ascend/ascend-toolkit/20.0.RC1/x86_64-linux_gcc7.3.0**  
+
+        **export PATH=/usr/local/python3.7.5/bin:\\${install_path}/atc/ccec_compiler/bin:\\${install_path}/atc/bin:\\$PATH**  
+
+        **export PYTHONPATH=\\${install_path}/atc/python/site-packages/te:\\${install_path}/atc/python/site-    packages/topi:\\$PYTHONPATH**  
+
+        **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64:\\$LD_LIBRARY_PATH**  
+
+        **export ASCEND_OPP_PATH=\\${install_path}/opp**  
+
+    2.  执行以下命令转换模型。
+
+        atc --model=yolov3.prototxt --weight=yolov3.caffemodel --framework=0 --output=yolov3 --soc_version=Ascend310 --insert_op_conf=aipp_nv12.cfg
 
     
 5.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0228757084_section8534138124114)中源码所在路径下的“**classification/model**”目录下。
     
-     **cp \\$HOME/modelzoo/googlenet/device/googlenet.om \\$HOME/AscendProjects/classification/model/**  
+     **cp ./yolov3.om \$HOME/AscendProjects/cameradetect/model/**  
   
 
 ## 环境配置   
 
-**注：服务器上已安装OpenCV、PresenterAgent、交叉编译工具可跳过此步骤。**   
+**注：服务器上已安装交叉编译工具可跳过此步骤。**   
       
 - 安装编译工具  
   **sudo apt-get install -y g++\-aarch64-linux-gnu g++\-5-aarch64-linux-gnu** 
-
-- 安装OpenCV 
-      
-    请参考 **https://gitee.com/ascend/common/blob/master/install_opencv/for_atlas200dk/README.md**   
   
 
 ## 编译<a name="zh-cn_topic_0219108795_section3723145213347"></a>
