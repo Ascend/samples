@@ -1,6 +1,6 @@
 # 检测网络应用 （python）
 
-本Application支持运行在Atlas 200 DK上，实现了yolov3网络的推理功能并在终端打印出检测结果
+本Application支持运行在Atlas 200 DK上，实现了yolov3网络的推理功能并在终端打印出检测结果。
 
 ## 软件准备
 
@@ -22,13 +22,13 @@
 
 2.  <a name="zh-cn_topic_0219108795_li2074865610364"></a>获取此应用中所需要的原始网络模型。    
  
-     -  下载原始网络模型及权重文件至ubuntu服务器任意目录，如:$HOME/yolov3_YUV。
+     -  下载原始网络模型及权重文件至ubuntu服务器任意目录，如:$HOME/yolov3_yuv。
 
-        **mkdir -p $HOME/yolov3_YUV**
+        **mkdir -p $HOME/yolov3_yuv**
 
-        **wget -P $HOME/yolov3_YUV https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/yolov3/yolov3.caffemodel** 
+        **wget -P $HOME/yolov3_yuv https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/yolov3/yolov3.caffemodel** 
  
-        **wget -P $HOME/yolov3_YUV https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/yolov3/yolov3.prototxt**
+        **wget -P $HOME/yolov3_yuv https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/yolov3/yolov3.prototxt**
 
 3.  将原始网络模型转换为适配昇腾AI处理器的模型。  
 
@@ -43,7 +43,7 @@
 
 
 5. 将转换好的模型放到工程文件中的model 目录下。  
-    **cp \\$HOME/modelzoo/yolov3_YUV/device/yolov3_YUV.om \\$HOME/AscendProjects/objectdetection_python/model/**   
+    **cp \\$HOME/modelzoo/yolov3_yuv/device/yolov3_yuv.om \\$HOME/AscendProjects/objectdetection_python/model/**   
 
 ## 环境部署<a name="zh-cn_topic_0228757083_section1759513564117"></a>
 
@@ -63,13 +63,19 @@
 
 2. acl.so拷贝到开发板。
 
-   **scp ${HOME}/Ascend/ascend-toolkit/20.0.RC1/arm64-linux_gcc7.3.0/pyACL/python/site-packages/acl/acl.so HwHiAiUser@192.168.1.2:/home/HwHiAiUser/Ascend/**
+   **scp ${HOME}/Ascend/ascend-toolkit/X.X.X/arm64-linux_gcc7.3.0/pyACL/python/site-packages/acl/acl.so HwHiAiUser@192.168.1.2:/home/HwHiAiUser/Ascend/**  
+   >![](public_sys-resources/icon-note.gif) **说明：**   
+            **请将X.X.X替换为Ascend-Toolkit开发套件包的实际版本号。**   
+            **例如：Toolkit包的包名为Ascend-Toolkit-20.0.RC1-x86_64-linux_gcc7.3.0.run，则此Toolkit的版本号为20.0.RC1。**
 
 3. 登录开发板，添加环境变量。  
 
    **ssh HwHiAiUser@192.168.1.2**  
-   **vim \${HOME}/.bashrc**    
+   **vim \${HOME}/.bashrc**   
+   在最后添加一行   
    **export PYTHONPATH=/home/HwHiAiUser/Ascend/:\\${PYTHONPATH}**  
+   ![](figures/source.png)   
+   执行如下命令，使环境变量生效   
    **source \${HOME}/.bashrc**
 
 
