@@ -26,9 +26,9 @@
 
         **mkdir -p $HOME/yolov3_YUV**
 
-        **wget -P $HOME/yolov3 https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/yolov3/yolov3.caffemodel** 
+        **wget -P $HOME/yolov3_YUV https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/yolov3/yolov3.caffemodel** 
  
-        **wget -P $HOME/yolov3 https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/yolov3/yolov3.prototxt**
+        **wget -P $HOME/yolov3_YUV https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/yolov3/yolov3.prototxt**
 
 3.  将原始网络模型转换为适配昇腾AI处理器的模型。  
 
@@ -55,7 +55,7 @@
 
     提示password时输入开发板密码，开发板默认密码为**Mind@123**，如[图 应用代码拷贝](#zh-cn_topic_0228757083_zh-cn_topic_0198304761_fig1660453512014)。
 
-    **图 1** **应用代码拷贝**<a name="zh-cn_topic_0228757083_zh-cn_topic_0198304761_fig1660453512014"></a>  
+    **图** **应用代码拷贝**<a name="zh-cn_topic_0228757083_zh-cn_topic_0198304761_fig1660453512014"></a>  
     
 
     ![](figures/zh-cn_image_0228832431.png)
@@ -63,10 +63,11 @@
 
 2. acl.so拷贝到开发板。
 
-   **${HOME}/Ascend/ascend-toolkit/20.0.RC1/arm64-linux_gcc7.3.0/pyACL/python/site-packages/acl/acl.so HwHiAiUser@192.168.1.2:/home/HwHiAiUser/Ascend/**
+   **scp ${HOME}/Ascend/ascend-toolkit/20.0.RC1/arm64-linux_gcc7.3.0/pyACL/python/site-packages/acl/acl.so HwHiAiUser@192.168.1.2:/home/HwHiAiUser/Ascend/**
 
-3. 登录开发板，添加环境变量
+3. 登录开发板，添加环境变量。  
 
+   **ssh HwHiAiUser@192.168.1.2**  
    **vim \${HOME}/.bashrc**    
    **export PYTHONPATH=/home/HwHiAiUser/Ascend/:\\${PYTHONPATH}**  
    **source \${HOME}/.bashrc**
@@ -76,10 +77,11 @@
 
 ## 运行
 
-1. 登录到开发板上，进入工程目录下，执行如下命令运行程序
+1. 登录到开发板上，进入工程目录下，执行如下命令运行程序。  
 
-   python3.7.5 object_detect.py ./data/
+   **cd \${HOME}/HIAI_PROJECTS/objectdetection_python/**   
+   **python3.7.5 object_detect.py ./data/**
 
-2. 推理结果在终端中显示
+2. 推理结果在终端中显示。
 
    ![image-20200725185820768](figures/obj_res.png)
