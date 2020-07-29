@@ -4,7 +4,9 @@
 
 本应用支持运行在AI云上加速环境(Atlas300)，实现了对黑白图像自动上色的功能。
 
-**注：本指导是分设操作指导。开发环境为Mindstudio安装在的本地虚拟机环境，运行环境为云端申请的插有300加速卡的环境。其中运行环境可以存在多种架构（centos-arm、Euleros-arm、ubuntu-x86等），本指导中只以ai1环境（ubuntu-x86）为例说明**
+**注1：本指导是分设操作指导。开发环境为Mindstudio安装在的本地虚拟机环境，运行环境为云端申请的插有300加速卡的环境。**
+
+**注2：运行环境可以存在多种架构（如arm架构下的Centos系统、arm架构下的Euleros系统、x86架构下的Ubuntu系统等），本指导中只以ai1环境（x86架构下的Ubuntu系统）为例说明**
 
 ## 软件准备<a name="zh-cn_topic_0219108795_section181111827718"></a>
 
@@ -14,12 +16,12 @@
 
     **cd $HOME/AscendProjects**    
 
-    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/ubuntu/sample-colorization.zip**  
+    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/colorization_300.zip**  
 
-    **unzip sample-colorization.zip**  
+    **unzip colorization.zip**  
     >![](public_sys-resources/icon-note.gif) **说明：**   
     >- 如果使用wget下载失败，可使用如下命令下载代码。  
-    **curl -OL https://c7xcode.obs.cn-north-4.myhuaweicloud.com/ubuntu/sample-colorization.zip** 
+    **curl -OL https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/colorization_300.zip** 
     >- 如果curl也下载失败，可复制下载链接到浏览器，手动上传至服务器。
     
 2.  <a name="zh-cn_topic_0219108795_li2074865610364"></a>获取此应用中所需要的原始网络模型。
