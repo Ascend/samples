@@ -74,12 +74,10 @@
    **vim \${HOME}/.bashrc**   
    在最后添加一行   
    **export PYTHONPATH=/home/HwHiAiUser/Ascend/:\\${PYTHONPATH}**  
-   ![](figures/source.png)   
+   ![](figures/pythonpath.png)   
    执行如下命令，使环境变量生效   
    **source \${HOME}/.bashrc**
 
-
-   
 
 ## 运行
 
