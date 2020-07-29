@@ -11,8 +11,9 @@ Ascend sample，请根据自己的需要进入对应文件夹获取应用，或�
 
 <details open><summary>classification：分类网络图片</summary><blockquote>
 
-- [for_atlas200dk_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/classification/for_atlas200dk_1.7x.0.0)  
-- [for_atlas300_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/classification/for_atlas300_1.7x.0.0)
+- [for_atlas200dk_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/classification/for_atlas200dk_1.7x.0.0_c++)  
+- [for_atlas200dk_1.7x.0.0_python](https://gitee.com/ascend/samples/tree/master/classification/for_atlas200dk_1.7x.0.0_python) 
+- [for_atlas300_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/classification/for_atlas300_1.7x.0.0_c++)
 </blockquote></details>  
 
 
@@ -39,8 +40,9 @@ Ascend sample，请根据自己的需要进入对应文件夹获取应用，或�
 
 <details open><summary>objectdetection：检测网络图片</summary><blockquote>
 
-- [for_atlas200dk_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/objectdetection/for_atlas200dk_1.7x.0.0)  
-- [for_atlas300_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/objectdetection/for_atlas300_1.7x.0.0)
+- [for_atlas200dk_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/objectdetection/for_atlas200dk_1.7x.0.0_c++) 
+- [for_atlas200dk_1.7x.0.0_python](https://gitee.com/ascend/samples/tree/master/objectdetection/for_atlas200dk_1.7x.0.0_python)   
+- [for_atlas300_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/objectdetection/for_atlas300_1.7x.0.0_c++)
 </blockquote></details>
 
 
