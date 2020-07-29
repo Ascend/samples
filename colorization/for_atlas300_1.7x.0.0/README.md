@@ -4,10 +4,11 @@
 
 本应用支持运行在AI云上加速环境(Atlas300)，实现了对黑白图像自动上色的功能。
 
+**注：本指导是分设操作指导。开发环境为Mindstudio安装在的本地虚拟机环境，运行环境为云端申请的插有300加速卡的环境。其中运行环境可以存在多种架构（centos-arm、Euleros-arm、ubuntu-x86等），本指导中只以ai1环境（ubuntu-x86）为例说明**
 
 ## 软件准备<a name="zh-cn_topic_0219108795_section181111827718"></a>
 
-运行此Sample前，需要按照此章节获取源码包。
+运行此Sample前，需要在开发环境按照此章节获取源码包。
 
 1.  <a name="zh-cn_topic_0228757084_section8534138124114"></a>获取源码包。
 
@@ -23,7 +24,7 @@
     
 2.  <a name="zh-cn_topic_0219108795_li2074865610364"></a>获取此应用中所需要的原始网络模型。
 
-    参考[表 黑白图像上色应用使用模型](#zh-cn_topic_0219108795_table19942111763710)获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到Ubuntu服务器的任意目录，例如：$HOME/models/sample-colorization。
+    参考[表 黑白图像上色应用使用模型](#zh-cn_topic_0219108795_table19942111763710)获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到Ubuntu服务器的任意目录，例如：$HOME/models/colorization。
 
     **表 1**  黑白图像上色应用使用模型
 
@@ -46,100 +47,75 @@
     </tbody>
     </table>
 
-3.  将原始网络模型转换为适配昇腾AI处理器的模型。
-    1.  切换到模型所在目录。  
-        
-         **cd $HOME/models/sample-colorization/** 
+3.  将原始网络模型转换为适配昇腾AI处理器的模型。  
 
-    2.  执行模型转换的命令。  
-        
-         **atc --model=colorization.prototxt --weight=colorization.caffemodel --framework=0 --output=colorization --soc_version=Ascend310** 
-        
-3.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0219108795_li953280133816)中源码所在路径下的“**sample\_colorization/model**”目录下。
-    
-     **cp colorization.om $HOME/AscendProjects/sample-colorization/model/**  
+    1.  在Mind Studio操作界面的顶部菜单栏中选择**Tools \> Model Convert**，进入模型转换界面。
+    2.  在弹出的**Model Conversion**操作界面中，进行模型转换配置。
+    3.  参照以下图片进行参数配置。    
+        -   Model File选择[步骤2](#zh-cn_topic_0219108795_li2074865610364)中下载的模型文件，此时会自动匹配到权重文件并填写在Weight File中。  
+        -   关闭Image Pre-processing。
 
+    ![](figures/模型转换1.png "模型转换1")  
+    ![](figures/模型转换2.png "模型转换2")  
+    ![](figures/模型转换3.png "模型转换3")
 
+4.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0228757084_section8534138124114)中源码所在路径下的“**colorization/model**”目录下。   
+    **cp \\$HOME/modelzoo/colorization/device/colorization.om \\$HOME/AscendProjects/colorization/model/**  
 
 ## 环境配置   
 
-**注：服务器上已安装opencv库和ffmpeg库可跳过此步骤。**  
-    
+**注：已安装opencv库和ffmpeg库可跳过此步骤。**  
 
-- 安装opencv和ffmpeg  
-    - centos系统：  
-    请参考 **https://gitee.com/ascend/common/blob/master/centos_install_opencv/CENTOS_INSTALL_OPENCV.md**  
-    - ubuntu系统：  
-    请参考 **https://gitee.com/ascend/common/blob/master/ubuntu_install_opencv/UBUNTU_INSTALL_OPENCV.md**
+- 安装opencv  
+    请参考 **https://gitee.com/ascend/common/blob/master/install_opencv/for_atlas300/README.md**
 
 ## 编译<a name="zh-cn_topic_0219108795_section3723145213347"></a>
 
-1.  以HwHiAiUser（运行用户）登录开发环境。
+1.  打开对应的工程。
 
-2.  设置环境变量。 
-   
-    执行如下命令。 
+    以Mind Studio安装用户在命令行进入安装包解压后的“MindStudio-ubuntu/bin”目录，如：$HOME/MindStudio-ubuntu/bin。执行如下命令启动Mind Studio。
 
-     **vim ~/.bashrc** 
+    **./MindStudio.sh**
 
-    在最后一行添加DDK_PATH及NPU_HOST_LIB的环境变量。
+    启动成功后，打开**colorization**工程，如[图 打开colorization工程](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810)所示。
 
-     **export DDK\_PATH=/home/HwHiAiUser/Ascend** 
+    **图 1**  打开colorization工程<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810"></a>  
+    ![](figures/打开colorization工程.png "打开colorization工程")
 
-     **export NPU\_HOST\_LIB=/home/HwHiAiUser/Ascend/acllib/lib64/stub**  
+2.  开始编译，打开Mind Studio工具，在工具栏中点击**Build \> Edit Build Configuration**。  
+    选择Target OS 为Centos7.6，如[图 配置编译](#zh-cn_topic_0203223265_fig17414647130)所示。
 
-     **export LD\_LIBRARY_PATH=\\$DDK\_PATH/acllib/lib64:/usr/local/Ascend/add-ons:\\$HOME/ascend_ddk/host/lib:\\$DDK_PATH/atc/lib64** 
-     >![](public_sys-resources/icon-note.gif) **说明：**   
-            **请将/home/HwHiAiUser/Ascend替换为ACLlib标准形态安装包的实际安装路径。** 
+    **图 2**  配置编译<a name="zh-cn_topic_0203223265_fig17414647130"></a>  
+    ![](figures/配置build.png "配置编译")  
     
+    之后点击**Build \> Build \> Build Configuration**，如[图 编译操作及生成文件](#zh-cn_topic_0203223265_fig1741464713019)所示，会在目录下生成build和out文件夹。
 
-    输入:wq!保存退出。
+    **图 3**  编译操作及生成文件<a name="zh-cn_topic_0203223265_fig1741464713019"></a>  
+    ![](figures/编译操作及生成文件.png "编译操作及生成文件")
 
-    执行如下命令使环境变量生效。
+    >![](public_sys-resources/icon-notice.gif) **须知：**   
+    >首次编译工程时，**Build \> Build**为灰色不可点击状态。需要点击**Build \> Edit Build Configuration**，配置编译参数后再进行编译。  
 
-     **source ~/.bashrc**   
-
-3.  创建用于存放编译文件的目录。  
-
-
-    **cd $HOME/AscendProjects/sample-colorization**  
-    
-    **mkdir -p build/intermediates/host**  
-
-4.  执行cmake生成编译文件。
-
-     **cd build/intermediates/host**   
-
-    **cmake ../../../src -DCMAKE_CXX_COMPILER=g++ -DCMAKE_SKIP_RPATH=TRUE**  
-
-5.  执行make命令，生成的可执行文件main在“$HOME/AscendProjects/sample-colorization/out”目录下。 
-
-    **make**
 ## 运行<a name="zh-cn_topic_0219108795_section1620073406"></a>
+1.  在Mind Studio工具的工具栏中找到Run按钮，单击  **Run \> Edit Configurations**。  
+    在Command Arguments 中添加运行参数 **../data**（输入图片的路径），之后分别点击Apply、OK。如[图 配置运行](#zh-cn_topic_0203223265_fig93931954162720)所示。   
+
+    **图 4**  配置运行<a name="zh-cn_topic_0203223265_fig93931954162720"></a>   
+    ![](figures/配置run.png "配置运行")
+ 
+2.  单击  **Run \> Run 'colorization'**，如[图 程序已执行示意图](#zh-cn_topic_0203223265_fig93931954162719)所示，可执行程序已经在开发者板执行。  
+
+    **图 5**  程序已执行示意图<a name="zh-cn_topic_0203223265_fig93931954162719"></a>  
+    ![](figures/程序已执行示意图.png "程序已执行示意图")
+
+3.  查看运行结果。
+
+    上色图片保存在工程下的“output \> outputs”目录下以时间戳命名的文件夹内。  
+
+**黑白图像**    
+![结果1](figures/dog.png)  
+**上色图像**   
+![结果1](figures/dog_result.png) 
 
 
-1.  将需要上色的黑白图片上传至“$HOME/AscendProjects/sample-colorization/data/”目录下。  
-
-2.  切换到可执行文件main所在的目录，给该目录下的main文件加执行权限。  
-   
-    **cd $HOME/AscendProjects/sample-colorization/out**  
-    
-    **chmod +x main**   
-
-3.  运行可执行文件。  
-    **./mian ../data**
-
-4.  查看运行结果。 
-
-    **cd result**  
-
-    进入result目录，查看已完成上色的图片。
-
-
-   黑白图片
-
-![](figures/dog.png)  
-   上色图片
-
-![结果1](figures/dog_result.png)
 
