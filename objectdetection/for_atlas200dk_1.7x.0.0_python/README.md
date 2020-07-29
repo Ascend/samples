@@ -21,13 +21,13 @@
 
 
 2.  <a name="zh-cn_topic_0219108795_li2074865610364"></a>获取此应用中所需要的原始网络模型。    
- 
+
      -  下载原始网络模型及权重文件至ubuntu服务器任意目录，如:$HOME/yolov3_yuv。
 
         **mkdir -p $HOME/yolov3_yuv**
 
         **wget -P $HOME/yolov3_yuv https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/yolov3/yolov3.caffemodel** 
- 
+
         **wget -P $HOME/yolov3_yuv https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/yolov3/yolov3.prototxt**
 
 3.  将原始网络模型转换为适配昇腾AI处理器的模型。  
@@ -44,7 +44,7 @@
     ![](figures/模型转换3.png "模型转换3")
 
 
-5. 将转换好的模型放到工程文件中的model 目录下。  
+4. 将转换好的模型放到工程文件中的model 目录下。  
     **cp \\$HOME/modelzoo/yolov3_yuv/device/yolov3_yuv.om \\$HOME/AscendProjects/objectdetection_python/model/**   
 
 ## 环境部署<a name="zh-cn_topic_0228757083_section1759513564117"></a>
