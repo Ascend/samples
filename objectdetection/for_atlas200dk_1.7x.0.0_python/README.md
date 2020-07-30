@@ -47,6 +47,7 @@
 4. 将转换好的模型放到工程文件中的model 目录下。  
     **cp \\$HOME/modelzoo/yolov3_yuv/device/yolov3_yuv.om \\$HOME/AscendProjects/objectdetection_python/model/**   
 
+
 ## 环境部署<a name="zh-cn_topic_0228757083_section1759513564117"></a>
 
 1.  应用代码拷贝到开发板。
@@ -81,6 +82,10 @@
    执行如下命令，使环境变量生效   
    **source \${HOME}/.bashrc**
 
+4. 安装环境依赖。
+
+   请参考 https://gitee.com/ascend/common/blob/master/install_python3env/README.md 进行环境依赖配置。  
+    
 
 ## 运行
 
