@@ -79,8 +79,11 @@
    **export PYTHONPATH=/home/HwHiAiUser/Ascend/:\\${PYTHONPATH}**  
    ![](figures/pythonpath1.png)   
    执行如下命令，使环境变量生效   
-   **source ~/.bashrc**
+   **source ~/.bashrc**  
 
+4. 安装环境依赖。
+
+   请参考 https://gitee.com/ascend/common/blob/master/install_python3env/README.md 进行环境依赖配置。
 ## 运行
 
 1. 登录到开发板上，进入工程目录下，执行如下命令运行程序。  
