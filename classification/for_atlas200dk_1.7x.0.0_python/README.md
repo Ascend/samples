@@ -36,14 +36,14 @@
     2.  在弹出的**Model Conversion**操作界面中，进行模型转换配置。
     3.  参照以下图片进行参数配置。    
         -   Model File选择[步骤2](#zh-cn_topic_0219108795_li2074865610364)中下载的模型文件，此时会自动匹配到权重文件并填写在Weight File中。  
-        -   修改模型的名字为googlenet_yuv，若修改模型名称，需对应修改object_detect.py文件中的MODEL_PATH。
+        -   修改模型的名字为googlenet_yuv，若修改模型名称，需对应修改classify.py文件中的MODEL_PATH。
         -   Input Type 选择FP32,input NodeL:data中N改为1。  
         -   Model Image Format选择BGR，原始模型需要的图片格式为BGR.
     ![](figures/模型转换1.png "模型转换1")  
     ![](figures/模型转换2.png "模型转换2")  
     ![](figures/模型转换3.png "模型转换3")
 
-4. 将转换好的模型放到工程文件中的model 目录下。
+4. 将转换好的模型放到工程文件中的model 目录下。  
 	**cp ~/modelzoo/googlenet_yuv/device/googlenet_yuv.om ~/AscendProjects/classification_python/model/**   
 
 ## 环境部署<a name="zh-cn_topic_0228757083_section1759513564117"></a>
