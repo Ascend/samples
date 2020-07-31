@@ -6,7 +6,8 @@
 
 运行此Sample前，需要下载本仓中的源码包。
 
-1. <a name="zh-cn_topic_0228757084_section8534138124114"></a>获取源码包。
+1. <a name="zh-cn_topic_0228757084_section8534138124114"></a>获取源码包。  
+    **mkdir -p $HOME/AscendProjects**
 
    **cd $HOME/AscendProjects**  
 
