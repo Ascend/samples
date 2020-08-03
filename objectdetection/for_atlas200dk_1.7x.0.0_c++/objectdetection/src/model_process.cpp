@@ -22,20 +22,27 @@
 using namespace std;
 
 ModelProcess::ModelProcess():loadFlag_(false), modelId_(0), modelMemPtr_(nullptr), modelMemSize_(0),
-modelWeightPtr_(nullptr),modelWeightSize_(0), modelDesc_(nullptr), input_(nullptr), output_(nullptr)
-{
+modelWeightPtr_(nullptr),modelWeightSize_(0), modelDesc_(nullptr), input_(nullptr), output_(nullptr),
+isReleased_(false){
+
 }
 
-ModelProcess::~ModelProcess()
-{
+ModelProcess::~ModelProcess() {
+    DestroyResource();
+}
+
+void ModelProcess::DestroyResource() {
+    if (isReleased_)
+        return;
+    
     Unload();
     DestroyDesc();
     DestroyInput();
     DestroyOutput();
+    isReleased_ = true;
 }
 
-Result ModelProcess::LoadModelFromFileWithMem(const char *modelPath)
-{
+Result ModelProcess::LoadModelFromFileWithMem(const char *modelPath) {
     if (loadFlag_) {
         ERROR_LOG("has already loaded a model");
         return FAILED;
