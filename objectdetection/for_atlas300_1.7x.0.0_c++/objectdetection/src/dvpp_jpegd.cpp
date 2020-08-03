@@ -44,14 +44,14 @@ Result DvppJpegD::InitDecodeOutputDesc(ImageData& inputImage)
         return FAILED;
     }
 
-
-
-    uint32_t decodeOutBufferSize = YUV420SP_SIZE(decodeOutWidthStride, decodeOutHeightStride);
-    printf("cal yuv size %d\n", decodeOutBufferSize);
-
+    /*预测接口要求aclrtMallocHost分配的内存,AI1上运行当前应用中会需要
+	多次拷贝图片内存,暂不用.
     acldvppJpegPredictDecSize(inputImage.data.get(), inputImage.size,
-    PIXEL_FORMAT_YUV_SEMIPLANAR_420, &decodeOutBufferSize);
-    printf("predict yuv size %d\n", decodeOutBufferSize);
+    PIXEL_FORMAT_YUV_SEMIPLANAR_420, &decodeOutBufferSize);*/
+    
+	/*分配一块足够大的内存*/
+    uint32_t decodeOutBufferSize = 
+	    YUV420SP_SIZE(decodeOutWidthStride, decodeOutHeightStride) * 4;
 
     aclError aclRet = acldvppMalloc(&decodeOutBufferDev_, decodeOutBufferSize);
     if (aclRet != ACL_ERROR_NONE) {
