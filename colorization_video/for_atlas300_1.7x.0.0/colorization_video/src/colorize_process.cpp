@@ -106,7 +106,7 @@ Result ColorizeProcess::OpenPresenterChannel() {
     OpenChannelParam param;
     param.host_ip = "192.168.1.223";  //IP address of Presenter Server
     param.port = 7008;  //port of present service
-    param.channel_name = "classification-video";
+    param.channel_name = "colorization-video";
     param.content_type = ContentType::kVideo;  //content type is Video
     INFO_LOG("OpenChannel start");
     PresenterErrorCode errorCode = OpenChannel(channel_, param);
