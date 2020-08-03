@@ -11,7 +11,7 @@
     
     **cd $HOME/AscendProjects**  
 
-    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/objectdetection_python.zip** 
+    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/objectdetection_python.zip --no-check-certificate** 
               
     **unzip objectdetection_python.zip**  
     
