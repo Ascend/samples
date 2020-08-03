@@ -6,20 +6,24 @@
 
 运行此Sample前，需要下载本仓中的源码包。
 
+<<<<<<< HEAD
+1.  <a name="zh-cn_topic_0228757084_section8534138124114"></a>获取源码包。
+=======
 1. <a name="zh-cn_topic_0228757084_section8534138124114"></a>获取源码包。  
     **mkdir -p $HOME/AscendProjects**
+>>>>>>> 69dbe15d18b0be370d52f8cc95ba892041666f37
 
-   **cd $HOME/AscendProjects**  
+    **cd $HOME/AscendProjects**  
 
-   **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/classification_python.zip** 
-
-   **unzip classification_python.zip**
-
-   **说明：**   
-
-   >- 如果使用wget下载失败，可使用如下命令下载代码。  
+    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/classification_python.zip** 
+              
+    **unzip classification_python.zip**  
+    
+    >![](public_sys-resources/icon-note.gif) **说明：**   
+    >- 如果使用wget下载失败，可使用如下命令下载代码。  
     **curl -OL https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/classification_python.zip** 
     >- 如果curl也下载失败，可复制下载链接到浏览器，手动上传至服务器。
+
 
 2. <a name="zh-cn_topic_0219108795_li2074865610364"></a>获取此应用中所需要的原始网络模型。
 
@@ -44,7 +48,12 @@
     ![](figures/模型转换2.png "模型转换2")  
     ![](figures/模型转换3.png "模型转换3")
 
+<<<<<<< HEAD
+4. 将转换好的模型放到工程文件中的model 目录下。
+
+=======
 4. 将转换好的模型放到工程文件中的model 目录下。  
+>>>>>>> 69dbe15d18b0be370d52f8cc95ba892041666f37
 	**cp ~/modelzoo/googlenet_yuv/device/googlenet_yuv.om ~/AscendProjects/classification_python/model/**   
 
 ## 环境部署<a name="zh-cn_topic_0228757083_section1759513564117"></a>
