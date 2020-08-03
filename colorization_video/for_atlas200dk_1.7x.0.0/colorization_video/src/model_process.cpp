@@ -28,7 +28,7 @@ isReleased_(false){
 }
 
 ModelProcess::~ModelProcess() {
-    DestroyResource;
+    DestroyResource();
 }
 
 void ModelProcess::DestroyResource() {
