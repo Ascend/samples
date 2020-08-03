@@ -2,8 +2,11 @@
 
 #  检测网络应用（C++）<a name="ZH-CN_TOPIC_0219122211"></a>
 
-本应用支持运行在AI云上加速环境(Atlas300)，实现了对yolov3目标检测网络的推理功能。 
+本应用支持运行在AI云上加速环境(Atlas300)，实现了对yolov3目标检测网络的推理功能。  
+ 
+**注1：本指导是分设操作指导。开发环境为Mindstudio安装在的本地虚拟机环境，运行环境为云端申请的插有300加速卡的环境。**
 
+**注2：运行环境可以存在多种架构（如arm架构下的Centos系统、arm架构下的Euleros系统、x86架构下的Ubuntu系统等），本指导中只以ai1环境（x86架构下的Ubuntu系统）为例说明**  
 
 ## 软件准备<a name="zh-cn_topic_0219108795_section181111827718"></a>
 
@@ -13,30 +16,49 @@
 
     **cd $HOME/AscendProjects**   
  
-    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/ubuntu/sample-objectdetection.zip**  
+    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/objectdetection_300.zip**  
  
-    **unzip sample-objectdetection.zip**
+    **unzip objectdetection_300.zip**
     >![](public_sys-resources/icon-note.gif) **说明：**   
     >- 如果使用wget下载失败，可使用如下命令下载代码。  
-    **curl -OL https://c7xcode.obs.cn-north-4.myhuaweicloud.com/ubuntu/sample-objectdetection.zip** 
+    **curl -OL https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/objectdetection_300.zip** 
     >- 如果curl也下载失败，可复制下载链接到浏览器，手动上传至服务器。
     
-2.  <a name="zh-cn_topic_0219108795_li2074865610364"></a>获取此应用中所需要的原始网络模型。    
-    1.  切换目录。  
-        **cd $HOME/AscendProjects/sample-objectdetection/caffe_model**     
+2.  <a name="zh-cn_topic_0219108795_li2074865610364"></a>获取此应用中所需要的原始网络模型。  
+    获取原始网络模型，将其存放到Ubuntu服务器的任意目录，例如：$HOME/models/objectdetection。    
+    1.  创建目录。  
+        **mkdir -p $HOME/models/objectdetection**     
     2.  下载原始网络模型及权重文件。  
-        **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/yolov3/yolov3.caffemodel**  
-        **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/yolov3/yolov3.prototxt**
+        **wget -P $HOME/models/objectdetection/ https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/yolov3/yolov3.caffemodel**  
+        **wget -P $HOME/models/objectdetection/ https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/yolov3/yolov3.prototxt**  
+        **wget -P $HOME/models/objectdetection/ https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/yolov3/aipp_nv12.cfg**
 
 3.  将原始网络模型转换为适配昇腾AI处理器的模型。  
 
-    执行模型转换的命令。         
-    **atc --model=yolov3.prototxt --weight=yolov3.caffemodel --framework=0 --output=yolov3 --soc_version=Ascend310 --insert_op_conf=aipp_bgr.cfg** 
-    
-3.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0219108795_li953280133816)中源码所在路径下的“**sample-objectdetection/model**”目录下。
-    
-     **cp yolov3.om $HOME/AscendProjects/sample-objectdetection/model/**  
+    1.  设置环境变量
+        
+        命令行中输入以下命令设置环境变量。
 
+        **cd $HOME/models/objectdetection/**
+        
+        **export install_path=\$HOME/Ascend/ascend-toolkit/20.0.RC1/x86_64-linux_gcc7.3.0**  
+
+        **export PATH=/usr/local/python3.7.5/bin:\\${install_path}/atc/ccec_compiler/bin:\\${install_path}/atc/bin:\\$PATH**  
+
+        **export PYTHONPATH=\\${install_path}/atc/python/site-packages/te:\\${install_path}/atc/python/site-packages/topi:\\$PYTHONPATH**  
+
+        **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64:\\$LD_LIBRARY_PATH**  
+
+        **export ASCEND_OPP_PATH=\\${install_path}/opp**  
+
+    2.  执行以下命令转换模型。
+
+        **atc --model=yolov3.prototxt --weight=yolov3.caffemodel --framework=0 --output=yolov3 --soc_version=Ascend310 --insert_op_conf=aipp_nv12.cfg**
+
+    
+4.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0219108795_li953280133816)中源码所在路径下的“**objectdetection/model**”目录下。
+    
+    **cp ./yolov3.om \$HOME/AscendProjects/objectdetection/model/**
 
 
 ## 环境配置   
