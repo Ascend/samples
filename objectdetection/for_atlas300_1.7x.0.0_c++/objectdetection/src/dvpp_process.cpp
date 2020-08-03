@@ -47,8 +47,6 @@ void DvppProcess::DestroyResource()
         (void)acldvppDestroyChannelDesc(dvppChannelDesc_);
         dvppChannelDesc_ = nullptr;
     }
-
-    INFO_LOG("end to destroy context");
 }
 
 Result DvppProcess::InitResource(aclrtStream& stream)

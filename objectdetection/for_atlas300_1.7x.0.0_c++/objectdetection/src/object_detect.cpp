@@ -28,52 +28,52 @@
 using namespace std;
 
 namespace {
- const static std::vector<std::string> yolov3Label = { "person", "bicycle", "car", "motorbike",
- "aeroplane","bus", "train", "truck", "boat",
- "traffic light", "fire hydrant", "stop sign", "parking meter",
- "bench", "bird", "cat", "dog", "horse",
- "sheep", "cow", "elephant", "bear", "zebra",
- "giraffe", "backpack", "umbrella", "handbag","tie",
- "suitcase", "frisbee", "skis", "snowboard", "sports ball",
- "kite", "baseball bat", "baseball glove", "skateboard", "surfboard",
- "tennis racket", "bottle", "wine glass", "cup",
- "fork", "knife", "spoon", "bowl", "banana",
- "apple", "sandwich", "orange", "broccoli", "carrot",
- "hot dog", "pizza", "donut", "cake", "chair",
- "sofa", "potted plant", "bed", "dining table", "toilet",
- "TV monitor", "laptop", "mouse", "remote", "keyboard",
- "cell phone", "microwave", "oven", "toaster", "sink",
- "refrigerator", "book", "clock", "vase","scissors",
- "teddy bear", "hair drier", "toothbrush" };
+    const static std::vector<std::string> yolov3Label = { "person", "bicycle", "car", "motorbike",
+    "aeroplane","bus", "train", "truck", "boat",
+    "traffic light", "fire hydrant", "stop sign", "parking meter",
+    "bench", "bird", "cat", "dog", "horse",
+    "sheep", "cow", "elephant", "bear", "zebra",
+    "giraffe", "backpack", "umbrella", "handbag","tie",
+    "suitcase", "frisbee", "skis", "snowboard", "sports ball",
+    "kite", "baseball bat", "baseball glove", "skateboard", "surfboard",
+    "tennis racket", "bottle", "wine glass", "cup",
+    "fork", "knife", "spoon", "bowl", "banana",
+    "apple", "sandwich", "orange", "broccoli", "carrot",
+    "hot dog", "pizza", "donut", "cake", "chair",
+    "sofa", "potted plant", "bed", "dining table", "toilet",
+    "TV monitor", "laptop", "mouse", "remote", "keyboard",
+    "cell phone", "microwave", "oven", "toaster", "sink",
+    "refrigerator", "book", "clock", "vase","scissors",
+    "teddy bear", "hair drier", "toothbrush" };
 
-const uint32_t kBBoxDataBufId = 0;
-const uint32_t kBoxNumDataBufId = 1;
+    const uint32_t kBBoxDataBufId = 0;
+    const uint32_t kBoxNumDataBufId = 1;
 
 
-enum BBoxIndex { TOPLEFTX = 0, TOPLEFTY, BOTTOMRIGHTX, BOTTOMRIGHTY, SCORE, LABEL };
-// bounding box line solid
-const uint32_t kLineSolid = 2;
+    enum BBoxIndex { TOPLEFTX = 0, TOPLEFTY, BOTTOMRIGHTX, BOTTOMRIGHTY, SCORE, LABEL };
+    // bounding box line solid
+    const uint32_t kLineSolid = 2;
 
-// output image prefix
-const string kOutputFilePrefix = "out_";
-// opencv draw label params.
-const double kFountScale = 0.5;
-const cv::Scalar kFontColor(0, 0, 255);
-const uint32_t kLabelOffset = 11;
-const string kFileSperator = "/";
+    // output image prefix
+    const string kOutputFilePrefix = "out_";
+    // opencv draw label params.
+    const double kFountScale = 0.5;
+    const cv::Scalar kFontColor(0, 0, 255);
+    const uint32_t kLabelOffset = 11;
+    const string kFileSperator = "/";
 
-// opencv color list for boundingbox
-const vector<cv::Scalar> kColors{
-  cv::Scalar(237, 149, 100), cv::Scalar(0, 215, 255), cv::Scalar(50, 205, 50),
-  cv::Scalar(139, 85, 26) };
+    // opencv color list for boundingbox
+    const vector<cv::Scalar> kColors{
+        cv::Scalar(237, 149, 100), cv::Scalar(0, 215, 255), cv::Scalar(50, 205, 50),
+        cv::Scalar(139, 85, 26) };
 
 }
 
-ObjectDetect::ObjectDetect(const char* modelPath, 
-                           uint32_t modelWidth, 
-                           uint32_t modelHeight)
+ObjectDetect::ObjectDetect(const char* modelPath,
+uint32_t modelWidth,
+uint32_t modelHeight)
 :deviceId_(0), context_(nullptr), stream_(nullptr), modelWidth_(modelWidth),
- modelHeight_(modelHeight), isInited_(false){
+modelHeight_(modelHeight), isInited_(false){
     imageInfoSize_ = 0;
     imageInfoBuf_ = nullptr;
     modelPath_ = modelPath;
@@ -216,15 +216,15 @@ Result ObjectDetect::Preprocess(ImageData& resizedImage, ImageData& srcImage) {
         ERROR_LOG("Resize image failed");
         return FAILED;
     }
-    
+
     return SUCCESS;
 }
 
 Result ObjectDetect::Inference(aclmdlDataset*& inferenceOutput,
-                               ImageData& resizedImage) {
+ImageData& resizedImage) {
     Result ret = model_.CreateInput(resizedImage.data.get(),
-                                    resizedImage.size,
-                                    imageInfoBuf_, imageInfoSize_);
+    resizedImage.size,
+    imageInfoBuf_, imageInfoSize_);
     if (ret != SUCCESS) {
         ERROR_LOG("Create mode input dataset failed");
         return FAILED;
@@ -242,13 +242,13 @@ Result ObjectDetect::Inference(aclmdlDataset*& inferenceOutput,
 }
 
 Result ObjectDetect::Postprocess(ImageData& image, aclmdlDataset* modelOutput,
-                                 const string& origImagePath) {
+const string& origImagePath) {
     uint32_t dataSize = 0;
     float* detectData = (float *)GetInferenceOutputItem(dataSize, modelOutput,
-                                                        kBBoxDataBufId);
+    kBBoxDataBufId);
 
     uint32_t* boxNum = (uint32_t *)GetInferenceOutputItem(dataSize, modelOutput,
-                                                    kBoxNumDataBufId);
+    kBoxNumDataBufId);
     if (boxNum == nullptr) return FAILED;
 
     uint32_t totalBox = boxNum[0];
@@ -269,7 +269,7 @@ Result ObjectDetect::Postprocess(ImageData& image, aclmdlDataset* modelOutput,
         uint32_t objIndex = (uint32_t)detectData[totalBox * LABEL + i];
         boundBox.text = yolov3Label[objIndex] + std::to_string(score) + "\%";
         printf("%d %d %d %d %s\n", boundBox.rect.ltX, boundBox.rect.ltY,
-               boundBox.rect.rbX, boundBox.rect.rbY, boundBox.text.c_str());
+        boundBox.rect.rbX, boundBox.rect.rbY, boundBox.text.c_str());
 
         detectResults.emplace_back(boundBox);
     }
@@ -284,26 +284,26 @@ Result ObjectDetect::Postprocess(ImageData& image, aclmdlDataset* modelOutput,
 }
 
 void* ObjectDetect::GetInferenceOutputItem(uint32_t& itemDataSize,
-                                           aclmdlDataset* inferenceOutput,
-                                           uint32_t idx) {
+aclmdlDataset* inferenceOutput,
+uint32_t idx) {
     aclDataBuffer* dataBuffer = aclmdlGetDatasetBuffer(inferenceOutput, idx);
     if (dataBuffer == nullptr) {
         ERROR_LOG("Get the %dth dataset buffer from model "
-                  "inference output failed", idx);
+        "inference output failed", idx);
         return nullptr;
     }
 
     void* dataBufferDev = aclGetDataBufferAddr(dataBuffer);
     if (dataBufferDev == nullptr) {
         ERROR_LOG("Get the %dth dataset buffer address "
-                  "from model inference output failed", idx);
+        "from model inference output failed", idx);
         return nullptr;
     }
 
     size_t bufferSize = aclGetDataBufferSize(dataBuffer);
     if (bufferSize == 0) {
         ERROR_LOG("The %dth dataset buffer size of "
-                  "model inference output is 0", idx);
+        "model inference output is 0", idx);
         return nullptr;
     }
 
@@ -324,7 +324,7 @@ void* ObjectDetect::GetInferenceOutputItem(uint32_t& itemDataSize,
 }
 
 void ObjectDetect::DrowBoundBoxToImage(vector<BBox>& detectionResults,
-                                       const string& origImagePath) {
+const string& origImagePath) {
     cv::Mat image = cv::imread(origImagePath, CV_LOAD_IMAGE_UNCHANGED);
     for (int i = 0; i < detectionResults.size(); ++i) {
         cv::Point p1, p2;
@@ -334,7 +334,7 @@ void ObjectDetect::DrowBoundBoxToImage(vector<BBox>& detectionResults,
         p2.y = detectionResults[i].rect.rbY;
         cv::rectangle(image, p1, p2, kColors[i % kColors.size()], kLineSolid);
         cv::putText(image, detectionResults[i].text, cv::Point(p1.x, p1.y + kLabelOffset),
-                    cv::FONT_HERSHEY_COMPLEX, kFountScale, kFontColor);
+        cv::FONT_HERSHEY_COMPLEX, kFountScale, kFontColor);
     }
 
     int pos = origImagePath.find_last_of("/");
@@ -347,7 +347,29 @@ void ObjectDetect::DrowBoundBoxToImage(vector<BBox>& detectionResults,
 
 void ObjectDetect::DestroyResource()
 {
-    aclError ret = aclrtResetDevice(deviceId_);
+    model_.DestroyResource();
+    dvpp_.DestroyResource();
+
+    aclError ret;
+    if (stream_ != nullptr) {
+        ret = aclrtDestroyStream(stream_);
+        if (ret != ACL_ERROR_NONE) {
+            ERROR_LOG("destroy stream failed");
+        }
+        stream_ = nullptr;
+    }
+    INFO_LOG("end to destroy stream");
+
+    if (context_ != nullptr) {
+        ret = aclrtDestroyContext(context_);
+        if (ret != ACL_ERROR_NONE) {
+            ERROR_LOG("destroy context failed");
+        }
+        context_ = nullptr;
+    }
+    INFO_LOG("end to destroy context");
+
+    ret = aclrtResetDevice(deviceId_);
     if (ret != ACL_ERROR_NONE) {
         ERROR_LOG("reset device failed");
     }

@@ -34,8 +34,8 @@ endif()
 
 # Header path
 include_directories(
-    $ENV{HOME}/ascend_ddk/include/third_party/
-    $ENV{HOME}/ascend_ddk/include/ascenddk/
+    $ENV{HOME}/ascend_ddk/x86/include/
+    $ENV{HOME}/ascend_ddk/x86/include/opencv4
     ${INC_PATH}/acllib/include/
     ../inc/
 )
@@ -47,7 +47,7 @@ endif()
 # add host lib path
 link_directories(
     ${LIB_PATH}
-    $ENV{HOME}/ascend_ddk/host/lib/
+    $ENV{HOME}/ascend_ddk/x86/lib/
     ${INC_PATH}/atc/lib64
 )
 

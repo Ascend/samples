@@ -28,7 +28,7 @@ using namespace std;
 namespace {
 uint32_t kModelWidth = 416;
 uint32_t kModelHeight = 416;
-const char* kModelPath = "../model/yolov3_yuv.om";
+const char* kModelPath = "../model/yolov3.om";
 }
 
 int main(int argc, char *argv[]) {

@@ -18,19 +18,30 @@
 */
 #include "model_process.h"
 #include <iostream>
+#include <unistd.h>
 #include "utils.h"
 using namespace std;
 
 ModelProcess::ModelProcess():loadFlag_(false), modelId_(0), modelMemPtr_(nullptr), modelMemSize_(0),
-modelWeightPtr_(nullptr),modelWeightSize_(0), modelDesc_(nullptr), input_(nullptr), output_(nullptr)
-{
+modelWeightPtr_(nullptr),modelWeightSize_(0), modelDesc_(nullptr), input_(nullptr), output_(nullptr),
+isReleased_(false){
+
 }
 
-ModelProcess::~ModelProcess()
-{
+ModelProcess::~ModelProcess() {
+    DestroyResource();
+}
+
+void ModelProcess::DestroyResource() {
+    if (isReleased_)
+        return;
+
     Unload();
     DestroyDesc();
+    DestroyInput();
     DestroyOutput();
+    isReleased_ = true;
+    sleep(20);
 }
 
 Result ModelProcess::LoadModelFromFileWithMem(const char *modelPath)
@@ -59,7 +70,7 @@ Result ModelProcess::LoadModelFromFileWithMem(const char *modelPath)
     }
 
     ret = aclmdlLoadFromFileWithMem(modelPath, &modelId_, modelMemPtr_,
-        modelMemSize_, modelWeightPtr_, modelWeightSize_);
+    modelMemSize_, modelWeightPtr_, modelWeightSize_);
     if (ret != ACL_ERROR_NONE) {
         ERROR_LOG("load model from file failed, model file is %s", modelPath);
         return FAILED;
@@ -96,8 +107,8 @@ void ModelProcess::DestroyDesc()
     }
 }
 
-Result ModelProcess::CreateInput(void *input1, size_t input1size, 
-                                 void* input2, size_t input2size)
+Result ModelProcess::CreateInput(void *input1, size_t input1size,
+void* input2, size_t input2size)
 {
     input_ = aclmdlCreateDataset();
     if (input_ == nullptr) {

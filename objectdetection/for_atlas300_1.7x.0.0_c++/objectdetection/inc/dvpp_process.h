@@ -36,6 +36,7 @@ public:
                   uint32_t width, uint32_t height);
     Result CvtJpegToYuv420sp(ImageData& src, ImageData& dest);
     Result InitResource(aclrtStream& stream);
+    void DestroyResource();
 
 protected:
     int isInitOk_;
@@ -43,7 +44,7 @@ protected:
     acldvppChannelDesc *dvppChannelDesc_;
     bool isGlobalContext_;
 
-private:
-    void DestroyResource();
+
+
 };
 
