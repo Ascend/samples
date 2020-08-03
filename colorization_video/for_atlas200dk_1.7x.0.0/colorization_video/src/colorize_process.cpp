@@ -312,6 +312,8 @@ Result ColorizeProcess::SendImage(cv::Mat& image) {
 
 void ColorizeProcess::DestroyResource()
 {
+    model_.DestroyResource();
+
     aclError ret;
     if (stream_ != nullptr) {
         ret = aclrtDestroyStream(stream_);
