@@ -44,6 +44,11 @@ public:
     Result LoadModelFromFileWithMem(const char *modelPath);
 
     /**
+    * @brief release all acl resource
+    */
+    void DestroyResource();
+
+    /**
     * @brief unload model
     */
     void Unload();
@@ -105,5 +110,7 @@ private:
     aclmdlDesc *modelDesc_;
     aclmdlDataset *input_;
     aclmdlDataset *output_;
+
+    bool isReleased_;
 };
 

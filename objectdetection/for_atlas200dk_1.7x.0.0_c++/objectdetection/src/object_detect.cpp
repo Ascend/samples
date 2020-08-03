@@ -354,6 +354,8 @@ void ObjectDetect::DrowBoundBoxToImage(vector<BBox>& detectionResults,
 
 void ObjectDetect::DestroyResource()
 {
+	model_.DestroyResource();
+	
     aclError ret = aclrtResetDevice(deviceId_);
     if (ret != ACL_ERROR_NONE) {
         ERROR_LOG("reset device failed");
