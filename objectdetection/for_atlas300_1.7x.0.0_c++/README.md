@@ -41,7 +41,7 @@
 
         **cd $HOME/models/objectdetection/**
         
-        **export install_path=\$HOME/Ascend/ascend-toolkit/20.0.RC1/x86_64-linux_gcc7.3.0**  
+        **export install_path=\$HOME/Ascend/ascend-toolkit/latest/x86_64-linux_gcc7.3.0**  
 
         **export PATH=/usr/local/python3.7.5/bin:\\${install_path}/atc/ccec_compiler/bin:\\${install_path}/atc/bin:\\$PATH**  
 
@@ -63,78 +63,50 @@
 
 ## 环境配置   
 
-**注：服务器上已安装opencv库和ffmpeg库可跳过此步骤。**  
-      
-- 安装opencv和ffmpeg  
-    - centos系统：  
-    请参考 **https://gitee.com/ascend/common/blob/master/centos_install_opencv/CENTOS_INSTALL_OPENCV.md**  
-    - ubuntu系统：  
-    请参考 **https://gitee.com/ascend/common/blob/master/ubuntu_install_opencv/UBUNTU_INSTALL_OPENCV.md**
+**注：已安装opencv库和ffmpeg库可跳过此步骤。**  
+
+- 安装opencv  
+    请参考 **https://gitee.com/ascend/common/blob/master/install_opencv/for_atlas300/README.md**
 
 ## 编译<a name="zh-cn_topic_0219108795_section3723145213347"></a>
+1.  打开对应的工程。
 
-1.  以HwHiAiUser（运行用户）登录开发环境。
+    以Mind Studio安装用户在命令行进入安装包解压后的“MindStudio-ubuntu/bin”目录，如：$HOME/MindStudio-ubuntu/bin。执行如下命令启动Mind Studio。
 
-2.  设置环境变量。 
-   
-    执行如下命令。 
+    **./MindStudio.sh**
 
-     **vim ~/.bashrc** 
+    启动成功后，打开**objectdetection**工程，如[图 打开objectdetection工程](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810)所示。
 
-    在最后一行添加DDK_PATH及NPU_HOST_LIB的环境变量。
+    **图 1**  打开objectdetection工程<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810"></a>  
+    ![](figures/打开objectdetection工程1.png "打开objectdetection工程")
 
-     **export DDK\_PATH=/home/HwHiAiUser/Ascend** 
+2.  开始编译，打开Mind Studio工具，在工具栏中点击**Build \> Edit Build Configuration**。  
+    选择Target OS 为Centos7.6，如[图 配置编译](#zh-cn_topic_0203223265_fig17414647130)所示。
 
-     **export NPU\_HOST\_LIB=/home/HwHiAiUser/Ascend/acllib/lib64/stub**  
-
-     **export LD\_LIBRARY_PATH=\\$DDK\_PATH/acllib/lib64:/usr/local/Ascend/add-ons:\\$HOME/ascend_ddk/host/lib:\\$DDK_PATH/atc/lib64** 
-
-     >![](public_sys-resources/icon-note.gif) **说明：**   
-            **请将/home/HwHiAiUser/Ascend替换为ACLlib标准形态安装包的实际安装路径。** 
+    **图 2**  配置编译<a name="zh-cn_topic_0203223265_fig17414647130"></a>  
+    ![](figures/配置build1.png "配置编译")  
     
+    之后点击**Build \> Build \> Build Configuration**，如[图 编译操作及生成文件](#zh-cn_topic_0203223265_fig1741464713019)所示，会在目录下生成build和out文件夹。
 
-    输入:wq!保存退出。
+    **图 3**  编译操作及生成文件<a name="zh-cn_topic_0203223265_fig1741464713019"></a>  
+    ![](figures/编译操作及生成文件1.png "编译操作及生成文件")
 
-    执行如下命令使环境变量生效。
-
-     **source ~/.bashrc**   
-
-3.  创建用于存放编译文件的目录。  
-
-
-    **cd $HOME/AscendProjects/sample-objectdetection**  
-    
-    **mkdir -p build/intermediates/host**  
-
-4.  执行cmake生成编译文件。
-
-     **cd build/intermediates/host**   
-
-    **cmake ../../../src -DCMAKE_CXX_COMPILER=g++ -DCMAKE_SKIP_RPATH=TRUE**  
-
-5.  执行make命令，生成的可执行文件main在“$HOME/AscendProjects/sample-objectdetection/out”目录下。 
-
-    **make**
+    >![](public_sys-resources/icon-notice.gif) **须知：**   
+    >首次编译工程时，**Build \> Build**为灰色不可点击状态。需要点击**Build \> Edit Build Configuration**，配置编译参数后再进行编译。  
 ## 运行<a name="zh-cn_topic_0219108795_section1620073406"></a>
+1.  在Mind Studio工具的工具栏中找到Run按钮，单击  **Run \> Edit Configurations**。  
+    在Command Arguments 中添加运行参数 **../data**（输入图片的路径），之后分别点击Apply、OK。如[图 配置运行](#zh-cn_topic_0203223265_fig93931954162720)所示。   
 
+    **图 4**  配置运行<a name="zh-cn_topic_0203223265_fig93931954162720"></a>   
+    ![](figures/配置run1.png "配置运行")
+ 
+2.  单击  **Run \> Run 'objectdetection'**，如[图 程序已执行示意图](#zh-cn_topic_0203223265_fig93931954162719)所示，可执行程序已经在开发者板执行。  
 
-1.  将需要检测的图片上传至“$HOME/AscendProjects/sample-objectdetection/data/”目录下。  
+    **图 5**  程序已执行示意图<a name="zh-cn_topic_0203223265_fig93931954162719"></a>  
+    ![](figures/程序已执行示意图1.png "程序已执行示意图")
 
-2.  切换到可执行文件main所在的目录，给该目录下的main文件加执行权限。  
-   
-    **cd $HOME/AscendProjects/sample-objectdetection/out**  
-    
-    **chmod +x main**   
+3.  查看运行结果。
 
-3.  运行可执行文件。  
-    **./main \.\./data/**
+    推理结果图片保存在工程下的“output \> outputs”目录下以时间戳命名的文件夹内。  
 
-4.  查看运行结果。 
-
-    **cd out**  
-
-    进入out目录，查看推理结果的图片。
-
-
-![结果1](figures/result.png)
-
+![结果1](figures/result.png) 
