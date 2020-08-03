@@ -52,7 +52,7 @@
 
 3.  将原始网络模型转换为适配昇腾AI处理器的模型。  
 
-    1.  在Mind Studio操作界面的顶部菜单栏中选择**Tools \> Model Convert**，进入模型转换界面。
+    1.  在Mind Studio操作界面的顶部菜单栏中选择**Tools \> Model Converter**，进入模型转换界面。
     2.  在弹出的**Model Conversion**操作界面中，进行模型转换配置。
     3.  参照以下图片进行参数配置。    
         -   Model File选择[步骤2](#zh-cn_topic_0219108795_li2074865610364)中下载的模型文件，此时会自动匹配到权重文件并填写在Weight File中。
@@ -62,7 +62,7 @@
     ![](figures/模型转换3.png "模型转换3")
 
     
-5.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0228757084_section8534138124114)中源码所在路径下的“**classification/model**”目录下。
+4.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0228757084_section8534138124114)中源码所在路径下的“**classification/model**”目录下。
     
      **cp \\$HOME/modelzoo/googlenet/device/googlenet.om \\$HOME/AscendProjects/classification/model/**  
   
