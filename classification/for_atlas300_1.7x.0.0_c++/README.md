@@ -95,7 +95,7 @@
     选择Target OS 为Centos7.6，如[图 配置编译](#zh-cn_topic_0203223265_fig17414647130)所示。
 
     **图 2**  配置编译<a name="zh-cn_topic_0203223265_fig17414647130"></a>  
-    ![](figures/配置build1.png "配置编译")  
+    ![](figures/配置build.png "配置编译")  
     
     之后点击**Build \> Build \> Build Configuration**，如[图 编译操作及生成文件](#zh-cn_topic_0203223265_fig1741464713019)所示，会在目录下生成build和out文件夹。
 
