@@ -1,1 +1,0 @@
-[{"name":"Build-Configuration","type":"AscendAppBuild","lastBuild":false,"buildProperties":{"HOST_OS":"Centos7.6","HOST_ARCH":"aarch64","TARGET_TYPE":"SOC"}},{"name":"config","type":"AscendAppBuild","lastBuild":true,"buildProperties":{"HOST_OS":"Centos7.6","remote_port":"","BUILD_MODE":"remote","HOST_ARCH":"aarch64","TARGET_TYPE":"SOC","remote_host":""}}]
