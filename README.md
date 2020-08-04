@@ -4,7 +4,6 @@
 
 Ascend sample，请根据自己的需要进入对应文件夹获取应用，或者点击下面的说明链接选择需要的应用。
 
-**注意：不带_c++和_python后缀的样例默认为c++样例！**
 
 #### 链接地址
 
@@ -19,23 +18,22 @@ Ascend sample，请根据自己的需要进入对应文件夹获取应用，或�
 
 <details open><summary>classification_video：分类网络视频</summary><blockquote>
 
-- [for_atlas200dk_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/classification_video/for_atlas200dk_1.7x.0.0)  
-- [for_atlas300_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/classification_video/for_atlas300_1.7x.0.0)
+- [for_atlas200dk_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/classification_video/for_atlas200dk_1.7x.0.0_c++)  
+- [for_atlas300_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/classification_video/for_atlas300_1.7x.0.0_c++)
 </blockquote></details>
 
 
 <details open><summary>colorization：黑白图像上色图片</summary><blockquote>
 
-- [for_atlas200dk_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/colorization/for_atlas200dk_1.7x.0.0)
-  
-- [for_atlas300_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/colorization/for_atlas300_1.7x.0.0)
+- [for_atlas200dk_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/colorization/for_atlas200dk_1.7x.0.0_c++)
+- [for_atlas300_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/colorization/for_atlas300_1.7x.0.0_c++)
 </blockquote></details>  
 
 
 <details open><summary>colorization_video：黑白图像上色视频</summary><blockquote>
 
-- [for_atlas200dk_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/colorization_video/for_atlas200dk_1.7x.0.0)  
-- [for_atlas300_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/colorization_video/for_atlas300_1.7x.0.0)
+- [for_atlas200dk_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/colorization_video/for_atlas200dk_1.7x.0.0_c++)  
+- [for_atlas300_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/colorization_video/for_atlas300_1.7x.0.0_c++)
 </blockquote></details>
 
 
@@ -49,8 +47,8 @@ Ascend sample，请根据自己的需要进入对应文件夹获取应用，或�
 
 <details open><summary>objectdetection_video：检测网络视频</summary><blockquote>
 
-- [for_atlas200dk_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/objectdetection_video/for_atlas200dk_1.7x.0.0)  
-- [for_atlas300_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/objectdetection_video/for_atlas300_1.7x.0.0)
+- [for_atlas200dk_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/objectdetection_video/for_atlas200dk_1.7x.0.0_c++)  
+- [for_atlas300_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/objectdetection_video/for_atlas300_1.7x.0.0_c++)
 </blockquote></details>
 
 <details open><summary>facedetection：人脸检测</summary><blockquote>
