@@ -89,7 +89,7 @@
 
 4. 安装环境依赖。
 
-   请参考 https://gitee.com/ascend/common/blob/master/install_python3env/README.md 进行环境依赖配置。  
+   请参考 https://gitee.com/ascend/common/blob/master/install_python3env/for_atlas200dk/README.md 进行环境依赖配置。  
     
 
 ## 运行
