@@ -4,6 +4,9 @@
 
 本应用支持运行在AI云上加速环境(Atlas300)，实现了googlenet网络的推理功能并输出带有推理结果标签的图片。 
 
+**注1：本指导是分设操作指导。开发环境为Mindstudio安装在的本地虚拟机环境，运行环境为云端申请的插有300加速卡的环境。**
+
+**注2：运行环境可以存在多种架构（如arm架构下的Centos系统、arm架构下的Euleros系统、x86架构下的Ubuntu系统等），本指导中只以ai1环境（x86架构下的Ubuntu系统）为例说明**
 
 ## 软件准备<a name="zh-cn_topic_0219108795_section181111827718"></a>
 
@@ -13,18 +16,18 @@
 
     **cd $HOME/AscendProjects**    
 
-    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/ubuntu/sample-classification_video.zip** 
+    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/classification_video_300.zip** 
   
-    **unzip sample-classification_video.zip**    
+    **unzip classification_video_300.zip**    
     
     >![](public_sys-resources/icon-note.gif) **说明：**   
     >- 如果使用wget下载失败，可使用如下命令下载代码。  
-    **curl -OL https://c7xcode.obs.cn-north-4.myhuaweicloud.com/ubuntu/sample-classification_video.zip** 
+    **curl -OL https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/classification_video_300.zip** 
     >- 如果curl也下载失败，可复制下载链接到浏览器，手动上传至服务器。
     
-2. <a name="zh-cn_topic_0219108795_li2074865610364"></a>获取此应用中所需要的原始网络模型。
+2.  <a name="zh-cn_topic_0219108795_li2074865610364"></a>获取此应用中所需要的原始网络模型。
 
-   参考[表 分类网络应用使用模型](#zh-cn_topic_0219108795_table19942111763710)获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到"$HOME/AscendProjects/sample-classification_video/caffe_model/"目录下。
+    参考[表 分类网络应用使用模型](#zh-cn_topic_0219108795_table19942111763710)获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到Ubuntu服务器的任意目录，例如：$HOME/models/classification_video。
 
     **表 1**  分类网络应用使用模型
 
@@ -49,155 +52,105 @@
 </tbody>
 </table>
 
+
 3.  将原始网络模型转换为适配昇腾AI处理器的模型。  
 
-    1.  切换到模型所在目录。  
-        
-         **cd $HOME/AscendProjects/sample-classification_video/caffe_model/** 
+    1.  在Mind Studio操作界面的顶部菜单栏中选择**Tools \> Model Converter**，进入模型转换界面。
+    2.  在弹出的**Model Conversion**操作界面中，进行模型转换配置。
+    3.  参照以下图片进行参数配置。    
+        -   Model File选择[步骤2](#zh-cn_topic_0219108795_li2074865610364)中下载的模型文件，此时会自动匹配到权重文件并填写在Weight File中。
 
-    2.  执行模型转换的命令。  
-        
-         **atc --model=googlenet.prototxt --weight=googlenet.caffemodel --framework=0 --output=googlenet_BGR --soc_version=Ascend310 --input_shape="data:1,3,224,224" --insert_op_conf=aipp.cfg** 
+    ![](figures/模型转换1.png "模型转换1")  
+    ![](figures/模型转换2.png "模型转换2")  
+    ![](figures/模型转换3.png "模型转换3")
+
     
-4.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0219108795_li953280133816)中源码所在路径下的“**sample-classification_video/model**”目录下。
+4.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0228757084_section8534138124114)中源码所在路径下的“**classification_video/model**”目录下。
     
-    **cp googlenet_BGR.om $HOME/AscendProjects/sample-classification_video/model/**
+     **cp \\$HOME/modelzoo/googlenet/device/googlenet.om \\$HOME/AscendProjects/classification_video/model/**  
+
 
 ## 环境配置   
 
-**注：服务器上已安装opencv库和ffmpeg库可跳过此步骤。**      
+**注：已安装opencv库、ffmpeg库和Presenter Agent可跳过此步骤。**  
 
 - 安装opencv和ffmpeg  
-    - centos系统：  
-    请参考 **https://gitee.com/ascend/common/blob/master/centos_install_opencv/CENTOS_INSTALL_OPENCV.md**  
-    - ubuntu系统：  
-    请参考 **https://gitee.com/ascend/common/blob/master/ubuntu_install_opencv/UBUNTU_INSTALL_OPENCV.md**
+    请参考 **https://gitee.com/ascend/common/blob/master/install_opencv/for_atlas300/README.md**
+
   
 - 安装PresentAgent    
-
-  1.  下载PresentAgent到服务器任意目录，如在“$HOME/Downloads/”目录下执行以下命令下载代码。  
- 
-      **git clone https://gitee.com/ascend/common.git**  
-  2.  切换到root用户。      
-
-      **su root**  
-  3.  安装tornado包。  
-      **python3.7.5 -m pip install tornado==5.1.0 -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com**  
-  4.  安装autoconf、automake、libtool。
-      - centos  
-        **yum install autoconf automake libtool**  
-      - ubuntu  
-        **apt-get install autoconf automake libtool**  
-  5.  安装protobuf。  
-      **git clone -b 3.8.x https://gitee.com/mirrors/protobufsource.git protobuf**   
-      **cd protobuf**   
-      **git submodule update --init --recursive**  
-      **./autogen.sh**   
-      **bash configure**  
-      **make**  
-      **make install**  
-      **ldconfig**  
-
-  6.  切换到运行用户。  
-      **su HwHiAiUser**
-
-  7.  将securec.h和securectype.h放置到$HOME/Ascend目录下。  
-      **cp \\$HOME/Downloads/common/presenteragent/securec.h \\$HOME/Ascend**  
-      **cp \\$HOME/Downloads/common/presenteragent/securectype.h \\$HOME/Ascend**   
-    
-  8.  编译并安装PresentAgent。    
-      **cd $HOME/Downloads/common/presenteragent/**   
-      **make**  
-      **make install**
-
+    请参考 **https://gitee.com/ascend/common/blob/master/install_presenteragent/for_atlas300/README.md**
 ## 编译<a name="zh-cn_topic_0219108795_section3723145213347"></a>
 
-1.  以HwHiAiUser（运行用户）登录开发环境。
+1.  打开对应的工程。
 
-2.  设置环境变量。 
-   
-    执行如下命令。 
+    以Mind Studio安装用户在命令行进入安装包解压后的“MindStudio-ubuntu/bin”目录，如：$HOME/MindStudio-ubuntu/bin。执行如下命令启动Mind Studio。
 
-     **vim ~/.bashrc** 
+    **./MindStudio.sh**
 
-    在最后一行添加DDK_PATH及NPU_HOST_LIB的环境变量。
+    启动成功后，打开**classification_video**工程，如[图 打开classification_video工程](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810)所示。
 
-     **export DDK\_PATH=/home/HwHiAiUser/Ascend** 
+    **图 1**  打开classification_video工程<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810"></a>  
+    ![](figures/打开classification_video工程1.png "打开classification_video工程")
 
-     **export NPU\_HOST\_LIB=/home/HwHiAiUser/Ascend/acllib/lib64/stub**  
+2.  修改Presenter Server的ip。  
+    -  将**script/presenterserver/display/config/config.conf**中的**presenter_server_ip**修改为Mind Studio所在Ubuntu服务器的虚拟网卡的ip地址，如[图 presenter_server_ip](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig1110624110)所示。
 
-     **export LD\_LIBRARY_PATH=\\$DDK\_PATH/acllib/lib64:/usr/local/Ascend/add-ons:\\$HOME/ascend_ddk/host/lib:\\$DDK_PATH/atc/lib64** 
+      **图 2**  修改presenter_server_ip<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig1110624110"></a>  
+      ![](figures/presenter_server_ip.png "修改presenter_server_ip")      
+    -  将**src/classify_process.cpp**中的 **param.host_ip** 修改为Mind Studio所在Ubuntu服务器的虚拟网卡的ip地址，如[图 param_host_ip](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11)所示。
 
-     >![](public_sys-resources/icon-note.gif) **说明：**   
-            **1.请将/home/HwHiAiUser/Ascend替换为ACLlib标准形态安装包的实际安装路径。**  
-            **2.注意LD\_LIBRARY_PATH环境变量相较于官网案例增加了\\$HOME/ascend_ddk/host/lib，如果不加则运行时会报错。** 
+      **图 3**  修改param_host_ip<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11"></a>  
+      ![](figures/param_host_ip.png "修改param_host_ip")    
+
+    >![](public_sys-resources/icon-note.gif) **说明：**    
+    >-  虚拟网卡的ip地址请通过ifconfig命令查看。    
+3.  开始编译，打开Mind Studio工具，在工具栏中点击**Build \> Edit Build Configuration**。  
+    选择**Target OS** 为**Centos7.6**，如[图 配置编译](#zh-cn_topic_0203223265_fig17414647130)所示。
+
+    **图 4**  配置编译<a name="zh-cn_topic_0203223265_fig17414647130"></a>  
+    ![](figures/配置build1.png "配置编译")  
     
-    输入:wq!保存退出。
+    之后点击**Build \> Build \> Build Configuration**，如[图 编译操作及生成文件](#zh-cn_topic_0203223265_fig1741464713019)所示，会在目录下生成build和out文件夹。
 
-    执行如下命令使环境变量生效。
+    **图 5**  编译操作及生成文件<a name="zh-cn_topic_0203223265_fig1741464713019"></a>  
+    ![](figures/编译操作及生成文件1.png "编译操作及生成文件")
 
-     **source ~/.bashrc**   
+    >![](public_sys-resources/icon-notice.gif) **须知：**   
+    >首次编译工程时，**Build \> Build**为灰色不可点击状态。需要点击**Build \> Edit Build Configuration**，配置编译参数后再进行编译。  
 
-3.  创建用于存放编译文件的目录。  
+4.  启动Presenter Server。
 
-    **cd $HOME/AscendProjects/sample-classification_video**  
-    
-    **mkdir -p build/intermediates/host**  
+    打开Mind Studio工具的Terminal，在应用代码存放路径下，执行如下命令在后台启动classification_video应用的Presenter Server主程序。如[图 启动PresenterServer](#zh-cn_topic_0228461904_zh-cn_topic_0203223294_fig423515251067)所示。
 
-4.  执行cmake生成编译文件。
+    **python3 script/presenterserver/presenter_server.py --app=display &**
 
-     **cd build/intermediates/host**   
-
-    **cmake ../../../src -DCMAKE_CXX_COMPILER=g++ -DCMAKE_SKIP_RPATH=TRUE**  
-
-5.  执行make命令，生成的可执行文件main在“$HOME/AscendProjects/sample-colorization_video/out”目录下。 
-
-    **make**
-    
-6. 修改配置文件。
-
-   **vim $HOME/AscendProjects/sample-classification_video/script/presenterserver/display/config/config.conf**
-
-   将web_server_ip后的ip修改为对应服务器的内网ip，如下图的192.168.1.207
-
-   ![1592638840461](./figures/1592638840461.png)
-
-7. 给公网ip开端口。  
-
-   请参考 **https://bbs.huaweicloud.com/forum/thread-61588-1-1.html** 。
-
-8. 启动Presenter Server。  
-   **cd $HOME/AscendProjects/sample-classification_video/script/presenterserver/**  
-
-   **python3 presenter_server.py  --app=display**  
+    **图 6**  启动PresenterServer<a name="zh-cn_topic_0228461904_zh-cn_topic_0203223294_fig423515251067"></a>  
+    ![](figures/presentserver11.png)
    
-   
-   
-   出现下图代表启动成功。
-   
-   ![1592639195857](./figures/1592639195857.png)
-   
-     
-   
-   将192.168.1.207换成公网ip，如http://***:7009 在浏览器中输入该URL，打开Presenter Server。
-   
-   ![1592639414986](./figures/1592639414986.png)
+  
+    如[图 启动PresenterServer](#zh-cn_topic_0228461904_zh-cn_topic_0203223294_fig423)所示，表示presenter_server的服务启动成功。  
+    **图 7**  启动PresenterServer<a name="zh-cn_topic_0228461904_zh-cn_topic_0203223294_fig423"></a>    
+    ![](figures/presentserver21.png)
+
 ## 运行<a name="zh-cn_topic_0219108795_section1620073406"></a>
+1.  在Mind Studio工具的工具栏中找到Run按钮，单击  **Run \> Edit Configurations**。  
+    在Command Arguments 中添加运行参数 **../data/cat.mp4**（输入的视频路径），之后分别点击Apply、OK。如[图 配置运行](#zh-cn_topic_0203223265_fig93931954162720)所示。   
 
+    **图 8**  配置运行<a name="zh-cn_topic_0203223265_fig93931954162720"></a>   
+    ![](figures/配置run1.png "配置运行")
+ 
+2.  单击  **Run \> Run 'classification_video'**，如[图 程序已执行示意图](#zh-cn_topic_0203223265_fig93931954162719)所示，可执行程序已经在开发者板执行。  
 
-1.  将需要分类的视频上传至“i$HOME/AscendProjects/sample-classification_video/data/”目录下。  
+    **图 9**  程序已执行示意图<a name="zh-cn_topic_0203223265_fig93931954162719"></a>  
+    ![](figures/程序已执行示意图1.png "程序已执行示意图")  
+3.  使用启动Presenter Server服务时提示的URL登录 Presenter Server 网站。
 
-2.  切换到可执行文件main所在的目录，给该目录下的main文件加执行权限。  
-   
-    **cd $HOME/AscendProjects/sample-classification_video/out**  
-    
-    **chmod +x main**   
+    等待Presenter Agent传输数据给服务端，单击“Refresh“刷新，当有数据时相应的Channel 的Status变成绿色，如下图所示。
 
-3.  运行可执行文件。  
-    **./main  ../data/person.mp4**
+    **图 10**  Presenter Server界面<a name="zh-cn_topic_0228461904_zh-cn_topic_0203223294_fig113691556202312"></a>  
+    ![](figures/Presenter-Server界面.png "Presenter-Server界面") 
 
-4.  查看运行结果。 
-
-    返回浏览器，查看运行结果。
+4.  单击右侧对应的View Name链接，比如上图的“video”，查看结果。
 
 
