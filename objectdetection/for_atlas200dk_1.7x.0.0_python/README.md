@@ -120,4 +120,4 @@
     -   host\_ip：开发板ip，USB连接一般为192.168.1.2.网线连接时一般为192.168.0.2。
 
     **命令示例：**  
-    **scp -r HwHiAiUser@192.168.1.2:/home/username/HIAI\_PROJECTS/objectdetection_python/outputs \~** 
+    **scp -r HwHiAiUser@192.168.1.2:/home/HwHiAiUser/HIAI\_PROJECTS/objectdetection_python/outputs \~** 
