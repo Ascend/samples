@@ -43,7 +43,7 @@
     3.  参照以下图片进行参数配置。    
         -   Model File选择[步骤2](#zh-cn_topic_0219108795_li2074865610364)中下载的模型文件，此时会自动匹配到权重文件并填写在Weight File中。  
         -   模型输入选择fp32。  
-        -   Input Image Resolution填写为300、*304。   
+        -   Input Image Resolution填写为300\*304。   
         -   Model Image Format选择BGR。   
         -   打开Crop。
 
