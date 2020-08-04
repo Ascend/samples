@@ -139,7 +139,7 @@
 
 执行以下指令查找仍在运行的进程。
 
-**ps -ef|grep ./workspace_mind_studio_facedetection**
+**ps -ef | grep ./workspace_mind_studio_facedetection**
 
 打印如下：
 
