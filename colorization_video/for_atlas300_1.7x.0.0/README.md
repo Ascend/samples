@@ -68,7 +68,7 @@
 
 ## 环境配置   
 
-**注：已安装opencv库和Presenter Agent可跳过此步骤。**  
+**注：已安装opencv库、ffmpeg库和Presenter Agent可跳过此步骤。**  
 
 - 安装opencv和ffmpeg  
     请参考 **https://gitee.com/ascend/common/blob/master/install_opencv/for_atlas300/README.md**
@@ -92,17 +92,18 @@
     ![](figures/打开colorization_video工程.png "打开colorization-video工程")
 
 2.  修改Presenter Server的ip。  
-    -  将**script/presentserver/display/config/config.conf**中的**presenter_server_ip**修改为Mind Studio所在Ubuntu服务器的虚拟网卡的ip地址，如[图 presenter_server_ip](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig1110624110)所示。
+    -  将**script/presentserver/display/config/config.conf**中的**presenter_server_ip**和 **web_server_ip** 修改为ai1环境的上网端口（一般为eth0）的ip地址，如下图所示，如[图 presenter_server_ip](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig1110624110)所示。
 
       **图 2**  修改presenter_server_ip<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig1110624110"></a>  
-      ![](figures/presenter_server_ip.png "修改presenter_server_ip")      
-    -  将**src/colorize_process.cpp**中的 **param.host_ip** 修改为Mind Studio所在Ubuntu服务器的虚拟网卡的ip地址，如[图 param_host_ip](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11)所示。
+      ![](figures/presenter_server_ip.png "修改presenter_server_ip")        
+      ![](figures/ifconfig.png "ifconfig")
+    -  将 **src/colorize_process.cpp** 中的  **param.host_ip**  修改为ai1环境的上网端口（一般为eth0）的ip地址，和上面步骤的ip一致，如[图 param_host_ip](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11)所示。
 
       **图 3**  修改param_host_ip<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11"></a>  
       ![](figures/param_host_ip.png "修改param_host_ip")    
 
     >![](public_sys-resources/icon-note.gif) **说明：**    
-    >-  虚拟网卡的ip地址请通过ifconfig命令查看。    
+    >-  ai1环境的上网端口（一般为eth0）的ip地址，请通过ifconfig命令查看。    
 3.  开始编译，打开Mind Studio工具，在工具栏中点击**Build \> Edit Build Configuration**。  
     选择**Target OS** 为**Centos7.6**，如[图 配置编译](#zh-cn_topic_0203223265_fig17414647130)所示。
 
@@ -133,7 +134,8 @@
 
 ## 运行<a name="zh-cn_topic_0219108795_section1620073406"></a>
 1.  在Mind Studio工具的工具栏中找到Run按钮，单击  **Run \> Edit Configurations**。  
-    在Command Arguments 中添加运行参数 **../data**（输入图片的路径），之后分别点击Apply、OK。如[图 配置运行](#zh-cn_topic_0203223265_fig93931954162720)所示。   
+    点击右侧的+号按钮，添加Target Host Ip,此ip为Ai1云端环境ip，用户请根据自己申请的ip填写。  
+    在Command Arguments 中添加运行参数 **../data/black-white_video.mp4**（输入视频的路径），之后分别点击Apply、OK。如[图 配置运行](#zh-cn_topic_0203223265_fig93931954162720)所示。   
 
     **图 8**  配置运行<a name="zh-cn_topic_0203223265_fig93931954162720"></a>   
     ![](figures/配置run.png "配置运行")
@@ -141,13 +143,17 @@
 2.  单击  **Run \> Run 'colorization_video'**，如[图 程序已执行示意图](#zh-cn_topic_0203223265_fig93931954162719)所示，可执行程序已经在开发者板执行。  
 
     **图 9**  程序已执行示意图<a name="zh-cn_topic_0203223265_fig93931954162719"></a>  
-    ![](figures/程序已执行示意图.png "程序已执行示意图")  
-3.  使用启动Presenter Server服务时提示的URL登录 Presenter Server 网站。
+    ![](figures/程序已执行示意图.png "程序已执行示意图")    
+
+3.  登录Presenter Server网页。  
+    启动Presenter Server服务时提示的URL是ai1环境内网的ip。此时我们只要将ip替换为ai1环境的公网ip，就可以在windows的浏览器中直接打开网页了。比如，本ai1环境的显示内容如下Please visit http://192.168.0.194:7009 for display server只需要将192.168.0.194替换为Ai1环境的公网ip，如124.70.8.192。  
+
+    在浏览器中输入 **http://124.70.8.192:7009** 即可打开Presenter Server网页。
 
     等待Presenter Agent传输数据给服务端，单击“Refresh“刷新，当有数据时相应的Channel 的Status变成绿色，如下图所示。
 
     **图 10**  Presenter Server界面<a name="zh-cn_topic_0228461904_zh-cn_topic_0203223294_fig113691556202312"></a>  
     ![](figures/Presenter-Server界面.png "Presenter-Server界面") 
 
-4.  单击右侧对应的View Name链接，比如上图的“video”，查看结果。
+4.  单击右侧对应的View Name链接，比如上图的“colorization-video”，查看结果。
 
