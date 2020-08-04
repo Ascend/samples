@@ -55,7 +55,7 @@ Ascend sample，请根据自己的需要进入对应文件夹获取应用，或�
 
 <details open><summary>facedetection：人脸检测</summary><blockquote>
 
-- [for_atlas200dk_1.7x.0.0](https://gitee.com/ascend/samples/tree/master/facedetection/for_atlas200dk_1.7x.0.0)  
+- [for_atlas200dk_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/facedetection/for_atlas200dk_1.7x.0.0_c++)  
 </blockquote></details> 
 
 <details open><summary>mark_detection：口罩识别图片版</summary><blockquote>
