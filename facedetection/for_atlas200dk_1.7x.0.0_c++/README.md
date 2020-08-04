@@ -149,3 +149,30 @@
 
 kill -9 2417
 
+##FAQ
+1. Mindstudio中运行样例失败或样例运行卡顿。
+    
+   这是Mindstudio版本导致的问题。当前解决办法为Mindstudio运行出问题后登录开发板，在命令行运行样例。
+
+   **注：必须要在Mindstudio中先运行一次，否则二进制文件等数据不会传到开发板上**    
+
+   在开发环境命令行中以普通用户执行以下命令登录开发者板（默认USB连接）。
+
+    **ssh HwHiAiUser@192.168.1.2**
+
+    ![ssh](https://images.gitee.com/uploads/images/2020/0804/162413_ed1287c3_5395865.png "屏幕截图.png")
+
+   进入案例对应可执行文件路径。
+    
+    **cd HIAI_PROJECTS/workspace_mind_studio/facedetection_xxx/out**
+
+    其中xxx需要根据自己编译出来的文件夹名称自行替换。
+
+    ![cd](https://images.gitee.com/uploads/images/2020/0804/162530_a7d92ff9_5395865.png "屏幕截图.png")
+
+    启动程序。（需要在开发环境中已经启动presentserver并且已经按照编译和运行章节操作过一次）
+
+    **bash run.sh**
+
+    按**ctrl\+c**即可结束程序。
+
