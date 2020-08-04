@@ -146,4 +146,4 @@
     **图 10**  Presenter Server界面<a name="zh-cn_topic_0228461904_zh-cn_topic_0203223294_fig113691556202312"></a>  
     ![](figures/Presenter-Server界面.png "Presenter-Server界面") 
 
-4.  单击右侧对应的View Name链接，比如上图的“video”，查看结果。
+4.  单击右侧对应的View Name链接，比如上图的“objectdetection-video”，查看结果。
