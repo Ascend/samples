@@ -65,7 +65,7 @@
 
 **注：已安装opencv库和ffmpeg库可跳过此步骤。**  
 
-- 安装opencv  
+- 安装opencv和ffmpeg  
     请参考 **https://gitee.com/ascend/common/blob/master/install_opencv/for_atlas300/README.md**
 
 ## 编译<a name="zh-cn_topic_0219108795_section3723145213347"></a>
