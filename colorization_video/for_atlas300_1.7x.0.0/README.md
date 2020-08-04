@@ -117,7 +117,12 @@
     >![](public_sys-resources/icon-notice.gif) **须知：**   
     >首次编译工程时，**Build \> Build**为灰色不可点击状态。需要点击**Build \> Edit Build Configuration**，配置编译参数后再进行编译。  
 
-4.  启动Presenter Server。
+4.  给公网ip开端口。
+
+    请参考 https://bbs.huaweicloud.com/forum/thread-61588-1-1.html 。
+
+
+5.  启动Presenter Server。
 
     打开Mind Studio工具的Terminal，在应用代码存放路径下，执行如下命令在后台启动colorization-video应用的Presenter Server主程序。如[图 启动PresenterServer](#zh-cn_topic_0228461904_zh-cn_topic_0203223294_fig423515251067)所示。
 
