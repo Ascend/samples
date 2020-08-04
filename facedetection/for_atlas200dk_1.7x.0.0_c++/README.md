@@ -34,7 +34,7 @@
     
         >![](public_sys-resources/icon-note.gif) **说明：**   
         >- facedetection原始模型网络：https://github.com/opencv/opencv/blob/master/samples/dnn/face_detector/deploy.prototxt。
-        >- C7x对prototxt文件有修改要求，按照[SSD网络模型prototxt修改](https://support.huaweicloud.com/usermanual-mindstudioc73/atlasmindstudio_02_0114.html)文档对prototxt文件进行修改。
+        >- C7x对prototxt文件有修改要求，按照[SSD网络模型prototxt修改](https://support.huaweicloud.com/usermanual-mindstudioc73/atlasmindstudio_02_0114.html)文档对prototxt文件进行修改。这里已经修改完成，直接执行以上命令下载即可。
 
 3.  将原始网络模型转换为适配昇腾AI处理器的模型。  
 
