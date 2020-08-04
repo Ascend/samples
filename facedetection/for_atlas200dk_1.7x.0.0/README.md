@@ -16,7 +16,7 @@
     **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/facedetection.zip** 
               
     **unzip facedetection.zip**  
-    
+
     >![](public_sys-resources/icon-note.gif) **说明：**   
     >- 如果使用wget下载失败，可使用如下命令下载代码。  
     **curl -OL https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/facedetection.zip** 
@@ -24,29 +24,17 @@
     
 2.  <a name="zh-cn_topic_0219108795_li2074865610364"></a>获取此应用中所需要的原始网络模型。    
  
-    参考[表 人脸检测应用使用模型](#zh-cn_topic_0219108795_table19942111763710)获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到Ubuntu服务器的任意目录，例如：$HOME/models/facedetection。
+     -  下载原始网络模型及权重文件至ubuntu服务器任意目录，如:$HOME/facedetection。
 
-    **表 1**  人脸检测应用使用模型
+        **mkdir -p $HOME/facedetection** 
 
-    <a name="zh-cn_topic_0219108795_table19942111763710"></a>
-    <table><thead align="left"><tr id="zh-cn_topic_0219108795_row611318123710"><th class="cellrowborder" valign="top" width="11.959999999999999%" id="mcps1.2.4.1.1"><p id="zh-cn_topic_0219108795_p81141820376"><a name="zh-cn_topic_0219108795_p81141820376"></a><a name="zh-cn_topic_0219108795_p81141820376"></a>模型名称</p>
-    </th>
-    <th class="cellrowborder" valign="top" width="8.07%" id="mcps1.2.4.1.2"><p id="zh-cn_topic_0219108795_p13181823711"><a name="zh-cn_topic_0219108795_p13181823711"></a><a name="zh-cn_topic_0219108795_p13181823711"></a>模型说明</p>
-    </th>
-    <th class="cellrowborder" valign="top" width="79.97%" id="mcps1.2.4.1.3"><p id="zh-cn_topic_0219108795_p1717182378"><a name="zh-cn_topic_0219108795_p1717182378"></a><a name="zh-cn_topic_0219108795_p1717182378"></a>模型下载路径</p>
-    </th>
-    </tr>
-    </thead>
-    <tbody><tr id="zh-cn_topic_0219108795_row1119187377"><td class="cellrowborder" valign="top" width="11.959999999999999%" headers="mcps1.2.4.1.1 "><p id="zh-cn_topic_0219108795_p4745165253920"><a name="zh-cn_topic_0219108795_p4745165253920"></a><a name="zh-cn_topic_0219108795_p4745165253920"></a>face_detection</p>
-    </td>
-    <td class="cellrowborder" valign="top" width="8.07%" headers="mcps1.2.4.1.2 "><p id="zh-cn_topic_0219108795_p1874515218391"><a name="zh-cn_topic_0219108795_p1874515218391"></a><a name="zh-cn_topic_0219108795_p1874515218391"></a>人脸检测模型</p>
-    </td>
-    <td class="cellrowborder" valign="top" width="79.97%" headers="mcps1.2.4.1.3 "><p id="zh-cn_topic_0219108795_p611318163718"><a name="zh-cn_topic_0219108795_p611318163718"></a><a name="zh-cn_topic_0219108795_p611318163718"></a>请参考<a href="https://gitee.com/ascend/models/tree/master/face_detection/for_1.7x.0.0" target="_blank" rel="noopener noreferrer">https://gitee.com/ascend/models/tree/master/face_detection/for_1.7x.0.0</a>目录中README.md下载原始网络模型文件及其对应的权重文件。</p>
-    </td>
-    </tr>
-    </tbody>
-    </table>
-
+        **wget -P $HOME/facedetection https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/face_detection/face_detection.caffemodel** 
+ 
+        **wget -P $HOME/facedetection https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/face_detection/face_detection.prototxt**
+    
+        >![](public_sys-resources/icon-note.gif) **说明：**   
+        >- facedetection原始模型网络：https://github.com/opencv/opencv/blob/master/samples/dnn/face_detector/deploy.prototxt。
+        >- C7x对prototxt文件有修改要求，按照[SSD网络模型prototxt修改](https://support.huaweicloud.com/usermanual-mindstudioc73/atlasmindstudio_02_0114.html)文档对prototxt文件进行修改。
 
 3.  将原始网络模型转换为适配昇腾AI处理器的模型。  
 
@@ -85,9 +73,9 @@
 
     **./MindStudio.sh**
 
-    启动成功后，打开**cameradetect**工程，如[图 打开cameradetect工程](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810)所示。
+    启动成功后，打开**facedetection**工程，如[图 打开facedetection工程](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810)所示。
 
-    **图 1**  打开cameradetect工程<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810"></a>  
+    **图 1**  打开facedetection工程<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810"></a>  
     ![](figures/Mindstudio_open.png "打开cameradetect工程")
 
 2.  修改配置文件
@@ -115,7 +103,7 @@
 
 4.  启动Presenter Server。
 
-    打开Mind Studio工具的Terminal，在应用代码存放路径下，执行如下命令在后台启动cameradetect应用的Presenter Server主程序。如[图 启动PresenterServer](#zh-cn_topic_0228461904_zh-cn_topic_0203223294_fig423515251067)所示。
+    打开Mind Studio工具的Terminal，在应用代码存放路径下，执行如下命令在后台启动facedetection应用的Presenter Server主程序。如[图 启动PresenterServer](#zh-cn_topic_0228461904_zh-cn_topic_0203223294_fig423515251067)所示。
 
     **bash script/run_presenter_server.sh**
 
@@ -129,7 +117,7 @@
  
 ## 运行<a name="zh-cn_topic_0219108795_section1620073406"></a>
 
-1.  单击  **Run \> Run 'cameradetect'**，如[图 程序已执行示意图](#zh-cn_topic_0203223265_fig93931954162719)所示，可执行程序已经在开发者板执行。  
+1.  单击  **Run \> Run 'facedetection'**，如[图 程序已执行示意图](#zh-cn_topic_0203223265_fig93931954162719)所示，可执行程序已经在开发者板执行。  
 
     **图 6**  程序已执行示意图<a name="zh-cn_topic_0203223265_fig93931954162719"></a>  
     ![](figures/run_ok.png "程序已执行示意图")
@@ -151,11 +139,11 @@
 
 执行以下指令查找仍在运行的进程。
 
-**ps -ef|grep ./workspace_mind_studio_cameradetect**
+**ps -ef|grep ./workspace_mind_studio_facedetection**
 
 打印如下：
 
-*HwHiAiU+  2417  2415  7 08:05 ?        00:00:05 ./workspace_mind_studio_cameradetect*
+*HwHiAiU+  2417  2415  7 08:05 ?        00:00:05 ./workspace_mind_studio_facedetection*
 
 杀死进程：
 
