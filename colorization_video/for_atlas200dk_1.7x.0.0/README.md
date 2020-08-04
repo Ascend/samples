@@ -131,7 +131,7 @@
 
 ## 运行<a name="zh-cn_topic_0219108795_section1620073406"></a>
 1.  在Mind Studio工具的工具栏中找到Run按钮，单击  **Run \> Edit Configurations**。  
-    在Command Arguments 中添加运行参数 **../data**（输入图片的路径），之后分别点击Apply、OK。如[图 配置运行](#zh-cn_topic_0203223265_fig93931954162720)所示。   
+    在Command Arguments 中添加运行参数 **../data/black-white_video.mp4**（输入视频的路径），之后分别点击Apply、OK。如[图 配置运行](#zh-cn_topic_0203223265_fig93931954162720)所示。   
 
     **图 8**  配置运行<a name="zh-cn_topic_0203223265_fig93931954162720"></a>   
     ![](figures/配置run.png "配置运行")
