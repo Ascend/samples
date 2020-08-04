@@ -24,7 +24,7 @@
     
 2.  <a name="zh-cn_topic_0219108795_li2074865610364"></a>获取此应用中所需要的原始网络模型。    
  
-    参考[表 人脸检测应用使用模型](#zh-cn_topic_0219108795_table19942111763710)获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到Ubuntu服务器的任意目录，例如：$HOME/models/colorization_video。
+    参考[表 人脸检测应用使用模型](#zh-cn_topic_0219108795_table19942111763710)获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到Ubuntu服务器的任意目录，例如：$HOME/models/facedetection。
 
     **表 1**  人脸检测应用使用模型
 
@@ -50,30 +50,23 @@
 
 3.  将原始网络模型转换为适配昇腾AI处理器的模型。  
 
-    1.  设置环境变量
-        
-        命令行中输入以下命令设置环境变量。
+    1.  在Mind Studio操作界面的顶部菜单栏中选择**Tools \> Model Convert**，进入模型转换界面。
+    2.  在弹出的**Model Conversion**操作界面中，进行模型转换配置。
+    3.  参照以下图片进行参数配置。    
+        -   Model File选择[步骤2](#zh-cn_topic_0219108795_li2074865610364)中下载的模型文件，此时会自动匹配到权重文件并填写在Weight File中。  
+        -   模型输入选择fp32。  
+        -   Input Image Resolution填写为300、*304。   
+        -   Model Image Format选择BGR。   
+        -   打开Crop。
 
-        **cd \$HOME/yolov3**
-        
-        **export install_path=\$HOME/Ascend/ascend-toolkit/20.0.RC1/x86_64-linux_gcc7.3.0**  
-
-        **export PATH=/usr/local/python3.7.5/bin:\\${install_path}/atc/ccec_compiler/bin:\\${install_path}/atc/bin:\\$PATH**  
-
-        **export PYTHONPATH=\\${install_path}/atc/python/site-packages/te:\\${install_path}/atc/python/site-packages/topi:\\$PYTHONPATH**  
-
-        **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64:\\$LD_LIBRARY_PATH**  
-
-        **export ASCEND_OPP_PATH=\\${install_path}/opp**  
-
-    2.  执行以下命令转换模型。
-
-        atc --model=yolov3.prototxt --weight=yolov3.caffemodel --framework=0 --output=yolov3 --soc_version=Ascend310 --insert_op_conf=aipp_nv12.cfg
+    ![](figures/模型转换1.png "模型转换1")  
+    ![](figures/模型转换2.png "模型转换2")  
+    ![](figures/模型转换3.png "模型转换3")
 
     
-5.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0228757084_section8534138124114)中源码所在路径下的“**classification/model**”目录下。
+5.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0228757084_section8534138124114)中源码所在路径下的“**facedetection/model**”目录下。
     
-     **cp ./yolov3.om \$HOME/AscendProjects/cameradetect/model/**  
+     **cp \\$HOME/modelzoo/face_detection/device/colorization.om \\$HOME/AscendProjects/facedetection/model/**  
   
 
 ## 环境配置   
