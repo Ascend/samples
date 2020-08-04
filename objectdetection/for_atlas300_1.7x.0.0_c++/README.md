@@ -30,7 +30,9 @@
         **mkdir -p $HOME/models/objectdetection**     
     2.  下载原始网络模型及权重文件。  
         **wget -P $HOME/models/objectdetection/ https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/yolov3/yolov3.caffemodel**  
+
         **wget -P $HOME/models/objectdetection/ https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/yolov3/yolov3.prototxt**  
+
         **wget -P $HOME/models/objectdetection/ https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/yolov3/aipp_nv12.cfg**
 
 3.  将原始网络模型转换为适配昇腾AI处理器的模型。  
