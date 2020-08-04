@@ -37,21 +37,30 @@
 
 3.  将原始网络模型转换为适配昇腾AI处理器的模型。  
 
-    1.  在Mind Studio操作界面的顶部菜单栏中选择**Tools \> Model Converter**，进入模型转换界面。
-    2.  在弹出的**Model Conversion**操作界面中，进行模型转换配置。
-    3.  参照以下图片进行参数配置。    
-        -   Model File选择[步骤2](#zh-cn_topic_0219108795_li2074865610364)中下载的模型文件，此时会自动匹配到权重文件并填写在Weight File中。  
-        -   修改模型的名字为yolov3_yuv，若修改模型名称，需对应修改object_detect.py文件中的MODEL_PATH。
-        -   Input Type 选择FP32；img_info的前两个参数N、C填写1、3。  
-        -   Model Image Format选择BGR，原始模型需要的图片格式为BGR；Mean全部设为0，Variance全部设为0.00392。
-    ![](figures/模型转换1.png "模型转换1")  
-    ![](figures/模型转换2.png "模型转换2")  
-    ![](figures/模型转换3.png "模型转换3")
+    1.  设置环境变量
+        
+        命令行中输入以下命令设置环境变量。
 
+        **cd \$HOME/yolov3_yuv**
+        
+        **export install_path=\$HOME/Ascend/ascend-toolkit/20.0.RC1/x86_64-linux_gcc7.3.0**  
 
-4. 将转换好的模型放到工程文件中的model 目录下。  
-    **cp \\$HOME/modelzoo/yolov3_yuv/device/yolov3_yuv.om \\$HOME/AscendProjects/objectdetection_python/model/**   
+        **export PATH=/usr/local/python3.7.5/bin:\\${install_path}/atc/ccec_compiler/bin:\\${install_path}/atc/bin:\\$PATH**  
 
+        **export PYTHONPATH=\\${install_path}/atc/python/site-packages/te:\\${install_path}/atc/python/site-packages/topi:\\$PYTHONPATH**  
+
+        **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64:\\$LD_LIBRARY_PATH**  
+
+        **export ASCEND_OPP_PATH=\\${install_path}/opp**  
+
+    2.  执行以下命令转换模型。
+
+        **atc --model=yolov3.prototxt --weight=yolov3.caffemodel --framework=0 --output=yolov3_yuv --soc_version=Ascend310 --insert_op_conf=aipp_nv12.cfg**
+
+    
+4.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0219108795_li953280133816)中源码所在路径下的“**objectdetection_python/model**”目录下。
+    
+    **cp ./yolov3_yuv.om \$HOME/AscendProjects/objectdetection_python/model/**
 
 ## 环境部署<a name="zh-cn_topic_0228757083_section1759513564117"></a>
 
