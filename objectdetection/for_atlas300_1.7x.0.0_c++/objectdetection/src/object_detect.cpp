@@ -347,16 +347,10 @@ const string& origImagePath) {
 
 void ObjectDetect::DestroyResource()
 {
-<<<<<<< HEAD
+
     model_.DestroyResource();
     dvpp_.DestroyResource();
-
-    aclError ret;
-=======
-	model_.DestroyResource();
-	
 	aclError ret;
->>>>>>> eb0657768f6a1bfab94a77e19a1d779b31c52b8d
     if (stream_ != nullptr) {
         ret = aclrtDestroyStream(stream_);
         if (ret != ACL_ERROR_NONE) {
@@ -374,11 +368,6 @@ void ObjectDetect::DestroyResource()
         context_ = nullptr;
     }
     INFO_LOG("end to destroy context");
-<<<<<<< HEAD
-
-=======
-	
->>>>>>> eb0657768f6a1bfab94a77e19a1d779b31c52b8d
     ret = aclrtResetDevice(deviceId_);
     if (ret != ACL_ERROR_NONE) {
         ERROR_LOG("reset device failed");

@@ -18,7 +18,6 @@
 */
 #include "model_process.h"
 #include <iostream>
-#include <unistd.h>
 #include "utils.h"
 using namespace std;
 
@@ -35,20 +34,11 @@ ModelProcess::~ModelProcess() {
 void ModelProcess::DestroyResource() {
     if (isReleased_)
         return;
-<<<<<<< HEAD
-
-=======
-    
->>>>>>> eb0657768f6a1bfab94a77e19a1d779b31c52b8d
     Unload();
     DestroyDesc();
     DestroyInput();
     DestroyOutput();
     isReleased_ = true;
-<<<<<<< HEAD
-    sleep(20);
-=======
->>>>>>> eb0657768f6a1bfab94a77e19a1d779b31c52b8d
 }
 
 Result ModelProcess::LoadModelFromFileWithMem(const char *modelPath)
