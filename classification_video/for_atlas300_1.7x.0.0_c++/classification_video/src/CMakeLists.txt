@@ -45,6 +45,7 @@ endif()
 
 # add host lib path
 link_directories(
+    /usr/local/lib
     ${LIB_PATH}
     $ENV{HOME}/ascend_ddk/x86/lib/
     $ENV{HOME}/Ascend/
