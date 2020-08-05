@@ -34,7 +34,7 @@
 
         **wget -P $HOME/models/objectdetection_video/ https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/yolov3/yolov3.prototxt**  
 
-        **wget -P $HOME/models/objectdetection_video/ https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/yolov3/aipp_nv12.cfg**
+        **wget -P $HOME/models/objectdetection_video/ https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/yolov3/aipp_bgr.cfg**
         >![](public_sys-resources/icon-note.gif) **说明：**   
         >- yolov3原始模型网络： https://github.com/maxuehao/YOLOV3/blob/master/yolov3_res18.prototxt 
         >- yolov3原始网络LICENSE地址： https://github.com/maxuehao/caffe/blob/master/LICENSE
@@ -59,7 +59,7 @@
 
     2.  执行以下命令转换模型。
 
-        **atc --model=yolov3.prototxt --weight=yolov3.caffemodel --framework=0 --output=yolov3 --soc_version=Ascend310 --insert_op_conf=aipp_nv12.cfg**
+        **atc --model=yolov3.prototxt --weight=yolov3.caffemodel --framework=0 --output=yolov3 --soc_version=Ascend310 --insert_op_conf=aipp_bgr.cfg**
 
     
 4.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0219108795_li953280133816)中源码所在路径下的“**objectdetection_video/model**”目录下。
@@ -92,11 +92,11 @@
     ![](figures/打开objectdetection_video工程.png "打开objectdetection-video工程")
 
 2.  修改Presenter Server的ip。  
-    -  将**script/presentserver/display/config/config.conf**中的**presenter_server_ip**修改为Mind Studio所在Ubuntu服务器的虚拟网卡的ip地址，如[图 presenter_server_ip](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig1110624110)所示。
+    -  将**script/object_detection.conf**中的**presenter_server_ip、presenter_view_ip、presenter_agent_ip**修改为Mind Studio所在Ubuntu服务器的虚拟网卡的ip地址，如[图 presenter_server_ip](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig1110624110)所示。
 
       **图 2**  修改presenter_server_ip<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig1110624110"></a>  
       ![](figures/presenter_server_ip.png "修改presenter_server_ip")      
-    -  将**src/sample_process.cpp**中的 **param.host_ip** 修改为Mind Studio所在Ubuntu服务器的虚拟网卡的ip地址，如[图 param_host_ip](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11)所示。
+    -  将**src/object_detect.cpp**中的 **param.host_ip** 修改为Mind Studio所在Ubuntu服务器的虚拟网卡的ip地址，如[图 param_host_ip](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11)所示。
 
       **图 3**  修改param_host_ip<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11"></a>  
       ![](figures/param_host_ip.png "修改param_host_ip")    
@@ -121,7 +121,7 @@
 
     打开Mind Studio工具的Terminal，在应用代码存放路径下，执行如下命令在后台启动objectdetection-video应用的Presenter Server主程序。如[图 启动PresenterServer](#zh-cn_topic_0228461904_zh-cn_topic_0203223294_fig423515251067)所示。
 
-    **python3 script/presenterserver/presenter_server.py --app=display &**
+    **bash script/run_presenter_server.sh &**
 
     **图 6**  启动PresenterServer<a name="zh-cn_topic_0228461904_zh-cn_topic_0203223294_fig423515251067"></a>  
     ![](figures/presentserver1.png)
