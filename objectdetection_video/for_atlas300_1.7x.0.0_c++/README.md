@@ -147,9 +147,9 @@
     **图 9**  程序已执行示意图<a name="zh-cn_topic_0203223265_fig93931954162719"></a>  
     ![](figures/程序已执行示意图.png "程序已执行示意图")  
 3.  登录Presenter Server网页。  
-    启动Presenter Server服务时提示的URL是ai1环境内网的ip。此时我们只要将ip替换为ai1环境的公网ip，就可以在windows的浏览器中直接打开网页了。比如，本ai1环境的显示内容如下Please visit http://192.168.0.194:7009 for display server只需要将192.168.0.194替换为Ai1环境的公网ip，如124.70.8.192。  
+    启动Presenter Server服务时提示的URL是ai1环境内网的ip。此时我们只要将ip替换为ai1环境的公网ip，就可以在windows的浏览器中直接打开网页了。比如，本ai1环境的显示内容如下Please visit http://192.168.0.194:7007 for display server只需要将192.168.0.194替换为Ai1环境的公网ip，如124.70.8.192。  
 
-    在浏览器中输入 **http://124.70.8.192:7009** 即可打开Presenter Server网页。
+    在浏览器中输入 **http://124.70.8.192:7007** 即可打开Presenter Server网页。
 
     等待Presenter Agent传输数据给服务端，单击“Refresh“刷新，当有数据时相应的Channel 的Status变成绿色，如下图所示。
 
