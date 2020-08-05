@@ -41,7 +41,12 @@ public:
     * @param [in] modelPath: model path
     * @return result
     */
-    Result LoadModelFromFile(const char *modelPath);
+    Result LoadModelFromFileWithMem(const char *modelPath);
+
+    /**
+    * @brief release all acl resource
+    */
+    void DestroyResource();
 
     /**
     * @brief unload model
@@ -65,7 +70,8 @@ public:
     * @param [in] bufferSize: input buffer size
     * @return result
     */
-    Result CreateInput(void *inputDataBuffer, size_t bufferSize);
+    Result CreateInput(void *input1, size_t input1size,
+                       void* input2, size_t input2size);
 
     /**
     * @brief destroy input resource
@@ -98,10 +104,14 @@ public:
 private:
     bool loadFlag_;  // model load flag
     uint32_t modelId_;
+    void *modelMemPtr_;
+    size_t modelMemSize_;
+    void *modelWeightPtr_;
+    size_t modelWeightSize_;
     aclmdlDesc *modelDesc_;
     aclmdlDataset *input_;
     aclmdlDataset *output_;
-	void *inputDataBuffer_;
-	size_t inputBufferSize_;
+
+    bool isReleased_;
 };
 
