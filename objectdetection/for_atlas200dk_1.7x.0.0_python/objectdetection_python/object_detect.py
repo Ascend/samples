@@ -7,6 +7,7 @@ from utils import *
 from acl_dvpp import Dvpp
 from acl_model import Model
 from acl_image import AclImage
+from PIL import Image, ImageDraw, ImageFont
 
 labels = ["person",
         "bicycle", "car", "motorbike", "aeroplane",
@@ -113,7 +114,7 @@ class ObjectDetect(object):
         return self._model.execute(resized_image.data(), resized_image.size,
                                    self._image_info_dev, self._image_info_size)
 
-    def post_process(self, infer_output, origin_img):
+    def post_process(self, infer_output, origin_img, image_file):
         print("post process")
         print(infer_output[1])
         box_num = infer_output[1][0, 0]
@@ -122,6 +123,12 @@ class ObjectDetect(object):
         print(box_info[0:16])
         scalex = origin_img.width / self._model_width
         scaley = origin_img.height / self._model_height
+        output_path = os.path.join("./outputs", os.path.basename(image_file))
+        origin_image = Image.open(image_file)
+        draw = ImageDraw.Draw(origin_image)
+        font = ImageFont.truetype("SourceHanSansCN-Normal.ttf", size=30)
+        print("images:{}".format(image_file))
+        print("======== inference results: =============")
         for n in range(int(box_num)):
             id = int(box_info[5])
             label = labels[id]
@@ -133,6 +140,10 @@ class ObjectDetect(object):
             print("%s: class %d, box %d %d %d %d, score %f"%(
                 label, id, top_left_x, top_left_y, 
                 bottom_right_x, bottom_right_y, score))
+            draw.line([(top_left_x, top_left_y),(bottom_right_x, top_left_y), (bottom_right_x, bottom_right_y), \
+            (top_left_x, bottom_right_y), (top_left_x, top_left_y)],fill=(0,200,100),width=3)
+            draw.text((top_left_x, top_left_y), label, font=font, fill=255)
+        origin_image.save(output_path)
 
 
 
@@ -157,6 +168,10 @@ def main():
     images_list = [os.path.join(image_dir, img)
                    for img in os.listdir(image_dir)
                    if os.path.splitext(img)[1] in IMG_EXT]
+    #创建目录，保存推理结果
+    if not os.path.isdir('./outputs'):
+        os.mkdir('./outputs')
+
     for image_file in images_list:
         #读入图片
         image = AclImage(image_file)
@@ -166,7 +181,7 @@ def main():
         #推理图片
         result = detect.inference(resized_image)
         #对推理结果进行处理
-        detect.post_process(result, image)
+        detect.post_process(result, image, image_file)
 
 if __name__ == '__main__':
     main()

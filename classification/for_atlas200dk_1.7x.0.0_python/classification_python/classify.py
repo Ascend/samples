@@ -8,6 +8,7 @@ from acl_dvpp import Dvpp
 from acl_model import Model
 from acl_image import AclImage
 from image_net_classes import get_image_net_class
+from PIL import Image, ImageDraw, ImageFont
 
 class Classify(object):
     def __init__(self, model_path, model_width, model_height):
@@ -82,16 +83,26 @@ class Classify(object):
     def inference(self, resized_image):
         return self._model.execute(resized_image.data(), resized_image.size)
 
-    def post_process(self, infer_output):
+    def post_process(self, infer_output, image_file):
         print("post process")
         data = infer_output[0]
         vals = data.flatten()
         top_k = vals.argsort()[-1:-6:-1]
+        print("images:{}".format(image_file))
         print("======== top5 inference results: =============")
         for n in top_k:
             object_class = get_image_net_class(n)
             print("label:%d  confidence: %f, class: %s" % (n, vals[n], object_class))
-
+        
+        #使用pillow，将置信度最高的类别写在图片上，并保存到本地
+        if len(top_k):
+            object_class = get_image_net_class(top_k[0])
+            output_path = os.path.join("./outputs", os.path.basename(image_file))
+            origin_img = Image.open(image_file)
+            draw = ImageDraw.Draw(origin_img)
+            font = ImageFont.truetype("SourceHanSansCN-Normal.ttf", size=30)
+            draw.text((10, 50), object_class, font=font, fill=255)
+            origin_img.save(output_path)
 
 MODEL_PATH = "./model/googlenet_yuv.om"
 MODEL_WIDTH = 224
@@ -114,6 +125,11 @@ def main():
     images_list = [os.path.join(image_dir, img)
                    for img in os.listdir(image_dir)
                    if os.path.splitext(img)[1] in IMG_EXT]
+    
+    #创建目录，保存推理结果
+    if not os.path.isdir('./outputs'):
+        os.mkdir('./outputs')
+
     for image_file in images_list:
         #读入图片
         image = AclImage(image_file)
@@ -123,7 +139,7 @@ def main():
         #推理图片
         result = classify.inference(resized_image)
         #对推理结果进行处理
-        classify.post_process(result)
+        classify.post_process(result, image_file)
 
 if __name__ == '__main__':
     main()
