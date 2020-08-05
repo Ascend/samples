@@ -106,7 +106,7 @@
 1. 登录到开发板上，进入工程目录下，执行如下命令运行程序。  
 
    **cd \${HOME}/HIAI_PROJECTS/objectdetection_python/**   
-   **python3.7.5 object_detect.py ./data/**
+   **python3 object_detect.py ./data/**
 
 2. 在终端可看到推理结果。  
 
