@@ -43,10 +43,11 @@ include_directories(
 
 # add host lib path
 link_directories(
+    /usr/local/lib
     ${LIB_PATH}
     $ENV{HOME}/ascend_ddk/x86/lib/
+    $ENV{HOME}/Ascend/
     ${INC_PATH}/atc/lib64
-    $ENV{HOME}/Ascend
 )
 
 add_executable(main
