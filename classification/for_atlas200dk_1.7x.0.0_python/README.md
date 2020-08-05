@@ -99,9 +99,9 @@
    执行如下命令，使环境变量生效   
    **source ~/.bashrc**  
 
-4. 安装环境依赖。  
-
-   请参考 https://gitee.com/ascend/common/blob/master/install_python3env/for_atlas200dk/README.md 进行环境依赖配置。 
+4. 安装环境依赖。 
+   - 安装numpy、pillow   
+       请参考 https://gitee.com/ascend/common/blob/master/install_python3env/for_atlas200dk/README.md 进行安装。 
    
 ## 运行
 
