@@ -8,9 +8,7 @@ Ascend sample，请根据自己的需要进入对应文件夹获取应用，或�
 #### 链接地址
 
 
-<details open><summary>classification：分类网络应用    
-
-输入：图片    输出：图片</summary><blockquote>
+<details open><summary>classification：基于googlenet的分类应用，输入为图片，输出为图片。</summary><blockquote>
 
 - [for_atlas200dk_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/classification/for_atlas200dk_1.7x.0.0_c++)  
 - [for_atlas200dk_1.7x.0.0_python](https://gitee.com/ascend/samples/tree/master/classification/for_atlas200dk_1.7x.0.0_python) 
