@@ -65,8 +65,8 @@
 - 安装编译工具  
   **sudo apt-get install -y g++\-aarch64-linux-gnu g++\-5-aarch64-linux-gnu** 
 
-- 安装PresenterAgent
-请参考 https://gitee.com/ascend/common/blob/master/install_presenteragent/for_atlas200dk/README.md
+- 安装PresenterAgent    
+  请参考 https://gitee.com/ascend/common/blob/master/install_presenteragent/for_atlas200dk/README.md
   
 
 ## 编译<a name="zh-cn_topic_0219108795_section3723145213347"></a>
