@@ -72,7 +72,7 @@
 3.  执行deploy脚本， 进行配置参数调整及第三方库下载编译 打开Mind Studio工具的Terminal，此时默认在代码主目录下，执行如下命令在后台指执行deploy脚本，进行环境部署。如[图 执行deploy脚本](#zh-cn_topic_0203223294_fig107831626101910)所示。
 
     **图 8**  执行deploy脚本<a name="zh-cn_topic_0203223294_fig107831626101910"></a>  
-    ![](figures/执行deploy脚本.png "执行deploy脚本")
+    ![](figures/执行depoly脚本.png "执行deploy脚本")
 
     >![](public_sys-resources/icon-note.gif) **说明：**   
     >-   首次deploy时，没有部署第三方库时会自动下载并编译，耗时可能比较久，请耐心等待。后续再重新编译时，不会重复下载编译，部署如上图所示。  
