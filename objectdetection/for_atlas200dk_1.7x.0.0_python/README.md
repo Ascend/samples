@@ -43,9 +43,9 @@
         
         命令行中输入以下命令设置环境变量。
 
-        **cd \\$HOME/yolov3**
+        **cd \$HOME/yolov3**
         
-        **export install_path=\$HOME/Ascend/ascend-toolkit/20.0.RC1/x86_64-linux_gcc7.3.0**  
+        **export install_path=\\$HOME/Ascend/ascend-toolkit/20.0.RC1/x86_64-linux_gcc7.3.0**  
 
         **export PATH=/usr/local/python3.7.5/bin:\\${install_path}/atc/ccec_compiler/bin:\\${install_path}/atc/bin:\\$PATH**  
 
