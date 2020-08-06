@@ -43,7 +43,7 @@
         
         命令行中输入以下命令设置环境变量。
 
-        **cd \$HOME/yolov3_yuv**
+        **cd \$HOME/yolov3**
         
         **export install_path=\$HOME/Ascend/ascend-toolkit/20.0.RC1/x86_64-linux_gcc7.3.0**  
 
@@ -58,6 +58,7 @@
     2.  执行以下命令转换模型。
 
         **atc --model=yolov3.prototxt --weight=yolov3.caffemodel --framework=0 --output=yolov3_yuv --soc_version=Ascend310 --insert_op_conf=aipp_nv12.cfg**
+
 
     
 4.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0219108795_li953280133816)中源码所在路径下的“**objectdetection_python/model**”目录下。
