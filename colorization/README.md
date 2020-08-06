@@ -16,23 +16,13 @@
 4)	模型推理：根据构建好的模型输入数据进行模型推理。    
 5)	解析推理结果：根据模型输出，解析模型的推理结果。使用opencv将转换后的彩色图像数据保存成图片文件。    
 
-## 算法设计
-
-该模型是一个相当标准的卷积神经网络，模型并没有用池化层，取而代之的是使用上/下采样层。该模型使用的损失函数是标准的交叉熵：
-
-![公式](https://images.gitee.com/uploads/images/2020/0805/095709_16d3ea7f_5395865.png "屏幕截图.png")
+## 模型结构
 
 ![模型结构图](https://images.gitee.com/uploads/images/2020/0805/095721_70b4f185_5395865.png "屏幕截图.png")
 
-## 数据集制作
-
-该模型采用ImageNet数据集，详见：http://www.image-net.org/
-
-## 模型训练
+## 原始模型
 
 该模型来自GitHub：https://github.com/richzhang/colorization 请从GitHub中获取模型网络结构，预训练模型等。
-
-要将训练好的caffe模型应用到Atlas200DK上，首先要将其转换为Ascend310芯片支持的离线模型，模型转换的参数如下图所示。Model File为记录网络结构的prototxt文件，Weight File为记录参数值的caffemodel文件。推理过程的batch size需要设为1，图像的宽、高、通道数不变，模型输入为Lab图像的L通道数据，通道数为1，因此输入的维度N、C、H、W分别对应为1、1、224、224。
 
 ## 图像预处理
 
