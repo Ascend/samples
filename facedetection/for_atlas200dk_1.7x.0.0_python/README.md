@@ -149,7 +149,7 @@
 
     等待Presenter Agent传输数据给服务端，单击“Refresh“刷新，当有数据时相应的Channel 的Status变成绿色，如下图所示。
 
-    **图 **  Presenter Server界面<a name="zh-cn_topic_0228461904_zh-cn_topic_0203223294_fig113691556202312"></a>  
+    **图**  Presenter Server界面<a name="zh-cn_topic_0228461904_zh-cn_topic_0203223294_fig113691556202312"></a>  
     ![](figures/presenter.png "Presenter-Server界面") 
 
 4.  单击右侧对应的View Name链接，比如上图的“video”，查看结果。
