@@ -66,7 +66,7 @@
 
 1.  应用代码拷贝到开发板。
 
-    以Mind Studio安装用户进入分类网络应用\(python\)代码所在根目录，如：AscendProjects/classification_python，执行以下命令将应用代码拷贝到开发板。
+    以Mind Studio安装用户进入分类网络应用\(python\)代码所在根目录，如：AscendProjects/classification_python，执行以下命令将应用代码拷贝到开发板。若拷贝失败，请检查开发板上是否有HIAI\_PROJECTS这个目录，没有就创建一下。
     
     **scp -r ~/AscendProjects/colorization_python HwHiAiUser@192.168.1.2:/home/HwHiAiUser/HIAI\_PROJECTS**
     
