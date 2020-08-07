@@ -116,11 +116,11 @@
 3. 查看推理图片。  
 
    推理产生的结果图片保存在outputs文件夹，可传到Mindstudio安装用户的家目录中查看。  
-   **scp -r username@host\_ip:/home/username/HIAI\_PROJECTS/classification_python/outputs \~**
+   **scp -r username@host\_ip:/home/username/HIAI\_PROJECTS/mask_detection_python/out \~**
 
     -   username：开发板用户﻿名，默认为HwHiAiUser。
     -   host\_ip：开发板ip，USB连接一般为192.168.1.2.网线连接时一般为192.168.0.2。
 
     **命令示例：**  
-    **scp -r HwHiAiUser@192.168.1.2:/home/HwHiAiUser/HIAI\_PROJECTS/classification_python/outputs \~** 
+    **scp -r HwHiAiUser@192.168.1.2:/home/HwHiAiUser/HIAI\_PROJECTS/mask_detection_python/out \~** 
    
