@@ -98,14 +98,16 @@
 
 4. 安装环境依赖。 
    - 安装numpy、pillow   
-       请参考 https://gitee.com/ascend/common/blob/master/install_python3env/for_atlas200dk/README.md 进行安装。 
+       请参考 https://gitee.com/ascend/common/blob/master/install_python3env/for_atlas200dk/README.md 进行安装。   
+   - 安装opencv-python   
+       请参考 https://gitee.com/ascend/common/blob/master/install_opencv/for_atlas200dk_python/README.md 进行安装。
    
 ## 运行
 
 1. 登录到开发板上，进入工程目录下，执行如下命令运行程序。  
 
-   **cd ~/HIAI_PROJECTS/classification_python/**   
-   **python3 classify.py ./data/**
+   **cd ~/HIAI_PROJECTS/mask_detection_python/**   
+   **python3 mask_detect.py**
 
 2. 在终端可看到推理结果。
 
