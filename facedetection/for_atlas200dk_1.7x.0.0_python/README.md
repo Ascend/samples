@@ -152,5 +152,27 @@
     **图**  Presenter Server界面<a name="zh-cn_topic_0228461904_zh-cn_topic_0203223294_fig113691556202312"></a>  
     ![](figures/presenter.png "Presenter-Server界面") 
 
-4.  单击右侧对应的View Name链接，比如上图的“video”，查看结果。
+4.  单击右侧对应的View Name链接，比如上图的“video”，查看结果。  
+
+## 后续处理<a name="zh-cn_topic_0228757088_section1092612277429"></a>
+
+-   **停止Presenter Server服务**
+
+    Presenter Server服务启动后会一直处于运行状态，若想停止人脸检测应用对应的Presenter Server服务，可执行如下操作。
+
+    以Mind Studio安装用户在Mind Studio所在服务器中的命令行中执行如下命令查看人脸检测应用对应的Presenter Server服务的进程。
+
+    **ps -ef | grep presenter**
+
+    ```
+    ascend@ubuntu:~/AscendProjects/face_detection/script$ ps -ef | grep presenter
+    ascend 9560 1342 0 02:19 pts/4  00:00:04   python3/home/ascend/AscendProjects/face_detection.bak/script/..//present
+    erserver/presenter_server.py --app face_detection
+    ```
+
+    如上所示  _9650_  即为人脸检测应用对应的Presenter Server服务的进程ID。
+
+    若想停止此服务，执行如下命令：
+
+    **kill -9** _9650_
    
