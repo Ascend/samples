@@ -109,11 +109,7 @@
    **cd ~/HIAI_PROJECTS/colorization_python/**   
    **python3 colorize.py ./data/**
 
-2. 在终端可看到推理结果。
-
-   ![](figures/result.png) 
-
-3. 查看推理图片。  
+2. 查看推理图片。  
 
    推理产生的结果图片保存在out文件夹，可传到Mindstudio安装用户的家目录中查看。 （此命令不是在开发板一侧使用，而是在MindStudio的安装用户这边使用） 
    
