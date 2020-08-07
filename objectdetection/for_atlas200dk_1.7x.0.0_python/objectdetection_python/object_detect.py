@@ -120,7 +120,8 @@ class ObjectDetect(object):
         box_num = infer_output[1][0, 0]
         print("box num ", box_num)
         box_info = infer_output[0].flatten()
-        print(box_info[0:16])
+        print ("\n")
+        print(box_info[0:6*box_num].reshape(6, box_num))
         scalex = origin_img.width / self._model_width
         scaley = origin_img.height / self._model_height
         output_path = os.path.join("./outputs", os.path.basename(image_file))
@@ -130,13 +131,13 @@ class ObjectDetect(object):
         print("images:{}".format(image_file))
         print("======== inference results: =============")
         for n in range(int(box_num)):
-            id = int(box_info[5])
+            id = int(box_info[5*int(box_num)+n])
             label = labels[id]
-            score = box_info[4]
-            top_left_x = box_info[0] * scalex
-            top_left_y = box_info[1] * scaley
-            bottom_right_x = box_info[2] * scalex
-            bottom_right_y = box_info[3] * scaley
+            score = box_info[4*int(box_num)+n]
+            top_left_x = box_info[0*int(box_num)+n] * scalex
+            top_left_y = box_info[1*int(box_num)+n] * scaley
+            bottom_right_x = box_info[2*int(box_num)+n] * scalex
+            bottom_right_y = box_info[3*int(box_num)+n] * scaley
             print("%s: class %d, box %d %d %d %d, score %f"%(
                 label, id, top_left_x, top_left_y, 
                 bottom_right_x, bottom_right_y, score))
