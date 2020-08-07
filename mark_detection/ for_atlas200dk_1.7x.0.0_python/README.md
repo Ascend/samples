@@ -74,7 +74,7 @@
      **图** **应用代码拷贝**<a name="zh-cn_topic_02287570831_zh-cn_topic_0198304761_fig1660453512014"></a>  
     
 
-    ![](figures/zh-cn_image_02288324312.png)
+    ![](figures/cp-success.png)
     
 
     
@@ -111,7 +111,7 @@
 
 2. 在终端可看到推理结果。
 
-   ![](figures/classification.png) 
+   ![](figures/result.png) 
 
 3. 查看推理图片。  
 
