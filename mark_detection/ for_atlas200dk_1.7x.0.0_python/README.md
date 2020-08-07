@@ -92,7 +92,7 @@
    在最后添加两行    
    **export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/acllib/lib64**   
    **export PYTHONPATH=/home/HwHiAiUser/Ascend/:\\${PYTHONPATH}**  
-   ![](figures/pythonpath1.png)   
+   ![](figures/bashrc.png)   
    执行如下命令，使环境变量生效   
    **source ~/.bashrc**  
 
