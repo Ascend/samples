@@ -56,6 +56,7 @@ Ascend sample，请根据自己的需要进入对应文件夹获取应用，或�
 <details open><summary>facedetection：基于caffe-ssd的人脸检测应用，输入为树莓派摄像头，输出为视频。</summary><blockquote>
 
 - [for_atlas200dk_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/facedetection/for_atlas200dk_1.7x.0.0_c++)：该分支是运行在200DK上基于1.7x.0.0版本的C++样例。使用dvpp对视频帧进行预处理，对预处理后的视频帧进行人脸检测，最后进行相应后处理。  
+- [for_atlas200dk_1.7x.0.0_python](https://gitee.com/ascend/samples/tree/master/facedetection/for_atlas200dk_1.7x.0.0_python)：该分支是运行在200DK上基于1.7x.0.0版本的python样例。使用dvpp对视频帧进行预处理，对预处理后的视频帧进行人脸检测，最后进行相应后处理。 
 </blockquote></details> 
 
 <details open><summary>mark_detection：基于yolov3的口罩识别应用，输入为图片，输出为图片。</summary><blockquote>
