@@ -84,7 +84,7 @@
 
 2.  修改配置文件
 
-    将data/param.conf中的presenter_server_ip、presenter_view_ip、presenter_agent_ip修改为Mind Studio所在Ubuntu服务器的虚拟网卡的ip地址，如下图所示。
+    将data/param.conf中的 **presenter_server_ip、presenter_view_ip** 修改为Mind Studio所在Ubuntu服务器的虚拟网卡的ip地址， **presenter\_agent\_ip** 修改为开发板上和ubuntu服务器连接的网口ip。如下图所示。
 
     ![](figures/conf.png "修改conf")
 
