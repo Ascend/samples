@@ -11,11 +11,11 @@ from utils import *
 from acl_model import Model
 from acl_image import AclImage
 
-labels = ["person", "face", "mask"]
+labels = ["face","person", "mask"]
 
 INPUT_DIR = './data/'
 OUTPUT_DIR = './out/'
-MODEL_PATH = "./model/yolov3_no_aipp_pb.om"
+MODEL_PATH = "./model/mask_detection.om"
 MODEL_WIDTH = 640
 MODEL_HEIGHT = 352
 class_num = 3
@@ -25,14 +25,15 @@ anchors_2 = np.array([[30, 61], [62, 45], [59, 119]]) / stride_list[1]
 anchors_3 = np.array([[116, 90], [156, 198], [163, 326]]) / stride_list[2]
 anchor_list = [anchors_1, anchors_2, anchors_3]
 
-conf_threshold = 0.3
-iou_threshold = 0.4
+conf_threshold = 0.2
+iou_threshold = 0.3
 
 colors = [(255, 0, 0), (0, 255, 0), (0, 0, 255), (0, 255, 255), (255, 0, 255), (255, 255, 0)]
 
-def preprocess(image):
-    img_h = image.shape[0]
-    img_w = image.shape[1]
+def preprocess(img_path):
+    image = Image.open(img_path)
+    img_h = image.size[1]
+    img_w = image.size[0]
     net_h = MODEL_HEIGHT
     net_w = MODEL_WIDTH
 
@@ -45,7 +46,7 @@ def preprocess(image):
     shift_x_ratio = (net_w - new_w) / 2.0 / net_w
     shift_y_ratio = (net_h - new_h) / 2.0 / net_h
 
-    image_ = cv.resize(image, (new_w, new_h))
+    image_ = image.resize( (new_w, new_h))
     new_image = np.zeros((net_h, net_w, 3), np.uint8)
     new_image[shift_y: new_h + shift_y, shift_x: new_w + shift_x, :] = np.array(image_)
     new_image = new_image.astype(np.float32)
@@ -138,8 +139,8 @@ def convert_labels(label_list):
 def post_process(infer_output, origin_img):
     print("post process")
     result_return = dict()
-    img_h = origin_img.shape[0]
-    img_w = origin_img.shape[1]
+    img_h = origin_img.size[1]
+    img_w = origin_img.size[0]
     scale = min(float(MODEL_WIDTH) / float(img_w), float(MODEL_HEIGHT) / float(img_h))
     new_w = int(img_w * scale)
     new_h = int(img_h * scale)
@@ -190,8 +191,8 @@ def main():
         pic_path = os.path.join(INPUT_DIR, pic)
         bgr_img = cv.imread(pic_path)
         #预处理
-        # data, orig = preprocess(pic_path)
-        data, orig = preprocess(bgr_img)
+        data, orig = preprocess(pic_path)
+        #data, orig = preprocess(bgr_img)
         #送进模型推理
         result_list = model.execute([data,])    
         #处理推理结果
