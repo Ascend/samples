@@ -23,13 +23,13 @@
 
 2.  <a name="zh-cn_topic_0219108795_li2074865610364"></a>获取此应用中所需要的原始网络模型。    
  
-     -  下载原始网络模型及权重文件至ubuntu服务器任意目录，如:$HOME/facedetection。
+     -  下载原始网络模型及权重文件至ubuntu服务器任意目录，如:$HOME/models/facedetection_python。
 
-        **mkdir -p $HOME/facedetection** 
+        **mkdir -p $HOME/models/facedetection_python** 
 
-        **wget -P $HOME/facedetection https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/face_detection/face_detection.caffemodel** 
+        **wget -P $HOME/models/facedetection_python https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/face_detection/face_detection.caffemodel** 
  
-        **wget -P $HOME/facedetection https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/face_detection/face_detection.prototxt**
+        **wget -P $HOME/models/facedetection_python https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/face_detection/face_detection.prototxt**
     
         >![](public_sys-resources/icon-note.gif) **说明：**   
         >- facedetection原始模型网络： https://github.com/opencv/opencv/blob/master/samples/dnn/face_detector/deploy.prototxt。
@@ -54,7 +54,7 @@
     
 4.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0228757084_section8534138124114)中源码所在路径下的“**facedetection/model**”目录下。
     
-     **cp \\$HOME/modelzoo/face_detection/device/face_detection.om \\$HOME/AscendProjects/facedetection/model/**  
+     **cp \\$HOME/modelzoo/face_detection/device/face_detection.om \\$HOME/AscendProjects/facedetection_python/model/**  
   
 
 ## 环境部署<a name="zh-cn_topic_0228757083_section1759513564117"></a>
