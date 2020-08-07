@@ -98,16 +98,16 @@
 4.  启动Presenter Server。
     执行如下命令在后台启动人脸检测python应用的Presenter Server主程序。
 
-    **bash /home/ascend/AscendProjects/facedetection_python/script/run_presenter_server.sh &**
+    **bash \$HOME/AscendProjects/facedetection_python/script/run_presenter_server.sh &**
 
     使用提示的URL登录Presenter Server。如下图所示，表示Presenter Server启动成功。
 
-    **图 **  主页显示<a name="zh-cn_topic_0228757088_fig64391558352"></a>  
+    **图**  主页显示<a name="zh-cn_topic_0228757088_fig64391558352"></a>  
     ![](figures/主页显示.png "主页显示")
 
     Presenter Server、Mind Studio与Atlas 200 DK之间通信使用的IP地址示例如下图所示：
 
-    **图 **  IP地址示例<a name="zh-cn_topic_0228757088_fig1881532172010"></a>  
+    **图**  IP地址示例<a name="zh-cn_topic_0228757088_fig1881532172010"></a>  
     ![](figures/IP地址示例.png "IP地址示例")
 
     其中：
@@ -136,24 +136,21 @@
 
 
 ## 运行
+1. 检查是否使用的"CAMERA0"摄像头。  
+   代码中默认使用的是"CAMERA0"摄像头，查看方法参考下方链接。   
+   https://support.huaweicloud.com/usermanual-A200dk_3000/atlas200dk_02_0051.html 
 
-1. 登录到开发板上，进入工程目录下，执行如下命令运行程序。  
+2. 登录到开发板上，进入工程目录下，执行如下命令运行程序。  
 
-   **cd ~/HIAI_PROJECTS/mask_detection_python/**   
-   **python3 mask_detect.py**
+   **cd ~/HIAI_PROJECTS/facedetection_python/**   
+   **python3 main.py**
 
-2. 在终端可看到推理结果。
+3.  使用启动Presenter Server服务时提示的URL登录 Presenter Server 网站。
 
-   ![](figures/result.png) 
+    等待Presenter Agent传输数据给服务端，单击“Refresh“刷新，当有数据时相应的Channel 的Status变成绿色，如下图所示。
 
-3. 查看推理图片。  
+    **图 **  Presenter Server界面<a name="zh-cn_topic_0228461904_zh-cn_topic_0203223294_fig113691556202312"></a>  
+    ![](figures/presenter.png "Presenter-Server界面") 
 
-   推理产生的结果图片保存在outputs文件夹，可传到Mindstudio安装用户的家目录中查看。  
-   **scp -r username@host\_ip:/home/username/HIAI\_PROJECTS/mask_detection_python/out \~**
-
-    -   username：开发板用户﻿名，默认为HwHiAiUser。
-    -   host\_ip：开发板ip，USB连接一般为192.168.1.2.网线连接时一般为192.168.0.2。
-
-    **命令示例：**  
-    **scp -r HwHiAiUser@192.168.1.2:/home/HwHiAiUser/HIAI\_PROJECTS/mask_detection_python/out \~** 
+4.  单击右侧对应的View Name链接，比如上图的“video”，查看结果。
    
