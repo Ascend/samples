@@ -56,14 +56,37 @@
     
      **cp \\$HOME/modelzoo/face_detection/device/face_detection.om \\$HOME/AscendProjects/facedetection_python/model/**  
   
+## 环境配置<a name="zh-cn_topic_0228757083_section17595135641"></a> 
+   - 安装numpy、pillow   
+       请参考 https://gitee.com/ascend/common/blob/master/install_python3env/for_atlas200dk/README.md 进行安装。   
+   
 
-## 环境部署<a name="zh-cn_topic_0228757083_section1759513564117"></a>
+## 环境部署<a name="zh-cn_topic_0228757083_section1759513564117"></a>  
 
-1.  应用代码拷贝到开发板。
+1.  以Mind Studio安装用户进入facedetectionapp应用代码所在根目录，如：\\$HOME/AscendProjects/facedetection_python/。  
+     
+    **cd \\$HOME/AscendProjects/facedetection_python/** 
 
-    以Mind Studio安装用户进入口罩检测应用\(python\)代码所在根目录，如：AscendProjects/mask_detection_python，执行以下命令将应用代码拷贝到开发板。
+2.  修改配置文件。  
+
+    修改 **script/face\_detection.conf** 中 **presenter\_server\_ip** 和 **presenter\_view\_ip** 为当前ubuntu服务器上和atlas200dk开发板连接的网口ip， **presenter\_agent\_ip** 为开发板上和ubuntu服务器连接的网口ip。
+
+    如使用USB连接，开发板的USB网口ip为192.168.1.2，ubuntu服务器和开发板连接的虚拟网卡的网口ip为192.168.1.134，则配置文件内容如下所示：
+
+    **presenter\_server\_ip=192.168.1.134**
+
+    **presenter\_view\_ip=192.168.1.134**
+
+    **presenter\_agent\_ip=192.168.1.2**
+
+    >![](public_sys-resources/icon-note.gif) **说明：**   
+    >-   一般通过USB连接时，atlas200dk\_board\_ip为开发板的USB网口ip，默认为192.168.1.2。通过网口连接时，atlas200dk\_board\_ip为开发板的网络网口ip，默认为192.168.0.2。
+
+3.  应用代码拷贝到开发板。
+
+    以Mind Studio安装用户进入口罩检测应用\(python\)代码所在根目录，如：AscendProjects/facedetection_python，执行以下命令将应用代码拷贝到开发板。若拷贝失败，请检查开发板上是否有HIAI\_PROJECTS这个目录，没有就创建一下。
     
-    **scp -r ~/AscendProjects/mask_detection_python HwHiAiUser@192.168.1.2:/home/HwHiAiUser/HIAI\_PROJECTS**
+    **scp -r ~/AscendProjects/facedetection_python HwHiAiUser@192.168.1.2:/home/HwHiAiUser/HIAI\_PROJECTS**
     
      提示password时输入开发板密码，开发板默认密码为**Mind@123**，如[图 应用代码拷贝](#zh-cn_topic_0228757083_zh-cn_topic_0198304761_fig1660453512014)。
     
@@ -72,16 +95,35 @@
 
     ![](figures/cp-success.png)
     
+4.  启动Presenter Server。
+    执行如下命令在后台启动人脸检测python应用的Presenter Server主程序。
 
+    **bash /home/ascend/AscendProjects/facedetection_python/script/run_presenter_server.sh &**
+
+    使用提示的URL登录Presenter Server。如下图所示，表示Presenter Server启动成功。
+
+    **图 **  主页显示<a name="zh-cn_topic_0228757088_fig64391558352"></a>  
+    ![](figures/主页显示.png "主页显示")
+
+    Presenter Server、Mind Studio与Atlas 200 DK之间通信使用的IP地址示例如下图所示：
+
+    **图 **  IP地址示例<a name="zh-cn_topic_0228757088_fig1881532172010"></a>  
+    ![](figures/IP地址示例.png "IP地址示例")
+
+    其中：
+
+    -   Atlas 200 DK开发者板使用的IP地址为192.168.1.2（USB方式连接）。
+    -   Presenter Server与Atlas 200 DK通信的IP地址为UI Host服务器中与Atlas 200 DK在同一网段的IP地址，例如：192.168.1.223。
+    -   通过浏览器访问Presenter Server的IP地址本示例为：10.10.0.1，由于Presenter Server与Mind Studio部署在同一服务器，此IP地址也为通过浏览器访问Mind Studio的IP。
     
-2. acl.so拷贝到开发板。
+5.  acl.so拷贝到开发板。
 
     **scp ~/Ascend/ascend-toolkit/20.0.RC1/arm64-linux_gcc7.3.0/pyACL/python/site-packages/acl/acl.so HwHiAiUser@192.168.1.2:/home/HwHiAiUser/Ascend/**  
    >![](public_sys-resources/icon-note.gif) **说明：**   
             **请将X.X.X替换为Ascend-Toolkit开发套件包的实际版本号。**   
             **例如：Toolkit包的包名为Ascend-Toolkit-20.0.RC1-x86_64-linux_gcc7.3.0.run，则此Toolkit的版本号为20.0.RC1。**
 
-3. 登录开发板，添加环境变量。  
+6. 登录开发板，添加环境变量。  
 
    **ssh HwHiAiUser@192.168.1.2**  
    **vim ~/.bashrc**   
@@ -92,12 +134,7 @@
    执行如下命令，使环境变量生效   
    **source ~/.bashrc**  
 
-4. 安装环境依赖。 
-   - 安装numpy、pillow   
-       请参考 https://gitee.com/ascend/common/blob/master/install_python3env/for_atlas200dk/README.md 进行安装。   
-   - 安装opencv-python   
-       请参考 https://gitee.com/ascend/common/blob/master/install_opencv/for_atlas200dk_python/README.md 进行安装。
-   
+
 ## 运行
 
 1. 登录到开发板上，进入工程目录下，执行如下命令运行程序。  
