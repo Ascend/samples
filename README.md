@@ -26,7 +26,9 @@ Ascend sample，请根据自己的需要进入对应文件夹获取应用，或�
 <details open><summary>colorization：基于alexnet的黑白图像上色应用，输入为图片，输出为图片。</summary><blockquote>
 
 - [for_atlas200dk_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/colorization/for_atlas200dk_1.7x.0.0_c++)：该分支是运行在200DK上基于1.7x.0.0版本的C++样例。使用opencv对图像进行预处理，对预处理后的图像进行色彩通道预测，最后通过opencv进行相应后处理。  
+- [for_atlas200dk_1.7x.0.0_python](https://gitee.com/ascend/samples/tree/master/colorization/for_atlas200dk_1.7x.0.0_python)：该分支是运行在200DK上基于1.7x.0.0版本的python样例。使用opencv对图像进行预处理，对预处理后的图像进行色彩通道预测，最后通过opencv进行相应后处理。
 - [for_atlas300_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/colorization/for_atlas300_1.7x.0.0_c++)：该分支是运行在200DK上基于1.7x.0.0版本的C++样例。使用opencv对图像进行预处理，对预处理后的图像进行色彩通道预测，最后通过opencv进行相应后处理。
+  
 </blockquote></details>  
 
    
@@ -58,6 +60,7 @@ Ascend sample，请根据自己的需要进入对应文件夹获取应用，或�
 
 <details open><summary>mark_detection：基于yolov3的口罩识别应用，输入为图片，输出为图片。</summary><blockquote>
 
+- [for_atlas200dk_1.7x.0.0_python](https://gitee.com/ascend/samples/tree/master/mark_detection/%20for_atlas200dk_1.7x.0.0_python)：该分支是运行在200DK上基于1.7x.0.0版本的python样例。使用opencv和pillow对图像进行预处理，对预处理后的图像进行口罩识别，最后通过opencv和pillow进行相应后处理。 
 - [for_atlas200dk_1.3x.0.0_python](https://gitee.com/ascend/samples/tree/master/mark_detection/for_atlas200dk_1.3x.0.0_python)：该分支是运行在200DK上基于1.3x.0.0版本的python样例。使用opencv对图像进行预处理，对预处理后的图像进行口罩识别，最后通过opencv进行相应后处理。 
 </blockquote></details>
 
