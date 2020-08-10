@@ -59,7 +59,7 @@ Before running this sample, you need to obtain the source code package.
         **atc --model=yolov3.prototxt --weight=yolov3.caffemodel --framework=0 --output=yolov3 --soc_version=Ascend310 --insert_op_conf=aipp_nv12.cfg**
 
     
-4.  4.	Upload the converted model file (.om file) to the objectdetection/model directory in the path where the source code is stored in [step 1](#zh-cn_topic_0219108795_li953280133816).
+4.  Upload the converted model file (.om file) to the objectdetection/model directory in the path where the source code is stored in [step 1](#zh-cn_topic_0219108795_li953280133816).
     
     **cp ./yolov3.om \$HOME/AscendProjects/objectdetection/model/**
 
