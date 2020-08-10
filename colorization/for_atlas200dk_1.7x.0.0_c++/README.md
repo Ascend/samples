@@ -1,4 +1,4 @@
-中文|[English](Readme_EN.md)
+中文|[English](README_EN.md)
 
 # 黑白图像上色<a name="ZH-CN_TOPIC_0219122211"></a>
 
