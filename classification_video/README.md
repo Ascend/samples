@@ -9,7 +9,7 @@
 
 ## 总体设计
 
-![输入图片说明](https://images.gitee.com/uploads/images/2020/0810/161429_a0487fb2_5408865.png "屏幕截图.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0810/162403_39b2ad88_5408865.png "1.png")
 
 
 
