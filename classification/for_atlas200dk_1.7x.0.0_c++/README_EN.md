@@ -53,7 +53,7 @@ Before running this sample, you need to obtain the source code package.
     1.  Choose **Tools > Model** Converter from the menu bar of Mind Studio.    
     2.  Configure model conversion settings in the displayed **Model Converter** dialog box.    
     3.  Set the parameters by referring to the following figure.     
-        -   Select the model file downloaded in [Step 2](#zh-cn_topic_0219108795_li2074865610364) for Model File. The required weight file is automatically matched and filled in Weight File.
+        -   Select the model file downloaded in [Step 2](#zh-cn_topic_0219108795_li2074865610364) for Model File. The required weight file is automatically matched and filled in Weight File.    
     ![](figures/模型转换1.png "模型转换1")  
     ![](figures/模型转换2.png "模型转换2")  
     ![](figures/模型转换3.png "模型转换3")
@@ -99,7 +99,7 @@ Before running this sample, you need to obtain the source code package.
     **Figure 3**  Build and files generated<a name="zh-cn_topic_0203223265_fig1741464713019"></a>  
     ![](figures/编译操作及生成文件1.png "Build and files generated")
 
-    >![](public_sys-resources/icon-notice.gif) **须知：**   
+    >![](public_sys-resources/icon-notice.gif) **NOTICE**   
     >When you build a project for the first time, **Build > Build** is unavailable. You need to choose **Build > Edit Build Configuration** to set parameters before build.  
 
 ## Run<a name="zh-cn_topic_0219108795_section1620073406"></a>
