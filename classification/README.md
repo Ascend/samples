@@ -8,7 +8,7 @@
 
 ## 总体设计
 
-![原理框图](https://images.gitee.com/uploads/images/2020/0805/095543_cea73640_5395865.png "屏幕截图.png")  
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0810/152928_dffd1a38_5408865.png "屏幕截图.png")
 
 1.  **运行管理资源申请：**用于初始化系统内部资源，ACL固定的调用流程。
 2. **加载模型文件并构建输出内存：**从文件加载离线模型数据，需要由用户自行管理模型运行的内存，根据内存中加载的模型获取模型的基本信息包含模型输入、输出数据的数据buffer大小；由模型的基本信息构建模型输出内存，为接下来的模型推理做好准备。
@@ -22,7 +22,7 @@
 
 ## 模型结构
 
-![模型结构图](https://images.gitee.com/uploads/images/2020/0805/095721_70b4f185_5395865.png "屏幕截图.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0810/153018_5bb4f333_5408865.jpeg "googlenet网络结构图.jpg")
 
 ## 原始模型
 
