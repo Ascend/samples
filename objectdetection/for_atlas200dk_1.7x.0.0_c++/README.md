@@ -36,11 +36,12 @@
         >- yolov3原始模型网络： https://github.com/maxuehao/YOLOV3/blob/master/yolov3_res18.prototxt 
         >- yolov3原始网络LICENSE地址： https://github.com/maxuehao/caffe/blob/master/LICENSE
         >- C7x对prototxt文件有修改要求，按照[yolov3网络模型prototxt修改](https://support.huaweicloud.com/usermanual-mindstudioc73/atlasmindstudio_02_0112.html)文档对prototxt文件进行修改。这里已经修改完成，直接执行以上命令下载即可。
-3.  Convert the source model to a model supported by the Ascend AI Processor.  
 
-    1.  Set environment variables.
+3.  将原始网络模型转换为适配昇腾AI处理器的模型。  
+
+    1.  设置环境变量
         
-        Set the following environment variables:
+        命令行中输入以下命令设置环境变量。
 
         **cd \$HOME/yolov3**
         
@@ -54,66 +55,65 @@
 
         **export ASCEND_OPP_PATH=\\${install_path}/opp**  
 
-    2.  Set the following environment variables:
+    2.  执行以下命令转换模型。
 
         **atc --model=yolov3.prototxt --weight=yolov3.caffemodel --framework=0 --output=yolov3 --soc_version=Ascend310 --insert_op_conf=aipp_nv12.cfg**
 
     
-4.  4.	Upload the converted model file (.om file) to the objectdetection/model directory in the path where the source code is stored in [step 1](#zh-cn_topic_0219108795_li953280133816).
+5.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0219108795_li953280133816)中源码所在路径下的“**objectdetection/model**”目录下。
     
     **cp ./yolov3.om \$HOME/AscendProjects/objectdetection/model/**
 
-## Environment Configuration   
+## 环境配置   
 
-**Note: If OpenCV and a cross compiler have been installed on the server, skip this step.**  
+**注：服务器上已安装OpenCV、交叉编译工具可跳过此步骤。**  
     
-- Install the compiler.  
+- 安装编译工具  
   **sudo apt-get install -y g++\-aarch64-linux-gnu g++\-5-aarch64-linux-gnu** 
 
-- Install OpenCV 
+- 安装OpenCV 
       
-    For details, see **https://gitee.com/ascend/common/blob/master/install_opencv/for_atlas200dk/README.md**    
+    请参考 **https://gitee.com/ascend/common/blob/master/install_opencv/for_atlas200dk/README.md**    
 
-## Build<a name="zh-cn_topic_0219108795_section3723145213347"></a>
-1.  Open the project.
+## 编译<a name="zh-cn_topic_0219108795_section3723145213347"></a>
+1.  打开对应的工程。
 
-    Go to the directory of the decompressed installation package as the Mind Studio installation user in CLI mode, for example, $HOME/MindStudio-ubuntu/bin. Run the following command to launch Mind Studio:
+    以Mind Studio安装用户在命令行进入安装包解压后的“MindStudio-ubuntu/bin”目录，如：$HOME/MindStudio-ubuntu/bin。执行如下命令启动Mind Studio。
 
     **./MindStudio.sh**
 
-    After the project is started, open the **objectdetection** project, as shown in[Figure 1 Opening the objectdetection project](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810).
+    启动成功后，打开**objectdetection**工程，如[图 打开objectdetection工程](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810)所示。
 
-    **Figure 1**  Opening the objectdetection project<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810"></a>  
-    ![](figures/打开objectdetection工程1.png "Opening the objectdetection project")
+    **图 1**  打开objectdetection工程<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810"></a>  
+    ![](figures/打开objectdetection工程1.png "打开objectdetection工程")
 
-2.  Start build. Choose **Build > Build-Configuration** from the main menu of Mind Studio.  
-    Set Target OS to Centos7.6, as shown in [Figure 2 Build Configurations](#zh-cn_topic_0203223265_fig17414647130).
+2.  开始编译，打开Mind Studio工具，在工具栏中点击**Build \> Edit Build Configuration**。  
+    选择Target OS 为Centos7.6，如[图 配置编译](#zh-cn_topic_0203223265_fig17414647130)所示。
 
-    **Figure 2**  Build Configurations<a name="zh-cn_topic_0203223265_fig17414647130"></a>  
-    ![](figures/配置build1.png "Build Configurations")  
+    **图 2**  配置编译<a name="zh-cn_topic_0203223265_fig17414647130"></a>  
+    ![](figures/配置build1.png "配置编译")  
     
-    Click **Build > Build > Build Configuration**. The build and out folders are generated in the directory, as shown in [Figure 3 Build and files generated](#zh-cn_topic_0203223265_fig1741464713019).
+    之后点击**Build \> Build \> Build Configuration**，如[图 编译操作及生成文件](#zh-cn_topic_0203223265_fig1741464713019)所示，会在目录下生成build和out文件夹。
 
-    **Figure 3**  Build and files generated<a name="zh-cn_topic_0203223265_fig1741464713019"></a>  
-    ![](figures/编译操作及生成文件1.png "Build and files generated")
+    **图 3**  编译操作及生成文件<a name="zh-cn_topic_0203223265_fig1741464713019"></a>  
+    ![](figures/编译操作及生成文件1.png "编译操作及生成文件")
 
-    >![](public_sys-resources/icon-notice.gif) **NOTICE**   
-    >When you build a project for the first time, **Build > Build** is unavailable. You need to choose **Build > Edit Build Configuration** to set parameters before build.  
+    >![](public_sys-resources/icon-notice.gif) **须知：**   
+    >首次编译工程时，**Build \> Build**为灰色不可点击状态。需要点击**Build \> Edit Build Configuration**，配置编译参数后再进行编译。  
+## 运行<a name="zh-cn_topic_0219108795_section1620073406"></a>
+1.  在Mind Studio工具的工具栏中找到Run按钮，单击  **Run \> Edit Configurations**。  
+    在Command Arguments 中添加运行参数 **../data**（输入图片的路径），之后分别点击Apply、OK。如[图 配置运行](#zh-cn_topic_0203223265_fig93931954162720)所示。   
 
-## Run<a name="zh-cn_topic_0219108795_section1620073406"></a>
-1.  Choose **Run > Edit Configurations** from the main menu of Mind Studio.    
-    Add the running parameter ../data in Command Arguments and click Apply and then click OK, as shown in [Figure 4 Run/Debug Configurations](#zh-cn_topic_0203223265_fig93931954162720).   
-
-    **Figure 4**  Run/Debug Configurations<a name="zh-cn_topic_0203223265_fig93931954162720"></a>   
-    ![](figures/配置run1.png "Run/Debug Configurations")
+    **图 4**  配置运行<a name="zh-cn_topic_0203223265_fig93931954162720"></a>   
+    ![](figures/配置run1.png "配置运行")
  
-2.  Click Run > Run 'objectdetection'. The executable file has been executed on the developer board, as shown in [Figure 5 Execution finished](#zh-cn_topic_0203223265_fig93931954162719).  
+2.  单击  **Run \> Run 'objectdetection'**，如[图 程序已执行示意图](#zh-cn_topic_0203223265_fig93931954162719)所示，可执行程序已经在开发者板执行。  
 
-    **Figure 5** Execution finished<a name="zh-cn_topic_0203223265_fig93931954162719"></a>  
-    ![](figures/程序已执行示意图1.png "Execution finished")
+    **图 5**  程序已执行示意图<a name="zh-cn_topic_0203223265_fig93931954162719"></a>  
+    ![](figures/程序已执行示意图1.png "程序已执行示意图")
 
-3.  Check the execution result.
+3.  查看运行结果。
 
-    The result images are stored in the folder named after the timestamp in the output > outputs directory of the project.  
+    推理结果图片保存在工程下的“output \> outputs”目录下以时间戳命名的文件夹内。  
 
 ![结果1](figures/result.png) 
