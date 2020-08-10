@@ -74,5 +74,5 @@ Ascend sample，请根据自己的需要进入对应文件夹获取应用，或�
 
 <details open><summary>Atlas200DK-UART-CAR：基于caffe-ssd的手势识别应用，输入为树莓派摄像头，输出为视频。</summary><blockquote>
 
-- [for_atlas200dk_1.3x.0.0_c++](https://gitee.com/ascend/samples/tree/master/Atlas200DK-UART-CAR/for_atlas200dk_1.3x.0.0_c++)：该分支是运行在200DK上基于1.3x.0.0版本的C++样例。使用dvpp对画面帧进行预处理，对预处理的画面帧进行手势识别，最后将识别的结果经过蓝牙传递给小车。
+- [for_atlas200dk_1.3x.0.0_c++](https://gitee.com/ascend/samples/tree/master/Atlas200DK-UART-CAR/for_atlas200dk_1.3x.0.0_c++)：该分支是运行在200DK上基于1.3x.0.0版本的C++样例。使用dvpp对画面帧进行预处理，对预处理的画面帧进行手势识别，最后将识别的结果通过蓝牙传递给小车。
 </blockquote></details>
