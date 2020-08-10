@@ -16,7 +16,7 @@ Before running this sample, you need to obtain the source code package.
               
     **unzip classification.zip**  
     
-    >![](public_sys-resources/icon-note.gif) **说明：**   
+    >![](public_sys-resources/icon-note.gif) **NOTE**   
     >- If the download using wget fails, run the following command to download the code:  
     **curl -OL https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/classification.zip** 
     >- If the download using curl also fails, open the download link in a browser to download the code and manually upload it to the server.
