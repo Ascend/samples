@@ -99,8 +99,8 @@
 4. 安装环境依赖。 
    - 安装numpy、pillow   
        请参考 https://gitee.com/ascend/common/blob/master/install_python3env/for_atlas200dk/README.md 进行安装。   
-   - 安装opencv-python   
-       请参考 https://gitee.com/ascend/common/blob/master/install_opencv/for_atlas200dk_python/README.md 进行安装。
+   - 安装opencv  
+       请参考 https://gitee.com/ascend/common/tree/master/install_opencv/for_atlas200dk 进行安装。
    
 ## 运行
 
