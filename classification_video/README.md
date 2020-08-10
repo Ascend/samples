@@ -9,7 +9,7 @@
 
 ## 总体设计
 
-![总体设计](https://images.gitee.com/uploads/images/2020/0806/161544_a91ea99a_5395865.png "屏幕截图.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0810/161429_a0487fb2_5408865.png "屏幕截图.png")
 
 
 
@@ -22,7 +22,7 @@
 
 ## 模型结构
 
-![模型结构图](https://images.gitee.com/uploads/images/2020/0805/095721_70b4f185_5395865.png "屏幕截图.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0810/161511_e5e94b94_5408865.jpeg "googlenet网络结构图.jpg")
 
 ## 原始模型
 
