@@ -52,7 +52,7 @@ AIPP：
 
 ## 图像后处理
 
-![image-20200810195221950](C:\Users\Ly\AppData\Roaming\Typora\typora-user-images\image-20200810195221950.png)
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0811/092217_5fa87d6b_5408865.png "image-20200810195221950.png")
 
 
 结合这个输出打印结果以及对检测网络的认知，可以知道：
