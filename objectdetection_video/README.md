@@ -46,7 +46,7 @@ AIPP：
 3. 图像数据类型转换：Uint8->FP16（达芬奇推理的要求，模型最后实际的输入是fp16）
 
 ## 视频帧后处理
-![输入图片说明](https://images.gitee.com/uploads/images/2020/0811/100129_b7eb12b0_5408865.png "1.PNG")
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0811/100236_3857b674_5408865.png "1.png")
 
 
 结合这个输出打印结果以及对检测网络的认知，可以知道：
