@@ -104,7 +104,7 @@ Result ColorizeProcess::InitModel(const char* omModelPath) {
 
 Result ColorizeProcess::OpenPresenterChannel() {
     OpenChannelParam param;
-    param.host_ip = "192.168.1.223";  //IP address of Presenter Server
+    param.host_ip = "192.168.0.119";  //IP address of Presenter Server
     param.port = 7008;  //port of present service
     param.channel_name = "colorization-video";
     param.content_type = ContentType::kVideo;  //content type is Video
