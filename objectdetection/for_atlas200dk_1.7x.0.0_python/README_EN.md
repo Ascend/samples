@@ -86,7 +86,7 @@ Before running this sample, obtain the source code package.
              **Replace  with the actual version of the Ascend Toolkit.**   
 			 
 			 
-             **For example, if the Toolkit is named Ascend-Toolkit-20.0.RC1-x86_64-linux_gcc7.3.0.run, the Toolkit version is **20.0.RC1**.**
+             For example, if the Toolkit is named Ascend-Toolkit-20.0.RC1-x86_64-linux_gcc7.3.0.run, the Toolkit version is **20.0.RC1**.
 
 3. Log in to the developer board and add environment variables.
    
