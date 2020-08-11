@@ -1,3 +1,5 @@
+中文|[English](README_EN.md)
+
 # 分类网络应用 （python）
 
 本Application支持运行在Atlas 200 DK上，实现了googlenet网络的推理功能并输出相似度为前五的物体类别。
