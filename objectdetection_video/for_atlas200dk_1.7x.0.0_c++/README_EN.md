@@ -1,4 +1,4 @@
-中文|[English](README_EN.md)
+English|[中文](README.md)
 
 # Video Object Detection Network Application (C++)<a name="ZH-CN_TOPIC_0219122211"></a>
 
