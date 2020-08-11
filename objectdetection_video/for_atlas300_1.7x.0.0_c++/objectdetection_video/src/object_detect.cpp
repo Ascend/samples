@@ -145,7 +145,7 @@ Result ObjectDetect::CreateModelInputdDataset()
 
 Result ObjectDetect::OpenPresenterChannel() {
     OpenChannelParam param;
-    param.host_ip = "192.168.0.194";  //IP address of Presenter Server
+    param.host_ip = "192.168.0.119";  //IP address of Presenter Server
     param.port = 7006;  //port of present service
     param.channel_name = "video";
     param.content_type = ContentType::kVideo;  //content type is Video

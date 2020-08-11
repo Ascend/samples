@@ -1,1 +1,0 @@
-cd $(dirname $0);./workspace_mind_studio_objectdetection_video ../data/detection.mp4
