@@ -1,4 +1,4 @@
-English|[中文](Readme.md)
+English|[中文](README.md)
 
 # Video Object Classification Network Application (C++)<a name="ZH-CN_TOPIC_0219122211"></a>
 
