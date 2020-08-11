@@ -87,8 +87,8 @@
 
    **scp ${HOME}/Ascend/ascend-toolkit/X.X.X/arm64-linux_gcc7.3.0/pyACL/python/site-packages/acl/acl.so HwHiAiUser@192.168.1.2:/home/HwHiAiUser/Ascend/**  
    >![](public_sys-resources/icon-note.gif) **说明：**   
-            **请将X.X.X替换为Ascend-Toolkit开发套件包的实际版本号。**   
-            **例如：Toolkit包的包名为Ascend-Toolkit-20.0.RC1-x86_64-linux_gcc7.3.0.run，则此Toolkit的版本号为20.0.RC1。**
+   >- **请将X.X.X替换为Ascend-Toolkit开发套件包的实际版本号。**   
+      **例如：Toolkit包的包名为Ascend-Toolkit-20.0.RC1-x86_64-linux_gcc7.3.0.run，则此Toolkit的版本号为20.0.RC1。**
 
 3. 登录开发板，添加环境变量。  
 
