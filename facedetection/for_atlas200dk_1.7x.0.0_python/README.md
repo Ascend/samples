@@ -175,4 +175,9 @@
     若想停止此服务，执行如下命令：
 
     **kill -9** _9650_
-   
+
+-   **kill main.py**（此命令在开发者板上执行。）
+
+     **ps -ef | grep main.py | grep -v grep | awk '{print $2}' | xargs kill -9** 
+
+    
