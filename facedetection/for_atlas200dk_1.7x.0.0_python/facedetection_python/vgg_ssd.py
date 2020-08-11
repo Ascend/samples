@@ -46,16 +46,15 @@ class VggSsd(object):
     def _analyze_inference_output(self, infer_output, origin_img):
         #vgg ssd有两个输出,第一个输出infer_output[0]为检测到的物体个数,shape为(1,8)
         box_num = int(infer_output[0][0, 0])
-        
-        #第二个输出infer_output[1]为检测到的物体信息,shape为(1, 200, 8)
-        box_info = infer_output[1][0]       
-
+       #第二个输出infer_output[1]为检测到的物体信息,shape为(1, 200, 8)
+        box_info = infer_output[1][0]  
         detection_result_list = []
         for i in range(box_num):
             #检测到的物体置信度
             score = box_info[i, SCORE]
             if score < 0.9:
-                continue 
+                break 
+            
             detection_item = presenter_datatype.ObjectDetectionResult()            
             detection_item.confidence = score
             #人脸位置框坐标, 是归一化的坐标，需要乘以图片宽高转换为图片上的坐标
@@ -66,4 +65,5 @@ class VggSsd(object):
             #将置信度组织为字符串
             detection_item.result_text = str(round(detection_item.confidence * 100, 2)) + "%"
             detection_result_list.append(detection_item)
+            
         return detection_result_list

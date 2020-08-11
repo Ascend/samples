@@ -1,5 +1,6 @@
 import acl
 from atlas_utils.constants import *
+from lib.atlasutil_so import libatlas
 
 def check_ret(message, ret):
     if ret != ACL_ERROR_NONE:
@@ -23,7 +24,7 @@ def copy_data_device_to_host(device_data, data_size):
     return host_buffer
 
 def copy_data_device_to_device(device_data, data_size):
-    device_buffer, ret = acl.rt.malloc(data_size, ACL_MEM_MALLOC_HUGE_FIRST)
+    device_buffer, ret = acl.rt.malloc(data_size, ACL_MEM_MALLOC_NORMAL_ONLY)
     if ret != ACL_ERROR_NONE:
         print("Malloc device memory failed, error: ", ret)
         return None
@@ -39,7 +40,7 @@ def copy_data_device_to_device(device_data, data_size):
     return device_buffer
 
 def copy_data_host_to_device(host_data, data_size):
-    device_buffer, ret = acl.rt.malloc(data_size, ACL_MEM_MALLOC_HUGE_FIRST)
+    device_buffer, ret = acl.rt.malloc(data_size, ACL_MEM_MALLOC_NORMAL_ONLY)
     if ret != ACL_ERROR_NONE:
         print("Malloc device memory failed, error: ", ret)
         return None
@@ -64,4 +65,7 @@ def align_up2(value):
     return align_up(value, 2)
 
 def yuv420sp_size(width, height):
-    return int(width * height * 3 /2)
+    return width * height * 3 // 2
+
+def unpack_bytes(dest, dest_size, src, src_size):
+    libatlas.UnpackFloatByteArray(dest, dest_size, src, src_size)

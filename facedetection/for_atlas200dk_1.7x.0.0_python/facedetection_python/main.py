@@ -31,18 +31,23 @@ def main():
     while True:
         #从摄像头读入一帧图片
         image = cap.read()
+        if image is None:
+            print("Get memory from camera failed")
+            break
+        
         #检测网络将图片处理为模型输入数据
         model_input = detect.pre_process(image)
         if model_input == None:
             print("Pre process image failed")
-            continue
+            break
         #将数据送入离线模型推理
         result = model.execute(model_input)
         #检测网络解析推理输出
         jpeg_image, detection_list = detect.post_process(result, image)
         if jpeg_image == None:
             print("The jpeg image for present is None")
-            continue
+            break
+        
         chan.send_detection_data(CAMERA_FRAME_WIDTH, CAMERA_FRAME_HEIGHT, 
                                  jpeg_image, detection_list)
 

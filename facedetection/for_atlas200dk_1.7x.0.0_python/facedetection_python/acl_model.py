@@ -4,12 +4,14 @@ Copyright (R) @huawei.com, all rights reserved
 CREATED:  2020-6-04 20:12:13
 MODIFIED: 2020-6-28 14:04:45
 """
+
 import acl
 import struct
 import numpy as np
 import datetime
 from utils import *
 from atlas_utils.acl_image import AclImage
+
 
 class Model(object):
     def __init__(self, acl_resource, model_path):
@@ -21,6 +23,7 @@ class Model(object):
         self._output_info = []
         self.model_desc = None          # pointer when using
         self._init_resource()
+        
 
     def __del__(self):
         self._release_dataset(self.input_dataset)
@@ -60,28 +63,44 @@ class Model(object):
         for i in range(output_size):
             #获取每个输出的shape和数据类型
             dims = acl.mdl.get_output_dims(self.model_desc, i)
+            shape = tuple(dims[0]["dims"])
             datatype = acl.mdl.get_output_data_type(self.model_desc, i)
-            self._output_info.append({"shape": tuple(dims[0]["dims"]),
-                                      "type": datatype})
+            size = acl.mdl.get_output_size_by_index(self.model_desc, i)
+
+            if datatype == ACL_FLOAT:
+                np_type = np.float32            
+            elif datatype == ACL_INT32:
+                np_type = np.int32
+            elif datatype == ACL_UINT32:
+                np_type = np.uint32
+            else:
+                print("Unspport model output datatype ", datatype)
+                return None
+            #创建输出对应的numpy数组,数据类型和shape和模型输出一致        
+            output_tensor = np.zeros(size//4, dtype=np_type).reshape(shape)
+            if not output_tensor.flags['C_CONTIGUOUS']:
+                output_tensor = np.ascontiguousarray(output_tensor)
+
+            tensor_ptr = acl.util.numpy_to_ptr(output_tensor)           
+            self._output_info.append({"ptr": tensor_ptr,
+                                      "tensor": output_tensor})            
 
     def _gen_output_dataset(self, size):
         print("[Model] create model output dataset:")
         dataset = acl.mdl.create_dataset()
         for i in range(size):
             #为每个输出申请device内存
-            temp_buffer_size = acl.mdl.\
-                get_output_size_by_index(self.model_desc, i)
-            temp_buffer, ret = acl.rt.malloc(temp_buffer_size,
-                                             ACL_MEM_MALLOC_NORMAL_ONLY)
+            size = acl.mdl.get_output_size_by_index(self.model_desc, i)
+            buffer, ret = acl.rt.malloc(size, ACL_MEM_MALLOC_NORMAL_ONLY)
             check_ret("acl.rt.malloc", ret)
             #创建输出的data buffer结构,将申请的内存填入data buffer
-            dataset_buffer = acl.create_data_buffer(temp_buffer,
-                                                    temp_buffer_size)
+            dataset_buffer = acl.create_data_buffer(buffer, size)
             #将data buffer加入输出dataset
             _, ret = acl.mdl.add_dataset_buffer(dataset, dataset_buffer)
+            print("malloc output %d, size %d"%(i, size))
             if ret:
                 #如果失败,则释放资源
-                acl.rt.free(temp_buffer)
+                acl.rt.free(buffer)
                 acl.destroy_data_buffer(dataset)
                 check_ret("acl.destroy_data_buffer", ret)
         self.output_dataset = dataset
@@ -221,51 +240,23 @@ class Model(object):
             #从输出buffer中获取输出数据内存地址
             buffer = acl.mdl.get_dataset_buffer(self.output_dataset, i)
             data = acl.get_data_buffer_addr(buffer)
-            size = acl.get_data_buffer_size(buffer)
-            #创建一个numpy数组用于拷贝输出内存数据
-            narray = np.zeros(size, dtype=np.byte)
-            narray_ptr = acl.util.numpy_to_ptr(narray)
-            ret = acl.rt.memcpy(narray_ptr, narray.size * narray.itemsize, 
+            size = int(acl.get_data_buffer_size(buffer))
+            output_ptr = self._output_info[i]["ptr"]
+            output_tensor = self._output_info[i]["tensor"]
+            ret = acl.rt.memcpy(output_ptr, output_tensor.size*output_tensor.itemsize,                            
                                 data, size, ACL_MEMCPY_DEVICE_TO_DEVICE)
             if ret != ACL_ERROR_NONE:
                 print("Memcpy inference output to local failed")
                 return None
-            #根据模型输出的shape和数据类型,将内存数据解码为numpy数组
-            output_nparray = self._unpack_bytes_array(
-                narray, self._output_info[i]["shape"],
-                self._output_info[i]["type"])
-            dataset.append(output_nparray)
+
+            dataset.append(output_tensor)
 
         return dataset  
-
-    def _unpack_bytes_array(self, byte_array, shape, datatype):
-        tag = ""
-        np_type = None
-        #获取输出数据类型对应的numpy数组类型和解码标记
-        if datatype == ACL_FLOAT:
-            tag = 'f'
-            np_type = np.float
-        elif datatype == ACL_INT32:
-            tag = 'i'
-            np_type = np.int32
-        elif datatype == ACL_UINT32:
-            tag = 'I'
-            np_type = np.uint32
-        else:
-            print("unsurpport datatype ", datatype)
-            return
-        #输出数据字节数除以数据类型字节长度, 得到实际数据长度
-        size = byte_array.size / 4
-        #组织解码标签字符串:数据长度+类型
-        unpack_tag = str(int(size)) + tag
-        #解码数据
-        st = struct.unpack(unpack_tag, bytearray(byte_array))
-        #将解码后的数据组织为numpy数组,并设置shape和类型
-        return np.array(st).astype(np_type).reshape(shape)
 
     def _release_dataset(self, dataset):
         if not dataset:
             return
+        print("destroy dataset")
         num = acl.mdl.get_dataset_num_buffers(dataset)
         for i in range(num):
             data_buf = acl.mdl.get_dataset_buffer(dataset, i)

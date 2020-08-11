@@ -163,7 +163,6 @@ class Dvpp():
         #释放缩放申请的资源
         acl.media.dvpp_destroy_pic_desc(input_desc)
         acl.media.dvpp_destroy_pic_desc(output_desc)
-
         return AclImage(out_buffer, stride_width,
                         stride_height, output_size, MEMORY_DVPP)
 
@@ -213,6 +212,5 @@ class Dvpp():
             return None
         #释放资源
         acl.media.dvpp_destroy_pic_desc(input_desc)
-
         return AclImage(output_buffer, image.width, 
                         image.height, int(output_size_array[0]), MEMORY_DVPP)
