@@ -56,9 +56,9 @@ Before running this sample, obtain the source code package.
    3. Set the parameters by referring to the following figure.
       - Select the model file downloaded in [Step 2](#zh-cn_topic_0219108795_li2074865610364) in **Model File**, and **Weight File** is automatically filled in.
    
-   ![](figures/模型转换1.png "Model conversion 1")  
-   ![](figures/模型转换2.png "Model conversion 2")  
-   ![](figures/模型转换3.png "Model conversion 3")
+     ![](figures/模型转换1.png "Model conversion 1")  
+     ![](figures/模型转换2.png "Model conversion 2")  
+     ![](figures/模型转换3.png "Model conversion 3")
 
 4. Upload the converted model file (.om) to the **classification_video/model** directory under the path of the source code downloaded in [Step 1](#zh-cn_topic_0228757084_section8534138124114).
    
