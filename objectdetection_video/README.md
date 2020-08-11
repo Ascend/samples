@@ -22,7 +22,7 @@
 
 ## 模型结构
 
-![yolov3_416网络结构图](C:\Users\Ly\Pictures\yolov3_416网络结构图.jpg)
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0811/095451_1f7f1b91_5408865.jpeg "yolov3_416网络结构图.jpg")
 
 ## 原始模型
 
