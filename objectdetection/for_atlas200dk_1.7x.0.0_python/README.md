@@ -1,3 +1,5 @@
+中文|[English](README_EN.md)
+
 # 检测网络应用 （python）
 
 本Application支持运行在Atlas 200 DK上，实现了yolov3网络的推理功能并在终端打印出检测结果。
