@@ -1,4 +1,4 @@
-中文|[English](README_EN.md)
+English|[中文](README.md)
 
 # sample
 
