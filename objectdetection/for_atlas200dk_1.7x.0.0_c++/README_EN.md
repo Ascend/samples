@@ -33,9 +33,9 @@ Before running this sample, you need to obtain the source code package.
         **wget -P $HOME/yolov3 https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/yolov3/aipp_nv12.cfg** 
             
         >![](public_sys-resources/icon-note.gif) **Note**   
-        >- yolov3 original model network: https://github.com/maxuehao/YOLOV3/blob/master/yolov3_res18.prototxt 
-        >- yolov3 original network license address: https://github.com/maxuehao/caffe/blob/master/LICENSE
-        >- C7x has modification requirements for prototxt files, according to [Modification of yolov3 network model prototxt](https://support.huaweicloud.com/usermanual-mindstudioc73/atlasmindstudio_02_0112.html)文档对prototxt文件进行修改。这里已经修改完成，直接执行以上命令下载即可。
+        >- Original YOLOv3 network:  https://github.com/maxuehao/YOLOV3/blob/master/yolov3_res18.prototxt 
+        >- To obtain the LICENSE of the original YOLOv3 network: https://github.com/maxuehao/caffe/blob/master/LICENSE
+        >- C7x has modification requirements for prototxt files, according to [Modification of yolov3 network model prototxt](https://support.huaweicloud.com/usermanual-mindstudioc73/atlasmindstudio_02_0112.html). The modification has been completed herein. You can directly run the preceding command to download the file.
 3.  Convert the source model to a model supported by the Ascend AI Processor.  
 
     1.  Set environment variables.
