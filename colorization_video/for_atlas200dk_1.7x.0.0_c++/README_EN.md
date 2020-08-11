@@ -92,13 +92,13 @@ Before running this sample, obtain the source code package.
    
     - Change the value of **presenter_server_ip** in **script/presentserver/display/config/config.conf** to the virtual NIC IP address of the Ubuntu server where Mind Studio is installed, as shown in [Figure 2 Modifying presenter_server_ip](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig1110624110).
    
-    **Figure 2** Modifying presenter_server_ip<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig1110624110"></a>  
-    ![](figures/presenter_server_ip.png "Modifying presenter_server_ip")
+      **Figure 2** Modifying presenter_server_ip<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig1110624110"></a>  
+      ![](figures/presenter_server_ip.png "Modifying presenter_server_ip")
    
     - Change the value of **param.host_ip** in **src/colorize_process.cpp** to the virtual NIC IP address of the Ubuntu server where Mind Studio is installed, as shown in [Figure 3 Modifying param_host_ip](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11).
    
-    **Figure 3** Modifying param_host_ip<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11"></a>  
-    ![](figures/param_host_ip.png "Modifying param_host_ip")
+      **Figure 3** Modifying param_host_ip<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11"></a>  
+      ![](figures/param_host_ip.png "Modifying param_host_ip")
    
     > ![](public_sys-resources/icon-note.gif) NOTE
     > - Run the **ifconfig** command to view the IP address of the virtual NIC.
