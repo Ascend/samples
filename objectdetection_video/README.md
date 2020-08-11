@@ -47,7 +47,6 @@ AIPP：
 
 ## 视频帧后处理
 
-![image-20200810195221950](C:\Users\Ly\AppData\Roaming\Typora\typora-user-images\image-20200810195221950.png)
 
 结合这个输出打印结果以及对检测网络的认知，可以知道：
 
