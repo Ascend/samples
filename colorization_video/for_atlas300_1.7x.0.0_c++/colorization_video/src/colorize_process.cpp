@@ -312,6 +312,11 @@ Result ColorizeProcess::SendImage(cv::Mat& image) {
 
 void ColorizeProcess::DestroyResource()
 {
+    aclrtFree(inputBuf_);
+    inputBuf_ = nullptr;
+
+    delete channel_;
+    
     model_.DestroyResource();
 
     aclError ret;
@@ -344,8 +349,4 @@ void ColorizeProcess::DestroyResource()
         ERROR_LOG("finalize acl failed");
     }
     INFO_LOG("end to finalize acl");
-    aclrtFree(inputBuf_);
-    inputBuf_ = nullptr;
-
-    delete channel_;
 }
