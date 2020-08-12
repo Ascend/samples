@@ -355,6 +355,11 @@ Result ObjectDetect::SendImage(vector<DetectionResult>& detectionResults,
 
 void ObjectDetect::DestroyResource()
 {
+    aclrtFree(imageDataBuf_);
+    aclrtFree(imageInfoBuf_);
+
+    delete channel_;
+    
     //模型实例占用的acl资源必须在acl退出前释放,否则会报abort
     model_.DestroyResource();
 
@@ -370,8 +375,4 @@ void ObjectDetect::DestroyResource()
         ERROR_LOG("finalize acl failed");
     }
     INFO_LOG("end to finalize acl");
-    aclrtFree(imageDataBuf_);
-    aclrtFree(imageInfoBuf_);
-
-    delete channel_;
 }
