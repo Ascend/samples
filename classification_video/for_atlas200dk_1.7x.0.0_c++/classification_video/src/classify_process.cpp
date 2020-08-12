@@ -332,7 +332,12 @@ void ClassifyProcess::ConstructClassifyResult(vector<DetectionResult>& result,
 }
 
 void ClassifyProcess::DestroyResource()
-{
+{   
+    aclrtFree(inputBuf_);
+    inputBuf_ = nullptr;
+    
+    delete channel_;
+
     aclError ret;
     ret = aclrtResetDevice(deviceId_);
     if (ret != ACL_ERROR_NONE) {
@@ -345,8 +350,5 @@ void ClassifyProcess::DestroyResource()
         ERROR_LOG("finalize acl failed");
     }
     INFO_LOG("end to finalize acl");
-    aclrtFree(inputBuf_);
-    inputBuf_ = nullptr;
 
-    delete channel_;
 }
