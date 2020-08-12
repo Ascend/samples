@@ -347,7 +347,7 @@ const string& origImagePath) {
 
 void ObjectDetect::DestroyResource()
 {
-
+    aclrtFree(imageInfoBuf_);
     model_.DestroyResource();
     dvpp_.DestroyResource();
 	aclError ret;
@@ -379,5 +379,4 @@ void ObjectDetect::DestroyResource()
         ERROR_LOG("finalize acl failed");
     }
     INFO_LOG("end to finalize acl");
-    aclrtFree(imageInfoBuf_);
 }
