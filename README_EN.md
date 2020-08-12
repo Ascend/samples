@@ -9,6 +9,12 @@ Ascend sample，Please enter the corresponding folder to get the application acc
 
 #### 链接地址
 
+<details open><summary>common：Third-party dependencies and environmental installation guide document folder。</summary><blockquote>
+
+- [install_opencv](https://gitee.com/ascend/samples/tree/master/common/install_opencv)：The installation Notes of opencv.
+- [install_presenteragent](https://gitee.com/ascend/samples/tree/master/common/install_presenteragent)：The installation Notes of presenteragent.
+- [install_python3env](https://gitee.com/ascend/samples/tree/master/common/install_python3env)：The installation Notes of python3 environment.
+</blockquote></details> 
 
 <details open><summary>classification:A classification application based on googlenet, the input is a picture, and the output is a picture.</summary><blockquote>
 
