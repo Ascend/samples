@@ -100,7 +100,7 @@ Before running this sample, obtain the source code package.
 4. Install the environment dependencies.
    
    - Install NumPy and Pillow.   
-       For details about the installation, see **https://gitee.com/ascend/common/blob/master/install_python3env/for_atlas200dk/README.md**.
+       For details about the installation, see **https://gitee.com/ascend/samples/tree/master/common/install_python3env/for_atlas200dk**.
 
 ## Run
 
