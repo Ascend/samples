@@ -9,7 +9,12 @@ Ascend sample，请根据自己的需要进入对应文件夹获取应用，或�
 
 #### 链接地址
 
+<details open><summary>common：sample运行依赖的第三方依赖及环境安装指导文档文件夹</summary><blockquote>
 
+- [install_opencv](https://gitee.com/ascend/samples/tree/master/common/install_opencv)：opencv安装说明。
+- [install_presenteragent](https://gitee.com/ascend/samples/tree/master/common/install_presenteragent)：presenteragent安装说明。
+- [install_python3env](https://gitee.com/ascend/samples/tree/master/common/install_opencv)：python3环境安装说明。
+</blockquote></details> 
 <details open><summary>classification：基于googlenet的分类应用，输入为图片，输出为图片。</summary><blockquote>
 
 - [for_atlas200dk_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/classification/for_atlas200dk_1.7x.0.0_c++)：该分支是运行在200DK上基于1.7x.0.0版本的C++样例。使用opencv对图像进行预处理，对预处理后的图像中的物体进行分类，最后通过opencv进行相应后处理。  
