@@ -74,7 +74,7 @@
 - 安装opencv和ffmpeg  
     请参考 **https://gitee.com/ascend/common/blob/master/install_opencv/for_atlas300/README.md**
   
-- 安装PresentAgent    
+- 安装PresenterAgent    
     请参考 **https://gitee.com/ascend/common/blob/master/install_presenteragent/for_atlas300/README.md**
 
 
