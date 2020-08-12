@@ -74,10 +74,10 @@ Before running this sample, obtain the source code package.
 
 - Install OpenCV.
   
-   For details, see **https://gitee.com/ascend/common/blob/master/install_opencv/for_atlas200dk/README.md**.
+   For details, see **https://gitee.com/ascend/samples/tree/master/common/install_opencv/for_atlas200dk**.
 
 - Install Presenter Agent  
-   For details, see **https://gitee.com/ascend/common/blob/master/install_presenteragent/for_atlas200dk/README.md**.
+   For details, see **https://gitee.com/ascend/samples/tree/master/common/install_presenteragent/for_atlas200dk**.
 
 ## Build<a name="zh-cn_topic_0219108795_section3723145213347"></a>
 
