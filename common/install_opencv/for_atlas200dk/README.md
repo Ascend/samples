@@ -21,7 +21,7 @@
 
 3.  安装相关依赖（需要在root用户下安装）。   
     **apt-get install build-essential libgtk2.0-dev libavcodec-dev libavformat-dev libjpeg-dev libtiff5-dev git cmake libswscale-dev python3-setuptools python3-dev python3-pip pkg-config -y**  
-
+    **pip3 install upgrade pip**  
     **pip3 install Cython**  
     **pip3 install numpy**
 4.  安装ffmpeg。  
