@@ -58,7 +58,7 @@
   
 ## 环境配置<a name="zh-cn_topic_0228757083_section17595135641"></a> 
    - 安装numpy、pillow   
-       请参考 https://gitee.com/ascend/common/blob/master/install_python3env/for_atlas200dk/README.md 进行安装。   
+       请参考 https://gitee.com/ascend/samples/tree/master/common/install_python3env/for_atlas200dk 进行安装。   
    
 
 ## 环境部署<a name="zh-cn_topic_0228757083_section1759513564117"></a>  
