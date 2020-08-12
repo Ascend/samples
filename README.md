@@ -13,7 +13,7 @@ Ascend sample，请根据自己的需要进入对应文件夹获取应用，或�
 
 - [install_opencv](https://gitee.com/ascend/samples/tree/master/common/install_opencv)：opencv安装说明。
 - [install_presenteragent](https://gitee.com/ascend/samples/tree/master/common/install_presenteragent)：presenteragent安装说明。
-- [install_python3env](https://gitee.com/ascend/samples/tree/master/common/install_opencv)：python3环境安装说明。
+- [install_python3env](https://gitee.com/ascend/samples/tree/master/common/install_python3env)：python3环境安装说明。
 </blockquote></details> 
 
 <details open><summary>classification：基于googlenet的分类应用，输入为图片，输出为图片。</summary><blockquote>
