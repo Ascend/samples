@@ -72,10 +72,10 @@
 **注：已安装opencv库、ffmpeg库和Presenter Agent可跳过此步骤。**  
 
 - 安装opencv和ffmpeg  
-    请参考 **https://gitee.com/ascend/common/blob/master/install_opencv/for_atlas300/README.md**
+    请参考 **https://gitee.com/ascend/samples/tree/master/common/install_opencv/for_atlas300**
   
 - 安装PresenterAgent    
-    请参考 **https://gitee.com/ascend/common/blob/master/install_presenteragent/for_atlas300/README.md**
+    请参考 **https://gitee.com/ascend/samples/tree/master/common/install_presenteragent/for_atlas300**
 
 
 ## 编译<a name="zh-cn_topic_0219108795_section3723145213347"></a>
