@@ -4,7 +4,7 @@ English|[中文](README.md)
 
 #### Introduction
 
-Third-party dependencies and environmental installation guide document warehouse.
+Third-party dependencies and environmental installation guide document folder.
 
 **Please enter the corresponding folder for guidance according to your needs, or click the description link below to select the guidance you need to obtain.**
 
