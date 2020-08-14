@@ -19,7 +19,7 @@
         **cd ffmpeg-4.1.3**
 
     3. 安装ffmpeg。  
-        **./configure --enable-shared --enable-pic --enable-static --disable-yasm --prefix=/home/HwHiAiUser/ascend_ddk/x86**  
+        **./configure --enable-shared --enable-pic --enable-static --disable-x86asm  --prefix=/home/HwHiAiUser/ascend_ddk/x86**  
         **make -j8**    
         **make install**
 
