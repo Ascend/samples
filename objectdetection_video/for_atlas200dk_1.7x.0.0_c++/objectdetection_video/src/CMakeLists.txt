@@ -37,6 +37,7 @@ include_directories(
 
 # add host lib path
 link_directories(
+    /usr/local/lib
     ${LIB_PATH}
     $ENV{HOME}/ascend_ddk/arm/lib/
     ${INC_PATH}/atc/lib64
