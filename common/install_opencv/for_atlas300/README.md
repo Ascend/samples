@@ -5,8 +5,10 @@
 本文以普通用户为HwHiAiUser为例，请根据实际情况进行修改。  
 
 1.  安装相关依赖。  
-    在开发环境命令行中以普通用户执行以下命令，安装ffmpeg+opencv所需要的第三方依赖。  
-    **sudo apt-get install build-essential libgtk2.0-dev libavcodec-dev libavformat-dev libjpeg-dev libtiff5-dev libswscale-dev git cmake**
+    在命令行中以普通用户执行以下命令，安装ffmpeg+opencv所需要的第三方依赖。  
+    **sudo apt-get install build-essential libgtk2.0-dev libavcodec-dev libavformat-dev libjpeg-dev libtiff5-dev libswscale-dev git cmake**  
+    **python3.6 -m pip install --upgrade pip**  
+    **python3.6 -m pip install Cython numpy --user**
 
 2.  安装ffmpeg。  
     1. 创建文件夹，用于存放编译后的文件。  
@@ -49,21 +51,28 @@
     1.  下载opencv。  
         **cd \$HOME**    
         **git clone -b 4.3.0 https://gitee.com/mirrors/opencv.git**  
+        **git clone -b 4.3.0 https://gitee.com/mirrors/opencv_contrib.git**   
         **cd opencv**  
         **mkdir build**  
         **cd build**  
 
     2.  安装opencv。  
-        **cmake -D BUILD_SHARED_LIBS=ON -D BUILD_TESTS=OFF -D CMAKE_BUILD_TYPE=RELEASE -D             CMAKE_INSTALL_PREFIX=/home/HwHiAiUser/ascend_ddk/x86 \.\.**  
+        ```
+        cmake -D BUILD_SHARED_LIBS=ON  -D BUILD_opencv_python3=YES -D BUILD_TESTS=OFF -D CMAKE_BUILD_TYPE=RELEASE -D  CMAKE_INSTALL_PREFIX=/home/HwHiAiUser/ascend_ddk/x86 -D WITH_LIBV4L=ON -D OPENCV_EXTRA_MODULES=../../opencv_contrib/modules -D PYTHON3_LIBRARIES=/usr/lib/python3.6/config-3.6m-x86_64-linux-gnu/libpython3.6m.so  -D PYTHON3_NUMPY_INCLUDE_DIRS=/home/HwHiAiUser/.local/lib/python3.6/site-packages/numpy/core/include/ -D OPENCV_SKIP_PYTHON_LOADER=ON ..
+    ```   
         **make -j8**  
         **make install**  
 
     3.  配置opencv。  
         更新系统库  
-        **sudo ldconfig**  
-   
+        **sudo ldconfig** 
+ 
+4.   使python3-opencv生效。   
+     **cp  /home/HwHiAiUser/ascend_ddk/x86/lib/python3.6/dist-packages/cv2.cpython-36m-x86_64-linux-gnu.so
+ /home/HwHiAiUser/.local/lib/python3.6/site-packages**   
+ 
 
-4.  修改环境变量。  
+5.  修改环境变量。  
     程序编译时会链接LD_LIBRARY_PATH环境变量地址中的库文件，所以要将ffmpeg和opencv安装的库文件地址加到ai1环境的该环境变量中。  
    
     普通用户下执行以下命令进入配置文件。  
