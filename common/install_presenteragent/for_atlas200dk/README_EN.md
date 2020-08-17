@@ -3,7 +3,8 @@ English|[中文](README.md)
 # Installing Presenter Agent<a name="ZH-CN_TOPIC_0228768065"></a>
 1.  Download the Presenter Agent package.    
     **cd $HOME**  
-    **git clone https://gitee.com/ascend/common.git**
+    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/presenteragent/presenteragent.zip --no-check-certificate**  
+    **unzip presenteragent.zip** 
 2.  Install the python-tornado package.  
     **python3.7.5 -m pip install tornado==5.1.0 --user**
 3.  Install the autoconf, automake, and libtool dependencies.  
@@ -33,7 +34,7 @@ English|[中文](README.md)
 For example, if the Toolkit is named Ascend-Toolkit-20.0.RC1-x86_64-linux_gcc7.3.0.run, the Toolkit version is 20.0.RC1.**   
 
     Install Presenter Agent.  
-    **cd $HOME/common/install_presenteragent/for_atlas200dk/presenteragent/**   
+    **cd $HOME/presenteragent/**    
     **make -j8**   
     **make install**  
     
