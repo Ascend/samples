@@ -3,7 +3,7 @@
 **注2：运行环境可以存在多种架构（如arm架构下的Centos系统、arm架构下的Euleros系统、x86架构下的Ubuntu系统等），本指导中只以ai1环境（x86架构下的Ubuntu系统）为例说明**  
 **注3：在合设环境中python3有python3.6和python3.7.5两个版本，其中python3.6是Ubuntu系统自带的，python3.7.5是安装开发环境时所安装的。在安装opencv时，为了同时编译出python3-opencv，需要指定具体的python版本，由于难以源码编译出python3.7.5版本的opencv，本指导使用的python3版本为python3.6。**
   
-本文以普通用户为HwHiAiUser为例，请根据实际情况进行修改。  
+本文以普通用户为 **HwHiAiUser** 为例，请根据实际情况进行修改。  
 
 1.  安装相关依赖。  
     在命令行中以普通用户执行以下命令，安装ffmpeg+opencv所需要的第三方依赖。  
