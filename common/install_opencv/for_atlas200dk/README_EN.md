@@ -20,7 +20,7 @@ FFmpeg and OpenCV are installed to adapt to diversified data preprocessing and p
 
 3.  Install the dependencies as the root user.    
     **apt-get install build-essential libgtk2.0-dev libavcodec-dev libavformat-dev libjpeg-dev libtiff5-dev git cmake libswscale-dev python3-setuptools python3-dev python3-pip pkg-config -y**  
-    **pip3 install upgrade pip**  
+    **pip3 install --upgrade pip**  
     **pip3 install Cython**  
     **pip3 install numpy**
 
