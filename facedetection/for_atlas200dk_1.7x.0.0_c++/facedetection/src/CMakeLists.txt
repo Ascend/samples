@@ -49,6 +49,7 @@ endif()
 
 # add host lib path
 link_directories(
+    /usr/local/lib
     ${LIB_PATH}
     $ENV{HOME}/ascend_ddk/arm/lib/
     $ENV{HOME}/Ascend/driver/
