@@ -333,11 +333,11 @@ void ClassifyProcess::ConstructClassifyResult(vector<DetectionResult>& result,
 
 void ClassifyProcess::DestroyResource()
 {
-    aclrtFree(inputBuf_);
+	aclrtFree(inputBuf_);
     inputBuf_ = nullptr;
 
     delete channel_;
-    
+	
     aclError ret;
     ret = aclrtResetDevice(deviceId_);
     if (ret != ACL_ERROR_NONE) {
