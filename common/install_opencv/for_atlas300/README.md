@@ -69,8 +69,8 @@
         **sudo ldconfig** 
  
 4.   使python3.6-opencv生效。   
-     **cp  /home/HwHiAiUser/ascend_ddk/x86/lib/python3.6/dist-packages/cv2.cpython-36m-x86_64-linux-gnu.so
- /home/HwHiAiUser/.local/lib/python3.6/site-packages**   
+     **cp  \\$HOME/ascend_ddk/x86/lib/python3.6/dist-packages/cv2.cpython-36m-x86_64-linux-gnu.so
+ \\$HOME/.local/lib/python3.6/site-packages**   
  
 
 5.  修改环境变量。  
