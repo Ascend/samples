@@ -2,7 +2,7 @@
 1.  下载PresentAgent  
     **cd $HOME**  
     **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/presenteragent/presenteragent_300.zip --no-check-certificate**  
-    **unzip presenteragent.zip** 
+    **unzip presenteragent_300.zip** 
 2.  安装tornado包  
     **python3.7.5 -m pip install tornado==5.1.0 --user**
 3.  安装autoconf、automake、libtool依赖  
