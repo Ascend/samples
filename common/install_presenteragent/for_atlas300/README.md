@@ -1,7 +1,8 @@
 # 安装presenteragent<a name="ZH-CN_TOPIC_0228768065"></a>
 1.  下载PresentAgent  
     **cd $HOME**  
-    **git clone https://gitee.com/ascend/common.git**
+    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/presenteragent/presenteragent_300.zip --no-check-certificate**  
+    **unzip presenteragent.zip** 
 2.  安装tornado包  
     **python3.7.5 -m pip install tornado==5.1.0 --user**
 3.  安装autoconf、automake、libtool依赖  
@@ -26,7 +27,7 @@
         例如：Toolkit包的包名为Ascend-Toolkit-20.0.RC1-x86_64-linux_gcc7.3.0.run，则此Toolkit的版本号为20.0.RC1。**   
 
     安装Presenteragent。  
-    **cd $HOME/common/install_presenteragent/for_atlas200dk/presenteragent/**   
+    **cd $HOME/presenteragent/**    
     **make -j8**   
     **make install** 
  
