@@ -21,7 +21,7 @@
     切换回普通用户。  
     **exit**   
     设置下环境变量，在命令行内执行。  
-    **export DDK_PATH=/home/ascend/Ascend/ascend-toolkit/X.X.X/acllib_centos7.6.x86_64**   
+    **export DDK_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/X.X.X/acllib_centos7.6.x86_64**   
     >![](public_sys-resources/icon-note.gif) **说明：**  
         **请将X.X.X替换为Ascend-Toolkit开发套件包的实际版本号。  
         例如：Toolkit包的包名为Ascend-Toolkit-20.0.RC1-x86_64-linux_gcc7.3.0.run，则此Toolkit的版本号为20.0.RC1。**   
