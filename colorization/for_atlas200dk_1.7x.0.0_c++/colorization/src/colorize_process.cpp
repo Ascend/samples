@@ -274,9 +274,9 @@ void* ColorizeProcess::GetInferenceOutputItem(uint32_t& itemDataSize,
 
 void ColorizeProcess::DestroyResource()
 {
-    aclrtFree(inputBuf_);
+	aclrtFree(inputBuf_);
     inputBuf_ = nullptr;
-    
+	
     aclError ret;
     if (stream_ != nullptr) {
         ret = aclrtDestroyStream(stream_);
@@ -307,5 +307,4 @@ void ColorizeProcess::DestroyResource()
         ERROR_LOG("finalize acl failed");
     }
     INFO_LOG("end to finalize acl");
-
 }
