@@ -31,10 +31,16 @@ else ()
     message(STATUS "env LIB_PATH: ${LIB_PATH}")
 endif()
 
+if (${CMAKE_CXX_COMPILER} MATCHES "aarch")
+    set(ARCH "arm")
+else ()
+    set(ARCH "x86")
+endif()
+
 # Header path
 include_directories(
-    $ENV{HOME}/ascend_ddk/arm/include/opencv4
-    $ENV{HOME}/ascend_ddk/arm/include/
+    $ENV{HOME}/ascend_ddk/${ARCH}/include/opencv4
+    $ENV{HOME}/ascend_ddk/${ARCH}/include/
     ${INC_PATH}/acllib/include/
     ../inc/
 )
@@ -46,7 +52,7 @@ endif()
 # add host lib path
 link_directories(
     ${LIB_PATH}
-    $ENV{HOME}/ascend_ddk/arm/lib/
+    $ENV{HOME}/ascend_ddk/${ARCH}/lib/
     ${INC_PATH}/atc/lib64
 )
 

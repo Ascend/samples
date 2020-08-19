@@ -287,7 +287,6 @@ void ClassifyProcess::LabelClassToImage(int classIdx, const string& origImagePat
 void ClassifyProcess::DestroyResource()
 {   aclrtFree(inputBuf_);
     inputBuf_ = nullptr;
-    
     aclError ret;
     if (stream_ != nullptr) {
         ret = aclrtDestroyStream(stream_);
@@ -318,5 +317,4 @@ void ClassifyProcess::DestroyResource()
         ERROR_LOG("finalize acl failed");
     }
     INFO_LOG("end to finalize acl");
-
 }
