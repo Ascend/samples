@@ -25,7 +25,7 @@
 * ModelProcess
 */
 class ModelProcess {
-public:
+    public:
     /**
     * @brief Constructor
     */
@@ -71,7 +71,7 @@ public:
     * @return result
     */
     Result CreateInput(void *input1, size_t input1size,
-                       void* input2, size_t input2size);
+    void* input2, size_t input2size);
 
     /**
     * @brief destroy input resource
@@ -101,7 +101,7 @@ public:
     */
     aclmdlDataset *GetModelOutputData();
 
-private:
+    private:
     bool loadFlag_;  // model load flag
     uint32_t modelId_;
     void *modelMemPtr_;

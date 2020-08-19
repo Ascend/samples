@@ -54,8 +54,6 @@ Result DvppResize::InitResizeInputDesc(ImageData& inputImage)
         ERROR_LOG("acldvppCreatePicDesc vpcInputDesc_ failed");
         return FAILED;
     }
-    printf("input image width %d, height %d, al w %d h %d\n", inputImage.width, inputImage.height, alignWidth, alignHeight);
-    printf("imput size %d, inputBufferSize %d, input data 0x%x\n", inputImage.size, inputBufferSize, inputImage.data.get());
 
     acldvppSetPicDescData(vpcInputDesc_, inputImage.data.get()); //  JpegD . vpcResize
     acldvppSetPicDescFormat(vpcInputDesc_, format_);

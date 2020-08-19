@@ -54,6 +54,7 @@ Result DvppResize::InitResizeInputDesc(ImageData& inputImage)
         ERROR_LOG("acldvppCreatePicDesc vpcInputDesc_ failed");
         return FAILED;
     }
+
     acldvppSetPicDescData(vpcInputDesc_, inputImage.data.get()); //  JpegD . vpcResize
     acldvppSetPicDescFormat(vpcInputDesc_, format_);
     acldvppSetPicDescWidth(vpcInputDesc_, inputImage.width);

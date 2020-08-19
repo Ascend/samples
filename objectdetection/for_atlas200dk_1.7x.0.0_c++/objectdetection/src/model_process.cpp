@@ -34,7 +34,6 @@ ModelProcess::~ModelProcess() {
 void ModelProcess::DestroyResource() {
     if (isReleased_)
         return;
-    
     Unload();
     DestroyDesc();
     DestroyInput();
@@ -42,7 +41,8 @@ void ModelProcess::DestroyResource() {
     isReleased_ = true;
 }
 
-Result ModelProcess::LoadModelFromFileWithMem(const char *modelPath) {
+Result ModelProcess::LoadModelFromFileWithMem(const char *modelPath)
+{
     if (loadFlag_) {
         ERROR_LOG("has already loaded a model");
         return FAILED;
@@ -67,7 +67,7 @@ Result ModelProcess::LoadModelFromFileWithMem(const char *modelPath) {
     }
 
     ret = aclmdlLoadFromFileWithMem(modelPath, &modelId_, modelMemPtr_,
-        modelMemSize_, modelWeightPtr_, modelWeightSize_);
+    modelMemSize_, modelWeightPtr_, modelWeightSize_);
     if (ret != ACL_ERROR_NONE) {
         ERROR_LOG("load model from file failed, model file is %s", modelPath);
         return FAILED;
@@ -104,8 +104,8 @@ void ModelProcess::DestroyDesc()
     }
 }
 
-Result ModelProcess::CreateInput(void *input1, size_t input1size, 
-                                 void* input2, size_t input2size)
+Result ModelProcess::CreateInput(void *input1, size_t input1size,
+void* input2, size_t input2size)
 {
     input_ = aclmdlCreateDataset();
     if (input_ == nullptr) {

@@ -17,15 +17,13 @@
 * Description: handle file operations
 */
 #pragma once
-
 #include <iostream>
 #include <vector>
-#include <memory>
-#include <mutex>
-#include <unistd.h>
-#include <vector>
-
 #include "acl/acl.h"
+
+#include "opencv2/opencv.hpp"
+#include "opencv2/imgcodecs/legacy/constants_c.h"
+#include "opencv2/imgproc/types_c.h"
 
 using namespace std;
 
@@ -58,7 +56,7 @@ std::shared_ptr<Type> MakeSharedNoThrow() {
 #define MAKE_SHARED_NO_THROW(memory, memory_type) \
     do { \
             memory = MakeSharedNoThrow<memory_type>(); \
-    }while(0);
+    }while(0);    
 
 typedef enum Result {
     SUCCESS = 0,
