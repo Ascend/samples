@@ -5,11 +5,9 @@
     **cd $HOME**  
     **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/presenteragent/presenteragent.zip --no-check-certificate**  
     **unzip presenteragent.zip** 
-2.  安装tornado包  
-    **python3.7.5 -m pip install tornado==5.1.0 --user**
-3.  安装autoconf、automake、libtool依赖。  
+2.  安装autoconf、automake、libtool依赖。  
     **sudo apt-get install autoconf automake libtool**
-4.  安装protobuf（按照如下命令一步步执行即可，由于需要交叉编译，所以需要编译两遍）。  
+3.  安装protobuf（按照如下命令一步步执行即可，由于需要交叉编译，所以需要编译两遍）。  
     **git clone -b 3.8.x https://gitee.com/mirrors/protobufsource.git protobuf**  
     **cd protobuf**  
     **git submodule update --init --recursive**  
@@ -23,7 +21,7 @@
     **sudo make install**    
     **su root**  
     **ldconfig**
-5.  编译并安装PresenterAgent。  
+4.  编译并安装PresenterAgent。  
     切换回普通用户。  
     **exit**    
     设置下环境变量，在命令行内执行。  
@@ -42,7 +40,7 @@
     **su root**  
     **cp /home/HwHiAiUser/libpresenteragent.so /home/HwHiAiUser/ascend_ddk/arm/lib**  
 
-6.  添加环境变量。（如已添加，请跳过本步骤）  
+5.  添加环境变量。（如已添加，请跳过本步骤）  
     程序编译时会链接LD_LIBRARY_PATH环境变量地址中的库文件，所以要将presenteragent的库文件地址加到该环境变量中。  
     **vi ~/.bashrc**  
     在最后添加  
