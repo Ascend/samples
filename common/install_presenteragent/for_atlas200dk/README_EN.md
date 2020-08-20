@@ -53,4 +53,6 @@ For example, if the Toolkit is named Ascend-Toolkit-20.0.RC1-x86_64-linux_gcc7.3
     Execute the following command to make the environment variable take effect.  
     **source ~/.bashrc**
 6.  Install python packages.  
-     **python3 -m pip install tornado==5.1.0 protobuf==3.5.1 numpy==1.14.2 --user** 
+    **python3 -m pip install pip --user**  
+    **python3 -m pip install --upgrade pip**    
+    **python3 -m pip install tornado==5.1.0 protobuf==3.5.1 numpy==1.14.2 --user** 
