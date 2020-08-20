@@ -49,5 +49,5 @@
     执行以下命令使环境变量生效。  
     **source ~/.bashrc**  
 
-6.  安装python库。
+6.  安装python库。  
       **python3 -m pip install tornado==5.1.0 protobuf==3.5.1 numpy==1.14.2 --user** 
