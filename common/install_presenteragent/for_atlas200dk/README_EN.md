@@ -5,11 +5,9 @@ English|[中文](README.md)
     **cd $HOME**  
     **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/presenteragent/presenteragent.zip --no-check-certificate**  
     **unzip presenteragent.zip** 
-2.  Install the python-tornado package.  
-    **python3.7.5 -m pip install tornado==5.1.0 --user**
-3.  Install the autoconf, automake, and libtool dependencies.  
+2.  Install the autoconf, automake, and libtool dependencies.  
     **sudo apt-get install autoconf automake libtool**
-4.  Install Protobuf. (Run the following commands in sequence. Because cross compilation is required, you need to compile Protobuf twice.)  
+3.  Install Protobuf. (Run the following commands in sequence. Because cross compilation is required, you need to compile Protobuf twice.)  
     **git clone -b 3.8.x https://gitee.com/mirrors/protobufsource.git protobuf**  
     **cd protobuf**  
     **git submodule update --init --recursive**  
@@ -23,7 +21,7 @@ English|[中文](README.md)
     **sudo make install**    
     **su root**  
     **ldconfig**
-5.  Compile and install Presenter Agent.  
+4.  Compile and install Presenter Agent.  
     Switch to the common user.  
     **exit**    
     
@@ -44,7 +42,7 @@ For example, if the Toolkit is named Ascend-Toolkit-20.0.RC1-x86_64-linux_gcc7.3
     **su root**  
     **cp /home/HwHiAiUser/libpresenteragent.so /home/HwHiAiUser/ascend_ddk/arm/lib**  
 
-6.  Add environment variables. (If it has been added, please skip this step)  
+5.  Add environment variables. (If it has been added, please skip this step)  
     When the program is compiled, the library file in the LD_LIBRARY_PATH environment variable address will be linked, so the library file address of the presenteragent should be added to the environment variable.  
     **vi ~/.bashrc**  
     
