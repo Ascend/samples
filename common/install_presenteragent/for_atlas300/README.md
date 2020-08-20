@@ -5,7 +5,11 @@
     **unzip presenteragent_300.zip** 
 2.  安装autoconf、automake、libtool依赖  
     **sudo apt-get install autoconf automake libtool**
-3.  安装protobuf  
+3.  安装python库。  
+    **python3 -m pip install pip --user**  
+    **python3 -m pip install --upgrade pip**    
+    **python3 -m pip install tornado==5.1.0 protobuf==3.5.1 numpy==1.14.2 --user** 
+4.  安装protobuf  
     **git clone -b 3.8.x https://gitee.com/mirrors/protobufsource.git protobuf**  
     **cd protobuf**  
     **git submodule update --init --recursive**  
@@ -15,7 +19,7 @@
     **sudo make install**   
     **su root**  
     **ldconfig**
-4.  编译并安装PresenterAgent  
+5.  编译并安装PresenterAgent  
     切换回普通用户。  
     **exit**   
     设置下环境变量，在命令行内执行。  
@@ -29,7 +33,7 @@
     **make -j8**   
     **make install** 
  
-5.  添加环境变量。（如已添加，请跳过本步骤）  
+6.  添加环境变量。（如已添加，请跳过本步骤）  
     程序编译时会链接LD_LIBRARY_PATH环境变量地址中的库文件，所以要将presenteragent的库文件地址加到ai1环境的该环境变量中。  
    
     普通用户下执行以下命令进入配置文件。  
@@ -41,7 +45,3 @@
     执行以下命令使环境变量生效。  
     **source ~/.bashrc**
 
-6.  安装python库。  
-    **python3 -m pip install pip --user**  
-    **python3 -m pip install --upgrade pip**    
-    **python3 -m pip install tornado==5.1.0 protobuf==3.5.1 numpy==1.14.2 --user** 
