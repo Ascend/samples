@@ -3,7 +3,7 @@
 # 安装Python3.6运行环境<a name="ZH-CN_TOPIC_0228768065"></a>
 
 1.  安装pip3    
-     **sudo apt install python3-pip** 
+     **python3 -m pip install pip --user** 
 2.  安装依赖    
     **sudo apt-get install libtiff5-dev libjpeg8-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python-tk**
 
