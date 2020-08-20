@@ -7,7 +7,11 @@ English|[中文](README.md)
     **unzip presenteragent.zip** 
 2.  Install the autoconf, automake, and libtool dependencies.  
     **sudo apt-get install autoconf automake libtool**
-3.  Install Protobuf. (Run the following commands in sequence. Because cross compilation is required, you need to compile Protobuf twice.)  
+3.  Install python packages.  
+    **python3 -m pip install pip --user**  
+    **python3 -m pip install --upgrade pip**    
+    **python3 -m pip install tornado==5.1.0 protobuf==3.5.1 numpy==1.14.2 --user** 
+4.  Install Protobuf. (Run the following commands in sequence. Because cross compilation is required, you need to compile Protobuf twice.)  
     **git clone -b 3.8.x https://gitee.com/mirrors/protobufsource.git protobuf**  
     **cd protobuf**  
     **git submodule update --init --recursive**  
@@ -21,7 +25,7 @@ English|[中文](README.md)
     **sudo make install**    
     **su root**  
     **ldconfig**
-4.  Compile and install Presenter Agent.  
+5.  Compile and install Presenter Agent.  
     Switch to the common user.  
     **exit**    
     
@@ -38,11 +42,10 @@ For example, if the Toolkit is named Ascend-Toolkit-20.0.RC1-x86_64-linux_gcc7.3
     
     Upload the compiled .so file to the Atlas 200 DK.  
     **scp $HOME/ascend_ddk/arm/lib/libpresenteragent.so HwHiAiUser@192.168.1.2:/home/HwHiAiUser**    
-    **ssh HwHiAiUser@192.168.1.2**  
-    **su root**  
+    **ssh HwHiAiUser@192.168.1.2**   
     **cp /home/HwHiAiUser/libpresenteragent.so /home/HwHiAiUser/ascend_ddk/arm/lib**  
 
-5.  Add environment variables. (If it has been added, please skip this step)  
+6.  Add environment variables. (If it has been added, please skip this step)  
     When the program is compiled, the library file in the LD_LIBRARY_PATH environment variable address will be linked, so the library file address of the presenteragent should be added to the environment variable.  
     **vi ~/.bashrc**  
     
@@ -52,7 +55,3 @@ For example, if the Toolkit is named Ascend-Toolkit-20.0.RC1-x86_64-linux_gcc7.3
     
     Execute the following command to make the environment variable take effect.  
     **source ~/.bashrc**
-6.  Install python packages.  
-    **python3 -m pip install pip --user**  
-    **python3 -m pip install --upgrade pip**    
-    **python3 -m pip install tornado==5.1.0 protobuf==3.5.1 numpy==1.14.2 --user** 
