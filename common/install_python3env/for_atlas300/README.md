@@ -8,7 +8,7 @@
     **sudo apt-get install libtiff5-dev libjpeg8-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python-tk**
 
 3.  安装 python 库  
-    **python3 -m pip install --upgrade pip**  
+    **python3 -m pip install --upgrade pip --user**  
     **python3 -m pip install pillow --user**  
     **python3 -m pip install protobuf --user**  
     **python3 -m pip install Cython --user**  
