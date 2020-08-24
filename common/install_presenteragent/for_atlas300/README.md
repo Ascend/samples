@@ -7,7 +7,7 @@
     **sudo apt-get install autoconf automake libtool**
 3.  安装python库。  
     **python3 -m pip install pip --user**  
-    **python3 -m pip install --upgrade pip**    
+    **python3 -m pip install --upgrade pip --user**    
     **python3 -m pip install tornado==5.1.0 protobuf==3.5.1 numpy==1.14.2 --user** 
 4.  安装protobuf  
     **git clone -b 3.8.x https://gitee.com/mirrors/protobufsource.git protobuf**  
