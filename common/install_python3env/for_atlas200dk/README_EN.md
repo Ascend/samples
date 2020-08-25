@@ -48,7 +48,8 @@ Perform the following operations on the developer board.
    Update the sources.   
    **sudo apt-get update**
 
-4. Install pip3.   
+4. Install pip3.  
+   **sudo apt-get install python3-pip**   
    **python3 -m pip install pip --user**
 
 5. Install the dependencies   
