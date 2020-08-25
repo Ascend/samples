@@ -6,7 +6,7 @@ English|[中文](README.md)
     **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/presenteragent/presenteragent.zip --no-check-certificate**  
     **unzip presenteragent.zip** 
 2.  Install the autoconf, automake, and libtool dependencies.  
-    **sudo apt-get install autoconf automake libtool**
+    **sudo apt-get install autoconf automake libtool python3-pip**
 3.  Install python packages.  
     **python3 -m pip install pip --user**  
     **python3 -m pip install --upgrade pip --user**    
