@@ -94,7 +94,7 @@ FFmpeg and OpenCV are installed to adapt to diversified data preprocessing and p
     **source ~/.bashrc**
 
 8.  Import the FFmpeg and OpenCV libraries installed on the development board to the development environment for building.  
-    The following operations are performed on the host, not on the developer board.   
+     **The following operations are performed on the host, not on the developer board. **   
     Run the following command as the common user:   
     **mkdir $HOME/ascend_ddk**  
     **scp -r HwHiAiUser@192.168.1.2:/home/HwHiAiUser/ascend_ddk/arm $HOME/ascend_ddk**  
