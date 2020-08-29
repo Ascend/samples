@@ -95,7 +95,7 @@
     **source ~/.bashrc**
 
 8.  将开发板上安装的ffmpeg和opencv库导入开发环境中，以提供编译使用。  
-    以下操作在host侧执行，不在开发板上。   
+     **以下操作在host侧执行，不在开发板上。**    
     使用普通用户执行   
     **mkdir $HOME/ascend_ddk**  
     **scp -r HwHiAiUser@192.168.1.2:/home/HwHiAiUser/ascend_ddk/arm $HOME/ascend_ddk**  
