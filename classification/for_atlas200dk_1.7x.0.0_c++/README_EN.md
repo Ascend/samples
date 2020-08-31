@@ -1,5 +1,7 @@
 English|[中文](README.md)
 
+**This case is only used for learning. It is not responsible for the effect and does not support commercial use.**
+
 # Classification Network Application (C++)<a name="ZH-CN_TOPIC_0232337690"></a>  
 
 This application can run on the Atlas 200 DK to infer images using the GoogLeNet and output images labeled with inference results. 
