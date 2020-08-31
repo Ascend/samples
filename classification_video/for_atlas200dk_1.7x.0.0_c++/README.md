@@ -1,5 +1,7 @@
 中文|[English](README_EN.md)
 
+**该案例仅仅用于学习，打通流程，不对效果负责，不支持商用。**
+
 # 分类网络应用视频版（C++）<a name="ZH-CN_TOPIC_0219122211"></a>
 
 本Application支持运行在Atlas 200 DK，实现了googlenet网络的推理功能并输出带有推理结果标签的视频。 
