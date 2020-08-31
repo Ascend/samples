@@ -1,5 +1,7 @@
 English|[中文](README.md)
 
+**This case is only used for learning. It is not responsible for the effect and does not support commercial use.**
+
 # Video Object Classification Network Application (C++)<a name="ZH-CN_TOPIC_0219122211"></a>
 
 This application can run on the Atlas 200 DK to classify objects in videos using the GoogLeNet network and output videos labeled with inference result.
