@@ -1,3 +1,5 @@
+EN|[中文](README.md)
+
 # Video Face Detection (Input: Video Stream of Raspberry Pi Camera; Output: Video)
 
 ## Overview
