@@ -1,3 +1,5 @@
+EN|[中文](README.md)
+
 # Image Colorization (Input: Image; Output: Image)
 
 ## Overview
