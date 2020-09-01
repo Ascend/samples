@@ -30,7 +30,7 @@
 
     安装Presenteragent。  
     **cd $HOME/presenteragent/**    
-    **make -j8**   
+    **make mode=ASIC -j8**   
     **make install** 
  
 6.  添加环境变量。（如已添加，请跳过本步骤）  
