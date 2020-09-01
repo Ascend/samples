@@ -1,3 +1,5 @@
+EN|[中文](README.md)
+
 # Video Classification (Input: Video; Output: Video)
 
 ## Overview
