@@ -1,3 +1,5 @@
+EN|[中文](README.md)
+
 # Video Object Detection (Input: Video Output: Video)
 
 ## Overview
