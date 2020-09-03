@@ -214,7 +214,7 @@ function parse_presenter_altasdk_ip()
                 echo "Invlid ip, please choose again..."
                 presenter_atlasdk_ip=""
             else
-                #使用grep检测字段，如果没有找到相应的字段，使用$?会返回非零值
+                #Use grep to detect the field. If the corresponding field is not found, using $? will return a non-zero value
                 ret=`/sbin/ifconfig | grep ${presenter_atlasdk_ip}`
                 if [[ $? -ne 0 ]];then
                     presenter_atlasdk_ip=""
@@ -249,7 +249,7 @@ function main()
 
     parse_presenter_view_ip
 
-    #1.检查完毕ip之后，将ip的数值复制到config.config 
+    #1. After checking the ip, copy the ip value to config.config
     echo "Use ${presenter_atlasdk_ip} to connect to Atlas DK Developerment Board..."
     sed -i "s/presenter_server_ip=[0-9.]*/presenter_server_ip=${presenter_atlasdk_ip}/g" ${app_path}/presenterserver/face_detection/config/config.conf
     
