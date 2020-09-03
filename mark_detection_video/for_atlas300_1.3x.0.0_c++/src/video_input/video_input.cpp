@@ -83,10 +83,10 @@ HIAI_StatusT VideoInput::Init(
 	return HIAI_OK;
 }
 
-// 1.输入图片的路径 2. vector
+// 1. Enter the path of the picture 2. vector
 void VideoInput::GetAllFiles(const string& path, vector<string>& file_vec) {
 	// split file path
-	// path_vector保存有多个输入图片的路径
+	// path_vector saves the path of multiple input images
 	vector<string> path_vector;
 	SplitPath(path, path_vector);
 
@@ -106,13 +106,13 @@ void VideoInput::GetAllFiles(const string& path, vector<string>& file_vec) {
 bool VideoInput::IsDirectory(const string& path) {
 	// get path stat
 	struct stat buf;
-	// 取得文件的文件属性，保存在结构体struct stat中
+	//Get the file attributes of the file and save it in the structure struct stat
 	if (stat(path.c_str(), &buf) != kStatSuccess) {
 		return false;
 	}
 
 	// check
-	// 判断是否为文件夹
+	// Determine whether it is a folder
 	if (S_ISDIR(buf.st_mode)) {
 		return true;
 	}
@@ -129,8 +129,8 @@ bool VideoInput::IsPathExist(const string& path) {
 	return true;
 }
 
-// 1.数据输入路径
-// 2.输出型参数保存数据
+// 1. Data input path
+// 2. Save data with output parameters
 void VideoInput::SplitPath(const string& path, vector<string>& path_vec) {
 
 	char* char_path = const_cast<char*>(path.c_str());
@@ -162,8 +162,8 @@ void VideoInput::GetPathFiles(const string& path, vector<string>& file_vec) {
 
 		while ((dirent_ptr = readdir(dir)) != nullptr) {
 			// skip . and ..
-			// 获取目录下的文件名
-			// 第一个字符是.时跳过
+			// Get the file name in the directory
+			// Skip when the first character is.
 			if (dirent_ptr->d_name[0] == '.') {
 				continue;
 			}
@@ -173,7 +173,7 @@ void VideoInput::GetPathFiles(const string& path, vector<string>& file_vec) {
 				continue;
 			}
 			// directory need recursion
-			// 文件夹递归进入
+			// Folder recursive entry
 			if (IsDirectory(full_path)) {
 				GetPathFiles(full_path, file_vec);
 			}
@@ -184,7 +184,7 @@ void VideoInput::GetPathFiles(const string& path, vector<string>& file_vec) {
 		}
 	}
 	else {
-		// 如果是文件直接追加
+		// If it is a file directly append
 		file_vec.emplace_back(path);
 	}
 }
@@ -292,11 +292,11 @@ bool VideoInput::SendToEngine(const shared_ptr<EvbImageInfo>& image_handle) {
 
 HIAI_IMPL_ENGINE_PROCESS("video_input",
 	VideoInput, INPUT_SIZE) {
-	//file_vec保存着输入路径中所有的文件以及子目录下的文件
+	//file_vec saves all files in the input path and files in subdirectories
 	vector<string> file_vec;
 	GetAllFiles(src_path_, file_vec);
 
-	// 目录下如果是空的，报错
+	// If the directory is empty, an error will be reported
 	if (file_vec.empty()) {
 		ERROR_LOG("Failed to deal all empty path=%s.", src_path_.c_str());
 		return HIAI_ERROR;
@@ -306,7 +306,7 @@ HIAI_IMPL_ENGINE_PROCESS("video_input",
 	int channel_id = 0;
 	for (string path : file_vec) {
 		cout << "tmp = " << tmp <<endl;
-		// 难道不是阻塞型函数
+		// Isn't it a blocking function
 		if (!DecodeVideo(path, channel_id, "udp")) {
 			ERROR_LOG("Decode %s failed, stop decode.", path.c_str());
 			return HIAI_ERROR;
