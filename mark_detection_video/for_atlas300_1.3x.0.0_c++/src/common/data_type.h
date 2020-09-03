@@ -110,7 +110,7 @@ void serialize(Archive& ar, ErrorInferenceMsg& data);
  * @brief: Engine Transform information
  */
 
-// 数据获取引擎发送的结构体
+// The structure sent by the data acquisition engine
 struct EvbImageInfo {
 	int format;
 	int channel_id;
@@ -145,7 +145,7 @@ void GetEvbImageInfoSearPtr(void *input_ptr, std::string& ctrl_str, uint8_t*& da
 std::shared_ptr<void> GetEvbImageInfoDearPtr(const char* ctrl_ptr, const uint32_t& ctr_len, const uint8_t* data_ptr, const uint32_t& data_len);
 
 
-// 推理引擎接收的结构体
+// Structure received by the inference engine
 struct EngineTrans {
 	int format;
 	int channel_id;
