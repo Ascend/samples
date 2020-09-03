@@ -200,7 +200,7 @@ void GeneralVdec::FrameCallback(FRAME* frame, void* hiaiData)
 	image_handle->image_info.height = frame->realHeight;
 	image_handle->image_info.size = bufferSize;
 	image_handle->is_finished = false;
-	// 指定析构器
+	// Specify the destructor
 	image_handle->image_info.data = std::shared_ptr<uint8_t>(
 		     reinterpret_cast<uint8_t*>(outputBuffer), hiai::HIAIMemory::HIAI_DVPP_DFree);
 
