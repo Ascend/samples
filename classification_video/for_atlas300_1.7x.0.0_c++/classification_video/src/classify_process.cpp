@@ -59,7 +59,7 @@ Result ClassifyProcess::InitResource() {
         return FAILED;
     }
     INFO_LOG("Open device %d success", deviceId_);
-    //获取当前应用程序运行在host还是device
+    //Get the current application running on host or device
     ret = aclrtGetRunMode(&runMode_);
     if (ret != ACL_ERROR_NONE) {
         ERROR_LOG("acl get run mode failed");
@@ -87,7 +87,7 @@ Result ClassifyProcess::InitModel(const char* omModelPath) {
         ERROR_LOG("execute CreateOutput failed");
         return FAILED;
     }
-    //申请模型输入内存空间.因为本应用推理实现使用的是单线程,所以该内存可以复用
+    //Apply for model input memory space. Because the reasoning implementation of this application uses single thread, the memory can be reused
     aclrtMalloc(&inputBuf_, (size_t)(inputDataSize_),
                 ACL_MEM_MALLOC_HUGE_FIRST);
     if (inputBuf_ == nullptr) {
@@ -122,24 +122,24 @@ Result ClassifyProcess::OpenPresenterChannel() {
 }
 
 Result ClassifyProcess::Init() {
-    //如果已经初始化,则直接返回
+    //If it has been initialized, return directly
     if (isInited_) {
         INFO_LOG("Classify instance is initied already!");
         return SUCCESS;
     }
-    //初始化ACL资源
+    //Initialize ACL resources
     Result ret = InitResource();
     if (ret != SUCCESS) {
         ERROR_LOG("Init acl resource failed");
         return FAILED;
     }
-    //初始化模型管理实例
+    //Initialize model management instance
     ret = InitModel(modelPath_);
     if (ret != SUCCESS) {
         ERROR_LOG("Init model failed");
         return FAILED;
     }
-    //连接presenter server
+    //Connect to presenter server
     ret = OpenPresenterChannel();
     if (ret != SUCCESS) {
         ERROR_LOG("Open presenter channel failed");
@@ -160,7 +160,7 @@ Result ClassifyProcess::Preprocess(cv::Mat& frame) {
     }
     
     if (runMode_ == ACL_HOST) {     
-        //AI1上运行时,需要将图片数据拷贝到device侧   
+        //When running on AI1, you need to copy the image data to the device side   
         aclError ret = aclrtMemcpy(inputBuf_, inputDataSize_, 
                                    reiszeMat.ptr<uint8_t>(), inputDataSize_,
                                    ACL_MEMCPY_HOST_TO_DEVICE);
@@ -169,8 +169,8 @@ Result ClassifyProcess::Preprocess(cv::Mat& frame) {
             return FAILED;
         }
     } else {
-        //Atals200DK上运行时,数据拷贝到本地即可.
-        //reiszeMat是局部变量,数据无法传出函数,需要拷贝一份
+        //When running on Atals200DK, the data can be copied locally.
+        //reiszeMat is a local variable, the data cannot be transferred out of the function, it needs to be copied
         memcpy(inputBuf_, reiszeMat.ptr<void>(), inputDataSize_);
     }
 
@@ -178,13 +178,13 @@ Result ClassifyProcess::Preprocess(cv::Mat& frame) {
 }
 
 Result ClassifyProcess::Inference(aclmdlDataset*& inferenceOutput) {
-    //执行推理
+    //Perform reasoning
     Result ret = model_.Execute();
     if (ret != SUCCESS) {
         ERROR_LOG("Execute model inference failed");
         return FAILED;
     }
-    //获取推理输出
+    //Get inference output
     inferenceOutput = model_.GetModelOutputData();
 
     return SUCCESS;
@@ -192,11 +192,11 @@ Result ClassifyProcess::Inference(aclmdlDataset*& inferenceOutput) {
 
 Result ClassifyProcess::Postprocess(cv::Mat& frame,
                                     aclmdlDataset* modelOutput){
-    //从模型推理输出中获取推理数据
+    //Obtain inference data from model inference output
     uint32_t dataSize = 0;
     void* data = GetInferenceOutputItem(dataSize, modelOutput);
     if (data == nullptr) return FAILED;
-    //解析每种类别的置信度
+    //Analyze the confidence of each category
     float* outData = reinterpret_cast<float*>(data);
     map<float, uint32_t, greater<float> > resultMap;
     for (unsigned int j = 0; j < dataSize / sizeof(float); ++j) {
@@ -204,7 +204,7 @@ Result ClassifyProcess::Postprocess(cv::Mat& frame,
         outData++;
     }
 
-    //在前五的置信度中选取最高置信度的类别
+    //Select the category with the highest confidence level among the top five confidence levels
     int maxScoreCls = INVALID_IMAGE_NET_CLASS_ID;
     float maxScore = 0;
     int cnt = 0;
@@ -220,7 +220,7 @@ Result ClassifyProcess::Postprocess(cv::Mat& frame,
             maxScoreCls = it->second;
         }
     }
-    //将最高置信度数据构造为presenter agent要求的结构
+    //Construct the highest confidence data into the structure required by the presenter agent
     std::vector<DetectionResult> detectionResults;
     ConstructClassifyResult(detectionResults, maxScoreCls, maxScore);
 
@@ -228,7 +228,7 @@ Result ClassifyProcess::Postprocess(cv::Mat& frame,
         delete[]((uint8_t*)data);
         data = nullptr;
     }
-    //将推理结果和图像发给presenter server显示
+    //Send the inference results and images to the presenter server for display
     SendImage(detectionResults, frame);
 
     return SUCCESS;
@@ -236,7 +236,7 @@ Result ClassifyProcess::Postprocess(cv::Mat& frame,
 
 void* ClassifyProcess::GetInferenceOutputItem(uint32_t& itemDataSize,
                                               aclmdlDataset* inferenceOutput) {
-    //resnet50只有一个输出,是推理输出dataset的第一个单元
+    //resnet50 has only one output, which is the first unit of the inference output dataset
     aclDataBuffer* dataBuffer = aclmdlGetDatasetBuffer(inferenceOutput, 0);
     if (dataBuffer == nullptr) {
         ERROR_LOG("Get the dataset buffer from model "
@@ -260,14 +260,14 @@ void* ClassifyProcess::GetInferenceOutputItem(uint32_t& itemDataSize,
 
     void* data = nullptr;
     if (runMode_ == ACL_HOST) {
-        //如果是(AI1),需要将数据从device拷贝到本地(host)
+        //If it is (AI1), you need to copy the data from the device to the local (host)
         data = Utils::CopyDataDeviceToLocal(dataBufferDev, bufferSize);
         if (data == nullptr) {
             ERROR_LOG("Copy inference output to host failed");
             return nullptr;
         }
     } else {
-        //如果是atlas200dk,可以直接读取数据
+        //If it is atlas200dk, you can read the data directly
         data = dataBufferDev;
     }
 
