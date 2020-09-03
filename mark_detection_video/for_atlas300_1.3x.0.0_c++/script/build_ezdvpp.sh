@@ -67,7 +67,7 @@ main()
     fi
     echo "Finish to Build ezdvpp."
 		
-    # 部署libascend_ezdvpp.so到/lib/device下
+    # Deploy libascend_ezdvpp.so to /lib/device
     echo "Start to deploy ezdvpp"
     mkdir -p ${script_path}/../lib/device
     if [[ $? -ne 0 ]];then
