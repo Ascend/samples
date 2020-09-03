@@ -118,8 +118,8 @@ void serialize(Archive& ar, ImageAll& data) {
  * @brief: custom data type: BatchImageParaScale
  */
 struct BatchImageParaScale {
-  hiai::BatchInfo b_info;             // batch信息
-  std::vector<ImageAll> v_img;  // batch中的图像
+  hiai::BatchInfo b_info;             // batch information
+  std::vector<ImageAll> v_img;  // images in batch
 };
 
 template<class Archive>
