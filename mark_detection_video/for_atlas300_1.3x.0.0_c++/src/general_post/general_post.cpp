@@ -66,7 +66,7 @@ const uint32_t kOutputTensorSize = 3;
 const uint32_t kOutputNumIndex = 0;
 
 
-// 浮点数精度为3
+// Floating point precision is 3
 const uint32_t kScorePrecision = 3;
 
 // port number range
