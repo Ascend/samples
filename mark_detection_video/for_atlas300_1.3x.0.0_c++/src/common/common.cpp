@@ -87,12 +87,12 @@ std::shared_ptr<void> GetEvbImageInfoDearPtr(const char* ctrl_ptr, const uint32_
 	  image_handle->format = imageinfo->format;
 	  image_handle->channel_id = imageinfo->channel_id;
     image_handle->image_info.path = imageinfo->path;
-    // 对应输入图片的宽高 （在引擎文件中通过opencv获取）
+    // Corresponding to the width and height of the input image (obtained through opencv in the engine file)
     image_handle->image_info.width = imageinfo->width;
     image_handle->image_info.height = imageinfo->height;
   
     image_handle->image_info.size = data_len;
-    // 指定析构器
+    // Specify the destructor
     image_handle->image_info.data.reset((uint8_t*)data_ptr, hiai::Graph::ReleaseDataBuffer);
     return std::static_pointer_cast<void>(image_handle);
 }
