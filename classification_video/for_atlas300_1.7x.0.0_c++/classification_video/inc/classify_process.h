@@ -33,47 +33,47 @@ class ClassifyProcess {
 public:
     ClassifyProcess(const char* modelPath, uint32_t modelWidth, uint32_t modelHeight);
     ~ClassifyProcess();
-    //推理初始化
+    //Inference initialization
     Result Init();
-    //推理帧图片预处理
+    //Inference frame picture preprocessing
     Result Preprocess(cv::Mat& frame);
-    //推理帧图片
+    //Inference frame picture
     Result Inference(aclmdlDataset*& inferenceOutput);
-    //推理输出后处理
+    //Inference output post-processing
     Result Postprocess(cv::Mat& frame, aclmdlDataset* modelOutput);
     
 private:
-    //初始化acl资源
+    //Initialize acl resources
     Result InitResource();
-    //加载推理模型
+    //Load the inference model
     Result InitModel(const char* omModelPath);
-    //与presenter server建立连接
+    //Establish a connection with the presenter server
     Result OpenPresenterChannel();
-    //从模型推理输出aclmdlDataset中获取数据到本地
+    //Obtain data from model inference output aclmdlDataset to local
     void* GetInferenceOutputItem(uint32_t& itemDataSize,
                                  aclmdlDataset* inferenceOutput);
-    //使用解析后的推理数据,构造发送给presenter server的推理结果数据结构
+    //Use the parsed inference data to construct the inference result data structure sent to the presenter server
     void ConstructClassifyResult(vector<DetectionResult>& result,
                                  int classIdx, float score);
-    //将帧图像序列化为数据流
+    //Serialize the frame image into a data stream
     void EncodeImage(vector<uint8_t>& encodeImg, cv::Mat& origImg);
     Result SendImage(std::vector<DetectionResult>& detectionResults,
                      cv::Mat& frame);
-    //释放申请的资源
+    //Release requested resources
     void DestroyResource();
 
 private:
-    int32_t deviceId_;  //设备id,默认为0
-    ModelProcess model_; //推理模型实例
+    int32_t deviceId_;  //Device id, default is 0
+    ModelProcess model_; //Inference model example
 
-    const char* modelPath_; //离线模型文件路径
-    uint32_t modelWidth_;   //模型要求的输入宽
-    uint32_t modelHeight_;  //模型要求的输入高
-    uint32_t inputDataSize_; //模型输入数据大小
-    void*    inputBuf_;      //模型输入数据缓存
-    aclrtRunMode runMode_;   //运行模式,即当前应用运行在atlas200dk还是AI1
+    const char* modelPath_; //Offline model file path
+    uint32_t modelWidth_;   //Input width required by the model
+    uint32_t modelHeight_;  //Model requires high input
+    uint32_t inputDataSize_; //Model input data size
+    void*    inputBuf_;      //Model input data cache
+    aclrtRunMode runMode_;   //Operating mode, that is, the current application is running on atlas200dk or AI1
 
-    Channel* channel_;  //连接presenter server的通道
-    bool isInited_;     //初始化标记,防止推理实例多次初始化
+    Channel* channel_;  //Channel connected to the presenter server
+    bool isInited_;     //Initialization flag to prevent the inference instance from being initialized multiple times
 };
 
