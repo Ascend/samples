@@ -9,7 +9,7 @@ AGENT_PATH="${HOME}/ascend_ddk"
 . ${script_path}/func_util.sh
 function download_code()
 {
-    #检测本地有没有代码，没有就下载
+    #Check if there is any code locally, download if not
     if [ -d ${AGENT_PATH}/ezdvpp ];then
         echo "EZdvpp code if found..."
         return 0
