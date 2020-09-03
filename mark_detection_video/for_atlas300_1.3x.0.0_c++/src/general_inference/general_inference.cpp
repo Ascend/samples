@@ -192,7 +192,7 @@ bool GeneralInference::PreProcess(const shared_ptr<EngineTrans> &image_handle,
 
   // call
   DvppProcess dvpp_resize_img(resize_para);
-  // DVPP的输出结构体
+  // DVPP output structure
   DvppVpcOutput dvpp_output;
   int ret = dvpp_resize_img.DvppBasicVpcProc(
       image_handle->image_info.data.get(), image_handle->image_info.size,
