@@ -1,4 +1,4 @@
-Chinese | [English](Readme_EN.md)
+English | [中文](README.md)
 
 # Face Detection (C++)<a name="ZH-CN_TOPIC_0232337690"></a>
 
