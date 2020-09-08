@@ -40,7 +40,7 @@
      **vi ~/.bashrc**   
     在最后添加  
     **export LD_LIBRARY_PATH=\\$HOME/ascend_ddk/x86/lib\:\\$LD_LIBRARY_PATH**
-    ![](figures/bashrc.png "")   
+    
     
     执行以下命令使环境变量生效。  
     **source ~/.bashrc**
