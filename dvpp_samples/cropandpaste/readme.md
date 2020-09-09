@@ -15,7 +15,8 @@
 
 ### 编译代码
  
-1、以HwHiAiUser登陆开发环境 
+1、export环境变量   
+export DDK_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/20.0.0.RC1/acllib_centos7.6.x86_64 && export NPU_HOST_LIB=/home/HwHiAiUser/Ascend/ascend-toolkit/20.0.0.RC1/acllib_centos7.6.x86_64/acllib/lib64/stub 
 
 2、切换到“cropandpaste”目录，创建目录用于存放编译文件
 
@@ -43,19 +44,10 @@
 
 注意：执行时可能会报：No module named  ‘PIL’。是因为缺少pillow模块。  
 
-**pip install pillow**
+**pip3 install pillow**
 
-安装pillow时如果报错：ERROR setup.py install for pillow ...error...等一长串可以执行一下代码安装依赖
 
-**sudo yum install python-devel**
-
-**sudo yum install zlib-devel**
-
-**sudo yum install libjpeg-turbo-devel**  
-
-再执行安装命令  
-**pip install pillow**
 
 ### 查看结果
 
-1、out目录有一个output.yuv他是根据resize的宽度高度生成的yuv420文件。
+1、out目录有一个output.yuv，他是根据resize的宽度高度生成的yuv420文件。
