@@ -18,7 +18,8 @@
 
 ### 编译代码
 
-1、以HwHiAiUser登陆开发环境
+1、在命令行写入：   
+**export DDK_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/20.0.0.RC1/acllib_centos7.6.x86_64 && export NPU_HOST_LIB=/home/HwHiAiUser/Ascend/ascend-toolkit/20.0.0.RC1/acllib_centos7.6.x86_64/acllib/lib64/stub**
 
 2、切换到“jpege”目录，创建目录用于存放编译文件
 
@@ -28,8 +29,7 @@
 
 **mkdir -p build/intermediates/host**
 
-3、切换到“build/intermediates/host”目录，执行cmake生成编译文件。
-“../../../src”表示CMakeLists.txt文件所在的目录，请根据实际目录层级修改。
+3、切换到“build/intermediates/host”目录，执行cmake生成编译文件。    
 
 **cd build/intermediates/host**
 
