@@ -20,7 +20,8 @@
 
 ### 编译代码
 
-1、以HwHiAiUser登陆开发环境
+1、在命令行输入：   
+**export DDK_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/20.0.0.RC1/acllib_centos7.6.x86_64 && export NPU_HOST_LIB=/home/HwHiAiUser/Ascend/ascend-toolkit/20.0.0.RC1/acllib_centos7.6.x86_64/acllib/lib64/stub**
 
 2、切换到“vdec”目录，创建目录用于存放编译文件，例如，本文中，创建的文件夹为“build”
 
@@ -40,21 +41,8 @@
 
 ### 运行应用
 
-1、以HwHiAiUser（运行用户）将开发环境的“vdec”目录下的src目录、out目录及h265文件上传到运行环境（Host）的同一目录下，例如“/home/HwHiAiUser/vdec”。
 
-2、以HwHiAiUser（运行用户）登录运行环境（Host）。
-
-3、设置环境变量。
-
-如下为设置环境变量的示例，请根据实际安装情况替换路径。
-
-```
-export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/acllib/lib64:/usr/local/Ascend/add-ons
-```
-
-4、切换到可执行文件main所在的目录，例如“/home/HwHiAiUser/vdec/out”
-
-，给该目录下的main文件加执行权限。
+1、给该目录下的main文件加执行权限。
 
 ```
 chmod +x main
