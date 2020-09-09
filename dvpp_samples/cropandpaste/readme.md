@@ -15,8 +15,8 @@
 
 ### 编译代码
  
-1、export环境变量   
-export DDK_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/20.0.0.RC1/acllib_centos7.6.x86_64 && export NPU_HOST_LIB=/home/HwHiAiUser/Ascend/ascend-toolkit/20.0.0.RC1/acllib_centos7.6.x86_64/acllib/lib64/stub 
+1、在命令行输入：    
+**export DDK_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/20.0.0.RC1/acllib_centos7.6.x86_64 && export NPU_HOST_LIB=/home/HwHiAiUser/Ascend/ascend-toolkit/20.0.0.RC1/acllib_centos7.6.x86_64/acllib/lib64/stub**
 
 2、切换到“cropandpaste”目录，创建目录用于存放编译文件
 
@@ -38,13 +38,9 @@ export DDK_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/20.0.0.RC1/acllib_centos7
 
 1、到out目录执行脚本生成把输入图片抠图贴图后生成yuv文档在cropandpaste/out目录
 
-**cd ../../../out**
-
-**bash runcropandpaste.sh**
-
-注意：执行时可能会报：No module named  ‘PIL’。是因为缺少pillow模块。  
-
+**cd ../../../out**   
 **pip3 install pillow**
+**bash runcropandpaste.sh**
 
 
 
