@@ -39,7 +39,7 @@
 1、到out目录执行脚本生成把输入图片抠图贴图后生成yuv文档在cropandpaste/out目录
 
 **cd ../../../out**   
-**pip3 install pillow**
+**pip3 install pillow**   
 **bash runcropandpaste.sh**
 
 
