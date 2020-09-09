@@ -53,4 +53,4 @@ export DDK_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/20.0.0.RC1/acllib_centos7
 
 ### 查看结果
 
-1、out目录有一个output.yuv他是根据resize的宽度高度生成的yuv420文件。
+1、out目录有一个output.yuv，他是根据resize的宽度高度生成的yuv420文件。
