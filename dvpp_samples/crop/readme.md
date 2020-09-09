@@ -16,7 +16,8 @@
 
 ### 编译代码
 
-1、以HwHiAiUser登陆开发环境
+1、export环境变量   
+export DDK_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/20.0.0.RC1/acllib_centos7.6.x86_64 && export NPU_HOST_LIB=/home/HwHiAiUser/Ascend/ascend-toolkit/20.0.0.RC1/acllib_centos7.6.x86_64/acllib/lib64/stub 
 
 2、切换到“crop”目录，创建目录用于存放编译文件
 
@@ -46,7 +47,8 @@
 
 ​    ![](public_sys-resources/icon-note.gif) **说明：**   
 
-> - input.jpg、output.yuv文件名自行更改，./crop ../data/input.jpg   w   h  output.yuv  x  y  w  h。w、h分别为照片宽度和高度。x、y为位置。
+> - input.jpg、output.yuv文件名自行更改   
+  - ./crop ../data/input.jpg   w   h  output.yuv  x  y  w  h （w、h分别为照片宽度和高度。x、y为位置）。
 >   
 
 ### 查看结果
