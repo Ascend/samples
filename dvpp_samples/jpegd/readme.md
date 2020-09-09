@@ -29,7 +29,7 @@
 **mkdir -p build/intermediates/host**
 
 3、切换到“build/intermediates/host”目录，执行cmake生成编译文件。
-“../../../src”表示CMakeLists.txt文件所在的目录，请根据实际目录层级修改。
+
 
 **cd build/intermediates/host**
 
