@@ -167,7 +167,7 @@ Result ColorizeProcess::Preprocess(cv::Mat& frame) {
     cv::Mat reiszeMatL = channels[0] - 50;
 
     if (runMode_ == ACL_HOST) {
-        //When running on AI1, you need to copy the image data to the device side  
+        //AI1上运行时,需要将图片数据拷贝到device侧   
         aclError ret = aclrtMemcpy(inputBuf_, inputDataSize_,
             reiszeMatL.ptr<uint8_t>(), inputDataSize_,
             ACL_MEMCPY_HOST_TO_DEVICE);
@@ -177,8 +177,8 @@ Result ColorizeProcess::Preprocess(cv::Mat& frame) {
         }
     }
     else {
-        //When running on Atals200DK, the data can be copied locally.
-        //reiszeMat is a local variable, the data cannot be transferred out of the function, it needs to be copied
+        //Atals200DK上运行时,数据拷贝到本地即可.
+        //reiszeMat是局部变量,数据无法传出函数,需要拷贝一份
         memcpy(inputBuf_, reiszeMatL.ptr<uint8_t>(), inputDataSize_);
     }
 
@@ -314,8 +314,9 @@ void ColorizeProcess::DestroyResource()
 {   
     aclrtFree(inputBuf_);
     inputBuf_ = nullptr;
+
     delete channel_;
-    
+	
     model_.DestroyResource();
 
     aclError ret;

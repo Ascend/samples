@@ -33,14 +33,14 @@ const char* kModelPath = "../model/colorization.om";
 }
 
 int main(int argc, char *argv[]) {
-    //Check the input when the application is executed, the program execution requires the input of picture directory parameters
+    //检查应用程序执行时的输入,程序执行要求输入图片目录参数
     if((argc < 2) || (argv[1] == nullptr)){
         ERROR_LOG("Please input: ./main <image_dir>");
         return FAILED;
     }
-    //Instantiate the classification reasoning object, the parameter is the classification model path, the width and height of the model input requirements
+    //实例化分类推理对象,参数为分类模型路径,模型输入要求的宽和高
     ColorizeProcess colorize(kModelPath, kModelWidth, kModelHeight);
-    //Initialize the acl resources, models and memory for classification inference
+    //初始化分类推理的acl资源, 模型和内存
     Result ret = colorize.Init();
     if (ret != SUCCESS) {
         ERROR_LOG("Classification Init resource failed");
@@ -55,9 +55,9 @@ int main(int argc, char *argv[]) {
         cout << "Movie open Error" << endl;
         return FAILED;
     }
-    //Reasoning picture by picture
+    //逐张图片推理
     while(1) {
-        //Preprocess the picture: read the picture and zoom the picture to the size required by the model input
+        //预处理图片:读取图片,讲图片缩放到模型输入要求的尺寸
         cv::Mat frame;
         if (!capture.read(frame))
         {
@@ -71,14 +71,14 @@ int main(int argc, char *argv[]) {
                       videoFile.c_str());
             continue;
         }
-        //Send the preprocessed pictures to the model for inference and get the inference results
+        //将预处理的图片送入模型推理,并获取推理结果
         aclmdlDataset* inferenceOutput = nullptr;
         ret = colorize.Inference(inferenceOutput);
         if ((ret != SUCCESS) || (inferenceOutput == nullptr)) {
             ERROR_LOG("Inference model inference output data failed");
             return FAILED;
         }
-        //Analyze the inference output and mark the object category obtained by the inference on the picture
+        //解析推理输出,并将推理得到的物体类别标记到图片上
         ret = colorize.Postprocess(frame, inferenceOutput);
         if (ret != SUCCESS) {
             ERROR_LOG("Process model inference output data failed");
