@@ -33,21 +33,21 @@ const char* kAppConf = "../script/object_detection.conf";
 }
 
 int main(int argc, char *argv[]) {
-    //Check the input when the application is executed, the parameter of the program execution is the input video file path
+    //检查应用程序执行时的输入,程序执行的参数为输入视频文件路径
     if((argc < 2) || (argv[1] == nullptr)){
         ERROR_LOG("Please input: ./main <image_dir>");
         return FAILED;
     }
-    //Instantiate the target detection class, the parameter is the classification model path, and the width and height required by the model input
+    //实例化目标检测类,参数为分类模型路径,模型输入要求的宽和高
     ObjectDetect detect(kModelPath, kModelWidth, kModelHeight);
-    //Initialize the acl resource for classification reasoning, load the model and apply for the memory used for reasoning input
+    //初始化分类推理的acl资源, 加载模型和申请推理输入使用的内存
     Result ret = detect.Init();
     if (ret != SUCCESS) {
         ERROR_LOG("Classification Init resource failed");
         return FAILED;
     }
 
-    //Use opencv to open the video file
+    //使用opencv打开视频文件
     string videoFile = string(argv[1]);
     printf("open %s\n", videoFile.c_str());
     cv::VideoCapture capture(videoFile);
@@ -55,29 +55,29 @@ int main(int argc, char *argv[]) {
         cout << "Movie open Error" << endl;
         return FAILED;
     }
-    //Frame-by-frame reasoning
+    //逐帧推理
     while(1) {
-        //Read a picture
+        //读取一帧图片
         cv::Mat frame;
         if (!capture.read(frame)) {
             INFO_LOG("Video capture return false");
             break;
         }
-        //Preprocess the frame picture
+        //对帧图片进行预处理
         Result ret = detect.Preprocess(frame);
         if (ret != SUCCESS) {
             ERROR_LOG("Read file %s failed, continue to read next",
                       videoFile.c_str());
             continue;
         }
-        //Send the preprocessed pictures to the model for inference and get the inference results
+        //将预处理的图片送入模型推理,并获取推理结果
         aclmdlDataset* inferenceOutput = nullptr;
         ret = detect.Inference(inferenceOutput);
         if ((ret != SUCCESS) || (inferenceOutput == nullptr)) {
             ERROR_LOG("Inference model inference output data failed");
             return FAILED;
         }
-        //Analyze the inference output, and send the inferred object category, location, confidence and picture to the presenter server for display
+        //解析推理输出,并将推理得到的物体类别, 位置, 置信度和图片送到presenter server显示
         ret = detect.Postprocess(frame, inferenceOutput);
         if (ret != SUCCESS) {
             ERROR_LOG("Process model inference output data failed");

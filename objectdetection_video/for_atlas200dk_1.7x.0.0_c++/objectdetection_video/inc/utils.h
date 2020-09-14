@@ -17,49 +17,80 @@
 * Description: handle file operations
 */
 #pragma once
+
 #include <iostream>
 #include <vector>
+#include <memory>
+#include <mutex>
+#include <unistd.h>
+#include <vector>
+
 #include "acl/acl.h"
-#include <opencv2/opencv.hpp>
-#include <opencv2/highgui.hpp>
-#include "opencv2/imgcodecs/legacy/constants_c.h"
-#include "opencv2/imgproc/types_c.h"
-#include "ascenddk/presenter/agent/presenter_channel.h"
+
+using namespace std;
 
 #define INFO_LOG(fmt, args...) fprintf(stdout, "[INFO]  " fmt "\n", ##args)
 #define WARN_LOG(fmt, args...) fprintf(stdout, "[WARN]  " fmt "\n", ##args)
 #define ERROR_LOG(fmt, args...) fprintf(stdout, "[ERROR]  " fmt "\n", ##args)
-using namespace ascend::presenter;
 
-#define MODEL_INPUT_WIDTH	416
-#define MODEL_INPUT_HEIGHT	416
+#define RGBU8_IMAGE_SIZE(width, height) ((width) * (height) * 3)
+#define YUV420SP_SIZE(width, height) ((width) * (height) * 3 / 2)
 
+#define ALIGN_UP(num, align) (((num) + (align) - 1) & ~((align) - 1))
+#define ALIGN_UP2(num) ALIGN_UP(num, 2)
+#define ALIGN_UP16(num) ALIGN_UP(num, 16)
+#define ALIGN_UP128(num) ALIGN_UP(num, 128)
+
+#define SHARED_PRT_DVPP_BUF(buf) (shared_ptr<uint8_t>((uint8_t *)(buf), [](uint8_t* p) { acldvppFree(p); }))
+#define SHARED_PRT_U8_BUF(buf) (shared_ptr<uint8_t>((uint8_t *)(buf), [](uint8_t* p) { delete[](p); }))
+
+
+template<class Type>
+std::shared_ptr<Type> MakeSharedNoThrow() {
+    try {
+        return std::make_shared<Type>();
+    }
+    catch (...) {
+        return nullptr;
+    }
+}
+
+#define MAKE_SHARED_NO_THROW(memory, memory_type) \
+    do { \
+            memory = MakeSharedNoThrow<memory_type>(); \
+    }while(0);
 
 typedef enum Result {
     SUCCESS = 0,
     FAILED = 1
-} Result;
+}Result;
 
-typedef struct PicDesc {
-    std::string picName;
-    int width;
-    int height;
-}PicDesc;
-
-struct ConsoleParams {
-  uint32_t img_width = 0;
-  uint32_t img_height = 0;
-  int32_t size = 0;
-  std::string input_path = "";
-  std::shared_ptr<u_int8_t> data;
+struct Resolution {
+    uint32_t width = 0;
+    uint32_t height = 0;
 };
 
-const std::string kImagePathSeparator = ",";
-const int kStatSuccess = 0;
-const std::string kFileSperator = "/";
-const std::string kPathSeparator = "/";
-// output image prefix
-const std::string kOutputFilePrefix = "out_";
+struct ImageData {
+    uint32_t width = 0;
+    uint32_t height = 0;
+    uint32_t alignWidth = 0;
+    uint32_t alignHeight = 0;
+    uint32_t size = 0;
+    std::shared_ptr<uint8_t> data;
+};
+
+struct Rect {
+    uint32_t ltX = 0;
+    uint32_t ltY = 0;
+    uint32_t rbX = 0;
+    uint32_t rbY = 0;
+};
+
+struct BBox {
+    Rect rect;
+    uint32_t score;
+    string text;
+};
 
 /**
  * Utils
@@ -73,11 +104,6 @@ public:
     * @param [in] PicBufferSize: aligned pic size
     * @return device buffer of pic
     */
-
-    static Result PresentOutputFrame(Channel *channel, aclmdlDataset *modelOutput, cv::Mat mat);
-
-    static Result SaveDvppOutputData(const char *fileName, const void *devPtr, uint32_t dataSize);
-
     static bool IsDirectory(const std::string &path);
 
     static bool IsPathExist(const std::string &path);
@@ -87,6 +113,11 @@ public:
     static void GetAllFiles(const std::string &path, std::vector<std::string> &file_vec);
 
     static void GetPathFiles(const std::string &path, std::vector<std::string> &file_vec);
-
+    static void* CopyDataToDevice(void* data, uint32_t dataSize, aclrtMemcpyKind policy);
+    static void* CopyDataDeviceToLocal(void* deviceData, uint32_t dataSize);
+    static void* CopyDataHostToDevice(void* deviceData, uint32_t dataSize);
+    static void* CopyDataDeviceToDevice(void* deviceData, uint32_t dataSize);
+    static int ReadImageFile(ImageData& image, std::string fileName);
+    static Result CopyImageDataToDevice(ImageData& imageDevice, ImageData srcImage, aclrtRunMode mode);
 };
 

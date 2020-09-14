@@ -21,28 +21,53 @@
 #include "utils.h"
 using namespace std;
 
-ModelProcess::ModelProcess():loadFlag_(false), modelId_(0), modelDesc_(nullptr), input_(nullptr), output_(nullptr), inputDataBuffer_(nullptr), inputBufferSize_(0)
-{
+ModelProcess::ModelProcess():loadFlag_(false), modelId_(0), modelMemPtr_(nullptr), modelMemSize_(0),
+modelWeightPtr_(nullptr),modelWeightSize_(0), modelDesc_(nullptr), input_(nullptr), output_(nullptr),
+isReleased_(false){
+
 }
 
-ModelProcess::~ModelProcess()
-{
+ModelProcess::~ModelProcess() {
+    DestroyResource();
+}
+
+void ModelProcess::DestroyResource() {
+    if (isReleased_)
+        return;
+    
     Unload();
     DestroyDesc();
     DestroyInput();
     DestroyOutput();
+    isReleased_ = true;
 }
 
-Result ModelProcess::LoadModelFromFile(const char *modelPath)
-{
+Result ModelProcess::LoadModelFromFileWithMem(const char *modelPath) {
     if (loadFlag_) {
         ERROR_LOG("has already loaded a model");
         return FAILED;
     }
 
-    aclError ret;
+    aclError ret = aclmdlQuerySize(modelPath, &modelMemSize_, &modelWeightSize_);
+    if (ret != ACL_ERROR_NONE) {
+        ERROR_LOG("query model failed, model file is %s", modelPath);
+        return FAILED;
+    }
 
-    ret = aclmdlLoadFromFile(modelPath, &modelId_);
+    ret = aclrtMalloc(&modelMemPtr_, modelMemSize_, ACL_MEM_MALLOC_HUGE_FIRST);
+    if (ret != ACL_ERROR_NONE) {
+        ERROR_LOG("malloc buffer for mem failed, require size is %zu", modelMemSize_);
+        return FAILED;
+    }
+
+    ret = aclrtMalloc(&modelWeightPtr_, modelWeightSize_, ACL_MEM_MALLOC_HUGE_FIRST);
+    if (ret != ACL_ERROR_NONE) {
+        ERROR_LOG("malloc buffer for weight failed, require size is %zu", modelWeightSize_);
+        return FAILED;
+    }
+
+    ret = aclmdlLoadFromFileWithMem(modelPath, &modelId_, modelMemPtr_,
+        modelMemSize_, modelWeightPtr_, modelWeightSize_);
     if (ret != ACL_ERROR_NONE) {
         ERROR_LOG("load model from file failed, model file is %s", modelPath);
         return FAILED;
@@ -79,9 +104,8 @@ void ModelProcess::DestroyDesc()
     }
 }
 
-const float ModelInput2[4]={MODEL_INPUT_WIDTH,MODEL_INPUT_HEIGHT,MODEL_INPUT_WIDTH,MODEL_INPUT_HEIGHT};
-
-Result ModelProcess::CreateInput(void *inputDataBuffer, size_t bufferSize)
+Result ModelProcess::CreateInput(void *input1, size_t input1size, 
+                                 void* input2, size_t input2size)
 {
     input_ = aclmdlCreateDataset();
     if (input_ == nullptr) {
@@ -89,38 +113,34 @@ Result ModelProcess::CreateInput(void *inputDataBuffer, size_t bufferSize)
         return FAILED;
     }
 
-    aclDataBuffer* inputData = aclCreateDataBuffer(inputDataBuffer, bufferSize);
+    aclDataBuffer* inputData = aclCreateDataBuffer(input1, input1size);
     if (inputData == nullptr) {
         ERROR_LOG("can't create data buffer, create input failed");
         return FAILED;
     }
 
     aclError ret = aclmdlAddDatasetBuffer(input_, inputData);
-    if (ret != ACL_ERROR_NONE) {
+    if (inputData == nullptr) {
         ERROR_LOG("can't add data buffer, create input failed");
         aclDestroyDataBuffer(inputData);
         inputData = nullptr;
         return FAILED;
     }
 
-    static void *dataDev = nullptr;
-    if(nullptr == dataDev){
-        uint32_t dataSize=sizeof(ModelInput2);
-     	aclrtMalloc(&dataDev, dataSize,ACL_MEM_MALLOC_HUGE_FIRST);
-        aclrtMemcpy(dataDev, dataSize, ModelInput2, dataSize, ACL_MEMCPY_DEVICE_TO_DEVICE);
-    }
-    aclDataBuffer* inputData2 = aclCreateDataBuffer(dataDev, sizeof(ModelInput2));
-    if (inputData2 == nullptr) {
-  	ERROR_LOG("can't create data buffer, create input failed");
-	return FAILED;
-    }
-    ret = aclmdlAddDatasetBuffer(input_, inputData2);
-    if (ret != ACL_ERROR_NONE) {
-        ERROR_LOG("can't add data buffer, create input failed");
-        aclDestroyDataBuffer(inputData2);
-        inputData2 = nullptr;
+    aclDataBuffer* inputData2 = aclCreateDataBuffer(input2, input2size);
+    if (inputData == nullptr) {
+        ERROR_LOG("can't create data buffer, create input failed");
         return FAILED;
     }
+
+    ret = aclmdlAddDatasetBuffer(input_, inputData2);
+    if (inputData == nullptr) {
+        ERROR_LOG("can't add data buffer, create input failed");
+        aclDestroyDataBuffer(inputData2);
+        inputData = nullptr;
+        return FAILED;
+    }
+
     return SUCCESS;
 }
 
@@ -182,7 +202,6 @@ Result ModelProcess::CreateOutput()
     return SUCCESS;
 }
 
-
 void ModelProcess::DestroyOutput()
 {
     if (output_ == nullptr) {
@@ -227,6 +246,18 @@ void ModelProcess::Unload()
     if (modelDesc_ != nullptr) {
         (void)aclmdlDestroyDesc(modelDesc_);
         modelDesc_ = nullptr;
+    }
+
+    if (modelMemPtr_ != nullptr) {
+        aclrtFree(modelMemPtr_);
+        modelMemPtr_ = nullptr;
+        modelMemSize_ = 0;
+    }
+
+    if (modelWeightPtr_ != nullptr) {
+        aclrtFree(modelWeightPtr_);
+        modelWeightPtr_ = nullptr;
+        modelWeightSize_ = 0;
     }
 
     loadFlag_ = false;
