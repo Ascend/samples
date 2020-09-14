@@ -42,11 +42,11 @@ const static std::vector<std::string> yolov3Label = { "person", "bicycle", "car"
 "cell phone", "microwave", "oven", "toaster", "sink",
 "refrigerator", "book", "clock", "vase","scissors",
 "teddy bear", "hair drier", "toothbrush" };
-//推理输出dataset中下标为0的单元为检测框信息数据
+//The unit with subscript 0 in the inference output dataset is the detection frame information data
 const uint32_t kBBoxDataBufId = 0;
-//下标为1的单元为框个数数据
+//The unit with subscript 1 is the frame number data
 const uint32_t kBoxNumDataBufId = 1;
-//框信息中各个字段下标
+//Subscript of each field in box information
 enum BBoxIndex { TOPLEFTX = 0, TOPLEFTY, BOTTOMRIGHTX, BOTTOMRIGHTY, SCORE, LABEL };
 }
 
@@ -79,7 +79,7 @@ Result ObjectDetect::InitResource() {
         return FAILED;
     }
     INFO_LOG("Open device %d success", deviceId_);
-    //获取当前应用程序运行在host还是device
+    //Get the current application running on host or device
     ret = aclrtGetRunMode(&runMode_);
     if (ret != ACL_ERROR_NONE) {
         ERROR_LOG("acl get run mode failed");
@@ -114,13 +114,13 @@ Result ObjectDetect::InitModel(const char* omModelPath) {
 
 Result ObjectDetect::CreateModelInputdDataset()
 {
-    //申请输入模型的图像数据内存
+    //Apply for the image data memory of the input model
     aclError aclRet = aclrtMalloc(&imageDataBuf_, imageDataSize_, ACL_MEM_MALLOC_HUGE_FIRST);
     if (aclRet != ACL_ERROR_NONE) {
         ERROR_LOG("malloc device data buffer failed, aclRet is %d", aclRet);
         return FAILED;
     }
-    //yolov3的第二个输入,为输入图像宽高参数
+    //The second input of yolov3 is the input image width and height parameters
     const float imageInfo[4] = {(float)modelWidth_, (float)modelHeight_,
     (float)modelWidth_, (float)modelHeight_};
     imageInfoSize_ = sizeof(imageInfo);
@@ -132,7 +132,7 @@ Result ObjectDetect::CreateModelInputdDataset()
         ERROR_LOG("Copy image info to device failed");
         return FAILED;
     }
-    //使用申请的内存创建模型输入dataset.创建后每帧推理只更新内存数据即可,不用每次创建输入dataset
+    ///Use the requested memory to create the model input dataset. After creation, only update the memory data for each frame of reasoning, instead of creating the input dataset every time
     Result ret = model_.CreateInput(imageDataBuf_, imageDataSize_,
     imageInfoBuf_, imageInfoSize_);
     if (ret != SUCCESS) {
@@ -161,18 +161,18 @@ Result ObjectDetect::OpenPresenterChannel() {
 }
 
 Result ObjectDetect::Init() {
-    //如果已经初始化,则直接返回
+    //If it has been initialized, return directly
     if (isInited_) {
         INFO_LOG("Classify instance is initied already!");
         return SUCCESS;
     }
-    //初始化ACL资源
+    //If it has been initialized, return directly
     Result ret = InitResource();
     if (ret != SUCCESS) {
         ERROR_LOG("Init acl resource failed");
         return FAILED;
     }
-    //初始化模型管理实例
+    //Initialize model management instance
     ret = InitModel(modelPath_);
     if (ret != SUCCESS) {
         ERROR_LOG("Init model failed");
@@ -185,7 +185,7 @@ Result ObjectDetect::Init() {
         return FAILED;
     }	
 	
-    //连接presenter server
+    //Connect to presenter server
     ret = OpenPresenterChannel();
     if (ret != SUCCESS) {
         ERROR_LOG("Open presenter channel failed");
@@ -197,14 +197,14 @@ Result ObjectDetect::Init() {
 }
 
 Result ObjectDetect::Preprocess(cv::Mat& frame) {
-    //将帧图像缩放到模型要求大小
+    //Scale the frame image to the required size of the model
     cv::Mat reiszeMat;
     cv::resize(frame, reiszeMat, cv::Size(modelWidth_, modelHeight_));
     if (reiszeMat.empty()) {
         ERROR_LOG("Resize image failed");
         return FAILED;
     }
-    //将数据拷贝到输入dataset的缓存中
+    //Copy the data to the cache of the input dataset
     aclrtMemcpyKind policy = (runMode_ == ACL_HOST)?
                              ACL_MEMCPY_HOST_TO_DEVICE:ACL_MEMCPY_DEVICE_TO_DEVICE;
     aclError ret = aclrtMemcpy(imageDataBuf_, imageDataSize_,
@@ -218,13 +218,13 @@ Result ObjectDetect::Preprocess(cv::Mat& frame) {
 }
 
 Result ObjectDetect::Inference(aclmdlDataset*& inferenceOutput) {
-    //执行推理
+    //Perform reasoning
     Result ret = model_.Execute();
     if (ret != SUCCESS) {
         ERROR_LOG("Execute model inference failed");
         return FAILED;
     }
-    //获取推理输出
+    //Get inference output
     inferenceOutput = model_.GetModelOutputData();
 
     return SUCCESS;
@@ -232,19 +232,19 @@ Result ObjectDetect::Inference(aclmdlDataset*& inferenceOutput) {
 
 Result ObjectDetect::Postprocess(cv::Mat& frame,
                                     aclmdlDataset* modelOutput){
-    //获取框信息数据
+    //Get box information data
     uint32_t dataSize = 0;
     float* detectData = (float*)GetInferenceOutputItem(dataSize, modelOutput,
                                                        kBBoxDataBufId);
     if (detectData == nullptr) return FAILED;
-    //获取框个数信息
+    //Get information about the number of frames
     uint32_t* boxNum = (uint32_t*)GetInferenceOutputItem(dataSize, modelOutput,
                                                          kBoxNumDataBufId);
     if (boxNum == nullptr) return FAILED;
 
-    //框个数数据第一个数据是有效的
+    //The first data of the number of boxes is valid
     uint32_t totalBox = boxNum[0];
-    //框信息中框坐标是基于送入模型图片尺寸的,转换到原始帧图片上需要乘以缩放系数
+    //The frame coordinates in the frame information are based on the size of the picture sent to the model, and the conversion to the original frame picture needs to be multiplied by the zoom factor
     float widthScale = (float)(frame.cols) / modelWidth_;
     float heightScale = (float)(frame.rows) / modelHeight_;
 
@@ -252,16 +252,16 @@ Result ObjectDetect::Postprocess(cv::Mat& frame,
     for (uint32_t i = 0; i < totalBox; i++) {
         DetectionResult oneResult;
         Point point_lt, point_rb;
-        //获取检测到的物体的置信度,低于0.8的认为无效
+        //Obtain the confidence of the detected object, and those below 0.8 are considered invalid
         uint32_t score = uint32_t(detectData[totalBox * SCORE + i] * 100);
         if (score < 80) continue;
         printf("score %d", score);
-        //获取框坐标信息并转换为原始帧上的坐标
+        //Get the frame coordinate information and convert it to the coordinates on the original frame
         oneResult.lt.x = detectData[totalBox * TOPLEFTX + i] * widthScale;
         oneResult.lt.y = detectData[totalBox * TOPLEFTY + i] * heightScale;
         oneResult.rb.x = detectData[totalBox * BOTTOMRIGHTX + i] * widthScale;
         oneResult.rb.y = detectData[totalBox * BOTTOMRIGHTY + i] * heightScale;
-        //构造标记物体的字符串:物体名称+置信度
+        //Construct a string of labeled objects: object name + confidence
         uint32_t objIndex = (uint32_t)detectData[totalBox * LABEL + i];
         oneResult.result_text = yolov3Label[objIndex] + std::to_string(score) + "\%";
         printf("%d %d %d %d %s\n", oneResult.lt.x, oneResult.lt.y,
@@ -269,13 +269,13 @@ Result ObjectDetect::Postprocess(cv::Mat& frame,
 
         detectResults.emplace_back(oneResult);
     }
-    //如果是host侧,则数据是从device拷贝过来的,拷贝使用的内存要释放
+    //If it is the host side, the data is copied from the device, and the memory used by the copy must be released
     if (runMode_ == ACL_HOST) {
         delete[]((uint8_t*)detectData);
         delete[]((uint8_t*)boxNum);
     }
 
-    //将推理结果和图像发给presenter server显示
+    //Send the inference results and images to the presenter server for display
     SendImage(detectResults, frame);
 
     return SUCCESS;
@@ -327,7 +327,7 @@ void ObjectDetect::EncodeImage(vector<uint8_t>& encodeImg,
     vector<int> param = vector<int>(2);
     param[0] = CV_IMWRITE_JPEG_QUALITY;
     param[1] = 95;//default(95) 0-100
-    //jpeg图片必须序列化proto消息才能发送
+    //jpeg images must be serialized in proto messages before they can be sent
     cv::imencode(".jpg", origImg, encodeImg, param);
 }
 
@@ -343,7 +343,7 @@ Result ObjectDetect::SendImage(vector<DetectionResult>& detectionResults,
     imageParam.size = encodeImg.size();
     imageParam.data = reinterpret_cast<uint8_t*>(encodeImg.data());
     imageParam.detection_results = detectionResults;
-    //将检测到的物体框信息和帧图片发给presenter server显示
+    //Send the detected object frame information and frame pictures to the presenter server for display
     PresenterErrorCode errorCode = PresentImage(channel_, imageParam);
     if (errorCode != PresenterErrorCode::kNone) {
         ERROR_LOG("PresentImage failed %d", static_cast<int>(errorCode));
@@ -360,7 +360,7 @@ void ObjectDetect::DestroyResource()
 
     delete channel_;
 	
-    //模型实例占用的acl资源必须在acl退出前释放,否则会报abort
+    //The ACL resources occupied by the model instance must be released before the ACL exits, otherwise it will report abort
     model_.DestroyResource();
 
     aclError ret;
