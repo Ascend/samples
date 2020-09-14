@@ -97,13 +97,14 @@
 2.  修改Presenter Server的ip。  
     -  将script/object_detection.conf中的presenter_server_ip、presenter_view_ip、presenter_agent_ip修改为Mind Studio所在Ubuntu服务器的虚拟网卡的ip地址，如图所示。
 
-       **图 2** ![[ presenter_server_ip](https://images.gitee.com/uploads/images/2020/0914/142219_c7ceeb77_7985487.png "屏幕截图.png") 
-       (https://images.gitee.com/uploads/images/2020/0914/142415_c3af7959_7985487.png "屏幕截图.png")      
+       **图 2** ![ presenter_server_ip](https://images.gitee.com/uploads/images/2020/0914/142219_c7ceeb77_7985487.png "屏幕截图.png") 
+         
+
+  
     -  将src/object_detect.cpp中的 param.host_ip 修改为Mind Studio所在Ubuntu服务器的虚拟网卡的ip地址，如图所示。
 
        **图 3** ![修改param_host_ip](https://images.gitee.com/uploads/images/2020/0914/142642_84c705c2_7985487.png "屏幕截图.png") 
-       (https://images.gitee.com/uploads/images/2020/0914/142709_0de0284f_7985487.png "屏幕截图.png")
-
+       
     >![](public_sys-resources/icon-note.gif) **说明：**    
     >-  虚拟网卡的ip地址请通过ifconfig命令查看。    
 3.  开始编译，打开Mind Studio工具，在工具栏中点击**Build \> Edit Build Configuration**。  
