@@ -19,9 +19,9 @@
 
     **cd $HOME/AscendProjects**  
 
-    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/objectdetection_video_300.zip** 
+    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/objectdetection_video.zip** 
   
-    **unzip objectdetection_video_300**
+    **unzip objectdetection_video**
     >![](public_sys-resources/icon-note.gif) **说明：**   
     >- 如果使用wget下载失败，可使用如下命令下载代码。  
     **curl -OL https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/objectdetection_video_300.zip** 
