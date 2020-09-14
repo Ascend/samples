@@ -95,10 +95,10 @@
     ![](figures/打开objectdetection_video工程.png "打开objectdetection-video工程")
 
 2.  修改Presenter Server的ip。  
-    -  将script/object_detection.conf中的presenter_server_ip、presenter_view_ip、presenter_agent_ip修改为Mind Studio所在Ubuntu服务器的虚拟网卡的ip地址，，如图所示。
+    -  将script/object_detection.conf中的presenter_server_ip、presenter_view_ip、presenter_agent_ip修改为Mind Studio所在Ubuntu服务器的虚拟网卡的ip地址，如图所示。
 
        **图 2** ![[图 presenter_server_ip](https://images.gitee.com/uploads/images/2020/0914/142219_c7ceeb77_7985487.png "屏幕截图.png") 
-       ![](figures/presenter_server_ip.png "修改presenter_server_ip")      
+       ![输入图片说明](https://images.gitee.com/uploads/images/2020/0914/142415_c3af7959_7985487.png "屏幕截图.png")      
     -  将**src/sample_process.cpp**中的 **param.host_ip** 修改为Mind Studio所在Ubuntu服务器的虚拟网卡的ip地址，如[图 param_host_ip](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11)所示。
 
        **图 3**  修改param_host_ip<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11"></a>  
