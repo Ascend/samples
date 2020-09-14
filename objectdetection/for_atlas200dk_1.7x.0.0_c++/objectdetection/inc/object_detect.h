@@ -66,5 +66,6 @@ private:
     aclrtRunMode runMode_;
 
     bool isInited_;
+    bool isDeviceSet_;
 };
 

@@ -25,18 +25,14 @@
 
 using namespace std;
 
-DvppProcess::DvppProcess()
-    : isInitOk_(false), dvppChannelDesc_(nullptr) {
-    isGlobalContext_ = false;
+DvppProcess::DvppProcess():dvppChannelDesc_(nullptr){
 }
 
-DvppProcess::~DvppProcess()
-{
+DvppProcess::~DvppProcess(){
     DestroyResource();
 }
 
-void DvppProcess::DestroyResource()
-{
+void DvppProcess::DestroyResource(){
     aclError aclRet;
     if (dvppChannelDesc_ != nullptr) {
         aclRet = acldvppDestroyChannel(dvppChannelDesc_);
@@ -65,7 +61,6 @@ Result DvppProcess::InitResource(aclrtStream& stream)
         return FAILED;
     }
     stream_ = stream;
-    isInitOk_ = true;
     INFO_LOG("dvpp init resource ok");
     return SUCCESS;
 }

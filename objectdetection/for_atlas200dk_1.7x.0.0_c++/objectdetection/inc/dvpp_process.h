@@ -39,12 +39,7 @@ public:
     void DestroyResource();
 
 protected:
-    int isInitOk_;
     aclrtStream stream_;
     acldvppChannelDesc *dvppChannelDesc_;
-    bool isGlobalContext_;
-
-
-
 };
 
