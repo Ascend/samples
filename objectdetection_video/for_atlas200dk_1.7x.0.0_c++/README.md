@@ -133,7 +133,7 @@
   
     如图所示，表示presenter_server的服务启动成功。  
     **图 7**  启动PresenterServer    
-  ![打开成功](![输入图片说明](https://images.gitee.com/uploads/images/2020/0914/145023_388a8d2f_7985487.png "屏幕截图.png"))</a> 
+  (![输入图片说明](https://images.gitee.com/uploads/images/2020/0914/145147_0c2338b8_7985487.png "屏幕截图.png")))</a> 
 
 ## 运行<a name="zh-cn_topic_0219108795_section1620073406"></a>
 1.  在Mind Studio工具的工具栏中找到Run按钮，单击  **Run \> Edit Configurations**。  
