@@ -97,8 +97,8 @@
 2.  修改Presenter Server的ip。  
     -  将script/object_detection.conf中的presenter_server_ip、presenter_view_ip、presenter_agent_ip修改为Mind Studio所在Ubuntu服务器的虚拟网卡的ip地址，如图所示。
 
-       **图 2** !   
-[ presenter_server_ip](https://images.gitee.com/uploads/images/2020/0914/142219_c7ceeb77_7985487.png "屏幕截图.png") 
+       **图 2**      
+![ presenter_server_ip](https://images.gitee.com/uploads/images/2020/0914/142219_c7ceeb77_7985487.png "屏幕截图.png") 
          
 
   
