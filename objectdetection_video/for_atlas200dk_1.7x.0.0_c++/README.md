@@ -125,10 +125,9 @@
 
     打开Mind Studio工具的Terminal，在应用代码存放路径下，执行如下命令在后台启动objectdetection-video应用的Presenter Server主程序。如[图 启动PresenterServer](#zh-cn_topic_0228461904_zh-cn_topic_0203223294_fig423515251067)所示。
 
-    **python3 script/presenterserver/presenter_server.py --app=display &**
+    **bash script/run_presenter_server.sh &**
 
-    **图 6**  启动PresenterServer<a name="zh-cn_topic_0228461904_zh-cn_topic_0203223294_fig423515251067"></a>  
-    ![](figures/presentserver1.png)
+    **图 6**  启动PresenterServer![启动PresenterServer](https://images.gitee.com/uploads/images/2020/0914/143052_e105c176_7985487.png "屏幕截图.png")
    
   
     如[图 启动PresenterServer](#zh-cn_topic_0228461904_zh-cn_topic_0203223294_fig423)所示，表示presenter_server的服务启动成功。  
