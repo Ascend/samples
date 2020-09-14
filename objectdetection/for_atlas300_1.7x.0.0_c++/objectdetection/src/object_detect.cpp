@@ -69,11 +69,10 @@ namespace {
 
 }
 
-ObjectDetect::ObjectDetect(const char* modelPath,
-uint32_t modelWidth,
-uint32_t modelHeight)
+ObjectDetect::ObjectDetect(const char* modelPath, uint32_t modelWidth,
+                           uint32_t modelHeight)
 :deviceId_(0), context_(nullptr), stream_(nullptr), modelWidth_(modelWidth),
-modelHeight_(modelHeight), isInited_(false){
+modelHeight_(modelHeight), isInited_(false), isDeviceSet_(false){
     imageInfoSize_ = 0;
     imageInfoBuf_ = nullptr;
     modelPath_ = modelPath;
@@ -99,6 +98,7 @@ Result ObjectDetect::InitResource() {
         ERROR_LOG("acl open device %d failed", deviceId_);
         return FAILED;
     }
+    isDeviceSet_ = true;
     INFO_LOG("open device %d success", deviceId_);
 
     // create context (set current)
@@ -148,8 +148,7 @@ Result ObjectDetect::InitModel(const char* omModelPath) {
     return SUCCESS;
 }
 
-Result ObjectDetect::CreateImageInfoBuffer()
-{
+Result ObjectDetect::CreateImageInfoBuffer(){
     const float imageInfo[4] = {(float)modelWidth_, (float)modelHeight_,
     (float)modelWidth_, (float)modelHeight_};
     imageInfoSize_ = sizeof(imageInfo);
@@ -167,7 +166,7 @@ Result ObjectDetect::CreateImageInfoBuffer()
 
 Result ObjectDetect::Init() {
     if (isInited_) {
-        INFO_LOG("Classify instance is initied already!");
+        INFO_LOG("Object detection instance is initied already!");
         return SUCCESS;
     }
 
@@ -284,8 +283,8 @@ const string& origImagePath) {
 }
 
 void* ObjectDetect::GetInferenceOutputItem(uint32_t& itemDataSize,
-aclmdlDataset* inferenceOutput,
-uint32_t idx) {
+                                           aclmdlDataset* inferenceOutput,
+                                           uint32_t idx) {
     aclDataBuffer* dataBuffer = aclmdlGetDatasetBuffer(inferenceOutput, idx);
     if (dataBuffer == nullptr) {
         ERROR_LOG("Get the %dth dataset buffer from model "
@@ -314,8 +313,7 @@ uint32_t idx) {
             ERROR_LOG("Copy inference output to host failed");
             return nullptr;
         }
-    }
-    else {
+    } else {
         data = dataBufferDev;
     }
 
@@ -324,7 +322,7 @@ uint32_t idx) {
 }
 
 void ObjectDetect::DrowBoundBoxToImage(vector<BBox>& detectionResults,
-const string& origImagePath) {
+                                       const string& origImagePath) {
     cv::Mat image = cv::imread(origImagePath, CV_LOAD_IMAGE_UNCHANGED);
     for (int i = 0; i < detectionResults.size(); ++i) {
         cv::Point p1, p2;
@@ -345,12 +343,11 @@ const string& origImagePath) {
     cv::imwrite(sstream.str(), image);
 }
 
-void ObjectDetect::DestroyResource()
-{
+void ObjectDetect::DestroyResource(){
     aclrtFree(imageInfoBuf_);
     model_.DestroyResource();
     dvpp_.DestroyResource();
-	aclError ret;
+    aclError ret;
     if (stream_ != nullptr) {
         ret = aclrtDestroyStream(stream_);
         if (ret != ACL_ERROR_NONE) {
@@ -368,11 +365,14 @@ void ObjectDetect::DestroyResource()
         context_ = nullptr;
     }
     INFO_LOG("end to destroy context");
-    ret = aclrtResetDevice(deviceId_);
-    if (ret != ACL_ERROR_NONE) {
-        ERROR_LOG("reset device failed");
+
+    if (isDeviceSet_) {
+        ret = aclrtResetDevice(deviceId_);
+        if (ret != ACL_ERROR_NONE) {
+            ERROR_LOG("reset device failed");
+        }
+        INFO_LOG("end to reset device is %d", deviceId_);
     }
-    INFO_LOG("end to reset device is %d", deviceId_);
 
     ret = aclFinalize();
     if (ret != ACL_ERROR_NONE) {

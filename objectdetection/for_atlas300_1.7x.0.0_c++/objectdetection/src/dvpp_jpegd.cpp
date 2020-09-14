@@ -25,18 +25,15 @@ using namespace std;
 
 DvppJpegD::DvppJpegD(aclrtStream& stream,  acldvppChannelDesc *dvppChannelDesc)
     : stream_(stream), dvppChannelDesc_(dvppChannelDesc),
-      decodeOutBufferDev_(nullptr), decodeOutputDesc_(nullptr)
-{
+      decodeOutBufferDev_(nullptr), decodeOutputDesc_(nullptr){
 }
 
-DvppJpegD::~DvppJpegD()
-{
+DvppJpegD::~DvppJpegD(){
     DestroyDecodeResource();
 }
 
 
-Result DvppJpegD::InitDecodeOutputDesc(ImageData& inputImage)
-{
+Result DvppJpegD::InitDecodeOutputDesc(ImageData& inputImage){
     uint32_t decodeOutWidthStride = ALIGN_UP16(inputImage.width);
     uint32_t decodeOutHeightStride = ALIGN_UP2(inputImage.height);
     if (decodeOutWidthStride == 0 || decodeOutHeightStride == 0) {
@@ -44,11 +41,6 @@ Result DvppJpegD::InitDecodeOutputDesc(ImageData& inputImage)
         return FAILED;
     }
 
-    /*The prediction interface requires the memory allocated by aclrtMallocHost. 
-    The current application running on AI1 will need to copy the image memory multiple times.
-    acldvppJpegPredictDecSize(inputImage.data.get(), inputImage.size,
-    PIXEL_FORMAT_YUV_SEMIPLANAR_420, &decodeOutBufferSize);*/
-    
 	/*Allocate a large enough memory*/
     uint32_t decodeOutBufferSize = 
 	    YUV420SP_SIZE(decodeOutWidthStride, decodeOutHeightStride) * 4;
@@ -75,12 +67,7 @@ Result DvppJpegD::InitDecodeOutputDesc(ImageData& inputImage)
     return SUCCESS;
 }
 
-Result DvppJpegD::Process(ImageData& dest, ImageData& src)
-{
-    printf("src image width %d, height %d, size %d\n", src.width, src.height, src.size);
-
-
-
+Result DvppJpegD::Process(ImageData& dest, ImageData& src){
     int ret = InitDecodeOutputDesc(src);
     if (ret != SUCCESS) {
         ERROR_LOG("InitDecodeOutputDesc failed");
@@ -111,8 +98,7 @@ Result DvppJpegD::Process(ImageData& dest, ImageData& src)
     return SUCCESS;
 }
 
-void DvppJpegD::DestroyDecodeResource()
-{
+void DvppJpegD::DestroyDecodeResource(){
     if (decodeOutputDesc_ != nullptr) {
         acldvppDestroyPicDesc(decodeOutputDesc_);
         decodeOutputDesc_ = nullptr;

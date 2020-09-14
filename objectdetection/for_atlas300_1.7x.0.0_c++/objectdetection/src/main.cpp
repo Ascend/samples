@@ -32,30 +32,31 @@ const char* kModelPath = "../model/yolov3.om";
 }
 
 int main(int argc, char *argv[]) {
-    //Check the input when the application is executed, the program execution requires the input of picture directory parameters
-    if((argc < 2) || (argv[1] == nullptr)){
+    //Check input args: the path of input picture, and ignore hidden dotfile directory
+    if((argc != 2) || (argv[1] == nullptr)){
         ERROR_LOG("Please input: ./main <image_dir>");
         return FAILED;
     }
-    //Instantiate the target detection object, the parameter is the classification model path, the width and height required by the model input
+    //Instantiate the object detection class
     ObjectDetect detect(kModelPath, kModelWidth, kModelHeight);
-    //Initialize the acl resources, models and memory for classification inference
+    //Initialize the acl resources, dvpp, load model, 
+    //and malloc input memory of input which is const
     Result ret = detect.Init();
     if (ret != SUCCESS) {
         ERROR_LOG("Classification Init resource failed");
         return FAILED;
     }
 
-    //Get all the image file names in the image directory
+    //Get all the image file path in the image directory
     string inputImageDir = string(argv[1]);
     vector<string> fileVec;
     Utils::GetAllFiles(inputImageDir, fileVec);
     if (fileVec.empty()) {
-        ERROR_LOG("Failed to deal all empty path=%s.", inputImageDir.c_str());
+        ERROR_LOG("Failed to read image from %s, and hidden dotfile "
+                  "directory is ignored", inputImageDir.c_str());
         return FAILED;
     }
 
-    //Reasoning picture by picture
     ImageData image;
     for (string imageFile : fileVec) {
         Utils::ReadImageFile(image, imageFile);
@@ -64,7 +65,7 @@ int main(int argc, char *argv[]) {
             return FAILED;
         }
 
-        //Preprocess the picture: read the picture and zoom the picture to the size required by the model input
+        //Preprocess: copy image to device, convert to yuv, and resize
         ImageData resizedImage;
         Result ret = detect.Preprocess(resizedImage, image);
         if (ret != SUCCESS) {
@@ -72,14 +73,16 @@ int main(int argc, char *argv[]) {
                       imageFile.c_str());                
             continue;
         }
-        //Send the preprocessed pictures to the model for inference and get the inference results
+        //Send the resized picture to the model for inference 
+        //and get the inference results
         aclmdlDataset* inferenceOutput = nullptr;
         ret = detect.Inference(inferenceOutput, resizedImage);
         if ((ret != SUCCESS) || (inferenceOutput == nullptr)) {
             ERROR_LOG("Inference model inference output data failed");
             return FAILED;
         }
-        //Analyze the inference output and mark the object category and location obtained by the inference on the picture
+        //Analyze the inference output, mark the object category and 
+        //location by the inference result
         ret = detect.Postprocess(image, inferenceOutput, imageFile);
         if (ret != SUCCESS) {
             ERROR_LOG("Process model inference output data failed");

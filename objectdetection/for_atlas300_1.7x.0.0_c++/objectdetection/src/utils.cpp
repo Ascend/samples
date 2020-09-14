@@ -53,7 +53,7 @@ bool Utils::IsDirectory(const string &path) {
     if (S_ISDIR(buf.st_mode)) {
         return true;
     } else {
-    return false;
+        return false;
     }
 }
 
@@ -82,10 +82,10 @@ void Utils::GetAllFiles(const string &path, vector<string> &file_vec) {
 
     for (string every_path : path_vector) {
         // check path exist or not
-        if (!IsPathExist(path)) {
-        ERROR_LOG("Failed to deal path=%s. Reason: not exist or can not access.",
-                every_path.c_str());
-        continue;
+        if (!IsPathExist(every_path)) {
+            ERROR_LOG("Failed to deal path=%s. Reason: not exist "
+                      "or can not access.", every_path.c_str());                      
+            continue;
         }
         // get files in path and sub-path
         GetPathFiles(every_path, file_vec);
@@ -100,7 +100,7 @@ void Utils::GetPathFiles(const string &path, vector<string> &file_vec) {
         while ((dirent_ptr = readdir(dir)) != nullptr) {
             // skip . and ..
             if (dirent_ptr->d_name[0] == '.') {
-            continue;
+                continue;
             }
 
             // file path
@@ -113,8 +113,7 @@ void Utils::GetPathFiles(const string &path, vector<string> &file_vec) {
                 file_vec.emplace_back(full_path);
             }
         }
-    } 
-    else {
+    } else {
         file_vec.emplace_back(path);
     }
 }
@@ -162,7 +161,8 @@ void* Utils::CopyDataHostToDevice(void* deviceData, uint32_t dataSize) {
     return CopyDataToDevice(deviceData, dataSize, ACL_MEMCPY_HOST_TO_DEVICE);
 }
 
-Result Utils::CopyImageDataToDevice(ImageData& imageDevice, ImageData srcImage, aclrtRunMode mode) {
+Result Utils::CopyImageDataToDevice(ImageData& imageDevice, 
+                                    ImageData srcImage, aclrtRunMode mode) {
     void * buffer;
     if (mode == ACL_HOST)
         buffer = Utils::CopyDataHostToDevice(srcImage.data.get(), srcImage.size);
@@ -184,10 +184,6 @@ Result Utils::CopyImageDataToDevice(ImageData& imageDevice, ImageData srcImage, 
 
 int Utils::ReadImageFile(ImageData& image, std::string fileName)
 {
-    //uint32_t width = 0, height = 0;
-    //GetJPEGWidthHeight(fileName.c_str(), &width, &height);
-    //INFO_LOG("jpeg width %d, height %d", width, height);
-
     struct stat sBuf;
     int fileStatus = stat(fileName.data(), &sBuf);
     if (fileStatus == -1) {

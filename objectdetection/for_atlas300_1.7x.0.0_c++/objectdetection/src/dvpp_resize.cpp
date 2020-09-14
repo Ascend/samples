@@ -34,13 +34,11 @@ inDevBuffer_(nullptr),vpcOutBufferDev_(nullptr),vpcOutBufferSize_(0){
     size_.height = height;
 }
 
-DvppResize::~DvppResize()
-{
+DvppResize::~DvppResize(){
     DestroyResizeResource();
 }
 
-Result DvppResize::InitResizeInputDesc(ImageData& inputImage)
-{
+Result DvppResize::InitResizeInputDesc(ImageData& inputImage){
     uint32_t alignWidth = ALIGN_UP16(inputImage.width);
     uint32_t alignHeight = ALIGN_UP2(inputImage.height);
     if (alignWidth == 0 || alignHeight == 0) {
@@ -55,7 +53,7 @@ Result DvppResize::InitResizeInputDesc(ImageData& inputImage)
         return FAILED;
     }
 
-    acldvppSetPicDescData(vpcInputDesc_, inputImage.data.get()); //  JpegD . vpcResize
+    acldvppSetPicDescData(vpcInputDesc_, inputImage.data.get());
     acldvppSetPicDescFormat(vpcInputDesc_, format_);
     acldvppSetPicDescWidth(vpcInputDesc_, inputImage.width);
     acldvppSetPicDescHeight(vpcInputDesc_, inputImage.height);
@@ -65,8 +63,7 @@ Result DvppResize::InitResizeInputDesc(ImageData& inputImage)
     return SUCCESS;
 }
 
-Result DvppResize::InitResizeOutputDesc()
-{
+Result DvppResize::InitResizeOutputDesc(){
     int resizeOutWidth = size_.width;
     int resizeOutHeight = size_.height;
     int resizeOutWidthStride = ALIGN_UP16(resizeOutWidth);
@@ -76,21 +73,19 @@ Result DvppResize::InitResizeOutputDesc()
         return FAILED;
     }
 
-
-        vpcOutBufferSize_ = YUV420SP_SIZE(resizeOutWidthStride, resizeOutHeightStride);
-        aclError aclRet = acldvppMalloc(&vpcOutBufferDev_, vpcOutBufferSize_);
-        if (aclRet != ACL_ERROR_NONE) {
-            ERROR_LOG("acldvppMalloc vpcOutBufferDev_ failed, aclRet = %d", aclRet);
-            return FAILED;
-        }
-
+    vpcOutBufferSize_ = YUV420SP_SIZE(resizeOutWidthStride, resizeOutHeightStride);
+    aclError aclRet = acldvppMalloc(&vpcOutBufferDev_, vpcOutBufferSize_);
+    if (aclRet != ACL_ERROR_NONE) {
+        ERROR_LOG("acldvppMalloc vpcOutBufferDev_ failed, aclRet = %d", aclRet);
+        return FAILED;
+    }
 
     vpcOutputDesc_ = acldvppCreatePicDesc();
     if (vpcOutputDesc_ == nullptr) {
         ERROR_LOG("acldvppCreatePicDesc vpcOutputDesc_ failed");
         return FAILED;
     }
-    printf("vpcOutBufferSize_ %d\n", vpcOutBufferSize_);
+
     acldvppSetPicDescData(vpcOutputDesc_, vpcOutBufferDev_);
     acldvppSetPicDescFormat(vpcOutputDesc_, format_);
     acldvppSetPicDescWidth(vpcOutputDesc_, resizeOutWidth);
@@ -123,8 +118,7 @@ Result DvppResize::InitResizeResource(ImageData& inputImage) {
     return SUCCESS;  
 }
 
-Result DvppResize::Process(ImageData& resizedImage, ImageData& srcImage)
-{
+Result DvppResize::Process(ImageData& resizedImage, ImageData& srcImage){
     if (SUCCESS != InitResizeResource(srcImage)) {
         ERROR_LOG("Dvpp resize failed for init error");
         return FAILED;
@@ -156,8 +150,7 @@ Result DvppResize::Process(ImageData& resizedImage, ImageData& srcImage)
     return SUCCESS;
 }
 
-void DvppResize::DestroyResizeResource()
-{
+void DvppResize::DestroyResizeResource(){
     if (resizeConfig_ != nullptr) {
         (void)acldvppDestroyResizeConfig(resizeConfig_);
         resizeConfig_ = nullptr;
