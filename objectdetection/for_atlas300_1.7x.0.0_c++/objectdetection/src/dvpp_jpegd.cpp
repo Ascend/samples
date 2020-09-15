@@ -34,8 +34,8 @@ DvppJpegD::~DvppJpegD(){
 
 
 Result DvppJpegD::InitDecodeOutputDesc(ImageData& inputImage){
-    uint32_t decodeOutWidthStride = ALIGN_UP16(inputImage.width);
-    uint32_t decodeOutHeightStride = ALIGN_UP2(inputImage.height);
+    uint32_t decodeOutWidthStride = ALIGN_UP128(inputImage.width);
+    uint32_t decodeOutHeightStride = ALIGN_UP16(inputImage.height);
     if (decodeOutWidthStride == 0 || decodeOutHeightStride == 0) {
         ERROR_LOG("InitDecodeOutputDesc AlignmentHelper failed");
         return FAILED;
@@ -89,8 +89,8 @@ Result DvppJpegD::Process(ImageData& dest, ImageData& src){
 
     dest.width = src.width;
     dest.height = src.height;
-    dest.alignWidth = ALIGN_UP16(src.width);
-    dest.alignHeight = ALIGN_UP2(src.height);
+    dest.alignWidth = ALIGN_UP128(src.width);
+    dest.alignHeight = ALIGN_UP16(src.height);
     dest.size = YUV420SP_SIZE(dest.alignWidth, dest.alignHeight);
     dest.data = SHARED_PRT_DVPP_BUF(decodeOutBufferDev_);
     INFO_LOG("convert image success");
