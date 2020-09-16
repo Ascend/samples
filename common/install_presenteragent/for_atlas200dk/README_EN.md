@@ -10,7 +10,8 @@ English|[中文](README.md)
 3.  Install python packages.  
     **python3 -m pip install pip --user**  
     **python3 -m pip install --upgrade pip --user**    
-    **python3 -m pip install tornado==5.1.0 protobuf==3.5.1 numpy==1.14.2 --user** 
+    **python3 -m pip install tornado==5.1.0 protobuf==3.5.1 numpy==1.14.2 --user**  
+    **python3.7.5 -m pip install tornado==5.1.0 --user** 
 4.  Install Protobuf. (Run the following commands in sequence. Because cross compilation is required, you need to compile Protobuf twice.)  
     **git clone -b 3.8.x https://gitee.com/mirrors/protobufsource.git protobuf**  
     **cd protobuf**  
