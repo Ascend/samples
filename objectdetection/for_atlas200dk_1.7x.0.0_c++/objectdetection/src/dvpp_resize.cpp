@@ -39,8 +39,8 @@ DvppResize::~DvppResize(){
 }
 
 Result DvppResize::InitResizeInputDesc(ImageData& inputImage){
-    uint32_t alignWidth = ALIGN_UP16(inputImage.width);
-    uint32_t alignHeight = ALIGN_UP2(inputImage.height);
+    uint32_t alignWidth = ALIGN_UP128(inputImage.width);
+    uint32_t alignHeight = ALIGN_UP16(inputImage.height);
     if (alignWidth == 0 || alignHeight == 0) {
         ERROR_LOG("InitResizeInputDesc AlignmentHelper failed. image w %d, h %d, align w%d, h%d",
          inputImage.width, inputImage.height, alignWidth, alignHeight);
