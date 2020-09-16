@@ -10,7 +10,8 @@
 3.  安装python库。  
     **python3 -m pip install pip --user**  
     **python3 -m pip install --upgrade pip --user**    
-    **python3 -m pip install tornado==5.1.0 protobuf==3.5.1 numpy==1.14.2 --user** 
+    **python3 -m pip install tornado==5.1.0 protobuf==3.5.1 numpy==1.14.2 --user**  
+    **python3.7.5 -m pip install tornado==5.1.0 --user**  
 4.  安装protobuf（按照如下命令一步步执行即可，由于需要交叉编译，所以需要编译两遍）。  
     **git clone -b 3.8.x https://gitee.com/mirrors/protobufsource.git protobuf**  
     **cd protobuf**  
