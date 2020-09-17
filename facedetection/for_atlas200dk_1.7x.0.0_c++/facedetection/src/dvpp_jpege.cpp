@@ -120,7 +120,7 @@ Result DvppJpegE::Process(ImageData& destJpegImage, ImageData& srcYuvImage)
 
     destJpegImage.width = srcYuvImage.width;
     destJpegImage.height = srcYuvImage.height;
-    destJpegImage.size = encodeOutBufferSize_;
+    destJpegImage.size = tempLen;
 
     INFO_LOG("jpeg convert ok, size %d,tempLen %d", encodeOutBufferSize_,tempLen);
     destJpegImage.data = SHARED_PRT_DVPP_BUF(encodeOutBufferDev_);
