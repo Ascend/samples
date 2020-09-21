@@ -69,13 +69,6 @@ Result Camera::SetProperty(int channelID) {
         return FAILED;
     }
 
-    int image_format = CAMERA_IMAGE_YUV420_SP;
-    ret = SetCameraProperty(channelID, CAMERA_PROP_IMAGE_FORMAT, &image_format);
-    if (ret == LIBMEDIA_STATUS_FAILED) {
-        ERROR_LOG("Set camera image format to %d  channel %d failed\n",channelID, image_format);
-        return FAILED;
-    }
-
     CameraResolution resolution;
     resolution.width = width_;
     resolution.height = height_;
