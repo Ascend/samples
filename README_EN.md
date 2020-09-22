@@ -35,7 +35,7 @@ Ascend sample，Please enter the corresponding folder to get the application acc
 
 - [for_atlas200dk_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/colorization/for_atlas200dk_1.7x.0.0_c++):This branch is a C++ sample based on version 1.7x.0.0 running on 200DK. Use opencv to preprocess the image, perform color channel prediction on the preprocessed image, and finally perform the corresponding post-processing through opencv.  
 - [for_atlas200dk_1.7x.0.0_python](https://gitee.com/ascend/samples/tree/master/colorization/for_atlas200dk_1.7x.0.0_python):This branch is a python sample running on 200DK based on version 1.7x.0.0. Use opencv to preprocess the image, perform color channel prediction on the preprocessed image, and finally perform the corresponding post-processing through opencv.
-- [for_atlas300_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/colorization/for_atlas300_1.7x.0.0_c++):This branch is a C++ sample based on version 1.7x.0.0 running on 200DK. Use opencv to preprocess the image, perform color channel prediction on the preprocessed image, and finally perform the corresponding post-processing through opencv.
+- [for_atlas300_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/colorization/for_atlas300_1.7x.0.0_c++):This branch is a C++ sample based on version 1.7x.0.0 running on the ai1 environment. Use opencv to preprocess the image, perform color channel prediction on the preprocessed image, and finally perform the corresponding post-processing through opencv.
   
 </blockquote></details>  
 
