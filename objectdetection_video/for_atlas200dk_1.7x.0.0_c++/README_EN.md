@@ -130,11 +130,11 @@ Set **Target OS** to **Centos7.6**, as shown in [Figure 4 Build configuration](#
    **bash script/run_presenter_server.sh  &**
    
    **Figure 6** Starting Presenter Server <a name="zh-cn_topic_0228461904_zh-cn_topic_0203223294_fig423515251067"></a>  
-   ![](figures/presentserver1.png)
+   ![输入图片说明](https://images.gitee.com/uploads/images/2020/0923/091346_5c8880ea_5395865.png "屏幕截图.png")
    
    Presenter Server is started successfully, as shown in [Figure 7 Presenter Server started successfully](#zh-cn_topic_0228461904_zh-cn_topic_0203223294_fig423).   
    **Figure 7** Presenter Server started successfully <a name="zh-cn_topic_0228461904_zh-cn_topic_0203223294_fig423"></a>  
-   ![](figures/presentserver2.png)
+  ![输入图片说明](https://images.gitee.com/uploads/images/2020/0923/091501_736f9392_5395865.png "屏幕截图.png")
 
 ## Run<a name="zh-cn_topic_0219108795_section1620073406"></a>
 
