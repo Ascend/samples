@@ -128,13 +128,11 @@
 
     **bash script/run_presenter_server.sh &**
 
-    **图 6**  启动PresenterServer![启动PresenterServer](https://images.gitee.com/uploads/images/2020/0914/143052_e105c176_7985487.png "屏幕截图.png")
-   
+    **图 6**  启动PresenterServer![输入图片说明](https://images.gitee.com/uploads/images/2020/0923/091220_80e68c0b_5395865.png "屏幕截图.png")
   
     如图所示，表示presenter_server的服务启动成功。  
     **图 7**  启动PresenterServer    
-  ![启动PresenterServer](https://images.gitee.com/uploads/images/2020/0914/145147_0c2338b8_7985487.png "屏幕截图.png")</a> 
-
+  ![输入图片说明](https://images.gitee.com/uploads/images/2020/0923/091456_1eaa70a4_5395865.png "屏幕截图.png")
 ## 运行<a name="zh-cn_topic_0219108795_section1620073406"></a>
 1.  在Mind Studio工具的工具栏中找到Run按钮，单击  **Run \> Edit Configurations**。  
     在Command Arguments 中添加运行参数 **../data/detection.mp4**（输入视频的路径），之后分别点击Apply、OK。如[图 配置运行](#zh-cn_topic_0203223265_fig93931954162720)所示。   
