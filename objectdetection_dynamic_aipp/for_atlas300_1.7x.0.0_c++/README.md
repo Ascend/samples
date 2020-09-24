@@ -39,19 +39,19 @@
 
         **cd \$HOME/yolov3**
         
-        **export install_path=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux_gcc7.3.0**  
+        **export install_path=\$HOME/Ascend/ascend-toolkit/latest/x86_64-linux_gcc7.3.0**  
 
-        **export PATH=/usr/local/python3.7.5/bin:${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH**  
+        **export PATH=/usr/local/python3.7.5/bin:\\${install_path}/atc/ccec_compiler/bin:\\${install_path}/atc/bin:\\$PATH**  
 
-        **export PYTHONPATH=${install_path}/atc/python/site-packages/te:${install_path}/atc/python/site-packages/topi:$PYTHONPATH**  
+        **export PYTHONPATH=\\${install_path}/atc/python/site-packages/te:\\${install_path}/atc/python/site-packages/topi:\\$PYTHONPATH**  
 
-        **export LD_LIBRARY_PATH=${install_path}/atc/lib64:$LD_LIBRARY_PATH**  
+        **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64:\\$LD_LIBRARY_PATH**  
 
-        **export ASCEND_OPP_PATH=${install_path}/opp**  
+        **export ASCEND_OPP_PATH=\\${install_path}/opp**  
 
     2.  执行以下命令转换模型。
 
-        **atc --model=\\$HOME/yolov3/yolov3.prototxt --weight=\\$HOME/yolov3/yolov3.caffemodel --framework=0 --output=\\$HOME/yolov3/yolov3 --soc_version=Ascend310 --insert_op_conf=\\$HOME/AscendProjects/sample_objectdetection_dynamic_AIPP/aipp_objectdetection.cfg**
+        **atc --model=\\$HOME/yolov3/yolov3.prototxt --weight=\\$HOME/yolov3/yolov3.caffemodel --framework=0 --output=\\$HOME/yolov3/yolov3 --soc_version=Ascend310 --insert_op_conf=\\$HOME/AscendProjects/objectdetection_dynamic_aipp/aipp_objectdetection.cfg**
 
     
 5.  将转换好的模型文件（.om文件）添加到项目工程：
