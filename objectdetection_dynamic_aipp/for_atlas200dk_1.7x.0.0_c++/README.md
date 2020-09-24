@@ -76,7 +76,7 @@
 
     **./MindStudio.sh**
 
-    启动成功后，打开**objectdetection_dynamic_aipp**工程，如[图 1]所示。   
+    启动成功后，打开**objectdetection_dynamic_aipp**工程，如图 1所示。   
 
     ![打开工程](https://images.gitee.com/uploads/images/2020/0924/161134_1d437fbf_7985487.png "屏幕截图.png"))
 
@@ -89,7 +89,7 @@
 
     **图 2**  配置编译<a name="zh-cn_topic_0203223265_fig17414647130"></a>  
     
-    之后点击**Build \> Build \> Build Configuration**，如[图3 成功编译]，会在目录下生成build和out文件夹。
+    之后点击**Build \> Build \> Build Configuration**，如图3 成功编译，会在目录下生成build和out文件夹。
 
     ![成功编译](https://images.gitee.com/uploads/images/2020/0924/162201_eef5f2df_7985487.png "屏幕截图.png")
     **图 3**  编译操作及生成文件<a name="zh-cn_topic_0203223265_fig1741464713019"></a>  
@@ -98,9 +98,9 @@
     >首次编译工程时，**Build \> Build**为灰色不可点击状态。需要点击**Build \> Edit Build Configuration**，配置编译参数后再进行编译。  
 ## 运行<a name="zh-cn_topic_0219108795_section1620073406"></a>
 1.  在Mind Studio工具的工具栏中找到Run按钮，单击  **Run \> Edit Configurations**。  
-    在Command Arguments 中添加运行参数 **../data**（输入图片的路径），之后分别点击Apply、OK。如[图 配置运行](#zh-cn_topic_0203223265_fig93931954162720)所示。
+    在Command Arguments 中添加运行参数 **../data**（输入图片的路径），之后分别点击Apply、OK。如图 [配置运行] 所示。
    
-    ![配置运行](https://images.gitee.com/uploads/images/2020/0923/105215_2250996f_8083019.png "配置run.png")
+    ![配置运行](https://images.gitee.com/uploads/images/2020/0924/163014_4fc1f847_7985487.png "屏幕截图.png")
     **图 4**  配置运行<a name="zh-cn_topic_0203223265_fig93931954162720"></a>   
  
 2.  单击  **Run \> Run 'objectdetection'**，如[图 程序已执行示意图](#zh-cn_topic_0203223265_fig93931954162719)所示，可执行程序已经在开发者板执行。  
