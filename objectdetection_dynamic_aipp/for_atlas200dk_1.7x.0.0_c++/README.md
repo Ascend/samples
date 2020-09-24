@@ -91,7 +91,7 @@
     
     之后点击**Build \> Build \> Build Configuration**，如[图3 编译操作及生成文件](#zh-cn_topic_0203223265_fig1741464713019)所示，会在目录下生成build和out文件夹。
 
-    ![成功编译](https://images.gitee.com/uploads/images/2020/0923/105043_c09df42f_8083019.png "成功编译.png")
+    ![成功编译](https://images.gitee.com/uploads/images/2020/0924/162201_eef5f2df_7985487.png "屏幕截图.png")
     **图 3**  编译操作及生成文件<a name="zh-cn_topic_0203223265_fig1741464713019"></a>  
 
     >![](public_sys-resources/icon-notice.gif) **须知：**   
