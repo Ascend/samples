@@ -3,7 +3,7 @@
 **该案例仅仅用于学习，打通流程，不对效果负责，不支持商用。**
 
 #  检测网络应用（C++）<a name="ZH-CN_TOPIC_0219122211"></a>
-本应用支持运行在Atlas 200 DK上，实现了对yolov3目标检测网络的推理功能。 
+本应用支持运行在Atlas 300 上，实现了对yolov3目标检测网络的推理功能。 
 
 ## 软件准备<a name="zh-cn_topic_0219108795_section181111827718"></a>
 
@@ -98,10 +98,10 @@
     >首次编译工程时，**Build \> Build**为灰色不可点击状态。需要点击**Build \> Edit Build Configuration**，配置编译参数后再进行编译。  
 ## 运行<a name="zh-cn_topic_0219108795_section1620073406"></a>
 1.  在Mind Studio工具的工具栏中找到Run按钮，单击  **Run \> Edit Configurations**。  
-    在Command Arguments 中添加运行参数 **../data**（输入图片的路径），之后分别点击Apply、OK。如图 配置运行 所示。
+    在Command Arguments 中添加运行参数 **../data**（输入图片的路径），之后分别点击Apply、OK。如图4 配置运行 所示。
    
-    ![配置运行](https://images.gitee.com/uploads/images/2020/0924/165130_b41c0475_7985487.png "屏幕截图.png")
-    **图 4**  配置运行<a name="zh-cn_topic_0203223265_fig93931954162720"></a>   
+    ![配置运行](https://images.gitee.com/uploads/images/2020/0924/165130_b41c0475_7985487.png "屏幕截图.png")   
+**图 4**  配置运行<a name="zh-cn_topic_0203223265_fig93931954162720"></a>   
  
 2.  单击  **Run \> Run 'objectdetection'**，如图 程序已执行示意图 所示，可执行程序已经在开发者板执行。  
 
