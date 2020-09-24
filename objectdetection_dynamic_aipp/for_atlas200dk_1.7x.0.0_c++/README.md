@@ -76,14 +76,14 @@
 
     **./MindStudio.sh**
 
-    启动成功后，打开**objectdetection_dynamic_aipp**工程，如[图 1](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810)所示。
+    启动成功后，打开**objectdetection_dynamic_aipp**工程，如[图 1]所示。   
 
-    ![打开工程](https://images.gitee.com/uploads/images/2020/0923/104213_763df612_8083019.png "打开工程.png")
+    ![打开工程](https://images.gitee.com/uploads/images/2020/0924/161134_1d437fbf_7985487.png "屏幕截图.png"))
 
     **图 1**  打开objectdetection工程<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810"></a>  
 
 2.  开始编译，打开Mind Studio工具，在工具栏中点击**Build \> Edit Build Configuration**。  
-    选择Target OS 为Centos7.6，如[图2 配置编译](#zh-cn_topic_0203223265_fig17414647130)所示。
+    选择Target OS 为Centos7.6，如[图2 配置编译]所示。
 
     ![配置编译](https://images.gitee.com/uploads/images/2020/0923/104800_bd70575c_8083019.png "build成功.png")
 
