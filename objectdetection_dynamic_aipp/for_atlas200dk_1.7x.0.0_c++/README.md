@@ -13,7 +13,7 @@
 
     **cd $HOME/AscendProjects**  
 
-    **wget https://gitee.com/atlasdevelop/c7x_samples/tree/master/200dk_sample/sample_objectdetection_dynamic_AIPP**
+    **wget https://gitee.com/atlasdevelop/c7x_samples/tree/master/200dk_sample/objectdetection_dynamic_aipp**
             
     
 2.  <a name="zh-cn_topic_0219108795_li2074865610364"></a>获取此应用中所需要的原始网络模型。    
@@ -51,12 +51,12 @@
 
     2.  执行以下命令转换模型。
 
-        **atc --model=\\$HOME/yolov3/yolov3.prototxt --weight=\\$HOME/yolov3/yolov3.caffemodel --framework=0 --output=\\$HOME/yolov3/yolov3 --soc_version=Ascend310 --insert_op_conf=\\$HOME/AscendProjects/sample_objectdetection_dynamic_AIPP/aipp_objectdetection.cfg**
+        **atc --model=\\$HOME/yolov3/yolov3.prototxt --weight=\\$HOME/yolov3/yolov3.caffemodel --framework=0 --output=\\$HOME/yolov3/yolov3 --soc_version=Ascend310 --insert_op_conf=\\$HOME/AscendProjects/objectdetection_dynamic_aipp/aipp_objectdetection.cfg**
 
     
-5.  使用MindStudio将转换好的模型文件（.om文件）添加到项目工程中，如下图：
+5.  将转换好的模型文件（.om文件）添加到项目工程中：
 
-    ![添加模型](https://images.gitee.com/uploads/images/2020/0923/104414_96b53e71_8083019.png "添加模型.png")
+    cp /home/ascend/yolov3/yolov3.om /home/ascend/AscendProjects/objectdetection_dynamic_aipp/model/
 
 ## 环境配置   
 
@@ -76,7 +76,7 @@
 
     **./MindStudio.sh**
 
-    启动成功后，打开**sample_objectdetection_dynamic_AIPP**工程，如[图 1](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810)所示。
+    启动成功后，打开**objectdetection_dynamic_aipp**工程，如[图 1](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810)所示。
 
     ![打开工程](https://images.gitee.com/uploads/images/2020/0923/104213_763df612_8083019.png "打开工程.png")
 
