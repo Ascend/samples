@@ -56,7 +56,7 @@
     
 5.  将转换好的模型文件（.om文件）添加到项目工程中：
 
-    cp /home/ascend/yolov3/yolov3.om /home/ascend/AscendProjects/objectdetection_dynamic_aipp/model/
+    **cp /home/ascend/yolov3/yolov3.om /home/ascend/AscendProjects/objectdetection_dynamic_aipp/model/**
 
 ## 环境配置   
 
@@ -87,11 +87,11 @@
 
     ![配置编译](https://images.gitee.com/uploads/images/2020/0923/104800_bd70575c_8083019.png "build成功.png")
 
-    **图 2**  配置编译<a name="zh-cn_topic_0203223265_fig17414647130"></a>  
+    **图 2**  配置编译<a name="zh-cn_topic_0203223265_fig17414647130"></a>     
     
-    之后点击**Build \> Build \> Build Configuration**，如图3 成功编译，会在目录下生成build和out文件夹。
+3.  之后点击**Build \> Build \> Build Configuration**，如图3 成功编译，会在目录下生成build和out文件夹。
 
-    ![成功编译](https://images.gitee.com/uploads/images/2020/0924/162201_eef5f2df_7985487.png "屏幕截图.png")
+    ![成功编译](https://images.gitee.com/uploads/images/2020/0924/165847_c23103ce_7985487.png "屏幕截图.png")
     **图 3**  编译操作及生成文件<a name="zh-cn_topic_0203223265_fig1741464713019"></a>  
 
     >![](public_sys-resources/icon-notice.gif) **须知：**   
