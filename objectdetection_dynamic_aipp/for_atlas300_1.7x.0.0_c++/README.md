@@ -13,7 +13,7 @@
 
     **cd $HOME/AscendProjects**  
 
-    **wget https://gitee.com/atlasdevelop/c7x_samples/tree/master/200dk_sample/sample_objectdetection_dynamic_AIPP**
+    **wget https://gitee.com/atlasdevelop/c7x_samples/tree/master/200dk_sample/objectdetection_dynamic_aipp**
             
     
 2.  <a name="zh-cn_topic_0219108795_li2074865610364"></a>获取此应用中所需要的原始网络模型。    
@@ -39,24 +39,24 @@
 
         **cd \$HOME/yolov3**
         
-        **export install_path=\$HOME/Ascend/ascend-toolkit/20.0.RC1/x86_64-linux_gcc7.3.0**  
+        **export install_path=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux_gcc7.3.0**  
 
-        **export PATH=/usr/local/python3.7.5/bin:\\${install_path}/atc/ccec_compiler/bin:\\${install_path}/atc/bin:\\$PATH**  
+        **export PATH=/usr/local/python3.7.5/bin:${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH**  
 
-        **export PYTHONPATH=\\${install_path}/atc/python/site-packages/te:\\${install_path}/atc/python/site-packages/topi:\\$PYTHONPATH**  
+        **export PYTHONPATH=${install_path}/atc/python/site-packages/te:${install_path}/atc/python/site-packages/topi:$PYTHONPATH**  
 
-        **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64:\\$LD_LIBRARY_PATH**  
+        **export LD_LIBRARY_PATH=${install_path}/atc/lib64:$LD_LIBRARY_PATH**  
 
-        **export ASCEND_OPP_PATH=\\${install_path}/opp**  
+        **export ASCEND_OPP_PATH=${install_path}/opp**  
 
     2.  执行以下命令转换模型。
 
         **atc --model=\\$HOME/yolov3/yolov3.prototxt --weight=\\$HOME/yolov3/yolov3.caffemodel --framework=0 --output=\\$HOME/yolov3/yolov3 --soc_version=Ascend310 --insert_op_conf=\\$HOME/AscendProjects/sample_objectdetection_dynamic_AIPP/aipp_objectdetection.cfg**
 
     
-5.  使用MindStudio将转换好的模型文件（.om文件）添加到项目工程中，如下图：
+5.  将转换好的模型文件（.om文件）添加到项目工程：
 
-    ![添加模型](https://images.gitee.com/uploads/images/2020/0923/104414_96b53e71_8083019.png "添加模型.png")
+    cp yolov3/yolov3.om AscendProjects/objectdetection_dynamic_aipp/model/
 
 ## 环境配置   
 
@@ -76,36 +76,36 @@
 
     **./MindStudio.sh**
 
-    启动成功后，打开**sample_objectdetection_dynamic_AIPP**工程，如[图 1](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810)所示。
+    启动成功后，打开**sample_objectdetection_dynamic_AIPP**工程，如图 1所示。
 
-    ![打开工程](https://images.gitee.com/uploads/images/2020/0923/104213_763df612_8083019.png "打开工程.png")
+    ![打开工程](https://images.gitee.com/uploads/images/2020/0924/164857_c5896a64_7985487.png "屏幕截图.png")
 
     **图 1**  打开objectdetection工程<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810"></a>  
 
 2.  开始编译，打开Mind Studio工具，在工具栏中点击**Build \> Edit Build Configuration**。  
-    选择Target OS 为Centos7.6，如[图2 配置编译](#zh-cn_topic_0203223265_fig17414647130)所示。
+    选择Target OS 为Centos7.6，如图2 配置编译 所示。
 
     ![配置编译](https://images.gitee.com/uploads/images/2020/0923/104800_bd70575c_8083019.png "build成功.png")
 
     **图 2**  配置编译<a name="zh-cn_topic_0203223265_fig17414647130"></a>  
     
-    之后点击**Build \> Build \> Build Configuration**，如[图3 编译操作及生成文件](#zh-cn_topic_0203223265_fig1741464713019)所示，会在目录下生成build和out文件夹。
+    之后点击**Build \> Build \> Build Configuration**，如图3 编译操作及生成文件 所示，会在目录下生成build和out文件夹。   
 
-    ![成功编译](https://images.gitee.com/uploads/images/2020/0923/105043_c09df42f_8083019.png "成功编译.png")
+   ![成功编译](https://images.gitee.com/uploads/images/2020/0924/165058_13e12343_7985487.png "屏幕截图.png")
     **图 3**  编译操作及生成文件<a name="zh-cn_topic_0203223265_fig1741464713019"></a>  
 
     >![](public_sys-resources/icon-notice.gif) **须知：**   
     >首次编译工程时，**Build \> Build**为灰色不可点击状态。需要点击**Build \> Edit Build Configuration**，配置编译参数后再进行编译。  
 ## 运行<a name="zh-cn_topic_0219108795_section1620073406"></a>
 1.  在Mind Studio工具的工具栏中找到Run按钮，单击  **Run \> Edit Configurations**。  
-    在Command Arguments 中添加运行参数 **../data**（输入图片的路径），之后分别点击Apply、OK。如[图 配置运行](#zh-cn_topic_0203223265_fig93931954162720)所示。
+    在Command Arguments 中添加运行参数 **../data**（输入图片的路径），之后分别点击Apply、OK。如图 配置运行 所示。
    
-    ![配置运行](https://images.gitee.com/uploads/images/2020/0923/105215_2250996f_8083019.png "配置run.png")
+    ![配置运行](https://images.gitee.com/uploads/images/2020/0924/165130_b41c0475_7985487.png "屏幕截图.png")
     **图 4**  配置运行<a name="zh-cn_topic_0203223265_fig93931954162720"></a>   
  
-2.  单击  **Run \> Run 'objectdetection'**，如[图 程序已执行示意图](#zh-cn_topic_0203223265_fig93931954162719)所示，可执行程序已经在开发者板执行。  
+2.  单击  **Run \> Run 'objectdetection'**，如图 程序已执行示意图 所示，可执行程序已经在开发者板执行。  
 
-    ![程序已执行示意图](https://images.gitee.com/uploads/images/2020/0923/105353_1c1f6ca6_8083019.png "程序已执行示意图.png")
+    ![程序已执行](https://images.gitee.com/uploads/images/2020/0924/165329_eb405e6d_7985487.png "屏幕截图.png")
     **图 5**  程序已执行示意图<a name="zh-cn_topic_0203223265_fig93931954162719"></a>  
 
 3.  查看运行结果。
