@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="6c02673a-75f9-46e5-9f90-7af4586b8324" name="Default Changelist" comment="" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="x" value="128" />
+    <option name="y" value="33" />
+    <option name="width" value="1476" />
+    <option name="height" value="899" />
+  </component>
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="wav2word" type="b2602c69:ProjectViewProjectNode" />
+              <item name="wav2word" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="wav2word" type="b2602c69:ProjectViewProjectNode" />
+              <item name="wav2word" type="462c0819:PsiDirectoryNode" />
+              <item name="model" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
+      <pane id="OperatorsViewPane" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../wav2word 222" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="Ascend App Configuration Type" factoryName="Ascend App" hostip="192.168.1.2" commandArguments="">
+      <method v="2" />
+    </configuration>
+    <configuration name="wav2word" type="Ascend App Configuration Type" factoryName="Ascend App" hostip="192.168.1.2" commandArguments="../data" ProfilingParams="{&quot;--ai_core_profiling_mode&quot;:&quot;sample-based&quot;,&quot;ProfilingStatus&quot;:&quot;off&quot;,&quot;--ai_core_metrics&quot;:&quot;aicorePipeline&quot;,&quot;hasError&quot;:&quot;off&quot;,&quot;--profiling_options&quot;:&quot;task_trace&quot;,&quot;ai_core_sample_based&quot;:&quot;off&quot;,&quot;--aicore_sampling_interval&quot;:&quot;10&quot;,&quot;ai_core_task_based&quot;:&quot;off&quot;}">
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="6c02673a-75f9-46e5-9f90-7af4586b8324" name="Default Changelist" comment="" />
+      <created>1600840408002</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1600840408002</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="128" y="33" width="1476" height="899" extended-state="0" />
+    <layout>
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24982794" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.32974428" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Version Control" order="7" />
+      <window_info anchor="bottom" id="Log" order="8" />
+      <window_info anchor="bottom" id="Output" order="9" weight="0.3270525" />
+      <window_info anchor="bottom" id="Pylint" order="10" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.44683716" />
+      <window_info anchor="bottom" id="Event Log" order="12" side_tool="true" />
+      <window_info anchor="bottom" id="Tail" order="13" />
+      <window_info anchor="bottom" id="Build" order="14" weight="0.32974428" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+    </layout>
+  </component>
+</project>
