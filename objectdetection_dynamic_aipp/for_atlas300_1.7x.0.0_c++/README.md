@@ -85,7 +85,7 @@
 2.  开始编译，打开Mind Studio工具，在工具栏中点击**Build \> Edit Build Configuration**。  
     选择Target OS 为Centos7.6，如图2 配置编译 所示。
 
-    ![配置编译](https://images.gitee.com/uploads/images/2020/0923/104800_bd70575c_8083019.png "build成功.png")
+    ![build](https://images.gitee.com/uploads/images/2020/0924/210037_5093b531_7985487.png "屏幕截图.png")
 
     **图 2**  配置编译<a name="zh-cn_topic_0203223265_fig17414647130"></a>  
     
