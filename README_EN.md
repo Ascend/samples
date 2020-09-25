@@ -52,7 +52,16 @@ Ascend sample，Please enter the corresponding folder to get the application acc
 - [for_atlas200dk_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/objectdetection/for_atlas200dk_1.7x.0.0_c++):This branch is a C++ sample based on version 1.7x.0.0 running on 200DK. Use opencv to preprocess the image, perform target detection on the objects in the preprocessed image, and finally perform corresponding post-processing through opencv.  
 - [for_atlas200dk_1.7x.0.0_python](https://gitee.com/ascend/samples/tree/master/objectdetection/for_atlas200dk_1.7x.0.0_python):This branch is a python sample running on 200DK based on version 1.7x.0.0. Use dvpp to preprocess the image, perform target detection on the objects in the preprocessed image, and finally perform corresponding post-processing through pillow.   
 - [for_atlas300_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/objectdetection/for_atlas300_1.7x.0.0_c++):This branch is a C++ sample based on version 1.7x.0.0 running on the ai1 environment. Use opencv to preprocess the image, perform target detection on the objects in the preprocessed image, and finally perform corresponding post-processing through opencv.  
+</blockquote></details>     
+     
+<details open><summary>objectdetection_dynamic_aipp
+:Target detection application based on yolov3, the input is a picture, and the output is a picture.</summary><blockquote>
+
+- [for_atlas200dk_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/objectdetection_dynamic_aipp/for_atlas200dk_1.7x.0.0_c++):This branch is a C++ sample based on version 1.7x.0.0 running on 200DK. Use opencv to preprocess the image, perform target detection on the objects in the preprocessed image, and finally perform corresponding post-processing through opencv.  
+- [for_atlas200dk_1.7x.0.0_python](https://gitee.com/ascend/samples/tree/master/objectdetection/for_atlas200dk_1.7x.0.0_python):This branch is a python sample running on 200DK based on version 1.7x.0.0. Use dvpp to preprocess the image, perform target detection on the objects in the preprocessed image, and finally perform corresponding post-processing through pillow.   
+- [for_atlas300_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/objectdetection_dynamic_aipp/for_atlas300_1.7x.0.0_c++):This branch is a C++ sample based on version 1.7x.0.0 running on the ai1 environment. Use opencv to preprocess the image, perform target detection on the objects in the preprocessed image, and finally perform corresponding post-processing through opencv.  
 </blockquote></details>
+
 
 
 <details open><summary>objectdetection_video:Target detection application based on yolov3, the input is video, and the output is video.</summary><blockquote>
