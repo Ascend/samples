@@ -59,18 +59,17 @@
    vim ~/.bashrc
    打开.bashrc文件，在最后边添加环境变量
 
-```
-        export install_path=\$HOME/Ascend/ascend-toolkit/latest/x86_64-linux_gcc7.3.0
 
-        export PATH=/usr/local/python3.7.5/bin:\\${install_path}/atc/ccec_compiler/bin:\\${install_path}/atc/bin:\\$PATH  
+        **export install_path=\$HOME/Ascend/ascend-toolkit/latest/x86_64-linux_gcc7.3.0**
 
-        export PYTHONPATH=\\${install_path}/atc/python/site-packages/te:\\${install_path}/atc/python/site-packages/topi:\\$PYTHONPATH  
+        **export PATH=/usr/local/python3.7.5/bin:\\${install_path}/atc/ccec_compiler/bin:\\${install_path}/atc/bin:\\$PATH**  
 
-        export LD_LIBRARY_PATH=\\${install_path}/atc/lib64:\\$LD_LIBRARY_PATH 
+        **export PYTHONPATH=\\${install_path}/atc/python/site-packages/te:\\${install_path}/atc/python/site-packages/topi:\\$PYTHONPATH** 
 
-        export ASCEND_OPP_PATH=\\${install_path}/opp  
+        **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64:\\$LD_LIBRARY_PATH**
 
-```
+        **export ASCEND_OPP_PATH=\\${install_path}/opp**  
+
 
 
 
