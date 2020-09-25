@@ -90,12 +90,12 @@
 
 打开Mind Studio工具的Terminal，在预处理代码存放路径下，执行如下命令将.wav文件转换成.bin文件。
 
-**cd ./AscendProjects/wav2word/script**
+**cd \\$HOME/AscendProjects/wav2word/script**
 
 **python3 preparedata.py**
 
-如下图所示。
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/104131_431af1bb_7985487.png "屏幕截图.png") 
+ 如下图所示。     
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/104131_431af1bb_7985487.png "屏幕截图.png") 
 
 
 
@@ -117,12 +117,13 @@ Mindstudio配置开发板RC连接。
 
 
 5.后处理：
-将上一步骤生成的.bin文件移动到/home/ascend/AscendProjects/wav2word/out目录下，
+将上一步骤生成的.bin文件移动到/home/ascend/AscendProjects/wav2word/out目录下     
+move \\$HOME/AscendProject/wav2word/out/outs/*bin \\$HOME/AscendProjects/wav2word/out
    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/104310_acf2479d_7985487.png "屏幕截图.png")
 
 打开Mind Studio工具的Terminal，执行如下命令将.bin文件转换成文本。
 
-**cd ./AscendProjects/wav2word/script**
+**cd \\$HOME/AscendProjects/wav2word/script**
 
 **python3 postprocess.py**
 
