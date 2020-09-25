@@ -56,7 +56,7 @@
     
 5.  将转换好的模型文件（.om文件）添加到项目工程中：
 
-    **cp /home/ascend/yolov3/yolov3.om /home/ascend/AscendProjects/objectdetection_dynamic_aipp/model/**
+    **cp $HOME/yolov3/yolov3.om $HOME/AscendProjects/objectdetection_dynamic_aipp/model/**
 
 ## 环境配置   
 
@@ -78,7 +78,7 @@
 
     启动成功后，打开**objectdetection_dynamic_aipp**工程，如图 1所示。   
 
-    ![打开工程](https://images.gitee.com/uploads/images/2020/0924/161134_1d437fbf_7985487.png "屏幕截图.png"))
+    ![打开工程](https://images.gitee.com/uploads/images/2020/0924/161134_1d437fbf_7985487.png "屏幕截图.png")
 
     **图 1**  打开objectdetection工程<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810"></a>  
 
@@ -100,7 +100,7 @@
 1.  在Mind Studio工具的工具栏中找到Run按钮，单击  **Run \> Edit Configurations**。  
     在Command Arguments 中添加运行参数 **../data**（输入图片的路径），之后分别点击Apply、OK。如图 配置运行 所示。
    
-    ![配置运行](https://images.gitee.com/uploads/images/2020/0924/163014_4fc1f847_7985487.png "屏幕截图.png")
+    ![配置运行](https://images.gitee.com/uploads/images/2020/0924/163014_4fc1f847_7985487.png "屏幕截图.png")   
     **图 4**  配置运行  
  
 2.  单击  **Run \> Run 'objectdetection'**，如图 程序已执行示意图 所示，可执行程序已经在开发者板执行。  
