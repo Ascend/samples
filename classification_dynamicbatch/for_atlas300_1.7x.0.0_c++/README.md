@@ -84,10 +84,10 @@
 **./MindStudio.sh**
 
 打开后，选择“Open project”，打开classification_dynamicbatch工程。
-   ![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/172207_62f86791_7985487.png "屏幕截图.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/172207_62f86791_7985487.png "屏幕截图.png")
 
-此时，工程的model文件夹下已经有对应的om模型了。
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/172227_5f74dfdc_7985487.png "屏幕截图.png")
+此时，工程的model文件夹下已经有对应的om模型了。    
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/172227_5f74dfdc_7985487.png "屏幕截图.png")
 
 2.编译
 
