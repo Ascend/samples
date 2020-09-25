@@ -60,15 +60,15 @@
    打开.bashrc文件，在最后边添加环境变量
 
 ```
-     **export install_path=\$HOME/Ascend/ascend-toolkit/latest/x86_64-linux_gcc7.3.0**  
+        export install_path=\$HOME/Ascend/ascend-toolkit/latest/x86_64-linux_gcc7.3.0
 
-        **export PATH=/usr/local/python3.7.5/bin:\\${install_path}/atc/ccec_compiler/bin:\\${install_path}/atc/bin:\\$PATH**  
+        export PATH=/usr/local/python3.7.5/bin:\\${install_path}/atc/ccec_compiler/bin:\\${install_path}/atc/bin:\\$PATH  
 
-        **export PYTHONPATH=\\${install_path}/atc/python/site-packages/te:\\${install_path}/atc/python/site-packages/topi:\\$PYTHONPATH**  
+        export PYTHONPATH=\\${install_path}/atc/python/site-packages/te:\\${install_path}/atc/python/site-packages/topi:\\$PYTHONPATH  
 
-        **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64:\\$LD_LIBRARY_PATH**  
+        export LD_LIBRARY_PATH=\\${install_path}/atc/lib64:\\$LD_LIBRARY_PATH 
 
-        **export ASCEND_OPP_PATH=\\${install_path}/opp**  
+        export ASCEND_OPP_PATH=\\${install_path}/opp  
 
 ```
 
