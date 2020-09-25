@@ -20,7 +20,7 @@
 
    **cd wav2word**
 
-   下载源码：https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/wav2word.zip
+   下载源码：wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/wav2word.zip
 
 2. 获取此应用中所需要的原始网络模型。
 
@@ -30,9 +30,9 @@
 
    https://gitee.com/li_jian_jlu/smartvoice_classnotes_c73/tree/master/code/train/mic_train/pb_model
 
-   **mkdir -p ./models/wav2word**
+   **mkdir -p \\$HOME/models/wav2word**
 
-   **cd ./models/wav2word**
+   **cd \\$HOME/models/wav2word**
 
    将原始网络模型存放到$HOME/models/wav2word目录下：
     ![](figures/软件准备1.png "软件准备1")  
