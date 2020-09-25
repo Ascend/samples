@@ -67,7 +67,7 @@ wget -P $HOME/models https://obs-model-ascend.obs.cn-east-2.myhuaweicloud.com/go
 
     3.执行以下命令转换模型。这里需要注意原始模型和权重文件的路径。
 
-    atc --model=./models/googlenet.prototxt --weight=./models/googlenet.caffemodel --output_type=FP32 --input_shape="data:2,3,224,224" --input_format=NCHW --output=./models/googlenet_multibatch --soc_version=Ascend310 --framework=0
+    atc --model=\\$HOME/models/googlenet.prototxt --weight=\\$HOME/models/googlenet.caffemodel --output_type=FP32 --input_shape="data:2,3,224,224" --input_format=NCHW --output=\\$HOME/models/googlenet_multibatch --soc_version=Ascend310 --framework=0
     
     这条指令的参数设置可以参考
 
@@ -77,7 +77,7 @@ wget -P $HOME/models https://obs-model-ascend.obs.cn-east-2.myhuaweicloud.com/go
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0918/192252_3d1e24b9_7990837.png "屏幕截图.png")
     
-由于我们在--output参数中设置的是”--output=./models/googlenet_multibatch”,所以执行结束后还可以在models文件夹里看到生成的googlenet_multibatch.om
+由于我们在--output参数中设置的是”--output=\\$HOME/models/googlenet_multibatch”,所以执行结束后还可以在models文件夹里看到生成的googlenet_multibatch.om
 
 ## 环境配置   
 
@@ -101,30 +101,25 @@ wget -P $HOME/models https://obs-model-ascend.obs.cn-east-2.myhuaweicloud.com/go
 
 启动成功后，打开classification_multibatch工程。
 
-![输入图片说明](https://images.gitee.com/uploads/images/2020/0918/192338_83c72a27_7990837.png "屏幕截图.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/173800_ad83e919_7985487.png "屏幕截图.png")
 
 打开之后，在工程文件上右键-add model，添加刚才生成的om文件。
 
 2.编译
 
 在**Mindstudio**的工具栏中点击**Build > Edit Build Configuration**。选择Target OS 为Centos7.6，Target Architecture选择x86_64.
-![输入图片说明](https://images.gitee.com/uploads/images/2020/0918/192507_703042f1_7990837.png "屏幕截图.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/173856_9df2ef4d_7985487.png "屏幕截图.png")
    
 
 之后点击**Build > Build > Build Configuration**，会开始编译。
-
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/173945_8320017e_7985487.png "屏幕截图.png")
 3.运行
 
 在Mind Studio工具的工具栏中找到Run按钮，单击 Run > Edit Configurations。
 在Command Arguments 中添加运行参数 ../data/detection.mp4.
 由于本用例是在x86_64环境下运行，所以target host ip设置的是一个x86_64环境的云端服务ip.
-
-![输入图片说明](https://images.gitee.com/uploads/images/2020/0918/192530_a2400e47_7990837.png "屏幕截图.png")
-
-![输入图片说明](https://images.gitee.com/uploads/images/2020/0918/192541_3d3ec5d1_7990837.png "屏幕截图.png")
-
-![输入图片说明](https://images.gitee.com/uploads/images/2020/0918/192558_a4e861cd_7990837.png "屏幕截图.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/174003_b4d47e75_7985487.png "屏幕截图.png")
 
 添加ip成功后，开始运行，结束时可以看到终端打印出信息，即表明样例运行成功。
 
-![输入图片说明](https://images.gitee.com/uploads/images/2020/0918/192612_c71fd934_7990837.png "屏幕截图.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/174025_6d3b76db_7985487.png "屏幕截图.png")
