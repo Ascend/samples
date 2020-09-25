@@ -63,15 +63,13 @@
 
    **export ASCEND_OPP_PATH=\\${install_path}/opp**  
 
-  ![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/172831_4ae73ab8_7985487.png "屏幕截图.png")
 
    2.执行以下命令转换模型
 
-   转换好的模型文件（**googlenet_dynamicbatch.om**）位于**$HOME/AscendProjects/classification_dynamicbatch/model**目录下。
+   转换好的模型文件（**googlenet_dynamicbatch.om**）位于 **\$HOME/AscendProjects/classification_dynamicbatch/model** 目录下。
 
    **atc --model=\\$HOME/models/classification_dynamicbatch/googlenet.prototxt --weight=\\$HOME/models/classification_dynamicbatch/googlenet.caffemodel --framework=0 --output=\\$HOME/AscendProjects/classification_dynamicbatch/model/googlenet_dynamicbatch --soc_version=Ascend310 --input_shape="data:-1,3,224,224" --dynamic_batch_size="1,2" --output_type=FP32 --input_format=NCHW**
-   
-![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/172917_b5dd3d00_7985487.png "屏幕截图.png")
+
 ## 环境配置   
 
 **注：服务器上已安装OpenCV、交叉编译工具可跳过此步骤。**  
@@ -85,45 +83,47 @@
 
 ##  样例运行
 
-1.打开Mindstudio。
+1.  打开Mindstudio。
 
-执行以下命令，打开Mindstduio，并选择classification_dynamicbatch工程。
+    执行以下命令，打开Mindstduio，并选择classification_dynamicbatch工程。
+    
+    **cd ~/MindStudio-ubuntu/bin**
+    
+    **./MindStudio.sh**
+    
+    打开后，选择“Open project”，打开classification_dynamicbatch工程。
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/172207_62f86791_7985487.png "屏幕截图.png")
+    
+  
 
-**cd ~/MindStudio-ubuntu/bin**
+2.  编译。
 
-**./MindStudio.sh**
+    在**Mindstudio**的工具栏中点击**Build > Edit Build Configuration**。选择Target OS 为Centos7.6
+        ![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/172251_55be038e_7985487.png "屏幕截图.png")
+    
+    之后点击**Build > Build > Build Configuration**，会在目录下生成build和out文件夹。
+       ![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/172310_6a944499_7985487.png "屏幕截图.png")
 
-打开后，选择“Open project”，打开classification_dynamicbatch工程。
-![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/172207_62f86791_7985487.png "屏幕截图.png")
+3.  运行。
 
-此时，工程的model文件夹下已经有对应的om模型了。    
-![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/172227_5f74dfdc_7985487.png "屏幕截图.png")
+    1. Mindstudio配置开发板RC连接。
+    
+       **注：此时默认开发板已经连接到开发环境了**
+    
+       在Mind Studio工具的工具栏中找到**Tools**按钮，单机**Device Manager**。
+    
+       点击Device Manager界面右上方的 **“+”** 按钮，填写**Host IP**，点击OK。
+       
+    
+       看到Device Manager界面**Connetctivity**为**Yes**即为连接成功，点击**OK**即可。
+        ![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/172419_be101d37_7985487.png "屏幕截图.png")
 
-2.编译
 
-在**Mindstudio**的工具栏中点击**Build > Edit Build Configuration**。选择Target OS 为Centos7.6
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/172251_55be038e_7985487.png "屏幕截图.png")
-
-之后点击**Build > Build > Build Configuration**，会在目录下生成build和out文件夹。
-   ![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/172310_6a944499_7985487.png "屏幕截图.png")
-
-3.运行
-
-1. Mindstudio配置开发板RC连接。
-
-   **注：此时默认开发板已经连接到开发环境了**
-
-   在Mind Studio工具的工具栏中找到**Tools**按钮，单机**Device Manager**。
-
-   点击Device Manager界面右上方的 **“+”** 按钮，填写**Host IP**，点击OK。
-   
-
-   看到Device Manager界面**Connetctivity**为**Yes**即为连接成功，点击**OK**即可。
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/172419_be101d37_7985487.png "屏幕截图.png")
-在Mind Studio工具的工具栏中找到**Run**按钮，单击 **Run > Edit Configurations**。
-
-在Command Arguments 中添加运行参数 ../data（输入图片的路径），之后分别点击Apply、OK。
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/172435_6fdef687_7985487.png "屏幕截图.png")
-
-单击 **Run > Run 'classification_dynamicbatch'**，如下图，可执行程序已经在开发者板成功执行。
-   ![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/172446_7cd441e9_7985487.png "屏幕截图.png")
+    2. 在Mind Studio工具的工具栏中找到**Run**按钮，单击 **Run > Edit Configurations**。
+    
+        在Command Arguments 中添加运行参数  **../data** （输入图片的路径），之后分别点击Apply、OK。
+            ![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/172435_6fdef687_7985487.png "屏幕截图.png")
+        
+        单击 **Run > Run 'classification_dynamicbatch'**，如下图，可执行程序已经在开发者板成功执行。
+           ![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/172446_7cd441e9_7985487.png "屏幕截图.png")
+    
