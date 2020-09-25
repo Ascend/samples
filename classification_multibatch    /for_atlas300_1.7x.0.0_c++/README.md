@@ -14,7 +14,7 @@
         
         
      cd $HOME/AscendProjects     
-     wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/classification_multibatch.zip
+     wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/classification_multibatch.zip        
      unzip classification_multibatch.zip
         
 
@@ -51,46 +51,27 @@
 
 3. 将原始网络模型转换为适配昇腾AI处理器的模型。
    
-   下边介绍的是使用ATC工具对网络模型进行转换的方法。如果本机没有配置过ATC工具，那么需要进行以下操作。
 
    1.设置环境变量
 
-   打开Ubuntu终端，输入以下命令
-   vim ~/.bashrc
-   打开.bashrc文件，在最后边添加环境变量
+   命令行中输入以下命令设置环境变量。（仅在当前窗口生效）
 
+   **export install_path=\$HOME/Ascend/ascend-toolkit/latest/x86_64-linux_gcc7.3.0**  
 
-    **export install_path=\$HOME/Ascend/ascend-toolkit/latest/x86_64-linux_gcc7.3.0**
+   **export PATH=/usr/local/python3.7.5/bin:\\${install_path}/atc/ccec_compiler/bin:\\${install_path}/atc/bin:\\$PATH**  
 
-    **export PATH=/usr/local/python3.7.5/bin:\\${install_path}/atc/ccec_compiler/bin:\\${install_path}/atc/bin:\\$PATH**  
+   **export PYTHONPATH=\\${install_path}/atc/python/site-packages/te:\\${install_path}/atc/python/site-packages/topi:\\$PYTHONPATH**  
 
-    **export PYTHONPATH=\\${install_path}/atc/python/site-packages/te:\\${install_path}/atc/python/site-packages/topi:\\$PYTHONPATH** 
+   **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64:\\$LD_LIBRARY_PATH**  
 
-    **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64:\\$LD_LIBRARY_PATH**
-
-    **export ASCEND_OPP_PATH=\\${install_path}/opp**  
+   **export ASCEND_OPP_PATH=\\${install_path}/opp**  
 
 
 
 
+    2.执行以下命令转换模型。这里需要注意原始模型和权重文件的路径。
 
-
-    
-   2.完成ATC配置
-
-   修改完成.bashrc之后，需要同步一下，在当前窗口输入以下指令
-
-   `source ~/.bashrc`
-
-   这样，当前窗口就完成同步，可以使用刚才修改过的环境变量。
-   做完这些之后，输入指令atc --help,窗口会打印出ATC start working now等，说明ATC安装成功。如下图所示
-
-### ![输入图片说明](https://images.gitee.com/uploads/images/2020/0918/192233_61f80ae1_7990837.png "屏幕截图.png")
-
-
-    3.执行以下命令转换模型。这里需要注意原始模型和权重文件的路径。
-
-    atc --model=\\$HOME/models/googlenet.prototxt --weight=\\$HOME/models/googlenet.caffemodel --output_type=FP32 --input_shape="data:2,3,224,224" --input_format=NCHW --output=\\$HOME/models/googlenet_multibatch --soc_version=Ascend310 --framework=0
+     **atc --model=\\$HOME/models/googlenet.prototxt --weight=\\$HOME/models/googlenet.caffemodel --output_type=FP32 --input_shape="data:2,3,224,224" --input_format=NCHW --output=\\$HOME/models/googlenet_multibatch --soc_version=Ascend310 --framework=0** 
     
     这条指令的参数设置可以参考
 
@@ -121,18 +102,17 @@
 ./MindStudio.sh
 
 
-![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/173800_ad83e919_7985487.png "屏幕截图.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/191352_8b407ee1_7985487.png "屏幕截图.png")
 
-打开之后，在工程文件上右键-add model，添加刚才生成的om文件。
 
 2.编译
 
 在**Mindstudio**的工具栏中点击**Build > Edit Build Configuration**。选择Target OS 为Centos7.6，Target Architecture选择x86_64.
-![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/173856_9df2ef4d_7985487.png "屏幕截图.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/191419_f4672648_7985487.png "屏幕截图.png"))
    
 
 之后点击**Build > Build > Build Configuration**，会开始编译。
-![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/173945_8320017e_7985487.png "屏幕截图.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/192627_146f85be_7985487.png "屏幕截图.png")
 3.运行
 
 在Mind Studio工具的工具栏中找到Run按钮，单击 Run > Edit Configurations。
