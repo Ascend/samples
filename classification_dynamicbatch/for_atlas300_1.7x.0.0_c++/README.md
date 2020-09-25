@@ -4,7 +4,7 @@
 
 # classification_dynamicbatch样例运行指导
 
-本Sample实现了googlenet网络的推理功能，运行成功后简单打印成功信息。
+本Sample实现了googlenet网络的推理功能，运行成功后在屏幕打印推理结果。
 
 ### 软件准备
 
