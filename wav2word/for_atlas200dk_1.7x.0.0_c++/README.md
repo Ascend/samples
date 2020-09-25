@@ -16,11 +16,9 @@
 
    **cd $HOME/AscendProjects**
 
-   **mkdir wav2word**
+   下载源码：wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/wav2word.zip   
 
-   **cd wav2word**
-
-   下载源码：wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/wav2word.zip
+   unzip wav2word.zip
 
 2. 获取此应用中所需要的原始网络模型。
 
