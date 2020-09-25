@@ -2,7 +2,7 @@
 
 **该案例仅仅用于学习，打通流程，不对效果负责，不支持商用。**
 
-# MultiBatch样例运行指导
+# classification_multibatch样例运行指导
 
 本Sample实现了googlenet网络的推理功能，运行成功后简单打印成功信息。
 
@@ -14,8 +14,8 @@
 
 ```
    cd $HOME/AscendProjects     
-   wget https://gitee.com/atlasdevelop/c7x_samples/tree/master/200dk_sample/MultiBatch
-   unzip MultiBatch.zip
+   wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/classification_multibatch.zip
+   unzip classification_multibatch.zip
 ```
 
 2. 获取此应用中所需要的原始网络模型。
@@ -99,7 +99,7 @@ wget -P $HOME/models https://obs-model-ascend.obs.cn-east-2.myhuaweicloud.com/go
 
 ./MindStudio.sh
 
-启动成功后，打开multibatch工程。
+启动成功后，打开classification_multibatch工程。
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0918/192338_83c72a27_7990837.png "屏幕截图.png")
 
