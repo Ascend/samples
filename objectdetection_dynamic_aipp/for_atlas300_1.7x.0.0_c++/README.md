@@ -56,7 +56,7 @@
     
 5.  将转换好的模型文件（.om文件）添加到项目工程：
 
-    **cp yolov3/yolov3.om AscendProjects/objectdetection_dynamic_aipp/model/**
+    **cp \\$HOME/yolov3/yolov3.om \$HOME/AscendProjects/objectdetection_dynamic_aipp/model/**
 
 ## 环境配置   
 
