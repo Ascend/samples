@@ -18,7 +18,7 @@
 
 2. 获取此应用中所需要的原始网络模型。
 
-   获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到Ubuntu服务器的任意目录，例如：$HOME/models/DynamicBatch。
+   获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到Ubuntu服务器的任意目录，例如：$HOME/models/classification_dynamicbatch。
 
    下载原始网络模型文件：
 
@@ -28,9 +28,9 @@
 
    https://obs-model-ascend.obs.cn-east-2.myhuaweicloud.com/googlenet/googlenet.caffemodel
 
-   **mkdir -p \\$HOME/models/DynamicBatch**
+   **mkdir -p \\$HOME/models/classification_dynamicbatch**
 
-   **cd \\$HOME/models/DynamicBatch**
+   **cd \\$HOME/models/classification_dynamicbatch**
 
    将原始网络模型及其对应的权重文件存放到$HOME/models/DynamicBatch目录下：
 
@@ -42,7 +42,7 @@
 
    命令行中输入以下命令设置环境变量。（仅在当前窗口生效）
 
-   **export install_path=\$HOME/Ascend/ascend-toolkit/20.0.RC1/x86_64-linux_gcc7.3.0**  
+   **export install_path=\$HOME/Ascend/ascend-toolkit/latest/x86_64-linux_gcc7.3.0**  
 
    **export PATH=/usr/local/python3.7.5/bin:\\${install_path}/atc/ccec_compiler/bin:\\${install_path}/atc/bin:\\$PATH**  
 
@@ -58,7 +58,7 @@
 
    转换好的模型文件（**googlenet_dynamicbatch.om**）位于**$HOME/AscendProjects/DynamicBatch/model**目录下。
 
-   **atc --model=./models/DynamicBatch/googlenet.prototxt --weight=./models/DynamicBatch/googlenet.caffemodel --framework=0 --output=./AscendProjects/DynamicBatch/model/googlenet_dynamicbatch --soc_version=Ascend310 --input_shape="data:-1,3,224,224" --dynamic_batch_size="1,2" --output_type=FP32 --input_format=NCHW**
+   **atc --model=\\$HOME/models/classification_dynamicbatch/googlenet.prototxt --weight=\\$HOME/models/classification_dynamicbatch/googlenet.caffemodel --framework=0 --output=\\$HOME/AscendProjects/DynamicBatch/model/googlenet_dynamicbatch --soc_version=Ascend310 --input_shape="data:-1,3,224,224" --dynamic_batch_size="1,2" --output_type=FP32 --input_format=NCHW**
    
     ![](figures/模型转换3.png "模型转换3")
 
