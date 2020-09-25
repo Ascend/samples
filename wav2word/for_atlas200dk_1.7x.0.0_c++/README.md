@@ -72,7 +72,7 @@
 **./MindStudio.sh**
 
 打开后，选择“Open project”，打开wav2word工程。此时，工程的model文件夹下已经有对应的om模型了。
-    ![](figures/样例运行2.png "样例运行2")  
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/103950_66be0263_7985487.png "屏幕截图.png")
 
 
 
@@ -82,7 +82,7 @@
     ![](figures/样例运行3.png "样例运行3")  
 
 之后点击**Build > Build > Build Configuration**，会在目录下生成build和out文件夹。
-    ![](figures/样例运行4.png "样例运行4")  
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/104033_7b53ee57_7985487.png "屏幕截图.png") 
 
 
 
@@ -95,31 +95,30 @@
 **python3 preparedata.py**
 
 如下图所示。
-    ![](figures/样例运行5.png "样例运行5")  
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/104131_431af1bb_7985487.png "屏幕截图.png") 
 
 
 
 4.运行
-Mindstudio配置开发板RC连接。
+Mindstudio配置开发板RC连接。       
 **注：此时默认开发板已经连接到开发环境了**
 在Mind Studio工具的工具栏中找到**Tools**按钮，单机**Device Manager**。
 点击Device Manager界面右上方的 **“+”** 按钮，填写**Host IP**为开发者板ip（USB连接默认为192.168.1.2），点击OK。
 
 看到Device Manager界面**Connetctivity**为**Yes**即为连接成功，点击**OK**即可。
-    ![](figures/样例运行6.png "样例运行6")  
+   ![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/104202_430853c4_7985487.png "屏幕截图.png")
 
 在Mind Studio工具的工具栏中找到**Run**按钮，单击 **Run > Edit Configurations**。
 在Command Arguments 中添加运行参数 ../data（输入图片的路径），之后分别点击Apply、OK。
-    ![](figures/样例运行7.png "样例运行7")  
-
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/104221_3b1b1743_7985487.png "屏幕截图.png")
 单击 **Run > Run 'wav2word'**，如下图，可执行程序已经在开发者板执行,在/home/ascend/AscendProjects/wav2word/out/outputs目录下以时间命名的文件夹里可以看到生成的.bin文件。
-    ![](figures/样例运行8.png "样例运行8")  
+   ![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/104254_ae867f61_7985487.png "屏幕截图.png")
 
 
 
 5.后处理：
 将上一步骤生成的.bin文件移动到/home/ascend/AscendProjects/wav2word/out目录下，
-    ![](figures/样例运行9.png "样例运行9")  
+   ![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/104310_acf2479d_7985487.png "屏幕截图.png")
 
 打开Mind Studio工具的Terminal，执行如下命令将.bin文件转换成文本。
 
@@ -128,4 +127,4 @@ Mindstudio配置开发板RC连接。
 **python3 postprocess.py**
 
 转换结果如下图所示。
-    ![](figures/样例运行10.png "样例运行10")  
+   ![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/104327_21294c9d_7985487.png "屏幕截图.png")
