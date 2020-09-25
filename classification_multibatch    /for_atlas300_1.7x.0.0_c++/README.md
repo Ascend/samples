@@ -105,7 +105,10 @@
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/191352_8b407ee1_7985487.png "屏幕截图.png")
 
 
-2.编译
+2.添加模型    
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/194013_46aca0e8_7985487.png "屏幕截图.png")
+
+3.编译
 
 在**Mindstudio**的工具栏中点击**Build > Edit Build Configuration**。选择Target OS 为Centos7.6，Target Architecture选择x86_64.
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/191419_f4672648_7985487.png "屏幕截图.png"))
@@ -113,7 +116,7 @@
 
 之后点击**Build > Build > Build Configuration**，会开始编译。
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/192627_146f85be_7985487.png "屏幕截图.png")
-3.运行
+4.运行
 
 在Mind Studio工具的工具栏中找到Run按钮，单击 Run > Edit Configurations。
 在Command Arguments 中添加运行参数 ../data/detection.mp4.
@@ -122,4 +125,4 @@
 
 添加ip成功后，开始运行，结束时可以看到终端打印出信息，即表明样例运行成功。
 
-![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/174025_6d3b76db_7985487.png "屏幕截图.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/194032_4b4cfda6_7985487.png "屏幕截图.png")
