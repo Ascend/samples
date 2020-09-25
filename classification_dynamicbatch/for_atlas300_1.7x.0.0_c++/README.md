@@ -2,7 +2,7 @@
 
 **该案例仅仅用于学习，打通流程，不对效果负责，不支持商用。**
 
-# classification_dynamicbatch样例运行指导
+# DynamicBatch样例运行指导
 
 本Sample实现了googlenet网络的推理功能，运行成功后简单打印成功信息。
 
@@ -13,12 +13,12 @@
 1. 普通用户在开发环境中下载样例源码包
 
    **cd $HOME/AscendProjects     
-   wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/classification_dynamicbatch.zip    
-   unzip classification_dynamicbatch.zip **
+   wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/classification_dynamicbatch.zip
+   unzip classification_dynamicbatch.zip**
 
 2. 获取此应用中所需要的原始网络模型。
 
-   获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到Ubuntu服务器的任意目录，例如：$HOME/models/classification_dynamicbatch。
+   获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到Ubuntu服务器的任意目录，例如：$HOME/models/DynamicBatch。
 
    下载原始网络模型文件：
 
@@ -28,11 +28,11 @@
 
    https://obs-model-ascend.obs.cn-east-2.myhuaweicloud.com/googlenet/googlenet.caffemodel
 
-   **mkdir -p \\$HOME/models/classification_dynamicbatch**
+   **mkdir -p \\$HOME/models/DynamicBatch**
 
-   **cd \\$HOME/models/classification_dynamicbatch**
+   **cd \\$HOME/models/DynamicBatch**
 
-   将原始网络模型及其对应的权重文件存放到$HOME/models/classification_dynamicbatch目录下：
+   将原始网络模型及其对应的权重文件存放到$HOME/models/DynamicBatch目录下：
 
    ![](figures/模型转换1.png "模型转换1")  
 
