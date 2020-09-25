@@ -11,12 +11,12 @@
 运行此Sample前，需要执行以下步骤获取源码包并转换模型。
 
 1. 普通用户在开发环境中下载样例源码包
-
-```
-   cd $HOME/AscendProjects     
-   wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/classification_multibatch.zip
-   unzip classification_multibatch.zip
-```
+        
+        
+     cd $HOME/AscendProjects     
+     wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/classification_multibatch.zip
+     unzip classification_multibatch.zip
+        
 
 2. 获取此应用中所需要的原始网络模型。
 
@@ -60,15 +60,15 @@
    打开.bashrc文件，在最后边添加环境变量
 
 
-        **export install_path=\$HOME/Ascend/ascend-toolkit/latest/x86_64-linux_gcc7.3.0**
+    **export install_path=\$HOME/Ascend/ascend-toolkit/latest/x86_64-linux_gcc7.3.0**
 
-        **export PATH=/usr/local/python3.7.5/bin:\\${install_path}/atc/ccec_compiler/bin:\\${install_path}/atc/bin:\\$PATH**  
+    **export PATH=/usr/local/python3.7.5/bin:\\${install_path}/atc/ccec_compiler/bin:\\${install_path}/atc/bin:\\$PATH**  
 
-        **export PYTHONPATH=\\${install_path}/atc/python/site-packages/te:\\${install_path}/atc/python/site-packages/topi:\\$PYTHONPATH** 
+    **export PYTHONPATH=\\${install_path}/atc/python/site-packages/te:\\${install_path}/atc/python/site-packages/topi:\\$PYTHONPATH** 
 
-        **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64:\\$LD_LIBRARY_PATH**
+    **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64:\\$LD_LIBRARY_PATH**
 
-        **export ASCEND_OPP_PATH=\\${install_path}/opp**  
+    **export ASCEND_OPP_PATH=\\${install_path}/opp**  
 
 
 
@@ -115,14 +115,11 @@
 
 ##  样例运行
 
-1.打开Mindstudio。
-
-打开对应的工程。
+1.打开打开classification_multibatch工程。
 以Mind Studio安装用户在命令行进入安装包解压后的“MindStudio-ubuntu/bin”目录，如：$HOME/MindStudio-ubuntu/bin。执行如下命令启动Mind Studio。
 
 ./MindStudio.sh
 
-启动成功后，打开classification_multibatch工程。
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/173800_ad83e919_7985487.png "屏幕截图.png")
 
