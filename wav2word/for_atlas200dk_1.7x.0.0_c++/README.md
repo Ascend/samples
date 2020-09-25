@@ -12,29 +12,29 @@
 
 运行此Sample前，需要执行以下步骤获取源码包并转换模型。
 
-1. 普通用户在开发环境中下载样例源码包放到nlp_sample目录下：
+1. 普通用户在开发环境中下载样例源码包放到wav2word目录下：
 
    **cd $HOME/AscendProjects**
 
-   **mkdir nlp_sample**
+   **mkdir wav2word**
 
-   **cd nlp_sample**
+   **cd wav2word**
 
-   下载源码：https://gitee.com/atlasdevelop/c7x_samples/tree/master/nlp_sample
+   下载源码：https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/wav2word.zip
 
 2. 获取此应用中所需要的原始网络模型。
 
-   获取此应用中所用到的原始网络模型，并将其存放到Ubuntu服务器的任意目录，例如：$HOME/models/nlp_sample。
+   获取此应用中所用到的原始网络模型，并将其存放到Ubuntu服务器的任意目录，例如：$HOME/models/wav2word。
 
    下载原始网络模型文件：
 
    https://gitee.com/li_jian_jlu/smartvoice_classnotes_c73/tree/master/code/train/mic_train/pb_model
 
-   **mkdir -p ./models/nlp_sample**
+   **mkdir -p ./models/wav2word**
 
-   **cd ./models/nlp_sample**
+   **cd ./models/wav2word**
 
-   将原始网络模型存放到$HOME/models/nlp_sample目录下：
+   将原始网络模型存放到$HOME/models/wav2word目录下：
     ![](figures/软件准备1.png "软件准备1")  
 
 3. 将原始网络模型转换为适配昇腾AI处理器的模型。
@@ -57,21 +57,21 @@
    
 2.执行atc命令转换成离线模型
    
-**atc --model=./models/nlp_sample/test_model.pb --framework=3 --output=./AscendProjects/nlp_sample/model/voice --soc_version=Ascend310 --input_format=NHWC --input_shape="the_input:1,1600,200,1"**
+**atc --model=\\$HOME/models/wav2word/test_model.pb --framework=3 --output=\\$HOME/AscendProjects/wav2word/model/voice --soc_version=Ascend310 --input_format=NHWC --input_shape="the_input:1,1600,200,1"**
    
-转换好的模型文件（**voice.om**）位于$HOME/AscendProjects/nlp_sample/model目录下。
+转换好的模型文件（**voice.om**）位于$HOME/AscendProjects/wav2word/model目录下。
 
 ##  样例运行
 
 1.打开Mindstudio。
 
-执行以下命令，打开Mindstduio，并选择nlp_sample工程。
+执行以下命令，打开Mindstduio，并选择wav2word工程。
 
 **cd ~/MindStudio-ubuntu/bin**
 
 **./MindStudio.sh**
 
-打开后，选择“Open project”，打开nlp_sample工程。此时，工程的model文件夹下已经有对应的om模型了。
+打开后，选择“Open project”，打开wav2word工程。此时，工程的model文件夹下已经有对应的om模型了。
     ![](figures/样例运行2.png "样例运行2")  
 
 
@@ -90,7 +90,7 @@
 
 打开Mind Studio工具的Terminal，在预处理代码存放路径下，执行如下命令将.wav文件转换成.bin文件。
 
-**cd ./AscendProjects/nlp_sample/script**
+**cd ./AscendProjects/wav2word/script**
 
 **python3 preparedata.py**
 
@@ -112,18 +112,18 @@ Mindstudio配置开发板RC连接。
 在Command Arguments 中添加运行参数 ../data（输入图片的路径），之后分别点击Apply、OK。
     ![](figures/样例运行7.png "样例运行7")  
 
-单击 **Run > Run 'nlp_sample'**，如下图，可执行程序已经在开发者板执行,在/home/ascend/AscendProjects/nlp_sample/out/outputs目录下以时间命名的文件夹里可以看到生成的.bin文件。
+单击 **Run > Run 'wav2word'**，如下图，可执行程序已经在开发者板执行,在/home/ascend/AscendProjects/wav2word/out/outputs目录下以时间命名的文件夹里可以看到生成的.bin文件。
     ![](figures/样例运行8.png "样例运行8")  
 
 
 
 5.后处理：
-将上一步骤生成的.bin文件移动到/home/ascend/AscendProjects/nlp_sample/out目录下，
+将上一步骤生成的.bin文件移动到/home/ascend/AscendProjects/wav2word/out目录下，
     ![](figures/样例运行9.png "样例运行9")  
 
 打开Mind Studio工具的Terminal，执行如下命令将.bin文件转换成文本。
 
-**cd ./AscendProjects/nlp_sample/script**
+**cd ./AscendProjects/wav2word/script**
 
 **python3 postprocess.py**
 
