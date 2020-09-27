@@ -26,23 +26,31 @@
     **curl -OL https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/objectdetection.zip** 
     >- 如果curl也下载失败，可复制下载链接到浏览器，手动上传至服务器。
     
-2.  <a name="zh-cn_topic_0219108795_li2074865610364"></a>获取此应用中所需要的原始网络模型。  
-    获取原始网络模型，将其存放到Ubuntu服务器的任意目录，例如：$HOME/models/objectdetection。    
-    1.  创建目录。  
-        **mkdir -p $HOME/models/objectdetection_dynamic_image_size**       
-    2.  下载原始网络模型及权重文件。   
-        **wget -P $HOME/models/objectdetection_dynamic_image_size
-/ https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/yolov3/yolov3.caffemodel**  
+2. <a name="zh-cn_topic_0203223280_li2074865610364"></a>获取此应用中所需要的原始网络模型。
 
-        **wget -P $HOME/models/objectdetection_dynamic_image_size
-/ https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/yolov3/yolov3.prototxt**  
+    参考[表1](#zh-cn_topic_0203223280_table19942111763710)获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到Mind Studio所在Ubuntu服务器的任意目录，这两个文件必须存放到同一个目录下。例如：$HOME/models/faster\_rcnn。
 
-        **wget -P $HOME/models/objectdetection_dynamic_image_size
-/ https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/yolov3/aipp_nv12.cfg**
-        >![](public_sys-resources/icon-note.gif) **说明：**   
-        >- yolov3原始模型网络： https://github.com/maxuehao/YOLOV3/blob/master/yolov3_res18.prototxt 
-        >- yolov3原始网络LICENSE地址： https://github.com/maxuehao/caffe/blob/master/LICENSE
-        >- C7x对prototxt文件有修改要求，按照[yolov3网络模型prototxt修改](https://support.huaweicloud.com/usermanual-mindstudioc73/atlasmindstudio_02_0112.html)文档对prototxt文件进行修改。这里已经修改完成，直接执行以上命令下载即可。
+    **表 1**  检测网络应用使用模型
+
+    <a name="zh-cn_topic_0203223280_table19942111763710"></a>
+    <table><thead align="left"><tr id="zh-cn_topic_0203223280_row611318123710"><th class="cellrowborder" valign="top" width="11.959999999999999%" id="mcps1.2.4.1.1"><p id="zh-cn_topic_0203223280_p81141820376"><a name="zh-cn_topic_0203223280_p81141820376"></a><a name="zh-cn_topic_0203223280_p81141820376"></a>模型名称</p>
+    </th>
+    <th class="cellrowborder" valign="top" width="8.07%" id="mcps1.2.4.1.2"><p id="zh-cn_topic_0203223280_p13181823711"><a name="zh-cn_topic_0203223280_p13181823711"></a><a name="zh-cn_topic_0203223280_p13181823711"></a>模型说明</p>
+    </th>
+    <th class="cellrowborder" valign="top" width="79.97%" id="mcps1.2.4.1.3"><p id="zh-cn_topic_0203223280_p1717182378"><a name="zh-cn_topic_0203223280_p1717182378"></a><a name="zh-cn_topic_0203223280_p1717182378"></a>模型下载路径</p>
+    </th>
+    </tr>
+    </thead>
+    <tbody><tr id="zh-cn_topic_0203223280_row1119187377"><td class="cellrowborder" valign="top" width="11.959999999999999%" headers="mcps1.2.4.1.1 "><p id="zh-cn_topic_0203223280_p7118189378"><a name="zh-cn_topic_0203223280_p7118189378"></a><a name="zh-cn_topic_0203223280_p7118189378"></a>faster_rcnn</p>
+    </td>
+    <td class="cellrowborder" valign="top" width="8.07%" headers="mcps1.2.4.1.2 "><p id="zh-cn_topic_0203223280_p151818183718"><a name="zh-cn_topic_0203223280_p151818183718"></a><a name="zh-cn_topic_0203223280_p151818183718"></a>目标检测网络模型。</p>
+    <p id="zh-cn_topic_0203223280_p11121816373"><a name="zh-cn_topic_0203223280_p11121816373"></a><a name="zh-cn_topic_0203223280_p11121816373"></a>是基于Caffe的Faster RCNN模型。</p>
+    </td>
+    <td class="cellrowborder" valign="top" width="79.97%" headers="mcps1.2.4.1.3 "><p id="zh-cn_topic_0203223280_p611318163718"><a name="zh-cn_topic_0203223280_p611318163718"></a><a name="zh-cn_topic_0203223280_p611318163718"></a>请参考<a href="https://gitee.com/HuaweiAscend/models/tree/master/computer_vision/object_detect/faster_rcnn" target="_blank" rel="noopener noreferrer">https://gitee.com/HuaweiAscend/models/tree/master/computer_vision/object_detect/faster_rcnn</a>目录中README.md下载原始网络模型文件及其对应的权重文件。</p>
+    </td>
+    </tr>
+    </tbody>
+    </table>
 3.  将原始网络模型转换为适配昇腾AI处理器的模型。  
 
     1.  设置环境变量
