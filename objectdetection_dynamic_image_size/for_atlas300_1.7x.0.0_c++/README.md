@@ -50,7 +50,11 @@
     </td>
     </tr>
     </tbody>
-    </table>
+    </table>     
+下载的工程中有aipp_faster_rcnn.cfg文件，将它上传到 $HOME/models/objectdetection_dynamic_image_size      
+  
+cp \\$HOME/AscendProjects/objectdetection_dynamic_image_size/aipp_faster_rcnn.cfg \$HOME/models/objectdetection_dynamic_image_size/    
+
 3.  将原始网络模型转换为适配昇腾AI处理器的模型。  
 
     1.  设置环境变量
