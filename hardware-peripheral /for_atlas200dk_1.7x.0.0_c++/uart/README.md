@@ -1,4 +1,4 @@
-# sample-uart
+# uart
 
 #### 介绍
 本样例介绍如何使用Atlas200DK 开发板 UART1 串口发送数据，接收数据
