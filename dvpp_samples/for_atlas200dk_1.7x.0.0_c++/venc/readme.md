@@ -16,7 +16,7 @@
  >- 如果curl也下载失败，可复制下载链接到浏览器，手动上传至服务器。
 ### 编译代码
 
-1、以HwHiAiUser登陆开发环境
+1、以ascend登陆开发环境
 
 2、切换到“venc”目录，创建目录用于存放编译文件，例如，本文中，创建的文件夹为“build”
 
@@ -28,7 +28,7 @@ cd build
 
 4、设置下环境变量，在命令行内执行，下面的路径请根据实际目录层级修改
 
-export DDK_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/20.0.RC1/acllib_centos7.6.aarch64 && export NPU_HOST_LIB=/home/HwHiAiUser/Ascend/ascend-toolkit/20.0.RC1/acllib_centos7.6.aarch64/acllib/lib64/stub
+export DDK_PATH=/home/ascend/Ascend/ascend-toolkit/20.0.RC1/acllib_centos7.6.aarch64 && export NPU_HOST_LIB=/home/ascend/Ascend/ascend-toolkit/20.0.RC1/acllib_centos7.6.aarch64/acllib/lib64/stub
 
 5、在build目录下，执行如下的命令生成编译文件。“../src”表示 CMakeLists.txt文件所在的目录，请根据实际目录层级修改 
 
@@ -41,9 +41,9 @@ make
 ### 运行应用
 1、在Atlas 200DK开发板上连接摄像头，上电开机
 
-2、以HwHiAiUser（运行用户）将开发环境的“vdec”目录下的out目录上传到运行环境的一个目录下，例如“/home/HwHiAiUser/venc/out”。   
-运行环境：mkdir venc   
-开发环境：scp -r /home/AscendProjects/venc/out HwHiAiUser@192.168.1.2:venc/out
+2、以HwHiAiUser（运行用户）将开发环境的“vdec”目录下的out目录上传到运行环境的一个目录下，例如 **“/home/HwHiAiUser/venc/out”** 。   
+运行环境： **mkdir venc**    
+开发环境： **scp -r /home/AscendProjects/venc/out HwHiAiUser@192.168.1.2:venc/out** 
 
 3、以HwHiAiUser（运行用户）登录运行环境。
 
