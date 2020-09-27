@@ -108,7 +108,7 @@
     之后点击**Build \> Build \> Build Configuration**，如[图 编译操作及生成文件](#zh-cn_topic_0203223265_fig1741464713019)所示，会在目录下生成build和out文件夹。
 
     **图 3**  编译操作及生成文件<a name="zh-cn_topic_0203223265_fig1741464713019"></a>  
-    ![](figures/编译操作及生成文件1.png "编译操作及生成文件")
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0927/153504_5c98c613_7985487.png "屏幕截图.png")
 
     >![](public_sys-resources/icon-notice.gif) **须知：**   
     >首次编译工程时，**Build \> Build**为灰色不可点击状态。需要点击**Build \> Edit Build Configuration**，配置编译参数后再进行编译。  
