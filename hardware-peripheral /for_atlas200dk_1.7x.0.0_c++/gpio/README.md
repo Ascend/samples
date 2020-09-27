@@ -1,4 +1,4 @@
-# sample-gpio
+# gpio
 
 #### 介绍
 Atlas200DK 开发板 用户使用7个GPIO 的使用样例 供用户参考。
@@ -25,7 +25,7 @@ Atlas200DK 开发板 用户使用7个GPIO 的使用样例 供用户参考。
 
 1.参考 gpio 类
 
-2.参考 Custom.cpp 
+2.参考 main.cpp 
 
  以下函数返回值为 0->success -1->failed
 
