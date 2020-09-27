@@ -1,5 +1,19 @@
-## 实现视频编码功能
+## 实现视频编码功能     
 
+###软件准备    
+1、获取源码包
+
+  **cd $HOME/AscendProjects**
+
+  **wget** **https://c7xcode.obs.cn-north-4.myhuaweicloud.com/DVPP-sample/venc.zip**
+
+  **unzip venc.zip**
+
+ >![](E:/v32_40g/C32share/samples/dvpp-samples/crop/public_sys-resources/icon-note.gif) **说明：**   
+ >
+ >- 如果使用wget下载失败，可使用如下命令下载代码。  
+ >  **curl -OL https://c7xcode.obs.cn-north-4.myhuaweicloud.com/DVPP-sample/venc.zip** 
+ >- 如果curl也下载失败，可复制下载链接到浏览器，手动上传至服务器。
 ### 编译代码
 
 1、以HwHiAiUser登陆开发环境
@@ -27,7 +41,9 @@ make
 ### 运行应用
 1、在Atlas 200DK开发板上连接摄像头，上电开机
 
-2、以HwHiAiUser（运行用户）将开发环境的“vdec”目录下的out目录上传到运行环境的一个目录下，例如“/home/HwHiAiUser/venc/out”。
+2、以HwHiAiUser（运行用户）将开发环境的“vdec”目录下的out目录上传到运行环境的一个目录下，例如“/home/HwHiAiUser/venc/out”。   
+运行环境：mkdir venc   
+开发环境：scp -r /home/AscendProjects/venc/out HwHiAiUser@192.168.1.2:venc/out
 
 3、以HwHiAiUser（运行用户）登录运行环境。
 
