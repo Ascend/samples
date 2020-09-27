@@ -20,23 +20,23 @@
 
 2、切换到“venc”目录，创建目录用于存放编译文件，例如，本文中，创建的文件夹为“build”
 
-mkdir build
+ **mkdir build** 
 
 3、切换到build目录
 
-cd build
+ **cd build** 
 
 4、设置下环境变量，在命令行内执行，下面的路径请根据实际目录层级修改
 
-export DDK_PATH=/home/ascend/Ascend/ascend-toolkit/20.0.RC1/acllib_centos7.6.aarch64 && export NPU_HOST_LIB=/home/ascend/Ascend/ascend-toolkit/20.0.RC1/acllib_centos7.6.aarch64/acllib/lib64/stub
+ **export DDK_PATH=/home/ascend/Ascend/ascend-toolkit/20.0.RC1/acllib_centos7.6.aarch64 && export NPU_HOST_LIB=/home/ascend/Ascend/ascend-toolkit/20.0.RC1/acllib_centos7.6.aarch64/acllib/lib64/stub** 
 
 5、在build目录下，执行如下的命令生成编译文件。“../src”表示 CMakeLists.txt文件所在的目录，请根据实际目录层级修改 
 
-cmake  ../src -DCMAKE_SKIP_RPATH=TRUE -Dtarget= -DCMAKE_CXX_COMPILER=aarch64-linux-gnu-g++-5
+ **cmake  ../src -DCMAKE_SKIP_RPATH=TRUE -Dtarget= -DCMAKE_CXX_COMPILER=aarch64-linux-gnu-g++-5** 
 
 6、在编译文件夹目录执行make命令，生成的可执行文件main 在“venc/out”目录下
 
-make
+ **make** 
 
 ### 运行应用
 1、在Atlas 200DK开发板上连接摄像头，上电开机
