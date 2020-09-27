@@ -117,15 +117,15 @@
     在Command Arguments 中添加运行参数 **../data**（输入图片的路径），之后分别点击Apply、OK。如[图 配置运行](#zh-cn_topic_0203223265_fig93931954162720)所示。   
 
     **图 4**  配置运行<a name="zh-cn_topic_0203223265_fig93931954162720"></a>   
-    ![](figures/配置run.png "配置运行")
+   ![输入图片说明](https://images.gitee.com/uploads/images/2020/0927/153803_d2740cd0_7985487.png "屏幕截图.png")
  
 2.  单击  **Run \> Run 'objectdetection'**，如[图 程序已执行示意图](#zh-cn_topic_0203223265_fig93931954162719)所示，可执行程序已经在开发者板执行。  
 
     **图 5**  程序已执行示意图<a name="zh-cn_topic_0203223265_fig93931954162719"></a>  
-    ![](figures/程序已执行示意图1.png "程序已执行示意图")
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0927/153952_e402d360_7985487.png "屏幕截图.png")
 
 3.  查看运行结果。
 
     推理结果图片保存在工程下的“output \> outputs”目录下以时间戳命名的文件夹内。  
 
-![结果1](figures/result.png) 
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0927/154346_4f4a0e89_7985487.png "屏幕截图.png")
