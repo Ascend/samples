@@ -1,0 +1,1 @@
+atc --model=faster_rcnn.prototxt --weight=faster_rcnn.caffemodel --framework=0 --output=faster_rcnn --soc_version=Ascend310  --input_shape="data:1,3,-1,-1;im_info:1,3" --dynamic_image_size="416,416;512,512" --insert_op_conf=aipp_faster_rcnn.cfg
