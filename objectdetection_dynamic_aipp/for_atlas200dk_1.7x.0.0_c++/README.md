@@ -15,7 +15,7 @@
 
     **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/objectdetection_dynamic_aipp.zip --no-check-certificat**     
       
-      ** unzip objectdetection_dynamic_aipp.zip** 
+      **unzip objectdetection_dynamic_aipp.zip** 
             
     
 2.  <a name="zh-cn_topic_0219108795_li2074865610364"></a>获取此应用中所需要的原始网络模型。    
