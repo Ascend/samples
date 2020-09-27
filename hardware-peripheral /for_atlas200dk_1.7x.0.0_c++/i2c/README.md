@@ -1,4 +1,4 @@
-# sample-i2c
+# i2c
 
 #### 介绍
 Atlas200DK 开发板 用户使用I2C 的使用样例，开发板用户使用的I2C 口是 SDA->PIN3   SCL->PIN5 供用户参考。
