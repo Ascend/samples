@@ -29,13 +29,16 @@
 2.  <a name="zh-cn_topic_0219108795_li2074865610364"></a>获取此应用中所需要的原始网络模型。  
     获取原始网络模型，将其存放到Ubuntu服务器的任意目录，例如：$HOME/models/objectdetection。    
     1.  创建目录。  
-        **mkdir -p $HOME/models/objectdetection**     
-    2.  下载原始网络模型及权重文件。  
-        **wget -P $HOME/models/objectdetection/ https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/yolov3/yolov3.caffemodel**  
+        **mkdir -p $HOME/models/objectdetection_dynamic_image_size**       
+    2.  下载原始网络模型及权重文件。   
+        **wget -P $HOME/models/objectdetection_dynamic_image_size
+/ https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/yolov3/yolov3.caffemodel**  
 
-        **wget -P $HOME/models/objectdetection/ https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/yolov3/yolov3.prototxt**  
+        **wget -P $HOME/models/objectdetection_dynamic_image_size
+/ https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/yolov3/yolov3.prototxt**  
 
-        **wget -P $HOME/models/objectdetection/ https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/yolov3/aipp_nv12.cfg**
+        **wget -P $HOME/models/objectdetection_dynamic_image_size
+/ https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/yolov3/aipp_nv12.cfg**
         >![](public_sys-resources/icon-note.gif) **说明：**   
         >- yolov3原始模型网络： https://github.com/maxuehao/YOLOV3/blob/master/yolov3_res18.prototxt 
         >- yolov3原始网络LICENSE地址： https://github.com/maxuehao/caffe/blob/master/LICENSE
