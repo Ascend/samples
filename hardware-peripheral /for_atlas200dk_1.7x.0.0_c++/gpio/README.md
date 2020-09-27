@@ -44,6 +44,6 @@ Atlas200DK 开发板 用户使用7个GPIO 的使用样例 供用户参考。
  io_ctrl.gpio_get_value(3,&value) //读取GPIO0 的电平高低数值放入 value中，0代表低电平  1 代表高电平
 
  7个IO对应开发板的位置 参考：
- https://ascend.huawei.com/doc/Atlas%20200%20DK/1.3.0.0/zh/zh-cn_topic_0188003537.html
+https://support.huaweicloud.com/productdesc-A200dk_3000/atlas200_DK_pdes_19_0020.html
 
  建议：如果想用IO作为输入口循环检测，建议使用GIOP0,1 两个口，读写速度比较快，其他3，4，5，6，7是用扩展芯片扩展的IO口。
