@@ -57,7 +57,7 @@
         
         命令行中输入以下命令设置环境变量。
 
-        **cd $HOME/models/ objectdetection_dynamic_image_size/**
+        **cd $HOME/models/objectdetection_dynamic_image_size/**
         
         **export install_path=\$HOME/Ascend/ascend-toolkit/latest/x86_64-linux_gcc7.3.0**  
 
@@ -71,12 +71,13 @@
 
     2.  执行以下命令转换模型。
 
-        **atc --model=yolov3.prototxt --weight=yolov3.caffemodel --framework=0 --output=yolov3 --soc_version=Ascend310 --insert_op_conf=aipp_nv12.cfg**
+        **atc --model=faster_rcnn.prototxt --weight=faster_rcnn.caffemodel --framework=0 --output=faster_rcnn --soc_version=Ascend310  --input_shape="data:1,3,-1,-1;im_info:1,3" --dynamic_image_size="416,416;512,512" --insert_op_conf=aipp_faster_rcnn.cfg**
 
     
-4.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0219108795_li953280133816)中源码所在路径下的“**objectdetection/model**”目录下。
+4.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0219108795_li953280133816)中源码所在路径下的“**objectdetection_dynamic_image_size
+/model**”目录下。
     
-    **cp ./yolov3.om \$HOME/AscendProjects/objectdetection/model/**
+     **cp \\$HOME/models/objectdetection_dynamic_image_size/faster_rcnn.om $HOME/AscendProjects/objectdetection_dynamic_image_size/model** 
 
 
 ## 环境配置   
@@ -96,7 +97,7 @@
     启动成功后，打开**objectdetection**工程，如[图 打开objectdetection工程](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810)所示。
 
     **图 1**  打开objectdetection工程<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810"></a>  
-    ![](figures/打开objectdetection工程1.png "打开objectdetection工程")
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0927/143424_af9da989_7985487.png "屏幕截图.png")
 
 2.  开始编译，打开Mind Studio工具，在工具栏中点击**Build \> Edit Build Configuration**。  
     选择Target OS 为Centos7.6，如[图 配置编译](#zh-cn_topic_0203223265_fig17414647130)所示。
