@@ -93,7 +93,7 @@
 **python3 preparedata.py**
 
  如下图所示。     
-![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/104131_431af1bb_7985487.png "屏幕截图.png") 
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0928/170437_24515b42_5395865.png "屏幕截图.png") 
 
 
 
@@ -117,7 +117,7 @@ Mindstudio配置开发板RC连接。
 5.后处理：
 将上一步骤生成的.bin文件移动到/home/ascend/AscendProjects/wav2word/out目录下     
 move \\$HOME/AscendProject/wav2word/out/outs/*bin \\$HOME/AscendProjects/wav2word/out
-   ![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/104310_acf2479d_7985487.png "屏幕截图.png")
+   
 
 打开Mind Studio工具的Terminal，执行如下命令将.bin文件转换成文本。
 
@@ -126,4 +126,4 @@ move \\$HOME/AscendProject/wav2word/out/outs/*bin \\$HOME/AscendProjects/wav2wor
 **python3 postprocess.py**
 
 转换结果如下图所示。
-   ![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/104327_21294c9d_7985487.png "屏幕截图.png")
+   ![输入图片说明](https://images.gitee.com/uploads/images/2020/0928/170536_2c5f7b6f_5395865.png "屏幕截图.png")
