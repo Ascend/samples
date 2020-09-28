@@ -95,8 +95,8 @@ Ascend sample，请根据自己的需要进入对应文件夹获取应用，或�
 </blockquote></details>
 
 
-<details open><summary> wav2word：基于yolov3的目标检测应用，输入为视频，输出为视频。</summary><blockquote>
+<details open><summary> wav2word：基于test_model.pb的语言转换文字应用，输入为语音，输出为文本。</summary><blockquote>
 
-- [for_atlas200dk_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/wav2word/for_atlas200dk_1.7x.0.0_c++)：该分支是运行在200DK上基于1.7x.0.0版本的C++样例。使用opencv对视频帧进行预处理，对预处理后的视频帧中的物体进行目标检测，最后通过opencv进行相应后处理。    
-- [for_atlas300_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/wav2word/for_atlas300_1.7x.0.0_c++)：该分支是运行在ai1环境上基于1.7x.0.0版本的C++样例。使用opencv对视频帧进行预处理，对预处理后的视频帧中的物体进行目标检测，最后通过opencv进行相应后处理。  
+- [for_atlas200dk_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/wav2word/for_atlas200dk_1.7x.0.0_c++)：该分支是运行在200DK上基于1.7x.0.0版本的C++样例。使用opencv对语音进行预处理，对预处理后语音转换成相应文字，最后通过opencv进行相应后处理。    
+- [for_atlas300_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/wav2word/for_atlas300_1.7x.0.0_c++)：该分支是运行在ai1环境上基于1.7x.0.0版本的C++样例。使用opencv对语音进行预处理，对预处理后语音转换成相应文字，最后通过opencv进行相应后处理。  
 </blockquote></details>
