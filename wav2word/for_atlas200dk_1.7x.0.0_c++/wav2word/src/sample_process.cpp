@@ -97,7 +97,7 @@ Result SampleProcess::Process()
     // loop begin
     string testFile[] = {
         "../data/nihao.bin",
-        "../data/xinpian.bin"
+        
     };
 
     for (size_t index = 0; index < sizeof(testFile) / sizeof(testFile[0]); ++index) {
