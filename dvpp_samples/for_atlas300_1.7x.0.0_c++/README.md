@@ -5,7 +5,7 @@
 
 1. [crop](https://gitee.com/ascend/samples/blob/master/dvpp_samples/for_atlas300_1.7x.0.0_c++/crop/readme.md)：从输入图片中抠出需要用的图片区域，支持一图多框和多图多框。
 
-2. [cropandpaste](https://gitee.com/ascend/samples/blob/master/dvpp_samples/for_atlas300_1.7x.0.0_c++/cropandpaste/readme.md)：Atlas200DK开发者板使用I2C的样例。
+2. [cropandpaste](https://gitee.com/ascend/samples/blob/master/dvpp_samples/for_atlas300_1.7x.0.0_c++/cropandpaste/readme.md)：从输入图片中抠出来的图，对抠出的图进行缩放后，放在用户输出图片的指定区域，输出图片可以是空白图片（由用户申请的空输出内存产生的），也可以是已有图片（由用户申请输出内存后将已有图片读入输出内存），只有当输出图片是已有图片时，才表示叠加。
 
 3. [jpegd](https://gitee.com/ascend/samples/blob/master/dvpp_samples/for_atlas300_1.7x.0.0_c++/jpegd/readme.md)：实现.jpg、.jpeg、.JPG、.JPEG图片的解码，对于硬件不支持的格式，会使用软件解码。
 
