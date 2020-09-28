@@ -41,7 +41,7 @@
 ### 运行应用
 1、在Atlas 200DK开发板上连接摄像头，上电开机
 
-2、以HwHiAiUser（运行用户）将开发环境的“vdec”目录下的out目录上传到运行环境的一个目录下，例如 **“/home/HwHiAiUser/venc/out”** 。   
+2、以HwHiAiUser（运行用户）将开发环境的“venc”目录下的out目录上传到运行环境的一个目录下，例如 **“/home/HwHiAiUser/venc/out”** 。   
 运行环境： **mkdir venc**    
 开发环境： **scp -r /home/AscendProjects/venc/out HwHiAiUser@192.168.1.2:venc/out** 
 
@@ -49,7 +49,7 @@
 
 4、切换到可执行文件main所在的目录，例如“/home/HwHiAiUser/venc/out”
 
-，给该目录下的main文件加执行权限。
+给该目录下的main文件加执行权限。
 
 ```
 chmod +x main
