@@ -72,14 +72,13 @@
 
 ## 环境配置   
 
-**注：服务器上已安装OpenCV、交叉编译工具可跳过此步骤。**  
+**注：服务器上已安装交叉编译工具可跳过此步骤。**  
 
 - 安装编译工具  
 
   **sudo apt-get install -y g++\-aarch64-linux-gnu g++\-5-aarch64-linux-gnu** 
 
-- 安装OpenCV 
-  请参考 **https://gitee.com/ascend/samples/tree/master/common/install_opencv/for_atlas200dk**    
+  
 
 ##  样例运行
 
