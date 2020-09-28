@@ -1,7 +1,7 @@
 #  dvpp_samples-Atlas300
 
 #### 介绍
-本仓包含Atlas200支持的媒体数据处理功能，各文件夹对应不同功能，以供用户参考。具体说明如下。
+本仓包含Atlas300支持的媒体数据处理功能，各文件夹对应不同功能，以供用户参考。具体说明如下。
 
 1. [crop](https://gitee.com/ascend/samples/blob/master/dvpp_samples/for_atlas300_1.7x.0.0_c++/crop/readme.md)：从输入图片中抠出需要用的图片区域，支持一图多框和多图多框。
 
