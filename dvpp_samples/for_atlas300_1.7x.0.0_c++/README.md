@@ -1,4 +1,4 @@
-#  dvpp_samples-Atlas200DK
+#  dvpp_samples-Atlas300
 
 #### 介绍
 本仓包含Atlas200支持的媒体数据处理功能，各文件夹对应不同功能，以供用户参考。具体说明如下。
