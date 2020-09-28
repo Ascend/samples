@@ -99,7 +99,7 @@
 
 4.运行
 Mindstudio配置开发板RC连接。       
-**注：此时默认开发板已经连接到开发环境了**
+**注：此时默认开发板已经连接到开发环境了**      
 在Mind Studio工具的工具栏中找到**Tools**按钮，单机**Device Manager**。
 点击Device Manager界面右上方的 **“+”** 按钮，填写**Host IP**为开发者板ip（USB连接默认为192.168.1.2），点击OK。
 
