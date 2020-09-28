@@ -105,4 +105,10 @@ Ascend sample，请根据自己的需要进入对应文件夹获取应用，或�
 <details open><summary>hardware-peripheral：基于Atlas200DK各硬件接口的使用样例，详细介绍了gpio、i2c、uart使用须知。</summary><blockquote>
 
 - [for_atlas200dk_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/hardware-peripheral%20/for_atlas200dk_1.7x.0.0_c++)：本仓包含Atlas200DK各硬件接口的使用样例，各文件夹对应不同硬件设备的样例，以供用户参考。  
-</blockquote></details> 
+</blockquote></details>      
+
+<details open><summary>dvpp_samples：Atlas200DK和Atlas300支持的媒体数据处理功能。</summary><blockquote>
+
+- [for_atlas200dk_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/dvpp_samples/for_atlas200dk_1.7x.0.0_c++)：详细介绍了Atlas200dk中venc的功能即约束说明。 
+- [for_atlas300_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/dvpp_samples/for_atlas200dk_1.7x.0.0_c++)：详细介绍了Atlas300dk中crop、cropandpaste、jpegd、jpege、resize、vdec的功能即约束说明。
+</blockquote></details>
