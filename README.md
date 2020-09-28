@@ -99,4 +99,10 @@ Ascend sample，请根据自己的需要进入对应文件夹获取应用，或�
 
 - [for_atlas200dk_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/wav2word/for_atlas200dk_1.7x.0.0_c++)：该分支是运行在200DK上基于1.7x.0.0版本的C++样例。使用python wave库对音频文件进行特征提取，提取200维的音频特征进行计算输入，之后进行语音信号的预处理分帧，加窗，傅里叶变换等进行预处理，对预处理后语音转换成相应文字，最后通过调用Keras附带的CTC_decode函数库进行解码进行相应后处理。    
 - [for_atlas300_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/wav2word/for_atlas300_1.7x.0.0_c++)：该分支是运行在ai1环境上基于1.7x.0.0版本的C++样例。使用python wave库对音频文件进行特征提取，提取200维的音频特征进行计算输入，之后进行语音信号的预处理分帧，加窗，傅里叶变换等对语音进行预处理，对预处理后语音转换成相应文字，最后通过调用Keras附带的CTC_decode函数库进行解码进行相应后处理。  
-</blockquote></details>
+</blockquote></details>     
+
+
+<details open><summary>hardware-peripheral：基于Atlas200DK各硬件接口的使用样例，详细介绍了gpio、i2c、uart使用须知。</summary><blockquote>
+
+- [for_atlas200dk_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/hardware-peripheral%20/for_atlas200dk_1.7x.0.0_c++)：本仓包含Atlas200DK各硬件接口的使用样例，各文件夹对应不同硬件设备的样例，以供用户参考。  
+</blockquote></details> 
