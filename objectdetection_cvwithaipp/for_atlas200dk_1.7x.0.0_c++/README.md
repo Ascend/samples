@@ -42,21 +42,6 @@
         
 
 
-3.  将原始网络模型转换为适配昇腾AI处理器的模型。  
-
-    1.  在Mind Studio操作界面的顶部菜单栏中选择**Tools \> Model Converter**，进入模型转换界面。
-    2.  在弹出的**Model Conversion**操作界面中，进行模型转换配置。
-    3.  参照以下图片进行参数配置。    
-        -   Model File选择[步骤2](#zh-cn_topic_0219108795_li2074865610364)中下载的模型文件，此时会自动匹配到权重文件并填写在Weight File中。
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0919/105533_a2d2f902_5408865.png "屏幕截图.png")
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0919/105622_5cd24885_5408865.png "屏幕截图.png")
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0919/105650_ebd02314_5408865.png "屏幕截图.png")
-
-    
-4.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0228757084_section8534138124114)中源码所在路径下的“**sample-objectdetection_cvwithaipp/model**”目录下。
-    
-     **cp \\$HOME/modelzoo/vgg_ssd/device/vgg_ssd.om \\$HOME/AscendProjects/sample-objectdetection_cvwithaipp/model/**  
-  
 
 ## 环境配置   
 
@@ -81,9 +66,25 @@
     启动成功后，打开**sample-objectdetection_cvwithaipp**工程，如[图 打开sample-objectdetection_cvwithaipp工程](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810)所示。
 
     **图 1**  打开sample-objectdetection_cvwithaipp工程<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810"></a>  
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0919/105910_0b2c425f_5408865.png "屏幕截图.png")
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0919/105910_0b2c425f_5408865.png "屏幕截图.png")     
 
-2.  开始编译，打开Mind Studio工具，在工具栏中点击**Build \> Edit Build Configuration**。  
+2.  将原始网络模型转换为适配昇腾AI处理器的模型。  
+
+    1.  在Mind Studio操作界面的顶部菜单栏中选择**Tools \> Model Converter**，进入模型转换界面。
+    2.  在弹出的**Model Conversion**操作界面中，进行模型转换配置。
+    3.  参照以下图片进行参数配置。    
+        -   Model File选择[步骤2](#zh-cn_topic_0219108795_li2074865610364)中下载的模型文件，此时会自动匹配到权重文件并填写在Weight File中。
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0919/105533_a2d2f902_5408865.png "屏幕截图.png")
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0919/105622_5cd24885_5408865.png "屏幕截图.png")
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0919/105650_ebd02314_5408865.png "屏幕截图.png")
+
+    
+3.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0228757084_section8534138124114)中源码所在路径下的“**sample-objectdetection_cvwithaipp/model**”目录下。
+    
+     **cp \\$HOME/modelzoo/vgg_ssd/device/vgg_ssd.om \\$HOME/AscendProjects/sample-objectdetection_cvwithaipp/model/**  
+  
+
+4.  开始编译，打开Mind Studio工具，在工具栏中点击**Build \> Edit Build Configuration**。  
     选择Target OS 为Centos7.6，如[图 配置编译](#zh-cn_topic_0203223265_fig17414647130)所示。
 
     **图 2**  配置编译<a name="zh-cn_topic_0203223265_fig17414647130"></a>  
