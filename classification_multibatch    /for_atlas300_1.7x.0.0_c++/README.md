@@ -110,7 +110,7 @@
 3.编译
 
 在**Mindstudio**的工具栏中点击**Build > Edit Build Configuration**。选择Target OS 为Centos7.6，Target Architecture选择x86_64.
-![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/191419_f4672648_7985487.png "屏幕截图.png"))
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/191419_f4672648_7985487.png "屏幕截图.png")
    
 
 之后点击**Build > Build > Build Configuration**，会开始编译。
