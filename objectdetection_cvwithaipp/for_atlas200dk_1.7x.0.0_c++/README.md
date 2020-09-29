@@ -66,7 +66,7 @@
     启动成功后，打开**sample-objectdetection_cvwithaipp**工程，如[图 打开objectdetection_cvwithaipp工程](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810)所示。
 
     **图 **  打开objectdetection_cvwithaipp工程<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810"></a>  
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0929/144507_906ee56f_5395865.png "屏幕截图.png")   
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0929/155448_d9adcba0_5395865.png "屏幕截图.png")   
 
 2.  将原始网络模型转换为适配昇腾AI处理器的模型。  
 
@@ -103,11 +103,11 @@
     之后分别点击Apply、OK。如[图 配置运行](#zh-cn_topic_0203223265_fig93931954162720)所示。   
 
     **图 **  配置运行<a name="zh-cn_topic_0203223265_fig93931954162720"></a>   
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0929/145041_f24237ff_5395865.png "屏幕截图.png")
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0929/155547_1dbaf462_5395865.png "屏幕截图.png")
  
 2.  单击  **Run \> Run 'sample-objectdetection_cvwithaipp'**，如[图 程序已执行示意图](#zh-cn_topic_0203223265_fig93931954162719)所示，可执行程序已经在开发者板执行。  
 
-    **图 5**  程序已执行示意图<a name="zh-cn_topic_0203223265_fig93931954162719"></a>  
+    **图 **  程序已执行示意图<a name="zh-cn_topic_0203223265_fig93931954162719"></a>  
     ![输入图片说明](https://images.gitee.com/uploads/images/2020/0929/145103_83731901_5395865.png "屏幕截图.png")
 
 3.  查看运行结果。
