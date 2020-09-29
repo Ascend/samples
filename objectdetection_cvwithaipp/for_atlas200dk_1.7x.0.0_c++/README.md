@@ -5,7 +5,7 @@
 # 检测网络应用（C++）<a name="ZH-CN_TOPIC_0232337690"></a>  
 
 
-本Application支持运行在Atlas 200 DK 或是 在AI云上加速环境(Atlas300)上，实现了对vgg_ssd目标检测网络的推理功能。 
+本Application支持运行在Atlas 200 DK ,实现了对vgg_ssd目标检测网络的推理功能。 
 
 ## 软件准备<a name="zh-cn_topic_0219108795_section181111827718"></a>
 
@@ -15,9 +15,9 @@
 
     **cd $HOME/AscendProjects**  
 
-    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/classification.zip** 
+    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/objectdetection_cvwithaipp.zip --no-check-certificate** 
               
-    **unzip classification.zip**  
+    **unzip objectdetection_cvwithaipp.zip**  
     
     >![](public_sys-resources/icon-note.gif) **说明：**   
     >- 如果使用wget下载失败，可使用如下命令下载代码。  
