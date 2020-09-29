@@ -66,7 +66,7 @@
     启动成功后，打开**sample-objectdetection_cvwithaipp**工程，如[图 打开sample-objectdetection_cvwithaipp工程](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810)所示。
 
     **图 1**  打开sample-objectdetection_cvwithaipp工程<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810"></a>  
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0919/105910_0b2c425f_5408865.png "屏幕截图.png")     
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0929/144507_906ee56f_5395865.png "屏幕截图.png")   
 
 2.  将原始网络模型转换为适配昇腾AI处理器的模型。  
 
@@ -74,26 +74,27 @@
     2.  在弹出的**Model Conversion**操作界面中，进行模型转换配置。
     3.  参照以下图片进行参数配置。    
         -   Model File选择[步骤2](#zh-cn_topic_0219108795_li2074865610364)中下载的模型文件，此时会自动匹配到权重文件并填写在Weight File中。
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0919/105533_a2d2f902_5408865.png "屏幕截图.png")
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0919/105622_5cd24885_5408865.png "屏幕截图.png")
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0919/105650_ebd02314_5408865.png "屏幕截图.png")
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0929/144557_d189697b_5395865.png "屏幕截图.png")
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0929/144610_dc2f2b12_5395865.png "屏幕截图.png")
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0929/144621_d560fbfe_5395865.png "屏幕截图.png")   
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0929/144850_4c2a7af6_5395865.png "屏幕截图.png")
 
     
 3.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0228757084_section8534138124114)中源码所在路径下的“**sample-objectdetection_cvwithaipp/model**”目录下。
     
-     **cp \\$HOME/modelzoo/vgg_ssd/device/vgg_ssd.om \\$HOME/AscendProjects/sample-objectdetection_cvwithaipp/model/**  
+     **cp \\$HOME/modelzoo/vgg_ssd/device/vgg_ssd.om \\$HOME/AscendProjects/objectdetection_cvwithaipp/model/**  
   
 
 4.  开始编译，打开Mind Studio工具，在工具栏中点击**Build \> Edit Build Configuration**。  
     选择Target OS 为Centos7.6，如[图 配置编译](#zh-cn_topic_0203223265_fig17414647130)所示。
 
-    **图 2**  配置编译<a name="zh-cn_topic_0203223265_fig17414647130"></a>  
+    **图 **  配置编译<a name="zh-cn_topic_0203223265_fig17414647130"></a>  
     ![输入图片说明](https://images.gitee.com/uploads/images/2020/0919/105928_f1a02038_5408865.png "屏幕截图.png")
     
     之后点击**Build \> Build \> Build Configuration**，如[图 编译操作及生成文件](#zh-cn_topic_0203223265_fig1741464713019)所示，会在目录下生成build和out文件夹。
 
-    **图 3**  编译操作及生成文件<a name="zh-cn_topic_0203223265_fig1741464713019"></a>  
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0919/110356_41e73c55_5408865.png "屏幕截图.png")
+    **图 **  编译操作及生成文件<a name="zh-cn_topic_0203223265_fig1741464713019"></a>  
+   ![输入图片说明](https://images.gitee.com/uploads/images/2020/0929/145013_877d1391_5395865.png "屏幕截图.png")
 
     >![](public_sys-resources/icon-notice.gif) **须知：**   
     >首次编译工程时，**Build \> Build**为灰色不可点击状态。需要点击**Build \> Edit Build Configuration**，配置编译参数后再进行编译。  
@@ -101,13 +102,13 @@
 1.  在Mind Studio工具的工具栏中找到Run按钮，单击  **Run \> Edit Configurations**。  
     之后分别点击Apply、OK。如[图 配置运行](#zh-cn_topic_0203223265_fig93931954162720)所示。   
 
-    **图 4**  配置运行<a name="zh-cn_topic_0203223265_fig93931954162720"></a>   
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0919/110439_a89fd6bf_5408865.png "屏幕截图.png")
+    **图 **  配置运行<a name="zh-cn_topic_0203223265_fig93931954162720"></a>   
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0929/145041_f24237ff_5395865.png "屏幕截图.png")
  
 2.  单击  **Run \> Run 'sample-objectdetection_cvwithaipp'**，如[图 程序已执行示意图](#zh-cn_topic_0203223265_fig93931954162719)所示，可执行程序已经在开发者板执行。  
 
     **图 5**  程序已执行示意图<a name="zh-cn_topic_0203223265_fig93931954162719"></a>  
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0919/110744_80e9d5da_5408865.png "屏幕截图.png")
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0929/145103_83731901_5395865.png "屏幕截图.png")
 
 3.  查看运行结果。
 
