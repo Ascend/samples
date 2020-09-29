@@ -24,32 +24,22 @@
     **curl -OL https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/classification.zip** 
     >- 如果curl也下载失败，可复制下载链接到浏览器，手动上传至服务器。
     
-2.  <a name="zh-cn_topic_0219108795_li2074865610364"></a>获取此应用中所需要的原始网络模型。
+2.  <a name="zh-cn_topic_0219108795_li2074865610364"></a>获取此应用中所需要的原始网络模型。    
+ 
+     -  下载原始网络模型及权重文件至ubuntu服务器任意目录，如:$HOME/yolov3。
 
-    参考[表 检测网络应用使用模型](#zh-cn_topic_0219108795_table19942111763710)获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到Mind Studio所在Ubuntu服务器的任意目录。
+        **mkdir -p $HOME/vgg_ssd**
 
-    **表 1**  检测网络应用使用模型
+        **wget https://obs-book.obs.cn-east-2.myhuaweicloud.com/shaxiang/C73/vgg_ssd.caffemodel --no-check-certificate** 
+ 
+        **wget https://obs-book.obs.cn-east-2.myhuaweicloud.com/shaxiang/C73/vgg_ssd.prototxt --no-check-certificate**
 
-<a name="zh-cn_topic_0219108795_table19942111763710"></a>
-<table><thead align="left"><tr id="zh-cn_topic_0219108795_row611318123710"><th class="cellrowborder" valign="top" width="11.959999999999999%" id="mcps1.2.4.1.1"><p id="zh-cn_topic_0219108795_p81141820376"><a name="zh-cn_topic_0219108795_p81141820376"></a><a name="zh-cn_topic_0219108795_p81141820376"></a>模型名称</p>
-</th>
-<th class="cellrowborder" valign="top" width="8.07%" id="mcps1.2.4.1.2"><p id="zh-cn_topic_0219108795_p13181823711"><a name="zh-cn_topic_0219108795_p13181823711"></a><a name="zh-cn_topic_0219108795_p13181823711"></a>模型说明</p>
-</th>
-<th class="cellrowborder" valign="top" width="79.97%" id="mcps1.2.4.1.3"><p id="zh-cn_topic_0219108795_p1717182378"><a name="zh-cn_topic_0219108795_p1717182378"></a><a name="zh-cn_topic_0219108795_p1717182378"></a>模型下载路径</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="zh-cn_topic_0219108795_row1119187377"><td class="cellrowborder" valign="top" width="11.959999999999999%" headers="mcps1.2.4.1.1 "><p id="zh-cn_topic_0219108795_p4745165253920"><a name="zh-cn_topic_0219108795_p4745165253920"></a><a name="zh-cn_topic_0219108795_p4745165253920"></a>vgg_ssd</p>
-</td>
-<td class="cellrowborder" valign="top" width="8.07%" headers="mcps1.2.4.1.2 "><p id="zh-cn_topic_0219108795_p1874515218391"><a name="zh-cn_topic_0219108795_p1874515218391"></a><a name="zh-cn_topic_0219108795_p1874515218391"></a>图片目标检测推理模型。
-
-是基于Caffe的vgg_ssd模型。</p>
-</td>
-<td class="cellrowborder" valign="top" width="79.97%" headers="mcps1.2.4.1.3 "><p id="zh-cn_topic_0219108795_p611318163718"><a name="zh-cn_topic_0219108795_p611318163718"></a><a name="zh-cn_topic_0219108795_p611318163718"></a>请参考<a href="https://gitee.com/HuaweiAscend/models/tree/master/computer_vision/object_detect/vgg_ssd" target="_blank" rel="noopener noreferrer">https://gitee.com/HuaweiAscend/models/tree/master/computer_vision/object_detect/vgg_ssd</a>目录中README.md下载原始网络模型文件及其对应的权重文件。</p>
-</td>
-</tr>
-</tbody>
-</table>
+       
+            
+        >![](public_sys-resources/icon-note.gif) **说明：**   
+        >- vgg_ssd原始模型网络： https://github.com/weiliu89/caffe/tree/ssd
+        >- vgg_ssd原始网络LICENSE地址： https://github.com/weiliu89/caffe/blob/ssd/LICENSE
+        
 
 
 3.  将原始网络模型转换为适配昇腾AI处理器的模型。  
