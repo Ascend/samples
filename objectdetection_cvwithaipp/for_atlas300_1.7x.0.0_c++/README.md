@@ -2,7 +2,7 @@
 
 **该案例仅仅用于学习，打通流程，不对效果负责，不支持商用。**
 
-# 检测网络应用（C++）<a name="ZH-CN_TOPIC_0232337690"></a>  
+#objectdetection_cvwithaipp <a name="ZH-CN_TOPIC_0232337690"></a>  
 
 
 本Application支持运行在Atlas 300  ,实现了对vgg_ssd目标检测网络的推理功能。 
