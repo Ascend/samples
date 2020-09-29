@@ -15,7 +15,7 @@
 
     **cd $HOME/AscendProjects**  
 
-    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/objectdetection_cvwithaipp.zip --no-check-certificate** 
+    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/objectdetection_cvwithoutaipp.zip --no-check-certificate** 
               
     **unzip objectdetection_cvwithaipp.zip**  
     
