@@ -103,7 +103,7 @@
     之后分别点击Apply、OK。如[图 配置运行](#zh-cn_topic_0203223265_fig93931954162720)所示。   
 
     **图 **  配置运行<a name="zh-cn_topic_0203223265_fig93931954162720"></a>   
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0929/165657_08bbf9f2_5395865.png "屏幕截图.png")
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0929/165907_daf2c08e_5395865.png "屏幕截图.png")
  
 2.  单击  **Run \> Run 'sample-objectdetection_cvwithaipp'**，如[图 程序已执行示意图](#zh-cn_topic_0203223265_fig93931954162719)所示，可执行程序已经在开发者板执行。  
 
