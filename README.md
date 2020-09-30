@@ -70,19 +70,19 @@ Ascend sample，请根据自己的需要进入对应文件夹获取应用，或�
 - [for_atlas300_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/objectdetection_dynamic_aipp/for_atlas300_1.7x.0.0_c++)：该分支是运行在ai1环境上基于1.7x.0.0版本的C++样例。使用opencv对图像进行预处理，在模型推理时，需调用AscendCL提供的接口设置模型推理时需使用的AIPP配置，再对预处理后的图像中的物体进行目标检测，最后通过opencv进行相应后处理。  
 </blockquote></details>
 
-<details open><summary> objectdetection_cvwithaipp：基于vgg_ssd的目标检测应用，输入为图片，输出为图片。</summary><blockquote>
+<details open><summary> objectdetection_cvwithaipp：基于vgg_ssd的目标检测应用，使用opencv为输入图像数据进行预处理并在模型转换时开启AIPP。功能输入为图片，输出为图片。</summary><blockquote>
 
 - [for_atlas200dk_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/objectdetection_cvwithaipp/for_atlas200dk_1.7x.0.0_c++)：该分支是运行在200DK上基于1.7x.0.0版本的C++样例。使用opencv为输入图像数据进行预处理，并在模型转换时开启AIPP功能，实现目标检测的功能。  
 - [for_atlas300_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/objectdetection_cvwithaipp/for_atlas300_1.7x.0.0_c++)：该分支是运行在ai1环境上基于1.7x.0.0版本的C++样例。使用opencv为输入图像数据进行预处理，并在模型转换时开启AIPP功能，实现目标检测的功能。  
 </blockquote></details>   
 
-<details open><summary> objectdetection_cvwithoutaipp：基于vgg_ssd的目标检测应用，输入为图片，输出为图片。</summary><blockquote>
+<details open><summary> objectdetection_cvwithoutaipp：基于vgg_ssd的目标检测应用，使用opencv为输入图像数据进行预处理并在模型转换时关闭AIPP功能。输入为图片，输出为图片。</summary><blockquote>
 
 - [for_atlas200dk_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/objectdetection_cvwithoutaipp/for_atlas200dk_1.7x.0.0_c++)：该分支是运行在200DK上基于1.7x.0.0版本的C++样例。使用opencv为输入图像数据进行预处理，并在模型转换时关闭AIPP功能，实现目标检测的功能。  
 - [for_atlas300_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/objectdetection_cvwithoutaipp/for_atlas300_1.7x.0.0_c++)：该分支是运行在ai1环境上基于1.7x.0.0版本的C++样例。使用opencv为输入图像数据进行预处理，并在模型转换时关闭AIPP功能，实现目标检测的功能。  
 </blockquote></details>
 
-<details open><summary> objectdetection_dvppwithaipp：基于vgg_ssd的目标检测应用，输入为图片，输出为图片。</summary><blockquote>
+<details open><summary> objectdetection_dvppwithaipp：基于vgg_ssd的目标检测应用，使用dvpp对输入图像数据进行预处理并在模型转换时开启AIPP功能。输入为图片，输出为图片。</summary><blockquote>
 
 - [for_atlas200dk_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/objectdetection_dvppwithaipp/for_atlas200dk_1.7x.0.0_c++)：该分支是运行在200DK上基于1.7x.0.0版本的C++样例。使用dvpp对输入图像数据进行预处理，并在模型转换时开启AIPP功能，实现目标检测的功能。  
 - [for_atlas300_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/objectdetection_dvppwithaipp/for_atlas300_1.7x.0.0_c++)：该分支是运行在ai1环境上基于1.7x.0.0版本的C++样例。使用dvpp对输入图像数据进行预处理，并在模型转换时开启AIPP功能，实现目标检测的功能。  
