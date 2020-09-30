@@ -63,7 +63,7 @@
 
     **./MindStudio.sh**
 
-    启动成功后，打开**sample-objectdetection_cvwithaipp**工程，如[图 打开objectdetection_cvwithaipp工程](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810)所示。
+    启动成功后，打开**objectdetection_cvwithaipp**工程，如[图 打开objectdetection_cvwithaipp工程](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810)所示。
 
     **图 **  打开objectdetection_cvwithaipp工程<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810"></a>  
     ![输入图片说明](https://images.gitee.com/uploads/images/2020/0929/155238_aa1654ca_5395865.png "屏幕截图.png")   
@@ -80,7 +80,7 @@
     ![输入图片说明](https://images.gitee.com/uploads/images/2020/0929/153459_376851ec_5395865.png "屏幕截图.png")
 
     
-3.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0228757084_section8534138124114)中源码所在路径下的“**sample-objectdetection_cvwithaipp/model**”目录下。
+3.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0228757084_section8534138124114)中源码所在路径下的“**objectdetection_cvwithaipp/model**”目录下。
     
      **cp \\$HOME/modelzoo/vgg_ssd/device/vgg_ssd.om \\$HOME/AscendProjects/objectdetection_cvwithaipp/model/**  
   
@@ -105,7 +105,7 @@
     **图 **  配置运行<a name="zh-cn_topic_0203223265_fig93931954162720"></a>   
    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0929/154926_f8f5bb84_5395865.png "屏幕截图.png")
  
-2.  单击  **Run \> Run 'sample-objectdetection_cvwithaipp'**，如[图 程序已执行示意图](#zh-cn_topic_0203223265_fig93931954162719)所示，可执行程序已经在开发者板执行。  
+2.  单击  **Run \> Run 'objectdetection_cvwithaipp'**，如[图 程序已执行示意图](#zh-cn_topic_0203223265_fig93931954162719)所示，可执行程序已经在开发者板执行。  
 
     **图 **  程序已执行示意图<a name="zh-cn_topic_0203223265_fig93931954162719"></a>  
     ![输入图片说明](https://images.gitee.com/uploads/images/2020/0929/153605_44707760_5395865.png "屏幕截图.png")
