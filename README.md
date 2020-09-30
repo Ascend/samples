@@ -23,14 +23,14 @@ Ascend sample，请根据自己的需要进入对应文件夹获取应用，或�
 </blockquote></details>  
 
 <details open><summary>classification_dynamicbatch
-：基于googlenet的分类应用，输入为bin文件，输出为打印结果。</summary><blockquote>
+：基于googlenet的分类应用，模型推理时调用AscendCL提供的接口设置模型推理时需使用的Batch数。输入为bin文件，输出为打印结果。</summary><blockquote>
 
 - [for_atlas200dk_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/classification_dynamicbatch/for_atlas200dk_1.7x.0.0_c++)：该分支是运行在200DK上基于1.7x.0.0版本的C++样例。使用ifstream读取已对图像做好预处理的bin文件，在模型推理时，需调用AscendCL提供的接口设置模型推理时需使用的Batch数。对预处理后的文件进行推理，最后将推理结果打印屏幕上。    
 - [for_atlas300_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/classification_dynamicbatch/for_atlas300_1.7x.0.0_c++)：该分支是运行在ai1环境上基于1.7x.0.0版本的C++样例。使用ifstream读取已对图像做好预处理的bin文件，在模型推理时，需调用AscendCL提供的接口设置模型推理时需使用的Batch数。对预处理后的文件进行推理，最后将推理结果打印屏幕上。 
 </blockquote></details>  
 
 <details open><summary>classification_multibatch
-：基于googlenet的分类应用，输入为bin文件，输出为打印结果。</summary><blockquote>
+：基于googlenet的分类应用，输入数据满足多Batch的要求，申请Device上的内存存放多Batch的数据。输入为bin文件，输出为打印结果。</summary><blockquote>
 
 - [for_atlas200dk_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/classification_multibatch%20%20%20%20/for_atlas200dk_1.7x.0.0_c++)：该分支是运行在200DK上基于1.7x.0.0版本的C++样例。使用ifstream读取已对图像做好预处理的bin文件，等输入数据满足多Batch的要求，申请Device上的内存存放多Batch的数据，对预处理后的文件进行推理，最后将推理结果打印屏幕上。    
 - [for_atlas300_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/classification_multibatch%20%20%20%20/for_atlas300_1.7x.0.0_c++)：该分支是运行在ai1环境上基于1.7x.0.0版本的C++样例。使用ifstream读取已对图像做好预处理的bin文件，等输入数据满足多Batch的要求，申请Device上的内存存放多Batch的数据，对预处理后的文件进行推理，最后将推理结果打印屏幕上。 
