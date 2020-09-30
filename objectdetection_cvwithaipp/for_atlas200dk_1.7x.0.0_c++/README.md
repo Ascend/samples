@@ -80,7 +80,7 @@
     ![输入图片说明](https://images.gitee.com/uploads/images/2020/0929/144850_4c2a7af6_5395865.png "屏幕截图.png")
 
     
-3.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0228757084_section8534138124114)中源码所在路径下的“**sample-objectdetection_cvwithaipp/model**”目录下。
+3.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0228757084_section8534138124114)中源码所在路径下的“**objectdetection_cvwithaipp/model**”目录下。
     
      **cp \\$HOME/modelzoo/vgg_ssd/device/vgg_ssd.om \\$HOME/AscendProjects/objectdetection_cvwithaipp/model/**  
   
