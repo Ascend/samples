@@ -4,7 +4,7 @@
 
 # classification_dynamicbatch样例运行指导
 
-本Sample实现了googlenet网络的推理功能，运行成功后在屏幕打印推理结果。
+本Sample实现了googlenet网络的推理功能，在模型推理时，需调用AscendCL提供的接口设置模型推理时需使用的Batch数，运行成功后在屏幕打印推理结果。
 
 ### 软件准备
 
