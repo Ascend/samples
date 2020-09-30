@@ -15,13 +15,13 @@
 
     **cd $HOME/AscendProjects**  
 
-    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/objectdetection_cvwithaipp.zip --no-check-certificate** 
+    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/objectdetection_dvppwithaipp.zip --no-check-certificate** 
               
-    **unzip objectdetection_cvwithaipp.zip**  
+    **unzip objectdetection_dvppwithaipp.zip**  
     
     >![](public_sys-resources/icon-note.gif) **说明：**   
     >- 如果使用wget下载失败，可使用如下命令下载代码。  
-    **curl -OL https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/objectdetection_cvwithaipp.zip** 
+    **curl -OL https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/objectdetection_dvppwithaipp.zip** 
     >- 如果curl也下载失败，可复制下载链接到浏览器，手动上传至服务器。
     
 2.  <a name="zh-cn_topic_0219108795_li2074865610364"></a>获取此应用中所需要的原始网络模型。    
@@ -63,7 +63,7 @@
 
     **./MindStudio.sh**
 
-    启动成功后，打开**sample-objectdetection_cvwithaipp**工程，如[图 打开objectdetection_dvppwithaipp工程](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810)所示。
+    启动成功后，打开**objectdetection_dvppwithaipp**工程，如[图 打开objectdetection_dvppwithaipp工程](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810)所示。
 
     **图**  打开objectdetection_dvwithaipp工程<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810"></a>  
     ![输入图片说明](https://images.gitee.com/uploads/images/2020/0930/091341_66f2e645_5395865.png "屏幕截图.png"))   
@@ -82,7 +82,7 @@
     
 3.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0228757084_section8534138124114)中源码所在路径下的“**objectdetection_dvppwithaipp/model**”目录下。
     
-     **cp \\$HOME/modelzoo/vgg_ssd/device/vgg_ssd.om \\$HOME/AscendProjects/objectdetection_cvwithaipp/model/**  
+     **cp \\$HOME/modelzoo/vgg_ssd/device/vgg_ssd.om \\$HOME/AscendProjects/objectdetection_dvppwithaipp/model/**  
   
 
 4.  开始编译，打开Mind Studio工具，在工具栏中点击**Build \> Edit Build Configuration**。  
@@ -105,7 +105,7 @@
     **图 **  配置运行<a name="zh-cn_topic_0203223265_fig93931954162720"></a>   
    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0930/092012_1436720b_5395865.png "屏幕截图.png")
  
-2.  单击  **Run \> Run 'sample-objectdetection_cvwithaipp'**，如[图 程序已执行示意图](#zh-cn_topic_0203223265_fig93931954162719)所示，可执行程序已经在开发者板执行。  
+2.  单击  **Run \> Run 'objectdetection_cvwithaipp'**，如[图 程序已执行示意图](#zh-cn_topic_0203223265_fig93931954162719)所示，可执行程序已经在开发者板执行。  
 
     **图 **  程序已执行示意图<a name="zh-cn_topic_0203223265_fig93931954162719"></a>  
     ![输入图片说明](https://images.gitee.com/uploads/images/2020/0930/092034_9bd60b88_5395865.png "屏幕截图.png")
