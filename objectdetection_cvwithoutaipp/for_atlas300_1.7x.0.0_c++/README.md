@@ -17,7 +17,7 @@
 
     **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/objectdetection_cvwithoutaipp.zip --no-check-certificate** 
               
-    **unzip objectdetection_cvwithaipp.zip**  
+    **unzip objectdetection_cvwithoutaipp.zip**  
     
     >![](public_sys-resources/icon-note.gif) **说明：**   
     >- 如果使用wget下载失败，可使用如下命令下载代码。  
