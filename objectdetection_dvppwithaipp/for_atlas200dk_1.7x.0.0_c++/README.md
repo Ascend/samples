@@ -5,7 +5,7 @@
 # objectdetection_dvppwithaipp <a name="ZH-CN_TOPIC_0232337690"></a>  
 
 
-本Application支持运行在Atlas 300  ,实现了对vgg_ssd目标检测网络的推理功能。 
+本Application支持运行在Atlas200DK  ,实现了对vgg_ssd目标检测网络的推理功能。 
 
 ## 软件准备<a name="zh-cn_topic_0219108795_section181111827718"></a>
 
