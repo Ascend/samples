@@ -74,10 +74,10 @@
     2.  在弹出的**Model Conversion**操作界面中，进行模型转换配置。
     3.  参照以下图片进行参数配置。    
         -   Model File选择[步骤2](#zh-cn_topic_0219108795_li2074865610364)中下载的模型文件，此时会自动匹配到权重文件并填写在Weight File中。
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0929/144557_d189697b_5395865.png "屏幕截图.png")
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0929/170356_b10b953a_5395865.png "屏幕截图.png")
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0929/170502_b7f44310_5395865.png "屏幕截图.png")  
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0929/170512_1687b735_5395865.png "屏幕截图.png")
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0930/100722_71ee2da6_5395865.png "屏幕截图.png")
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0930/100734_7ae4caad_5395865.png "屏幕截图.png")
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0930/100743_0fac2401_5395865.png "屏幕截图.png")  
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0930/100753_7721630e_5395865.png "屏幕截图.png")
 
     
 3.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0228757084_section8534138124114)中源码所在路径下的“**objectdetection_cvwithaipp/model**”目录下。
@@ -89,12 +89,12 @@
     选择Target OS 为Centos7.6，如[图 配置编译](#zh-cn_topic_0203223265_fig17414647130)所示。
 
     **图 **  配置编译<a name="zh-cn_topic_0203223265_fig17414647130"></a>  
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0919/105928_f1a02038_5408865.png "屏幕截图.png")
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0930/101006_a7efffcb_5395865.png "屏幕截图.png")
     
     之后点击**Build \> Build \> Build Configuration**，如[图 编译操作及生成文件](#zh-cn_topic_0203223265_fig1741464713019)所示，会在目录下生成build和out文件夹。
 
     **图 **  编译操作及生成文件<a name="zh-cn_topic_0203223265_fig1741464713019"></a>  
-   ![输入图片说明](https://images.gitee.com/uploads/images/2020/0929/170645_52b179f0_5395865.png "屏幕截图.png")
+   ![输入图片说明](https://images.gitee.com/uploads/images/2020/0930/101018_3b70bb19_5395865.png "屏幕截图.png")
 
     >![](public_sys-resources/icon-notice.gif) **须知：**   
     >首次编译工程时，**Build \> Build**为灰色不可点击状态。需要点击**Build \> Edit Build Configuration**，配置编译参数后再进行编译。  
@@ -103,12 +103,12 @@
     之后分别点击Apply、OK。如[图 配置运行](#zh-cn_topic_0203223265_fig93931954162720)所示。   
 
     **图 **  配置运行<a name="zh-cn_topic_0203223265_fig93931954162720"></a>   
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0929/170706_f1f64db8_5395865.png "屏幕截图.png")
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0930/101057_93da1939_5395865.png "屏幕截图.png")
  
 2.  单击  **Run \> Run 'objectdetection_cvwithaipp'**，如[图 程序已执行示意图](#zh-cn_topic_0203223265_fig93931954162719)所示，可执行程序已经在开发者板执行。  
 
     **图 **  程序已执行示意图<a name="zh-cn_topic_0203223265_fig93931954162719"></a>  
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0929/170723_fc909fb0_5395865.png "屏幕截图.png")
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0930/101112_1d528afb_5395865.png "屏幕截图.png")
 
 3.  查看运行结果。
 
