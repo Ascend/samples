@@ -2,10 +2,10 @@
 
 **该案例仅仅用于学习，打通流程，不对效果负责，不支持商用。**
 
-# 检测网络应用（C++）<a name="ZH-CN_TOPIC_0232337690"></a>  
+# objectdetection_dvppwithaipp <a name="ZH-CN_TOPIC_0232337690"></a>  
 
 
-本Application支持运行在Atlas 200 DK 或是 在AI云上加速环境(Atlas300)上，实现了对vgg_ssd目标检测网络的推理功能。 
+本Application支持运行在Atlas 300  ,实现了对vgg_ssd目标检测网络的推理功能。 
 
 ## 软件准备<a name="zh-cn_topic_0219108795_section181111827718"></a>
 
@@ -15,58 +15,33 @@
 
     **cd $HOME/AscendProjects**  
 
-    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/classification.zip** 
+    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/objectdetection_dvppwithaipp.zip --no-check-certificate** 
               
-    **unzip classification.zip**  
+    **unzip objectdetection_dvppwithaipp.zip**  
     
     >![](public_sys-resources/icon-note.gif) **说明：**   
     >- 如果使用wget下载失败，可使用如下命令下载代码。  
-    **curl -OL https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/classification.zip** 
+    **curl -OL https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/objectdetection_dvppwithaipp.zip** 
     >- 如果curl也下载失败，可复制下载链接到浏览器，手动上传至服务器。
     
-2.  <a name="zh-cn_topic_0219108795_li2074865610364"></a>获取此应用中所需要的原始网络模型。
+2.  <a name="zh-cn_topic_0219108795_li2074865610364"></a>获取此应用中所需要的原始网络模型。    
+ 
+     -  下载原始网络模型及权重文件至ubuntu服务器任意目录，如:$HOME/vgg_ssd。
 
-    参考[表 检测网络应用使用模型](#zh-cn_topic_0219108795_table19942111763710)获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到Mind Studio所在Ubuntu服务器的任意目录。
+        **mkdir -p $HOME/vgg_ssd**
 
-    **表 1**  检测网络应用使用模型
+        **wget https://obs-book.obs.cn-east-2.myhuaweicloud.com/shaxiang/C73/vgg_ssd.caffemodel --no-check-certificate** 
+ 
+        **wget https://obs-book.obs.cn-east-2.myhuaweicloud.com/shaxiang/C73/vgg_ssd.prototxt --no-check-certificate**
 
-<a name="zh-cn_topic_0219108795_table19942111763710"></a>
-<table><thead align="left"><tr id="zh-cn_topic_0219108795_row611318123710"><th class="cellrowborder" valign="top" width="11.959999999999999%" id="mcps1.2.4.1.1"><p id="zh-cn_topic_0219108795_p81141820376"><a name="zh-cn_topic_0219108795_p81141820376"></a><a name="zh-cn_topic_0219108795_p81141820376"></a>模型名称</p>
-</th>
-<th class="cellrowborder" valign="top" width="8.07%" id="mcps1.2.4.1.2"><p id="zh-cn_topic_0219108795_p13181823711"><a name="zh-cn_topic_0219108795_p13181823711"></a><a name="zh-cn_topic_0219108795_p13181823711"></a>模型说明</p>
-</th>
-<th class="cellrowborder" valign="top" width="79.97%" id="mcps1.2.4.1.3"><p id="zh-cn_topic_0219108795_p1717182378"><a name="zh-cn_topic_0219108795_p1717182378"></a><a name="zh-cn_topic_0219108795_p1717182378"></a>模型下载路径</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="zh-cn_topic_0219108795_row1119187377"><td class="cellrowborder" valign="top" width="11.959999999999999%" headers="mcps1.2.4.1.1 "><p id="zh-cn_topic_0219108795_p4745165253920"><a name="zh-cn_topic_0219108795_p4745165253920"></a><a name="zh-cn_topic_0219108795_p4745165253920"></a>vgg_ssd</p>
-</td>
-<td class="cellrowborder" valign="top" width="8.07%" headers="mcps1.2.4.1.2 "><p id="zh-cn_topic_0219108795_p1874515218391"><a name="zh-cn_topic_0219108795_p1874515218391"></a><a name="zh-cn_topic_0219108795_p1874515218391"></a>图片目标检测推理模型。
-
-是基于Caffe的vgg_ssd模型。</p>
-</td>
-<td class="cellrowborder" valign="top" width="79.97%" headers="mcps1.2.4.1.3 "><p id="zh-cn_topic_0219108795_p611318163718"><a name="zh-cn_topic_0219108795_p611318163718"></a><a name="zh-cn_topic_0219108795_p611318163718"></a>请参考<a href="https://gitee.com/HuaweiAscend/models/tree/master/computer_vision/object_detect/vgg_ssd" target="_blank" rel="noopener noreferrer">https://gitee.com/HuaweiAscend/models/tree/master/computer_vision/object_detect/vgg_ssd</a>目录中README.md下载原始网络模型文件及其对应的权重文件。</p>
-</td>
-</tr>
-</tbody>
-</table>
+       
+            
+        >![](public_sys-resources/icon-note.gif) **说明：**   
+        >- vgg_ssd原始模型网络： https://github.com/weiliu89/caffe/tree/ssd
+        >- vgg_ssd原始网络LICENSE地址： https://github.com/weiliu89/caffe/blob/ssd/LICENSE
+        
 
 
-3.  将原始网络模型转换为适配昇腾AI处理器的模型。  
-
-    1.  在Mind Studio操作界面的顶部菜单栏中选择**Tools \> Model Converter**，进入模型转换界面。
-    2.  在弹出的**Model Conversion**操作界面中，进行模型转换配置。
-    3.  参照以下图片进行参数配置。    
-        -   Model File选择[步骤2](#zh-cn_topic_0219108795_li2074865610364)中下载的模型文件，此时会自动匹配到权重文件并填写在Weight File中。
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0919/105533_a2d2f902_5408865.png "屏幕截图.png")
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0919/105622_5cd24885_5408865.png "屏幕截图.png")
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0919/113533_f398daaf_5408865.png "屏幕截图.png")
-
-    
-4.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0228757084_section8534138124114)中源码所在路径下的“**sample-objectdetection_dvppwithaipp/model**”目录下。
-    
-     **cp \\$HOME/modelzoo/vgg_ssd/device/vgg_ssd.om \\$HOME/AscendProjects/sample-objectdetection_dvppwithaipp/model/**  
-  
 
 ## 环境配置   
 
@@ -88,21 +63,38 @@
 
     **./MindStudio.sh**
 
-    启动成功后，打开**sample-objectdetection_dvppwithaipp**工程，如[图 打开sample-objectdetection_dvppwithaipp工程](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810)所示。
+    启动成功后，打开**objectdetection_dvppwithaipp**工程，如[图 打开objectdetection_dvppwithaipp工程](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810)所示。
 
-    **图 1**  打开sample-objectdetection_dvppwithaipp工程<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810"></a>  
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0919/113628_916eb664_5408865.png "屏幕截图.png")
+    **图**  打开objectdetection_dvwithaipp工程<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810"></a>  
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0930/091341_66f2e645_5395865.png "屏幕截图.png"))   
 
-2.  开始编译，打开Mind Studio工具，在工具栏中点击**Build \> Edit Build Configuration**。  
+2.  将原始网络模型转换为适配昇腾AI处理器的模型。  
+
+    1.  在Mind Studio操作界面的顶部菜单栏中选择**Tools \> Model Converter**，进入模型转换界面。
+    2.  在弹出的**Model Conversion**操作界面中，进行模型转换配置。
+    3.  参照以下图片进行参数配置。    
+        -   Model File选择[步骤2](#zh-cn_topic_0219108795_li2074865610364)中下载的模型文件，此时会自动匹配到权重文件并填写在Weight File中。
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0930/091441_79c28dec_5395865.png "屏幕截图.png")
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0930/091509_8d38bd33_5395865.png "屏幕截图.png")
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0930/091607_18287bab_5395865.png "屏幕截图.png")   
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0930/091844_d1b4d78c_5395865.png "屏幕截图.png")
+
+    
+3.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0228757084_section8534138124114)中源码所在路径下的“**objectdetection_dvppwithaipp/model**”目录下。
+    
+     **cp \\$HOME/modelzoo/vgg_ssd/device/vgg_ssd.om \\$HOME/AscendProjects/objectdetection_dvppwithaipp/model/**  
+  
+
+4.  开始编译，打开Mind Studio工具，在工具栏中点击**Build \> Edit Build Configuration**。  
     选择Target OS 为Centos7.6，如[图 配置编译](#zh-cn_topic_0203223265_fig17414647130)所示。
 
-    **图 2**  配置编译<a name="zh-cn_topic_0203223265_fig17414647130"></a>  
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0919/112802_1f2b04e5_5408865.png "屏幕截图.png")
+    **图 **  配置编译<a name="zh-cn_topic_0203223265_fig17414647130"></a>  
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0930/091907_b07b1f45_5395865.png "屏幕截图.png")
     
     之后点击**Build \> Build \> Build Configuration**，如[图 编译操作及生成文件](#zh-cn_topic_0203223265_fig1741464713019)所示，会在目录下生成build和out文件夹。
 
-    **图 3**  编译操作及生成文件<a name="zh-cn_topic_0203223265_fig1741464713019"></a>  
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0919/113748_e6f93fff_5408865.png "屏幕截图.png")
+    **图 **  编译操作及生成文件<a name="zh-cn_topic_0203223265_fig1741464713019"></a>  
+   ![输入图片说明](https://images.gitee.com/uploads/images/2020/0930/091924_db498ab3_5395865.png "屏幕截图.png")
 
     >![](public_sys-resources/icon-notice.gif) **须知：**   
     >首次编译工程时，**Build \> Build**为灰色不可点击状态。需要点击**Build \> Edit Build Configuration**，配置编译参数后再进行编译。  
@@ -110,13 +102,13 @@
 1.  在Mind Studio工具的工具栏中找到Run按钮，单击  **Run \> Edit Configurations**。  
     之后分别点击Apply、OK。如[图 配置运行](#zh-cn_topic_0203223265_fig93931954162720)所示。   
 
-    **图 4**  配置运行<a name="zh-cn_topic_0203223265_fig93931954162720"></a>   
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0919/113848_b59dc69c_5408865.png "屏幕截图.png")
+    **图 **  配置运行<a name="zh-cn_topic_0203223265_fig93931954162720"></a>   
+   ![输入图片说明](https://images.gitee.com/uploads/images/2020/0930/092012_1436720b_5395865.png "屏幕截图.png")
  
-2.  单击  **Run \> Run 'sample-objectdetection_dvppwithaipp'**，如[图 程序已执行示意图](#zh-cn_topic_0203223265_fig93931954162719)所示，可执行程序已经在开发者板执行。  
+2.  单击  **Run \> Run 'objectdetection_cvwithaipp'**，如[图 程序已执行示意图](#zh-cn_topic_0203223265_fig93931954162719)所示，可执行程序已经在开发者板执行。  
 
-    **图 5**  程序已执行示意图<a name="zh-cn_topic_0203223265_fig93931954162719"></a>  
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0919/114027_e077d36b_5408865.png "屏幕截图.png")
+    **图 **  程序已执行示意图<a name="zh-cn_topic_0203223265_fig93931954162719"></a>  
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0930/092034_9bd60b88_5395865.png "屏幕截图.png")
 
 3.  查看运行结果。
 
@@ -124,4 +116,5 @@
  
     ![输入图片说明](https://images.gitee.com/uploads/images/2020/0919/110810_31c59ca0_5408865.png "屏幕截图.png")
     ![输入图片说明](https://images.gitee.com/uploads/images/2020/0919/110827_61600ed7_5408865.png "屏幕截图.png")
+
 
