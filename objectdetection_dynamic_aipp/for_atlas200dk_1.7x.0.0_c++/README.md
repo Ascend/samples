@@ -2,7 +2,7 @@
 
 **该案例仅仅用于学习，打通流程，不对效果负责，不支持商用。**
 
-#  检测网络应用（C++）<a name="ZH-CN_TOPIC_0219122211"></a>
+#   objectdetection_dynamic_aipp样例运行指导<a name="ZH-CN_TOPIC_0219122211"></a>
 本应用支持运行在Atlas 200 DK上，实现了对yolov3目标检测网络的推理功能。 
 
 ## 软件准备<a name="zh-cn_topic_0219108795_section181111827718"></a>
