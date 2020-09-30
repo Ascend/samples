@@ -4,7 +4,7 @@
 
 # classification_multibatch样例运行指导
 
-本Sample实现了googlenet网络的推理功能，运行成功后简单打印成功信息。
+本Sample实现了googlenet网络的推理功能。在推理前，需要编写一段代码逻辑：等输入数据满足多Batch（例如：8Batch）的要求，申请Device上的内存存放多Batch的数据，作为模型推理的输入。如果最后循环遍历所有的输入数据后，仍不满足多Batch的要求，则直接将剩余数据作为模型推理的输入。运行成功后简单打印成功信息。
 
 ### 软件准备
 
