@@ -84,8 +84,8 @@ Ascend sample，请根据自己的需要进入对应文件夹获取应用，或�
 
 <details open><summary> objectdetection_dvppwithaipp：基于vgg_ssd的目标检测应用，输入为图片，输出为图片。</summary><blockquote>
 
-- [for_atlas200dk_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/objectdetection_dvppwithaipp/for_atlas200dk_1.7x.0.0_c++)：该分支是运行在200DK上基于1.7x.0.0版本的C++样例。使用dvpp对输入图像数据进行预处理，并在模型转换时开启AIPP功能 实现目标检测的功能。  
-- [for_atlas300_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/objectdetection_dvppwithaipp/for_atlas300_1.7x.0.0_c++)：该分支是运行在ai1环境上基于1.7x.0.0版本的C++样例。使用dvpp对输入图像数据进行预处理，并在模型转换时开启AIPP功能 实现目标检测的功能。  
+- [for_atlas200dk_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/objectdetection_dvppwithaipp/for_atlas200dk_1.7x.0.0_c++)：该分支是运行在200DK上基于1.7x.0.0版本的C++样例。使用dvpp对输入图像数据进行预处理，并在模型转换时开启AIPP功能，实现目标检测的功能。  
+- [for_atlas300_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/objectdetection_dvppwithaipp/for_atlas300_1.7x.0.0_c++)：该分支是运行在ai1环境上基于1.7x.0.0版本的C++样例。使用dvpp对输入图像数据进行预处理，并在模型转换时开启AIPP功能，实现目标检测的功能。  
 </blockquote></details>
 <details open><summary>objectdetection_video：基于yolov3的目标检测应用，输入为视频，输出为视频。</summary><blockquote>
 
