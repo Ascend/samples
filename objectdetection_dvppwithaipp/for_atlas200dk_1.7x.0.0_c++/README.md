@@ -63,10 +63,10 @@
 
     **./MindStudio.sh**
 
-    启动成功后，打开**sample-objectdetection_cvwithaipp**工程，如[图 打开objectdetection_cvwithaipp工程](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810)所示。
+    启动成功后，打开**sample-objectdetection_cvwithaipp**工程，如[图 打开objectdetection_dvppwithaipp工程](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810)所示。
 
-    **图 **  打开objectdetection_cvwithaipp工程<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810"></a>  
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0929/155238_aa1654ca_5395865.png "屏幕截图.png")   
+    **图**  打开objectdetection_dvwithaipp工程<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810"></a>  
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0930/091341_66f2e645_5395865.png "屏幕截图.png"))   
 
 2.  将原始网络模型转换为适配昇腾AI处理器的模型。  
 
@@ -74,13 +74,13 @@
     2.  在弹出的**Model Conversion**操作界面中，进行模型转换配置。
     3.  参照以下图片进行参数配置。    
         -   Model File选择[步骤2](#zh-cn_topic_0219108795_li2074865610364)中下载的模型文件，此时会自动匹配到权重文件并填写在Weight File中。
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0929/153710_359488de_5395865.png "屏幕截图.png")
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0929/144610_dc2f2b12_5395865.png "屏幕截图.png")
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0929/144621_d560fbfe_5395865.png "屏幕截图.png")   
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0929/153459_376851ec_5395865.png "屏幕截图.png")
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0930/091441_79c28dec_5395865.png "屏幕截图.png")
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0930/091509_8d38bd33_5395865.png "屏幕截图.png")
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0930/091607_18287bab_5395865.png "屏幕截图.png")   
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0930/091844_d1b4d78c_5395865.png "屏幕截图.png")
 
     
-3.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0228757084_section8534138124114)中源码所在路径下的“**sample-objectdetection_cvwithaipp/model**”目录下。
+3.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0228757084_section8534138124114)中源码所在路径下的“**objectdetection_dvppwithaipp/model**”目录下。
     
      **cp \\$HOME/modelzoo/vgg_ssd/device/vgg_ssd.om \\$HOME/AscendProjects/objectdetection_cvwithaipp/model/**  
   
@@ -89,12 +89,12 @@
     选择Target OS 为Centos7.6，如[图 配置编译](#zh-cn_topic_0203223265_fig17414647130)所示。
 
     **图 **  配置编译<a name="zh-cn_topic_0203223265_fig17414647130"></a>  
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0929/153428_9b1ff179_5395865.png "屏幕截图.png")
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0930/091907_b07b1f45_5395865.png "屏幕截图.png")
     
     之后点击**Build \> Build \> Build Configuration**，如[图 编译操作及生成文件](#zh-cn_topic_0203223265_fig1741464713019)所示，会在目录下生成build和out文件夹。
 
     **图 **  编译操作及生成文件<a name="zh-cn_topic_0203223265_fig1741464713019"></a>  
-   ![输入图片说明](https://images.gitee.com/uploads/images/2020/0929/145013_877d1391_5395865.png "屏幕截图.png")
+   ![输入图片说明](https://images.gitee.com/uploads/images/2020/0930/091924_db498ab3_5395865.png "屏幕截图.png")
 
     >![](public_sys-resources/icon-notice.gif) **须知：**   
     >首次编译工程时，**Build \> Build**为灰色不可点击状态。需要点击**Build \> Edit Build Configuration**，配置编译参数后再进行编译。  
@@ -103,12 +103,12 @@
     之后分别点击Apply、OK。如[图 配置运行](#zh-cn_topic_0203223265_fig93931954162720)所示。   
 
     **图 **  配置运行<a name="zh-cn_topic_0203223265_fig93931954162720"></a>   
-   ![输入图片说明](https://images.gitee.com/uploads/images/2020/0929/154926_f8f5bb84_5395865.png "屏幕截图.png")
+   ![输入图片说明](https://images.gitee.com/uploads/images/2020/0930/092012_1436720b_5395865.png "屏幕截图.png")
  
 2.  单击  **Run \> Run 'sample-objectdetection_cvwithaipp'**，如[图 程序已执行示意图](#zh-cn_topic_0203223265_fig93931954162719)所示，可执行程序已经在开发者板执行。  
 
     **图 **  程序已执行示意图<a name="zh-cn_topic_0203223265_fig93931954162719"></a>  
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0929/153605_44707760_5395865.png "屏幕截图.png")
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0930/092034_9bd60b88_5395865.png "屏幕截图.png")
 
 3.  查看运行结果。
 
