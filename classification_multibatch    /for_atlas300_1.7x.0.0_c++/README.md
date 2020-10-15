@@ -103,7 +103,7 @@
 在Command Arguments 中添加运行参数 ../data/detection.mp4.
 由于本用例是在x86_64环境下运行，所以target host ip设置的是一个x86_64环境的云端服务ip.本例中使用如下ip.
 
-![输入图片说明](https://images.gitee.com/uploads/images/2020/1010/163919_6d305d40_7990837.png "屏幕截图.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2020/1010/163919_6d305d40_7990837.png "屏幕截图.png")    
 添加ip成功后，开始运行，结束时可以看到终端打印出信息，即表明样例运行成功。
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/1010/180548_886fc416_7990837.png "屏幕截图.png")
