@@ -4,7 +4,7 @@
 
 # classification_multibatch样例运行指导
 
-本Sample实现了googlenet网络的推理功能。在推理前，需要编写一段代码逻辑：等输入数据满足多Batch（例如：8Batch）的要求，申请Device上的内存存放多Batch的数据，作为模型推理的输入。如果最后循环遍历所有的输入数据后，仍不满足多Batch的要求，则直接将剩余数据作为模型推理的输入。运行成功后简单打印成功信息。
+本Sample实现了googlenet网络的推理功能。在推理前，需要编写一段代码逻辑：等输入数据满足多Batch（例如本案例：2Batch）的要求，申请Device上的内存存放多Batch的数据，作为模型推理的输入。如果最后循环遍历所有的输入数据后，仍不满足多Batch的要求，则直接将剩余数据作为模型推理的输入。运行成功后简单打印成功信息。
 
 ### 软件准备
 
@@ -101,9 +101,9 @@
 
 在Mind Studio工具的工具栏中找到Run按钮，单击 Run > Edit Configurations。
 在Command Arguments 中添加运行参数 ../data/detection.mp4.
-由于本用例是在x86_64环境下运行，所以target host ip设置的是一个x86_64环境的云端服务ip.
-![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/174003_b4d47e75_7985487.png "屏幕截图.png")
+由于本用例是在x86_64环境下运行，所以target host ip设置的是一个x86_64环境的云端服务ip.本例中使用如下ip.
 
+![输入图片说明](https://images.gitee.com/uploads/images/2020/1010/163919_6d305d40_7990837.png "屏幕截图.png")
 添加ip成功后，开始运行，结束时可以看到终端打印出信息，即表明样例运行成功。
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/1010/180548_886fc416_7990837.png "屏幕截图.png")
