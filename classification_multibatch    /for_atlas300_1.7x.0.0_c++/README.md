@@ -49,39 +49,6 @@
 </tbody>
 </table>
 
-3. 将原始网络模型转换为适配昇腾AI处理器的模型。
-   
-
-   1.设置环境变量
-
-   命令行中输入以下命令设置环境变量。（仅在当前窗口生效）
-
-   **export install_path=\$HOME/Ascend/ascend-toolkit/latest/x86_64-linux_gcc7.3.0**  
-
-   **export PATH=/usr/local/python3.7.5/bin:\\${install_path}/atc/ccec_compiler/bin:\\${install_path}/atc/bin:\\$PATH**  
-
-   **export PYTHONPATH=\\${install_path}/atc/python/site-packages/te:\\${install_path}/atc/python/site-packages/topi:\\$PYTHONPATH**  
-
-   **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64:\\$LD_LIBRARY_PATH**  
-
-   **export ASCEND_OPP_PATH=\\${install_path}/opp**  
-
-
-
-
-    2.执行以下命令转换模型。这里需要注意原始模型和权重文件的路径。
-
-     **atc --model=\\$HOME/models/googlenet.prototxt --weight=\\$HOME/models/googlenet.caffemodel --output_type=FP32 --input_shape="data:2,3,224,224" --input_format=NCHW --output=\\$HOME/models/googlenet_multibatch --soc_version=Ascend310 --framework=0** 
-    
-    这条指令的参数设置可以参考
-
-    https://support.huaweicloud.com/ti-atc-A300_3000_3010/altasatc_16_003.html
-
-    转换成功后，终端会输出如下
-
-![输入图片说明](https://images.gitee.com/uploads/images/2020/0918/192252_3d1e24b9_7990837.png "屏幕截图.png")
-    
-由于我们在--output参数中设置的是”--output=\\$HOME/models/googlenet_multibatch”,所以执行结束后还可以在models文件夹里看到生成的googlenet_multibatch.om
 
 ## 环境配置   
 
@@ -103,19 +70,34 @@
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/191352_8b407ee1_7985487.png "屏幕截图.png")
 
+2.模型转换
 
-2.添加模型    
+在工具栏找到Tools,单击Model Converter.加载之前下载的模型文件和权重文件。
+
+![输入图片说明](https://images.gitee.com/uploads/images/2020/1010/181751_937b37cb_7990837.png "屏幕截图.png")
+
+本例中，batch值为2，设置N的值是2。
+
+![输入图片说明](https://images.gitee.com/uploads/images/2020/1010/181835_19a37d16_7990837.png "屏幕截图.png")
+
+继续设置
+
+![输入图片说明](https://images.gitee.com/uploads/images/2020/1010/182024_47100f27_7990837.png "屏幕截图.png")
+
+3.添加模型  
+  
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/194013_46aca0e8_7985487.png "屏幕截图.png")
 
-3.编译
+4.编译
 
 在**Mindstudio**的工具栏中点击**Build > Edit Build Configuration**。选择Target OS 为Centos7.6，Target Architecture选择x86_64.
+
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/191419_f4672648_7985487.png "屏幕截图.png")
    
 
 之后点击**Build > Build > Build Configuration**，会开始编译。
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/192627_146f85be_7985487.png "屏幕截图.png")
-4.运行
+5.运行
 
 在Mind Studio工具的工具栏中找到Run按钮，单击 Run > Edit Configurations。
 在Command Arguments 中添加运行参数 ../data/detection.mp4.
@@ -124,4 +106,4 @@
 
 添加ip成功后，开始运行，结束时可以看到终端打印出信息，即表明样例运行成功。
 
-![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/194032_4b4cfda6_7985487.png "屏幕截图.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2020/1010/180548_886fc416_7990837.png "屏幕截图.png")
