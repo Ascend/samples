@@ -65,7 +65,7 @@
 
     启动成功后，打开**objectdetection_cvwithoutaipp**工程，如[图 打开objectdetection_cvwithaipp工程](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810)所示。
 
-      打开objectdetection_cvwithoutaipp工程<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810"></a>  
+     **图** 打开objectdetection_cvwithoutaipp工程<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810"></a>  
     ![输入图片说明](https://images.gitee.com/uploads/images/2020/0929/170314_8de8e85b_5395865.png "屏幕截图.png") 
 
 2.  将原始网络模型转换为适配昇腾AI处理器的模型。  
@@ -88,12 +88,12 @@
 4.  开始编译，打开Mind Studio工具，在工具栏中点击**Build \> Edit Build Configuration**。  
     选择Target OS 为Centos7.6，如[图 配置编译](#zh-cn_topic_0203223265_fig17414647130)所示。
 
-      配置编译<a name="zh-cn_topic_0203223265_fig17414647130"></a>  
+     **图** 配置编译<a name="zh-cn_topic_0203223265_fig17414647130"></a>  
     ![输入图片说明](https://images.gitee.com/uploads/images/2020/0930/101006_a7efffcb_5395865.png "屏幕截图.png")
     
     之后点击**Build \> Build \> Build Configuration**，如[图 编译操作及生成文件](#zh-cn_topic_0203223265_fig1741464713019)所示，会在目录下生成build和out文件夹。
 
-      编译操作及生成文件<a name="zh-cn_topic_0203223265_fig1741464713019"></a>  
+      **图**编译操作及生成文件<a name="zh-cn_topic_0203223265_fig1741464713019"></a>  
    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0930/101018_3b70bb19_5395865.png "屏幕截图.png")
 
     >![](public_sys-resources/icon-notice.gif) **须知：**   
@@ -102,12 +102,12 @@
 1.  在Mind Studio工具的工具栏中找到Run按钮，单击  **Run \> Edit Configurations**。  
     之后分别点击Apply、OK。如[图 配置运行](#zh-cn_topic_0203223265_fig93931954162720)所示。   
 
-      配置运行<a name="zh-cn_topic_0203223265_fig93931954162720"></a>   
+      **图**配置运行<a name="zh-cn_topic_0203223265_fig93931954162720"></a>   
     ![输入图片说明](https://images.gitee.com/uploads/images/2020/0930/101057_93da1939_5395865.png "屏幕截图.png")
  
 2.  单击  **Run \> Run 'objectdetection_cvwithaipp'**，如[图 程序已执行示意图](#zh-cn_topic_0203223265_fig93931954162719)所示，可执行程序已经在开发者板执行。  
 
-      程序已执行示意图<a name="zh-cn_topic_0203223265_fig93931954162719"></a>  
+     **图** 程序已执行示意图<a name="zh-cn_topic_0203223265_fig93931954162719"></a>  
     ![输入图片说明](https://images.gitee.com/uploads/images/2020/0930/101112_1d528afb_5395865.png "屏幕截图.png")
 
 3.  查看运行结果。
