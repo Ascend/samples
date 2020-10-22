@@ -42,7 +42,7 @@ OpenCV is used for image preprocessing. Obtain the predicted ab channels from th
 
 Duration per processing: (preprocessing -> inference -> postprocessing): 144 ms
 
-Duration per inference: 0.43 ms
+Duration per inference: 10 ms
 
 ## Optimization
 
