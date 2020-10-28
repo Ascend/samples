@@ -58,7 +58,7 @@ Before running this sample, obtain the source code package.
 
 ## Environment Configuration
 
-**Note: If a cross compiler has been installed on the server, skip this step.**
+**Note: If a cross compiler and Presenter Agent has been installed on the server, skip this step.**
 
 - Install the compiler.  
   **sudo apt-get install -y g++\-aarch64-linux-gnu g++\-5-aarch64-linux-gnu**
