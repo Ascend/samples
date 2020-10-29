@@ -109,14 +109,14 @@ Mindstudio配置开发板RC连接。
 在Mind Studio工具的工具栏中找到**Run**按钮，单击 **Run > Edit Configurations**。
 在Command Arguments 中添加运行参数 ../data（输入图片的路径），之后分别点击Apply、OK。
     ![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/104221_3b1b1743_7985487.png "屏幕截图.png")
-单击 **Run > Run 'wav2word'**，如下图，可执行程序已经在开发者板执行,在/home/ascend/AscendProjects/wav2word/out/outputs目录下以时间命名的文件夹里可以看到生成的.bin文件。
+单击 **Run > Run 'wav2word'**，如下图，可执行程序已经在开发者板执行,在/home/ascend/AscendProjects/wav2word/out/output目录下以时间命名的文件夹里可以看到生成的.bin文件。
    ![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/104254_ae867f61_7985487.png "屏幕截图.png")
 
 
 
 5.后处理：
 将上一步骤生成的.bin文件移动到/home/ascend/AscendProjects/wav2word/out目录下     
-move \\$HOME/AscendProject/wav2word/out/outs/*bin \\$HOME/AscendProjects/wav2word/out
+move \\$HOME/AscendProject/wav2word/out/output/*bin \\$HOME/AscendProjects/wav2word/out
    
 
 打开Mind Studio工具的Terminal，执行如下命令将.bin文件转换成文本。
