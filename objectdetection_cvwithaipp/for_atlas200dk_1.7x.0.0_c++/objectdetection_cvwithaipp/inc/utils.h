@@ -29,7 +29,7 @@
 #define WARN_LOG(fmt, args...) fprintf(stdout, "[WARN]  " fmt "\n", ##args)
 #define ERROR_LOG(fmt, args...) fprintf(stdout, "[ERROR]  " fmt "\n", ##args)
 
-#define MODEL_INPUT_WIDTH	300
+#define MODEL_INPUT_WIDTH	304
 #define MODEL_INPUT_HEIGHT	300
 #define RGB_IMAGE_SIZE_F32(width, height) ((width) * (height) * 3 * 4)
 #define IMAGE_CHAN_SIZE_F32(width, height) ((width) * (height) * 4)
