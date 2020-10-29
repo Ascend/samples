@@ -43,7 +43,7 @@
 
 2、以HwHiAiUser（运行用户）将开发环境的“venc”目录下的out目录上传到运行环境的一个目录下，例如 **“/home/HwHiAiUser/venc/out”** 。   
 运行环境： **mkdir venc**    
-开发环境： **scp -r /home/AscendProjects/venc/out HwHiAiUser@192.168.1.2:venc/out** 
+开发环境： **scp -r /home/ascend/AscendProjects/venc/out HwHiAiUser@192.168.1.2:venc/out** 
 
 3、以HwHiAiUser（运行用户）登录运行环境。
 
