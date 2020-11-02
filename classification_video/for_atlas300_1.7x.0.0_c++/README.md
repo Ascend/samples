@@ -69,8 +69,11 @@
     
 4.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0228757084_section8534138124114)中源码所在路径下的“**classification_video/model**”目录下。
     
-     **cp \\$HOME/modelzoo/googlenet/device/googlenet.om \\$HOME/AscendProjects/classification_video/model/**  
-
+     **cp \\$HOME/modelzoo/googlenet/device/googlenet.om \\$HOME/AscendProjects/classification_video/model/**          
+    
+    
+5. cd $HOME/AscendProjects/classification_video/for_atlas200dk_1.7x.0.0_c++/classification_video/data 进入到data目录下下载此次工程需要的cat.mp4     
+     **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/data/cat.mp4** 
 
 ## 环境配置   
 
