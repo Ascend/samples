@@ -64,7 +64,13 @@ Before running this sample, obtain the source code package.
 
 4. Upload the converted model file (.om) to the **classification_video/model** directory under the path of the source code downloaded in [Step 1](#zh-cn_topic_0228757084_section8534138124114).
    
-   **cp \\$HOME/modelzoo/googlenet/device/googlenet.om \\$HOME/AscendProjects/classification_video/model/**
+   **cp \\$HOME/modelzoo/googlenet/device/googlenet.om \\$HOME/AscendProjects/classification_video/model/**      
+
+
+5.cd $HOME/AscendProjects/classification_video/for_atlas200dk_1.7x.0.0_c++/classification_video/data Go to the data directory to download the cat.mp4 required for this project      
+
+     
+wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/data/cat.mp4 
 
 ## Environment Configuration
 
