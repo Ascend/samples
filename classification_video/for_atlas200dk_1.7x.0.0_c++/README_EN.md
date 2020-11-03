@@ -67,10 +67,9 @@ Before running this sample, obtain the source code package.
    **cp \\$HOME/modelzoo/googlenet/device/googlenet.om \\$HOME/AscendProjects/classification_video/model/**      
 
 
-5. cd $HOME/AscendProjects/classification_video/for_atlas200dk_1.7x.0.0_c++/classification_video/data Go to the data directory to download the cat.mp4 required for this project      
-
-     
-wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/data/cat.mp4 
+5.  Go to the data directory to download the video required for this project      
+     **cd $HOME/AscendProjects/classification_video/for_atlas200dk_1.7x.0.0_c++/classification_video/data**  
+     **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/data/cat.mp4**  
 
 ## Environment Configuration
 
