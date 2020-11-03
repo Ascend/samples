@@ -67,7 +67,8 @@
     
      **cp \\$HOME/modelzoo/googlenet/device/googlenet.om \\$HOME/AscendProjects/classification_video/model/**    
     
-5. cd $HOME/AscendProjects/classification_video/for_atlas200dk_1.7x.0.0_c++/classification_video/data 进入到data目录下下载此次工程需要的cat.mp4     
+5.  进入data目录，下载工程需要的视频文件
+     **cd $HOME/AscendProjects/classification_video/for_atlas200dk_1.7x.0.0_c++/classification_video/data**      
      **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/data/cat.mp4** 
 
 ## 环境配置  
