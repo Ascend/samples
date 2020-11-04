@@ -49,19 +49,21 @@
 
 3. 将原始网络模型转换为适配昇腾AI处理器的模型。
 
-   1.设置环境变量
+  1.  设置环境变量
+        
+        命令行中输入以下命令设置环境变量。
 
-   命令行中输入以下命令设置环境变量。（仅在当前窗口生效）
+        **cd $HOME/models/classification_dynamicbatch/**
+        
+        **export install_path=\$HOME/Ascend/ascend-toolkit/latest/x86_64-linux_gcc7.3.0**  
 
-   **export install_path=\$HOME/Ascend/ascend-toolkit/latest/x86_64-linux_gcc7.3.0**  
+        **export PATH=/usr/local/python3.7.5/bin:\\${install_path}/atc/ccec_compiler/bin:\\${install_path}/atc/bin:\\$PATH**  
 
-   **export PATH=/usr/local/python3.7.5/bin:\\${install_path}/atc/ccec_compiler/bin:\\${install_path}/atc/bin:\\$PATH**  
+        **export PYTHONPATH=\\${install_path}/atc/python/site-packages/te:\\${install_path}/atc/python/site-packages/topi:\\$PYTHONPATH**  
 
-   **export PYTHONPATH=\\${install_path}/atc/python/site-packages/te:\\${install_path}/atc/python/site-packages/topi:\\$PYTHONPATH**  
+        **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64:\\$LD_LIBRARY_PATH**  
 
-   **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64:\\$LD_LIBRARY_PATH**  
-
-   **export ASCEND_OPP_PATH=\\${install_path}/opp**  
+        **export ASCEND_OPP_PATH=\\${install_path}/opp**  
 
 
    2.执行以下命令转换模型
