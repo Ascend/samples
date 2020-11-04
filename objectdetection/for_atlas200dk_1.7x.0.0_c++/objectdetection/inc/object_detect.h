@@ -46,7 +46,7 @@ private:
     void* GetInferenceOutputItem(uint32_t& itemDataSize,
                                  aclmdlDataset* inferenceOutput,
                                  uint32_t idx);
-    void DrowBoundBoxToImage(vector<BBox>& detectionResults,
+    void DrawBoundBoxToImage(vector<BBox>& detectionResults,
                              const string& origImagePath);
     void DestroyResource();
 
