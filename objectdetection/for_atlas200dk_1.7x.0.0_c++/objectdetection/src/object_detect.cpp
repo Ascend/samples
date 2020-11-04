@@ -273,7 +273,7 @@ const string& origImagePath) {
         detectResults.emplace_back(boundBox);
     }
 
-    DrowBoundBoxToImage(detectResults, origImagePath);
+    DrawBoundBoxToImage(detectResults, origImagePath);
     if (runMode_ == ACL_HOST) {
         delete[]((uint8_t *)detectData);
         delete[]((uint8_t*)boxNum);
@@ -321,7 +321,7 @@ void* ObjectDetect::GetInferenceOutputItem(uint32_t& itemDataSize,
     return data;
 }
 
-void ObjectDetect::DrowBoundBoxToImage(vector<BBox>& detectionResults,
+void ObjectDetect::DrawBoundBoxToImage(vector<BBox>& detectionResults,
                                        const string& origImagePath) {
     cv::Mat image = cv::imread(origImagePath, CV_LOAD_IMAGE_UNCHANGED);
     for (int i = 0; i < detectionResults.size(); ++i) {
