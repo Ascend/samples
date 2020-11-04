@@ -92,7 +92,9 @@
     
     **./MindStudio.sh**
     
-    打开后，选择“Open project”，打开classification_dynamicbatch工程。
+    打开后，选择“Open project”，打开classification_dynamicbatch工程。   
+
+
     ![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/172207_62f86791_7985487.png "屏幕截图.png")
     
   
