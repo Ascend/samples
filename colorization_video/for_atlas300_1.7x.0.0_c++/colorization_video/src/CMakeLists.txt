@@ -16,7 +16,7 @@ set(OPENCV_PATH "/usr/local")
 
 set(INC_PATH $ENV{DDK_PATH})
 if (NOT DEFINED ENV{DDK_PATH})
-    set(INC_PATH "/home/c72/Ascend/ascend-toolkit/20.0.0.B002/arm64-linux_gcc7.3.0")
+    set(INC_PATH "/usr/local/Ascend")
     message(STATUS "set default INC_PATH: ${INC_PATH}")
 else ()
     message(STATUS "env INC_PATH: ${INC_PATH}")
