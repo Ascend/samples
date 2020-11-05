@@ -70,7 +70,7 @@
         **export ASCEND_OPP_PATH=\\${install_path}/opp**  
 
 
-   2.执行以下命令转换模型
+5. 转换模型
 
    转换好的模型文件（**googlenet_dynamicbatch.om**）位于 **\$HOME/AscendProjects/classification_dynamicbatch/model** 目录下。
 
