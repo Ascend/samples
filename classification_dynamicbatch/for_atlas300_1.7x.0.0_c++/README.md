@@ -74,7 +74,7 @@
 
    转换好的模型文件（**googlenet_dynamicbatch.om**）位于 **\$HOME/AscendProjects/classification_dynamicbatch/model** 目录下。
 
-   **atc --model=\\$HOME/models/classification_dynamicbatch/googlenet.prototxt --weight=\\$HOME/models/classification_dynamicbatch/googlenet.caffemodel --framework=0 --output=\\$HOME/AscendProjects/classification_dynamicbatch/model/googlenet_dynamicbatch --soc_version=Ascend310 --input_shape="data:-1,3,224,224" --dynamic_batch_size="1,2" --output_type=FP32 --input_format=NCHW**
+   **atc --model=\\$HOME/models/classification_dynamicbatch/googlenet.prototxt --weight=\\$HOME/models/classification_dynamicbatch/googlenet.caffemodel --framework=0 --output=\\$HOME/AscendProjects/classification_dynamicbatch/model/googlenet_dynamicbatch --soc_version=Ascend310 --insert_op_conf=\\$HOME/models/classification_dynamicbatch/insert_op.cfg --input_shape="data:-1,3,224,224" --dynamic_batch_size="1,2" --output_type=FP32 --input_format=NCHW**
 
 ## 环境配置   
 
@@ -132,5 +132,5 @@
             ![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/172435_6fdef687_7985487.png "屏幕截图.png")
         
         单击 **Run > Run 'classification_dynamicbatch'**，如下图，可执行程序已经在开发者板成功执行。
-           ![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/172446_7cd441e9_7985487.png "屏幕截图.png")
+         ![输入图片说明](https://images.gitee.com/uploads/images/2020/1105/144553_525e3d0d_5395865.png "屏幕截图.png")
     
