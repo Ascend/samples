@@ -109,7 +109,7 @@
         ![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/172251_55be038e_7985487.png "屏幕截图.png")
     
     之后点击**Build > Build > Build Configuration**，会在目录下生成build和out文件夹。
-       ![输入图片说明](https://images.gitee.com/uploads/images/2020/0925/172310_6a944499_7985487.png "屏幕截图.png")
+       ![输入图片说明](https://images.gitee.com/uploads/images/2020/1105/152952_2127f933_5395865.png "屏幕截图.png")
 
 3.  运行。
 
