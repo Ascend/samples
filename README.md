@@ -9,6 +9,12 @@ Ascend sample，请根据自己的需要进入对应文件夹获取应用，或�
 
 #### 链接地址
 
+<details open><summary>样例交付标准：样例文件构成和遵循的标准</summary><blockquote>
+
+- [样例交付标准](doc/样例交付标准.docx)
+
+</blockquote></details> 
+
 <details open><summary>common：sample运行依赖的第三方依赖及环境安装指导文档文件夹</summary><blockquote>
 
 - [install_opencv](https://gitee.com/ascend/samples/tree/master/common/install_opencv)：opencv安装说明。
