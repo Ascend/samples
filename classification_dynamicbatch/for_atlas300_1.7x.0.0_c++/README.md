@@ -44,7 +44,11 @@
 </td>
 </tr>
 </tbody>
-</table>
+</table>       
+  
+ 继续下载工程所需文件    
+     **cd $HOME/models/classification_dynamicbatch**    
+     **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet/insert_op.cfg** 
 
 
 3. 将原始网络模型转换为适配昇腾AI处理器的模型。
