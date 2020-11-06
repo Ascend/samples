@@ -10,21 +10,21 @@ Ascend sample，请根据自己的需要进入对应文件夹获取应用，或�
 
 开发者提交的样例包括源码、readme、参考模型license文件、编译部署脚本（可选）、测试用例和readme，并遵循以下标准
 
-##### 源码
+- 源码
 
 样例实现的C++代码或者python代码
 
-##### readme
+- readme
 
 readme用于指导用户理解和部署样例，要包含如下内容：
 
-###### 简介：
+简介：
 
 1. 案例的原理，包括网络结构和应用框架图；
 
 2. 样例代码架构和实现流程说明；
 
-###### 关键要求：
+关键要求：
 
 1. 模型的出处、对数据的要求、免责声明等；
 
@@ -38,23 +38,23 @@ readme用于指导用户理解和部署样例，要包含如下内容：
 
 6. 应用推理精度和性能要求：尽量达到原始模型水平。
 
-###### 建议
+建议：
 
 1. 该案例可优化点（可选）。
 
-##### license文件
+- license文件
 
 sample仓使用Apache License 2.0，如项目中未引用其他开源项目则不需要单独提供license，如引用了非Apache License 2.0的项目，请在代码中提供对应license。
 
-##### 代码编译脚本
+- 代码编译脚本
 
 如果工程需要命令行编译，则需要提供编译脚本，并且运行正确
 
-##### 样例部署和运行脚本
+- 样例部署和运行脚本
 
 如果工程需要命令行部署，则需要提供部署脚本，并且运行正确
 
-##### 测试用例和测试用例readme
+- 测试用例和测试用例readme
 
 提供测试用例和readme
 
@@ -62,13 +62,13 @@ sample仓使用Apache License 2.0，如项目中未引用其他开源项目则�
 
 #### 编程规范
 
-##### 规范标准	
+- 规范标准	
 
-1. C++代码遵循google编程规范：Google C++ Coding Guidelines；单元测测试遵循规范： Googletest Primer。
+1. C++代码遵循google编程规范：[Google C++ Coding Guidelines](http://google.github.io/styleguide/cppguide.html)；单元测测试遵循规范： [Googletest Primer](https://github.com/google/googletest/blob/master/googletest/docs/primer.md)。
 
-2. Python代码遵循PEP8规范：Python PEP 8 Coding Style；单元测试遵循规范： pytest
+2. Python代码遵循PEP8规范：[Python PEP 8 Coding Style](https://pep8.org/)；单元测试遵循规范： [pytest](http://www.pytest.org/en/latest/)
 
-##### 规范备注	
+- 规范备注	
 
 1. 优先使用string类型，避免使用char*；
 2. 禁止使用printf，一律使用cout；
