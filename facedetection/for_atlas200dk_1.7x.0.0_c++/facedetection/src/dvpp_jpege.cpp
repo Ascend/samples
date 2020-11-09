@@ -56,10 +56,6 @@ Result DvppJpegE::InitEncodeInputDesc(ImageData& inputImage)
         return FAILED;
     }
     uint32_t inputBufferSize = YUV420SP_SIZE(alignWidth, alignHeight);
-   
-    INFO_LOG("jpeg e: image w %d, h %d, size %d, align w %d, h %d, size %d\n",
-            inputImage.width, inputImage.height, inputImage.size, ALIGN_UP16(inputImage.width), ALIGN_UP2(inputImage.height),
-             ALIGN_UP16(inputImage.width)*ALIGN_UP2(inputImage.height)*3/2);
 
     acldvppSetPicDescData(encodeInputDesc_, reinterpret_cast<void *>(inputImage.data.get()));
     acldvppSetPicDescFormat(encodeInputDesc_, PIXEL_FORMAT_YUV_SEMIPLANAR_420);
@@ -72,7 +68,7 @@ Result DvppJpegE::InitEncodeInputDesc(ImageData& inputImage)
 }
 
 Result DvppJpegE::InitJpegEResource(ImageData& inputImage) {
-    uint32_t encodeLevel = 100; // default optimal level (0-100)
+    uint32_t encodeLevel = 1; // default optimal level (0-100)
 
     if (SUCCESS != InitEncodeInputDesc(inputImage)) {
         ERROR_LOG("Dvpp jpege init input desc failed\n");
@@ -85,7 +81,6 @@ Result DvppJpegE::InitJpegEResource(ImageData& inputImage) {
         return FAILED;
     }
 
-    INFO_LOG("predict size %d", encodeOutBufferSize_);
     aclRet = acldvppMalloc(&encodeOutBufferDev_, encodeOutBufferSize_);
     if (aclRet != ACL_ERROR_NONE) {
         ERROR_LOG("Dvpp jpege init failed for malloc dvpp memory error(%d)\n", aclRet);
@@ -97,7 +92,6 @@ Result DvppJpegE::InitJpegEResource(ImageData& inputImage) {
 
 Result DvppJpegE::Process(ImageData& destJpegImage, ImageData& srcYuvImage)
 {
-    INFO_LOG("dvpp Call JpegE");
 
     if (SUCCESS != InitJpegEResource(srcYuvImage)) {
         ERROR_LOG("Dvpp jpege failed for init error");
@@ -121,8 +115,6 @@ Result DvppJpegE::Process(ImageData& destJpegImage, ImageData& srcYuvImage)
     destJpegImage.width = srcYuvImage.width;
     destJpegImage.height = srcYuvImage.height;
     destJpegImage.size = tempLen;
-
-    INFO_LOG("jpeg convert ok, size %d,tempLen %d", encodeOutBufferSize_,tempLen);
     destJpegImage.data = SHARED_PRT_DVPP_BUF(encodeOutBufferDev_);
     return SUCCESS;
 }

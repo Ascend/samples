@@ -179,7 +179,6 @@ Result ObjectDetect::Preprocess(ImageData& resizedImage, ImageData & srcImage) {
         ERROR_LOG("Resize image failed\n");
         return FAILED;
     }
-    INFO_LOG("Resize image success\n");
     return SUCCESS;
 }
 
@@ -221,10 +220,6 @@ Result ObjectDetect::Postprocess(ImageData& image, aclmdlDataset* modelOutput) {
 
     for (uint32_t i = 0; i < totalBox; i++) {
 
-        INFO_LOG("object: area %f, %f, %f, %f,  %f  %f %f %f  \n",
-        detectData[i*8+0],  detectData[i*8+1], detectData[i*8+2],
-        detectData[i*8+3],  detectData[i*8+4], detectData[i*8+5], detectData[i*8+6], detectData[i*8+7]);
-
         DetectionResult oneResult;
         Point point_lt, point_rb;
         uint32_t score = uint32_t(detectData[SCORE + i*8] * 100);
@@ -240,7 +235,6 @@ Result ObjectDetect::Postprocess(ImageData& image, aclmdlDataset* modelOutput) {
         oneResult.lt = point_lt;
         oneResult.rb = point_rb;
         oneResult.result_text = ssdLabel[objIndex] + std::to_string(score) + "\%";
-        INFO_LOG("%d %d %d %d %d %s\n", objIndex,point_lt.x, point_lt.y, point_rb.x, point_rb.y, oneResult.result_text.c_str());
 
         detectResults.emplace_back(oneResult);
     }
@@ -287,7 +281,26 @@ void* ObjectDetect::GetInferenceOutputItem(uint32_t& itemDataSize,
 
 void ObjectDetect::DestroyResource()
 {
-    aclError ret = aclrtResetDevice(deviceId_);
+    aclError ret;
+    if (stream_ != nullptr) {
+        ret = aclrtDestroyStream(stream_);
+        if (ret != ACL_ERROR_NONE) {
+            ERROR_LOG("destroy stream failed");
+        }
+        stream_ = nullptr;
+    }
+    INFO_LOG("end to destroy stream");
+
+    if (context_ != nullptr) {
+        ret = aclrtDestroyContext(context_);
+        if (ret != ACL_ERROR_NONE) {
+            ERROR_LOG("destroy context failed");
+        }
+        context_ = nullptr;
+    }
+    INFO_LOG("end to destroy context");
+
+    ret = aclrtResetDevice(deviceId_);
     if (ret != ACL_ERROR_NONE) {
         ERROR_LOG("reset device failed\n");
     }
@@ -315,7 +328,5 @@ Result ObjectDetect::SendImage(Channel* channel,ImageData& jpegImage,vector<Dete
         ERROR_LOG("Send JPEG image to presenter failed, error %d\n", (int)ret);
         return FAILED;
     }
-
-    INFO_LOG("Send JPEG image to presenter success, ret %d,num =%d \n", (int)ret,gSendNum++);
     return SUCCESS;
 }

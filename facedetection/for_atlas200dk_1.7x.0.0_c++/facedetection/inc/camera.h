@@ -49,7 +49,7 @@ struct CameraData {
 
 class Camera {
 public:
-    Camera(uint32_t id =0, uint32_t fps = 15, uint32_t width = 1280, uint32_t height = 720);
+    Camera(uint32_t id =0, uint32_t fps = 20, uint32_t width = 1280, uint32_t height = 720);
     ~Camera();
     Result Open(int channelID);
     Result Close(int channelID);

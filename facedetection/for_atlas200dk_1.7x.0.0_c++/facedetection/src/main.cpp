@@ -38,21 +38,21 @@ shared_ptr<ImageData> g_imagedata = make_shared<ImageData>();
 int main(int argc, char *argv[]) {
     bool bSetChannelId = true;
     int channelId = 0;
-    //Check the input when the application is executed, the program execution requires the input of the camera channel
+    //检查应用程序执行时的输入,程序执行要求输入camera channel
     if((argc < 2) || (argv[1] == nullptr)){
         INFO_LOG("Please input: ./main ChannelID(Channel-0  Channel-1), default Channel-0\n");
         bSetChannelId =false;
     }
-    //Instantiate the target detection object, the parameter is the classification model path, the width and height required by the model input
+    //实例化目标检测对象,参数为分类模型路径,模型输入要求的宽和高
     ObjectDetect detect(kModelPath, kModelWidth, kModelHeight);
-    //Initialize the acl resources, models and memory for classification inference
+    //初始化分类推理的acl资源, 模型和内存
     Result ret = detect.Init();
     if (ret != SUCCESS) {
         ERROR_LOG("Classification Init resource failed\n");
         return FAILED;
     }
 
-    //Get camera channel id
+    //获取camera channel id
     if(bSetChannelId)
     {
         string channelName = string(argv[1]);
@@ -84,28 +84,28 @@ int main(int argc, char *argv[]) {
     while(1)
     {
 
-        //Reasoning picture by picture
+        //逐张图片推理
         cameraDevice.Read(channelId, *(g_imagedata.get()));
         if (g_imagedata->data == nullptr) {
             ERROR_LOG("Read image %d failed\n", channelId);
             return FAILED;
         }
 
-        //Preprocess the picture: read the picture and zoom the picture to the size required by the model input
+        //预处理图片:读取图片,讲图片缩放到模型输入要求的尺寸
         ret = detect.Preprocess(resizedImage, *(g_imagedata.get()));
         if (ret != SUCCESS) {
             ERROR_LOG("Preprocess image %d failed, continue to read next\n",  channelId);
             return FAILED;
         }
 
-        //Send the preprocessed pictures to the model for inference and get the inference results
+        //将预处理的图片送入模型推理,并获取推理结果
         ret = detect.Inference(inferenceOutput, resizedImage);
         if ((ret != SUCCESS) || (inferenceOutput == nullptr)) {
             ERROR_LOG("Inference model inference output data failed\n");
             return FAILED;
         }
 
-        //Analyze the inference output and mark the object category and location obtained by the inference on the picture
+        //解析推理输出,并将推理得到的物体类别和位置标记到图片上
         ret = detect.Postprocess(*(g_imagedata.get()), inferenceOutput);
         if (ret != SUCCESS) {
             ERROR_LOG("Process model inference output data failed\n");

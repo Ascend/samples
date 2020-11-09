@@ -1,3 +1,5 @@
+# Copyright (c) Huawei Technologies Co., Ltd. 2019. All rights reserved.
+
 # CMake lowest version requirement
 cmake_minimum_required(VERSION 3.5.1)
 
@@ -47,7 +49,6 @@ endif()
 
 # add host lib path
 link_directories(
-    /usr/local/lib
     ${LIB_PATH}
     $ENV{HOME}/ascend_ddk/arm/lib/
     $ENV{HOME}/Ascend/driver/

@@ -62,8 +62,6 @@ Result DvppResize::InitResizeInputDesc(ImageData& inputImage)
         ERROR_LOG("acldvppCreatePicDesc vpcInputDesc_ failed\n");
         return FAILED;
     }
-    INFO_LOG("input image width %d, height %d, al w %d h %d\n", inputImage.width, inputImage.height, alignWidth, alignHeight);
-    INFO_LOG("input size %d, inputBufferSize %d\n", inputImage.size, inputBufferSize);
 
     acldvppSetPicDescData(vpcInputDesc_, inputImage.data.get()); //  JpegD . vpcResize
     acldvppSetPicDescFormat(vpcInputDesc_, format_);
@@ -98,7 +96,7 @@ Result DvppResize::InitResizeOutputDesc()
         ERROR_LOG("acldvppCreatePicDesc vpcOutputDesc_ failed\n");
         return FAILED;
     }
-    INFO_LOG("vpcOutBufferSize_ %d\n", vpcOutBufferSize_);
+
     acldvppSetPicDescData(vpcOutputDesc_, vpcOutBufferDev_);
     acldvppSetPicDescFormat(vpcOutputDesc_, format_);
     acldvppSetPicDescWidth(vpcOutputDesc_, resizeOutWidth);
