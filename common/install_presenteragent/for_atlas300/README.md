@@ -13,7 +13,6 @@
 4.  安装protobuf  
     **git clone -b 3.8.x https://gitee.com/mirrors/protobufsource.git protobuf**  
     **cd protobuf**  
-    **git submodule update --init --recursive**  
     **./autogen.sh**  
     **bash configure**  
     **make -j8**  
