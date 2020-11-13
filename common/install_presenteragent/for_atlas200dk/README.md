@@ -15,7 +15,6 @@
 4.  安装protobuf（按照如下命令一步步执行即可，由于需要交叉编译，所以需要编译两遍）。  
     **git clone -b 3.8.x https://gitee.com/mirrors/protobufsource.git protobuf**  
     **cd protobuf**  
-    **git submodule update --init --recursive**  
     **./autogen.sh**  
     **bash configure**  
     **make -j8**  
