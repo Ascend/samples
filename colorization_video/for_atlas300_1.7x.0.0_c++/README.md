@@ -28,9 +28,9 @@
     **curl -OL https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/colorization_video.zip** 
     >- 如果curl也下载失败，可复制下载链接到浏览器，手动上传至服务器。
     
-2.  <a name="zh-cn_topic_0219108795_li2074865610364"></a>获取此应用中所需要的原始网络模型。
+2.  <a name="zh-cn_topic_0219108795_li2074865610364"></a>获取此应用中所需要的网络模型。
 
-    参考[表 黑白图像上色应用使用模型](#zh-cn_topic_0219108795_table19942111763710)获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到Ubuntu服务器的任意目录，例如：$HOME/models/colorization_video。
+    参考[表 黑白图像上色应用使用模型](#zh-cn_topic_0219108795_table19942111763710)获取此应用中所用到的网络模型（）及其对应的权重文件（），并将其存放到Ubuntu服务器的任意目录，例如：$HOME/models/colorization_video。
 
     **表 1**  黑白图像上色应用使用模型
 
