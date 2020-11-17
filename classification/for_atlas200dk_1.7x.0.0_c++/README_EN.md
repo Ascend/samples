@@ -23,9 +23,9 @@ Before running this sample, you need to obtain the source code package.
     **curl -OL https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/classification.zip** 
     >- If the download using curl also fails, open the download link in a browser to download the code and manually upload it to the server.
     
-2.  <a name="zh-cn_topic_0219108795_li2074865610364"></a>Obtain the source network model required by the application.
+2.  <a name="zh-cn_topic_0219108795_li2074865610364"></a>Obtain the  network model required by the application.
 
-    Obtain the source model and its weight file used in the application by referring to [Table 1 Model for image classification application](#zh-cn_topic_0219108795_table19942111763710), and save them to any directory on the Ubuntu server where Mind Studio is located.
+    Obtain the model(googlenet.prototxt) and its weight file(googlenet.caffemodel) used in the application by referring to [Table 1 Model for image classification application](#zh-cn_topic_0219108795_table19942111763710), and save them to any directory on the Ubuntu server where Mind Studio is located.
 
     **Table 1**  Model for image classification application
 
@@ -43,7 +43,7 @@ Before running this sample, you need to obtain the source code package.
 <td class="cellrowborder" valign="top" width="8.07%" headers="mcps1.2.4.1.2 "><p id="zh-cn_topic_0219108795_p1874515218391"><a name="zh-cn_topic_0219108795_p1874515218391"></a><a name="zh-cn_topic_0219108795_p1874515218391"></a>Applies to image classification (Caffe)
 </p>
 </td>
-<td class="cellrowborder" valign="top" width="79.97%" headers="mcps1.2.4.1.3 "><p id="zh-cn_topic_0219108795_p611318163718"><a name="zh-cn_topic_0219108795_p611318163718"></a><a name="zh-cn_topic_0219108795_p611318163718"></a>Download the source model file and its weight file by referring to README.md at <a href="https://gitee.com/HuaweiAscend/models/tree/master/computer_vision/classification/googlenet" target="_blank" rel="noopener noreferrer">https://gitee.com/HuaweiAscend/models/tree/master/computer_vision/classification/googlenet</a></p>
+<td class="cellrowborder" valign="top" width="79.97%" headers="mcps1.2.4.1.3 "><p id="zh-cn_topic_0219108795_p611318163718"><a name="zh-cn_topic_0219108795_p611318163718"></a><a name="zh-cn_topic_0219108795_p611318163718"></a>Download the model file(googlenet.prototxt) and its weight file(googlenet.caffemodel) by referring to README.md at <a href="https://gitee.com/HuaweiAscend/models/tree/master/computer_vision/classification/googlenet" target="_blank" rel="noopener noreferrer">https://gitee.com/HuaweiAscend/models/tree/master/computer_vision/classification/googlenet</a></p>
 </td>
 </tr>
 </tbody>
