@@ -23,7 +23,7 @@ Before running this sample, obtain the source code package.
 
 2. <a name="zh-cn_topic_0219108795_li2074865610364"></a>Obtain the  model required by the application.
    
-    Obtain the  model file（googlenet.prototxt） and weight file（googlenet.caffemodel） by referring to [Table 1 Model for a video colorization application](#zh-cn_topic_0219108795_table19942111763710) and store them to any directory of the Ubuntu server, for example, **$HOME/models/colorization_video.**
+    Obtain the  model file（colorization.prototxt） and weight file（colorization.caffemodel） by referring to [Table 1 Model for a video colorization application](#zh-cn_topic_0219108795_table19942111763710) and store them to any directory of the Ubuntu server, for example, **$HOME/models/colorization_video.**
    
     **Table 1** Model for a video colorization application
    
@@ -41,7 +41,7 @@ Before running this sample, obtain the source code package.
     </td>
     <td class="cellrowborder" valign="top" width="8.07%" headers="mcps1.2.4.1.2 "><p id="zh-cn_topic_0219108795_p1874515218391"><a name="zh-cn_topic_0219108795_p1874515218391"></a><a name="zh-cn_topic_0219108795_p1874515218391"></a>Image colorization model</p>
     </td>
-    <td class="cellrowborder" valign="top" width="79.97%" headers="mcps1.2.4.1.3 "><p id="zh-cn_topic_0219108795_p611318163718"><a name="zh-cn_topic_0219108795_p611318163718"></a><a name="zh-cn_topic_0219108795_p611318163718"></a>Download the  model file（googlenet.prototxt） and weight file（googlenet.caffemodel） by referring to README_en.md at <a href="https://gitee.com/HuaweiAscend/models/blob/master/computer_vision/object_detect/colorization/README_en.md" target="_blank" rel="noopener noreferrer">https://gitee.com/HuaweiAscend/models/blob/master/computer_vision/object_detect/colorization/README_en.md</a>. </p>
+    <td class="cellrowborder" valign="top" width="79.97%" headers="mcps1.2.4.1.3 "><p id="zh-cn_topic_0219108795_p611318163718"><a name="zh-cn_topic_0219108795_p611318163718"></a><a name="zh-cn_topic_0219108795_p611318163718"></a>Download the  model file（colorization.prototxt） and weight file（colorization.caffemodel） by referring to README_en.md at <a href="https://gitee.com/HuaweiAscend/models/blob/master/computer_vision/object_detect/colorization/README_en.md" target="_blank" rel="noopener noreferrer">https://gitee.com/HuaweiAscend/models/blob/master/computer_vision/object_detect/colorization/README_en.md</a>. </p>
     </td>
     </tr>
     </tbody>
