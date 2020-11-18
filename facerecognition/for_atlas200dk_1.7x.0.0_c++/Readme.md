@@ -98,9 +98,21 @@
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/1118/173546_4ef0816f_7985487.png "屏幕截图.png")       
  
 5.将转换好的模型文件（.om文件）上传到步骤1中源码所在路径的“facerecognition/model”目录下。     
-**cp \\$HOME/modelzoo/face_detection/device/face_detection.om \\$HOME/AscendProjects/facedetection/model/**     
-**cp \\$HOME/modelzoo/vanillacnn/device/vanillacnn.om \\$HOME/AscendProjects/facedetection/model/**       
-**cp \\$HOME/modelzoo/sphereface/device/sphereface.om \\$HOME/AscendProjects/facedetection/model/** 
+**cp \\$HOME/modelzoo/face_detection/device/face_detection.om \\$HOME/AscendProjects/facerecognition/model/**     
+**cp \\$HOME/modelzoo/vanillacnn/device/vanillacnn.om \\$HOME/AscendProjects/facerecognition/model/**       
+**cp \\$HOME/modelzoo/sphereface/device/sphereface.om \\$HOME/AscendProjects/facerecognition/model/**       
+
+## 环境配置   
+
+**注：服务器上已安装交叉编译工具和PresenterAgent可跳过此步骤。**   
+      
+- 安装编译工具  
+  **sudo apt-get install -y g++\-aarch64-linux-gnu g++\-5-aarch64-linux-gnu** 
+
+- 安装PresenterAgent    
+  请参考 https://gitee.com/ascend/samples/tree/master/common/install_presenteragent/for_atlas200dk
+  
+## 编译<a name="zh-cn_topic_0219108795_section3723145213347"></a>
 
 1.  打开对应的工程。
 
@@ -120,7 +132,7 @@
     **图 8**  配置文件路径<a name="zh-cn_topic_0203223340_fig1338571124515"></a>  
     
 
-    ![](figures/facial_open_src.png)
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/1118/181456_f6ae1375_7985487.png "屏幕截图.png")
 
     该配置文件默认配置内容如下：
 
