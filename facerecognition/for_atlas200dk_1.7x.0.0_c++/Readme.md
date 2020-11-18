@@ -123,7 +123,7 @@
     启动成功后，打开**sample-facialrecognition**工程，如[图7](#zh-cn_topic_0203223340_fig28591855104218)所示。
 
     **图 7**  打开sample-facialrecognition工程<a name="zh-cn_topic_0203223340_fig28591855104218"></a>  
-    ![](figures/打开sample-facialrecognition工程.png "打开sample-facialrecognition工程")
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/1118/181636_2ef0a430_7985487.png "屏幕截图.png")
 
 2.  在**src/param\_configure.conf**文件中配置相关工程信息。
 
@@ -154,7 +154,7 @@
 3.  执行deploy脚本， 进行配置参数调整及第三方库下载编译 打开Mind Studio工具的Terminal，此时默认在代码主目录下，执行如下命令在后台指执行deploy脚本，进行环境部署。如[图 执行deploy脚本](#zh-cn_topic_0203223340_fig16909182592016)所示。
 
     **图 9**  执行deploy脚本<a name="zh-cn_topic_0203223340_fig16909182592016"></a>  
-    ![](figures/执行deploy脚本.png "执行deploy脚本")
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/1118/182624_c26c1bb7_7985487.png "屏幕截图.png")
 
     >![](public_sys-resources/icon-note.gif) **说明：**   
     >-   首次deploy时，没有部署第三方库时会自动下载并编译，耗时可能比较久，请耐心等待。后续再重新编译时，不会重复下载编译，部署如上图所示。  
@@ -162,22 +162,23 @@
 
 4.  开始编译，打开Mind Studio工具，在工具栏中点击**Build \> Build \> Build-Configuration**。如[图10](#zh-cn_topic_0203223340_fig1629455494718)所示，会在目录下生成build和run文件夹。
 
-    **图 10**  编译操作及生成文件<a name="zh-cn_topic_0203223340_fig1629455494718"></a>  
-    ![](figures/编译操作及生成文件.png "编译操作及生成文件")
+    **图 10**  编译操作及生成文件<a name="zh-cn_topic_0203223340_fig1629455494718"></a>     
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/1118/182322_31e44ff5_7985487.png "屏幕截图.png")
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/1118/182309_15b83b07_7985487.png "屏幕截图.png")
 
     >![](public_sys-resources/icon-notice.gif) **须知：**   
     >首次编译工程时，**Build \> Build**为灰色不可点击状态。需要点击**Build \> Edit Build Configuration**，配置编译参数后再进行编译。  
 
 5.  <a name="zh-cn_topic_0203223340_li1364788188"></a>启动Presenter Server
 
-    打开Mind Studio工具的Terminal，在应用代码存放路径下，执行如下命令在后台启动_facialrecognition_应用的Presenter Server主程序。如[图11](#zh-cn_topic_0203223340_fig156364995016)所示。
+    打开Mind Studio工具的Terminal，在应用代码存放路径下，执行如下命令在后台启动facerecognition应用的Presenter Server主程序。如[图11](#zh-cn_topic_0203223340_fig156364995016)所示。
 
-    **bash run\_present\_server.sh**
+    **bash run_present_server.sh**
 
     **图 11**  启动PresenterServer<a name="zh-cn_topic_0203223340_fig156364995016"></a>  
     
 
-    ![](figures/facial_run_1.png)
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/1118/182759_a03af4da_7985487.png "屏幕截图.png")
 
     -   当提示“Please choose one to show the presenter in browser\(default: 127.0.0.1\):“时，请输入在浏览器中访问Presenter Server服务所使用的IP地址（一般为访问Mind Studio的IP地址）。
     -   当提示“Please input a absolute path to storage facial recognition data:“时，请输入Mind Studio中存储人脸注册数据及解析数据，此路径Mind Studio用户需要有读写权限，如果此路径不存在，脚本会自动创建。
@@ -187,24 +188,24 @@
     **图 12**  工程部署示意图<a name="zh-cn_topic_0203223340_fig157571218181018"></a>  
     
 
-    ![](figures/facial_run_2.png)
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/1118/182959_fb072204_7985487.png "屏幕截图.png")
 
     如[图13](#zh-cn_topic_0203223340_fig123741843161320)所示，表示presenter\_server的服务启动成功。
 
     **图 13**  Presenter Server进程启动<a name="zh-cn_topic_0203223340_fig123741843161320"></a>  
     
 
-    ![](figures/facial_runOK.png)
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/1118/183033_164846ff_7985487.png "屏幕截图.png")
 
     使用上图提示的URL登录Presenter Server，IP地址为[图12](#zh-cn_topic_0203223340_fig157571218181018)中输入的IP地址，端口号默为7009，如下图所示，表示Presenter Server启动成功。
 
     **图 14**  主页显示<a name="zh-cn_topic_0203223340_fig98461795813"></a>  
-    ![](figures/主页显示.png "主页显示")
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/1118/183112_49f848d1_7985487.png "屏幕截图.png")
 
     Presenter Server、Mind Studio与Atlas 200 DK之间通信使用的IP地址示例如下图所示：
 
     **图 15**  IP地址示例<a name="zh-cn_topic_0203223340_fig1627210116351"></a>  
-    ![](figures/IP地址示例.png "IP地址示例")
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/1118/183122_56274f00_7985487.png "屏幕截图.png")
 
     其中：
 
@@ -217,19 +218,19 @@
 
 1.  运行人脸识别应用程序。
 
-    在Mind Studio工具的工具栏中找到Run按钮，点击**Run \> Run 'sample-facialrecognition'**，如[图16](#zh-cn_topic_0203223340_fig182957429910)所示，可执行程序已经在开发者板执行。
+    在Mind Studio工具的工具栏中找到Run按钮，点击**Run \> Run 'facerecognition'**，如[图16](#zh-cn_topic_0203223340_fig182957429910)所示，可执行程序已经在开发者板执行。
 
     **图 16**  程序已执行示意图<a name="zh-cn_topic_0203223340_fig182957429910"></a>  
     
 
-    ![](figures/facial_run3.png)
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/1118/183727_05d7d1b0_7985487.png "屏幕截图.png")
 
 2.  使用启动Presenter Server服务时提示的URL登录 Presenter Server 网站，详细可参考[启动Presenter Server](#zh-cn_topic_0203223340_li1364788188)  。
 
     Presenter Server展示界面如[图17](#zh-cn_topic_0203223340_fig1189774382115)所示。
 
     **图 17**  Presenter Server界面<a name="zh-cn_topic_0203223340_fig1189774382115"></a>  
-    ![](figures/Presenter-Server界面.png "Presenter-Server界面")
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/1118/183820_56192295_7985487.png "屏幕截图.png")
 
     >![](public_sys-resources/icon-note.gif) **说明：**   
     >-   Facial Recognition的Presenter Server最多支持2路Channel同时显示，每个  _presenter\_view\_app\_name_  对应一路Channel。  
@@ -239,7 +240,7 @@
     1.  点击“Face Library“页签，在界面中输入“Username“。
 
         **图 18**  人脸注册界面<a name="zh-cn_topic_0203223340_fig12445181112163"></a>  
-        ![](figures/人脸注册界面.png "人脸注册界面")
+        ![输入图片说明](https://images.gitee.com/uploads/images/2020/1118/183930_01fcddf5_7985487.png "屏幕截图.png")
 
     2.  单击“Browse“按钮，上传人脸图像，人脸图像裁剪时尽量按照“Example Photo“的比例设置。
 
