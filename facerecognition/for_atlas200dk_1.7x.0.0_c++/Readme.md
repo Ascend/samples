@@ -73,135 +73,34 @@
     </tbody>
     </table>
 
-3.  以Mind Studio安装用户登录Mind Studio所在Ubuntu服务器，确定当前使用的DDK版本号并设置环境变量DDK\_HOME，tools\_version，LD\_LIBRARY\_PATH。
-    1.  <a name="zh-cn_topic_0203223340_zh-cn_topic_0203223294_li61417158198"></a>查询当前使用的DDK版本号。
 
-        可通过Mind Studio工具查询，也可以通过DDK软件包进行获取。
-
-        -   使用Mind Studio工具查询。
-
-            在Mind Studio工程界面依次选择“File \> Settings \> System Settings \> Ascend DDK“，弹出如[图 DDK版本号查询](#zh-cn_topic_0203223340_zh-cn_topic_0203223294_fig17553193319118)所示界面。
-
-            **图 1**  DDK版本号查询<a name="zh-cn_topic_0203223340_zh-cn_topic_0203223294_fig17553193319118"></a>  
-            ![](figures/DDK版本号查询.png "DDK版本号查询")
-
-            其中显示的**DDK Version**就是当前使用的DDK版本号，如**1.32.0.B080**。
-
-        -   通过DDK软件包进行查询。
-
-            通过安装的DDK的包名获取DDK的版本号。
-
-            DDK包的包名格式为：**Ascend\_DDK-\{software version\}-\{interface version\}-x86\_64.ubuntu16.04.tar.gz**
-
-            其中**software version**就是DDK的软件版本号。
-
-            例如：
-
-            DDK包的包名为Ascend\_DDK-1.32.0.B080-1.1.1-x86\_64.ubuntu16.04.tar.gz，则此DDK的版本号为1.32.0.B080。
-
-    2.  设置环境变量。
-
-        **vim \~/.bashrc**
-
-        执行如下命令在最后一行添加DDK\_HOME及LD\_LIBRARY\_PATH的环境变量。
-
-        **export tools\_version=_1.32.X.X_**
-
-        **export DDK\_HOME=$HOME/.mindstudio/huawei/ddk/_1.32.X.X_/ddk**
-
-        **export LD\_LIBRARY\_PATH=$DDK\_HOME/lib/x86\_64-linux-gcc5.4**
-
-        >![](public_sys-resources/icon-note.gif) **说明：**   
-        >-   **_1.32.X.X_**是[a](#zh-cn_topic_0203223340_zh-cn_topic_0203223294_li61417158198)中查询到的DDK版本号，需要根据查询结果对应填写，如**1.32.0.B080**  
-        >-   如果此环境变量已经添加，则此步骤可跳过。  
-
-        输入:wq!保存退出。
-
-        执行如下命令使环境变量生效。
-
-        **source \~/.bashrc**
-
-4.  将原始网络模型转换为适配昇腾AI处理器的模型，模型转换有Mind Studio工具转换和命令行转换两种方式。
+4.  将原始网络模型转换为适配昇腾AI处理器的模型。
     -   通过Mind Studio工具进行模型转换。
-        1.  在Mind Studio操作界面的顶部菜单栏中选择**Tools \> Model Convert**进入模型转换界面。
-        2.  在弹出的**Model** **Conversion**操作界面中，进行模型转换配置。
-            -   Model File选择[步骤2](#zh-cn_topic_0203223340_li99811487013)中下载的模型文件，此时会自动匹配到权重文件并填写在Weight File中。
-            -   Model Name填写为[表1](#zh-cn_topic_0203223340_table97791025517)中对应的**模型名称**。
-            -   VanillaCNNModel模型转换时非默认值配置如下：
+    1.  在Mind Studio操作界面的顶部菜单栏中选择**Tools \> Model Convert**，进入模型转换界面。
+    2.  在弹出的**Model Conversion**操作界面中，进行模型转换配置。
+    3.  face_detection参照以下图片进行参数配置。    
+        -   Model File选择[步骤2](#zh-cn_topic_0219108795_li2074865610364)中下载的模型文件，此时会自动匹配到权重文件并填写在Weight File中。  
+        -   模型输入选择fp32。  
+        -   Input Image Resolution填写为300\*304。   
+        -   Model Image Format选择BGR。   
+        -   打开Crop。
 
-                -   Nodes配置中的“Input Node:data“中的N值修改为**4**，此参数需要与“graph\_template.config“中的对应模型的“batch\_size“的值保持一致，C、H、W保持默认值，如[图2](#zh-cn_topic_0203223340_fig5158834193915)。
-                -   AIPP配置中的“Image Preprocess“请设置为**off**。
-
-                **图 2**  VanillaCNNModel模型转换时Nodes配置<a name="zh-cn_topic_0203223340_fig5158834193915"></a>  
-                
-
-                ![](figures/model_facial_1.png)
-
-            -   SpherefaceModel模型转换非默认值配置如下：
-
-                -   Nodes配置中的“Input Node:data“中的N:8表示人脸识别程序，每次处理8张人脸，此参数需要与“graph\_template.config”中的对应模型的“batch\_size“的值保持一致。
-                -   AIPP配置中的“Input Image Format“：输入图片的格式，此处选择  **RGB888\_U8**  。
-                -   AIPP配置中的“Input Image Size“：因为此处不需要做128\*16对齐，直接使用模型要求的宽和高即可，即96与112。
-                -   AIPP配置中的“**Model Image Format**”：模型图片的格式，此处选择  **BGR888\_U8**  。
-                -   AIPP配置中的“**Mean Less**“：此模型训练使用的图片的均值，可从此模型的sphereface\_model.prototxt文件中获取。
-                -   AIPP配置中的“**Multiplying Factor**”：此模型训练使用的图片的乘系数，可从此模型的sphereface\_model.prototxt文件中获取，即scale的值。
-
-                **图 3**  SpherefaceModel模型转化时Nodes配置<a name="zh-cn_topic_0203223340_fig188415461909"></a>  
-                
-
-                ![](figures/model_facial_3.png)
-
-                **图 4**  SpherefaceModel模型转化时AIPP配置请按照下图修改<a name="zh-cn_topic_0203223340_fig159362210546"></a>  
-                
-
-                ![](figures/model_facial_4.png)
-
-            -   face\_detection模型中**Input Image Size**需要分别修改为384,304， 此处需要做128\*16对齐。**Model Image Format**需要选择为BGR888\_U8。其他使用默认值。
-
-                **图 5**  face\_detection模型转换时非默认配置部分<a name="zh-cn_topic_0203223340_fig525743174114"></a>  
-                
-
-                ![](figures/model_facial_5.png)
-
-        3.  单击OK开始模型转换。
-
-            face\_detection模型在转换的时候，会出现如[图6](#zh-cn_topic_0203223340_fig19683520164211)所示错误。
-
-            **图 6**  模型转换错误<a name="zh-cn_topic_0203223340_fig19683520164211"></a>  
-            
-
-            ![](figures/model_facial_conversionfailed.png)
-
-            此时在**DetectionOutput**层的**Suggestion**中选择**SSDDetectionOutput**，并点击**Retry**。
-
-            模型转换成功后，后缀为.om的离线模型存放地址为：$HOME/modelzoo/XXX/device。
-
-            >![](public_sys-resources/icon-note.gif) **说明：**   
-            >-   Mind Studio模型转换中每一步的具体意义和参数说明可以参考[Mind Studio用户手册](https://ascend.huawei.com/doc/mindstudio/)中的“模型转换“章节。  
-            >-   XXX表示当前转换的模型名称，如face\_detection.om存放地址为：$HOME/modelzoo/face\_detection/device。  
-
-
-    -   命令行模式下模型转换。
-        1.  以Mind Studio安装用户进入存放原始模型的文件夹。
-
-            **cd $HOME/ascend/models/facialrecognition**
-
-        2.  使用omg工具执行以下命令进行模型转换。
-
-            ```
-            ${DDK_HOME}/uihost/bin/omg --output="./XXX" --model="./XXX.prototxt" --framework=0 --ddk_version=${tools_version} --weight="./XXX.caffemodel" --input_shape=`head -1 $HOME/AscendProjects/sample-facialrecognition/script/shape_XXX` --insert_op_conf=$HOME/AscendProjects/sample-facialrecognition/script/aipp_XXX.cfg --op_name_map=$HOME/AscendProjects/sample-facialrecognition/script/reassign_operators
-            ```
-
-            >![](public_sys-resources/icon-note.gif) **说明：**   
-            >-   input\_shape、insert\_op\_conf、op\_name\_map所需要的文件都在源码所在路径下的“sample-facialrecognition/script”目录下，请根据您实际的源码所在路径配置这些文件路径。  
-            >-   **XXX**为[表 Facial Recognition中使用模型](#zh-cn_topic_0203223340_table97791025517)中的模型名称，转换时请替换为实际的模型名称。  
-            >-   vanillacnn模型转换时不需要insert\_op\_conf、op\_name\_map参数，sphereface模型转换时不需要op\_name\_map参数，如果没有删除不需要的参数，转换模型时会报错。  
-            >-   每个参数的具体意义可参考[Atlas 200 DK用户手册](https://ascend.huawei.com/doc/atlas200dk/)中的“模型转换“章节。  
-
-
-5.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0203223340_li953280133816)中源码所在路径的“sample-facialrecognition/script”目录下。
-
-## 编译<a name="zh-cn_topic_0203223340_section147911829155918"></a>
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/1118/171602_36831f2a_7985487.png "屏幕截图.png")  
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/1118/171615_bc2b1b4e_7985487.png "屏幕截图.png")  
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/1118/171623_83b2a679_7985487.png "屏幕截图.png")   
+    4.  vanillacnn参照以下图片进行参数配置。    
+![输入图片说明](https://images.gitee.com/uploads/images/2020/1118/173302_cee66fa8_7985487.png "屏幕截图.png")   
+![输入图片说明](https://images.gitee.com/uploads/images/2020/1118/173408_48009a23_7985487.png "屏幕截图.png")   
+![输入图片说明](https://images.gitee.com/uploads/images/2020/1118/173421_4cf77d0e_7985487.png "屏幕截图.png")     
+    5.  sphereface参照以下图片进行参数配置。    
+![输入图片说明](https://images.gitee.com/uploads/images/2020/1118/173515_2b30575a_7985487.png "屏幕截图.png")      
+![输入图片说明](https://images.gitee.com/uploads/images/2020/1118/173533_55b33149_7985487.png "屏幕截图.png")   
+![输入图片说明](https://images.gitee.com/uploads/images/2020/1118/173546_4ef0816f_7985487.png "屏幕截图.png")       
+ 
+5.将转换好的模型文件（.om文件）上传到步骤1中源码所在路径的“facerecognition/model”目录下。     
+**cp \\$HOME/modelzoo/face_detection/device/face_detection.om \\$HOME/AscendProjects/facedetection/model/**     
+**cp \\$HOME/modelzoo/vanillacnn/device/vanillacnn.om \\$HOME/AscendProjects/facedetection/model/**       
+**cp \\$HOME/modelzoo/sphereface/device/sphereface.om \\$HOME/AscendProjects/facedetection/model/** 
 
 1.  打开对应的工程。
 
