@@ -23,27 +23,31 @@
 
 #include "colorize_process.h"
 #include "utils.h"
+#include<opencv2/opencv.hpp>
 
 using namespace std;
 
+using namespace cv;
+
 namespace {
-const uint32_t kModelWidth = 224;
-const uint32_t kModelHeight = 224;
-const char* kModelPath = "../model/colorization.om";
+    const uint32_t kModelWidth = 224;
+    const uint32_t kModelHeight = 224;
+    const char* kModelPath = "../model/colorization.om";
+
 }
 
 int main(int argc, char *argv[]) {
-   //Check the input when the application is executed, the program execution requires the input of picture directory parameters
+    //Check inputs and parameters
     if((argc < 2) || (argv[1] == nullptr)){
         ERROR_LOG("Please input: ./main <image_dir>");
         return FAILED;
     }
-   //Instantiate the classification reasoning object, the parameter is the classification model path, the width and height of the model input requirements
+    //Instantiation
     ColorizeProcess colorize(kModelPath, kModelWidth, kModelHeight);
-  //Initialize the acl resources, models and memory for classification inference
+    //acl init
     Result ret = colorize.Init();
     if (ret != SUCCESS) {
-        ERROR_LOG("Classification Init resource failed");
+        ERROR_LOG("colorization Init resource failed");
         return FAILED;
     }
 
@@ -55,9 +59,13 @@ int main(int argc, char *argv[]) {
         cout << "Movie open Error" << endl;
         return FAILED;
     }
-     //Reasoning picture by picture
+
+    int totalFrames = capture.get(7);
+    int currentFrames = 0;
+
+
     while(1) {
-         //Preprocess the picture: read the picture and zoom the picture to the size required by the model input
+        //preprocess
         cv::Mat frame;
         if (!capture.read(frame))
         {
@@ -65,20 +73,28 @@ int main(int argc, char *argv[]) {
             break;
         }
 
+        if (currentFrames == totalFrames - 1)
+        {
+            currentFrames = 0;
+            capture.set(1, 0);
+        }
+
+        currentFrames++;
+
         Result ret = colorize.Preprocess(frame);
         if (ret != SUCCESS) {
             ERROR_LOG("Read file %s failed, continue to read next",
-                      videoFile.c_str());
+            videoFile.c_str());
             continue;
         }
-       //Send the preprocessed pictures to the model for inference and get the inference results
+        //inference
         aclmdlDataset* inferenceOutput = nullptr;
         ret = colorize.Inference(inferenceOutput);
         if ((ret != SUCCESS) || (inferenceOutput == nullptr)) {
             ERROR_LOG("Inference model inference output data failed");
             return FAILED;
         }
-        //Analyze the inference output and mark the object category obtained by the inference on the picture
+        //postprocess
         ret = colorize.Postprocess(frame, inferenceOutput);
         if (ret != SUCCESS) {
             ERROR_LOG("Process model inference output data failed");

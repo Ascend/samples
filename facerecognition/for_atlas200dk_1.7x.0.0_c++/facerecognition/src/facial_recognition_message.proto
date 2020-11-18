@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package ascend.presenter.facial_recognition;
+
+enum ErrorCode {
+    kErrorNone = 0;
+    kErrorAppRegisterExist = 1;
+    kErrorAppRegisterType = 2;
+    kErrorAppRegisterLimit = 3;
+    kErrorOther = 5;
+}
+
+message CommonResponse {
+    ErrorCode ret = 1;
+    string message = 2;
+}
+
+message RegisterApp {
+    string id = 1;
+    string type = 2;
+}
+
+message Box {
+    uint32 lt_x = 1;
+    uint32 lt_y = 2;
+    uint32 rb_x = 3;
+    uint32 rb_y = 4;
+}
+
+message FaceFeature {
+    Box box = 1;
+    repeated float vector = 2;
+}
+
+message FaceInfo {
+    string id = 1;
+    bytes image = 2;
+}
+
+message FaceResult {
+    string id = 1;
+    CommonResponse response = 2;
+    repeated FaceFeature feature = 3;
+}
+
+message FrameInfo {
+    bytes image = 1;
+    repeated FaceFeature feature = 2;
+}

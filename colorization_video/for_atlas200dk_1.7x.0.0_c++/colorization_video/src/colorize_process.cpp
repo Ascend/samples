@@ -29,12 +29,13 @@ namespace {
     const uint32_t kScorePercent = 100;
 }
 
-ColorizeProcess::ColorizeProcess(const char* modelPath, 
-                                 uint32_t modelWidth, uint32_t modelHeight)
-:deviceId_(0), context_(nullptr), stream_(nullptr), inputBuf_(nullptr), 
+ColorizeProcess::ColorizeProcess(const char* modelPath,
+uint32_t modelWidth, uint32_t modelHeight)
+:deviceId_(0), context_(nullptr), stream_(nullptr), inputBuf_(nullptr),
 modelWidth_(modelWidth), modelHeight_(modelHeight), channel_(nullptr), isInited_(false){
     modelPath_ = modelPath;
     inputDataSize_ = RGBF32_CHAN_SIZE(modelWidth_, modelHeight_);
+
 }
 
 ColorizeProcess::~ColorizeProcess() {
@@ -103,20 +104,11 @@ Result ColorizeProcess::InitModel(const char* omModelPath) {
 }
 
 Result ColorizeProcess::OpenPresenterChannel() {
-    OpenChannelParam param;
-    param.host_ip = "192.168.1.223";  //IP address of Presenter Server
-    param.port = 7008;  //port of present service
-    param.channel_name = "colorization-video";
-    param.content_type = ContentType::kVideo;  //content type is Video
-    INFO_LOG("OpenChannel start");
-    PresenterErrorCode errorCode = OpenChannel(channel_, param);
-    INFO_LOG("OpenChannel param");
-    if (errorCode != PresenterErrorCode::kNone) {
-        ERROR_LOG("OpenChannel failed %d", static_cast<int>(errorCode));
-        return FAILED;
+    PresenterErrorCode openChannelret = OpenChannelByConfig(channel_, "./colorization.conf");
+    if (openChannelret != PresenterErrorCode::kNone) {
+        ERROR_LOG("Open channel failed, error %d\n", (int)openChannelret);
     }
 
-    return SUCCESS;
 }
 
 Result ColorizeProcess::Init() {
@@ -155,7 +147,7 @@ Result ColorizeProcess::Preprocess(cv::Mat& frame) {
         ERROR_LOG("Resize image failed");
         return FAILED;
     }
-    
+
     // deal image
     reiszeMat.convertTo(reiszeMat, CV_32FC3);
     reiszeMat = 1.0 * reiszeMat / 255;
@@ -167,18 +159,18 @@ Result ColorizeProcess::Preprocess(cv::Mat& frame) {
     cv::Mat reiszeMatL = channels[0] - 50;
 
     if (runMode_ == ACL_HOST) {
-        //When running on AI1, you need to copy the image data to the device side   
+        //AI1上运行时,需要将图片数据拷贝到device侧
         aclError ret = aclrtMemcpy(inputBuf_, inputDataSize_,
-            reiszeMatL.ptr<uint8_t>(), inputDataSize_,
-            ACL_MEMCPY_HOST_TO_DEVICE);
+        reiszeMatL.ptr<uint8_t>(), inputDataSize_,
+        ACL_MEMCPY_HOST_TO_DEVICE);
         if (ret != ACL_ERROR_NONE) {
             ERROR_LOG("Copy resized image data to device failed.");
             return FAILED;
         }
     }
     else {
-         //When running on Atals200DK, the data can be copied locally
-        //reiszeMat is a local variable, the data cannot be transferred out of the function, it needs to be copied
+        //Atals200DK上运行时,数据拷贝到本地即可.
+        //reiszeMat是局部变量,数据无法传出函数,需要拷贝一份
         memcpy(inputBuf_, reiszeMatL.ptr<uint8_t>(), inputDataSize_);
     }
 
@@ -198,7 +190,7 @@ Result ColorizeProcess::Inference(aclmdlDataset*& inferenceOutput) {
 }
 
 Result ColorizeProcess::Postprocess(cv::Mat& frame,
-                                    aclmdlDataset* modelOutput){
+aclmdlDataset* modelOutput){
     uint32_t dataSize = 0;
     void* data = GetInferenceOutputItem(dataSize, modelOutput);
     if (data == nullptr) return FAILED;
@@ -229,7 +221,7 @@ Result ColorizeProcess::Postprocess(cv::Mat& frame,
 
     //convert back to rgb
     cv::cvtColor(resultImage, resultImage, CV_Lab2BGR);
-    resultImage = resultImage * 255;    
+    resultImage = resultImage * 255;
     SendImage(resultImage);
 
     if (runMode_ == ACL_HOST) {
@@ -241,25 +233,25 @@ Result ColorizeProcess::Postprocess(cv::Mat& frame,
 }
 
 void* ColorizeProcess::GetInferenceOutputItem(uint32_t& itemDataSize,
-                                              aclmdlDataset* inferenceOutput) {
+aclmdlDataset* inferenceOutput) {
     aclDataBuffer* dataBuffer = aclmdlGetDatasetBuffer(inferenceOutput, 0);
     if (dataBuffer == nullptr) {
         ERROR_LOG("Get the dataset buffer from model "
-                  "inference output failed");
+        "inference output failed");
         return nullptr;
     }
 
     void* dataBufferDev = aclGetDataBufferAddr(dataBuffer);
     if (dataBufferDev == nullptr) {
         ERROR_LOG("Get the dataset buffer address "
-                  "from model inference output failed");
+        "from model inference output failed");
         return nullptr;
     }
 
     size_t bufferSize = aclGetDataBufferSize(dataBuffer);
     if (bufferSize == 0) {
         ERROR_LOG("The dataset buffer size of "
-                  "model inference output is 0 ");
+        "model inference output is 0 ");
         return nullptr;
     }
 
@@ -300,23 +292,22 @@ Result ColorizeProcess::SendImage(cv::Mat& image) {
 
     std::vector<DetectionResult> detectionResults;
     imageParam.detection_results = detectionResults;
-
-    PresenterErrorCode errorCode = PresentImage(channel_, imageParam);
-    if (errorCode != PresenterErrorCode::kNone) {
-        ERROR_LOG("PresentImage failed %d", static_cast<int>(errorCode));
+    PresenterErrorCode ret = PresentImage(channel_, imageParam);
+    // send to presenter failedPresentImage
+    if (ret != PresenterErrorCode::kNone) {
+        ERROR_LOG("Send JPEG image to presenter failed, error %d\n", (int)ret);
         return FAILED;
     }
-
     return SUCCESS;
 }
 
 void ColorizeProcess::DestroyResource()
-{   
+{
     aclrtFree(inputBuf_);
     inputBuf_ = nullptr;
 
     delete channel_;
-	
+
     model_.DestroyResource();
 
     aclError ret;

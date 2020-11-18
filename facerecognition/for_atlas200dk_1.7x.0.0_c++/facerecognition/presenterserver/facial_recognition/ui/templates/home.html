@@ -1,0 +1,737 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>App List</title>
+    <link rel="stylesheet" href="/static/css/base.css">
+    <link rel="stylesheet" href="/static/css/list.css">
+    <link rel="stylesheet" href="/static/css/face.css">
+    <link rel="stylesheet" href="/static/css/dialog.css">
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/cropper/cropper.css">
+
+</head>
+<body onload="init_image({{listret[0]}},{{listret[1]}},{{listret[2]}})" style="background-color: #edf7f9">
+    <div class="container-fluid">
+        <div class="nav_library">
+            <div class="nav_left">
+                <img src="/static/images/logo.png" alt="">
+                <p style="margin-bottom: 0"><span>Presenter Server</span></p>
+            </div>
+        </div>
+        <div class="container_top">
+            <div class="container">
+                <p><span> > Facial Recognition</span> </p>
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab" id="refresh">App List</a></li>
+                    <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab" id="face_library">Face Library</a></li>
+                </ul>
+            </div>
+        </div>
+    
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="home">
+                <div class="container">
+                    <div class="box_content">
+                        <div class="content_top">
+                        </div>
+                        <div class="content_bot" style="margin-top: 52px">
+                            <form name="myForm">
+                                <table id="mytable" width="100%" border="1">
+                                    <tr>
+                                        <th>No.</th>
+                                        <th>App Name</th>
+                                    </tr>
+                                    {% for item in listret[0] %}
+                                        <tr>
+                                            <td>{{item['id']}}</td>
+                                            <td><a class="view_channel" style="cursor:pointer">{{item['appname']}}</td>
+                                        </tr>
+                                    {% end %}
+                                </table>
+                            </form>
+                        </div>
+                        <div class="video_box" > 
+                            <div class="video_fps" id="fpswapper" >
+                                <p>
+                                    App Name: <span id="channel_name_val"></span>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                    fps: <span id="fps_val"></span>
+                                </p>
+                            </div>
+                            <div class="video_inner">
+                                <div class="video_loading">
+                                    <img src="/static/images/loading.gif" id="loading" board="1"/>
+                                    <canvas id="canvas"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="profile">
+                <div class="container">
+                    <div class="top_insert">
+                        <div class="top_insert_left">
+                            <form class="" style="position: relative;top:20px">
+                                <div class="form-group">
+                                    <label for="username" style="margin-right: 25px">Username</label>
+                                    <input type="text" class="form-control" id="username" placeholder="John" style="display: inline; width: 25%">
+                                </div>
+                                <div class="form-group" style="position: relative;top:inherit">
+                                    <label clss="control-label" for="input" style="margin-right: 53px;"">Photo</label>
+                                    <input type="file" id="input" class="sr-only" accept="image/*">
+                                    <input type="text" class="form-control" id="filename" placeholder="xxx.jpg" readonly="readonly" style="display: inline; width: 25%">
+                                    <label for="input" class="btn btn-default" id="Browse" style="vertical-align:baseline;width:80px;">
+                                    <span>Browse</span>
+                                    </label>
+                                    <button type="button" class="btn btn-primary" id="submit" style="vertical-align:baseline;width:80px;">Submit</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="top_insert_right">
+                            <div class="top_insert_right_left">
+                                <div class="example-photo-box">
+                                    <label for="example-photo">Example Photo</label>
+                                    <img id="example-photo" class="img-responsive" src="/static/123.png">
+                                </div>
+                            </div>
+                            <div class="top_insert_right_right">
+                                <div class="user-photo-box hidden">
+                                    <label for="user-photo">Cropped Photo</label>
+                                    <img id="user-photo" class="img-responsive" src="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal fade" id="changeModal" tabindex="-1" role="dialog" aria-hidden="true" data-backfrop = "static">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        <div class="img-container">
+                                            <img src="" alt="" id="photo">
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-primary" onclick="sendPhoto();" style="width:70px;">OK</button>
+                                        <button class="btn btn-close" aria-hidden="true" data-dismiss="modal" style="width:70px;">Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bot_pic_con">
+                        <div class="del_con" style="position:relative; top:-25px">
+                            <button type="button" class="btn btn-default" id="delete" style="width:90px;">Delete</button> 
+                            <!-- <span>Please select some face images to delete.</span> -->
+                            <button type="button" class="btn btn-default" id="delete_all" style="width:90px;">Delete All</button>
+                        </div>
+                        <div class="row row_dif">
+                            <form action="" id="myForm">
+                                <ul class="news_box" id="fenye">
+            
+                                </ul>
+                            </form>
+                        </div>
+                        <div class="fenye">
+                            <div class="fenye_list">
+                                <ul id="fenye_list">
+                                    <li><a class="fensiprev">Previous</a></li>
+                                    <li><a class="fensinext">Next</a></li>
+                                </ul>
+                                <a class="page" id="total_page">
+                                    Total page:
+                                    <span id="page"></span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="form-group" id="jump-group">
+                            <button id="btn-jump" type="button" class="btn btn-primary btn-sm" style="vertical-align: baseline; float:right; height:25px;">GO</button>
+                            <span id="totalpagenum" style="float:right; margin-right: 10px;"></span>
+                            <input class="form-control" type="text" style="display:inline; float:right; width:56px; height:25px;" id="jump">
+                            <label for="jump" style="float:right; height:25px; text-align: center; margin-right: 10px;">Jump To</label>
+                        </div>  
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="/static/js/jquery-1.10.2.min.js"></script>
+<script src="/static/js/dialog.js"></script>
+<script src="/static/bootstrap/js/bootstrap.min.js"></script>
+<script src="/static/cropper/cropper.js"></script>
+<script>
+    var log=console.log.bind(console)
+    var retCodeSuccess="0"
+    var retCodeFail="1"
+    var ws,app_name,req
+    var canvas_width,canvas_height
+</script>
+<script>
+    var canvas=document.getElementById("canvas")
+    var ctx=canvas.getContext("2d")
+    $('#fpswapper').hide()
+    $('#loading').hide()
+    function startViewVideo(app_name,req){
+        if(canvas_width != undefined && canvas_height != undefined){
+            ctx.clearRect(0,0,canvas_width,canvas_height)
+            console.log("canvas clear")
+        }
+        $('#loading').show()
+        $('#canvas').hide()
+        $('#channel_name_val').text(app_name)
+        $('#fps_val').text("")
+        $('#fpswapper').show()
+        if(ws != undefined){
+            ws.close()
+            console.log("websocket exist & close")
+        }
+        console.log("View Video started")
+        var img=new Image()
+        var wsProtocol="ws://"
+        if(window.location.protocol == "https:"){
+            wsProtocol = "wss://";
+        }
+        var wsUrl = wsProtocol + window.location.host + "/websocket?req="+req+"&app_name="+app_name;
+
+        ws=new WebSocket(wsUrl);
+        var onmessageflag = false;
+        console.log("build websocket success")
+
+        ws.onopen = function(){
+            ws.send('next');
+        }
+        ws.onmessage = function(evt){
+            $('#loading').hide()
+            $('#canvas').show()
+            // ctx.clearRect(0,0,canvas.width,canvas.height)
+            var data = JSON.parse(evt.data)
+            if(data["ret"] == retCodeSuccess){
+                $('#fps_val').text(data["fps"])
+                var src="data:image/jpeg;base64,"+data["image"];
+                //face detect
+                var img=new Image()
+                img.src=src
+                img.onload=function(){
+                    canvas.setAttribute("width",img.width)
+                    canvas.setAttribute("height",img.height)
+                    canvas_width = img.width
+                    canvas_height = img.height
+                    ctx.strokeStyle="yellow"
+                    ctx.font="40px serif"
+                    ctx.fillStyle="yellow"
+                    ctx.drawImage(img,0,0)
+                    for(var i in data["face_list"]){
+                        var msg=data["face_list"][i].name
+                        if(data["face_list"][i].confidence>0 && data["face_list"][i].confidence<=1){
+                            //confidence keep two digits
+                            msg = msg +  " : " + data["face_list"][i].confidence.toFixed(2)
+                        }
+                        var pos=data["face_list"][i].coordinate
+                        //add space between msg and face
+                        //if upper space is not enough show the msg at the bottom 
+                        if(50>pos[1]){
+                            ctx.fillText(msg,pos[0],pos[3]+50)
+                        }
+                        else{
+                            ctx.fillText(msg,pos[0],pos[1]-10)
+                        }
+                        ctx.beginPath()
+                        // 1/3 space draw line
+                        ctx.moveTo(pos[0],pos[1])
+                        ctx.lineTo(pos[0],pos[3]/3+pos[1]*2/3)
+                        
+                        ctx.moveTo(pos[0],pos[3]*2/3+pos[1]/3)
+                        ctx.lineTo(pos[0],pos[3])
+                        ctx.lineTo(pos[0]*2/3+pos[2]/3,pos[3])
+
+                        ctx.moveTo(pos[0]/3+pos[2]*2/3,pos[3])
+                        ctx.lineTo(pos[2],pos[3])
+                        ctx.lineTo(pos[2],pos[3]*2/3+pos[1]/3)
+
+                        ctx.moveTo(pos[2],pos[3]/3+pos[1]*2/3)
+                        ctx.lineTo(pos[2],pos[1])
+                        ctx.lineTo(pos[2]*2/3+pos[0]/3,pos[1])
+                        
+                        ctx.moveTo(pos[0]*2/3+pos[2]/3,pos[1])
+                        ctx.lineTo(pos[0],pos[1])
+                        ctx.stroke()
+                    }
+                }
+                
+            }
+            ws.send('next')
+        }
+    }
+    $(".view_channel").click(function(){
+        $('#loading').show()
+        $('#canvas').hide()
+        if(ws != undefined){
+            ws.close()
+        }
+        var req, app_name=encodeURIComponent($(this).text())
+        var url = "/view?app_name="+app_name
+        $.ajax({
+            type: "GET",
+            url: url,
+            dataType: "json",
+            success: function(data){
+                if(data["ret"]==retCodeSuccess){
+                    req=data["msg"]
+                    startViewVideo(app_name, req)
+                }else{
+                    log("View failed! Channel not exists")
+                    dialog.tip("Tips","Channel not exists",function(){})
+                }
+            },
+            error: function(e){
+                alert(e)
+            }
+        })
+    })
+    $("#face_library").click(function(){
+        console.log("click face library")
+        $("html,body").animate({scrollTop:0},500);
+    })
+    $("#refresh").click(function(){
+        console.log("click app list")
+        $("html,body").animate({scrollTop:0},500);
+    })
+</script>
+<script>
+    var page_size=6
+    var currentApplist
+    $("#jump-group").hide()
+    $("#fenye").hide()
+    $('#fenye_list').hide()
+    $('#total_page').hide()
+    var page_num
+    var fensi=[]
+    var now_fensi=[]
+    var uploadImage
+    var uploadedImageURL    
+    var CropperOptions={
+        viewMode: 2,         //make crop frame in the origin frame 
+    }
+
+    function init_image(applist,list,videostate){
+        log("init image dataset start")
+        if(list.length!=0){
+            $("#fenye").show()
+            $('#fenye_list').show()
+            $('#total_page').show()
+            $("#jump-group").show()
+        }
+        currentApplist = applist
+        fensi = []
+        for(var i=0;i<list.length;i++){
+            fensi.push({title:list[i]["name"],src:list[i]["image"]})
+        }
+        log("init image dataset end")
+        load_img();
+        if(videostate["ret"] == 1){
+            startViewVideo(videostate["msg"].name,videostate["msg"].req)
+        }
+    }
+    
+    function load_img(){
+        log("load img start")
+        var card_num=fensi.length;//get image num
+        page_num=Math.ceil(card_num/page_size);  // get page num
+        $("#page").html(page_num);
+        // $("#page").text("/"+page_num+"")
+        $("#totalpagenum").text("/"+page_num+"")
+        updata(page_num,1);//initate
+        $("#ye1").addClass("index");
+        log("load img end")
+    }
+    function updata(page_num,current_page){
+        now_fensi=[];//clear 
+        $("#fenye_list").empty();//clear page index ul
+        $("#fenye").empty();//clear page index card
+        var prev_page=current_page-1;
+        var next_page=current_page+1;
+        if(current_page==1) prev_page=current_page;
+        if(current_page==page_num) next_page=page_num;
+        var ht="<li><a onclick='javascript:updata("+page_num+","+prev_page+");' class='fensiprev'>Prev</a></li><li><a onclick='javascript:updata("+page_num+","+next_page+");' class='fensinext'>Next</a></li>";
+        $("#fenye_list").append(ht);//add prev next page button
+        if(page_num<5){
+            for(i=1;i<page_num+1;i++){
+                var html="<li><a onclick="+"javascript:updata("+page_num+","+i+");"+" class='ye'>"+i+"</a></li>";
+                if(current_page==i){
+                    html="<li><a onclick="+"javascript:updata("+page_num+","+i+");"+" class='ye index'>"+i+"</a></li>";
+                }
+                $(".fensinext").parents('li').before(html);
+            }
+        }else if(page_num>=5){
+            for(i=1;i<page_num+1;i++){
+                var html="<li><a onclick="+"javascript:updata("+page_num+","+i+");"+" class='ye'>"+i+"</a></li>";
+                if(current_page<4 && i<=5){
+                    if(current_page==i){
+                        html="<li><a onclick="+"javascript:updata("+page_num+","+i+");"+" class='ye index'>"+i+"</a></li>";
+                    }
+                    $(".fensinext").parents('li').before(html);
+                }
+                if(current_page>3 && current_page<=(page_num-2)){
+                    if(i<=(current_page+2) && i>=(current_page-2)){
+                        if(current_page==i){
+                            html="<li><a onclick="+"javascript:updata("+page_num+","+i+");"+" class='ye index'>"+i+"</a></li>";
+                        }
+                        $(".fensinext").parents('li').before(html);
+                    }
+                }
+                if(current_page==(page_num-1)){
+                    if(i>(page_num-5)){
+                        if(current_page==i){
+                            html="<li><a onclick="+"javascript:updata("+page_num+","+i+");"+" class='ye index'>"+i+"</a></li>";
+                        }
+                        $(".fensinext").parents('li').before(html);
+                    }
+                }else if(current_page==page_num){
+                    if(i>(page_num-5)){
+                        if(current_page==i){
+                            html="<li><a onclick="+"javascript:updata("+page_num+","+i+");"+" class='ye index'>"+i+"</a></li>";
+                        }
+                        $(".fensinext").parents('li').before(html);
+                    }
+                }
+
+            }
+        }
+        for(i=0;i<fensi.length;i++){
+            var x=current_page-1;
+            if(i==0){
+                i=i+x*page_size;
+            }
+            if(i<current_page*page_size && current_page<2){
+                now_fensi.push(fensi[i]);
+            }else if(i>=x*page_size && i<current_page*page_size && current_page>1){
+                now_fensi.push(fensi[i]);
+            }
+        }
+        for(i=0;i<now_fensi.length;i++){
+            var html="<li id="+'card'+i+" class='small_card col-lg-4 col-md-4 col-sm-4 col-xs-4'><input class='pic_check' type='checkbox' name='mycheck' id="+'carda'+i+"> <label for="+'carda'+i+"><div class='pic_con' style='background-color: #eaeaea;'><img class='img-responsive' style='margin-bottom:0;margin-right:0'src="+now_fensi[i].src+" alt=''> </div></label><p class='p_title'><span>"+now_fensi[i].title+"</span></p></li>"
+            $("#fenye").append(html);
+        }
+    }
+</script>
+<script>
+    $(function(){
+        log("Init cropper start")
+        initCropper()
+        log("Init cropper end")
+    })
+    function initCropper(){
+        $("#photo").cropper(CropperOptions)
+        if(URL){
+            $("#input").change(function(){
+                ImageImport();
+            })
+        }
+        else{
+            $("#input").prop('disabled', true).addClass('disabled');
+        }
+        $("#changeModal").on('shown.bs.modal', function () {
+            $("#photo").cropper(CropperOptions)
+        })
+    }
+    function ImageImport(){
+        var files=document.getElementById("input").files
+        if(files && files.length){
+            file=files[0]
+            //image size : [ 10k , 5M ]
+            if(file.size <10*1024 || file.size>5*1024*1024){
+                log("Invalid image size, size should in [ 10k , 5M ]")
+                dialog.tip("Tips","Invalid image size, size should in [ 10k , 5M ]",function(){})
+                $("#input").val('');
+                return;
+            }
+            if (/^image\/(jpeg|png|bmp)$/.test(file.type)) {
+                ImageHeaderCheck(file)
+            } else {
+                log("Invalid Image suffix. Only suypport jpg/png/bmp image")
+                dialog.tip("Tips","Invalid Image suffix. Only suypport jpg/png/bmp image",function(){})
+                return
+            }
+            
+        }
+    }
+    function ImageHeaderCheck(file){
+        log("Check Image head")
+        var reader=new FileReader();
+        reader.readAsArrayBuffer(file)
+        var jpghead=[255,216]
+        var pnghead=[137,80,78,71]
+        var bmphead=[66,77]
+        reader.onload = function(evt){
+            var ImgArrayBuffer=evt.target.result
+            var buffer=new Uint8Array(ImgArrayBuffer)
+            if(BinaryCheck(buffer,jpghead)==false && BinaryCheck(buffer,pnghead) == false && BinaryCheck(buffer,bmphead) == false){
+                $("#input").val("")
+                log("Check image head invalid")
+                dialog.tip("Tips","Check image head invalid",function(){})
+                return ;
+            }
+            LoadCropper(file)
+        }
+    }
+    function LoadCropper(file){
+        // free URL if URL existes
+        if (uploadedImageURL) {
+            URL.revokeObjectURL(uploadedImageURL);
+        }
+        uploadedImageURL = URL.createObjectURL(file);
+        // 1.destory cropper 2.change src 
+        $("#photo").cropper('destroy').attr('src', uploadedImageURL)
+        // click space not exit modal 
+        $("#changeModal").modal({backdrop: 'static'})
+        $("#input").val('');
+    }
+
+    function BinaryCheck(buffer,head){
+        if(buffer == undefined || head == undefined){
+            return false;
+        }
+        if(head.length<2 ||buffer.length < head.length){
+            return false
+        }
+        for(var i=0;i<head.length;i++){
+            if(buffer[i] != head[i]){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    var sendPhoto = function(){
+        $('#photo').cropper('getCroppedCanvas',{
+            width:300,
+            height:400
+        }).toBlob(function(blob){
+            // setting src and hide modal
+            $('#user-photo').attr('src',URL.createObjectURL(blob));
+        });
+        $('.user-photo-box').removeClass('hidden')
+        uploadImage=$('#photo').cropper('getCroppedCanvas',{
+            width:300,
+            height:400
+        }).toDataURL("image/jpeg")
+        $('#changeModal').modal('hide');
+        document.getElementById('filename').setAttribute('value',file.name)
+        log("get cropped image success")
+    }
+</script>
+<script>
+    function checkImageValid(){
+        if(!uploadImage || uploadImage==undefined){
+            log("cropped image undefined")
+            dialog.tip("Tips","Please select an image and cropped your face")
+            return false
+        }
+        var img=uploadImage.trim()
+        var prejpg="data:image/jpeg;base64,"
+        if(img.length< prejpg.length){
+            log("Tips","Invalid image base64 header identifier")
+            dialog.tip("Tips","Invalid image base64 header identifier",function(){})
+            return false
+        }
+        for(var i=0; i<prejpg.length; i++){
+            if(img.charAt(i) != prejpg.charAt(i)){
+                log("Invalid image base64 header identifier")
+                dialog.tip("Tips","Invalid image base64 header identifier",function(){})
+                return false
+            }
+            return true;
+        }
+        return false
+    }
+    function checkNameValid(){
+        var name = $("#username").val().trim();
+        if (name.length <= 0)
+        {
+            log(" Username can not be empty")
+            dialog.tip("Tips", "Username can not be empty" ,function(){});
+            return false;
+        }
+        if (name.length > 50)
+        {
+            log("Length of Username should less than 50")
+            dialog.tip("Tips", "Length of Username should less than 50" ,function(){});
+            return false;
+        }
+        for (var i = 0; i < name.length; i++)
+        {
+            var c = name.charAt(i).charCodeAt();
+            //ascii check 0-9 a-z A-Z space
+            var flag =  ((c==32) ||(c >= 48 && c <= 57) || (c >= 97 && c<= 122) || (c>= 65 && c <= 90) || (c == 47));
+            if (false == flag)
+            {
+                log("Username only support 0-9, a-z, A-Z space/")
+                dialog.tip("Tips", "Username only support 0-9, a-z, A-Z space/" ,function(){});
+                return false;
+            }
+        }
+        return true;
+    }
+    $('#filename').click(function(){
+        $('#Browse').click()
+    })
+    $('#submit').click(function(){
+        if(true == checkNameValid() && true ==  checkImageValid()){
+            var submiturl="/register?"+"user_name="+encodeURIComponent($("#username").val().trim())+"&image_data="+encodeURIComponent(uploadImage.trim())+"&time="+(new Date().getTime());
+            $('#submit').attr("disabled",true)
+            $.ajax({
+                type: "POST",
+                url: submiturl,
+                dataType: "json",
+                success:function(data){
+                    log("success submit ajax")
+                    if(data["ret"] == retCodeSuccess){
+                        log(data["msg"])
+                        dialog.tip("Tips","Face Register success!",function(){
+                            window.location.reload()
+                        })
+                    }else{
+                        log(data["msg"])
+                        dialog.tip("Tips",data["msg"],function(){})
+                    }
+                },
+                error:function(e){
+                    // log(e)
+                    log(e)
+                    dialog.tip("Tips",e,function(){})
+                }
+            })
+            $('#submit').attr("disabled",false)
+        }
+    });
+
+    $('#delete').click(function(){
+        if($("input[name='mycheck']").is(":checked")){
+            var delete_url="/delete?"
+            for(var i=0;i<now_fensi.length;i++){
+                if($('#carda'+i+"").is(":checked")){
+                    delete_url=delete_url+"user_name="+now_fensi[i].title+"&"
+                }
+            }
+            delete_url=delete_url.substring(0,delete_url.length-1)
+            dialog.confirm("Tips", "Are you sure to delete？", function(){
+                $.ajax({
+                    type:"POST", //方法
+                    url:delete_url,
+                    dataType: "json",
+                    success:function (data) {
+                        if(data["ret"]==retCodeSuccess){
+                            log(data["msg"])
+                            dialog.tip("Tips","delete face success",function(){
+                                window.location.reload()
+                            })
+                        }
+                        else{
+                            log("delete face faild"+"    "+data["msg"])
+                            dialog.tip("Tips","delete face faild"+"    "+data["msg"],function(){})
+                        }
+                    }
+                });
+
+            },function(){
+                for(var i=0;i<now_fensi.length;i++){
+                    if($('#carda'+i+"").is(":checked")){
+                        $('#carda'+i+"").click()
+                    }
+                }
+            });
+        }else{
+            log("No image selected !")
+            dialog.tip("Tips", "Please select the image !", function(){});
+        }
+    })
+    $('#delete_all').click(function(){
+        for(var i=0;i<now_fensi.length;i++){
+            if($('#carda'+i+"").is(":checked")){
+                continue;
+            }
+            $('#carda'+i+"").click()
+        }
+        var delete_url="/delete?"
+        for(var i=0;i<fensi.length;i++){
+            delete_url=delete_url+"user_name="+fensi[i].title+"&"
+        }
+        delete_url=delete_url.substring(0,delete_url.length-1)
+        dialog.confirm("Tips", "Are you sure to delete all image？", function(){
+            $.ajax({
+                type:"POST", 
+                url:delete_url,
+                dataType: "json",
+                success:function (data) {
+                    if(data["ret"]==retCodeSuccess){
+                        log(data["msg"])
+                        dialog.tip("Tips","delete  all face success",function(){
+                            window.location.reload()
+                        })
+                    }
+                    else{
+                        log("delete all face faild"+"    "+data["msg"])
+                        dialog.tip("Tips","delete face faild"+"    "+data["msg"],function(){})
+                    }
+                }
+            });
+        },function(){
+            for(var i=0;i<now_fensi.length;i++){
+                if($('#carda'+i+"").is(":checked")){
+                    $('#carda'+i+"").click()
+                }
+            }
+        });
+    })
+    $('#btn-jump').click(function(){
+        var jumppage=$("#jump").val().trim()
+        if(jumppage>0 && jumppage<=page_num){
+            updata(page_num,jumppage)
+        }else{
+            log("Index Invalid")
+            dialog.tip("Tips","Index Invalid",function(){})
+        }
+    })
+    function checkNumValid(){
+        var name = $("#jump").val().trim();
+        
+        if (name.length > 3)
+        {
+            log("Invalid Num Input")
+            dialog.tip("Tips", "Invalid Num Input" ,function(){});
+            return false;
+        }
+        for (var i = 0; i < name.length; i++)
+        {
+            var c = name.charAt(i).charCodeAt();
+            //ascii check 0-9 
+            var flag =  (c >= 48 && c <= 57) 
+            if (false == flag)
+            {
+                log("Num only support 0-9")
+                dialog.tip("Tips", "Num only support 0-9" ,function(){});
+                return false;
+            }
+        }
+        return true;
+    }
+    // // hash record anchor node
+    // // get back history tab after refresh page
+    $(document).ready(function() {
+        if(location.hash) {
+            $('a[href=' + location.hash + ']').tab('show');
+        }
+        $(document.body).on("click", "a[data-toggle]", function(event) {
+            location.hash = this.getAttribute("href");
+        });
+    });
+    $(window).on('popstate', function() {
+        var anchor = location.hash || $("a[data-toggle=tab]").first().attr("href");
+        $('a[href=' + anchor + ']').tab('show');
+    });
+</script>
+</html>
+
+    

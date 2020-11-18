@@ -23,6 +23,7 @@
 #include <memory>
 #include "ascenddk/presenter/agent/presenter_channel.h"
 
+
 using namespace std;
 using namespace ascend::presenter;
 
@@ -67,5 +68,7 @@ private:
 
     Channel* channel_;
     bool isInited_;
+    std::shared_ptr<Channel> chan_;
+
 };
 

@@ -1,3 +1,5 @@
+# Copyright (c) Huawei Technologies Co., Ltd. 2019. All rights reserved.
+
 # CMake lowest version requirement
 cmake_minimum_required(VERSION 3.5.1)
 
@@ -16,7 +18,7 @@ set(OPENCV_PATH "/usr/local")
 
 set(INC_PATH $ENV{DDK_PATH})
 if (NOT DEFINED ENV{DDK_PATH})
-    set(INC_PATH "/usr/local/Ascend")
+    set(INC_PATH "/home/c72/Ascend/ascend-toolkit/20.0.0.B002/arm64-linux_gcc7.3.0")
     message(STATUS "set default INC_PATH: ${INC_PATH}")
 else ()
     message(STATUS "env INC_PATH: ${INC_PATH}")
@@ -64,3 +66,5 @@ target_link_libraries(main
         ascendcl acl_dvpp stdc++ opencv_highgui opencv_core opencv_imgproc opencv_imgcodecs opencv_calib3d opencv_features2d opencv_videoio protobuf presenteragent)
 
 install(TARGETS main DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+
+execute_process(COMMAND ${CMAKE_COMMAND} -E copy ../../script/colorization.conf ../../out/colorization.conf)
