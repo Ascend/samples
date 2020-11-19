@@ -24,14 +24,14 @@
 
     **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/facerecognition.zip** 
               
-    **unzip colorization_video.zip**  
+    **unzip facerecognition.zip**  
     
     >![](public_sys-resources/icon-note.gif) **说明：**   
     >- 如果使用wget下载失败，可使用如下命令下载代码。  
     **curl -OL https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/facerecognition.zip** 
     >- 如果curl也下载失败，可复制下载链接到浏览器，手动上传至服务器。
 
-2.  <a name="zh-cn_topic_0203223340_li99811487013"></a>获取此应用中所需要的原始网络模型。
+2.  <a name="zh-cn_topic_0203223340_li99811487013"></a>获取此应用中所需要的网络模型。
 
     参考[表1](#zh-cn_topic_0203223340_table97791025517)获取此应用中所用到的网络模型及其对应的权重文件，并将其存放到Mind Studio所在Ubuntu服务器的任意目录，这两个文件必须存放到同一个目录下。例如：$HOME/models/facialrecognition。
 
