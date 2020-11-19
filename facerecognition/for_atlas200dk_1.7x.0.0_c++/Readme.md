@@ -271,12 +271,17 @@
 
     单击[图19 停止Facial Recognition应用](#zh-cn_topic_0203223340_fig12461162791610)所示的停止按钮停止Facial Recognition应用程序。
 
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/1119/203616_3fb859ae_7985487.png "屏幕截图.png") 
+    **图 19**  停止Facial Recognition应用<a name="zh-cn_topic_0203223340_fig12461162791610"></a>  
     
 
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/1119/203626_17621871_7985487.png "屏幕截图.png")
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/1119/203930_79496425_7985487.png "屏幕截图.png")
 
+    如[图20](#zh-cn_topic_0203223340_fig5786125319165)所示应用程序已停止运行
+
+    **图 20**  Facial Recognition应用已停止<a name="zh-cn_topic_0203223340_fig5786125319165"></a>  
     
+
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/1119/203938_c36e3c0d_7985487.png "屏幕截图.png")
 
 -   **停止Presenter Server服务**
 
