@@ -60,7 +60,7 @@
          说明：  
          facedetection原始模型网络： https://github.com/opencv/opencv/blob/master/samples/dnn/face_detector/deploy.prototxt。
          facedetection原始网络LICENSE地址： https://github.com/opencv/opencv/blob/master/LICENSE
-         C7x对prototxt文件有修改要求，按照SSD网络模型prototxt修改文档对prototxt文件进行修改。这里已经修改完成，直接执行以上命令下载即可。
+         C7x对prototxt文件有修改要求，按照SSD网络模型prototxt修改文档对prototxt文件进行修改。这里已经修改完成，直接执行以上命令下载即可。</p>
     </td>
     </tr>
     <tr id="zh-cn_topic_0203223340_row11880162511114"><td class="cellrowborder" valign="top" width="13.309999999999999%" headers="mcps1.2.4.1.1 "><p id="zh-cn_topic_0203223340_p1388012251117"><a name="zh-cn_topic_0203223340_p1388012251117"></a><a name="zh-cn_topic_0203223340_p1388012251117"></a>vanillacnn</p>
