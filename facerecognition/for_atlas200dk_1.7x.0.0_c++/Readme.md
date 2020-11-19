@@ -267,21 +267,22 @@
 
 -   **停止人脸识别应用**
 
-   facerecognition应用执行后会处于持续运行状态，若要停止facerecognition应用程序，可执行如下操作。
+    Facial Recognition应用执行后会处于持续运行状态，若要停止Facial Recognition应用程序，可执行如下操作。
 
     单击[图19 停止Facial Recognition应用](#zh-cn_topic_0203223340_fig12461162791610)所示的停止按钮停止Facial Recognition应用程序。
 
     **图 19**  停止Facial Recognition应用<a name="zh-cn_topic_0203223340_fig12461162791610"></a>  
     
 
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/1119/203930_79496425_7985487.png "屏幕截图.png")
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/1119/204132_0680b016_7985487.png "屏幕截图.png")
 
     如[图20](#zh-cn_topic_0203223340_fig5786125319165)所示应用程序已停止运行
 
     **图 20**  Facial Recognition应用已停止<a name="zh-cn_topic_0203223340_fig5786125319165"></a>  
     
 
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/1119/203938_c36e3c0d_7985487.png "屏幕截图.png")
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/1119/204153_557cd8cf_7985487.png "屏幕截图.png")
+
 
 -   **停止Presenter Server服务**
 
@@ -289,17 +290,14 @@
 
     以Mind Studio安装用户在Mind Studio所在服务器中执行如下命令查看人脸识别应用对应的Presenter Server服务的进程。
 
-    **ps -ef | grep presenter | grep facial\_recognition**
+    **ps -ef | grep presenter | grep facerecognition**
 
-    ```
-    ascend@ascend-HP-ProDesk-600-G4-PCI-MT:~/sample-facialrecognition$ ps -ef | grep presenter | grep facial_recognition
-    ascend 22294 20313 22 14:45 pts/24?? 00:00:01 python3 presenterserver/presenter_server.py --app facial_recognition
-    ```
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/1119/205326_0c7998d7_7985487.png "屏幕截图.png")
 
-    如上所示  _22294_  即为人脸识别应用对应的Presenter Server服务的进程ID。
+    如上所示  _36806_  即为人脸识别应用对应的Presenter Server服务的进程ID。
 
     若想停止此服务，执行如下命令：
 
-    **kill -9** _22294_
+    **kill -9** _36806_
 
 
