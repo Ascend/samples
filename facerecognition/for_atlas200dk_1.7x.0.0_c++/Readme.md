@@ -35,7 +35,7 @@
 
     参考[表1](#zh-cn_topic_0203223340_table97791025517)获取此应用中所用到的网络模型及其对应的权重文件，并将其存放到Mind Studio所在Ubuntu服务器的任意目录，这两个文件必须存放到同一个目录下。例如：$HOME/models/。
 
-    **表 1**  Facial Recognition中使用模型
+    **表 1**  facerecognition中使用模型
     <a name="zh-cn_topic_0203223340_table97791025517"></a>
     <table><thead align="left"><tr id="zh-cn_topic_0203223340_row48791253115"><th class="cellrowborder" valign="top" width="13.309999999999999%" id="mcps1.2.4.1.1"><p id="zh-cn_topic_0203223340_p187902511114"><a name="zh-cn_topic_0203223340_p187902511114"></a><a name="zh-cn_topic_0203223340_p187902511114"></a>模型名称</p>
     </th>
@@ -132,7 +132,7 @@
 
     **./MindStudio.sh**
 
-    启动成功后，打开**sample-facialrecognition**工程，如[图7](#zh-cn_topic_0203223340_fig28591855104218)所示。
+    启动成功后，打开**facerecognition**工程，如[图7](#zh-cn_topic_0203223340_fig28591855104218)所示。
 
     **图 7**  打开sample-facialrecognition工程<a name="zh-cn_topic_0203223340_fig28591855104218"></a>  
     ![输入图片说明](https://images.gitee.com/uploads/images/2020/1118/181636_2ef0a430_7985487.png "屏幕截图.png")
@@ -193,7 +193,7 @@
     ![输入图片说明](https://images.gitee.com/uploads/images/2020/1118/182759_a03af4da_7985487.png "屏幕截图.png")
 
     -   当提示“Please choose one to show the presenter in browser\(default: 127.0.0.1\):“时，请输入在浏览器中访问Presenter Server服务所使用的IP地址（一般为访问Mind Studio的IP地址）。
-    -   当提示“Please input a absolute path to storage facial recognition data:“时，请输入Mind Studio中存储人脸注册数据及解析数据，此路径Mind Studio用户需要有读写权限，如果此路径不存在，脚本会自动创建。
+    -   当提示“Please input a absolute path to storage facerecognition data:“时，请输入Mind Studio中存储人脸注册数据及解析数据，此路径Mind Studio用户需要有读写权限，如果此路径不存在，脚本会自动创建。
 
     如[图12](#zh-cn_topic_0203223340_fig157571218181018)所示，请在“Current environment valid ip list“中选择通过浏览器访问Presenter Server服务使用的IP地址，并输入存储人脸识别解析数据的路径。
 
@@ -245,7 +245,7 @@
     ![输入图片说明](https://images.gitee.com/uploads/images/2020/1118/183820_56192295_7985487.png "屏幕截图.png")
 
     >![](public_sys-resources/icon-note.gif) **说明：**   
-    >-   Facial Recognition的Presenter Server最多支持2路Channel同时显示，每个  _presenter\_view\_app\_name_  对应一路Channel。  
+    >-   facerecognition的Presenter Server最多支持2路Channel同时显示，每个  _presenter\_view\_app\_name_  对应一路Channel。  
     >-   由于硬件的限制，每一路支持的最大帧率是20fps，受限于网络带宽的影响，帧率会自动适配较低的帧率进行显示。  
 
 3.  进行人脸注册。
@@ -267,14 +267,14 @@
 
 -   **停止人脸识别应用**
 
-    Facial Recognition应用执行后会处于持续运行状态，若要停止Facial Recognition应用程序，可执行如下操作。
+   facerecognition应用执行后会处于持续运行状态，若要停止facerecognition应用程序，可执行如下操作。
 
     单击[图19 停止Facial Recognition应用](#zh-cn_topic_0203223340_fig12461162791610)所示的停止按钮停止Facial Recognition应用程序。
 
-    **图 19**  停止Facial Recognition应用<a name="zh-cn_topic_0203223340_fig12461162791610"></a>  
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/1119/203616_3fb859ae_7985487.png "屏幕截图.png") 
     
 
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/1118/184648_4e0afccd_7985487.png "屏幕截图.png")
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/1119/203626_17621871_7985487.png "屏幕截图.png")
 
     
 
