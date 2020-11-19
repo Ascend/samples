@@ -77,7 +77,7 @@ public:
     * @return device buffer of pic
     */
 
-    static Result PostProcess(const std::string &path, aclmdlDataset *modelOutput);
+    static Result PostProcess(const string &path, aclmdlDataset *modelOutput, aclmdlDesc* modelDesc);
 
     static bool IsDirectory(const std::string &path);
 

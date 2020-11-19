@@ -49,17 +49,12 @@ bool Utils::IsDirectory(const string &path) {
 }
 
 bool Utils::CreateFolder(std::string folderPath, mode_t mode) {
-    cout << "1" << endl;
     int folder_exist = access(folderPath.c_str(), W_OK);
-    cout << "2" << endl;
     if (-1 == folder_exist) {
-        cout << "3" << endl;
         if (mkdir(folderPath.c_str(), mode) == -1) {
-            cout << "4" << endl;
             return false;
         }
     }
-    cout << "hello" << endl;
     return true;
 }
 
@@ -134,7 +129,7 @@ void* Utils::CopyDataHostToDvpp(void* data, int size) {
         size, aclRet);
         return nullptr;
     }
-    printf("malloc dvpp memory size %d ok", size);
+    INFO_LOG("malloc dvpp memory size %d ok", size);
     // copy input to device memory
     aclRet = aclrtMemcpy(buffer, size, data, size, ACL_MEMCPY_HOST_TO_DEVICE);
     if (aclRet != ACL_ERROR_NONE) {
@@ -142,7 +137,7 @@ void* Utils::CopyDataHostToDvpp(void* data, int size) {
         acldvppFree(buffer);
         return nullptr;
     }
-    printf("copy data to dvpp ok");
+    INFO_LOG("copy data to dvpp ok");
 
     return buffer;
 }
@@ -156,7 +151,7 @@ void* Utils::CopyDataDeviceToDvpp(void* data, int size) {
         size, aclRet);
         return nullptr;
     }
-    printf("malloc dvpp memory size %d ok", size);
+    INFO_LOG("malloc dvpp memory size %d ok", size);
     // copy input to device memory
     aclRet = aclrtMemcpy(buffer, size, data, size, ACL_MEMCPY_DEVICE_TO_DEVICE);
     if (aclRet != ACL_ERROR_NONE) {
@@ -164,7 +159,7 @@ void* Utils::CopyDataDeviceToDvpp(void* data, int size) {
         acldvppFree(buffer);
         return nullptr;
     }
-    printf("copy data to dvpp ok");
+    INFO_LOG("copy data to dvpp ok");
 
     return buffer;
 }

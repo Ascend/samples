@@ -75,7 +75,6 @@ int main(int argc, char *argv[]) {
             ERROR_LOG("Inference model inference output data failed");
             return FAILED;
         }
-        cout << "------------------------" << endl;
         //解析推理输出,并将推理得到的物体类别和位置标记到图片上
         ret = detect.Postprocess(inferenceOutput, imageFile);
         if (ret != SUCCESS) {

@@ -146,7 +146,7 @@ Result SampleProcess::MainProcess(string input_path)
         }
 
         // post process.
-        ret = Utils::PostProcess(path, modelOutput);
+        ret = Utils::PostProcess(path, modelOutput, processModel.GetModelDesc());
         if (ret != SUCCESS) {
             ERROR_LOG("pull model output data failed");
             return FAILED;

@@ -29,6 +29,8 @@
 #define WARN_LOG(fmt, args...) fprintf(stdout, "[WARN]  " fmt "\n", ##args)
 #define ERROR_LOG(fmt, args...) fprintf(stdout, "[ERROR]  " fmt "\n", ##args)
 
+
+
 #define MODEL_INPUT_WIDTH	300
 #define MODEL_INPUT_HEIGHT	300
 #define RGB_IMAGE_SIZE_F32(width, height) ((width) * (height) * 3 * 4)
@@ -76,7 +78,7 @@ public:
     * @return device buffer of pic
     */
 
-    static Result PostProcess(const std::string &path, aclmdlDataset *modelOutput);
+    static Result PostProcess(const string &path, aclmdlDataset *modelOutput, aclmdlDesc* modelDesc);
 
     static bool IsDirectory(const std::string &path);
 

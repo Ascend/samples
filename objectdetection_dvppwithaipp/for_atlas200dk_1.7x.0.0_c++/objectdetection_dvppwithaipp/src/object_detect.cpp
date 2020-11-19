@@ -34,15 +34,16 @@ namespace {
         "pottedplant","sheep","sofa","train","tvmonitor"
     };
 
-enum BBoxIndex {LABEL=1,SCORE,TOPLEFTX,TOPLEFTY,BOTTOMRIGHTX,BOTTOMRIGHTY,BOXINFOSIZE=8};
+    enum BBoxIndex {LABEL=1,SCORE,TOPLEFTX,TOPLEFTY,BOTTOMRIGHTX,BOTTOMRIGHTY,BOXINFOSIZE=8};
+#define DATE_TYPE_SIZE 4
 
 }
 
-ObjectDetect::ObjectDetect(const char* modelPath, 
-                           uint32_t modelWidth, 
-                           uint32_t modelHeight)
+ObjectDetect::ObjectDetect(const char* modelPath,
+uint32_t modelWidth,
+uint32_t modelHeight)
 :deviceId_(0), context_(nullptr), stream_(nullptr), modelWidth_(modelWidth),
- modelHeight_(modelHeight), isInited_(false){
+modelHeight_(modelHeight), isInited_(false){
     modelPath_ = modelPath;
 }
 
@@ -163,7 +164,7 @@ Result ObjectDetect::Preprocess(ImageData& resizedImage, ImageData& srcImage) {
 }
 
 Result ObjectDetect::Inference(aclmdlDataset*& inferenceOutput,
-                               ImageData& resizedImage) {
+ImageData& resizedImage) {
     Result ret = model_.CreateInput(resizedImage.data.get(), resizedImage.size);
     if (ret != SUCCESS) {
         ERROR_LOG("Create mode input dataset failed");
@@ -201,11 +202,8 @@ Result ObjectDetect::Postprocess(aclmdlDataset* modelOutput, const string& path)
             ERROR_LOG("aclGetDataBufferAddr from dataBuffer failed.");
             return FAILED;
         }
-
-        aclDataType dataType = aclmdlGetOutputDataType(model_.GetmodelDesc(),i);
-        size_t dataTypeSize = aclDataTypeSize(dataType);
-        uint32_t dataSize = aclGetDataBufferSize(dataBuffer);
     }
+
 
     aclDataBuffer* dataBuffer = aclmdlGetDatasetBuffer(modelOutput, 0);
     if (dataBuffer == nullptr) {
@@ -217,22 +215,46 @@ Result ObjectDetect::Postprocess(aclmdlDataset* modelOutput, const string& path)
         ERROR_LOG("aclGetDataBufferAddr from dataBuffer failed.");
         return FAILED;
     }
-    float count;
+
+    void * ptr = nullptr;
+    aclDataType dataType = aclmdlGetOutputDataType(model_.GetmodelDesc(),0);
+    if (dataType == ACL_FLOAT){
+        ptr = new float(0);
+    }
+    else if(dataType == ACL_INT32 ) {
+        ptr = new uint32_t(0);
+    }
+    else {
+        return FAILED;
+    }
+
+    //    uint32_t BBOX_MAX;
     if (runMode_ == ACL_HOST) {
-        aclError ret = aclrtMemcpy(&count, sizeof(count), data, sizeof(count), ACL_MEMCPY_DEVICE_TO_HOST);
+        aclError ret = aclrtMemcpy(ptr, DATE_TYPE_SIZE, data, DATE_TYPE_SIZE, ACL_MEMCPY_DEVICE_TO_HOST);
         if (ret != ACL_ERROR_NONE) {
-            ERROR_LOG("box count aclrtMemcpy failed!");
+            ERROR_LOG("box num aclrtMemcpy failed!");
             return FAILED;
         }
     }
     else {
-        aclError ret = aclrtMemcpy(&count, sizeof(count), data, sizeof(count), ACL_MEMCPY_DEVICE_TO_DEVICE);
+        aclError ret = aclrtMemcpy(ptr, DATE_TYPE_SIZE, data, DATE_TYPE_SIZE, ACL_MEMCPY_DEVICE_TO_DEVICE);
         if (ret != ACL_ERROR_NONE) {
-            ERROR_LOG("box count aclrtMemcpy failed!");
+            ERROR_LOG("box num aclrtMemcpy failed!");
             return FAILED;
         }
     }
-    uint32_t BBOX_MAX = (uint32_t)count;
+    uint32_t boxNum;
+    if (dataType == ACL_FLOAT){
+        boxNum = *(float*)ptr;
+    }
+    else if(dataType == ACL_INT32 ) {
+        boxNum = *(uint32_t*)ptr;
+    }
+    else {
+        return FAILED;
+    }
+
+
 
     dataBuffer = aclmdlGetDatasetBuffer(modelOutput, 1);
     if (dataBuffer == nullptr) {
@@ -267,18 +289,22 @@ Result ObjectDetect::Postprocess(aclmdlDataset* modelOutput, const string& path)
     int font_face = 0;
     double font_scale = 1;
     int thickness = 2;
-    int baseline;
     cv::Mat resultImage = cv::imread(path, CV_LOAD_IMAGE_COLOR);
 
-    for(uint32_t b=0;b<BBOX_MAX;b++) {
+    for(uint32_t b=0;b<boxNum;b++) {
         uint32_t score=uint32_t(outInfo[SCORE+BOXINFOSIZE*b]*100);
         if(score<85) continue;
+
         //TODO:
-        cout << "+++++++++++++++++++" <<endl;
         rect.x=outInfo[TOPLEFTX+BOXINFOSIZE*b]*resultImage.cols;
         rect.y=outInfo[TOPLEFTY+BOXINFOSIZE*b]*resultImage.rows;
         rect.width=outInfo[BOTTOMRIGHTX+BOXINFOSIZE*b]*resultImage.cols-rect.x;
         rect.height=outInfo[BOTTOMRIGHTY+BOXINFOSIZE*b]*resultImage.rows-rect.y;
+
+        cout << "+++++++++++++++++++++++" << endl;
+        cout << "score = " << score << endl;
+        cout << rect.x << " " << rect.y << " " << rect.width << " " << rect.height << endl;
+
         uint32_t objIndex = (uint32_t)outInfo[LABEL+BOXINFOSIZE*b];
         string text = vggssdLabel[objIndex]+":"+std::to_string(score)+"\%";
         cv::Point origin;
@@ -300,31 +326,38 @@ Result ObjectDetect::Postprocess(aclmdlDataset* modelOutput, const string& path)
     string outputPath = sstream.str();
     cv::imwrite(outputPath, resultImage);
 
+    if (dataType == ACL_FLOAT){
+        delete (float*)ptr;
+    }
+    else if(dataType == ACL_INT32 ) {
+        delete (uint32_t*)ptr;
+    }
+
 
     return SUCCESS;
 }
 
 void* ObjectDetect::GetInferenceOutputItem(uint32_t& itemDataSize,
-                                           aclmdlDataset* inferenceOutput,
-                                           uint32_t idx) {
+aclmdlDataset* inferenceOutput,
+uint32_t idx) {
     aclDataBuffer* dataBuffer = aclmdlGetDatasetBuffer(inferenceOutput, idx);
     if (dataBuffer == nullptr) {
         ERROR_LOG("Get the %dth dataset buffer from model "
-                  "inference output failed", idx);
+        "inference output failed", idx);
         return nullptr;
     }
 
     void* dataBufferDev = aclGetDataBufferAddr(dataBuffer);
     if (dataBufferDev == nullptr) {
         ERROR_LOG("Get the %dth dataset buffer address "
-                  "from model inference output failed", idx);
+        "from model inference output failed", idx);
         return nullptr;
     }
 
     size_t bufferSize = aclGetDataBufferSize(dataBuffer);
     if (bufferSize == 0) {
         ERROR_LOG("The %dth dataset buffer size of "
-                  "model inference output is 0", idx);
+        "model inference output is 0", idx);
         return nullptr;
     }
 

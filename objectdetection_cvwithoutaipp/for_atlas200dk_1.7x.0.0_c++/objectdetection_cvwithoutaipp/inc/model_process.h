@@ -95,6 +95,8 @@ public:
     */
     aclmdlDataset *GetModelOutputData();
 
+    aclmdlDesc * GetModelDesc();
+
 private:
     bool loadFlag_;  // model load flag
     uint32_t modelId_;

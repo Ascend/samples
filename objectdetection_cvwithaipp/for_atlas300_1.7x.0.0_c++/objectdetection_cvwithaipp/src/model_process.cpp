@@ -224,4 +224,10 @@ aclmdlDataset *ModelProcess::GetModelOutputData()
     return output_;
 }
 
+aclmdlDesc *ModelProcess::GetModelDesc()
+{
+    return modelDesc_;
+}
+
+
 

@@ -28,6 +28,8 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include "acl/acl.h"
+#include "model_process.h"
+
 
 using namespace std;
 
@@ -35,6 +37,7 @@ namespace {
     const uint32_t kImageRChannelMean = 123;
     const uint32_t kImageGChannelMean = 117;
     const uint32_t kImageBChannelMean = 104;
+#define DATE_TYPE_SIZE 4
 }
 aclrtRunMode Utils::runMode_ = ACL_DEVICE;
 
@@ -46,55 +49,96 @@ const static std::vector<std::string> vggssdLabel = {
 
 enum BBoxIndex {LABEL=1,SCORE,TOPLEFTX,TOPLEFTY,BOTTOMRIGHTX,BOTTOMRIGHTY,BOXINFOSIZE=8};
 
-Result Utils::PostProcess(const string &path, aclmdlDataset *modelOutput)
+Result Utils::PostProcess(const string &path, aclmdlDataset *modelOutput, aclmdlDesc* modelDesc)
 {
     size_t outDatasetNum = aclmdlGetDatasetNumBuffers(modelOutput);
-	if (outDatasetNum != 2) {
-		ERROR_LOG("outDatasetNum=%zu must be 2",outDatasetNum);
-		return FAILED;
-	}
-	aclDataBuffer* dataBuffer = aclmdlGetDatasetBuffer(modelOutput, 0);
-	if (dataBuffer == nullptr) {
-		ERROR_LOG("get model output aclmdlGetDatasetBuffer failed");
-		return FAILED;
-	}
-	void* data = aclGetDataBufferAddr(dataBuffer);
-	if (data == nullptr) {
-		ERROR_LOG("aclGetDataBufferAddr from dataBuffer failed.");
-		return FAILED;
-	}
+    if (outDatasetNum != 2) {
+        ERROR_LOG("outDatasetNum=%zu must be 2",outDatasetNum);
+        return FAILED;
+    }
 
-	float count;
+    for (size_t i = 0; i < outDatasetNum; i++) {
+        aclDataBuffer* dataBuffer = aclmdlGetDatasetBuffer(modelOutput, i);
+        if (dataBuffer == nullptr) {
+            ERROR_LOG("get model output aclmdlGetDatasetBuffer failed");
+            return FAILED;
+        }
 
+        void* data = aclGetDataBufferAddr(dataBuffer);
+        if (data == nullptr) {
+            ERROR_LOG("aclGetDataBufferAddr from dataBuffer failed.");
+            return FAILED;
+        }
+    }
+
+
+    aclDataBuffer* dataBuffer = aclmdlGetDatasetBuffer(modelOutput, 0);
+    if (dataBuffer == nullptr) {
+        ERROR_LOG("get model output aclmdlGetDatasetBuffer failed");
+        return FAILED;
+    }
+    void* data = aclGetDataBufferAddr(dataBuffer);
+    if (data == nullptr) {
+        ERROR_LOG("aclGetDataBufferAddr from dataBuffer failed.");
+        return FAILED;
+    }
+
+    void * ptr = nullptr;
+    aclDataType dataType = aclmdlGetOutputDataType(modelDesc,0);
+
+    cout << "dataType = " << dataType << endl;
+
+    if (dataType == ACL_FLOAT){
+        ptr = new float(0);
+    }
+    else if(dataType == ACL_INT32 ) {
+        ptr = new uint32_t(0);
+    }
+    else {
+        return FAILED;
+    }
+
+    //    uint32_t BBOX_MAX;
     if (runMode_ == ACL_HOST) {
-        aclError ret = aclrtMemcpy(&count, sizeof(count), data, sizeof(count), ACL_MEMCPY_DEVICE_TO_HOST);
+        aclError ret = aclrtMemcpy(ptr, DATE_TYPE_SIZE, data, DATE_TYPE_SIZE, ACL_MEMCPY_DEVICE_TO_HOST);
         if (ret != ACL_ERROR_NONE) {
-            ERROR_LOG("box count aclrtMemcpy failed!");
+            ERROR_LOG("box num aclrtMemcpy failed!");
             return FAILED;
         }
     }
     else {
-        aclError ret = aclrtMemcpy(&count, sizeof(count), data, sizeof(count), ACL_MEMCPY_DEVICE_TO_DEVICE);
+        aclError ret = aclrtMemcpy(ptr, DATE_TYPE_SIZE, data, DATE_TYPE_SIZE, ACL_MEMCPY_DEVICE_TO_DEVICE);
         if (ret != ACL_ERROR_NONE) {
-            ERROR_LOG("box count aclrtMemcpy failed!");
+            ERROR_LOG("box num aclrtMemcpy failed!");
             return FAILED;
         }
     }
+    uint32_t boxNum;
+    if (dataType == ACL_FLOAT){
+        boxNum = *(float*)ptr;
+    }
+    else if(dataType == ACL_INT32 ) {
+        boxNum = *(uint32_t*)ptr;
+    }
+    else {
+        return FAILED;
+    }
 
-    uint32_t BBOX_MAX = (uint32_t)count;
+    cout << "boxNum = " << boxNum << endl;
 
-	dataBuffer = aclmdlGetDatasetBuffer(modelOutput, 1);
-	if (dataBuffer == nullptr) {
-		ERROR_LOG("get model output aclmdlGetDatasetBuffer failed");
-		return FAILED;
-	}
+    dataBuffer = aclmdlGetDatasetBuffer(modelOutput, 1);
+    if (dataBuffer == nullptr) {
+        ERROR_LOG("get model output aclmdlGetDatasetBuffer failed");
+        return FAILED;
+    }
     uint32_t dataBufferSize = aclGetDataBufferSize(dataBuffer);
-	data = aclGetDataBufferAddr(dataBuffer);
-	if (data == nullptr) {
-		ERROR_LOG("aclGetDataBufferAddr from dataBuffer failed.");
-		return FAILED;
-	}
-	float outInfo[dataBufferSize/sizeof(float)];
+    data = aclGetDataBufferAddr(dataBuffer);
+    if (data == nullptr) {
+        ERROR_LOG("aclGetDataBufferAddr from dataBuffer failed.");
+        return FAILED;
+    }
+
+    float outInfo[dataBufferSize/sizeof(float)];
 
     if (runMode_ == ACL_HOST) {
         aclError ret = aclrtMemcpy(outInfo, sizeof(outInfo), data, sizeof(outInfo), ACL_MEMCPY_DEVICE_TO_HOST);
@@ -111,40 +155,53 @@ Result Utils::PostProcess(const string &path, aclmdlDataset *modelOutput)
         }
     }
 
-	cv::Rect rect;
-	int font_face = 0; 
-	double font_scale = 1;
-	int thickness = 2;
-	int baseline;
-	cv::Mat resultImage = cv::imread(path, CV_LOAD_IMAGE_COLOR);
+    cv::Rect rect;
+    int font_face = 0;
+    double font_scale = 1;
+    int thickness = 2;
+    cv::Mat resultImage = cv::imread(path, CV_LOAD_IMAGE_COLOR);
 
-	for(uint32_t b=0;b<BBOX_MAX;b++) {
-		uint32_t score=uint32_t(outInfo[SCORE+BOXINFOSIZE*b]*100);
-		if(score<85) continue;
+    for(uint32_t b=0;b<boxNum;b++) {
+        uint32_t score=uint32_t(outInfo[SCORE+BOXINFOSIZE*b]*100);
+        if(score<99) continue;
+
         //TODO:
-		rect.x=outInfo[TOPLEFTX+BOXINFOSIZE*b]*resultImage.cols;
-		rect.y=outInfo[TOPLEFTY+BOXINFOSIZE*b]*resultImage.rows;
-		rect.width=outInfo[BOTTOMRIGHTX+BOXINFOSIZE*b]*resultImage.cols-rect.x;
-		rect.height=outInfo[BOTTOMRIGHTY+BOXINFOSIZE*b]*resultImage.rows-rect.y;
-		uint32_t objIndex = (uint32_t)outInfo[LABEL+BOXINFOSIZE*b];
-		string text = vggssdLabel[objIndex]+":"+std::to_string(score)+"\%";
-      	cv::Point origin; 
-      	origin.x = rect.x;
-      	origin.y = rect.y;
-      	cv::putText(resultImage, text, origin, font_face, font_scale, cv::Scalar(0, 255, 255), thickness, 4, 0);
-		cv::rectangle(resultImage, rect, cv::Scalar(0, 255, 255),1, 8,0);
+        rect.x=outInfo[TOPLEFTX+BOXINFOSIZE*b]*resultImage.cols;
+        rect.y=outInfo[TOPLEFTY+BOXINFOSIZE*b]*resultImage.rows;
+        rect.width=outInfo[BOTTOMRIGHTX+BOXINFOSIZE*b]*resultImage.cols-rect.x;
+        rect.height=outInfo[BOTTOMRIGHTY+BOXINFOSIZE*b]*resultImage.rows-rect.y;
+
+        cout << "+++++++++++++++++++++++" << endl;
+        cout << "score = " << score << endl;
+        cout << rect.x << " " << rect.y << " " << rect.width << " " << rect.height << endl;
+
+        uint32_t objIndex = (uint32_t)outInfo[LABEL+BOXINFOSIZE*b];
+        string text = vggssdLabel[objIndex]+":"+std::to_string(score)+"\%";
+        cv::Point origin;
+        origin.x = rect.x;
+        origin.y = rect.y;
+        cv::putText(resultImage, text, origin, font_face, font_scale, cv::Scalar(0, 255, 255), thickness, 4, 0);
+        cv::rectangle(resultImage, rect, cv::Scalar(0, 255, 255),1, 8,0);
     }
 
-	// generate result image
+    // generate result image
     int pos = path.find_last_of(kFileSperator);
     string file_name(path.substr(pos + 1));
     stringstream sstream;
     sstream.str("");
     sstream << "./output" << kFileSperator
-      << kOutputFilePrefix << file_name;
+    << kOutputFilePrefix << file_name;
+
 
     string outputPath = sstream.str();
-	cv::imwrite(outputPath, resultImage);
+    cv::imwrite(outputPath, resultImage);
+
+    if (dataType == ACL_FLOAT){
+        delete (float*)ptr;
+    }
+    else if(dataType == ACL_INT32 ) {
+        delete (uint32_t*)ptr;
+    }
 
     return SUCCESS;
 }

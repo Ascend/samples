@@ -44,6 +44,7 @@ using namespace std;
 #define SHARED_PRT_U8_BUF(buf) (shared_ptr<uint8_t>((uint8_t *)(buf), [](uint8_t* p) { delete[](p); }))
 
 
+
 template<class Type>
 std::shared_ptr<Type> MakeSharedNoThrow() {
     try {
