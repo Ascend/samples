@@ -36,7 +36,6 @@
     参考[表1](#zh-cn_topic_0203223340_table97791025517)获取此应用中所用到的网络模型及其对应的权重文件，并将其存放到Mind Studio所在Ubuntu服务器的任意目录，这两个文件必须存放到同一个目录下。例如：$HOME/models/。
 
     **表 1**  Facial Recognition中使用模型
-
     <a name="zh-cn_topic_0203223340_table97791025517"></a>
     <table><thead align="left"><tr id="zh-cn_topic_0203223340_row48791253115"><th class="cellrowborder" valign="top" width="13.309999999999999%" id="mcps1.2.4.1.1"><p id="zh-cn_topic_0203223340_p187902511114"><a name="zh-cn_topic_0203223340_p187902511114"></a><a name="zh-cn_topic_0203223340_p187902511114"></a>模型名称</p>
     </th>
