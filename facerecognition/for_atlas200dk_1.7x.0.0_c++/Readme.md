@@ -52,7 +52,6 @@
     <p id="zh-cn_topic_0203223340_p1087912253112"><a name="zh-cn_topic_0203223340_p1087912253112"></a><a name="zh-cn_topic_0203223340_p1087912253112"></a>是基于Caffe的Resnet10-SSD300模型转换后的网络模型。</p>
     </td>
     <td class="cellrowborder" valign="top" width="74.65%" headers="mcps1.2.4.1.3 "><p id="zh-cn_topic_0203223340_p188801525813"><a name="zh-cn_topic_0203223340_p188801525813"></a><a name="zh-cn_topic_0203223340_p188801525813"></a><a name="zh-cn_topic_0219108795_li2074865610364"></a>获取此应用中所需要的原始网络模型。    
- 
      -  下载原始网络模型及权重文件至ubuntu服务器任意目录，如:$HOME/models。
 
         **mkdir -p $HOME/models** 
