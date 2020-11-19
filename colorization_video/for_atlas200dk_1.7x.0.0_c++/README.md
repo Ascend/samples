@@ -92,15 +92,11 @@
     ![](figures/打开colorization_video工程.png "打开colorization-video工程")
 
 2.  修改Presenter Server的ip。  
-    -  将**script/presentserver/display/config/config.conf**中的**presenter_server_ip**修改为Mind Studio所在Ubuntu服务器的虚拟网卡的ip地址，如[图 presenter_server_ip](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig1110624110)所示。
+    -  将**script/colorization.conf**中的**presenter_server_ip、presenter_view_ip**修改为Mind Studio所在Ubuntu服务器的虚拟网卡的ip地址，如[图 presenter_server_ip](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig1110624110)所示。
 
        **图 2**  修改presenter_server_ip<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig1110624110"></a>  
-       ![](figures/presenter_server_ip.png "修改presenter_server_ip")      
-    -  将**src/colorize_process.cpp**中的 **param.host_ip** 修改为Mind Studio所在Ubuntu服务器的虚拟网卡的ip地址，如[图 param_host_ip](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11)所示。
-
-       **图 3**  修改param_host_ip<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11"></a>  
-       ![](figures/param_host_ip.png "修改param_host_ip")    
-
+       ![输入图片说明](https://images.gitee.com/uploads/images/2020/1119/104748_44aa9ddb_7985487.png "屏幕截图.png")      
+    
     >![](public_sys-resources/icon-note.gif) **说明：**    
     >-  虚拟网卡的ip地址请通过ifconfig命令查看。    
 3.  开始编译，打开Mind Studio工具，在工具栏中点击**Build \> Edit Build Configuration**。  
@@ -112,7 +108,7 @@
     之后点击**Build \> Build \> Build Configuration**，如[图 编译操作及生成文件](#zh-cn_topic_0203223265_fig1741464713019)所示，会在目录下生成build和out文件夹。
 
     **图 5**  编译操作及生成文件<a name="zh-cn_topic_0203223265_fig1741464713019"></a>  
-    ![](figures/编译操作及生成文件.png "编译操作及生成文件")
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/1119/104832_bf0256fa_7985487.png "屏幕截图.png")
 
     >![](public_sys-resources/icon-notice.gif) **须知：**   
     >首次编译工程时，**Build \> Build**为灰色不可点击状态。需要点击**Build \> Edit Build Configuration**，配置编译参数后再进行编译。  
@@ -121,15 +117,15 @@
 
     打开Mind Studio工具的Terminal，在应用代码存放路径下，执行如下命令在后台启动colorization-video应用的Presenter Server主程序。如[图 启动PresenterServer](#zh-cn_topic_0228461904_zh-cn_topic_0203223294_fig423515251067)所示。
 
-    **python3 script/presenterserver/presenter_server.py --app=display &**
+    **bash script/run_presenter_server.sh**
 
     **图 6**  启动PresenterServer<a name="zh-cn_topic_0228461904_zh-cn_topic_0203223294_fig423515251067"></a>  
-    ![](figures/presentserver1.png)
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/1119/105122_2ba15e9a_7985487.png "屏幕截图.png")
    
   
     如[图 启动PresenterServer](#zh-cn_topic_0228461904_zh-cn_topic_0203223294_fig423)所示，表示presenter_server的服务启动成功。  
     **图 7**  启动PresenterServer<a name="zh-cn_topic_0228461904_zh-cn_topic_0203223294_fig423"></a>    
-    ![](figures/presentserver2.png)
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/1119/105132_2cc897b2_7985487.png "屏幕截图.png")
 
 ## 运行<a name="zh-cn_topic_0219108795_section1620073406"></a>
 1.  在Mind Studio工具的工具栏中找到Run按钮，单击  **Run \> Edit Configurations**。  
