@@ -70,7 +70,23 @@
     </td>
     </tr>
     </tbody>
-    </table>
+    </table>          
+
+
+3. <a name="zh-cn_topic_0219108795_li2074865610364"></a>获取此应用中所需要的facedetection网络模型。 
+ 
+     -  facedetection网络模型及权重文件按如下方式下载。
+
+        **mkdir -p $HOME/models** 
+
+        **wget -P $HOME/models https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/face_detection/face_detection.caffemodel** 
+ 
+        **wget -P $HOME/models https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/face_detection/face_detection.prototxt**
+    
+        >![](public_sys-resources/icon-note.gif) **说明：**   
+        >- facedetection原始模型网络： https://github.com/opencv/opencv/blob/master/samples/dnn/face_detector/deploy.prototxt。
+        >- facedetection原始网络LICENSE地址： https://github.com/opencv/opencv/blob/master/LICENSE
+        >- C7x对prototxt文件有修改要求，按照[SSD网络模型prototxt修改](https://support.huaweicloud.com/usermanual-mindstudioc73/atlasmindstudio_02_0114.html)文档对prototxt文件进行修改。这里已经修改完成，直接执行以上命令下载即可。
 
 4.  将原始网络模型转换为适配昇腾AI处理器的模型。
     -   通过Mind Studio工具进行模型转换。
