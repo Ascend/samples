@@ -99,17 +99,17 @@
         -   Model Image Format选择BGR。   
         -   打开Crop。
 
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/1118/171602_36831f2a_7985487.png "屏幕截图.png")  
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/1118/171615_bc2b1b4e_7985487.png "屏幕截图.png")  
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/1118/171623_83b2a679_7985487.png "屏幕截图.png")   
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/1120/203114_239ed3c2_7985487.png "屏幕截图.png")  
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/1120/203126_c08119ac_7985487.png "屏幕截图.png")  
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/1120/203139_595983cf_7985487.png "屏幕截图.png")   
     4.  vanillacnn参照以下图片进行参数配置。    
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/1118/173302_cee66fa8_7985487.png "屏幕截图.png")   
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/1118/173408_48009a23_7985487.png "屏幕截图.png")   
-![输入图片说明](https://images.gitee.com/uploads/images/2020/1118/173421_4cf77d0e_7985487.png "屏幕截图.png")     
+![输入图片说明](https://images.gitee.com/uploads/images/2020/1120/205902_5cbf2f3b_7985487.png "屏幕截图.png")     
     5.  sphereface参照以下图片进行参数配置。    
-![输入图片说明](https://images.gitee.com/uploads/images/2020/1118/173515_2b30575a_7985487.png "屏幕截图.png")      
-![输入图片说明](https://images.gitee.com/uploads/images/2020/1118/173533_55b33149_7985487.png "屏幕截图.png")   
-![输入图片说明](https://images.gitee.com/uploads/images/2020/1118/173546_4ef0816f_7985487.png "屏幕截图.png")       
+![输入图片说明](https://images.gitee.com/uploads/images/2020/1120/205918_11d242bb_7985487.png "屏幕截图.png")      
+![输入图片说明](https://images.gitee.com/uploads/images/2020/1120/205931_f80c10a2_7985487.png "屏幕截图.png")   
+![输入图片说明](https://images.gitee.com/uploads/images/2020/1120/205944_0cd5a166_7985487.png "屏幕截图.png")       
  
 5.将转换好的模型文件（.om文件）上传到步骤1中源码所在路径的“facerecognition/model”目录下。     
 **cp \\$HOME/modelzoo/face_detection/device/face_detection.om \\$HOME/AscendProjects/facerecognition/model/**     
