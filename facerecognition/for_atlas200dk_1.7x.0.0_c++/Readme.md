@@ -136,7 +136,7 @@
 
     启动成功后，打开**facerecognition**工程，如[图7](#zh-cn_topic_0203223340_fig28591855104218)所示。
 
-    **图 7**  打开sample-facialrecognition工程<a name="zh-cn_topic_0203223340_fig28591855104218"></a>  
+    **图 7**  打开 **facerecognition** 工程<a name="zh-cn_topic_0203223340_fig28591855104218"></a>  
     ![输入图片说明](https://images.gitee.com/uploads/images/2020/1118/181636_2ef0a430_7985487.png "屏幕截图.png")     
 
 2.  在data/param.conf 修改presenter_server_ip     
