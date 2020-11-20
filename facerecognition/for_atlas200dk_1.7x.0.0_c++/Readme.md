@@ -90,7 +90,7 @@
 
 4.  将原始网络模型转换为适配昇腾AI处理器的模型。
     -   通过Mind Studio工具进行模型转换。
-    1.  在Mind Studio操作界面的顶部菜单栏中选择**Tools \> Model Convert**，进入模型转换界面。
+    1.  在Mind Studio操作界面的顶部菜单栏中选择**Ascend \> Model Convert**，进入模型转换界面。
     2.  在弹出的**Model Conversion**操作界面中，进行模型转换配置。
     3.  face_detection参照以下图片进行参数配置。    
         -   Model File选择[步骤2](#zh-cn_topic_0219108795_li2074865610364)中下载的模型文件，此时会自动匹配到权重文件并填写在Weight File中。  
