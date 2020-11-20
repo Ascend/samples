@@ -93,15 +93,11 @@
     ![](figures/打开colorization_video工程.png "打开colorization-video工程")
 
 2.  修改Presenter Server的ip。  
-    -  将**script/colorization.conf**中的**presenter_server_ip** 修改为ai1环境的上网端口（一般为eth0）的ip地址，如下图所示，如[图 presenter_server_ip](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig1110624110)所示。
+    -  将**script/colorization.conf**中的**presenter_server_ip、presenter_view_ip**修改为Mind Studio所在Ubuntu服务器的虚拟网卡的ip地址，如[图 presenter_server_ip](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig1110624110)所示。
 
-      **图 2**  修改presenter_server_ip<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig1110624110"></a>  
-      ![](figures/presenter_server_ip.png "修改presenter_server_ip")        
-      ![](figures/ifconfig.png "ifconfig")
-    -  将 **src/colorize_process.cpp** 中的  **param.host_ip**  修改为ai1环境的上网端口（一般为eth0）的ip地址，和上面步骤的ip一致，如[图 param_host_ip](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11)所示。
-
-      **图 3**  修改param_host_ip<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11"></a>  
-      ![](figures/param_host_ip.png "修改param_host_ip")    
+       **图 2**  修改presenter_server_ip<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig1110624110"></a>  
+       ![输入图片说明](https://images.gitee.com/uploads/images/2020/1120/101330_cebc2b42_7985487.png "屏幕截图.png")      
+    
 
     >![](public_sys-resources/icon-note.gif) **说明：**    
     >-  ai1环境的上网端口（一般为eth0）的ip地址，请通过ifconfig命令查看。    
@@ -128,7 +124,7 @@
 
     打开Mind Studio工具的Terminal，在应用代码存放路径下，执行如下命令在后台启动colorization-video应用的Presenter Server主程序。如[图 启动PresenterServer](#zh-cn_topic_0228461904_zh-cn_topic_0203223294_fig423515251067)所示。
 
-    ** bash script/run_presenter_server.sh**
+    **bash script/run_presenter_server.sh**
 
     **图 6**  启动PresenterServer<a name="zh-cn_topic_0228461904_zh-cn_topic_0203223294_fig423515251067"></a>  
     ![输入图片说明](https://images.gitee.com/uploads/images/2020/1119/105729_315dde2c_7985487.png "屏幕截图.png")
