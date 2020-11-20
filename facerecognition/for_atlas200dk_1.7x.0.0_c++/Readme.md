@@ -103,8 +103,8 @@
     ![输入图片说明](https://images.gitee.com/uploads/images/2020/1120/203126_c08119ac_7985487.png "屏幕截图.png")  
     ![输入图片说明](https://images.gitee.com/uploads/images/2020/1120/203139_595983cf_7985487.png "屏幕截图.png")   
     4.  vanillacnn参照以下图片进行参数配置。    
-![输入图片说明](https://images.gitee.com/uploads/images/2020/1118/173302_cee66fa8_7985487.png "屏幕截图.png")   
-![输入图片说明](https://images.gitee.com/uploads/images/2020/1118/173408_48009a23_7985487.png "屏幕截图.png")   
+![输入图片说明](https://images.gitee.com/uploads/images/2020/1120/210107_337163da_7985487.png "屏幕截图.png")   
+![输入图片说明](https://images.gitee.com/uploads/images/2020/1120/210120_28d2dc5d_7985487.png "屏幕截图.png")   
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/1120/205902_5cbf2f3b_7985487.png "屏幕截图.png")     
     5.  sphereface参照以下图片进行参数配置。    
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/1120/205918_11d242bb_7985487.png "屏幕截图.png")      
