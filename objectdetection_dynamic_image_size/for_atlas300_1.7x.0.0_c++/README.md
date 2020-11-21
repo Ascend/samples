@@ -109,4 +109,4 @@
 
     推理结果图片保存在工程下的“output \> outputs”目录下以时间戳命名的文件夹内。  
 
-![输入图片说明](https://images.gitee.com/uploads/images/2020/0927/154346_4f4a0e89_7985487.png "屏幕截图.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2020/1121/091757_6886034d_7985487.png "屏幕截图.png")
