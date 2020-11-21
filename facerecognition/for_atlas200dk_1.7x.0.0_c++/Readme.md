@@ -108,7 +108,7 @@
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/1120/205902_5cbf2f3b_7985487.png "屏幕截图.png")     
     5.  sphereface参照以下图片进行参数配置。    
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/1120/205918_11d242bb_7985487.png "屏幕截图.png")      
-![输入图片说明](https://images.gitee.com/uploads/images/2020/1120/205931_f80c10a2_7985487.png "屏幕截图.png")   
+![输入图片说明](https://images.gitee.com/uploads/images/2020/1121/202638_aaaa47e0_7985487.png "屏幕截图.png")   
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/1120/205944_0cd5a166_7985487.png "屏幕截图.png")       
  
 5.将转换好的模型文件（.om文件）上传到步骤1中源码所在路径的“facerecognition/model”目录下。     
