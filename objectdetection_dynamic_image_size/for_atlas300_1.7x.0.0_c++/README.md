@@ -38,7 +38,7 @@
     
         >![](public_sys-resources/icon-note.gif) **说明：**   
         >- objectdetection_dynamic_image_size原始模型网络： https://github.com/rbgirshick/py-faster-rcnn/blob/781a917b378dbfdedb45b6a56189a31982da1b43/models/pascal_voc/VGG16/faster_rcnn_end2end/test.prototxt。
-        >- objectdetection_dynamic_image_size原始网络LICENSE地址： https://github.com/opencv/opencv/blob/master/LICENSE
+        >- objectdetection_dynamic_image_size原始网络LICENSE地址： https://gitee.com/HuaweiAscend/models/blob/master/computer_vision/object_detect/faster_rcnn/LICENSE
         >- C7x对prototxt文件有修改要求，按照[SSD网络模型prototxt修改](https://support.huaweicloud.com/usermanual-mindstudioc73/atlasmindstudio_02_0114.html)文档对prototxt文件进行修改。这里已经修改完成，直接执行以上命令下载即可。
 
 3.  将原始网络模型转换为适配昇腾AI处理器的模型。  
@@ -109,4 +109,5 @@
 
     推理结果图片保存在工程下的“output \> outputs”目录下以时间戳命名的文件夹内。  
 
-![输入图片说明](https://images.gitee.com/uploads/images/2020/1121/091757_6886034d_7985487.png "屏幕截图.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2020/1121/091757_6886034d_7985487.png "屏幕截图.png")    
+![输入图片说明](https://images.gitee.com/uploads/images/2020/1121/194720_fc5ed160_7985487.png "屏幕截图.png")
