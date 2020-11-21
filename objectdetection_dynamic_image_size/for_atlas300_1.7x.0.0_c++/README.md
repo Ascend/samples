@@ -43,26 +43,20 @@
 
 3.  将原始网络模型转换为适配昇腾AI处理器的模型。  
 
-4.  设置环境变量
+     1.  设置环境变量
         命令行中输入以下命令设置环境变量。    
-    **cd $HOME/objectdetection_dynamic_image_size/**
-        
-    **export install_path=\$HOME/Ascend/ascend-toolkit/latest/x86_64-linux_gcc7.3.0**  
-    
-    **export PATH=/usr/local/python3.7.5/bin:\\${install_path}/atc/ccec_compiler/bin:\\${install_path}/atc/bin:\\$PATH**  
-    
-    **export PYTHONPATH=\\${install_path}/atc/python/site-packages/te:\\${install_path}/atc/python/site-packages/topi:\\$PYTHONPATH**  
-    
-    **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64:\\$LD_LIBRARY_PATH**  
-    
-     **export ASCEND_OPP_PATH=\\${install_path}/opp**  
+        **cd $HOME/objectdetection_dynamic_image_size/**
+        **export install_path=\$HOME/Ascend/ascend-toolkit/latest/x86_64-linux_gcc7.3.0**  
+        **export PATH=/usr/local/python3.7.5/bin:\\${install_path}/atc/ccec_compiler/bin:\\${install_path}/atc/bin:\\$PATH**   
+        **export PYTHONPATH=\\${install_path}/atc/python/site-packages/te:\\${install_path}/atc/python/site-packages/topi:\\$PYTHONPATH**    
+        **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64:\\$LD_LIBRARY_PATH**  
+         **export ASCEND_OPP_PATH=\\${install_path}/opp**  
 
-5.  转换模型。  
-
-    **atc --model=faster_rcnn.prototxt --weight=faster_rcnn.caffemodel --framework=0 --output=faster_rcnn --soc_version=Ascend310  --input_shape="data:1,3,-1,-1;im_info:1,3" --dynamic_image_size="512,512;600,600;800,800" **
+      2.  转换模型。  
+         **atc --model=faster_rcnn.prototxt --weight=faster_rcnn.caffemodel --framework=0 --output=faster_rcnn --soc_version=Ascend310  --input_shape="data:1,3,-1,-1;im_info:1,3" --dynamic_image_size="512,512;600,600;800,800"** 
 
     
-6.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0219108795_li953280133816)中源码所在路径下的“**objectdetection_dynamic_image_size
+4.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0219108795_li953280133816)中源码所在路径下的“**objectdetection_dynamic_image_size
 /model**”目录下。
     
      **cp \\$HOME/objectdetection_dynamic_image_size/faster_rcnn.om $HOME/AscendProjects/objectdetection_dynamic_image_size/model** 
