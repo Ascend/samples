@@ -138,8 +138,8 @@ sample仓使用Apache License 2.0，如项目中未引用其他开源项目则�
 
 <details open><summary>objectdetection：基于yolov3的目标检测应用，输入为图片，输出为图片。</summary><blockquote>
 
-- [for_atlas200dk_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/objectdetection/for_atlas200dk_1.7x.0.0_c++)：该分支是运行在200DK上基于1.7x.0.0版本的C++样例。使用opencv对图像进行预处理，对预处理后的图像中的物体进行目标检测，最后通过opencv进行相应后处理。  
-- [for_atlas300_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/objectdetection/for_atlas300_1.7x.0.0_c++)：该分支是运行在ai1环境上基于1.7x.0.0版本的C++样例。使用opencv对图像进行预处理，对预处理后的图像中的物体进行目标检测，最后通过opencv进行相应后处理。  
+- [for_atlas200dk_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/objectdetection/for_atlas200dk_1.7x.0.0_c++)：该分支是运行在200DK上基于1.7x.0.0版本的C++样例。使用dvpp对图像进行预处理，对预处理后的图像中的物体进行目标检测，最后通过opencv进行相应后处理。  
+- [for_atlas300_1.7x.0.0_c++](https://gitee.com/ascend/samples/tree/master/objectdetection/for_atlas300_1.7x.0.0_c++)：该分支是运行在ai1环境上基于1.7x.0.0版本的C++样例。使用dvpp对图像进行预处理，对预处理后的图像中的物体进行目标检测，最后通过opencv进行相应后处理。  
 </blockquote></details>
 
 <details open><summary> objectdetection_dynamic_aipp：基于yolov3的目标检测应用，输入为图片，输出为图片。</summary><blockquote>
