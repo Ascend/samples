@@ -139,33 +139,9 @@
     **图 7**  打开 **facerecognition** 工程<a name="zh-cn_topic_0203223340_fig28591855104218"></a>  
     ![输入图片说明](https://images.gitee.com/uploads/images/2020/1118/181636_2ef0a430_7985487.png "屏幕截图.png")     
 
-2.  在data/param.conf 修改presenter_server_ip     
-![输入图片说明](https://images.gitee.com/uploads/images/2020/1120/201644_9456e521_7985487.png "屏幕截图.png")
-2.  在**src/param\_configure.conf**文件中配置相关工程信息。
+2.  在script/param.conf 修改presenter_server_ip、presenter_view_ip为Mind Studio所在Ubuntu服务器的虚拟网卡的ip地址     
+![输入图片说明](https://images.gitee.com/uploads/images/2020/1123/162751_72b71499_7985487.png "屏幕截图.png")
 
-    如[图8](#zh-cn_topic_0203223340_fig1338571124515)所示。
-
-    **图 8**  配置文件路径<a name="zh-cn_topic_0203223340_fig1338571124515"></a>  
-    
-
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/1118/181456_f6ae1375_7985487.png "屏幕截图.png")
-
-    该配置文件默认配置内容如下：
-
-    ```
-    remote_host=192.168.1.2
-    data_source=Channel-1
-    presenter_view_app_name=video
-    ```
-
-    -   remote\_host：配置为Atlas 200 DK开发者板的IP地址。
-    -   data\_source: 配置为摄像头所属Channel，取值为Channel-1或者Channel-2，查询摄像头所属Channel的方法请参考[Atlas 200 DK用户手册](https://ascend.huawei.com/doc/Atlas200DK/)中的“如何查看摄像头所属Channel”。
-    -   presenter\_view\_app\_name: 用户自定义的在PresenterServer界面展示的View Name，此View Name需要在Presenter Server展示界面唯一，只能为大小写字母、数字、“\_”的组合，位数3\~20。
-
-    >![](public_sys-resources/icon-note.gif) **说明：**   
-    >-   三个参数必须全部填写，否则无法通过build。  
-    >-   注意参数填写时不需要使用“”符号。  
-    >-   当前已经按照配置示例配置默认值，请按照配置情况自行修改。  
 
 
 
@@ -182,14 +158,14 @@
 
     打开Mind Studio工具的Terminal，在应用代码存放路径下，执行如下命令在后台启动facerecognition应用的Presenter Server主程序。如[图11](#zh-cn_topic_0203223340_fig156364995016)所示。
 
-    **bash run_present_server.sh**
+    **bash script/run_presenter_server.sh**
 
     **图 11**  启动PresenterServer<a name="zh-cn_topic_0203223340_fig156364995016"></a>  
     
 
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/1118/182759_a03af4da_7985487.png "屏幕截图.png")
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/1123/163126_b38c109b_7985487.png "屏幕截图.png")
 
-    -   当提示“Please choose one to show the presenter in browser\(default: 127.0.0.1\):“时，请输入在浏览器中访问Presenter Server服务所使用的IP地址（一般为访问Mind Studio的IP地址）。
+    
     -   当提示“Please input a absolute path to storage facerecognition data:“时，请输入Mind Studio中存储人脸注册数据及解析数据，此路径Mind Studio用户需要有读写权限，如果此路径不存在，脚本会自动创建。
 
     如[图12](#zh-cn_topic_0203223340_fig157571218181018)所示，请在“Current environment valid ip list“中选择通过浏览器访问Presenter Server服务使用的IP地址，并输入存储人脸识别解析数据的路径。
@@ -197,14 +173,14 @@
     **图 12**  工程部署示意图<a name="zh-cn_topic_0203223340_fig157571218181018"></a>  
     
 
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/1118/182959_fb072204_7985487.png "屏幕截图.png")
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/1123/163331_bda0b5cc_7985487.png "屏幕截图.png")
 
     如[图13](#zh-cn_topic_0203223340_fig123741843161320)所示，表示presenter\_server的服务启动成功。
 
     **图 13**  Presenter Server进程启动<a name="zh-cn_topic_0203223340_fig123741843161320"></a>  
     
 
-    ![输入图片说明](https://images.gitee.com/uploads/images/2020/1118/183033_164846ff_7985487.png "屏幕截图.png")
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/1123/163724_1a9e2fd8_7985487.png "屏幕截图.png")
 
     使用上图提示的URL登录Presenter Server，IP地址为[图12](#zh-cn_topic_0203223340_fig157571218181018)中输入的IP地址，端口号默为7009，如下图所示，表示Presenter Server启动成功。
 
