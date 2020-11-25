@@ -54,18 +54,20 @@
     **scp -r ~/samples/contrib/cartoonGAN_picture  HwHiAiUser@X.X.X.X:/home/HwHiAiUser/HIAI_PROJECTS**  
  
     ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
-    > - X.X.X.X请替换为运行环境的ip，如USB方式连接的200DK为192.168.1.2，ai1s云端推理环境为公网ip地址。
+    > -  **X.X.X.X请替换为运行环境的ip，如USB方式连接的200DK为192.168.1.2，ai1s云端推理环境为公网ip地址。** 
 
-6. 将acl.so拷贝到开发板。
+6. 将acl.so拷贝到运行环境。
 
-   **scp ${HOME}/Ascend/ascend-toolkit/X.X.X/arm64-linux_gcc7.3.0/pyACL/python/site-packages/acl/acl.so HwHiAiUser@192.168.1.2:/home/HwHiAiUser/Ascend/**  
-   >![](public_sys-resources/icon-note.gif) **说明：**   
+   **scp ${HOME}/Ascend/ascend-toolkit/X.X.X/X_64-linux_gcc7.3.0/pyACL/python/site-packages/acl/acl.so HwHiAiUser@X.X.X.X:/home/HwHiAiUser/Ascend/**  
+    ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**     
    >- **请将X.X.X替换为Ascend-Toolkit开发套件包的实际版本号。**   
       **例如：Toolkit包的包名为Ascend-Toolkit-20.0.RC1-x86_64-linux_gcc7.3.0.run，则此Toolkit的版本号为20.0.RC1。**
+   > -  **如为200DK，请将X_64-linux_gcc7.3.0替换为arm64-linux_gcc7.3.0,如为ai1s云端推理环境，请将X_64-linux_gcc7.3.0替换为X86_64-linux_gcc7.3.0** 
+   > -  **X.X.X.X请替换为运行环境的ip，如USB方式连接的200DK为192.168.1.2，ai1s云端推理环境为公网ip地址。** 
 
-7. 登录开发板，添加环境变量。  
+7. 登录开发环境，添加环境变量。  
 
-   **ssh HwHiAiUser@192.168.1.2**  
+   **ssh HwHiAiUser@X.X.X.X**  
    **vim \${HOME}/.bashrc**   
    在最后添加两行    
    **export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/acllib/lib64**   
@@ -77,7 +79,8 @@
 8. 安装环境依赖。
 
    - 安装python opencv  
-       请参考 https://gitee.com/ascend/samples/tree/master/common/install_opencv/for_atlas200dk 进行安装。 
+       Atlas200DK 请参考 https://gitee.com/ascend/samples/tree/master/common/install_opencv/for_atlas200dk 进行安装。 
+       Atlas300 请参考https://gitee.com/ascend/samples/tree/master/common/install_opencv/for_atlas300 进行安装。
 ### 样例运行
 
    以HwHiAiUser用户登录运行环境，进入工程目录下，执行如下命令运行程序。  
