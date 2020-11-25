@@ -79,7 +79,8 @@
 8. 安装环境依赖。
 
    - 安装python opencv  
-       Atlas200DK 请参考 https://gitee.com/ascend/samples/tree/master/common/install_opencv/for_atlas200dk 进行安装。 
+       Atlas200DK 请参考 https://gitee.com/ascend/samples/tree/master/common/install_opencv/for_atlas200dk 进行安装。   
+
        Atlas300 请参考https://gitee.com/ascend/samples/tree/master/common/install_opencv/for_atlas300 进行安装。
 ### 样例运行
 
