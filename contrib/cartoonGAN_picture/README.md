@@ -65,7 +65,7 @@
    > -  **如为200DK，请将X_64-linux_gcc7.3.0替换为arm64-linux_gcc7.3.0,如为ai1s云端推理环境，请将X_64-linux_gcc7.3.0替换为X86_64-linux_gcc7.3.0** 
    > -  **X.X.X.X请替换为运行环境的ip，如USB方式连接的200DK为192.168.1.2，ai1s云端推理环境为公网ip地址。** 
 
-7. 登录开发环境，添加环境变量。  
+7. 登录运行环境，添加环境变量。  
 
    **ssh HwHiAiUser@X.X.X.X**  
    **vim \${HOME}/.bashrc**   
