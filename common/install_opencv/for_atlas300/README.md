@@ -1,13 +1,14 @@
 # 安装ffmpeg+opencv<a name="ZH-CN_TOPIC_0228768065"></a>
-**注1：本指导是合设操作指导。开发环境与运行环境均为云端申请的插有300加速卡的环境。**  
-**注2：运行环境可以存在多种架构（如arm架构下的Centos系统、arm架构下的Euleros系统、x86架构下的Ubuntu系统等），本指导中只以ai1环境（x86架构下的Ubuntu系统）为例说明**  
-**注3：在合设环境中python3有python3.6和python3.7.5两个版本，其中python3.6是Ubuntu系统自带的，python3.7.5是安装开发环境时所安装的。在安装opencv时，为了同时编译出python3-opencv，需要指定具体的python版本，由于难以源码编译出python3.7.5版本的opencv，本指导使用的python3版本为python3.6。**
+**注1：本指导是分设操作指导。开发环境与运行环境不在同一服务器上。**   
+**注2：运行环境可以存在多种架构（如arm架构下的Centos系统、arm架构下的Euleros系统、x86架构下的Ubuntu系统等），本指导中以ai1s云端环境（x86架构下的Ubuntu系统）为例，故编译安装的opencv为x86版。**  
+**注3：在安装opencv时，为了同时编译出python3-opencv，需要指定具体的python版本，由于难以源码编译出python3.7.5版本的opencv，本指导使用的python3版本为python3.6。**
   
 本文以普通用户为 **HwHiAiUser** 为例，请根据实际情况进行修改。  
 
 1.  安装相关依赖。  
     在命令行中以普通用户执行以下命令，安装ffmpeg+opencv所需要的第三方依赖。  
-    **sudo apt-get install build-essential libgtk2.0-dev libavcodec-dev libavformat-dev libjpeg-dev libtiff5-dev libswscale-dev git cmake**  
+    **sudo apt-get install build-essential libgtk2.0-dev libavcodec-dev libavformat-dev libjpeg-dev libtiff5-dev libswscale-dev git cmake  python3-setuptools python3-dev python3-pip pkg-config -y**  
+
     **python3.6 -m pip install --upgrade pip**  
     **python3.6 -m pip install Cython numpy --user**
 
@@ -59,7 +60,7 @@
 
     2.  安装opencv。  
         ```
-        cmake -D BUILD_SHARED_LIBS=ON  -D BUILD_opencv_python3=YES -D BUILD_TESTS=OFF -D CMAKE_BUILD_TYPE=RELEASE -D  CMAKE_INSTALL_PREFIX=/home/HwHiAiUser/ascend_ddk/x86 -D WITH_LIBV4L=ON -D OPENCV_EXTRA_MODULES=../../opencv_contrib/modules -D PYTHON3_LIBRARIES=/usr/lib/python3.6/config-3.6m-x86_64-linux-gnu/libpython3.6m.so  -D PYTHON3_NUMPY_INCLUDE_DIRS=/home/HwHiAiUser/.local/lib/python3.6/site-packages/numpy/core/include/ -D OPENCV_SKIP_PYTHON_LOADER=ON ..
+        cmake -D BUILD_SHARED_LIBS=ON  -D BUILD_opencv_python3=YES -D BUILD_TESTS=OFF -D CMAKE_BUILD_TYPE=RELEASE -D  CMAKE_INSTALL_PREFIX=/home/HwHiAiUser/ascend_ddk/x86 -D WITH_LIBV4L=ON -D OPENCV_EXTRA_MODULES=../../opencv_contrib/modules -D PYTHON3_LIBRARIES=/usr/lib/python3.6/config-3.6m-x86_64-linux-gnu/libpython3.6m.so  -D PYTHON3_NUMPY_INCLUDE_DIRS=/home/HwHiAiUser/.local/lib/python3.6/site-packages/numpy/core/include/ -D OPENCV_SKIP_PYTHON_LOADER=ON -D CMAKE_INSTALL_PREFIX=/home/HwHiAiUser/ascend_ddk/x86 ..
         ```   
         **make -j8**  
         **make install**  
