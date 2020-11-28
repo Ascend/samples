@@ -87,7 +87,7 @@
 
 5.  安装ffmpeg  
   
-    创建文件夹，用于存放编译后的文件
+    创建文件夹，用于存放编译后的文件  
     **mkdir -p /home/HwHiAiUser/ascend_ddk/arm**
 
     下载ffmpeg  
@@ -96,7 +96,7 @@
     **tar -zxvf ffmpeg-4.1.3.tar.gz**  
     **cd ffmpeg-4.1.3**
 
-    安装ffmpeg 
+    安装ffmpeg   
     **./configure --enable-shared --enable-pic --enable-static --disable-x86asm --prefix=/home/HwHiAiUser/ascend_ddk/arm**  
     **make -j8**      
     **make install**
@@ -104,23 +104,23 @@
     将ffmpeg添加到系统环境变量中，使得其他程序能够找到ffmpeg环境  
     **su root**  
     **vim /etc/ld.so.conf.d/ffmpeg.conf**  
-    在末尾添加一行 
+    在末尾添加一行   
     **/home/HwHiAiUser/ascend_ddk/arm/lib**  
     使配置生效  
     **ldconfig**  
 
     配置profile系统文件  
     **vim /etc/profile**  
-    在末尾添加一行
+    在末尾添加一行  
     **export PATH=$PATH:/home/HwHiAiUser/ascend_ddk/arm/bin**  
     使配置文件生效  
     **source /etc/profile**  
-    使opencv能找到ffmpeg 
+    使opencv能找到ffmpeg   
     **cp /home/HwHiAiUser/ascend_ddk/arm/lib/pkgconfig/\* /usr/share/pkgconfig**  
-    退出root用户 
+    退出root用户   
     **exit**
 
-6.  安装opencv 
+6.  安装opencv   
     下载opencv  
     **git clone -b 4.3.0 https://gitee.com/mirrors/opencv.git**  
     **git clone -b 4.3.0 https://gitee.com/mirrors/opencv_contrib.git**  
