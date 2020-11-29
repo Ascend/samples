@@ -70,8 +70,8 @@
    **ssh HwHiAiUser@X.X.X.X**  
    **vim \${HOME}/.bashrc**   
    在最后添加两行    
-   **export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/acllib/lib64**   
-   **export PYTHONPATH=/home/HwHiAiUser/Ascend/:\${PYTHONPATH}**  
+   **export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/acllib/lib64:\${LD_LIBRARY_PATH}**   
+   **export PYTHONPATH=/home/HwHiAiUser/Ascend:\${PYTHONPATH}**  
    ![](figures/pythonpath.png)   
    执行如下命令，使环境变量生效   
    **source \${HOME}/.bashrc**
