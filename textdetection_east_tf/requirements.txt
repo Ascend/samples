@@ -1,0 +1,7 @@
+#python3.6
+pip3 install scikit-build
+pip3 install opencv-python
+pip3 install opencv-contrib-python
+pip3 install scipy
+pip3 install matplotlib
+pip3 install shapely
