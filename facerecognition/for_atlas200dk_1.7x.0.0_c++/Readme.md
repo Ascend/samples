@@ -118,14 +118,18 @@
 
 ## 环境配置   
 
-**注：服务器上已安装交叉编译工具和PresenterAgent可跳过此步骤。**   
-      
+**注：服务器上已安装OpenCV、PresentAgent、交叉编译工具可跳过此步骤。**  
+    
 - 安装编译工具  
   **sudo apt-get install -y g++\-aarch64-linux-gnu g++\-5-aarch64-linux-gnu** 
 
-- 安装PresenterAgent    
-  请参考 https://gitee.com/ascend/samples/tree/master/common/install_presenteragent/for_atlas200dk
-  
+- 安装OpenCV 
+      
+    请参考 **https://gitee.com/ascend/samples/tree/master/common/install_opencv/for_atlas200dk**   
+
+- 安装PresenterAgent   
+    请参考 **https://gitee.com/ascend/samples/tree/master/common/install_presenteragent/for_atlas200dk**  
+
 ## 编译<a name="zh-cn_topic_0219108795_section3723145213347"></a>
 
 1.  打开对应的工程。
