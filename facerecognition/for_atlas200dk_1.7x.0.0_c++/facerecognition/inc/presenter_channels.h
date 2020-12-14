@@ -39,12 +39,19 @@
 #include <mutex>
 #include <string>
 #include <cstdint>
+#include <fstream>
+#include <iostream>
 
 #include "ascenddk/presenter/agent/presenter_types.h"
 #include "ascenddk/presenter/agent/channel.h"
 #include "ascenddk/presenter/agent/presenter_channel.h"
 
 #include "utils.h"
+
+#define COMMENT_CHAR '#'
+#define EQUALS_CHAR  '='
+#define BLANK_SPACE_CHAR ' '
+#define TABLE_CHAR '\t'
 
 struct PresenterServerParams {
   // ip of presenter server
@@ -58,7 +65,7 @@ struct PresenterServerParams {
 };
 
 class PresenterChannels {
-public:
+  public:
   static PresenterChannels& GetInstance() {
     static PresenterChannels instance;
     return instance;
@@ -66,6 +73,85 @@ public:
 
   void Init(const PresenterServerParams& param) {
     param_ = param;
+  }
+
+  bool IsSpace(char c)
+  {
+    return (BLANK_SPACE_CHAR == c || TABLE_CHAR == c);
+  }
+
+  void Trim(string& str)
+  {
+    if (str.empty()) {
+      return;
+    }
+    uint32_t i, start_pos, end_pos;
+    for (i = 0; i < str.size(); ++i) {
+      if (!IsSpace(str[i])) {
+        break;
+      }
+    }
+    if (i == str.size()) { // is all blank space
+      str = "";
+      return;
+    }
+
+    start_pos = i;
+
+    for (i = str.size() - 1; i >= 0; --i) {
+      if (!IsSpace(str[i])) {
+        break;
+      }
+    }
+    end_pos = i;
+
+    str = str.substr(start_pos, end_pos - start_pos + 1);
+  }
+
+  bool AnalyseLine(const string & line, string & key, string & value)
+  {
+    if (line.empty())
+      return false;
+    int start_pos = 0, end_pos = line.size() - 1, pos;
+    if ((pos = line.find(COMMENT_CHAR)) != -1) {
+      if (0 == pos) {  //the first charactor is #
+        return false;
+      }
+      end_pos = pos - 1;
+    }
+    string new_line = line.substr(start_pos, start_pos + 1 - end_pos);  // delete comment
+
+    if ((pos = new_line.find(EQUALS_CHAR)) == -1)
+      return false;  // has no =
+
+    key = new_line.substr(0, pos);
+    value = new_line.substr(pos + 1, end_pos + 1- (pos + 1));
+
+    Trim(key);
+    if (key.empty()) {
+      return false;
+    }
+    Trim(value);
+    return true;
+  }
+
+  bool ReadConfig(map<string, string>& config, const char* configFile)
+  {
+    config.clear();
+    ifstream infile(configFile);
+    if (!infile) {
+      cout << "file open error" << endl;
+      return false;
+    }
+    string line, key, value;
+    while (getline(infile, line)) {
+      if (AnalyseLine(line, key, value)) {
+        config[key] = value;
+      }
+    }
+
+    infile.close();
+    return true;
   }
 
   ascend::presenter::Channel* GetChannel() {
@@ -131,13 +217,14 @@ public:
     param.port = param_.port;
     param.channel_name = param_.app_id;
     param.content_type = ascend::presenter::ContentType::kVideo;
+
     ascend::presenter::PresenterErrorCode error_code =
-        ascend::presenter::OpenChannel(ch, param);
+    ascend::presenter::OpenChannel(ch, param);
 
     // open channel failed
     if (error_code != ascend::presenter::PresenterErrorCode::kNone) {
       //ERROR_LOG("Open channel failed! %d",
-       //               error_code);
+      //               error_code);
       return nullptr;
     }
 

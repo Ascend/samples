@@ -159,16 +159,31 @@ Result ResourceLoad::InitComponent() {
 }
 
 Result ResourceLoad::OpenPresenterChannel() {
-    PresenterServerParams register_param;
+    const char* configFile = "./param.conf";
+    map<string, string> config;
+    PresenterChannels::GetInstance().ReadConfig(config, configFile);
 
-    register_param.host_ip = "192.168.1.223";
-    register_param.port = 7008;
-    register_param.app_id = "facial_recognition";
-  
+    PresenterServerParams register_param;
     register_param.app_type = "facial_recognition";
-    INFO_LOG("host_ip = %s,port = %d,app_name = %s",
+    map<string, string>::const_iterator mIter = config.begin();
+    for (; mIter != config.end(); ++mIter) {
+        if (mIter->first == "presenter_server_ip") {
+            register_param.host_ip = mIter->second;
+        }
+        else if (mIter->first == "presenter_server_port") {
+            register_param.port = std::stoi(mIter->second);
+        }
+        else if (mIter->first == "channel_name") {
+            register_param.app_id = mIter->second;
+        }
+        /*else if (mIter->first == "content_type") {
+            register_param.app_type = mIter->second;
+        }*/
+    }
+
+    INFO_LOG("host_ip = %s,port = %d,app_name = %s,app_type %s",
                   register_param.host_ip.c_str(), register_param.port,
-                  register_param.app_id.c_str());
+                  register_param.app_id.c_str(), register_param.app_type.c_str());
     INFO_LOG("Init Presenter Channel \n");
     // Init class PresenterChannels by configs
     PresenterChannels::GetInstance().Init(register_param);
