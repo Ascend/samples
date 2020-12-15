@@ -1,7 +1,11 @@
 # 田园诗秒变风景画（C++）<a name="ZH-CN_TOPIC_0232337690"></a>  
 
 
-本项目支持运行在Atlas 200 DK上，实现了从前端获取用户画面布局，模型推理生成并输出AI风景图。 
+本应用支持运行在AI云上加速环境(Atlas300)，实现了从前端获取用户画面布局，模型推理生成并输出AI风景图。  
+
+**注1：本指导是合设操作指导。开发环境与运行环境均为云端申请的插有300加速卡的环境。**
+
+**注2：运行环境可以存在多种架构（如arm架构下的Centos系统、arm架构下的Euleros系统、x86架构下的Ubuntu系统等），本指导中只以ai1环境（x86架构下的Ubuntu系统）为例说明** 
 
 ## 软件准备<a name="zh-cn_topic_0219108795_section181111827718"></a>
 
@@ -40,13 +44,14 @@
 
 ## 环境配置   
 
-**注：服务器上已安装交叉编译工具可跳过此步骤。**   
-      
-- 安装编译工具  
-  **sudo apt-get install -y g++\-aarch64-linux-gnu g++\-5-aarch64-linux-gnu** 
+**注：已安装opencv库、ffmpeg库和Presenter Agent可跳过此步骤。**  
 
+- 安装opencv和ffmpeg  
+    请参考 **https://gitee.com/ascend/samples/tree/master/common/install_opencv/for_atlas300**
+
+  
 - 安装PresenterAgent    
-  请参考 https://gitee.com/ascend/samples/tree/master/common/install_presenteragent/for_atlas200dk
+    请参考 **https://gitee.com/ascend/samples/tree/master/common/install_presenteragent/for_atlas300**
   
 
 ## 编译<a name="zh-cn_topic_0219108795_section3723145213347"></a>
@@ -64,17 +69,20 @@
     ![](figures/Mindstudio_open.png "打开cameradetect工程")
 
 2.  修改Presenter Server的ip。  
-    -  将**script/presenterserver/display/config/config.conf**中的**presenter_server_ip**修改为Mind Studio所在Ubuntu服务器的虚拟网卡的ip地址，如[图 presenter_server_ip](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig1110624110)所示。
+    -  将**script/presenterserver/display/config/config.conf**中的**presenter_server_ip**修改为AI云上加速环境(Atlas300)的内网可用ip，例如192.168.1.161。  
+
+    如[图 presenter_server_ip](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig1110624110)所示。
 
        **图 2**  修改presenter_server_ip<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig1110624110"></a>  
        ![输入图片说明](https://images.gitee.com/uploads/images/2020/1215/120813_3612ef47_7401379.png "屏幕截图.png")      
-    -  将**src/painting_process.cpp**中的 **param.host_ip** 修改为Mind Studio所在Ubuntu服务器的虚拟网卡的ip地址，如[图 param_host_ip](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11)所示。
+    -  将**src/painting_process.cpp**中的 **param.host_ip** 修改为AI云上加速环境(Atlas300)的内网可用ip，例如192.168.1.161。  
+    如[图 param_host_ip](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11)所示。
 
        **图 3**  修改param_host_ip<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11"></a>  
        ![输入图片说明](https://images.gitee.com/uploads/images/2020/1215/120648_90302b80_7401379.png "屏幕截图.png")    
 
     >![](public_sys-resources/icon-note.gif) **说明：**    
-    >-  虚拟网卡的ip地址请通过ifconfig命令查看。    
+    >-  ip地址请通过ifconfig命令查看。    
 
 3.  开始编译，打开Mind Studio工具，在工具栏中点击**Build \> Edit Build Configuration**。  
     选择Target OS 为Centos7.6，Target Architecture 为aarch64如[图2 配置编译](#zh-cn_topic_0203223265_fig17414647130)所示。
