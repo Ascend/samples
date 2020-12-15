@@ -119,9 +119,12 @@
     **图 6**  程序已执行示意图<a name="zh-cn_topic_0203223265_fig93931954162719"></a>  
     ![](figures/run_ok.png "程序已执行示意图")
 
-2.  使用启动Presenter Server服务时提示的URL登录 Presenter Server 网站。
+2.  登录Presenter Server网页。  
+    启动Presenter Server服务时提示的URL是ai1环境内网的ip。此时我们只要将ip替换为ai1环境的公网ip，就可以在windows的浏览器中直接打开网页了。比如，本ai1环境的显示内容如下Please visit http://192.168.1.161:7009 for display server只需要将192.168.1.161替换为Ai1环境的公网ip，如124.70.8.192。  
 
-    等待Presenter Agent传输数据给服务端，单击“Refresh“刷新，当有数据时相应的Channel 的Status变成绿色，如[图7 Presenter-Server界面](#zh-cn_topic_0203223265_fig93931954155519)所示。
+    在浏览器中输入 **http://124.70.8.192:7009** 即可打开Presenter Server网页。
+
+    等待Presenter Agent传输数据给服务端，单击“Refresh“刷新，当有数据时相应的Channel 的Status变成绿色，如下图所示。
 
     **图 7**  Presenter Server界面<a name="zh-cn_topic_0228461904_zh-cn_topic_0203223294_fig113691556202312"></a>  
     ![](figures/presenter.png "Presenter-Server界面") 
@@ -130,9 +133,6 @@
  
 ## 结束应用
 
-命令行执行以下命令登陆开发板（密码：Mind@123）。
-
-**ssh HwHiAiUser@192.168.1.2**
 
 执行以下指令查找仍在运行的进程。
 
@@ -154,15 +154,10 @@ kill -9 2417
     
    这是Mindstudio版本导致的问题。当前解决办法为Mindstudio运行出问题后登录开发板，在命令行运行样例。
 
-   **注：必须要在Mindstudio中先运行一次，否则二进制文件等数据不会传到开发板上**    
+   **注：必须要在Mindstudio中先运行一次，否则二进制文件等数据不会传到运行环境上**    
 
-2. 在开发环境命令行中以普通用户执行以下命令登录开发者板（默认USB连接）。
 
-    **ssh HwHiAiUser@192.168.1.2**
-
-    ![](figures/ssh连接.png "ssh连接界面") 
-
-3. 进入案例对应可执行文件路径。
+2. 进入案例对应可执行文件路径。
     
     **cd HIAI_PROJECTS/workspace_mind_studio/AIPainting_xxx/out**
 
@@ -170,9 +165,9 @@ kill -9 2417
 
     ![](figures/项目运行路径.png "项目运行路径") 
 
- 4. 启动程序。（需要在开发环境中已经启动presentserver并且已经按照编译和运行章节操作过一次）
+3. 启动程序。（需要在开发环境中已经启动presentserver并且已经按照编译和运行章节操作过一次）
 
     **bash run.sh**
 
- 5. 按**ctrl\+c**即可结束程序。
+4. 按**ctrl\+c**即可结束程序。
 
