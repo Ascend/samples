@@ -71,15 +71,15 @@
 2.  修改Presenter Server的ip。  
     -  将**script/presenterserver/display/config/config.conf**中的**presenter_server_ip**修改为AI云上加速环境(Atlas300)的内网可用ip，例如192.168.1.161。  
 
-    如[图 presenter_server_ip](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig1110624110)所示。
+       如[图 presenter_server_ip](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig1110624110)所示。
 
        **图 2**  修改presenter_server_ip<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig1110624110"></a>  
-       ![输入图片说明](https://images.gitee.com/uploads/images/2020/1215/120813_3612ef47_7401379.png "屏幕截图.png")      
+       ![输入图片说明](https://images.gitee.com/uploads/images/2020/1215/161821_74ef37c9_7401379.png "屏幕截图.png")     
     -  将**src/painting_process.cpp**中的 **param.host_ip** 修改为AI云上加速环境(Atlas300)的内网可用ip，例如192.168.1.161。  
     如[图 param_host_ip](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11)所示。
 
        **图 3**  修改param_host_ip<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11"></a>  
-       ![输入图片说明](https://images.gitee.com/uploads/images/2020/1215/120648_90302b80_7401379.png "屏幕截图.png")    
+       ![输入图片说明](https://images.gitee.com/uploads/images/2020/1215/161743_5e283435_7401379.png "屏幕截图.png")    
 
     >![](public_sys-resources/icon-note.gif) **说明：**    
     >-  ip地址请通过ifconfig命令查看。    
