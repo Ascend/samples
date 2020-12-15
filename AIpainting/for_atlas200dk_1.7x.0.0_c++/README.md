@@ -20,8 +20,23 @@
     **curl -OL https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/AIpainting.zip** 
     >- 如果curl也下载失败，可复制下载链接到浏览器，手动下载至Host端。
     
-2.  本项目已转换好的模型文件（.om文件）已打包在model目录下，跳过模型转换步骤。
+2. 获取此应用中所需要的网络模型。  
+     **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/AIpainting/AIPainting_v2.pb** 
 
+3. 将原始网络模型转换为适配昇腾AI处理器的模型。  
+
+    1.  在Mind Studio操作界面的顶部菜单栏中选择**Tools \> Model Converter**，进入模型转换界面。
+    2.  在弹出的**Model Conversion**操作界面中，进行模型转换配置。
+    3.  参照以下图片进行参数配置。    
+        -   Model File选择步骤2中下载的模型文件。
+
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/1215/115210_76e767e8_7401379.png "屏幕截图.png")
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/1215/115215_129d5395_7401379.png "屏幕截图.png")
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/1215/115220_1273fa02_7401379.png "屏幕截图.png")
+
+4.  将转换好的模型文件（.om文件）上传到[步骤1](#zh-cn_topic_0228757084_section8534138124114)中源码所在路径下的“**AIpainting/model**”目录下。
+    
+     **cp \\$HOME/modelzoo/AIPainting_v2/device/AIPainting_v2.om \\$HOME/AscendProjects/AIpainting/model/**  
 
 ## 环境配置   
 
@@ -38,7 +53,8 @@
 
 1.  打开对应的工程。
 
-    以Mind Studio安装用户在命令行进入安装包解压后的“MindStudio-ubuntu/bin”目录，如：$HOME/MindStudio-ubuntu/bin。执行如下命令启动Mind Studio。
+    以Mind Studio安装用户在命令行进入安装包解压后的“MindStudio-ubuntu/bin”目录，如：$HOME/MindStudio-ubuntu/bin。  
+    执行如下命令启动Mind Studio。
 
     **./MindStudio.sh**
 
@@ -47,8 +63,20 @@
     **图 1**  打开AIPainting工程<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11106241192810"></a>  
     ![](figures/Mindstudio_open.png "打开cameradetect工程")
 
+2.  修改Presenter Server的ip。  
+    -  将**script/presenterserver/display/config/config.conf**中的**presenter_server_ip**修改为Mind Studio所在Ubuntu服务器的虚拟网卡的ip地址，如[图 presenter_server_ip](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig1110624110)所示。
 
-2.  开始编译，打开Mind Studio工具，在工具栏中点击**Build \> Edit Build Configuration**。  
+       **图 2**  修改presenter_server_ip<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig1110624110"></a>  
+       ![输入图片说明](https://images.gitee.com/uploads/images/2020/1215/120813_3612ef47_7401379.png "屏幕截图.png")      
+    -  将**src/painting_process.cpp**中的 **param.host_ip** 修改为Mind Studio所在Ubuntu服务器的虚拟网卡的ip地址，如[图 param_host_ip](#zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11)所示。
+
+       **图 3**  修改param_host_ip<a name="zh-cn_topic_0228461902_zh-cn_topic_0203223265_fig11"></a>  
+       ![输入图片说明](https://images.gitee.com/uploads/images/2020/1215/120648_90302b80_7401379.png "屏幕截图.png")    
+
+    >![](public_sys-resources/icon-note.gif) **说明：**    
+    >-  虚拟网卡的ip地址请通过ifconfig命令查看。    
+
+3.  开始编译，打开Mind Studio工具，在工具栏中点击**Build \> Edit Build Configuration**。  
     选择Target OS 为Centos7.6，Target Architecture 为aarch64如[图2 配置编译](#zh-cn_topic_0203223265_fig17414647130)所示。
 
     **图 2**  配置编译<a name="zh-cn_topic_0203223265_fig17414647130"></a>  
@@ -62,12 +90,12 @@
     >![](public_sys-resources/icon-notice.gif) **须知：**   
     >首次编译工程时，**Build \> Build**为灰色不可点击状态。需要点击**Build \> Edit Build Configuration**，配置编译参数后再进行编译。 
 
-3.  启动Presenter Server。
+4.  启动Presenter Server。
 
     打开Mind Studio工具的Terminal，在应用代码存放路径下，执行如下命令在后台启动AIPainting应用的Presenter Server主程序。如[图4 启动PresenterServer](#zh-cn_topic_0228461904_zh-cn_topic_0203223294_fig423515251067)所示。
 
-    **
-
+    
+     **python3 script/presenterserver/presenter_server.py --app=display &**   
     **图 4**  启动PresenterServer<a name="zh-cn_topic_0228461904_zh-cn_topic_0203223294_fig423515251067"></a>  
     ![](figures/present.png)
     
