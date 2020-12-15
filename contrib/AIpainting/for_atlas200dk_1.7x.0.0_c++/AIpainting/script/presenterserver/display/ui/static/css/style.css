@@ -1,0 +1,172 @@
+/* 公用 */
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    -webkit-overflow-scrolling: touch;
+    font-size: 0;
+    font-weight: 400;
+    /* -ms-overflow-style: none; */
+    text-align: center;
+    color: #ffffff;
+    box-sizing: border-box;
+    background: url(../images/bg.jpg) no-repeat;
+    background-size: 100% 100%;
+    overflow-x: hidden;
+}
+
+.logo {
+    position: absolute;
+    width: 84px;
+    left: 60px;
+    top: 60px;
+}
+
+.title {
+    position: absolute;
+    width: 449px;
+    top: 60px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+}
+
+.img-left {
+    position: absolute;
+    width: 1134px;
+    top: 215px;
+    left: 36px;
+    margin: 0 auto;
+}
+
+.videoLeftBox {
+    display: none;
+    position: absolute;
+    width: 1134px;
+    height: 774px;
+    top: 215px;
+    left: 36px;
+}
+
+.videoLeft {
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+}
+
+.tankBtn {
+    position: absolute;
+    width: 292px;
+    top: 650px;
+    left: 0;
+    right: 0px;
+    margin: 0 auto;
+}
+
+.styleBox {
+    position: absolute;
+    width: 702px;
+    height: 380px;
+    top: 600px;
+    right: 20px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+.text {
+    position: absolute;
+    width: 398px;
+    top: 660px;
+    left: 270px;
+}
+
+.product {
+    position: absolute;
+    width: 606px;
+    top: 235px;
+    right: 70px;
+}
+
+.swiper-container0 {
+    width: 702px;
+    height: 100%;
+    overflow: hidden;
+}
+
+.swiper-slide {
+    text-align: center;
+    font-size: 18px;
+    /* Center slide text vertically */
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+}
+
+.imgStyle {
+    width: 100%;
+}
+
+.swiper-slide img {
+    z-index: 2;
+    transform: scale(1.5);
+    transform-origin: 0 50%;
+}
+
+.swiper-slide-active img {
+    z-index: 4;
+    transform: scale(2);
+    transform-origin: 0 50%;
+    margin-left: -35px;
+}
+
+.swiper-slide-next img {
+    z-index: 3;
+    transform: scale(1.7);
+    transform-origin: 0 50%;
+    /* margin-left: -100px; */
+}
+
+.swiper-slide-duplicate-prev img {
+    z-index: 1;
+    transform: scale(1.3);
+    transform-origin: 0 50%;
+}
+
+/* .swiper-slide-duplicate-prev img {
+    transform: scale(0.6);
+
+    margin-left: -857px;
+} */
+
+.styleTips {
+    position: absolute;
+    width: 200px;
+    top: 990px;
+    left: 66%;
+    font-size: 20px;
+    color: #000000;
+}
+
+.tips {
+    position: absolute;
+    width: 350px;
+    top: 930px;
+    left: 390px;
+}

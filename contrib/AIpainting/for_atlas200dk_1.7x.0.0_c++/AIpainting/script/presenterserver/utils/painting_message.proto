@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package PaintingMessage;
+
+enum ErrorCode {
+  kErrorNone = 0;
+  kErrorAppRegisterExist = 1;
+  kErrorAppRegisterType = 2;
+  kErrorAppRegisterLimit = 3;
+  kErrorOther = 5;
+}
+
+message CommonResponse {
+  ErrorCode ret = 1;
+  string message = 2;
+}
+
+message RegisterApp {
+  string id = 1;
+  string type = 2;
+}
+
+message ModelInputData {
+  string name = 1;
+  bytes data = 2;
+}
+
+message DataPackage {
+  ModelInputData objectData = 1;
+  ModelInputData layoutData = 2;
+}
