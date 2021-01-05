@@ -31,7 +31,7 @@
     安装Presenteragent。  
     **cd $HOME/presenteragent/**    
     **make mode=ASIC -j8**   
-    **make install** 
+    **make install mode=ASIC** 
  
 6.  添加环境变量。（如已添加，请跳过本步骤）  
     程序编译时会链接LD_LIBRARY_PATH环境变量地址中的库文件，所以要将presenteragent的库文件地址加到ai1环境的该环境变量中。  
