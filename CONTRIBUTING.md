@@ -12,7 +12,7 @@ Ascend Samples，欢迎各位开发者！
 
 1. 在线编译,推理请使用C++/python代码实现，符合第四部分编码规范(当前只有C++的样例)
 
-2. C++PR 提交样例规范请参考[sample](../cplusplus/level2_simple_inference/1_classification/googlenet_imagenet_picture)。
+2. C++PR 提交样例规范请参考[sample](./cplusplus/level2_simple_inference/1_classification/googlenet_imagenet_picture)。
 
 3. 贡献者工程代码目录规则：   
     
@@ -136,7 +136,7 @@ PR提交的样例需要包含门禁项、工程测试用例和readme。
 
 5. 环境和其他问题，请提交Issue跟踪。
 
-6. 提交测试用例可以参考[PR提交示例](../cplusplus/level2_simple_inference/1_classification/googlenet_imagenet_picture)。
+6. 提交测试用例可以参考[PR提交示例](./cplusplus/level2_simple_inference/1_classification/googlenet_imagenet_picture)。
 
 
  **五、编程规范**
