@@ -48,10 +48,10 @@ function setAtcEnv() {
 function setBuildEnv() {
     # 设置代码编译时需要的环境变量
     if [[ ${version} = "c73" ]] || [[ ${version} = "C73" ]];then
-        export DDK_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/arm64-linux_gcc7.3.0
+        export DDK_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/x86_64-linux_gcc7.3.0
         export NPU_HOST_LIB=${DDK_PATH}/acllib/lib64/stub
     elif [[ ${version} = "c75" ]] || [[ ${version} = "C75" ]];then
-        export DDK_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/arm64-linux
+        export DDK_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/x86_64-linux
         export NPU_HOST_LIB=${DDK_PATH}/acllib/lib64/stub
     fi
 
