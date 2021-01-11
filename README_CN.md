@@ -11,10 +11,10 @@ AscendCL（Ascend Computing Language）提供Device管理、Context管理、Stre
 **master分支样例版本适配情况请参见[样例表单及适配说明](#Version-of-samples),如果需要使用的案例不兼容您所需要的版本，请参考[表 版本说明](#Version-Description)下载对应发行版**
 
 **表1** 版本说明<a name="Version-Description"></a>
-| 版本 | samples仓是否维护 | samples获取方式 |
+| CANN版本 | samples仓是否维护 | samples获取方式 |
 |---|---|---|
 | c32 | 否 | 压缩包提供，[点击下载](https://obs-book.obs.cn-east-2.myhuaweicloud.com/1.32.0.0/1.32.0.0_samples.tar.gz) |
-| 20.0-20.1 | 是 | Release 0.1.0发行版，[点击跳转](https://gitee.com/ascend/samples/releases/v0.1.0) |
+| [20.0-20.1](https://ascend.huawei.com/#/software/cann/download) | 是 | Release 0.1.0发行版，[点击跳转](https://gitee.com/ascend/samples/releases/v0.1.0) |
 
 ## 目录结构与说明
 
