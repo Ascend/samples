@@ -8,7 +8,7 @@ AscendCL（Ascend Computing Language）提供Device管理、Context管理、Stre
 
 ## 版本说明
 
-**master分支样例版本适配情况请参见[样例表单及适配说明](#Version of samples),如果需要使用的案例不兼容您所需要的版本，请参考[表 版本说明](#Version-Description)下载对应发行版**
+**master分支样例版本适配情况请参见[样例表单及适配说明](#Version-of-samples),如果需要使用的案例不兼容您所需要的版本，请参考[表 版本说明](#Version-Description)下载对应发行版**
 
 **表 版本说明**<a name="Version-Description"></a>
 | 版本 | samples仓是否维护 | samples获取方式 |
