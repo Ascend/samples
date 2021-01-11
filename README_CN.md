@@ -14,7 +14,7 @@ AscendCL（Ascend Computing Language）提供Device管理、Context管理、Stre
 | 版本 | samples仓是否维护 | samples获取方式 |
 |---|---|---|
 | c32 | 否 | 压缩包提供，[点击下载](https://obs-book.obs.cn-east-2.myhuaweicloud.com/1.32.0.0/1.32.0.0_samples.tar.gz) |
-| 20.0-20.1 | 是 | V1.0发行版，[点击跳转](https://gitee.com/ascend/samples/releases/V1.0) |
+| 20.0-20.1 | 是 | Release 0.1.0发行版，[点击跳转](https://gitee.com/ascend/samples/releases/v0.1.0) |
 
 ## 目录结构与说明
 
