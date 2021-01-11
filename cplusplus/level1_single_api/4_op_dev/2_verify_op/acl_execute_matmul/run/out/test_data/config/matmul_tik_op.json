@@ -1,0 +1,24 @@
+[
+{
+  "op": "MatmulTik",
+  "input_desc": [
+    {
+      "format": "ND",
+      "shape": [16, 64],
+      "type": "float16"
+    },
+    {
+      "format": "ND",
+      "shape": [64, 1024],
+      "type": "float16"
+    }
+  ],
+  "output_desc": [
+    {
+      "format": "ND",
+      "shape": [16, 1024],
+      "type": "float16"
+    }
+  ]
+}
+]

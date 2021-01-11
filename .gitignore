@@ -1,0 +1,84 @@
+# Samples
+build/
+output
+
+
+# Cmake files
+CMakeFiles/
+cmake_install.cmake
+CMakeCache.txt
+Makefile
+cmake-build-debug
+
+# Dynamic libraries
+*.so
+*.so.*
+*.dylib
+
+# Static libraries
+*.la
+*.lai
+*.a
+*.lib
+
+# Object files
+*.o
+
+# Editor
+.vscode
+.idea/
+
+# Cquery
+.cquery_cached_index/
+compile_commands.json
+
+# Ctags and cscope
+tags
+TAGS
+CTAGS
+GTAGS
+GRTAGS
+GSYMS
+GPATH
+cscope.*
+
+# Python files
+*__pycache__*
+.pytest_cache
+
+# Mac files
+*.DS_Store
+
+# Test results
+test_temp_summary_event_file/
+*.dot
+*.dat
+*.svg
+*.perf
+*.info
+*.ckpt
+*.shp
+*.pkl
+*.pb
+*.om
+*.prototxt
+*.caffemodel
+
+# lite opencl compile file
+*.cl.inc
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+*.bak/
+
+# file
+*.mp4
+*.yuv
+*.log
+*.h264
+*.h265
+*.bin

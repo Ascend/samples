@@ -1,0 +1,55 @@
+[
+{
+  "op": "Cast",
+  "input_desc": [
+    {
+      "format": "ND",
+      "shape": [1000],
+      "type": "float"
+    }
+  ],
+  "output_desc": [
+    {
+      "format": "ND",
+      "shape": [1000],
+      "type": "float16"
+    }
+  ],
+  "attr" : [
+     {
+       "name": "truncate",
+       "type": "bool",
+       "value": false
+     },
+     {
+       "name": "dst_type",
+       "type": "int",
+       "value": 1
+     }
+  ]
+},
+{
+  "op": "ArgMaxD",
+  "input_desc": [
+    {
+      "format": "ND",
+      "shape": [1000],
+      "type": "float16"
+    }
+  ],
+  "output_desc": [
+    {
+      "format": "ND",
+      "shape": [1],
+      "type": "int32"
+    }
+  ],
+  "attr": [
+    {
+        "name": "dimension",
+        "type": "int",
+        "value": 0
+    }
+  ]
+}
+]

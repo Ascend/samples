@@ -1,0 +1,41 @@
+[
+  {
+    "op": "Conv2DTik",
+    "input_desc": [
+      {
+        "format": "NCHW",
+        "shape": [8, 512, 7, 7],
+        "type": "float16"
+      },
+      {
+        "format": "NCHW",
+        "shape": [512, 512, 3, 3],
+        "type": "float16"
+      }
+    ],
+    "output_desc": [
+      {
+        "format": "NCHW",
+        "shape": [8, 512, 7, 7],
+        "type": "float16"
+      }
+    ],
+    "attr": [
+      {
+        "name": "strides",
+        "type": "list_int",
+        "value": [1, 1, 1, 1]
+      },
+      {
+        "name": "pads",
+        "type": "list_int",
+        "value": [1, 1, 1, 1]
+      },
+      {
+        "name": "dilations",
+        "type": "list_int",
+        "value": [1, 1, 1, 1]
+      }
+    ]
+  }
+]

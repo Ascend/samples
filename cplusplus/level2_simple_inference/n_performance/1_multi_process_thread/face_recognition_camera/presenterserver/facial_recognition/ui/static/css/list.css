@@ -1,0 +1,102 @@
+body{
+    background-color: #edf7f9;
+    font-family: Arial, 黑体, Tahoma;
+}
+
+.nav_library{
+    width: 100%;
+    height: 80px;
+    background-color: #155070;
+    padding-left: 50px;
+    padding-right: 50px;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-pack: justify;
+    -webkit-justify-content: space-between;
+    justify-content: space-between;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    box-sizing: border-box;
+}
+.nav_left{
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-pack: justify;
+    -webkit-justify-content: space-between;
+    justify-content: space-between;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+}
+.nav_left img{
+    width: 60px;
+    height: 60px;
+    margin-right: 20px;
+}
+.nav_left p span{
+    font-size: 24px;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.container_top{
+    height: 45px;
+    line-height: 45px;
+    font-weight: bold;
+    border-bottom: 1px solid #ccc;
+    margin: 0 auto;
+}
+
+.box_content{
+    /* width: 1024px; */
+    margin: 0 auto;
+}
+.content_bot{
+    /* background-color: #ffffff; */
+    margin: 0 auto;
+}
+#mytable th,td{
+    background-color:#ffffff;
+    height: 40px;
+    text-align: center;
+}
+.video_box{
+    background-color: #edf7f9;
+}
+.video_fps{
+    text-align: center;
+}
+
+.video_fps p{
+    height: 45px;
+    line-height: 45px;
+    font-weight: bold;
+    text-align: center;
+}
+.video_inner{
+    height:400px;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+}
+
+.video_loading{
+    height:400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;  
+}
+#canvas{
+    /* vertical-align:top; */
+    max-width:100%;
+    max-height:400px;
+}
