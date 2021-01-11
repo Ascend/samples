@@ -1,8 +1,0 @@
-{
-  "type": "AscendApp",
-  "project_type": "Custom",
-  "project_desc": "",
-  "target": "RC",
-  "target_id": "RC",
-  "ddk_version": "1.32.0.B080"
-}
