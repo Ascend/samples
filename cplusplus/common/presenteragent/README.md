@@ -17,7 +17,7 @@ Presenter包括Presenter Server与Presenter Agent。
 
 -   **Sample Code**
 
-    config是配置文件目录，修改config.conf进行可服务端ip和port的定制，logging.conf是logging模块的配置；src是源码目录，其中，presenter\_message\_pb2.py 定义protobuf格式，presenter\_socket\_server.py 负责并行接收数据，webapp.py 负责把数据推送到Chrome，进行前台展示；ui是web界面素材所在目录。
+    Presenter Server源码在样例的工程目录下，config是配置文件目录，修改config.conf进行可服务端ip和port的定制，logging.conf是logging模块的配置；src是源码目录，其中，presenter\_message\_pb2.py 定义protobuf格式，presenter\_socket\_server.py 负责并行接收数据，webapp.py 负责把数据推送到Chrome，进行前台展示；ui是web界面素材所在目录。
 
     与Presenter Agent的消息通信：
 
