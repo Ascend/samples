@@ -23,8 +23,7 @@ AscendCL（Ascend Computing Language）提供Device管理、Context管理、Stre
 │   ├── contrib   
 │   ├── level1_single_api   
 │   ├── level2_simple_inference   
-│   └── level3_multi_model   
-├── [ci](./ci)：**自动构建脚本。**    
+│   └── level3_multi_model      
 ├── [doc](./doc)：**相关依赖安装文档。**    
 │   ├── opencv_install   
 │   ├── presenteragent_install   
