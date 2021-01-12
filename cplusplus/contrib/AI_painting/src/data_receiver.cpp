@@ -92,14 +92,23 @@ Result DataReceiver::DoReceiverProcess(void* objectData, void* layoutData) {
         INFO_LOG("layout_input_name: %s", layout_input_name.c_str());
         INFO_LOG("layout_input_data size: %ld", layout_input_data.size());
 
-        memcpy(objectData, object_input_data.c_str(), object_input_data.size());
-        memcpy(layoutData, layout_input_data.c_str(), layout_input_data.size());
+        aclrtRunMode runMode;
+        aclrtGetRunMode (& runMode);
+        aclrtMemcpyKind policy = (runMode == ACL_HOST) ?
+        ACL_MEMCPY_HOST_TO_DEVICE : ACL_MEMCPY_DEVICE_TO_DEVICE;
+
+        aclError ret = aclrtMemcpy(objectData, object_input_data.size(),
+        object_input_data.c_str(), object_input_data.size(), policy);
+        ret = aclrtMemcpy(layoutData, layout_input_data.size(),
+        layout_input_data.c_str(), layout_input_data.size(), policy);
+        if (ret != ACL_ERROR_NONE) {
+            ERROR_LOG("Copy resized image data to device failed.");
+            return FAILED;
+        }
 
         return SUCCESS;
 
     } else {
         return FAILED;
     }
-
 }
-
