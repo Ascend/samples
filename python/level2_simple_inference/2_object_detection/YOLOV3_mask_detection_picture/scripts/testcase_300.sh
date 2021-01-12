@@ -5,7 +5,7 @@ version=$1
 
 data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/YOLOV3_mask_detection_picture-python/test_image/"
 verify_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/YOLOV3_mask_detection_picture-python/verify_image/"
-project_name="python_YOLOV3_coco_detection_picture-python"
+project_name="python_YOLOV3_mask_detection_picture"
 
 script_path="$( cd "$(dirname $BASH_SOURCE)" ; pwd -P)"
 project_path=${script_path}/..
