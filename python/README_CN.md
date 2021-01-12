@@ -5,7 +5,7 @@
 本目录为python样例目录，目录结构和具体说明如下。
 
 **./**   
-├── [common](./common)：**公共代码目录**   
+├── [common](./common)：**公共代码目录(正在开发)**   
 ├── [contrib](./contrib)：**用户贡献样例**     
 │   ├── cartoonGAN_picture   
 │   └── garbage_picture    
