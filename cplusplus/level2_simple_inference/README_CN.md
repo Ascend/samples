@@ -5,8 +5,8 @@
 本目录为推理教学样例，各文件夹对应不同种类的样例，以供用户参考，目录结构和具体说明如下。   
 **注：标注为正在开发的样例，暂时只是规划了样例目录，内容正在开发中，待开发完成后再上传仓库。**
 
-**./**
-├── [0_data_process](./0_data_process)：**数据处理样例** 
+**./**   
+├── [0_data_process](./0_data_process)：**数据处理样例**    
 ├── [1_classification](./1_classification)：**分类样例**    
 ├── [2_object_detection](./2_object_detection)：**检测样例**     
 ├── [3_segmentation](./3_segmentation)：**语义分割样例（正在开发）**   
