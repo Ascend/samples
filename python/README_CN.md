@@ -2,7 +2,8 @@
 
 #### 目录结构与说明
 
-本目录为python样例目录，目录结构和具体说明如下。
+本目录为python样例目录，目录结构和具体说明如下。   
+**注：标注未正在开发的样例，暂时只是规划了样例目录，内容正在开发中，待开发完成后再上传仓库。**
 
 **./**   
 ├── [common](./common)：**公共代码目录**   
@@ -17,4 +18,4 @@
 │   ├── 5_nlp     
 │   ├── 6_other   
 │   └── n_performance   
-└── [level3_multi_model](./level3_multi_model)：**级别3-行业样例**   
+└── [level3_multi_model](./level3_multi_model)：**级别3-行业样例（正在开发）**   
