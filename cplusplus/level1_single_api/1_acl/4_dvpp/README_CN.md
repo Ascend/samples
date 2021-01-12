@@ -16,7 +16,7 @@
 │    
 ├── [resize](./resize)：**resize接口。针对图像做缩放操作**    
 │    
-├── [smallResolution_cropandpaste](./smallResolution_cropandpaste)：**cropandpaste接口。对指定输入图片进行抠图（包括抠图区域小于10*6），再贴图到输出图片中。**    
+├── [smallResolution_cropandpaste](./smallResolution_cropandpaste)：**cropandpaste接口。对指定输入图片进行抠图，再贴图到输出图片中。**    
 │   
 ├── [vdec](./vdec)：**vdec接口，实现视频的解码，输出YUV420SP格式（包括NV12和NV21）的图片。**     
 │    
