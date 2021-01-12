@@ -20,74 +20,9 @@
 #include "./assign.h"
 #include <string>
 #include <vector>
+#include <algorithm>
 
 namespace ge {
-
-bool IsUnknownRankShape(const std::vector<int64_t>& shape_vec) {
-  if (shape_vec.size() == 1 && shape_vec[0] == -2) {
-    return true;
-  }
-  return false;
-}
-
-bool IsUnKnownShape(const std::vector<int64_t>& shape_vec) {
-  auto found = find(shape_vec.begin(), shape_vec.end(), -1);
-  return found != shape_vec.end();
-}
-
-bool IsUnknown(const std::vector<int64_t>& shape_vec) {
-  return (IsUnKnownShape(shape_vec) || IsUnknownRankShape(shape_vec));
-}
-
-void MakeUpShapeRange(const std::vector<int64_t>& shape, std::vector<std::pair<int64_t, int64_t>>& range) {
-  if (IsUnknownRankShape(shape)) {
-    return;
-  }
-
-  if (range.empty()) {
-    for (size_t i = 0; i < shape.size(); i++) {
-      if (shape[i] == -1) {
-        range.push_back(std::pair<int64_t, int64_t>(1, -1));
-      } else {
-        range.push_back(std::pair<int64_t, int64_t>(shape[i], shape[i]));
-      }
-    }
-  }
-}
-
-	
-bool OneInOneOutDynamicInfer(const Operator& op,
-                             const std::string& input_name,
-                             const std::vector<std::string>& output_name_list) {
-  // get input desc
-  auto op_info = OpDescUtils::GetOpDescFromOperator(op);
-  auto input_desc = op_info->MutableInputDesc(input_name);
-  vector<int64_t> input_shape = input_desc->MutableShape().GetDims();
-  DataType input_dtype = input_desc->GetDataType();
-
-  if (IsUnknown(input_shape)) {
-    std::vector<std::pair<int64_t, int64_t>> input_range;
-    input_desc->GetShapeRange(input_range);
-    MakeUpShapeRange(input_shape, input_range);
-
-    auto output_desc = op_info->MutableOutputDesc(0);
-    for (const string& output_name : output_name_list) {
-      output_desc = op_info->MutableOutputDesc(output_name);
-      output_desc->SetShape(GeShape(input_shape));
-      output_desc->SetOriginShape(GeShape(input_shape));
-      output_desc->SetShapeRange(input_range);
-      output_desc->SetDataType(input_dtype);
-    }
-  } else {
-    auto output_desc = op_info->MutableOutputDesc(0);
-    for (const string& output_name : output_name_list) {
-      output_desc = op_info->MutableOutputDesc(output_name);
-      output_desc->SetShape(GeShape(input_shape));
-      output_desc->SetDataType(input_dtype);
-    }
-  }
-  return true;
-}
 
 //----------------Assign-------------------
 IMPLEMT_VERIFIER(Assign, AssignVerify)
@@ -101,11 +36,16 @@ IMPLEMT_VERIFIER(Assign, AssignVerify)
 // Obtains the processing function of the output tensor description.
 IMPLEMT_COMMON_INFERFUNC(AssignInferShape)
 {
-  if (OneInOneOutDynamicInfer(op, "value", {"ref"})) {
-    return GRAPH_SUCCESS;
-  }
-  return GRAPH_FAILED;
+  Shape x_shape = op.GetInputDesc("ref").GetShape();
+  DataType input_dtype = op.GetInputDesc("ref").GetDataType();
+  std::vector<std::pair<int64_t, int64_t>> shape_range_x;
+  op.GetInputDesc("ref").GetShapeRange(shape_range_x);
 
+  TensorDesc tensordesc_output = op.GetOutputDesc("ref");
+  tensordesc_output.SetShape(x_shape);
+  tensordesc_output.SetDataType(input_dtype);
+  tensordesc_output.SetShapeRange(shape_range_x);
+  (void)op.UpdateOutputDesc("ref", tensordesc_output);
 }
 
 //Registered inferfunction
