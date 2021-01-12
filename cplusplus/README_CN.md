@@ -10,11 +10,6 @@
 ├── [environment](./environment)：**c++环境准备和依赖安装**      
 ├── [level1_single_api](./level1_single_api)：**级别1-单一功能接口样例**   
 │   ├── 1_acl   
-│   │   ├── 1_resource   
-│   │   ├── 2_memory_management   
-│   │   ├── 3_model_management   
-│   │   ├── 4_dvpp     
-│   │   └── 5_blas   
 │   ├── 2_atc   
 │   ├── 3_ir   
 │   ├── 4_op_dev   
@@ -27,11 +22,7 @@
 │   ├── 4_recommendation   
 │   ├── 5_nlp     
 │   ├── 6_other   
-│   ├── n_performance   
-│   │   ├── 1_multi_process_thread    
-│   │   ├── 2_multi_card   
-│   │   ├── 3_capability   
-│   └   └── 4_profiling   
+│   └── n_performance     
 ├── [level3_multi_model](./level3_multi_model)：**级别3-行业样例**   
 │   ├── 1_tutorial   
 └   └── 2_official   
