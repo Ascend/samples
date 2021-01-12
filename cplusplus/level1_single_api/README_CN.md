@@ -18,7 +18,7 @@
 ├── [5_200dk_peripheral](./5_200dk_peripheral)：**200DK外设相关接口样例。**   
 │   ├── gpio   
 │   ├── i2c   
-└   └── uart   
+│   └── uart   
 ├── [6_media](./6_media)：**media相关接口样例（正在开发）。**    
 ├── [7_dvpp](./7_dvpp)：**dvpp直接调用相关接口样例（正在开发）。**   
 └── [8_graphrun](./8_graphrun)：**graphrun相关接口样例。**   
