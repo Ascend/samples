@@ -6,8 +6,8 @@
 
 **./**   
 ├── [common](./common)：**公共代码目录**   
-├── [contrib](./contrib)：**用户贡献样例** 
-├── [environment](./environment)：**c++环境准备和依赖安装**   
+├── [contrib](./contrib)：**用户贡献样例**    
+├── [environment](./environment)：**c++环境准备和依赖安装**      
 ├── [level1_single_api](./level1_single_api)：**级别1-单一功能接口样例**   
 │   ├── 1_acl   
 │   │   ├── 1_resource   
