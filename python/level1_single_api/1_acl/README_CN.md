@@ -7,9 +7,8 @@
 **./**   
 ├── [1_resource](./1_resource)**：resource相关功能样例。（正在开发）**      
 ├── [2_memory_management](./2_memory_management)**：内存管理相关功能样例。（正在开发）**    
-├── [3_model_management](./3_model_management)**：模型管理相关功能样例。（正在开发）**    
-├── [4_dvpp](./4_dvpp)**：dvpp相关功能样例。（正在开发）**    
-└── [5_blas](./5_blas)**：blas相关功能样例。（正在开发）**    
+├── [3_model_management](./3_model_management)**：模型管理相关功能样例。（正在开发）**       
+└── [4_blas](./5_blas)**：blas相关功能样例。（正在开发）**    
 
 
 
