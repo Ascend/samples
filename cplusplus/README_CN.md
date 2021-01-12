@@ -15,6 +15,8 @@
 │   ├── 4_op_dev   
 │   ├── 5_200dk_peripheral    
 │   └── 6_media   
+│   └── 7_dvpp   
+│   └── 8_graphrun   
 ├── [level2_simple_inference](./level2_simple_inference)：**级别2-推理教学样例**   
 │   ├── 1_classification     
 │   ├── 2_object_detection   
