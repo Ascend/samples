@@ -92,7 +92,7 @@
 ## 环境要求<a name="section3833348101215"></a>
 
 -   操作系统及架构：CentOS 7.6 x86\_64、CentOS aarch64、Ubuntu 18.04 x86\_64
--   版本：20.0、20.1、20.2
+-   版本：20.2
 -   编译器：
     -   Ascend310 EP/Ascend710形态编译器：g++
     -   Atlas 200 DK编译器：aarch64-linux-gnu-g++
