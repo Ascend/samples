@@ -183,15 +183,16 @@ def main():
     acl_resource.init()
     #加载模型
     model = Model(acl_resource, MODEL_PATH)
-    src_dir = os.listdir(INPUT_DIR)
-    print("src_dir = ", src_dir)
+    images_list = [os.path.join(INPUT_DIR, img)
+                   for img in os.listdir(INPUT_DIR)
+                   if os.path.splitext(img)[1] in IMG_EXT]
     #从data目录逐张读取图片进行推理
-    for pic in src_dir:
+    for pic in images_list:
         #读取图片
-        pic_path = os.path.join(INPUT_DIR, pic)
-        bgr_img = cv.imread(pic_path)
+        
+        bgr_img = cv.imread(pic)
         #预处理
-        data, orig = preprocess(pic_path)
+        data, orig = preprocess(pic)
         #data, orig = preprocess(bgr_img)
         #送进模型推理
         result_list = model.execute([data,])    
