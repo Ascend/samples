@@ -126,8 +126,9 @@ function main() {
 
     
     mkdir -p ${HOME}/models/${project_name}  
+    declare -i num=0
     for i in $(find ${HOME}/models/${project_name} -name "*.om" 2>/dev/null);do
-        modelArray=${i}
+        modelArray[$((num++))]=${i}
     done 
     if [[ 3 -eq ${#modelArray[@]} ]];then 
         ln -s ${HOME}/models/${project_name}/${model_name1}".om" ${project_path}/model/${model_name1}".om"
