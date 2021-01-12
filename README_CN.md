@@ -38,7 +38,7 @@ AscendCL（Ascend Computing Language）提供Device管理、Context管理、Stre
 
 ## 样例表单及适配说明<a name="Version-of-samples"></a>
 
-| 样例名称 | 语言 | 适配版本 | 适配产品 |
+| 样例名称 | 语言 | 适配CANN版本 | 适配产品 |
 |---|---|---|---|
 | [crop](./cplusplus/level1_single_api/1_acl/4_dvpp/crop) |  c++ |20.0/20.1  | Atlas200DK/Atlas300 |
 | [vdec](./cplusplus/level1_single_api/1_acl/4_dvpp/vdec) |  c++ |20.0/20.1  | Atlas200DK/Atlas300 |
