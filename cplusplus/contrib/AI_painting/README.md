@@ -51,7 +51,7 @@
     ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
     > - modelzoo中提供了转换好的om模型，可下载直接使用，也可以参照第三步下载原始模型进行模型转换。
 
-3. 将原始模型转换为Davinci模型。
+3. 将原始模型转换为Davinci模型。 
     
     **注：请确认环境变量已经在[环境准备和依赖安装](../../environment)中配置完成**
 
@@ -70,6 +70,7 @@
     3. 执行以下命令将转换好的模型复制到样例中model文件夹中。
 
         **cp ./AIPainting_v2.om $HOME/samples/cplusplus/contrib/AI_painting/model/**
+
 
 
 
