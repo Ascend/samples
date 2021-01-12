@@ -1,4 +1,4 @@
-中文|[English](README_EN.md)
+[English]|[中文](README_CN.md)
 
 ## About Ascend Samples Repository
    
@@ -23,12 +23,7 @@ This repository provides a wide range of samples developed based on AscendCL API
 │   ├── contrib   
 │   ├── level1_single_api   
 │   ├── level2_simple_inference   
-│   └── level3_multi_model   
-├── [ci](./ci)：**Build scripts**    
-├── [doc](./doc)：**Dependency installation guides**    
-│   ├── opencv_install   
-│   ├── presenteragent_install   
-│   └── python3_ENV_install   
+│   └── level3_multi_model    
 ├── [python](./python)：**Python samples **  
 │   ├── common   
 │   ├── contrib   
