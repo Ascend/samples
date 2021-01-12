@@ -5,25 +5,25 @@ Presenter部署在Mind Studio所在的Linux服务器上，主要作用是推理�
 Presenter包括Presenter Server与Presenter Agent。
 
 -   Presenter Agent提供一系列API，用户通过调用API向Presenter Server推送媒体消息。
--   Presenter Server接收Presenter Agent发过来的人脸数据，通过浏览器进行结果展示。
+-   Presenter Server接收Presenter Agent发过来的数据，通过浏览器进行结果展示。
 
 ## Presenter Server<a name="zh-cn_topic_0147635264_section513113597483"></a>
 
 -   **Description**
 
-    Presenter Server是展示人脸检测推理结果的软件包，该软件基于python3.5实现，并用到了第三方web框架tornado，以及底层通信框架protobuf。
+    Presenter Server是展示推理结果的软件包，该软件基于python3实现，并用到了第三方web框架tornado，以及底层通信框架protobuf。
 
-    Presenter Server支持图片模式和视频模式。图片模式展示单张人脸图片，视频模式以图片流的方式展示连续图片。Presenter server通过channel来标记不同的数据源，在浏览器里通过Create按钮添加channel，Delete进行删除，默认支持两路channel，分别是image和video。
+    Presenter Server支持图片模式和视频模式。图片模式展示单张图片，视频模式以图片流的方式展示连续图片。Presenter server通过channel来标记不同的数据源，在浏览器里通过Create按钮添加channel，Delete进行删除，默认支持两路channel，分别是image和video。
 
 -   **Sample Code**
 
-    presenter server的根目录在common/presenter/server，face\_detection是人脸识别app的目录，config是配置文件目录，修改config.conf进行可服务端ip和port的定制，logging.conf是logging模块的配置；src是源码目录，其中，presenter\_message\_pb2.py 定义protobuf格式，presenter\_socket\_server.py 负责并行接收人脸数据，webapp.py 负责把数据推送到Chrome，进行前台展示；ui是web界面素材所在目录。
+    config是配置文件目录，修改config.conf进行可服务端ip和port的定制，logging.conf是logging模块的配置；src是源码目录，其中，presenter\_message\_pb2.py 定义protobuf格式，presenter\_socket\_server.py 负责并行接收数据，webapp.py 负责把数据推送到Chrome，进行前台展示；ui是web界面素材所在目录。
 
     与Presenter Agent的消息通信：
 
-    Presenter Server 与Presenter Agent和Chrome的消息通信如下图所示，Chrome上发起创建channel的操作，Presenter Server发送人脸数据到指定channel，Chrome打开此channel，观察人脸检测推理结果。
+    Presenter Server 与Presenter Agent和Chrome的消息通信如下图所示，Chrome上发起创建channel的操作，Presenter Server发送数据到指定channel，Chrome打开此channel，观察推理结果。
 
-    ![](doc/source/img/zh-cn_image_0167567268.png)
+    ![输入图片说明](https://images.gitee.com/uploads/images/2021/0112/114222_18033d3b_7401379.png "屏幕截图.png")
 
     Presenter Server与Presenter Agent之间消息结构如下，依次是4个字节的消息总长度，1个字节的消息名长度，若干字节的消息消息名，若干字节的protobuf内容。
 
@@ -39,7 +39,7 @@ Presenter包括Presenter Server与Presenter Agent。
     ---------------------------------------------------------------
     ```
 
-    主要的消息有两个，一个是打开channel的请求消息OpenChannelRequest ，另一个是发送人脸数据的消息PresentImageRequest ，其在ptorobuf中的定义如下：
+    主要的消息有两个，一个是打开channel的请求消息OpenChannelRequest ，另一个是发送数据的消息PresentImageRequest ，其在ptorobuf中的定义如下：
 
     ```
     message OpenChannelRequest {
@@ -116,7 +116,7 @@ Presenter包括Presenter Server与Presenter Agent。
     return ret
     ```
 
-    解析protobuf，来自Presenter Agent的消息请求共有三个，分别是打开channel、发送人脸数据、发送心跳。
+    解析protobuf，来自Presenter Agent的消息请求共有三个，分别是打开channel、发送数据、发送心跳。
 
     ```
     def _process_msg(self, conn, msg_name, msg_data):
@@ -141,7 +141,7 @@ Presenter Agent提供一系列API，用户可以调用这些API向Presenter Serv
 
 调用流程如下所示：
 
-![](doc/source/img/zh-cn_image_0167567505.png)
+![输入图片说明](https://images.gitee.com/uploads/images/2021/0112/114246_8c1504f0_7401379.png "屏幕截图.png")
 
 1.  App调用OpenChannel函数打开与Presenter Server间的通道。
 2.  App调用SendMessage函数在该通道上推送媒体消息。推送消息时， 支持在推送的图片上画矩形框。使用时需要将框的左上、右下点的坐标、框的标题设置到PresentImageRequest对象中。
