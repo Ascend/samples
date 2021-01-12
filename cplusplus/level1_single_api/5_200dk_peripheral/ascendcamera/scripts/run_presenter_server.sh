@@ -93,7 +93,7 @@ function check_python3_lib()
 function check_ip()
 {
     #check format of remost_host ip
-    presenter_connect_ip=$(cat ${app_path}/script/param.conf | grep "presenter_server_ip" | awk -F'[ =]+' '{print $2}')
+    presenter_connect_ip=$(cat ${app_path}/scripts/param.conf | grep "presenter_server_ip" | awk -F'[ =]+' '{print $2}')
 	presenter_connect_ip=$(echo $presenter_connect_ip | sed -e 's/\r//' | sed -e 's/\n//' | sed -e 's/ //')
     if [[ "$presenter_connect_ip" = "" ]];then
         echo "please check your param.conf to make sure that each parameter has a value"
@@ -105,7 +105,7 @@ function check_ip()
         return 1
     fi
 
-    presenter_view_ip=$(cat ${app_path}/script/param.conf | grep "presenter_view_ip" | awk -F'[ =]+' '{print $2}')
+    presenter_view_ip=$(cat ${app_path}/scripts/param.conf | grep "presenter_view_ip" | awk -F'[ =]+' '{print $2}')
     presenter_view_ip=$(echo $presenter_view_ip | sed -e 's/\r//' | sed -e 's/\n//' | sed -e 's/ //')
        if [[ "$presenter_view_ip" = "" ]];then
            echo "please check your param.conf to make sure that each parameter has a value"
