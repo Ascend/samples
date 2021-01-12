@@ -5,27 +5,6 @@
 
 **./**   
 ├── [googlenet_imagenet_dynamic_batch](./googlenet_imagenet_dynamic_batch)：**动态batch分类样例**   
-│   ├── CMakeLists.txt   
-│   ├── data   
-│   ├── model   
-│   └── src   
 ├── [googlenet_imagenet_multi_batch](./googlenet_imagenet_multi_batch)：**多batch分类样例**   
-│   ├── CMakeLists.txt   
-│   ├── data   
-│   ├── model   
-│   └── src   
-├── [googlenet_imagenet_picture](./googlenet_imagenet_picture)：**图片分类样例**  
-│   ├── CMakeLists.txt   
-│   ├── data   
-│   ├── inc   
-│   ├── model   
-│   ├── script   
-│   └── src   
-├── [googlenet_imagenet_video](./googlenet_imagenet_video)：**视频分类样例**  
-│   ├── CMakeLists.txt   
-│   ├── data   
-│   ├── inc   
-│   ├── model   
-│   ├── presenterserver   
-│   ├── script   
-└   └── src   
+├── [googlenet_imagenet_picture](./googlenet_imagenet_picture)：**图片分类样例**   
+└── [googlenet_imagenet_video](./googlenet_imagenet_video)：**视频分类样例**  
