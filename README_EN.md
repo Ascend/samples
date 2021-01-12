@@ -10,10 +10,10 @@ This repository provides a wide range of samples developed based on AscendCL API
 
 **For the CANN version and Ascend product supported by each sample in the master branch, see [Version and Product Support per Sample](#Version-of-samples). You can also download a specific sample release by referring to [CANN Version Description](#Version-Description).**
 
-** Table 1** CANN Version Description <a name="Version-Description"></a>
+**Table 1** CANN Version Description <a name="Version-Description"></a>
 | CANN Version | Samples Repository Support | Download Link |
 |---|---|---|
-| [20.0–20.1](https://ascend.huawei.com/#/software/cann/download) | Yes | Release 0.1.0 [click here] (https://gitee.com/ascend/samples/releases/v0.1.0) |
+| [20.0–20.1](https://ascend.huawei.com/#/software/cann/download) | Yes | Release 0.1.0 [click here](https://gitee.com/ascend/samples/releases/v0.1.0) |
 
 ## Directory Structure
 
