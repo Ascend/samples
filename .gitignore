@@ -52,7 +52,6 @@ cscope.*
 test_temp_summary_event_file/
 *.dot
 *.dat
-*.svg
 *.perf
 *.info
 *.ckpt
