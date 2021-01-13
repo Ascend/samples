@@ -30,6 +30,8 @@ else ()
     set(INC_PATH "$ENV{HOME}/Ascend/ascend-toolkit/20.1.rc1/x86_64-linux")
 endif()
 
+set(INC_PATH $ENV{DDK_PATH})
+
 if (NOT DEFINED ENV{DDK_PATH})
     set(INC_PATH "/usr/local/Ascend")
     message(STATUS "set default INC_PATH: ${INC_PATH}")
@@ -68,7 +70,7 @@ link_directories(
     ${INC_PATH}/atc/lib64
     ${INC_PATH}/aclib/lib64/stub/
     $ENV{HOME}/Ascend/
-    $ENV{HOME}/Ascend/driveri/
+    $ENV{HOME}/Ascend/driver/
 )
 
 add_executable(main

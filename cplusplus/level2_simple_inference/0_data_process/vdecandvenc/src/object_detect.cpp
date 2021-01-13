@@ -46,7 +46,7 @@ ObjectDetect::ObjectDetect(const char* modelPath,
 }
 
 ObjectDetect::~ObjectDetect() {
-    DestroyResource();
+    //DestroyResource();
 }
 
 AtlasError ObjectDetect::InitResource() {
@@ -280,6 +280,8 @@ void ObjectDetect::DestroyResource()
     encoder_.DestroyResource();
     model_.DestroyResource();
 
+    aclrtFree(imageInfoBuf_);
+
     aclError ret;
     if (stream_ != nullptr) {
         ret = aclrtDestroyStream(stream_);
@@ -300,7 +302,8 @@ void ObjectDetect::DestroyResource()
         ATLAS_LOG_ERROR("finalize acl failed\n");
     }
     ATLAS_LOG_INFO("end to finalize acl");
-    aclrtFree(imageInfoBuf_);
+    
+    
 }
 
 AtlasError ObjectDetect::SendImage(Channel* channel,ImageData& jpegImage,vector<DetectionResult>& detRes) {
