@@ -4,11 +4,12 @@
 
 此样例通过TIK方式实现了BatchNorm算子，BatchNorm算子是对输入进行归一化处理，x<sub>norm</sub>=（x−μ）/σ，其中， μ和 σ是计算的均值和方差。
 
-此样例针对不同的shape范围，制定不同的Tiling策略，从而形成多个算子实现文件，再将算子实现文件编译成二进制文件（.o）。后续可参考[BatchNorm](https://gitee.com/ascend/samples/tree/dev/cplusplus/level1_single_api/4_op_dev/2_verify_op/acl_execute_batchnorm)运行sample执行对应shape的算子。
+此样例针对不同的shape范围，制定不同的Tiling策略，从而形成多个算子实现文件，再将算子实现文件编译成二进制文件（.o）。后续可参考[BatchNorm](https://gitee.com/ascend/samples/tree/master/cplusplus/level1_single_api/4_op_dev/2_verify_op/acl_execute_batchnorm)运行sample执行对应shape的算子。
 
 ## 环境要求<a name="section3833348101215"></a>
 
 -   操作系统及架构：CentOS x86系统、CentOS aarch64系统
+-   版本：20.2
 -   python及依赖的库：python3.7.5
 -   已完成昇腾AI软件栈在开发环境、运行环境上的部署。
 
