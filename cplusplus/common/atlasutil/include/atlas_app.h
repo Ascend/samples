@@ -33,15 +33,18 @@ public:
     ~AtlasApp();
 
     /**
-    * @brief init reousce
-    * @return result
-    */   
+     * @brief Get the single instance of AtlasApp
+     * @return Instance of AtlasApp
+     */ 
 	static AtlasApp& GetInstance() {
 		static AtlasApp instance;
 		return instance;
 	}
 
-    AtlasError Init();
+    /**
+     * @brief Create one app thread     * 
+     * @return Result of create thread
+     */ 
     int CreateAtlasThread(AtlasThread* thInst, const std::string& instName,
                           aclrtContext context, aclrtRunMode runMode);
     int Start(vector<AtlasThreadParam>& threadParamTbl);
@@ -53,6 +56,7 @@ public:
     void Exit();
 
 private:
+    AtlasError Init();
     int CreateAtlasThreadMgr(AtlasThread* thInst, const std::string& instName,
                              aclrtContext context, aclrtRunMode runMode);
     bool CheckThreadAbnormal();

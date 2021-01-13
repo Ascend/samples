@@ -54,7 +54,7 @@
 #define RTSP_TRANSPORT_UDP "udp"
 #define RTSP_TRANSPORT_TCP "tcp"
 
-#define VIDEO_CHANNEL_MAX  16
+#define VIDEO_CHANNEL_MAX  23
 #define INVALID_CHANNEL_ID -1
 
 enum StreamType {
@@ -145,6 +145,7 @@ class VideoDecode : public AtlasVideoCapBase {
     
     void DestroyResource();
     bool IsStop() { return isStop_; }
+    bool IsJam() { return isJam_; }
 
 private:  
     AtlasError InitResource();
@@ -177,6 +178,7 @@ private:
     
     bool isStop_;
     bool isReleased_;
+    bool isJam_;
 };
 
 #endif /* VIDEO_DECODE_H_ */
