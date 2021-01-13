@@ -83,13 +83,13 @@ Caffe与TensorFlow共存的自定义算子样例工程的目录结构如下所�
 
 -   Scope融合规则样例
 
-    Scope融合规则实现样例，请参见[tf_scope_fusion_pass](https://gitee.com/ascend/samples/tree/dev/cplusplus/level1_single_api/4_op_dev/1_custom_op/framework/tf_scope_fusion_pass)：
+    Scope融合规则实现样例，请参见[tf_scope_fusion_pass](https://gitee.com/ascend/samples/tree/master/cplusplus/level1_single_api/4_op_dev/1_custom_op/framework/tf_scope_fusion_pass)：
 
     - decode_bbox_v2_scope_fusion_pass为多对一场景融合示例，目标是将Decode Scope下的所有小算子融合为DecodeBboxV2算子。Decode Scope内包括2个Exp算子/4个Mul算子/4个Sub算子/2的倍数个RealDiv算子/2个Unpack算子/1个Pack算子/3个Transpose算子/不能包括Softmax算子。
     - decode_bbox_v2_multi_pass为多对多场景融合示例，目标是将Decode Scope下的所有小算子融合为DecodeBboxV2算子和Identity的算子组合。Decode Scope内包括2个Exp算子/4个Mul算子/4个Sub算子/2的倍数个RealDiv算子/2个Unpack算子/1个Pack算子/3个Transpose算子/不能包括Softmax算子。
     - scope_batchmulticlass_nms_pass多对一场景融合示例，目标是将Batchmulticlass_nms Scope下的所有小算子融合为Batchmulticlass_nms算子。Batchmulticlass_nms Scope内包括1个NonMaxSuppressionV2算子/4个Maximum算子/11个Merge算子/不能包括Transpose算子。
     
-    Scope融合算子适配插件实现文件，请参见[tf_plugin](https://gitee.com/ascend/samples/blob/dev/cplusplus/level1_single_api/4_op_dev/1_custom_op/framework/tf_plugin)：
+    Scope融合算子适配插件实现文件，请参见[tf_plugin](https://gitee.com/ascend/samples/tree/master/cplusplus/level1_single_api/4_op_dev/1_custom_op/framework/tf_plugin)：
     - decode_bbox_v2_scope_fussion_plugin对应为decode_bbox_v2_scope_fusion_pass融合算子的适配插件实现文件。
 
 
