@@ -1,15 +1,12 @@
 """
 Copyright (R) @huawei.com, all rights reserved
 -*- coding:utf-8 -*-
-CREATED:  2020-6-04 20:12:13
-MODIFIED: 2020-6-28 14:04:45
 """
 import acl
 import struct
 import numpy as np
 import datetime
 from utils import *
-
 
 class Model(object):
     def __init__(self, acl_resource, model_path):
@@ -25,6 +22,7 @@ class Model(object):
         self._init_resource()
         self._is_released = False
         acl_resource.register_resource(self)
+        return 
     
     def __del__(self):
         if self._is_released:
@@ -45,6 +43,7 @@ class Model(object):
                 print("acl.mdl.destroy_desc error:", ret)
         self._is_released = True
         print("Model release source success")
+        return
 
     def _init_resource(self):
         print("Init model resource")
@@ -67,7 +66,6 @@ class Model(object):
 
         #create input buffer 
         self._init_input_buffer()
-
         return SUCCESS
 
     def _get_output_desc(self, output_size):
@@ -77,6 +75,7 @@ class Model(object):
             datatype = acl.mdl.get_output_data_type(self.model_desc, i)
             self._output_info.append({"shape": tuple(dims[0]["dims"]),
                                       "type": datatype})
+        return 
 
     def _gen_output_dataset(self, size):
         print("[Model] create model output dataset:")
@@ -100,6 +99,7 @@ class Model(object):
                 check_ret("acl.destroy_data_buffer", ret)
         self.output_dataset = dataset
         print("[Model] create model output dataset success")
+        return
 
     def _init_input_buffer(self):
         self._input_num = acl.mdl.get_num_inputs(self.model_desc)
@@ -107,6 +107,7 @@ class Model(object):
         for i in range(self._input_num):
             item = {"addr":None, "size":0}
             self._input_buffer.append(item)
+        return
 
     def _gen_input_dataset(self, input_list):
         ret = SUCCESS

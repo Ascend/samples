@@ -35,7 +35,6 @@ class AclResource(object):
         check_ret("acl.rt.get_run_mode", ret)
 
         print("Init resource success")
-        return self.stream
 
     def register_resource(self, resource):
         self.other_resource_list.append({DICT_KEY_RESOURCE:resource, 
@@ -47,14 +46,7 @@ class AclResource(object):
                 self.other_resource_list[i][DICT_KEY_STATUS] = DICT_VAL_UNREG
                 break
     
-    def destroy(self):
-        self.__del__()
-        self.is_destroyed = True
-    
     def __del__(self):
-        if self.is_destroyed:
-            return
-
         print("Release acl resource, ", len(self.other_resource_list))
         for i in range(len(self.other_resource_list)): 
             print("Start relase resource ", i)           

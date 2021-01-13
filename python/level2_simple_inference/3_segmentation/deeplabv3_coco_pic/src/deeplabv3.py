@@ -6,7 +6,6 @@ from constants import *
 from acl_model import Model
 from acl_resource import AclResource
 
-
 MODEL_WIDTH = 513
 MODEL_HEIGHT = 513
 INPUT_DIR = './data/'
@@ -28,7 +27,6 @@ def preprocess(picPath):
     if not img.flags['C_CONTIGUOUS']:
         img = np.ascontiguousarray(img)
     return orig_shape,  img
-
 
 def postprocess(result_list, pic, orig_shape,pic_path):
     result_img = result_list[0].reshape(513,513)
@@ -68,7 +66,6 @@ def main():
         #postprocess
         postprocess(result_list, pic, orig_shape,pic_path)
     print("Execute end")
-
 
 if __name__ == '__main__':
     main()
