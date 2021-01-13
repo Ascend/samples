@@ -1,7 +1,6 @@
 import acl
 
-from atlas_utils.constants import *
-from atlas_utils.utils import *
+from utils import *
 
 DICT_KEY_RESOURCE = "resource"
 DICT_KEY_STATUS = "status"
@@ -16,7 +15,6 @@ class AclResource(object):
         self.context = None
         self.stream = None
         self.run_mode = None
-        self.is_destroyed = False
         self.other_resource_list = []
 
     def init(self):
