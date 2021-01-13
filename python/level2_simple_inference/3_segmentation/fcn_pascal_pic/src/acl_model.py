@@ -115,7 +115,7 @@ class Model(object):
         ret = SUCCESS
         if len(input_list) != self._input_num:
             print("Current input data num %d unequal to"
-                  " model input num %d"%(len(input_list), self._input_num))
+                  " model input num %d" % (len(input_list), self._input_num))
             return FAILED
 
         self.input_dataset = acl.mdl.create_dataset()
@@ -124,7 +124,7 @@ class Model(object):
             data, size = self._parse_input_data(item, i)            
             if (data is None) or (size == 0):
                 ret = FAILED
-                print("The %d input is invalid"%(i))
+                print("The %d input is invalid" % (i))
                 break
 
             dataset_buffer = acl.create_data_buffer(data, size)
@@ -139,21 +139,21 @@ class Model(object):
             self._release_dataset(self.input_dataset)
         return ret
 
-    def _parse_input_data(self, input, index):
+    def _parse_input_data(self , inputitem, index):
         data = None
         size = 0
-        if isinstance(input, np.ndarray):
-            ptr = acl.util.numpy_to_ptr(input)
-            size = input.size * input.itemsize
+        if isinstance(inputitem, np.ndarray):
+            ptr = acl.util.numpy_to_ptr(inputitem)
+            size = inputitem.size * inputitem.itemsize
             data = self._copy_input_to_device(ptr, size, index)
-            if data == None:
+            if data is None:
                 size = 0
                 print("Copy input to device failed")
 
-        elif (isinstance(input, dict) and
-              input.has_key('data') and input.has_key('size')):
-            size = input['size']
-            data = input['data']
+        elif (isinstance(inputitem, dict) and
+              inputitem.has_key('data') and inputitem.has_key('size')):
+            size = inputitem['size']
+            data = inputitem['data']
         else:
             print("Unsupport input")
 
@@ -166,7 +166,7 @@ class Model(object):
             data = copy_data_device_to_device(input_ptr, size)
             if data is None:
                 print("Malloc memory and copy model %dth "
-                      "input to device failed"%(index))
+                      "input to device failed" % (index))
                 return None
             buffer_item['addr'] = data
             buffer_item['size'] = size
@@ -175,12 +175,12 @@ class Model(object):
                                 input_ptr, size,
                                 ACL_MEMCPY_DEVICE_TO_DEVICE)
             if ret != ACL_ERROR_NONE:
-                print("Copy model %dth input to device failed"%(index))
+                print("Copy model %dth input to device failed" % (index))
                 return None
             data = buffer_item['addr']
         else:
             print("The model %dth input size %d is change,"
-                  " before is %d"%(index, size, buffer_item['size']))
+                  " before is %d" % (index, size, buffer_item['size']))
             return None
 
         return data
@@ -208,9 +208,9 @@ class Model(object):
         dataset = []
         num = acl.mdl.get_dataset_num_buffers(self.output_dataset)
         for i in range(num):
-            buffer = acl.mdl.get_dataset_buffer(self.output_dataset, i)
-            data = acl.get_data_buffer_addr(buffer)
-            size = acl.get_data_buffer_size(buffer)
+            outbuffer = acl.mdl.get_dataset_buffer(self.output_dataset, i)
+            data = acl.get_data_buffer_addr(outbuffer)
+            size = acl.get_data_buffer_size(outbuffer)
             narray = np.zeros(size, dtype=np.byte)
             narray_ptr = acl.util.numpy_to_ptr(narray)
             ret = acl.rt.memcpy(narray_ptr, narray.size * narray.itemsize, 

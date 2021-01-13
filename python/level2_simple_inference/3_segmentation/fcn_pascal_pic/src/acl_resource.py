@@ -7,8 +7,6 @@ DICT_KEY_STATUS = "status"
 DICT_VAL_REG = "register"
 DICT_VAL_UNREG = "unregister"
 
-
-
 class AclResource(object):
     def __init__(self, device_id=0):
         self.device_id = device_id
@@ -35,16 +33,19 @@ class AclResource(object):
         check_ret("acl.rt.get_run_mode", ret)
 
         print("Init resource success")
+        return
 
     def register_resource(self, resource):
         self.other_resource_list.append({DICT_KEY_RESOURCE:resource, 
                                          DICT_KEY_STATUS:DICT_VAL_REG})
+        return
 
     def unregister_resource(self, resource):
         for i in range(len(self.other_resource_list)):            
             if self.other_resource_list[i] == resource:
                 self.other_resource_list[i][DICT_KEY_STATUS] = DICT_VAL_UNREG
                 break
+        return
     
     def __del__(self):
         print("Release acl resource, ", len(self.other_resource_list))
@@ -60,3 +61,4 @@ class AclResource(object):
         acl.rt.reset_device(self.device_id)
         acl.finalize()
         print("Release acl resource success")
+        return
