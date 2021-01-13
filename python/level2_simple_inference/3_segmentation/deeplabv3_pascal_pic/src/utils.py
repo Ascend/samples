@@ -6,6 +6,7 @@ def check_ret(message, ret):
         raise Exception("{} failed ret={}"
                         .format(message, ret))
 
+
 def copy_data_device_to_host(device_data, data_size):
     host_buffer, ret = acl.rt.malloc_host(data_size)
     if ret != ACL_ERROR_NONE:
@@ -59,6 +60,7 @@ def align_up(value, align):
 
 def align_up16(value):
     return align_up(value, 16)
+
 
 def align_up2(value):
     return align_up(value, 2)

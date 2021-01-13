@@ -139,7 +139,7 @@ class Model(object):
             self._release_dataset(self.input_dataset)
         return ret
 
-    def _parse_input_data(self , inputitem, index):
+    def _parse_input_data(self, inputitem, index):
         data = None
         size = 0
         if isinstance(inputitem, np.ndarray):
@@ -150,8 +150,7 @@ class Model(object):
                 size = 0
                 print("Copy input to device failed")
 
-        elif (isinstance(inputitem, dict) and
-              inputitem.has_key('data') and inputitem.has_key('size')):
+        elif (isinstance(inputitem, dict) and ('data' in inputitem) and ('size' in inputitem) ):
             size = inputitem['size']
             data = inputitem['data']
         else:

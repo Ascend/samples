@@ -24,18 +24,18 @@ def pre_process( picPath):
     rgb_img =origin_img.resize((MODEL_WIDTH, MODEL_HEIGHT))
     in_ = np.array(rgb_img, dtype=np.float32) 
     in_ = in_[:,:,::-1] 
-    in_ -= np.array((104.00698793,116.66876762,122.67891434)) 
+    in_ -= np.array((104.00698793, 116.66876762, 122.67891434)) 
     in_ = in_.transpose((2,0,1)).copy()
     return origin_img, in_
 
-def post_process(infer_output, image_file,origin_img):
+def post_process(infer_output, image_file, origin_img):
     print("post process")
     data = infer_output[0]
     data = np.squeeze(data)
     prediction = data.argmax(axis = 0).astype(np.uint8) 
     voc_palette = vis.make_palette(21) 
     out_im = Image.fromarray(vis.color_seg(prediction, voc_palette)) 
-    out_im2 =out_im.resize((origin_img.width,origin_img.height))
+    out_im2 =out_im.resize((origin_img.width, origin_img.height))
     output_path = os.path.join(os.path.join(SRC_PATH, "../outputs/"),'out_'+ os.path.basename(image_file))
     output_path2 = os.path.join(os.path.join(SRC_PATH, "../outputs/"),'outvis_'+ os.path.basename(image_file))
     out_im2.save(output_path) 
@@ -73,7 +73,7 @@ def main():
         result = model.execute([resized_image,])
         print("Inference  end")              
 
-        result_img_encode = post_process(result, image_file,origin_img)             
+        result_img_encode = post_process(result, image_file, origin_img)             
         print("post process  end")     
     return result_img_encode
 
