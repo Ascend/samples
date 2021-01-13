@@ -27,6 +27,7 @@
 ## 环境要求<a name="section3833348101215"></a>
 
 -   操作系统及架构：CentOS x86系统、CentOS aarch64系统、Euleros x86系统、Euleros aarch64系统
+-   版本：20.2
 -   编译器：g++
 -   芯片：all
 -   python及依赖的库：python3.7.5
@@ -116,9 +117,9 @@
 
    - 如果用户采用将TensorFlow原始模型解析为Graph的构图方式，请执行如下命令：
 
-     如果安装了ATC组件，请执行：**./ir_build  _${soc_version}_  tf**
+     如果安装的是ATC组件，请执行：**./ir_build ${soc_version} tf**
 
-     如果安装了FwkACLlib组件，请执行：**./fwk_ir_build_ ${soc_version}_  tf**
+     如果安装的是FwkACLlib组件，请执行：**./fwk_ir_build ${soc_version} tf**
 
      编译成功提示：
 
@@ -130,9 +131,9 @@
 
    - 如果用户采用将Caffe原始模型解析为Graph的构图方式，请执行如下命令：
 
-     如果安装了ATC组件，请执行：**./ir_build  _${soc_version}_  caffe**
+     如果安装的是ATC组件，请执行：**./ir_build ${soc_version} caffe**
 
-     如果安装了FwkACLlib组件，请执行：**./fwk_ir_build_ ${soc_version}_  caffe**
+     如果安装的是FwkACLlib组件，请执行：**./fwk_ir_build ${soc_version} caffe**
 
      编译成功提示：
 
