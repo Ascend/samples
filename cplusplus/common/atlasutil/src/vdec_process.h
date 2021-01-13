@@ -29,6 +29,7 @@ public:
     AtlasError Process(std::shared_ptr<FrameData> frameData, void* userData);
     AtlasError SetFormat(uint32_t format);
     AtlasError VideoParamCheck();
+    bool IsExit() { return isExit_; }
 
 private:
     AtlasError CreateVdecChannelDesc();
@@ -66,7 +67,7 @@ private:
     acldvppPicDesc *outputPicDesc_;
 
     pthread_t subscribeThreadId_;
-
+    bool isExit_;
     bool isReleased_;
     
 };

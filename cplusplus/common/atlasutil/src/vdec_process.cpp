@@ -27,6 +27,7 @@ VdecProcess::VdecProcess(int channelId, uint32_t width, uint32_t height,
 ,frameWidth_(width)
 ,frameHeight_(height)
 ,callback_(callback)
+,isExit_(false)
 ,isReleased_(false){
     alignWidth_ = ALIGN_UP16(frameWidth_);
     alignHeight_ = ALIGN_UP2(frameHeight_);
@@ -83,7 +84,9 @@ void* VdecProcess::SubscribeReportThreadFunc(void *arg) {
         return (void*)ATLAS_ERROR_CREATE_ACL_CONTEXT;
     }
 
-    while (!g_ReportExit) {
+    VdecProcess* vdec = (VdecProcess *)arg;
+
+    while (!vdec->IsExit()) {
         // Notice: timeout 1000ms
         aclrtProcessReport(1000);
     }
@@ -105,7 +108,7 @@ void VdecProcess::UnsubscribReportThread() {
     (void)aclrtUnSubscribeReport(static_cast<uint64_t>(subscribeThreadId_),
                                                        stream_);
     // destory thread
-    g_ReportExit = true;
+    isExit_ = true;
 
     void *res = nullptr;
     int joinThreadErr = pthread_join(subscribeThreadId_, &res);
@@ -235,6 +238,7 @@ AtlasError VdecProcess::CreateInputStreamDesc(shared_ptr<FrameData> frameData)
         return ATLAS_ERROR_SET_STREAM_DESC_SIZE;
     }
 
+    acldvppSetStreamDescTimestamp(inputStreamDesc_, frameData->frameId);
 
     return ATLAS_OK;
 }

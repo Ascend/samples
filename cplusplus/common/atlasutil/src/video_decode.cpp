@@ -59,6 +59,7 @@ namespace {
     const int kWaitDecodeFinishInterval = 1000;
 
     const int kDefaultFps = 1;
+    const int kReadSlow = 2;
 
     ChannelIdGenerator channelIdGenerator;
 }
@@ -68,7 +69,8 @@ context_(context), streamType_(STREAM_VIDEO), channelId_(INVALID_CHANNEL_ID),
 frameId_(0), finFrameCnt_(0), status_(DECODE_UNINIT), streamName_(videoName),
 streamFormat_(H264_MAIN_LEVEL), lastDecodeTime_(0), fpsInterval_(0), 
 ffmpegDecoder_(nullptr), dvppVdec_(nullptr),
-frameImageQueue_(kDecodeFrameQueueSize), isStop_(false), isReleased_(false) {
+frameImageQueue_(kDecodeFrameQueueSize), isStop_(false), isReleased_(false),
+isJam_(false) {
     if (IsRtspAddr(videoName)) {
         streamType_ = STREAM_RTSP;
     }
@@ -80,20 +82,19 @@ VideoDecode::~VideoDecode() {
 
 void VideoDecode::DestroyResource() {
     if (isReleased_) return;    
-    
+    //1. stop ffmpeg
     isStop_ = true;
     ffmpegDecoder_->StopDecode();
-
     while ((status_ >= DECODE_START) && (status_ < DECODE_FFMPEG_FINISHED)) {
         usleep(kWaitDecodeFinishInterval);
     }
-
+    //2. delete ffmpeg decoder
     delete ffmpegDecoder_;
-    ffmpegDecoder_ = nullptr;
-    
+    ffmpegDecoder_ = nullptr;    
+    //3. release dvpp vdec
     delete dvppVdec_;
     dvppVdec_ = nullptr;
-    
+    //4. release image memory in decode output queue
     do {
         shared_ptr<ImageData> frame = FrameImageOutQueue(true);
         if (frame == nullptr) {
@@ -105,7 +106,7 @@ void VideoDecode::DestroyResource() {
             frame->data = nullptr;
         }       
     }while(1);
-
+    //5. release channel id
     channelIdGenerator.ReleaseChannelId(channelId_);
 
     isReleased_ = true;
@@ -113,7 +114,7 @@ void VideoDecode::DestroyResource() {
 
 AtlasError VideoDecode::InitResource() {
     aclError aclRet;
-
+    //1. Set acl context of video decoder, use current thread context default
     if (context_ == nullptr) {
         aclRet = aclrtGetCurrentContext(&context_);
         if ((aclRet != ACL_ERROR_NONE) || (context_ == nullptr)) {
@@ -121,14 +122,12 @@ AtlasError VideoDecode::InitResource() {
             return ATLAS_ERROR_GET_ACL_CONTEXT;
         }       
     }
-    
-    //如果有传入acl context参数,设置解码器主线程context
     AtlasError ret = SetAclContext();
     if (ret != ATLAS_OK) {
         ATLAS_LOG_ERROR("Set video decoder acl context error:%d", aclRet);
         return ret;
     }
-
+    //2.Get current run mode
     aclRet = aclrtGetRunMode(&runMode_);
     if (aclRet != ACL_ERROR_NONE) {
         ATLAS_LOG_ERROR("acl get run mode failed");
@@ -139,14 +138,14 @@ AtlasError VideoDecode::InitResource() {
 }
 
 AtlasError VideoDecode::InitVdecDecoder() {
-    //为视频解码器分配一个当前应用唯一的channel id
+    //Generate a unique channel id for video decoder
     channelId_ = channelIdGenerator.GenerateChannelId();
     if (channelId_ == INVALID_CHANNEL_ID) {
         ATLAS_LOG_ERROR("Decoder number excessive %d", VIDEO_CHANNEL_MAX);
         return ATLAS_ERROR_TOO_MANY_VIDEO_DECODERS;
     }
 
-    //实例化vdec解码器,将输入的h26x帧解码为图片
+    //Create dvpp vdec to decode h26x data
     dvppVdec_ = new VdecProcess(channelId_, ffmpegDecoder_->GetFrameWidth(), 
                                 ffmpegDecoder_->GetFrameHeight(), 
                                 streamFormat_, VideoDecode::DvppVdecCallback); 
@@ -159,7 +158,7 @@ AtlasError VideoDecode::InitVdecDecoder() {
 }
 
 AtlasError VideoDecode::InitFFmpegDecoder() {
-        //创建视频解码为H26X的解码器实例
+    //Create ffmpeg decoder to parse video stream to h26x frame data
     ffmpegDecoder_ = new FFmpegDecoder(streamName_);
     if (kInvalidTpye == GetVdecType()) {
         this->SetStatus(DECODE_ERROR);        
@@ -168,26 +167,27 @@ AtlasError VideoDecode::InitFFmpegDecoder() {
         return ATLAS_ERROR_FFMPEG_DECODER_INIT;
     } 
 
-    //h26x裸流文件没有帧率参数
+    //Get video fps, if no fps, use 1 as default
     int fps =  ffmpegDecoder_->GetFps();
     if (fps == 0) {
         fps = kDefaultFps;
         ATLAS_LOG_INFO("Video %s fps is 0, change to %d", 
                        streamName_.c_str(), fps);
     }
+    //Cal the frame interval time(us)
     fpsInterval_ = kUsec / fps;
 
     return ATLAS_OK;
 }
 
 AtlasError VideoDecode::Open() {
-    //防止多次初始化
+    //Open video stream, if open failed before, return error directly
     if (status_ == DECODE_ERROR) 
         return ATLAS_ERROR_OPEN_VIDEO_UNREADY;
-
+    //If open ok already
     if (status_ != DECODE_UNINIT)
         return ATLAS_OK;
-
+    //Init acl resource
     AtlasError ret = InitResource();
     if (ret != ATLAS_OK) {
         this->SetStatus(DECODE_ERROR);
@@ -195,7 +195,7 @@ AtlasError VideoDecode::Open() {
                         streamName_.c_str(), ret);
         return ret;
     }
-
+    //Init ffmpeg decoder
     ret = InitFFmpegDecoder();
     if (ret != ATLAS_OK) {
         this->SetStatus(DECODE_ERROR);
@@ -203,7 +203,7 @@ AtlasError VideoDecode::Open() {
                         streamName_.c_str(), ret);
         return ret;
     }
-    
+    //Init dvpp vdec decoder
     ret = InitVdecDecoder();
     if (ret != ATLAS_OK) {
         this->SetStatus(DECODE_ERROR);
@@ -211,7 +211,7 @@ AtlasError VideoDecode::Open() {
                         streamName_.c_str(), ret);
         return ret;
     }
- 
+    //Set init ok
     this->SetStatus(DECODE_READY);
     ATLAS_LOG_INFO("Video %s decode init ok", streamName_.c_str());
     
@@ -219,9 +219,7 @@ AtlasError VideoDecode::Open() {
 }
 
 int VideoDecode::GetVdecType() {
-    //VDEC支持　H265 main level，264 baseline level，main level，high level
-    //等４种格式的视频解码.根据ffmpeg的解码确定视频文件属于哪一种.同样的,如果时h26x裸流,
-    //ffmpeg是无法解析出格式信息的
+    //VDEC only support　H265 main level，264 baseline level，main level，high level
     int type = ffmpegDecoder_->GetVideoType();
     int profile = ffmpegDecoder_->GetProfile();
     if (type == AV_CODEC_ID_HEVC) {        
@@ -259,12 +257,12 @@ int VideoDecode::GetVdecType() {
     return streamFormat_;
 }
 
-//dvpp vdec　callback函数
+//dvpp vdec　callback
 void VideoDecode::DvppVdecCallback(acldvppStreamDesc *input, 
                                    acldvppPicDesc *output, void *userData)
 {
     VideoDecode* decoder = (VideoDecode*)userData;
-    //获取dvpp vdec解码后的yuv图片数据
+    //Get decoded image parameters
     shared_ptr<ImageData> image = make_shared<ImageData>();
     image->format = acldvppGetPicDescFormat(output);
     image->width = acldvppGetPicDescWidth(output);
@@ -276,11 +274,9 @@ void VideoDecode::DvppVdecCallback(acldvppStreamDesc *input,
     void* vdecOutBufferDev = acldvppGetPicDescData(output);
     image->data = SHARED_PRT_DVPP_BUF(vdecOutBufferDev);
 
-    //将解码后的图片放入队列等待读取
+    //Put the decoded image to queue for read
     decoder->ProcessDecodedImage(image);
-
-    //释放dvpp vdec的输入输出desc.为了减少内存申请和拷贝,输入和输出数据内存都是
-    //和上下游操作复用的,并且解码时异步的,内存无法复用, 所以需要对每一帧重新创建输入输出desc
+    //Release resouce
     aclError ret = acldvppDestroyPicDesc(output);
     if (ret != ACL_ERROR_NONE) {
         ATLAS_LOG_ERROR("fail to destroy pic desc, error %d", ret);
@@ -300,16 +296,16 @@ void VideoDecode::DvppVdecCallback(acldvppStreamDesc *input,
 }
 
 void VideoDecode::ProcessDecodedImage(shared_ptr<ImageData> frameData) {
+    finFrameCnt_++;
     if (YUV420SP_SIZE(frameData->width, frameData->height) != frameData->size) {
         ATLAS_LOG_ERROR("Invalid decoded frame parameter, "
-                        "width %d, height %d, size %d",
-                        frameData->width, frameData->height, frameData->size);
+                        "width %d, height %d, size %d, buffer %p",
+                        frameData->width, frameData->height, frameData->size, frameData->data.get());
         return;
     }
 
     FrameImageEnQueue(frameData);
 
-    finFrameCnt_++;
     if ((status_ == DECODE_FFMPEG_FINISHED) && (finFrameCnt_ >= frameId_)) {
         ATLAS_LOG_INFO("Last frame decoded by dvpp, change status to %d",
                        DECODE_DVPP_FINISHED);
@@ -329,7 +325,7 @@ AtlasError VideoDecode::FrameImageEnQueue(shared_ptr<ImageData> frameData) {
     return ATLAS_ERROR_VDEC_QUEUE_FULL;
 }
 
-//启动ffmpeg解码器,将视频文件解码为h26x帧
+//start decoder
 void VideoDecode::StartFrameDecoder() {
     if (status_ == DECODE_READY) {
 
@@ -340,25 +336,24 @@ void VideoDecode::StartFrameDecoder() {
     }
 }
 
-//ffmpeg解码器线程入口
+//ffmpeg decoder entry
 void VideoDecode::FrameDecodeThreadFunction(void* decoderSelf) {
     VideoDecode* thisPtr =  (VideoDecode*)decoderSelf;
 
-    //将ffmpeg解码器线程的acl context设置为跟主线程和vdec解码线程一致
     aclError aclRet = thisPtr->SetAclContext();
     if (aclRet != ACL_ERROR_NONE) {
         ATLAS_LOG_ERROR("Set frame decoder context failed, errorno:%d",
                         aclRet);
         return;
     }
-    //调用ffmpeg解码器开始解码视频,这是一个阻塞接口,一直到视频解析完
+    //start decode until complete
     thisPtr->FFmpegDecode();
     if (thisPtr->IsStop())  {
         thisPtr->SetStatus(DECODE_FINISHED);
         return;
     }
     thisPtr->SetStatus(DECODE_FFMPEG_FINISHED);  
-    //ffmpeg解码完视频后vdec解码器发一个结束帧
+    //when ffmpeg decode finish, send eos to vdec
     shared_ptr<FrameData> videoFrame = make_shared<FrameData>();    
     videoFrame->isFinished = true;
     videoFrame->data = nullptr;
@@ -370,7 +365,7 @@ void VideoDecode::FrameDecodeThreadFunction(void* decoderSelf) {
     } 
 }
 
-//ffmpeg解码回调
+//callback of ffmpeg decode frame 
 AtlasError VideoDecode::FrameDecodeCallback(void* decoder, void* frameData, 
                                             int frameSize) {
     if ((frameData == NULL) || (frameSize == 0)) {
@@ -380,6 +375,7 @@ AtlasError VideoDecode::FrameDecodeCallback(void* decoder, void* frameData,
 
     //将ffmpeg解码得到的h26x数据拷贝到dvpp内存
     VideoDecode* videoDecoder = (VideoDecode*)decoder;
+
     void* buffer = CopyDataToDevice(frameData, frameSize,
                                     videoDecoder->runMode_, MEMORY_DVPP);  
     if (buffer == nullptr) {
@@ -406,10 +402,12 @@ AtlasError VideoDecode::FrameDecodeCallback(void* decoder, void* frameData,
 }
 
 void VideoDecode::SleeptoNextFrameTime() {
-    while ((frameImageQueue_.Size() >  kDecodeFrameQueueSize / 2) && 
-           !isStop_) {
+    while(frameImageQueue_.Size() >  kReadSlow) {
+        if (isStop_) {
+            return;
+        }
         usleep(kOutputJamWait);
-    }
+    }           
 
     if (streamType_ == STREAM_RTSP) {
         usleep(0);
@@ -576,3 +574,4 @@ AtlasError VideoDecode::Close() {
     DestroyResource();
     return ATLAS_OK;
 }
+
