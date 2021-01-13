@@ -150,7 +150,7 @@ class Model(object):
                 size = 0
                 print("Copy input to device failed")
 
-        elif (isinstance(inputitem, dict) and ('data' in inputitem) and ('size' in inputitem) ):
+        elif (isinstance(inputitem, dict) and ('data' in inputitem) and ('size' in inputitem)):
             size = inputitem['size']
             data = inputitem['data']
         else:

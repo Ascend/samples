@@ -12,6 +12,7 @@ def make_palette(num_classes):
             i += 1 
     return palette  
  
+ 
 def color_seg(seg, palette): 
     return palette[seg.flat].reshape(seg.shape + (3,)) 
  
