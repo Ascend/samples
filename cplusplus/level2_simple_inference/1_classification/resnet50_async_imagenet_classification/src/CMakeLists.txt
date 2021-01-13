@@ -67,6 +67,9 @@ if (target STREQUAL "Simulator_Function")
 else ()
     if (${CMAKE_HOST_SYSTEM_NAME} MATCHES "Windows")
         target_link_libraries(main libascendcl)
+    elseif ($(CMAKE_CXX_COMPILER) MATCHES "android")
+        target_link_libraries(main
+            ascendcl stdc++)
     else ()
         target_link_libraries(
             main ascendcl stdc++ pthread)
