@@ -4,6 +4,7 @@
 
 **本README只提供命令行方式运行样例的指导，如需在Mindstudio下运行样例，请参考[Mindstudio运行图片样例wiki](https://gitee.com/ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E5%9B%BE%E7%89%87%E6%A0%B7%E4%BE%8B?sort_id=3164874)。**
 
+
 ## 垃圾分类样例
 
 功能：使用mobilenetV2模型对输入图片进行分类推理。
@@ -12,11 +13,14 @@
 
 样例输出：推理后的jpg图片。
 
+训练过程参考 [MobileNetV2垃圾分类](https://gitee.com/ascend/samples/wikis/MobileNetV2%E5%9E%83%E5%9C%BE%E5%88%86%E7%B1%BB?sort_id=3404387)
+
+
 ### 前提条件
 
 部署此Sample前，需要准备好以下环境：
 
-- 请确认已按照[环境准备和依赖安装](https://gitee.com/ascend/samples/tree/dev/python/environment)准备好环境。
+- 请确认已按照[环境准备和依赖安装](https://gitee.com/ascend/samples/tree/master/python/environment)准备好环境。
 
 - 已完成对应产品的开发环境和运行环境安装。
 
@@ -52,7 +56,7 @@
 
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
-    | mobilenetV2 | 图片分类推理模型。是基于mindspore的mobilenetv2模型。 | 请参考[https://gitee.com/ascend/modelzoo/tree/master/contrib/Research/cv/garbage_classification/ATC_mobilenetv2_tf_AE](https://gitee.com/ascend/modelzoo/tree/master/contrib/Research/cv/garbage_classification/ATC_mobilenetv2_tf_AE)目录中README.md下载原始模型章节下载模型和权重文件。 |
+    | mobilenetV2 | 图片分类推理模型。是基于mindspore的mobilenetv2模型。 | 请参考[https://gitee.com/ascend/modelzoo/tree/master/contrib/Research/cv/garbage_classification/ATC_mobilenetv2_mindspore_AE](https://gitee.com/ascend/modelzoo/tree/master/contrib/Research/cv/garbage_classification/ATC_mobilenetv2_tf_AE)目录中README.md下载原始模型章节下载模型和权重文件。 |
 
     ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
 
