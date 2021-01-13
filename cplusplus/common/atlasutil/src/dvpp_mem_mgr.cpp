@@ -64,7 +64,7 @@ namespace {
 }
 
 
-DvppMemPool::DvppMemPool():
+DvppMemPool::DvppMemPool() : 
 blockNum_(0),
 freeList_(kDefaultBlockNum) {
 }
