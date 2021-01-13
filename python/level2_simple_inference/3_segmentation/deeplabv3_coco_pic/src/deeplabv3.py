@@ -1,8 +1,12 @@
+"""
+Copyright (R) @huawei.com, all rights reserved
+-*- coding:utf-8 -*-
+"""
 import cv2 as cv
 import numpy as np
 import os
 import time
-from constants import *
+import constants
 from acl_model import Model
 from acl_resource import AclResource
 
@@ -11,7 +15,10 @@ MODEL_HEIGHT = 513
 INPUT_DIR = './data/'
 OUTPUT_DIR = './out/'
 MODEL_PATH = './model/deeplabv3_plus.om'
-
+"""
+function: preprocess
+param: picPath
+"""
 def preprocess(picPath):
     #read img
     bgr_img = cv.imread(picPath)
@@ -26,15 +33,14 @@ def preprocess(picPath):
     # save memory C_CONTIGUOUS mode
     if not img.flags['C_CONTIGUOUS']:
         img = np.ascontiguousarray(img)
-    return orig_shape,  img
+    return orig_shape , img
 
 def postprocess(result_list, pic, orig_shape,pic_path):
     result_img = result_list[0].reshape(513,513)
-    result_img =result_img.astype('uint8')
+    result_img = result_img.astype('uint8')
     orig_img = cv.imread(pic_path)
-    img5 = cv.merge((result_img,result_img,result_img))
-    bgr_img = cv.resize(img5,(orig_shape[1],orig_shape[0]))
-    print(bgr_img)
+    img = cv.merge((result_img , result_img,result_img))
+    bgr_img = cv.resize(img,(orig_shape[1],orig_shape[0]))
     bgr_img = (bgr_img + 255)
     output_pic = os.path.join(OUTPUT_DIR, "out_" + pic)
     cv.imwrite(output_pic, bgr_img)
