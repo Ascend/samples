@@ -6,6 +6,7 @@ def check_ret(message, ret):
         raise Exception("{} failed ret={}"
                         .format(message, ret))
 
+
 def copy_data_device_to_host(device_data, data_size):
     host_buffer, ret = acl.rt.malloc_host(data_size)
     if ret != ACL_ERROR_NONE:
@@ -21,6 +22,7 @@ def copy_data_device_to_host(device_data, data_size):
         return None
 
     return host_buffer
+
 
 def copy_data_device_to_device(device_data, data_size):
     device_buffer, ret = acl.rt.malloc(data_size, ACL_MEM_MALLOC_HUGE_FIRST)
@@ -38,6 +40,7 @@ def copy_data_device_to_device(device_data, data_size):
 
     return device_buffer
 
+
 def copy_data_host_to_device(host_data, data_size):
     device_buffer, ret = acl.rt.malloc(data_size, ACL_MEM_MALLOC_HUGE_FIRST)
     if ret != ACL_ERROR_NONE:
@@ -54,14 +57,18 @@ def copy_data_host_to_device(host_data, data_size):
 
     return device_buffer
 
+
 def align_up(value, align):
     return int(int((value + align - 1) / align) * align)
+
 
 def align_up16(value):
     return align_up(value, 16)
 
+
 def align_up2(value):
     return align_up(value, 2)
 
+
 def yuv420sp_size(width, height):
-    return int(width * height * 3 /2)
+    return int(width * height * 3 / 2)
