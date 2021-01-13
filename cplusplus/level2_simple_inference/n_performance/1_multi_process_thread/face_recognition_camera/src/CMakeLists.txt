@@ -85,4 +85,4 @@ else()
 endif()
 
 install(TARGETS main DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
-execute_process(COMMAND ${CMAKE_COMMAND} -E copy ../../script/param.conf ../../out/param.conf)
+execute_process(COMMAND ${CMAKE_COMMAND} -E copy ../../scripts/param.conf ../../out/param.conf)
