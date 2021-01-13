@@ -16,7 +16,9 @@ class Model(object):
         self.model_path = model_path    # string
         self.model_id = None            # pointer
         self.input_dataset = None
+        self._input_num = 0
         self.output_dataset = None
+        self._input_buffer = []
         self._output_info = []
         self.model_desc = None          # pointer when using
         self._init_resource()
@@ -90,7 +92,7 @@ class Model(object):
             #create output data buffer
             dataset_buffer = acl.create_data_buffer(temp_buffer,
                                                     temp_buffer_size)
-            #将data buffer加入输出dataset
+            #add data buffer to output dataset
             _, ret = acl.mdl.add_dataset_buffer(dataset, dataset_buffer)
             if ret:
                 #free resource 
@@ -135,7 +137,6 @@ class Model(object):
                 break
         if ret == FAILED:
             self._release_dataset(self.input_dataset)
-
         return ret
 
     def _parse_input_data(self, input, index):
