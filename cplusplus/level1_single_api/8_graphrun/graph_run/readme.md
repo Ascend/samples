@@ -28,8 +28,9 @@
 ## 环境要求<a name="section112421056192915"></a>
 
 -   操作系统及架构：Euleros x86系统、Euleros aarch64系统
+-   版本：20.2
 -   编译器：g++
--   芯片：all
+-   芯片：Ascend910系列、Ascend710系列
 -   python及依赖的库：python3.7.5
 -   已完成昇腾AI软件栈在运行环境上的部署
 
@@ -58,7 +59,7 @@
    1. 在运行环境配置环境变量。
 
       ```
-      export install_path=/home/HwHiAiUser/Ascend# 软件包安装路径，请根据实际修改
+      export install_path=/home/HwHiAiUser/Ascend  # fwkacllib组件的安装路径，请根据实际修改
       export LD_LIBRARY_PATH=${install_path}/fwkacllib/lib64:$LD_LIBRARY_PATH 
       export PATH=${install_path}/fwkacllib/ccec_compiler/bin:${install_path}/fwkacllib/bin:$PATH 
       export PYTHONPATH=${install_path}/fwkacllib/python/site-packages:$PYTHONPATH 
