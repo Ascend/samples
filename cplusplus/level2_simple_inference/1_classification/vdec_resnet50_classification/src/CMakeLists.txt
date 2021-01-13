@@ -64,7 +64,7 @@ add_executable(main
 
 if (${CMAKE_HOST_SYSTEM_NAME} MATCHES "Windows")
     target_link_libraries(main libascendcl libacl_dvpp)
-elseif ($(CMAKE_CXX_COMPILER) MATCHES "android")
+elseif (${CMAKE_CXX_COMPILER} MATCHES "android")
     target_link_libraries(main
         ascendcl acl_dvpp stdc++)
 else ()
