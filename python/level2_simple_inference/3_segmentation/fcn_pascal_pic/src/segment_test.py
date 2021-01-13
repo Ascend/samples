@@ -4,7 +4,6 @@ import sys
 import os
 import acl
 import numpy as np
-import os
 
 import time
 from PIL import Image, ImageDraw, ImageFont
