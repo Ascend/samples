@@ -13,12 +13,16 @@
 ## 目录结构<a name="section766832317011"></a>
 
 ```
-├── main.cpp              //图运行文件
-├──graph_utils.cpp        //构图文件
-├──graph_utils.h          //对外头文件接口
+├── src                   //源码文件
+│   ├──main.cpp
+│   ├──graph_utils.cpp
+│   ├──graph_utils.h
 ├── Makefile              //编译脚本 
 ├── data         
 │   ├──data_generate.py  //数据生成脚本，用于生成.bin格式的数据               
+├── scripts
+│   ├──host_version.conf
+│   ├──testcase_800.sh
 ```
 
 ## 环境要求<a name="section112421056192915"></a>

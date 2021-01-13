@@ -14,10 +14,14 @@
 ├── src
 │   ├──main.cpp           //实现文件 
 ├── Makefile              //编译脚本 
+├── CMakeLists.txt        //编译脚本
 ├── data         
 │   ├──data_generate.py   // 通过算子原型构建Graph时，用于生成Graph所需要的数据信息，例如权重、偏置等数据
 │   ├──tensorflow_generate.py  // 将TensorFlow原始模型解析为Graph时，用于生成.pb格式的TensorFlow模型
 │   ├──caffe_generate.py  // 将Caffe原始模型解析为Graph时，用于生成.pbtxt格式的Caffe模型与.caffemodel格式的权重文件     
+├── scripts
+│   ├──host_version.conf
+│   ├──testcase_300.sh
 ```
 
 ## 环境要求<a name="section3833348101215"></a>
