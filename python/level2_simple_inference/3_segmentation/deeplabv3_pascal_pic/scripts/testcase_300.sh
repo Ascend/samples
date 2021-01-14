@@ -1,6 +1,6 @@
-tensorflow_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com:443/003_Atc_Models/AE/ATC%20Model/garbage/mobilenetv2.air"
-davinci_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com:443/003_Atc_Models/AE/ATC%20Model/garbage/mobilenetv2.air"
-model_name="deeplabv3"
+tensorflow_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com:443/003_Atc_Models/nkxiaolei/DeepLapV3_Plus/deeplabv3_plus.pb"
+davinci_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com:443/003_Atc_Models/nkxiaolei/DeepLapV3_Plus/deeplabv3_plus.om"
+model_name="deeplabv3_plus"
 
 version=$1
 
@@ -20,41 +20,41 @@ function downloadDataWithVerifySource() {
 
     mkdir -p ${project_path}/data/
 
-    wget -O ${project_path}/data/"dirtycloth.jpg"  ${data_source}"dirtycloth.jpg"  --no-check-certificate
+    wget -O ${project_path}/data/"cat.jpg"  ${data_source}"cat.jpg"  --no-check-certificate
     if [ $? -ne 0 ];then
-        echo "download dirtycloth.jpg failed, please check Network."
+        echo "download cat.jpg failed, please check Network."
         return 1
     fi
 
-    wget -O ${project_path}/data/"bottle.jpg"  ${data_source}"bottle.jpg"  --no-check-certificate
+    wget -O ${project_path}/data/"dog.jpg"  ${data_source}"dog.jpg"  --no-check-certificate
     if [ $? -ne 0 ];then
-        echo "download bottle.jpg failed, please check Network."
+        echo "download dog.jpg failed, please check Network."
         return 1
     fi
 
-    wget -O ${project_path}/data/"newspaper.jpg"  ${data_source}"newspaper.jpg"  --no-check-certificate
+    wget -O ${project_path}/data/"girl.jpg"  ${data_source}"girl.jpg"  --no-check-certificate
     if [ $? -ne 0 ];then
-        echo "download newspaper.jpg failed, please check Network."
+        echo "download girl.jpg failed, please check Network."
         return 1
     fi
 
     mkdir -p ${project_path}/verify_image/
 
-    wget -O ${project_path}/verify_image/out_dirtycloth.jpg ${verify_source}"out_dirtycloth.jpg" --no-check-certificate
+    wget -O ${project_path}/verify_image/out_dog.jpg ${verify_source}"out_dog.jpg" --no-check-certificate
     if [ $? -ne 0 ];then
-        echo "download out_dirtycloth.jpg failed, please check Network."
+        echo "download out_dog.jpg failed, please check Network."
         return 1
     fi
 
-    wget -O ${project_path}/verify_image/out_bottle.jpg ${verify_source}"out_bottle.jpg" --no-check-certificate
+    wget -O ${project_path}/verify_image/out_girl.jpg ${verify_source}"out_girl.jpg" --no-check-certificate
     if [ $? -ne 0 ];then
-        echo "download out_bottle.jpg failed, please check Network."
+        echo "download out_girl.jpg failed, please check Network."
         return 1
     fi
 
-    wget -O ${project_path}/verify_image/out_newspaper.jpg ${verify_source}"out_newspaper.jpg" --no-check-certificate
+    wget -O ${project_path}/verify_image/out_cat.jpg ${verify_source}"out_cat.jpg" --no-check-certificate
     if [ $? -ne 0 ];then
-        echo "download out_newspaper.jpg failed, please check Network."
+        echo "download out_cat.jpg failed, please check Network."
         return 1
     fi
 
@@ -64,13 +64,7 @@ function downloadDataWithVerifySource() {
 
 function setAtcEnv() {
     # set enviroment param
-    if [[ ${version} = "c75" ]] || [[ ${version} = "C73" ]];then
-        export install_path=/home/HwHiAiUser/Ascend/ascend-toolkit/latest
-        export PATH=/usr/local/python3.7.5/bin:${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
-        export PYTHONPATH=${install_path}/atc/python/site-packages/te:${install_path}/atc/python/site-packages/topi:$PYTHONPATH
-        export ASCEND_OPP_PATH=${install_path}/opp
-        export LD_LIBRARY_PATH=${install_path}/atc/lib64:${LD_LIBRARY_PATH}
-    elif [[ ${version} = "c75" ]] || [[ ${version} = "C75" ]];then
+    if [[ ${version} = "c75" ]] || [[ ${version} = "C75" ]];then
         export install_path=$HOME/Ascend/ascend-toolkit/latest
         export PATH=/usr/local/python3.7.5/bin:${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
         export ASCEND_OPP_PATH=${install_path}/opp
@@ -87,7 +81,13 @@ function downloadOriginalModel() {
 
     wget -O ${project_path}/model/${tensorflow_model##*/} ${tensorflow_model} --no-check-certificate
     if [ $? -ne 0 ];then
-        echo "install mindspore_model failed, please check Network."
+        echo "install tensorflow_model failed, please check Network."
+        return 1
+    fi
+
+    wget -O ${project_path}/model/${davinci_model##*/} ${davinci_model} --no-check-certificate
+    if [ $? -ne 0 ];then
+        echo "install davinci_model failed, please check Network."
         return 1
     fi
 
@@ -101,7 +101,7 @@ function main() {
         return ${inferenceError}
     fi
 
-    # download test data
+    # download data
     downloadDataWithVerifySource
     if [ $? -ne 0 ];then
         echo "ERROR: download test images or verify images failed"
@@ -110,23 +110,25 @@ function main() {
 
     mkdir -p ${HOME}/models/${project_name}     
     if [[ $(find ${HOME}/models/${project_name} -name ${model_name}".om")"x" = "x" ]];then 
-        # download origin model
+        # downloadmodel
         downloadOriginalModel
         if [ $? -ne 0 ];then
             echo "ERROR: download original model failed"
             return ${inferenceError}
         fi
 
-        # set enviroment param
+        # set model convert param 
         setAtcEnv
         if [ $? -ne 0 ];then
             echo "ERROR: set atc environment failed"
             return ${inferenceError}
         fi
+    fi
 
+        '''
         # convert model
         cd ${project_path}/model/
-        atc --model=${project_path}/model/${mindspore_model##*/} --framework=1 --output=${HOME}/models/${project_name}/${model_name} --soc_version=Ascend310 --insert_op_conf=${project_path}/model/${aipp_cfg##*/} --input_shape="data:1,3,224,224" --input_format=NCHW
+        atc --model=${project_path}/model/${tensorflow_model##*/} --framework=3 --output=${HOME}/models/${project_name}/${model_name} --soc_version=Ascend310 --input_shape="data:1,513,513,3" --input_format=NHWC
         if [ $? -ne 0 ];then
             echo "ERROR: convert model failed"
             return ${inferenceError}
@@ -145,6 +147,7 @@ function main() {
         fi
     fi
 
+    '''
     cd ${project_path}
 
     # reconfigure enviroment param
@@ -153,13 +156,13 @@ function main() {
     export PYTHONPATH=/home/HwHiAiUser/Ascend/nnrt/latest/pyACL/python/site-packages/acl:${PYTHONPATH}
 
     # excute program
-    python3.6 ${project_path}/src/classify_test.py ${project_path}/data
+    python3.6 ${project_path}/src/deeplabv3.py ${project_path}/data
     if [ $? -ne 0 ];then
         echo "ERROR: run failed. please check your project"
         return ${inferenceError}
     fi   
     
-    # 调用python脚本判断本工程推理结果是否正常
+    # verify
     for outimage in $(find ${project_path}/verify_image -name "*.jpg");do
         tmp=`basename $outimage`
         if [[ ! -d "${project_path}/outputs" ]];then
