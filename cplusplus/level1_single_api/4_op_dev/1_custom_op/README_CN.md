@@ -1,10 +1,10 @@
-# README<a name="ZH-CN_TOPIC_0302083279"></a>
+# README
 
-## 概述<a name="section095045815312"></a>
+## 概述
 
 本样例包含了TBE自定义算子、AI CPU自定义算子以及TensorFlow Scope融合规则开发的代码样例，同时提供了对应的编译规则文件，开发者可以直接基于本样例追加自己的自定义算子实现代码，然后进行工程的编译即可获得自定义算子安装包。
 
-## 目录结构<a name="section7643193610511"></a>
+## 目录结构
 
 Caffe与TensorFlow共存的自定义算子样例工程的目录结构如下所示：
 
@@ -64,43 +64,44 @@ Caffe与TensorFlow共存的自定义算子样例工程的目录结构如下所�
 ├── tools
 ```
 
-## 样例介绍<a name="section2138174861712"></a>
+## 样例介绍
 
 -   TBE自定义算子样例
-    -   Add算子，请参见[Add](doc/Add.md)。
-    -   LeakyRelu算子，请参见[LeakyRelu](doc/LeakyRelu.md)。
-    -   ScatterNdAdd算子，请参见[ScatterNdAdd](doc/ScatterNdAdd.md)。
-    -   Conv2d算子，请参见[Conv2d](doc/Conv2d.md)。
-    -   Matmul算子，请参见[Matmul](doc/Matmul.md)。
-    -   Permute算子，请参见[Permute](doc/Permute.md)。
-    -   Upsample算子，请参见[Upsample](doc/Upsample.md)。
-    -   LSTM算子，请参见[LSTM](doc/LSTM.md)。
-    -   BatchMultiClassNonMaxSuppression算子，请参见[BatchMultiClassNonMaxSuppression](doc/BatchMultiClassNonMaxSuppression.md)。
+    -   Add算子，请参见[Add](doc/Add_CN.md)。
+    -   LeakyRelu算子，请参见[LeakyRelu](doc/LeakyRelu_CN.md)。
+    -   ScatterNdAdd算子，请参见[ScatterNdAdd](doc/ScatterNdAdd_CN.md)。
+    -   Conv2d算子，请参见[Conv2d](doc/Conv2d_CN.md)。
+    -   Matmul算子，请参见[Matmul](doc/Matmul_CN.md)。
+    -   Permute算子，请参见[Permute](doc/Permute_CN.md)。
+    -   Upsample算子，请参见[Upsample](doc/Upsample_CN.md)。
+    -   LSTM算子，请参见[LSTM](doc/LSTM_CN.md)。
+    -   BatchMultiClassNonMaxSuppression算子，请参见[BatchMultiClassNonMaxSuppression](doc/BatchMultiClassNonMaxSuppression_CN.md)。
 
 -   AI CPU自定义算子样例
-    -   ReshapeCust算子，请参见[Reshape](doc/Reshape.md)。
-    -   UniqueCust算子，请参见[Unique](doc/Unique.md)。
+    -   ReshapeCust算子，请参见[Reshape](doc/Reshape_CN.md)。
+    -   UniqueCust算子，请参见[Unique](doc/Unique_CN.md)。
 
 -   Scope融合规则样例
 
-    Scope融合规则实现样例，请参见[tf_scope_fusion_pass](https://gitee.com/ascend/samples/tree/master/cplusplus/level1_single_api/4_op_dev/1_custom_op/framework/tf_scope_fusion_pass)：
+    Scope融合规则实现样例，请参见[tf_scope_fusion_pass](framework/tf_scope_fusion_pass)：
 
     - decode_bbox_v2_scope_fusion_pass为多对一场景融合示例，目标是将Decode Scope下的所有小算子融合为DecodeBboxV2算子。Decode Scope内包括2个Exp算子/4个Mul算子/4个Sub算子/2的倍数个RealDiv算子/2个Unpack算子/1个Pack算子/3个Transpose算子/不能包括Softmax算子。
     - decode_bbox_v2_multi_pass为多对多场景融合示例，目标是将Decode Scope下的所有小算子融合为DecodeBboxV2算子和Identity的算子组合。Decode Scope内包括2个Exp算子/4个Mul算子/4个Sub算子/2的倍数个RealDiv算子/2个Unpack算子/1个Pack算子/3个Transpose算子/不能包括Softmax算子。
     - scope_batchmulticlass_nms_pass多对一场景融合示例，目标是将Batchmulticlass_nms Scope下的所有小算子融合为Batchmulticlass_nms算子。Batchmulticlass_nms Scope内包括1个NonMaxSuppressionV2算子/4个Maximum算子/11个Merge算子/不能包括Transpose算子。
     
-    Scope融合算子适配插件实现文件，请参见[tf_plugin](https://gitee.com/ascend/samples/tree/master/cplusplus/level1_single_api/4_op_dev/1_custom_op/framework/tf_plugin)：
+    Scope融合算子适配插件实现文件，请参见[tf_plugin](framework/tf_plugin)：
+    
     - decode_bbox_v2_scope_fussion_plugin对应为decode_bbox_v2_scope_fusion_pass融合算子的适配插件实现文件。
 
 
-## 环境要求<a name="section3833348101215"></a>
+## 环境要求
 
 -   操作系统及架构：CentOS x86_64、CentOS aarch64、Ubuntu 18.04 x86_64、EulerOS x86、EulerOS aarch64
 -   版本：20.2
 -   python及依赖的库：python3.7.5
 -   已完成昇腾AI软件栈的部署。
 
-## 算子工程编译<a name="section5535155125212"></a>
+## 算子工程编译
 
 1.  在样例工程的“custom.proto“文件中增加原始框架为Caffe的自定义算子的定义。
 
@@ -197,13 +198,13 @@ Caffe与TensorFlow共存的自定义算子样例工程的目录结构如下所�
 
 
     -   SYSTEM\_INFO：标志编译生成的算子包的形态的名称，若不设置SYSTEM\_INFO环境变量，则会自动根据操作系统类型及架构获取。
-
+    
         若用户需要自定义生成的算子包形态名称，请取消此环境变量的注释，并自行修改，例如，若操作系统版本为CentOS，架构为aarch64，则可设置为：
-
+    
         ```
         export SYSTEM_INFO=centos_aarch64
         ```
-
+    
         则编译生成的算子包名称为custom\_opp\__centos\_aarch64_.run。
 
 
@@ -211,14 +212,16 @@ Caffe与TensorFlow共存的自定义算子样例工程的目录结构如下所�
 
     在自定义算子样例工程目录下执行如下操作进行自定义算子工程的编译。
 
+    **chmod +x build.sh**
+
     **./build.sh**
 
     编译成功后，会在当前目录下创建build\_out目录，并在build\_out目录下生成自定义算子安装包**custom\_opp\__<target os\>\_<target architecture\>_.run**。
-
+    
     **说明：**若重新进行工程编译，请先执行**./build.sh clean**命令进行编译文件的清理。
 
 
-## 算子部署<a name="section1870411824610"></a>
+## 算子部署
 
 1.  设置环境变量。
 
@@ -269,11 +272,11 @@ Caffe与TensorFlow共存的自定义算子样例工程的目录结构如下所�
     注：其他目录与文件，自定义算子部署无需关注。
 
 
-## 算子ST验证<a name="section401515151519"></a>
+## 算子ST验证
 
 请参见[2_verify_op](../2_verify_op)中的样例对自定义算子进行验证。
 
-## 算子网络验证<a name="section8115152673517"></a>
+## 算子网络验证
 
 推理场景下，用户可在使用ATC工具进行模型转换时加载自定义算子生成离线模型文件，然后执行模型推理时调用。
 
@@ -281,8 +284,7 @@ Caffe与TensorFlow共存的自定义算子样例工程的目录结构如下所�
 
 本样例中提供了训练场景下如下单算子网络验证样例：
 
--   TBE算子：Add、ScatterNdAdd，单算子网络验证文件可参见“tbe/testcases/tf\_test/_<OpType\>_”目录下的xx.py文件。
--   AI CPU算子：UniqueCust，单算子网络验证文件可参见“cpukernel/testcases/tf\_test/unique/tf\_unique.py”文件，当前版本暂不支持验证。
+TBE算子：Add、ScatterNdAdd，单算子网络验证文件可参见“tbe/testcases/tf\_test/_<OpType\>_”目录下的xx.py文件。
 
 单算子网络测试文件执行步骤如下所示：
 
@@ -308,7 +310,7 @@ Caffe与TensorFlow共存的自定义算子样例工程的目录结构如下所�
 
     -   **install\_path**为Fwkacllib组件、Driver组件及OPP组件的安装目录。
     -   **ASCEND\_DEVICE\_ID**为昇腾AI处理器的逻辑ID。
-
+    
         取值范围\[0,N-1\]，默认为0。其中N为当前物理机/虚拟机/容器内的设备总数。
 
 
@@ -321,7 +323,7 @@ Caffe与TensorFlow共存的自定义算子样例工程的目录结构如下所�
         TBE算子：Add与ScatterNdAdd
 
             执行网络测试脚本后，结果为True，表示在昇腾AI处理器上运行结果与CPU上运行结果一致，运行结果正确。
-
+    
             ```
             2020-03-06 11:03:45.383022: I tf_adapter/kernels/geop_npu.cc:304] [GEOP] GeOp Finalize success, geop_num_:0
             ====================================
@@ -331,7 +333,7 @@ Caffe与TensorFlow共存的自定义算子样例工程的目录结构如下所�
 
 
 
-## 融合规则验证<a name="section770942961711"></a>
+## 融合规则验证
 
 推理场景下，用户可在使用ATC工具进行模型转换时，通过命令行参数**enable\_scope\_fusion\_passes**指定需要生效的融合规则，从而该验证该融合规则是否生效。下面针对xx的融合规则，给出验证方法：
 
@@ -442,9 +444,9 @@ Caffe与TensorFlow共存的自定义算子样例工程的目录结构如下所�
 
 
     2.  从dump的图ge\_proto\_xxxxx\_Build.txt中可以看到融合后的算子DecodeBboxV2及相关属性：
-
+    
        ![输入图片说明](https://images.gitee.com/uploads/images/2020/1223/171156_7faf65b4_5474059.png "zh-cn_image_0303338211.png")
-
+    
         说明：
         scope多对多融合示例也可以使用此模型与方法进行验证。
 
