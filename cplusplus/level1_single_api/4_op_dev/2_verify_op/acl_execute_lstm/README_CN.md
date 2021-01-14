@@ -1,8 +1,8 @@
-# Matmul算子运行验证<a name="ZH-CN_TOPIC_0302083283"></a>
+# LSTM算子运行验证<a name="ZH-CN_TOPIC_0302083145"></a>
 
 ## 功能描述<a name="section1421916179418"></a>
 
-该样例实现了对[自定义算子MatmulTik](../../1_custom_op/doc/Matmul.md)的功能验证，通过将自定义算子转换为单算子离线模型文件，然后通过AscendCL加载单算子模型文件进行运行。
+该样例实现了对[自定义算子LSTMTik](../../1_custom_op/doc/LSTM_CN.md)的功能验证，通过将自定义算子转换为单算子离线模型文件，然后通过AscendCL加载单算子模型文件进行运行。
 
 说明：单算子模型文件的生成只依赖算子代码实现文件、算子原型定义、算子信息库，不依赖算子适配插件。
 
@@ -18,10 +18,10 @@
 │        └── test_data         // 测试数据存放目录
 │           ├── config
 │               └── acl.json       //用于进行~acl初始化，请勿修改此文件
-│               └── matmul_tik_op.json    // 算子描述文件，用于构造单算子模型文件
+│               └── lstm_op.json    // 算子描述文件，用于构造单算子模型文件
 │           ├── data
-│               └── check_out.py    // 生成期望结果并与实际结果进行比对的脚本
-│               └── generate_datatik.py    // 生成测试数据的脚本
+│               └── compare_result.py    // 生成期望结果并与实际结果进行比对的脚本
+│               └── generate_data.py    // 生成测试数据的脚本
 ├── src
 │   ├── CMakeLists.txt    // 编译规则文件
 │   ├── common.cpp         // 公共函数，读取二进制文件函数的实现文件  
@@ -35,17 +35,17 @@
 -   操作系统及架构：CentOS x86\_64、CentOS aarch64、Ubuntu 18.04 x86\_64
 -   版本：20.2
 -   编译器：
-    -   Ascend 310 EP/Ascend 710编译器：g++
+    -   Ascend 310 EP编译器：g++
     -   Atlas 200 DK编译器：aarch64-linux-gnu-g++
 
--   芯片：Ascend310、Ascend710
+-   芯片：Ascend310
 -   python及依赖的库：python3.7.5
 -   已完成昇腾AI软件栈的部署。
 -   已参考[custom\_op](../../1_custom_op)完成自定义算子的编译部署。
 
 ## 配置环境变量<a name="section053142383519"></a>
 
--   Ascend 310 EP/Ascend 710
+-   Ascend 310 EP
     1.  开发环境上，设置生成单算子离线模型的环境变量。
 
         环境变量配置示例如下：
@@ -124,13 +124,13 @@
 
 
 
-## 编译运行（Ascend 310 EP/Ascend 710）<a name="section6961141117311"></a>
+## 编译运行（Ascend 310 EP）<a name="section1042793885117"></a>
 
-1.  生成MatmulTik算子的单算子离线模型文件。
-    1.  以运行用户（例如HwHiAiUser）登录开发环境，并进入样例工程的“acl\_execute\_matmul/run/out“目录。
+1.  生成LSTMTik算子的单算子离线模型文件。
+    1.  以运行用户（例如HwHiAiUser）登录开发环境，并进入样例工程的“acl\_execute\_lstm/run/out“目录。
     2.  在out目录下执行如下命令，生成单算子模型文件。
 
-        **atc --singleop=test\_data/config/matmul\_tik\_op.json  --soc\_version=_$\{soc\_version\} _--output=op\_models**
+        **atc --singleop=test\_data/config/lstm\_op.json  --soc\_version=_$\{soc\_version\}_  --output=op\_models**
 
         其中：
 
@@ -147,7 +147,7 @@
 
         模型转换成功后，会生成如下文件：
 
-        在当前目录的op\_models目录下生成单算子的模型文件**0\_MatmulTik\_1\_2\_16\_64\_1\_2\_64\_1024\_1\_2\_16\_1024.om**，命名规范为：序号+opType + 输入的描述\(dateType\_format\_shape\)+输出的描述。
+        在当前目录的op\_models目录下生成单算子的模型文件0\_LSTMTik\_xxxx.om，命名规范为：序号+opType + 输入的描述\(dateType\_format\_shape\)+输出的描述。
 
         dataType以及format对应枚举值请从ATC组件所在目录下的“atc/include/graph/types.h”文件中查看，枚举值从0开始依次递增。
 
@@ -158,12 +158,12 @@
 
     进入样例工程目录的run/out/test\_data/data目录下，执行如下命令：
 
-    **python3.7.5 generate\_datatik.py**
+    **python3.7.5 generate\_data.py**
 
-    会在当前目录下生成数据类型为float16，shape分别为\(16,64\)与\(64,1024\)的数据文件input\_0.bin与input\_1.bin，用于进行MatmulTik算子的验证，并生成预期结果文件np\_result.bin。
+    会在当前目录下生成数据文件input\_\*.bin及预期结果文件output\_golden\_\*.bin，用于进行LSTMTik算子的验证。
 
 3.  编译样例工程，生成单算子验证可执行文件。
-    1.  切换到样例工程根目录acl\_execute\_matmul，然后在样例工程根目录下执行如下命令创建目录用于存放编译文件，例如，创建的目录为“build/intermediates/host“。
+    1.  切换到样例工程根目录acl\_execute\_lstm，然后在样例工程根目录下执行如下命令创建目录用于存放编译文件，例如，创建的目录为“build/intermediates/host“。
 
         **mkdir -p build/intermediates/host**
 
@@ -184,53 +184,53 @@
 
         **make**
 
-        会在工程目录的“run/out“目录下生成可执行文件**execute\_matmul\_tik\_op**。
+        会在工程目录的“run/out“目录下生成可执行文件**execute\_lstm\_op**。
 
 
 4.  在硬件设备的Host侧执行单算子验证文件。
-    1.  以运行用户（例如HwHiAiUser）拷贝开发环境中样例工程acl\_execute\_matmul/run/目录下的out文件夹到运行环境（硬件设备Host侧）任一目录，例如上传到/home/HwHiAiUser/HIAI\_PROJECTS/run\_matmul/目录下。
+    1.  以运行用户（例如HwHiAiUser）拷贝开发环境中样例工程acl\_execute\_lstm/run/目录下的out文件夹到运行环境（硬件设备Host侧）任一目录，例如上传到/home/HwHiAiUser/HIAI\_PROJECTS/run\_lstm/目录下。
 
-        **说明：**若您的开发环境即为硬件设备的Host侧，此拷贝操作可跳过。
+        **说明：** 若您的开发环境即为硬件设备的Host侧，此拷贝操作可跳过。
 
-    2.  在运行环境中执行execute\_matmul\_tik\_op文件，验证单算子模型文件。
+    2.  在运行环境中执行execute\_lstm\_op文件，验证单算子模型文件。
 
-        在/home/HwHiAiUser/HIAI\_PROJECTS/run\_matmul/out目录下执行如下命令：
+        在/home/HwHiAiUser/HIAI\_PROJECTS/run\_lstm/out目录下执行如下命令：
 
-        **chmod +x execute\_matmul\_tik\_op**
+        **chmod +x execute\_lstm\_op**
 
-        **./execute\_matmul\_tik\_op**
+        **./execute\_lstm\_op**
 
-        执行完成后，会生成结果二进制文件result\_files/output\_0.bin。
+        执行完成后，会生成结果二进制文件result\_files/output\_\*.bin。
 
     3.  执行如下命令，将实际结果与预期结果进行比对。
 
         进入test\_data/data目录下，执行如下命令：
 
-        **python3.7.5 check\_out.py**
+        **python3.7.5 compare\_result.py**
 
         此脚本将算子实际运行结果与预期结果进行比对。
 
         若回显如下，则代表实际运行结果与预期结果比对成功。
 
         ```
-        Compared with the numpy calculation method, the result is correct.
+        compare success
         ```
 
         若回显如下，则代表实际运行结果与预期结果比对失败。
 
         ```
-        Compared with the numpy calculation method, the result is wrong.
+        compare failed
         ```
 
 
 
-## 编译运行（Atlas 200 DK）<a name="section2610307364"></a>
+## 编译运行（Atlas 200 DK）<a name="section17953191113524"></a>
 
-1.  生成MatmulTik算子的单算子离线模型文件。
-    1.  以运行用户（例如HwHiAiUser）登录开发环境，并进入样例工程的“acl\_execute\_matmul/run/out“目录。
+1.  生成LSTMTik算子的单算子离线模型文件。
+    1.  以运行用户（例如HwHiAiUser）登录开发环境，并进入样例工程的“acl\_execute\_lstm/run/out“目录。
     2.  在out目录下执行如下命令，生成单算子模型文件。
 
-        **atc --singleop=test\_data/config/matmul\_tik\_op.json  --soc\_version=_$\{soc\_version\} _--output=op\_models**
+        **atc --singleop=test\_data/config/lstm\_op.json  --soc\_version=_$\{soc\_version\}_  --output=op\_models**
 
         其中：
 
@@ -247,7 +247,7 @@
 
         模型转换成功后，会生成如下文件：
 
-        在当前目录的op\_models目录下生成单算子的模型文件**0\_MatmulTik\_1\_2\_16\_64\_1\_2\_64\_1024\_1\_2\_16\_1024.om**，命名规范为：序号+opType + 输入的描述\(dateType\_format\_shape\)+输出的描述。
+        在当前目录的op\_models目录下生成单算子的模型文件0\_LSTMTik\_xxxx.om，命名规范为：序号+opType + 输入的描述\(dateType\_format\_shape\)+输出的描述。
 
         dataType以及format对应枚举值请从ATC组件所在目录下的“atc/include/graph/types.h”文件中查看，枚举值从0开始依次递增。
 
@@ -258,12 +258,12 @@
 
     进入样例工程目录的run/out/test\_data/data目录下，执行如下命令：
 
-    **python3.7.5 generate\_datatik.py**
+    **python3.7.5 generate\_data.py**
 
-    会在当前目录下生成数据类型为float16，shape分别为\(16,64\)与\(64,1024\)的数据文件input\_0.bin与input\_1.bin，用于进行MatmulTik算子的验证，并生成预期结果文件np\_result.bin。
+    会在当前目录下生成数据文件input\_\*.bin及预期结果文件output\_golden\_\*.bin，用于进行LSTMTik算子的验证。
 
 3.  编译样例工程，生成单算子验证可执行文件。
-    1.  切换到样例工程根目录acl\_execute\_matmul，然后在样例工程根目录下执行如下命令创建目录用于存放编译文件，例如，创建的目录为“build/intermediates/host“。
+    1.  切换到样例工程根目录acl\_execute\_lstm，然后在样例工程根目录下执行如下命令创建目录用于存放编译文件，例如，创建的目录为“build/intermediates/host“。
 
         **mkdir -p build/intermediates/host**
 
@@ -284,39 +284,39 @@
 
         **make**
 
-        会在工程目录的“run/out“目录下生成可执行文件**execute\_matmul\_tik\_op**。
+        会在工程目录的“run/out“目录下生成可执行文件**execute\_lstm\_op**。
 
 
 4.  在运行环境上执行单算子验证文件。
-    1.  以运行用户（例如HwHiAiUser用户）拷贝开发环境中样例工程acl\_execute\_matmul/run/目录下的out文件夹到板端环境任一目录，例如上传到/home/HwHiAiUser/HIAI\_PROJECTS/run\_matmul/目录下。
-    2.  在板端环境中执行execute\_matmul\_tik\_op文件，验证单算子模型文件。
+    1.  以HwHiAiUser用户（运行用户）拷贝开发环境中样例工程acl\_execute\_lstm/run/目录下的out文件夹到板端环境任一目录，例如上传到/home/HwHiAiUser/HIAI\_PROJECTS/run\_lstm/目录下。
+    2.  在板端环境中执行execute\_lstm\_op文件，验证单算子模型文件。
 
-        在/home/HwHiAiUser/HIAI\_PROJECTS/run\_matmul/out目录下执行如下命令：
+        在/home/HwHiAiUser/HIAI\_PROJECTS/run\_lstm/out目录下执行如下命令：
 
-        **chmod +x execute\_matmul\_tik\_op**
+        **chmod +x execute\_lstm\_op**
 
-        **./execute\_matmul\_tik\_op**
+        **./execute\_lstm\_op**
 
-        执行完成后，会屏显出输入数据及输出数据，同时会生成结果二进制文件result\_files/output\_0.bin。
+        执行完成后，会屏显出输入数据及输出数据，同时会生成结果二进制文件result\_files/output\_\*.bin。
 
-    3.  test\_data/data目录中提供了**check\_out.py**脚本用于比对算子实际结果与调用numpy生成的预期结果。
+    3.  test\_data/data目录中提供了**compare\_result.py**脚本用于比对算子实际结果与期望结果。
 
         开发者可将生成结果文件后的out文件夹拷贝到开发环境，然后在开发环境上进入test\_data/data目录执行如下操作进行结果校验。
 
-        **python3.7.5 check\_out.py**
+        **python3.7.5 compare\_result.py**
 
         此脚本将算子实际运行结果与预期结果进行比对。
 
         若回显如下，则代表实际运行结果与预期结果比对成功。
 
         ```
-        Compared with the numpy calculation method, the result is correct.
+        compare success
         ```
 
         若回显如下，则代表实际运行结果与预期结果比对失败。
 
         ```
-        Compared with the numpy calculation method, the result is wrong.
+        compare failed
         ```
 
 
