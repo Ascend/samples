@@ -7,7 +7,7 @@ This sample describes how to implement the Add operator in TBE DSL mode, and ver
 The Add operator returns the sum of its operands, as shown in the following figure.
 
 **Figure  1**  Add operator function diagram<a name="en-us_topic_0229823836_fig1134425318216"></a>  
-![](figures/add-operator-function-diagram.png "add-operator-function-diagram")
+![](https://images.gitee.com/uploads/images/2021/0114/162517_9f334f35_5474059.png "add-operator-function-diagram.png")
 
 ## Operator Analysis<a name="section1672275111254"></a>
 
