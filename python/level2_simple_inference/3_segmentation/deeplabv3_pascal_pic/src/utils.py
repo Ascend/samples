@@ -63,19 +63,20 @@ def copy_data_host_to_device(host_data, data_size):
 
 
 def align_up(value, align):
-    """align_up """
+    """align_up"""
     return int(int((value + align - 1) / align) * align)
 
 
 def align_up16(value):
-    """align_up16 """
+    """align_up16"""
     return align_up(value, 16)
 
 
 def align_up2(value):
-    """align_up2 """
+    """dvpp align_up2"""
     return align_up(value, 2)
 
 
 def yuv420sp_size(width, height):
+    """yuv420sp_size"""
     return int(width * height * 3 / 2)

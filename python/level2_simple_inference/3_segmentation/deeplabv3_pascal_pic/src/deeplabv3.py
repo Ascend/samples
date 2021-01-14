@@ -13,7 +13,7 @@ from acl_resource import AclResource
 MODEL_WIDTH = 513
 MODEL_HEIGHT = 513
 INPUT_DIR = './data/'
-OUTPUT_DIR = './out/'
+OUTPUT_DIR = './outputs/'
 MODEL_PATH = './model/deeplabv3_plus.om'
 """
 function: preprocess
