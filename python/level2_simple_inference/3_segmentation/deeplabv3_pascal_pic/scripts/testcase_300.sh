@@ -1,12 +1,12 @@
-mindspore_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com:443/003_Atc_Models/AE/ATC%20Model/garbage/mobilenetv2.air"
-aipp_cfg="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/garbage_picture/insert_op_yuv.cfg"
-model_name="garbage_yuv"
+tensorflow_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com:443/003_Atc_Models/AE/ATC%20Model/garbage/mobilenetv2.air"
+davinci_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com:443/003_Atc_Models/AE/ATC%20Model/garbage/mobilenetv2.air"
+model_name="deeplabv3"
 
 version=$1
 
-data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/garbage_picture/"
-verify_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/garbage_picture/"
-project_name="garbage_picture"
+data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/deeplabv3/"
+verify_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/deeplabv3/"
+project_name="deeplabv3_pascal_pic"
 
 script_path="$( cd "$(dirname $BASH_SOURCE)" ; pwd -P)"
 project_path=${script_path}/..
@@ -63,8 +63,8 @@ function downloadDataWithVerifySource() {
 
 
 function setAtcEnv() {
-    # 设置模型转换时需要的环境变量
-    if [[ ${version} = "c73" ]] || [[ ${version} = "C73" ]];then
+    # set enviroment param
+    if [[ ${version} = "c75" ]] || [[ ${version} = "C73" ]];then
         export install_path=/home/HwHiAiUser/Ascend/ascend-toolkit/latest
         export PATH=/usr/local/python3.7.5/bin:${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
         export PYTHONPATH=${install_path}/atc/python/site-packages/te:${install_path}/atc/python/site-packages/topi:$PYTHONPATH
@@ -85,15 +85,9 @@ function downloadOriginalModel() {
 
     mkdir -p ${project_path}/model/
 
-    wget -O ${project_path}/model/${mindspore_model##*/} ${mindspore_model} --no-check-certificate
+    wget -O ${project_path}/model/${tensorflow_model##*/} ${tensorflow_model} --no-check-certificate
     if [ $? -ne 0 ];then
         echo "install mindspore_model failed, please check Network."
-        return 1
-    fi
-
-    wget -O ${project_path}/model/${aipp_cfg##*/}  ${aipp_cfg} --no-check-certificate
-    if [ $? -ne 0 ];then
-        echo "install caffe_model failed, please check Network."
         return 1
     fi
 
@@ -107,7 +101,7 @@ function main() {
         return ${inferenceError}
     fi
 
-    # 下载测试集和验证集
+    # download test data
     downloadDataWithVerifySource
     if [ $? -ne 0 ];then
         echo "ERROR: download test images or verify images failed"
@@ -116,21 +110,21 @@ function main() {
 
     mkdir -p ${HOME}/models/${project_name}     
     if [[ $(find ${HOME}/models/${project_name} -name ${model_name}".om")"x" = "x" ]];then 
-        # 下载原始模型文件[aipp_cfg文件]
+        # download origin model
         downloadOriginalModel
         if [ $? -ne 0 ];then
             echo "ERROR: download original model failed"
             return ${inferenceError}
         fi
 
-        # 设置模型转换的环境变量
+        # set enviroment param
         setAtcEnv
         if [ $? -ne 0 ];then
             echo "ERROR: set atc environment failed"
             return ${inferenceError}
         fi
 
-        # 转模型
+        # convert model
         cd ${project_path}/model/
         atc --model=${project_path}/model/${mindspore_model##*/} --framework=1 --output=${HOME}/models/${project_name}/${model_name} --soc_version=Ascend310 --insert_op_conf=${project_path}/model/${aipp_cfg##*/} --input_shape="data:1,3,224,224" --input_format=NCHW
         if [ $? -ne 0 ];then
@@ -153,12 +147,12 @@ function main() {
 
     cd ${project_path}
 
-    # 重新配置程序运行所需的环境变量
+    # reconfigure enviroment param
     export LD_LIBRARY_PATH=
     export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/nnrt/latest/acllib/lib64:/home/HwHiAiUser/ascend_ddk/x86/lib:${LD_LIBRARY_PATH}
     export PYTHONPATH=/home/HwHiAiUser/Ascend/nnrt/latest/pyACL/python/site-packages/acl:${PYTHONPATH}
 
-    # 运行程序
+    # excute program
     python3.6 ${project_path}/src/classify_test.py ${project_path}/data
     if [ $? -ne 0 ];then
         echo "ERROR: run failed. please check your project"

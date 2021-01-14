@@ -1,3 +1,7 @@
+"""
+Copyright (R) @huawei.com, all rights reserved
+-*- coding:utf-8 -*-
+"""
 import numpy as np 
 def make_palette(num_classes): 
     palette = np.zeros((num_classes, 3), dtype=np.uint8) 

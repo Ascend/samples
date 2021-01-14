@@ -1,3 +1,7 @@
+"""
+Copyright (R) @huawei.com, all rights reserved
+-*- coding:utf-8 -*-
+"""
 import acl
 
 from utils import *
