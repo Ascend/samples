@@ -53,6 +53,7 @@
         export install_path=$HOME/Ascend/ascend-toolkit/latest
         export PATH=${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
         export ASCEND_OPP_PATH=${install_path}/opp
+        export ASCEND_AICPU_PATH=${install_path}
         ```
 
         install\_path为开发套件包Ascend-cann-toolkit的安装路径。
