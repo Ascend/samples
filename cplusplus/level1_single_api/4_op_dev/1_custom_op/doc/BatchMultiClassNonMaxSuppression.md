@@ -25,7 +25,7 @@ Scope辨识阶段需要确定scope是否对应Tensorflow的Python API，若是�
 
 ## 样例获取<a name="section122898421212"></a>
 
-融合规则和插件代码获取：[https://gitee.com/ascend/samples/tree/dev/cplusplus/level1\_single\_api/4\_op\_dev/1\_custom\_op/framework/tf\_scope\_fusion\_pass](https://gitee.com/ascend/samples/tree/dev/cplusplus/level1_single_api/4_op_dev/1_custom_op/framework/tf_scope_fusion_pass)
+融合规则和插件代码获取：[https://gitee.com/ascend/samples/tree/master/cplusplus/level1\_single\_api/4\_op\_dev/1\_custom\_op/framework/tf\_scope\_fusion\_pass](https://gitee.com/ascend/samples/tree/master/cplusplus/level1_single_api/4_op_dev/1_custom_op/framework/tf_scope_fusion_pass)
 
 ## 融合规则设计思路<a name="section184331455516"></a>
 
@@ -64,7 +64,7 @@ BatchMultiClassNonMaxSuppression scope映射的是目前提供的后处理算子
 BatchMultiClassNonMaxSuppression scope在Tensorflow计算图上的表现为一个子图，具有以下关键特征：
 
 具体参见：
-[https://gitee.com/ascend/samples/tree/dev/cplusplus/level1\_single\_api/4\_op\_dev/1\_custom\_op/framework/tf\_scope\_fusion\_pass](https://gitee.com/ascend/samples/tree/dev/cplusplus/level1_single_api/4_op_dev/1_custom_op/framework/tf_scope_fusion_pass)
+[https://gitee.com/ascend/samples/tree/master/cplusplus/level1\_single\_api/4\_op\_dev/1\_custom\_op/framework/tf\_scope\_fusion\_pass](https://gitee.com/ascend/samples/tree/master/cplusplus/level1_single_api/4_op_dev/1_custom_op/framework/tf_scope_fusion_pass)
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/1207/221202_4d663acf_8200958.png "zh-cn_image_0298659584.png")
 
