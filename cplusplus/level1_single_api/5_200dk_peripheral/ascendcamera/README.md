@@ -89,7 +89,7 @@
     **ssh HwHiAiUser@xxx.xxx.xxx.xxx**    
 
     ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
-    > - **xxx.xxx.xxx.xxx**为运行环境ip，200DK在USB连接时一般为192.168.1.2，300（ai1s）为对应的公网ip。
+    > - **xxx.xxx.xxx.xxx**为运行环境ip，200DK在USB连接时一般为192.168.1.2。
 
 2. <a name="step_2"></a>运行可执行文件。
 
