@@ -25,7 +25,8 @@ Scope辨识阶段需要确定scope是否对应Tensorflow的Python API，若是�
 
 ## 样例获取<a name="section122898421212"></a>
 
-融合规则和插件代码获取：[https://gitee.com/ascend/samples/tree/master/cplusplus/level1\_single\_api/4\_op\_dev/1\_custom\_op/framework/tf\_scope\_fusion\_pass](https://gitee.com/ascend/samples/tree/master/cplusplus/level1_single_api/4_op_dev/1_custom_op/framework/tf_scope_fusion_pass)
+融合规则代码获取：
+[https://gitee.com/ascend/samples/tree/master/cplusplus/level1\_single\_api/4\_op\_dev/1\_custom\_op/framework/tf\_scope\_fusion\_pass](https://gitee.com/ascend/samples/tree/master/cplusplus/level1_single_api/4_op_dev/1_custom_op/framework/tf_scope_fusion_pass)
 
 ## 融合规则设计思路<a name="section184331455516"></a>
 
