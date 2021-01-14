@@ -79,9 +79,7 @@
 
 1. 修改present相关配置文件。
 
-    将样例目录下**script/param.conf**中的 presenter_server_ip、presenter_view_ip 修改为开发环境中可以ping通运行环境的ip地址，使用以下两种情况举例说明。
-
-     - 使用产品为200DK开发者板。   
+    将样例目录下**script/param.conf**中的 presenter_server_ip、presenter_view_ip 修改为开发环境中可以ping通运行环境的ip地址。   
         1. 开发环境中使用ifconfig查看可用ip。   
         2. 在开发环境中将**script/param.conf**中的 presenter_server_ip、presenter_view_ip 修改为该ip地址。   
         ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
@@ -129,7 +127,7 @@
 
 2. 启动presenterserver并登录运行环境。
 
-    - 使用产品为200DK开发者板。   
+    
         1. 开发环境中执行以下命令启动presentserver。   
             **cd $HOME/samples/cplusplus/level2_simple_inference/2_object_detection/face_detection_camera**   
             **bash script/run_presenter_server.sh**   
@@ -157,7 +155,7 @@
 
 1. 打开presentserver网页界面。
 
-   - 使用产品为200DK开发者板。
+   
 
       打开启动Presenter Server服务时提示的URL即可。
       
