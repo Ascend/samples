@@ -40,9 +40,9 @@ int64_t GetElementNum(const std::vector<int64_t> &shape) {
 namespace ge {
 
 IMPLEMT_COMMON_INFERFUNC(ReshapeCustInferShape) {
-  TensorDesc tensordesc_tensor = op.GetInputDesc("tensor");
-  TensorDesc tensor_desc_shape = op.GetInputDesc("shape");
-  TensorDesc tensor_desc_output = op.GetOutputDesc("output");
+  TensorDesc tensordesc_tensor = op.GetInputDescByName("tensor");
+  TensorDesc tensor_desc_shape = op.GetInputDescByName("shape");
+  TensorDesc tensor_desc_output = op.GetOutputDescByName("output");
   Tensor shape_tensor;
   if (op.GetInputConstData("shape", shape_tensor) == GRAPH_SUCCESS) {
     DataType shape_type = tensor_desc_shape.GetDataType();
@@ -62,13 +62,13 @@ IMPLEMT_COMMON_INFERFUNC(ReshapeCustInferShape) {
       return GRAPH_FAILED;
     }
     tensor_desc_output.SetShape(Shape(shape_values));
-	tensor_desc_output.SetOriginShape(Shape(shape_values));
+	  tensor_desc_output.SetOriginShape(Shape(shape_values));
   }
-  
+
   tensor_desc_output.SetDataType(tensordesc_tensor.GetDataType());
 
   std::vector<std::pair<int64_t,int64_t>> range;
-  auto status = op.GetInputDesc("tensor").GetShapeRange(range);
+  auto status = op.GetInputDescByName("tensor").GetShapeRange(range);
   if (status != GRAPH_SUCCESS) {
     return GRAPH_FAILED;
   }

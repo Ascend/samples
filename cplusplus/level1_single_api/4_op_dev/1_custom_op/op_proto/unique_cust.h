@@ -19,20 +19,7 @@
 #include "graph/operator_reg.h"
 
 namespace ge {
-/**
- * *@brief Cast a tensor form src data type to dst data type.
- *
- * *@par Inputs:
- * *One input:
- * *x:A Tensor. Must be one of the following types: bool, float16, float, int8, int32, uint32, uint8,
- *    int64, uint64, int16, uint16, double, complex64, complex128, qint8, quint8, qint16, quint16, qint32.
- *
- *    *@par Attributes:
- *    *dst_type: An required attribute of type int32, specifying the dst data type.
- *
- *    *@par Outputs:
- *    *y:A Tensor. Has the same type as x.
- *    */
+
 REG_OP(UniqueCust)
     .INPUT(x, TensorType({DT_FLOAT, DT_FLOAT16, DT_INT8, DT_INT16, \
            DT_UINT16, DT_UINT8, DT_INT32, DT_INT64, DT_DOUBLE}))
