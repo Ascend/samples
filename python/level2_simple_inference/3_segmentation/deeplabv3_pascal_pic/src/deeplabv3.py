@@ -7,8 +7,8 @@ import numpy as np
 import os
 import time
 import constants
-from acl_model import Model
-from acl_resource import AclResource
+import acl_resource
+import acl_model
 
 MODEL_WIDTH = 513
 MODEL_HEIGHT = 513
@@ -53,11 +53,11 @@ def main():
         os.mkdir(OUTPUT_DIR)
 
     #acl init
-    acl_resource = AclResource()
-    acl_resource.init()
+    aclresource = acl_resource.AclResource()
+    aclresource.init()
 
     #load model
-    model = Model(acl_resource, MODEL_PATH)
+    model = acl_model.Model(aclresource, MODEL_PATH)
     src_dir = os.listdir(INPUT_DIR)
 
     #infer picture
