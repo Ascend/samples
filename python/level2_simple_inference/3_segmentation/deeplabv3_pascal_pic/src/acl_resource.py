@@ -4,7 +4,7 @@ Copyright (R) @huawei.com, all rights reserved
 """
 import acl
 
-from utils import *
+from utils import check_ret
 
 DICT_KEY_RESOURCE = "resource"
 DICT_KEY_STATUS = "status"

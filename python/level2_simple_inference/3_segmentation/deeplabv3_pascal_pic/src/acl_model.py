@@ -6,7 +6,8 @@ import acl
 import struct
 import numpy as np
 import datetime
-from utils import *
+from utils import check_ret, copy_data_device_to_device
+from constants import ACL_MEM_MALLOC_NORMAL_ONLY, SUCCESS, ACL_ERROR_NONE, FAILED, ACL_MEMCPY_DEVICE_TO_DEVICE, ACL_FLOAT
 
 class Model(object):
     """Model"""

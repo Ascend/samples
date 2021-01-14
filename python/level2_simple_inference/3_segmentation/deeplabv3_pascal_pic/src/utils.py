@@ -3,7 +3,7 @@ Copyright (R) @huawei.com, all rights reserved
 -*- coding:utf-8 -*-
 """
 import acl
-from constants import *
+from constants import ACL_ERROR_NONE, ACL_MEM_MALLOC_HUGE_FIRST, ACL_MEMCPY_DEVICE_TO_DEVICE
 
 def check_ret(message, ret):
     """check_ret"""
