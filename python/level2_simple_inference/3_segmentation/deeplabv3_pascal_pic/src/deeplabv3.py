@@ -15,11 +15,9 @@ MODEL_HEIGHT = 513
 INPUT_DIR = './data/'
 OUTPUT_DIR = './outputs/'
 MODEL_PATH = './model/deeplabv3_plus.om'
-"""
-function: preprocess
-param: picPath
-"""
+
 def preprocess(picPath):
+    """preprocess"""
     #read img
     bgr_img = cv.imread(picPath)
     print(bgr_img.shape)
@@ -37,6 +35,7 @@ def preprocess(picPath):
 
 
 def postprocess(result_list, pic, orig_shape, pic_path):
+    """postprocess"""
     result_img = result_list[0].reshape(513, 513)
     result_img = result_img.astype('uint8')
     orig_img = cv.imread(pic_path)
@@ -48,6 +47,7 @@ def postprocess(result_list, pic, orig_shape, pic_path):
 
 
 def main():
+    """main"""
     #create output directory
     if not os.path.exists(OUTPUT_DIR):
         os.mkdir(OUTPUT_DIR)

@@ -6,12 +6,14 @@ import acl
 from constants import *
 
 def check_ret(message, ret):
+    """check_ret"""
     if ret != ACL_ERROR_NONE:
         raise Exception("{} failed ret={}"
                         .format(message, ret))
 
 
 def copy_data_device_to_host(device_data, data_size):
+    """copy_data_device_to_host"""
     host_buffer, ret = acl.rt.malloc_host(data_size)
     if ret != ACL_ERROR_NONE:
         print("Malloc host memory failed, error: ", ret)
@@ -29,6 +31,7 @@ def copy_data_device_to_host(device_data, data_size):
 
 
 def copy_data_device_to_device(device_data, data_size):
+    """copy_data_device_to_device"""
     device_buffer, ret = acl.rt.malloc(data_size, ACL_MEM_MALLOC_HUGE_FIRST)
     if ret != ACL_ERROR_NONE:
         print("Malloc device memory failed, error: ", ret)
@@ -46,6 +49,7 @@ def copy_data_device_to_device(device_data, data_size):
 
 
 def copy_data_host_to_device(host_data, data_size):
+    """copy_data_host_to_device"""
     device_buffer, ret = acl.rt.malloc(data_size, ACL_MEM_MALLOC_HUGE_FIRST)
     if ret != ACL_ERROR_NONE:
         print("Malloc device memory failed, error: ", ret)

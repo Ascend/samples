@@ -12,6 +12,7 @@ DICT_VAL_REG = "register"
 DICT_VAL_UNREG = "unregister"
 
 class AclResource(object):
+    """AclResource"""
     def __init__(self, device_id=0):
         self.device_id = device_id
         self.context = None
@@ -40,11 +41,13 @@ class AclResource(object):
         return
 
     def register_resource(self, resource):
+        """register_resource"""
         self.other_resource_list.append({DICT_KEY_RESOURCE:resource, 
                                          DICT_KEY_STATUS:DICT_VAL_REG})
         return
 
     def unregister_resource(self, resource):
+        """unregister_resource"""
         for i in range(len(self.other_resource_list)):            
             if self.other_resource_list[i] == resource:
                 self.other_resource_list[i][DICT_KEY_STATUS] = DICT_VAL_UNREG

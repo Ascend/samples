@@ -9,6 +9,7 @@ import datetime
 from utils import *
 
 class Model(object):
+    """Model"""
     def __init__(self, acl_resource, model_path):
         print("load model ", model_path)
         self.acl_resource = acl_resource
@@ -185,6 +186,7 @@ class Model(object):
         return data
 
     def execute(self, input_list):
+        """execute"""
         ret = self._gen_input_dataset(input_list)
         if ret == FAILED:
             print("Gen model input dataset failed")
