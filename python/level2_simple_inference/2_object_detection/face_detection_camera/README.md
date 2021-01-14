@@ -94,11 +94,11 @@
 
 3. <a name="step_2"></a>运行可执行文件。
 
-      **cd $HOME/face_detection_camera**
+      **cd $HOME/face_detection_camera/src**
 
     切换目录后，执行以下命令运行样例。
 
-    **python3 main.py**
+    **python3.6 main.py**
 
 ### 查看结果
 
