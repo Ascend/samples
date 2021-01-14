@@ -142,6 +142,7 @@ AtlasError Preprocess::Process(int msgId, shared_ptr<void> msgData) {
     switch(msgId) {
         case MSG_APP_START:
             ret = AppStartMsgProcess();
+            break;
         case MSG_READ_FRAME:
             ret = ReadFrameMsgProcess();
             break;

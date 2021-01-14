@@ -52,7 +52,6 @@ private:
 private:   
     AtlasModel model_;
 
-    const char* modelPath_;
     uint32_t modelWidth_;
     uint32_t modelHeight_;
 };

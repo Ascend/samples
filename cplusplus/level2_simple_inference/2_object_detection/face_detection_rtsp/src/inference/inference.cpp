@@ -29,9 +29,8 @@
 using namespace std;
 
 Inference::Inference(const string& modelPath,
-                     uint32_t modelWidth, uint32_t modelHeight):                           
-modelWidth_(modelWidth), modelHeight_(modelHeight), 
-model_(modelPath){
+                     uint32_t modelWidth, uint32_t modelHeight):                       
+model_(modelPath), modelWidth_(modelWidth), modelHeight_(modelHeight){
 }
 
 Inference::~Inference() {
