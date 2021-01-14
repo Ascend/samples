@@ -79,7 +79,7 @@
 
     **cd $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV3_mask_detection/data**
 
-    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/YOLOV3_mask_detection-python/mask.jpg**
+    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/YOLOV3_mask_detection_picture-python/mask.jpg**
 
 
 ### 样例运行

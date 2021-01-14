@@ -91,9 +91,7 @@
 
 1. 修改present相关配置文件。
 
-    将样例目录下**script/param.conf**中的 presenter_server_ip、presenter_view_ip 修改为开发环境中可以ping通运行环境的ip地址。
-
-      - 使用产品为200DK开发者板。   
+    将样例目录下**script/param.conf**中的 presenter_server_ip、presenter_view_ip 修改为开发环境中可以ping通运行环境的ip地址。   
         1. 开发环境中使用ifconfig查看可用ip。   
         2. 在开发环境中将**script/param.conf**中的 presenter_server_ip、presenter_view_ip 修改为该ip地址。   
         ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
@@ -104,16 +102,6 @@
  
 2. 开发环境命令行中设置编译依赖的环境变量。
 
-   可以在命令行中执行 **uname -a**，查看开发环境和运行环境的cpu架构。如果回显为x86_64，则为x86架构。如果回显为arm64，则为Arm架构。基于开发环境与运行环境CPU架构是否相同，请仔细看下面的步骤：
-
-   - 当开发环境与运行环境CPU架构相同时，执行以下命令导入环境变量。 
-  
-     **export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest**
-
-     **export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub**
-
-   - 当开发环境与运行环境CPU架构不同时，执行以下命令导入环境变量。例如开发环境为X86架构，运行环境为Arm架构，由于开发环境上同时部署了X86和Arm架构的开发套件，后续编译应用时需要调用Arm架构开发套件的ACLlib库，所以此处需要导入环境变量为Arm架构的ACLlib库路径。 
-  
      **export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux**  
  
      **export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub**   
@@ -125,14 +113,8 @@
 
     **mkdir -p build/intermediates/host**
 
-4. 切换到 **build/intermediates/host** 目录，执行cmake生成编译文件。
-
-    - 当开发环境与运行环境操作系统架构相同时，执行如下命令编译。   
-      **cd build/intermediates/host**  
-      **make clean**   
-      **cmake \.\./\.\./\.\./src -DCMAKE_CXX_COMPILER=g++ -DCMAKE_SKIP_RPATH=TRUE**
-
-    - 当开发环境与运行环境操作系统架构不同时，需要使用交叉编译器编译。例如开发环境为X86架构，运行环境为Arm架构，执行以下命令进行交叉编译。   
+4. 切换到 **build/intermediates/host** 目录，执行cmake生成编译文件。   
+ 
       **cd build/intermediates/host**   
       **make clean**   
       **cmake \.\./\.\./\.\./src -DCMAKE_CXX_COMPILER=aarch64-linux-gnu-g++ -DCMAKE_SKIP_RPATH=TRUE**
@@ -185,7 +167,6 @@
 
 1. 打开presentserver网页界面。
 
-   - 使用产品为200DK开发者板。
 
       打开启动Presenter Server服务时提示的URL即可。
       

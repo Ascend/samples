@@ -1,3 +1,6 @@
+import sys
+project_path = sys.path[0] + "/../"
+sys.path.append(project_path)
 import datetime
 
 from atlas_utils.camera import Camera
@@ -6,10 +9,10 @@ from acl_model import Model
 from acl_resource import AclResource
 from vgg_ssd import VggSsd
 
-MODEL_PATH = "./model/face_detection.om"
+MODEL_PATH = project_path + "/model/face_detection.om"
 MODEL_WIDTH = 304
 MODEL_HEIGHT = 300
-FACE_DETEC_CONF="./script/face_detection.conf"
+FACE_DETEC_CONF= project_path + "/scripts/face_detection.conf"
 CAMERA_FRAME_WIDTH = 1280
 CAMERA_FRAME_HEIGHT = 720
 
