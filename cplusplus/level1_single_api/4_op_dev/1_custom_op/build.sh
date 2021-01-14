@@ -5,7 +5,7 @@
 # ASCEND_OPP_PATH: The installation path of the OPP package, where "/usr/local/Ascend/opp" is the
 #                  default installation path. If user defines the installation path, please modify it.
 # Uncomment and modify it when you specified installation path of OPP.
-# export ASCEND_OPP_PATH=/home/jahyeon/Ascend/opp
+# export ASCEND_OPP_PATH=/usr/local/Ascend/opp
 
 # ASCEND_AICPU_PATH: The installation path of the AICPU package, where "/usr/local/Ascend" is the
 #                  default installation path. If user defines the installation path, please modify it.
@@ -15,7 +15,7 @@
 # ASCEND_TENSOR_COMPLIER_INCLUDE: The path of the header file of the ATC package, where "/usr/local/Ascend/atc/include" is the
 #                                 default installation path. If user defines the installation path, please modify it.
 # Uncomment and modify it when you specified installation path of ATC.
-# export ASCEND_TENSOR_COMPLIER_INCLUDE=/home/jahyeon/Ascend/atc/include
+# export ASCEND_TENSOR_COMPLIER_INCLUDE=/usr/local/Ascend/atc/include
 
 # TOOLCHAIN_DIR: The path of the cross compilation tool, where "/usr/local/Ascend/toolkit/toolchain/hcc" is the
 #                default installation path. If user defines the installation path, please modify it.
