@@ -21,6 +21,7 @@ class AclResource(object):
         self.other_resource_list = []
 
     def init(self):
+        """init"""
         print("[Sample] init resource stage:")
         ret = acl.init()
         check_ret("acl.rt.set_device", ret)
