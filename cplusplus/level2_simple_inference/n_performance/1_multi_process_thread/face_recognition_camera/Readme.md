@@ -169,7 +169,6 @@
 
 1. 打开presentserver网页界面。
 
-   - 使用产品为200DK开发者板。
 
       打开启动Presenter Server服务时提示的URL即可。
       
