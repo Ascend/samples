@@ -61,7 +61,7 @@ For example:
 
 -   Operator Information Library
 
-    For details about the operator information library of ReshapeCust, see  [reshape\_cust.ini](cpukernel/op_info_cfg/aicpu_kernel/reshape_cust.ini).
+    For details about the operator information library of ReshapeCust, see  [reshape\_cust.ini](../cpukernel/op_info_cfg/aicpu_kernel/reshape_cust.ini).
 
 -   Operator Plug-in
 
