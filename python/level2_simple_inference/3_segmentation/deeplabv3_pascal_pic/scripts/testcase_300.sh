@@ -124,30 +124,6 @@ function main() {
             return ${inferenceError}
         fi
     fi
-
-        '''
-        # convert model
-        cd ${project_path}/model/
-        atc --model=${project_path}/model/${tensorflow_model##*/} --framework=3 --output=${HOME}/models/${project_name}/${model_name} --soc_version=Ascend310 --input_shape="data:1,513,513,3" --input_format=NHWC
-        if [ $? -ne 0 ];then
-            echo "ERROR: convert model failed"
-            return ${inferenceError}
-        fi
-
-        ln -s ${HOME}/models/${project_name}/${model_name}".om" ${project_path}/model/${model_name}".om"
-        if [ $? -ne 0 ];then
-            echo "ERROR: failed to set model soft connection"
-            return ${inferenceError}
-        fi
-    else 
-        ln -s ${HOME}/models/${project_name}/${model_name}".om" ${project_path}/model/${model_name}".om"
-        if [ $? -ne 0 ];then
-            echo "ERROR: failed to set model soft connection"
-            return ${inferenceError}
-        fi
-    fi
-
-    '''
     cd ${project_path}
 
     # reconfigure enviroment param
