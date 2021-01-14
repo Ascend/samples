@@ -25,7 +25,7 @@ Note that the scope fusion patterns need to be analyzed based on the scope struc
 
 ## Sample Obtaining<a name="section122898421212"></a>
 
-Click  [here](https://gitee.com/ascend/samples/tree/dev/cplusplus/level1_single_api/4_op_dev/1_custom_op/framework/tf_scope_fusion_pass)  to obtain the fusion pattern code and plug-in code.
+Click  [here](https://gitee.com/ascend/samples/tree/master/cplusplus/level1_single_api/4_op_dev/1_custom_op/framework/tf_scope_fusion_pass)  to obtain the fusion pattern code and plug-in code.
 
 ## Fusion Rule Design<a name="section184331455516"></a>
 
@@ -65,7 +65,7 @@ The "BatchMultiClassNonMaxSuppression" scope is a subgraph in the TensorFlow gra
 
 For details, please visit:
 
-[https://gitee.com/ascend/samples/tree/dev/cplusplus/level1\_single\_api/4\_op\_dev/1\_custom\_op/framework/tf\_scope\_fusion\_pass](https://gitee.com/ascend/samples/tree/dev/cplusplus/level1_single_api/4_op_dev/1_custom_op/framework/tf_scope_fusion_pass)
+[https://gitee.com/ascend/samples/tree/master/cplusplus/level1\_single\_api/4\_op\_dev/1\_custom\_op/framework/tf\_scope\_fusion\_pass](https://gitee.com/ascend/samples/tree/master/cplusplus/level1_single_api/4_op_dev/1_custom_op/framework/tf_scope_fusion_pass)
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/1207/221202_4d663acf_8200958.png "zh-cn_image_0298659584.png")
 
