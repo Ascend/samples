@@ -66,7 +66,7 @@ ifeq ($(mode), AtlasDK)
 SRCS := $(SRCS_ALL)
 CC_FLAGS += -DENABLE_BOARD_CAMARE
 else 
-SRCS := $(subst $(LOCAL_DIR)/src/camera.cpp, ,$(SRCS_ALL))
+SRCS := $(subst src/camera.cpp, ,$(SRCS_ALL))
 endif
 
 OBJS := $(addprefix $(OBJ_DIR)/, $(patsubst %.cpp, %.o,$(SRCS)))
