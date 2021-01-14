@@ -127,7 +127,8 @@
 
 2. 启动presenterserver并登录运行环境。
 
-    
+      使用产品为200DK开发者板。   
+        1. 开发环境中执行以下命令启动presentserver。  
         1. 开发环境中执行以下命令启动presentserver。   
             **cd $HOME/samples/cplusplus/level2_simple_inference/2_object_detection/face_detection_camera**   
             **bash script/run_presenter_server.sh**   
