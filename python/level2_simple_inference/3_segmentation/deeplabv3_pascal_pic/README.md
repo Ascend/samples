@@ -52,7 +52,7 @@
 
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
-    | deeplabv3 | 语义分割推理模型。是基于tensorflow的deeplabv3模型。 | 请参考[https://gitee.com/ascend/modelzoo/tree/master/contrib/Research/cv/deeplabv3/ATC_mobilenetv2_tf_AE](https://gitee.com/ascend/modelzoo/tree/master/contrib/Research/cv/deeplabv3/ATC_mobilenetv2_tf_AE)目录中README.md下载原始模型章节下载模型和权重文件。 |
+    | deeplabv3 | 语义分割推理模型。是基于tensorflow的deeplabv3模型。 | 请参考[https://ascend.huawei.com/#/software/modelzoo/detail/1/859d642560f84e1ebf0808b7e7cc816f](https://ascend.huawei.com/#/software/modelzoo/detail/1/859d642560f84e1ebf0808b7e7cc816f)下载模型。 |
 
     ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
 
@@ -75,6 +75,12 @@
     3. 执行以下命令将转换好的模型复制到样例中model文件夹中。
 
         **cp ./deeplabv3.om $HOME/samples/python/contrib/deeplabv3_parscal_pic/model/**
+    
+
+    4. 可以下载转换好的模型复制到样例中model文件夹中。
+
+        **https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com:443/003_Atc_Models/nkxiaolei/DeepLapV3_Plus/deeplabv3_plus.pb**
+        **cp ./deeplabv3_plus.om $HOME/samples/python/contrib/deeplabv3_parscal_pic/model/**
 
 4. 获取样例需要的测试图片。
 
@@ -82,7 +88,7 @@
 
     **cd $HOME/samples/python/contrib/deeplabv3_parscal_pic/data**
 
-    **https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/deeplabv3/kite.jpg**
+    **https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/deeplabv3/girl.jpg**
 
     **https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/deeplabv3/dog.jpg**    
     
