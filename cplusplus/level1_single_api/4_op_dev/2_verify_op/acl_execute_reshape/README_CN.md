@@ -2,7 +2,7 @@
 
 ## 功能描述<a name="section1421916179418"></a>
 
-该样例实现了对[自定义算子ReshapeCust](../../1_custom_op/doc/Reshape.md)的功能验证，通过将自定义算子转换为单算子离线模型文件，然后通过AscendCL加载单算子模型文件进行运行。
+该样例实现了对[自定义算子ReshapeCust](../../1_custom_op/doc/Reshape_CN.md)的功能验证，通过将自定义算子转换为单算子离线模型文件，然后通过AscendCL加载单算子模型文件进行运行。
 
 说明：单算子模型文件的生成只依赖算子代码实现文件、算子原型定义、算子信息库，不依赖算子适配插件。
 
@@ -53,6 +53,7 @@
         export install_path=$HOME/Ascend/ascend-toolkit/latest
         export PATH=${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
         export ASCEND_OPP_PATH=${install_path}/opp
+        export ASCEND_AICPU_PATH=${install_path}
         ```
 
         install\_path为开发套件包Ascend-cann-toolkit的安装路径。
