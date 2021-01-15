@@ -70,11 +70,11 @@
 
     2. 执行以下命令下载aipp配置文件并使用atc命令进行模型转换。
 
-        **atc --model=./deeplabv3.pb --framework=3 --output=deeplabv3 --soc_version=Ascend310 -- --input_shape="data:1,513,513" **
+        **atc --model=./deeplabv3_plus.pb --framework=3 --output=deeplabv3 --soc_version=Ascend310 -- --input_shape="data:1,513,513" **
 
     3. 执行以下命令将转换好的模型复制到样例中model文件夹中。
 
-        **cp ./deeplabv3.om $HOME/samples/python/contrib/deeplabv3_parscal_pic/model/**
+        **cp ./deeplabv3_plus.om $HOME/samples/python/level2_simple_inference/3_segmentation/deeplabv3_pascal_pic/model/**
     
 
     4. 可以下载转换好的模型复制到样例中model文件夹中。
@@ -86,7 +86,7 @@
 
     执行以下命令，进入样例的data文件夹中，下载对应的测试图片。
 
-    **cd $HOME/samples/python/contrib/deeplabv3_parscal_pic/data**
+    **cd $HOME/samples/python/python/level2_simple_inference/3_segmentation/deeplabv3_pascal_pic/data**
 
     **https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/deeplabv3/girl.jpg**
 
