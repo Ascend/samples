@@ -1,12 +1,12 @@
 **本样例为大家学习昇腾软件栈提供参考，非商业目的！**
 
-**本样例适配20.0及以上版本，支持产品为Atlas200DK、Atlas300([ai1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366))。**
+**本样例适配20.1及以上版本，支持产品为Atlas200DK、Atlas300([ai1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366))。**
 
 **本README只提供命令行方式运行样例的指导
 
 ## 语义分割样例
 
-功能：使用deeplabv3模型对输入图片进行语义分割。
+功能：使用deeplabv3+模型对输入图片进行语义分割。
 
 样例输入：待推理的jpg图片。
 
@@ -52,7 +52,7 @@
 
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
-    | deeplabv3 | 语义分割推理模型。是基于tensorflow的deeplabv3模型。 | 请参考[https://ascend.huawei.com/#/software/modelzoo/detail/1/859d642560f84e1ebf0808b7e7cc816f](https://ascend.huawei.com/#/software/modelzoo/detail/1/859d642560f84e1ebf0808b7e7cc816f)下载模型。 |
+    | deeplabv3+ | 语义分割推理模型。是基于tensorflow的deeplabv3+模型。 | 请参考[https://ascend.huawei.com/#/software/modelzoo/detail/1/859d642560f84e1ebf0808b7e7cc816f](https://ascend.huawei.com/#/software/modelzoo/detail/1/859d642560f84e1ebf0808b7e7cc816f)下载模型。 |
 
     ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
 
