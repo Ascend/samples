@@ -219,7 +219,7 @@ function main() {
     rbYOffset=${rbYOffset/-/}
 
     if [[ ${label1} != "bus" ]] || [[ ${scoreOffset} -gt 5 ]] || [[ `echo "${ltXOffset} > 0.05" | bc` -eq 1 ]] || [[ `echo "${ltYOffset} > 0.05" | bc` -eq 1 ]] || [[ `echo "${rbXOffset} > 0.05" | bc` -eq 1 ]] || [[ `echo "${rbYOffset} > 0.05" | bc` -eq 1 ]];then
-        echo "ERROR: The result of reasoning is wrong1!"
+        echo "ERROR: The bus.jpg result of reasoning is wrong!"
         return ${verifyResError}
     fi
 
@@ -243,7 +243,7 @@ function main() {
     rbYOffset=${rbYOffset/-/}
 
     if [[ ${label2} != "boat" ]] || [[ ${scoreOffset} -gt 5 ]] || [[ `echo "${ltXOffset} > 0.05" | bc` -eq 1 ]] || [[ `echo "${ltYOffset} > 0.05" | bc` -eq 1 ]] || [[ `echo "${rbXOffset} > 0.05" | bc` -eq 1 ]] || [[ `echo "${rbYOffset} > 0.05" | bc` -eq 1 ]];then
-        echo "ERROR: The result of reasoning is wrong2!"
+        echo "ERROR: The boat.jpg result of reasoning is wrong!"
         return ${verifyResError}
     fi
 
