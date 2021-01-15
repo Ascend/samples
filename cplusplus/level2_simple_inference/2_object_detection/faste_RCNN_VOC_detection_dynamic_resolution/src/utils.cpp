@@ -31,11 +31,7 @@
 
 using namespace std;
 
-
-
-
 aclrtRunMode Utils::runMode_ = ACL_DEVICE;
-
 
 const static std::vector<string> label = {
     "background","aeroplane","bicycle",
@@ -47,10 +43,7 @@ const static std::vector<string> label = {
     "pottedplant","sheep","sofa",
     "train","tvmonitor"};
 
-
 enum BBoxIndex { TOPLEFTX = 0, TOPLEFTY, BOTTOMRIGHTX, BOTTOMRIGHTY, SCORE, LABEL };
-
-
 
 Result Utils::CreateImageInfoBuffer(void* &imageInfoBuf, uint32_t &imageInfoSize)
 {
