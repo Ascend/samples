@@ -40,7 +40,7 @@ ge::graphStatus WithRank(const ge::TensorDesc &tensor, int64_t rank, ge::Shape &
 
 namespace ge {
 IMPLEMT_INFERFUNC(UniqueCust, UniqueCustInfer) {
-  TensorDesc x_input = op.GetInputDesc("x");
+  TensorDesc x_input = op.GetInputDescByName("x");
 
   Shape x_shape;
   if (WithRank(x_input, 1, x_shape, "UniqueCust") != GRAPH_SUCCESS) {
@@ -52,13 +52,13 @@ IMPLEMT_INFERFUNC(UniqueCust, UniqueCustInfer) {
     return GRAPH_FAILED;
   }
 
-  TensorDesc idx_desc = op.GetOutputDesc("idx");
+  TensorDesc idx_desc = op.GetOutputDescByName("idx");
   idx_desc.SetShape(x_shape);
   idx_desc.SetOriginShape(x_shape);
   idx_desc.SetDataType(idx_type);
   op.UpdateOutputDesc("idx", idx_desc);
 
-  TensorDesc y_desc = op.GetOutputDesc("y");
+  TensorDesc y_desc = op.GetOutputDescByName("y");
   y_desc.SetShape(Shape({UNKNOWN_DIM}));
   y_desc.SetOriginShape(Shape({UNKNOWN_DIM}));
   y_desc.SetDataType(x_input.GetDataType());
