@@ -84,4 +84,4 @@ $(OBJS): $(OBJ_DIR)/%.o : %.cpp | do_pre_build
 
 
 clean:
-	rm -rf $(TOPDIR)/out
+	rm -fr $(TOPDIR)/out
