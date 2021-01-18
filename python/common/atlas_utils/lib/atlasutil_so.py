@@ -12,7 +12,7 @@ def _lib_relative_path():
     global g_run_mode
     so_path = ""    
     if g_run_mode == ACL_HOST:
-        so_path = '/aisc/libatlasutil.so'
+        so_path = '/asic/libatlasutil.so'
     elif g_run_mode == ACL_DEVICE:
         so_path = '/atlas200dk/libatlasutil.so'
     else:
