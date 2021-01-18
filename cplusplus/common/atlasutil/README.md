@@ -20,37 +20,37 @@ atlasutil库对当前开源社区样例中
 
 ### 第三方库依赖
 
-1. 依赖acl库，使用前需要安装ascend开发环境。环境部署参见：
+1. 依赖acl库，使用前需要安装ascend开发环境
 
-2. 视频解码使用ffmpeg+dvpp，依赖ffmpeg库。ffmpeg开发环境安装参见：
+2. 视频解码使用ffmpeg+dvpp，依赖ffmpeg库
+
+环境部署和ffmpeg开发环境安装参见[环境准备和依赖安装](../../../environment)
 
 注意：开发环境是指编译应用代码的服务器；
 
 ​           运行环境是指运行应用的Atlas200DK开发板或者Atals300云服务器；
 
-​           下同，不在赘述
+​           下同，不再赘述
 
 ### 编译步骤
 
 1.进入src目录；
 
-2.如果是Atlas200DK使用，执行命令make; 如果是Atlas300，执行命令make mode=ASIC;
+2.执行编译安装命令。Atlas200DK：
 
-3.执行命令make install。执行后编译生成的libatalsutil.so将被拷贝到$HOME/ascend_ddk/$(arch)/lib;库头文件将被拷贝到$HOME/ascend_ddk/$(arch)/include/atlasutil目录下。其中Atlas200DK开发环境中$(arch)为arm, Atlas300为x86
+make \& make install; 
+
+Atlas300:
+
+make mode=ASIC \& make mode=ASIC install
+
+编译生成的libatalsutil.so和库头文件都将被拷贝到当前用户目录下的ascend_ddk子目录下
 
 ## 部署方法
 
-1. 将ffmpeg库和libatlasutil.so拷贝到运行环境/home/HwHiAiUser/HIAI_PROJECTS/ascend_lib下;
+1. 将ffmpeg库和libatlasutil.so拷贝到运行环境/home/HwHiAiUser/ascend_ddk/\$arch/lib下;
 
-2. 使用环境变量 LD_LIBRARY_PATH或者ldconfig将ffmpeg库和libatlasutil.so加入链接加载配置中：
-
-   （1）设置 LD_LIBRARY_PATH方法。在运行环境下打开/home/HwHiAiUser/.bashrc文件，在文件中设置LD_LIBRARY_PATH环境变量：
-
-   export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/HwHiAiUser/HIAI_PROJECTS/ascend_lib
-
-   保存后退出
-
-   （2）ldconfig方法。在运行环境下切换到 root用户，打开/etc/ld.so.conf.d/mind_so.conf ，将/home/HwHiAiUser/HIAI_PROJECTS/ascend_lib追加到文件末尾，保存后退出，然后执行命令ldconfig
+2. 在运行环境下切换到 root用户，打开/etc/ld.so.conf.d/mind_so.conf ，将/home/HwHiAiUser/ascend_ddk/\$arch/lib追加到文件末尾，保存后退出，然后执行命令ldconfig
 
 ## 接口说明
 
@@ -64,11 +64,11 @@ AtlasCapture类为Atlas200DK板载摄像头、RTSP视频流、mp4文件和H264/H
 
 说明：在Atlas200DK上打开一个可用的摄像头。如果0槽位摄像头可用，则选择0槽位；否则选择槽位1;如果两个摄像头都不可用，只生成实例，不会打开任何摄      像头。
 
-输入参数：width:摄像头分辨率宽
+输入参数：width:摄像头分辨率宽  
 
-​                   height:摄像头分辨率高
+​                   height:摄像头分辨率高  
 
-​                   fps:帧率, 参数范围为[1, 20]
+​                   fps:帧率, 参数范围为[1, 20]  
 
 返回值：无
 
