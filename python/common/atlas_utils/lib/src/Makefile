@@ -17,7 +17,7 @@ else ifeq ($(mode), ASIC)
 CC := g++
 arch := x86
 NPU_HOST_LIB = $(HOME)/Ascend/ascend-toolkit/20.1.rc1/x86_64-linux/acllib/lib64/stub/
-OUT_DIR = ../aisc/
+OUT_DIR = ../asic/
 else
 $(error "Unsupported mode: "$(mode)", please input: AtlasDK or ASIC.")
 endif
