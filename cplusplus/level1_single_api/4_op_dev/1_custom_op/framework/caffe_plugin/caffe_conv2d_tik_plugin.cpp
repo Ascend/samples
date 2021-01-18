@@ -9,23 +9,23 @@
 using namespace ge;
 namespace domi {
 
-const std::string NUM_OUTPUT = "num_output";
-const std::string GROUP = "group";
-const std::string KERNEL_SIZE = "kernel_size";
-const std::string KERNEL_H = "kernel_h";
-const std::string KERNEL_W = "kernel_w";
-const std::string AXiS = "axis";
-const std::string FORCE_ND_IM2COL = "force_nd_im2col";
-const std::string PAD = "pad";
-const std::string PAD_H = "pad_h";
-const std::string PAD_W = "pad_w";
-const std::string PADS = "pads";
-const std::string STRIDE = "stride";
-const std::string STRIDE_H = "stride_h";
-const std::string STRIDE_W = "stride_w";
-const std::string STRIDES = "strides";
-const std::string DILATION = "dilation";
-const std::string DILATIONS = "dilations";
+const char NUM_OUTPUT = "num_output";
+const char GROUP = "group";
+const char KERNEL_SIZE = "kernel_size";
+const char KERNEL_H = "kernel_h";
+const char KERNEL_W = "kernel_w";
+const char AXiS = "axis";
+const char FORCE_ND_IM2COL = "force_nd_im2col";
+const char PAD = "pad";
+const char PAD_H = "pad_h";
+const char PAD_W = "pad_w";
+const char PADS = "pads";
+const char STRIDE = "stride";
+const char STRIDE_H = "stride_h";
+const char STRIDE_W = "stride_w";
+const char STRIDES = "strides";
+const char DILATION = "dilation";
+const char DILATIONS = "dilations";
 // if op_src get required attr failed, need to return Failed
 // if op_src get optional attr failed, need to return Failed or set a default value
 // Get covolution pad params from caffe proto and convert to tbe conv2d ir
