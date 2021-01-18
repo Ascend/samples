@@ -19,9 +19,13 @@
 
 部署此Sample前，需要准备好以下环境：
 
-- 请确认已按照[环境准备和依赖安装]()准备好环境。
+- 请确认已按照[环境准备和依赖安装](../../../environment)准备好环境。
 
 - 已完成对应产品的开发环境和运行环境安装。
+
+  注意：本样例依赖libatlasutil.so库，编译和运行环境都必须安装该库，具体参见[atlasutils库使用方法](../../../common/atlasutil/README.md)
+
+  
 
 ### 软件准备
 
@@ -98,7 +102,7 @@
         > - 也可以在ai1s云端环境中使用ifconfig查看内网ip。
         > - 登录ai1s云端环境时的ip地址为此环境的公网ip，ai1s云端环境中ifconfig查看到的ip为此环境的内网ip。
 
-    将文件中[rtspaddr]段下的rtsp_*配置项的值修改为要检测的视频文件或者rtsp地址. 样例支持多路视频流，路数参考[VDEC功能约束及说明](https://support.huaweicloud.com/asdevg-python-A200dk_3000_c75/atlaspython_01_0100.html)
+    将文件中[rtspaddr]段下的rtsp_*配置项的值修改为要检测的视频文件或者rtsp地址. 样例支持多路视频流，路数参考[VDEC功能约束及说明](https://support.huaweicloud.com/asdevg-python-A200dk_3000_c75/atlaspython_01_0100.html)；rtsp地址配置项字段名必须是"rtsp+下划线+数字"的格式.rtsp字段的值可以是rtsp流url或者是**运行环境**下存放的视频文件
 	
 	将[display]段下的display_channel配置项的值，修改为[rtspaddr]段要使用presenter显示的视频编号，从0开始
 	
