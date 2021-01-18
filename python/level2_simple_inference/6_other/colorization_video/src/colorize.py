@@ -2,14 +2,16 @@
 Copyright (R) @huawei.com, all rights reserved
 -*- coding:utf-8 -*-
 """
+import sys
 import cv2 as cv
 import numpy as np
 import os
-import sys
 import re
+import time
+sys.path.append("..")
+sys.path.append("../atlas_utils/")
 
 from atlas_utils import presenteragent
-import time
 from constants import *
 from acl_model import Model
 from acl_resource import AclResource
@@ -18,9 +20,9 @@ from acl_resource import AclResource
 MODEL_WIDTH = 224
 MODEL_HEIGHT = 224
 
-model_path = './model/colorization.om'
+model_path = '../model/colorization.om'
 
-COLORIZATION_CONF ="./script/colorization.conf"
+COLORIZATION_CONF ="../scripts/param.conf"
 
 
 def preprocess(frame):
