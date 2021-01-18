@@ -34,17 +34,22 @@ def copy_data_host_to_device(device_data, data_size):
     check_ret("acl.rt.memcpy", ret)
     return host_buffer
 
+
 def align_up(value, align):
     return int(int((value + align - 1) / align) * align)
+
 
 def align_up128(value):
     return align_up(value, 128)
 
+
 def align_up16(value):
     return align_up(value, 16)
 
+
 def align_up2(value):
     return align_up(value, 2)
+
 
 def yuv420sp_size(width, height):
     return int(width * height * 3 /2)
