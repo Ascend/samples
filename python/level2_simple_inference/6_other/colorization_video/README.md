@@ -167,8 +167,8 @@
         1. 执行以下命令登录运行环境。   
            **开发环境与运行环境合一部署，请跳过此步骤！**   
            **ssh HwHiAiUser@xxx.xxx.xxx.xxx**    
-        2.运行环境中启动presenterserver。   
-      进入工程所在目录（如$HOME/colorization_video），执行以下命令    
+        2. 运行环境中启动presenterserver。   
+进入工程所在目录（如$HOME/colorization_video），执行以下命令
            **bash script/run_presenter_server.sh**   
 
 3. <a name="step_2"></a>运行可执行文件。
