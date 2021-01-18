@@ -49,6 +49,9 @@ namespace {
         {512,512},
         {512,512}
     };
+    const uint32_t singleClassMaxBox = 304;
+    const uint32_t boxNum = 8;
+    const uint32_t classNum = 21;
 }
 
 typedef enum Result {

@@ -31,11 +31,7 @@
 
 using namespace std;
 
-
-
-
 aclrtRunMode Utils::runMode_ = ACL_DEVICE;
-
 
 const static std::vector<string> label = {
     "background","aeroplane","bicycle",
@@ -47,11 +43,7 @@ const static std::vector<string> label = {
     "pottedplant","sheep","sofa",
     "train","tvmonitor"};
 
-//enum BBoxIndex {LABEL=1,SCORE,TOPLEFTX,TOPLEFTY,BOTTOMRIGHTX,BOTTOMRIGHTY,BOXINFOSIZE=8};
-
 enum BBoxIndex { TOPLEFTX = 0, TOPLEFTY, BOTTOMRIGHTX, BOTTOMRIGHTY, SCORE, LABEL };
-
-
 
 Result Utils::CreateImageInfoBuffer(void* &imageInfoBuf, uint32_t &imageInfoSize)
 {
@@ -96,54 +88,20 @@ Result Utils::PostProcess(const string &path, aclmdlDataset *modelOutput)
 		ERROR_LOG("outDatasetNum=%zu must be 2",outDatasetNum);
 		return FAILED;
 	}
-	aclDataBuffer* dataBuffer = aclmdlGetDatasetBuffer(modelOutput, 0);
-	if (dataBuffer == nullptr) {
-		ERROR_LOG("get model output aclmdlGetDatasetBuffer failed");
-		return FAILED;
-	}
-	void* data = aclGetDataBufferAddr(dataBuffer);
-	if (data == nullptr) {
-		ERROR_LOG("aclGetDataBufferAddr from dataBuffer failed.");
-		return FAILED;
-	}
 
-    size_t bufferSize = aclGetDataBufferSize(dataBuffer);
-    if (bufferSize == 0) {
-        ERROR_LOG("The dataset buffer size of "
-        "model inference output is 0");
-        return FAILED;
-    }
-
-    float * boxNum = new float[bufferSize/sizeof(float)];
-    if (runMode_ == ACL_HOST) {
-        aclError ret = aclrtMemcpy(boxNum, bufferSize, data, bufferSize, ACL_MEMCPY_DEVICE_TO_HOST);
-        if (ret != ACL_ERROR_NONE) {
-            ERROR_LOG("box count aclrtMemcpy failed!");
-            return FAILED;
-        }
-    }
-    else {
-        aclError ret = aclrtMemcpy(boxNum, bufferSize, data, bufferSize, ACL_MEMCPY_DEVICE_TO_DEVICE);
-        if (ret != ACL_ERROR_NONE) {
-            ERROR_LOG("box count aclrtMemcpy failed!");
-            return FAILED;
-        }
-    }
-
-
-    dataBuffer = aclmdlGetDatasetBuffer(modelOutput, 1);
+    aclDataBuffer* dataBuffer = aclmdlGetDatasetBuffer(modelOutput, 1);
     if (dataBuffer == nullptr) {
         ERROR_LOG("get model output aclmdlGetDatasetBuffer failed");
         return FAILED;
     }
 
-    data = aclGetDataBufferAddr(dataBuffer);
+    void* data = aclGetDataBufferAddr(dataBuffer);
     if (data == nullptr) {
         ERROR_LOG("aclGetDataBufferAddr from dataBuffer failed.");
         return FAILED;
     }
 
-    bufferSize = aclGetDataBufferSize(dataBuffer);
+    size_t bufferSize = aclGetDataBufferSize(dataBuffer);
     if (bufferSize == 0) {
         ERROR_LOG("The dataset buffer size of "
         "model inference output is 0");
@@ -179,42 +137,55 @@ Result Utils::PostProcess(const string &path, aclmdlDataset *modelOutput)
 
     float widthScale = (float)(image_width) / it->first;
     float heightScale = (float)(image_height) / it->second;
+    ofstream inferRes;
+    inferRes.open("inference_result.txt",ios::app);
 
-    for (int i=1; i<21; i++) {
-        for (int j=0; j<2; j++) {
-            BBox boundBox;
-            uint32_t score = uint32_t(boxInfo[SCORE + j*8 + i*304*8] * 100);
-            if (score < 99) continue;
-            static int tmpnum = 0;
-            boundBox.rect.ltX = boxInfo[TOPLEFTX + j*8 + i*304*8] * widthScale;
-            boundBox.rect.ltY = boxInfo[TOPLEFTY + j*8 + i*304*8] * heightScale;
-            boundBox.rect.rbX = boxInfo[BOTTOMRIGHTX + j*8 + i*304*8] * widthScale;
-            boundBox.rect.rbY = boxInfo[BOTTOMRIGHTY + j*8 + i*304*8] * heightScale;
-            uint32_t objIndex = (uint32_t)boxInfo[LABEL + j*8 + i*304*8];
-            boundBox.text = label[objIndex] + std::to_string(score) + "\%";
+    stringstream inferResultStream;
+    inferResultStream.str("");
+    inferResultStream << "image = " << path << endl;
+    for (int i=1; i<classNum; i++) {
+        for (int j=0; j<singleClassMaxBox; j++) {
+            uint32_t score = uint32_t(boxInfo[SCORE + j*boxNum + i*singleClassMaxBox*boxNum] * 100);
+            if (score < 95 || score > 100) continue;
+            uint32_t objIndex = (uint32_t)boxInfo[LABEL + j*boxNum + i*singleClassMaxBox*boxNum];
+            if (objIndex <= 0 || objIndex > 21 ) continue;
+            
+            float ltX_Scale = boxInfo[TOPLEFTX + j*boxNum + i*singleClassMaxBox*boxNum] / it->first;
+            float ltY_Scale = boxInfo[TOPLEFTY + j*boxNum + i*singleClassMaxBox*boxNum] / it->second;
+            float rbX_Scale = boxInfo[BOTTOMRIGHTX + j*boxNum + i*singleClassMaxBox*boxNum] / it->first;
+            float rbY_Scale = boxInfo[BOTTOMRIGHTY + j*boxNum + i*singleClassMaxBox*boxNum] / it->second;
+
+            inferResultStream << "label = " << label[objIndex] << ";" << "score = " << score << ";" << "ltX_Scale = " << ltX_Scale << ";" << "ltY_Scale = " << ltY_Scale << ";" << "rbX_Scale = " << rbX_Scale \
+            << ";" << "rbY_Scale = " << rbY_Scale << endl;
+
+            string text = label[objIndex] + std::to_string(score) + "\%";
             cv::Point p1, p2;
-            p1.x = boundBox.rect.ltX;
-            p1.y = boundBox.rect.ltY;
-            p2.x = boundBox.rect.rbX;
-            p2.y = boundBox.rect.rbY;
+            p1.x = ltX_Scale * image_width;
+            p1.y = ltY_Scale * image_height;
+            p2.x = rbX_Scale * image_width;
+            p2.y = rbY_Scale * image_height;
             cv::rectangle(resultImage, p1, p2, cv::Scalar(255, 0, 255),1, 8,0);
-            cv::putText(resultImage, boundBox.text, cv::Point(p1.x, p1.y), 0, 1, cv::Scalar(0, 255, 255), 2, 4, 0);
-            tmpnum++;
+            cv::putText(resultImage, text, cv::Point(p1.x, p1.y), 0, 1, cv::Scalar(0, 255, 255), 2, 4, 0);
         }
     }
+    inferResultStream << endl;
+    inferRes << inferResultStream.str();
     it++;
 
 	// generate result image
+    string cmd("mkdir -p ./output");
+    system(cmd.c_str());
+
     int pos = path.find_last_of(kFileSperator);
     string file_name(path.substr(pos + 1));
     stringstream sstream;
     sstream.str("");
-    sstream << "./output" << kFileSperator
-      << kOutputFilePrefix << file_name;
+    sstream << "./output" << kFileSperator << kOutputFilePrefix << file_name;
+
     string outputPath = sstream.str();
 	cv::imwrite(outputPath, resultImage);
-
-    delete [] boxNum;
+    
+    inferRes.close();
     delete [] boxInfo;
 
     return SUCCESS;
