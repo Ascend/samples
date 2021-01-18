@@ -37,6 +37,9 @@ def copy_data_host_to_device(device_data, data_size):
 def align_up(value, align):
     return int(int((value + align - 1) / align) * align)
 
+def align_up128(value):
+    return align_up(value, 128)
+
 def align_up16(value):
     return align_up(value, 16)
 
