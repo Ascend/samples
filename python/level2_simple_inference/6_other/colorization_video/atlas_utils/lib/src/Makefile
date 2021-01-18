@@ -81,7 +81,3 @@ $(OBJS): $(OBJ_DIR)/%.o : %.cpp | do_pre_build
 	$(Q)echo [CC] $@
 	$(Q)mkdir -p $(dir $@)
 	$(Q)$(CC) $(CC_FLAGS) $(INC_DIR) -c -fstack-protector-all $< -o $@
-
-
-clean:
-	rm -fr $(TOPDIR)/out
