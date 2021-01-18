@@ -1,14 +1,14 @@
+#include "conv2d_tik.h"
+#include <string>
+#include <vector>
+#include <algorithm>
+
 #define CHECK_FORMAT(format)  \
 {                                         \
     if(ge::FORMAT_RESERVED == format) {    \
         return false;     \
     }                     \
 }
-
-#include "conv2d_tik.h"
-#include <string>
-#include <vector>
-#include <algorithm>
 
 namespace ge
 {
@@ -49,12 +49,11 @@ static bool GetPadConv2D(ge::Operator& op,
     }
     std::vector<int32_t> padVec;
     if (GRAPH_SUCCESS != op.GetAttr("pads", padVec)){
-        ERROR_LOG("pSize should be 4. pSize = %d, pSize");
         return false;
     }
     auto pSize = padVec.size();
     if (pSize != 4) {
-        ERROR_LOG("pSize should be 4. pSize = %d, pSize");
+        ERROR_LOG("pSize should be 4. pSize = %d", pSize);
         return false;
     }
     padt = padVec[0];
@@ -92,7 +91,7 @@ static bool GetAttrsConv2D(ge::Operator& op, Format refer,
     }
     auto dSize = dilationList.size();
     if (dSize != 4) {
-        ERROR_LOG("dSize should be 4. dSize = %d, dSize");
+        ERROR_LOG("dSize should be 4. dSize = %d", dSize);
         return false;
     }
 
@@ -108,11 +107,11 @@ static bool GetAttrsConv2D(ge::Operator& op, Format refer,
         dilw = dilationList[2];
     }
     if (strh <= 0 || strw <= 0) {
-        ERROR_LOG("strh and strw should both > 0. strh = %d, strw = %d, strh, strw");
+        ERROR_LOG("strh and strw should both > 0. strh = %d, strw = %d", strh, strw);
         return false;
     }
     if (dilh <= 0 || dilw <= 0) {
-        ERROR_LOG("dilh and dilw should both > 0. dilh = %d, dilw = %d, dilh, dilw");
+        ERROR_LOG("dilh and dilw should both > 0. dilh = %d, dilw = %d", dilh, dilw);
         return false;
     }
 
@@ -254,7 +253,7 @@ IMPLEMT_VERIFIER(Conv2DTik, Conv2DVerify) {
         return GRAPH_FAILED;
     }
     if (wShape.size() != 4) {
-        ERROR_LOG("Filter size should bo 4");
+        ERROR_LOG("Filter size should be 4");
         return GRAPH_FAILED;
     }
 
@@ -262,7 +261,7 @@ IMPLEMT_VERIFIER(Conv2DTik, Conv2DVerify) {
     auto wDtype = wTensor.GetDataType();
 
     if(xDtype != wDtype) {
-        ERROR_LOG("Inputs should hava same dtype");
+        ERROR_LOG("Inputs should have same dtype");
         return GRAPH_FAILED;
     }
 
