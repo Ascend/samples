@@ -67,13 +67,16 @@ def main():
     acl_resource.init()
     
     model = Model(acl_resource, model_path)
-    src_dir = os.listdir(INPUT_DIR)
+    images_list = [os.path.join(INPUT_DIR, img)
+                   for img in os.listdir(INPUT_DIR)
+                   if os.path.splitext(img)[1] in IMG_EXT]
+
     
-    for pic in src_dir:
+    for pic in images_list:
         
-        pic_path = os.path.join(INPUT_DIR, pic)
+        
                
-        orig_shape, orig_l, l_data = preprocess(pic_path)
+        orig_shape, orig_l, l_data = preprocess(pic)
         
         result_list = model.execute([l_data,])    
        
