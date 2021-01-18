@@ -1,3 +1,5 @@
+English|[中文](README_CN.md)
+
  **Introduction**
 
 Welcome to use Ascend Samples!
