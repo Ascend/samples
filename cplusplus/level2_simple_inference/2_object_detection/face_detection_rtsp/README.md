@@ -23,7 +23,11 @@
 
 - 已完成对应产品的开发环境和运行环境安装。
 
-  注意：本样例依赖libatlasutil.so库，编译和运行环境都必须安装该库，具体参见[atlasutils库使用方法](../../../common/atlasutil/README.md)
+  注意：
+
+  1.本样例只支持20.1及以上版本
+
+  2.本样例依赖libatlasutil.so库，编译和运行环境都必须安装该库，具体参见[atlasutils库使用方法](../../../common/atlasutil/README.md)
 
   
 
@@ -120,11 +124,10 @@
      
      **export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux**  
 
-     **export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub**   
-     ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
+     **export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub** 
      
-        > - 如果是20.0版本，此处 **DDK_PATH** 环境变量中的 **arm64-liunx** 应修改为 **arm64-linux_gcc7.3.0**。
-
+     
+   
 3. 切换到face_detection_rtsp目录，创建目录用于存放编译文件，例如，本文中，创建的目录为 **build/intermediates/host**。
 
     **cd $HOME/samples/cplusplus/level2_simple_inference/2_object_detection/face_detection_rtsp**
