@@ -246,10 +246,10 @@ void FFmpegDecoder::Decode(FrameProcessCallBack callback,
                 if (ret != 0) {
                     processOk = false;
                     break;
-                }
-                av_packet_unref(&avPacket);
+                }                
             }
         }
+        av_packet_unref(&avPacket);		
     }
 
     av_bsf_free(&bsfCtx); // free AVBSFContext pointer
