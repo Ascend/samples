@@ -116,8 +116,13 @@ $\color{red}{以下操作在运行环境(Atlas200DK)上操作}$
 
         更新源。  
         **sudo apt-get update** 
+5.  部署PyACL。  
+    - 20.0版本  
+    在开发环境执行 `find / -name pyACL` 命令,将arm64-linux_gcc7.3.0路径下的 **pyACL** 目录拷贝到运行环境的/home/HwHiAiUser/Ascend/路径下。
+    - 20.1版本  
+    参考链接部署  https://support.huaweicloud.com/dedg-A200dk_3000_c75/atlased_04_0017.html
 
-5.  在运行环境添加环境变量，用于运行工程。
+6.  在运行环境添加环境变量，用于运行工程。
     1.  打开.bashrc文件  
         **vim ~/.bashrc** 
       
