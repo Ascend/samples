@@ -1,4 +1,6 @@
- **介绍**
+中文|[English](CONTRIBUTING_EN.md) 
+
+**介绍**
 
 Ascend Samples，欢迎各位开发者！
 
