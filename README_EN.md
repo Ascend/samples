@@ -1,4 +1,4 @@
-[English]|[中文](README_CN.md)
+English|[中文](README_CN.md)
 
 ## About Ascend Samples Repository
    
@@ -110,7 +110,7 @@ Ascend forum: https://forum.huawei.com/enterprise/en/forum-100504.html
 
 ## Contribution
 
-Welcome to contribute to Ascend Samples. For more details, please refer to our [Contribution Wiki](./CONTRIBUTING.md).
+Welcome to contribute to Ascend Samples. For more details, please refer to our [Contribution Wiki](./CONTRIBUTING_EN.md).
 
 ## License
 [Apache License 2.0](LICENSE)
