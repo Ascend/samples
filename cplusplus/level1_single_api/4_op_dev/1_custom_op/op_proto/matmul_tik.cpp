@@ -2,10 +2,6 @@
 #include <string>
 #include <vector>
 
-const char *x1 = "x1"
-const char *x2 = "x2"
-const char *y = "y"
-
 namespace ge {
 
 IMPLEMT_VERIFIER(MatmulTik, MatmulTikVerify)
