@@ -39,12 +39,12 @@ def copy_data_to_dvpp(data, size, run_mode):
     if run_mode == ACL_DEVICE:
         policy = ACL_MEMCPY_DEVICE_TO_DEVICE
 
-    buffer, ret = acl.media.dvpp_malloc(size)
+    dvpp_buffer, ret = acl.media.dvpp_malloc(size)
     check_ret("acl.rt.malloc_host", ret)
-    ret = acl.rt.memcpy(buffer, size, data, size, policy)
+    ret = acl.rt.memcpy(dvpp_buffer, size, data, size, policy)
     check_ret("acl.rt.memcpy", ret)
 
-    return buffer
+    return dvpp_buffer
 
 
 def align_up(value, align):
