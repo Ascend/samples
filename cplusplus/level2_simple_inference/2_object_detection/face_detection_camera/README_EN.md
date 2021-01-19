@@ -78,16 +78,15 @@ Before deploying this sample, ensure that:
 
 1. Modify Presenter-related configuration files.
 
-    Change **presenter_server_ip** and **presenter_view_ip** in **script/param.conf** in the sample directory to the IP addresses that can ping the operating environment in the development environment. The following are two examples:
+    Change **presenter_server_ip** and **presenter_view_ip** in **script/param.conf** in the sample directory to the IP addresses that can ping the operating environment in the development environment. 
 
-     - Atlas 200 DK
-        1. In the development environment, run the ifconfig command to view available IP addresses.
-        2. In the development environment, change **presenter_server_ip** and **presenter_view_ip** in **script/param.conf** to the available IP addresses.
+    1. In the development environment, run the ifconfig command to view available IP addresses.    
+    2. In the development environment, change **presenter_server_ip** and **presenter_view_ip** in **script/param.conf** to the available IP addresses.
 
-        ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **Note**
+    ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **Note**
 
-        > - 1. If the development environment and operating environment are deployed on separate servers, the configured virtual NIC IP address is used, for example, 192.168.1.223.
-        > - 2. If the development environment and operating environment are deployed on the same server, the fixed IP address of Atlas 200 DK is used, for example, 192.168.1.2.
+    > - 1. If the development environment and operating environment are deployed on separate servers, the configured virtual NIC IP address is used, for example, 192.168.1.223.    
+    > - 2. If the development environment and operating environment are deployed on the same server, the fixed IP address of Atlas 200 DK is used, for example, 192.168.1.2.
 
 2. Set the environment variables on which compilation depends in the command line of the development environment.
   
@@ -106,12 +105,6 @@ Before deploying this sample, ensure that:
 
 4. Go to the **build/intermediates/host** directory and run the cmake command.
 
-    - If the OS architecture of the development environment is the same as that of the operating environment, run the following command to perform compilation.
-      **cd build/intermediates/host**  
-      **make clean**  
-      **cmake \.\./\.\./\.\./src -DCMAKE_CXX_COMPILER=g++ -DCMAKE_SKIP_RPATH=TRUE**
-
-    - If the OS architecture of the development environment is different from that of the operating environment, use the cross compiler to perform compilation. If the development environment uses the x86 architecture and the operating environment uses the ARM architecture, run the following command to perform cross compilation:
       **cd build/intermediates/host**  
       **make clean**  
       **cmake \.\./\.\./\.\./src -DCMAKE_CXX_COMPILER=aarch64-linux-gnu-g++ -DCMAKE_SKIP_RPATH=TRUE**
@@ -134,13 +127,12 @@ Before deploying this sample, ensure that:
 
 2. Start the Presenter Server and log in to the operating environment.
 
-    - Atlas 200 DK
-        1. Run the following command in the development environment to start the Presenter Server:  
-            **cd $HOME/samples/cplusplus/level2_simple_inference/2_object_detection/face_detection_camera**  
-            **bash script/run_presenter_server.sh**  
-        2. Run the following command to log in to the operating environment:  
-            **If the development environment and operating environment are deployed on the same server, skip this step.**  
-            **ssh HwHiAiUser@xxx.xxx.xxx.xxx**
+    1. Run the following command in the development environment to start the Presenter Server:  
+        **cd $HOME/samples/cplusplus/level2_simple_inference/2_object_detection/face_detection_camera**  
+        **bash script/run_presenter_server.sh**  
+    2. Run the following command to log in to the operating environment:  
+        **If the development environment and operating environment are deployed on the same server, skip this step.**  
+        **ssh HwHiAiUser@xxx.xxx.xxx.xxx**
 
 3. Run the executable file.
 
