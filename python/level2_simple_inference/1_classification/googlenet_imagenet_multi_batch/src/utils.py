@@ -79,4 +79,4 @@ def yuv420sp_size(width, height):
     """
     yuv image size
     """
-    return int(width * height * 3 /2)
+    return int(width * height * 3 / 2)
