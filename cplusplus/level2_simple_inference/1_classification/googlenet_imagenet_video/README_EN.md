@@ -1,4 +1,4 @@
-ENGLISH|[中文](README_CN.md)
+English|[中文](README_CN.md)
 
 **This sample provides reference for you to learn the Ascend AI Software Stack and is not for commercial purposes.**
 
@@ -67,7 +67,7 @@ In the development environment, run the following commands as a non-root user to
       
       **cd $HOME/models/googlenet\_imagenet\_video**
       
-      **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet\_imagenet\_video/insert\_op.cfg**
+      **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_imagenet_video/insert_op.cfg**
       
       **atc --model=./googlenet.prototxt --weight=./googlenet.caffemodel --framework=0 --output=googlenet --soc\_version=Ascend310 --insert\_op\_conf=./insert\_op.cfg --input\_shape="data:1,3,224,224" --input\_format=NCHW**
    
@@ -81,7 +81,7 @@ In the development environment, run the following commands as a non-root user to
    
    **cd $HOME/samples/cplusplus/level2\_simple\_inference/1\_classification/googlenet\_imagenet\_video/data**
    
-   **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet\_imagenet\_video/cat.mp4**
+   **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_imagenet_video/cat.mp4**
    
    **cd ..**
 
