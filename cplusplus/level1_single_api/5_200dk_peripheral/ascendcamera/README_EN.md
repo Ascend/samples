@@ -1,3 +1,5 @@
+English|[中文](README_CN.md)
+
 **This sample provides reference for you to learn the Ascend AI Software Stack and is not for commercial purposes.**
 
 **This sample applies to Ascend camera 20.0 and later versions, and supports Atlas 200 DK and Atlas 300 ([AI1s](https://support.huaweicloud.com/en-us/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366)).**
