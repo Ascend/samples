@@ -62,7 +62,7 @@ Before deploying this sample, ensure that:
 
 3. Convert the original model to a Da Vinci model.
    
-   **Note: Ensure that the environment variables have been configured based on [Preparing Environment and Installing Dependencies](https://gitee.com/ascend/samples/tree/dev/cplusplus/environment).**
+   **Note: Ensure that the environment variables have been configured based on [Preparing Environment and Installing Dependencies](../../../environment).**
    
    1. Set the **LD\_LIBRARY\_PATH** environment variable.
       
