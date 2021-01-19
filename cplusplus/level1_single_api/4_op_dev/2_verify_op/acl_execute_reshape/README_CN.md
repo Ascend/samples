@@ -211,7 +211,7 @@
 
     2.  在运行环境中执行execute\_custom\_reshape\_op文件，验证单算子模型文件。
 
-        在/home/HwHiAiUser/HIAI\_PROJECTS/run\_lstm/out目录下执行如下命令：
+        在/home/HwHiAiUser/HIAI\_PROJECTS/run\_reshape/out目录下执行如下命令：
 
         **chmod +x execute\_custom\_reshape\_op**
 

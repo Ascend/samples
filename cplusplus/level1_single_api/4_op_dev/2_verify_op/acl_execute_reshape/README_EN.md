@@ -211,7 +211,7 @@ Note: The generation of a single-operator model file depends only on the operato
 
     2.  Execute the  **execute\_custom\_reshape\_op**  file in the  operating environment  to verify the single-operator model file.
 
-        Run the following commands in the  **/home/HwHiAiUser/HIAI\_PROJECTS/run\_lstm/out**  directory:
+        Run the following commands in the  **/home/HwHiAiUser/HIAI\_PROJECTS/run\_reshape/out**  directory:
 
         **chmod +x execute\_custom\_reshape\_op**
 
