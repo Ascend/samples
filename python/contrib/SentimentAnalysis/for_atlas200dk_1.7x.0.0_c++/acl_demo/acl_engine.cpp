@@ -159,7 +159,7 @@ bool AclEngine::Inference() {
             }
 
             if (0 != retVal) {
-                printf("kModelId %d aclInferenceProcess, ret[%d]\n", model_id_,
+                printf("kModelId %u aclInferenceProcess, ret[%d]\n", model_id_,
                        ret);
                 ReleaseAllAclModelResource(model_id_, model_desc_ptr_,
                                            contexts_);
@@ -461,7 +461,7 @@ int AclEngine::ReadInputFiles(const vector<vector<string>> &inputs) {
         const auto &fileNames = inputs[inIdx];
         void *p_imgBuf = input_buffers_[inIdx];
         size_t fileSize = input_buffer_sizes_[inIdx] / params_.batch_size;
-        printf("params_.batch_size = %d \n", params_.batch_size);
+        printf("params_.batch_size = %u \n", params_.batch_size);
         printf("fileSize = %d \n", (int)fileSize);
         size_t pos = 0;
         bool isInputBin = false; // TO READ BIN WITHOUT C++ PREPROCESS OR READ
