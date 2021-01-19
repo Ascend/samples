@@ -125,7 +125,7 @@ In the development environment, run the following commands as a non-root user to
    
    > - *xxx.xxx.xxx.xxx* is the IP address of the operating environment, which is **192.168.1.2** when Atlas 200 DK is connected using the USB, and is the IP address of the corresponding public network for Atlas 300 (AI1s).
 
-2. Run the executable file.
+2. <a name="step_2"></a>Run the executable file.
    
    - If the development environment and operating environment are deployed on the same server, run the following commands to set the operating environment variables and change the directory:
      
@@ -171,7 +171,7 @@ After the execution is complete, the running results are printed in the CLI of t
    
    > - *xxx.xxx.xxx.xxx* is the IP address of the operating environment, which is **192.168.1.2** when Atlas 200 DK is connected using the USB, and is the IP address of the corresponding public network for Atlas 300 (AI1s).
 
-2. Run the executable file.
+2. <a name="step2_2"></a>Run the executable file.
    
    - If the development environment and operating environment are deployed on the same server, run the following commands to set the operating environment variables and change the directory:
      
