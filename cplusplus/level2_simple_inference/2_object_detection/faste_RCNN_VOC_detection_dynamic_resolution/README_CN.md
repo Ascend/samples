@@ -1,3 +1,5 @@
+中文|[English](README_EN.md)
+
 **本样例为大家学习昇腾软件栈提供参考，非商业目的！**
 
 **本样例适配20.0及以上版本，支持产品为Atlas200DK、Atlas300([ai1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366))。**
@@ -5,8 +7,6 @@
 **本README只提供命令行方式运行样例的指导，如需在Mindstudio下运行样例，请参考[Mindstudio运行图片样例wiki](https://gitee.com/ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E5%9B%BE%E7%89%87%E6%A0%B7%E4%BE%8B?sort_id=3164874)。**
 
 ## faste_RCNN_VOC_detection_dynamic_resolution样例
-
-**注：案例详细介绍请参见[googlenet动态batch_wiki]()。**
 
 功能：使用faster_rcnn模型对输入图片进行预测推理，并将结果打印到输出图片上。
 
@@ -112,7 +112,7 @@
      **export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub**
 
      ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
-        > - 如果是20.0版本，此处 **DDK_PATH** 环境变量中的 **arm64-liunx** 应修改为 **arm64-linux_gcc7.3.0**。
+        > - 如果是20.0版本，此处 **DDK_PATH** 环境变量中的 **arm64-linux** 应修改为 **arm64-linux_gcc7.3.0**。
         > - 可以在命令行中执行 **uname -a**，查看开发环境和运行环境的cpu架构。如果回显为x86_64，则为x86架构。如果回显为arm64，则为Arm架构。
 
 2. 切换到faste_RCNN_VOC_detection_dynamic_resolution目录，创建目录用于存放编译文件，例如，本文中，创建的目录为 **build/intermediates/host**。
