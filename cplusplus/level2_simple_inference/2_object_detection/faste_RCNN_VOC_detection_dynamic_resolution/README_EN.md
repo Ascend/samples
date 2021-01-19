@@ -18,7 +18,7 @@ Output: JPG image with the inference result
 
 Before deploying this sample, ensure that:
 
-- The environment has been prepared according to [Environment Preparation and Dependency Installation](.../../environment).
+- The environment has been prepared according to [Environment Preparation and Dependency Installation](../../../environment).
 
 - The development environment and operating environment of the corresponding product have been installed.
 
@@ -62,7 +62,7 @@ Before deploying this sample, ensure that:
 
 3. Convert the original model to a Da Vinci model.
 
-    **Note: Ensure that the environment variables have been configured in [Environment Preparation and Dependency Installation](.../../environment).**
+    **Note: Ensure that the environment variables have been configured in [Environment Preparation and Dependency Installation](../../../environment).**
 
     1. Set the **LD_LIBRARY_PATH** environment variable.
 
