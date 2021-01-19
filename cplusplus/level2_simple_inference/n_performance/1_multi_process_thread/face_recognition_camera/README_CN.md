@@ -142,7 +142,7 @@
         **ssh HwHiAiUser@xxx.xxx.xxx.xxx**      
 
    ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**      
-   > - 当提示“Please input a absolute path to storage facial recognition data:“时，请输入Mind Studio中存储人脸注册数据及解析数据，此路径Mind Studio用户需要有读写权限，如果此路径不存在，脚本会自动创建。
+   > - 当提示“Please input a absolute path to storage facial recognition data:“时，请输入MindStudio中存储人脸注册数据及解析数据，此路径MindStudio用户需要有读写权限，如果此路径不存在，脚本会自动创建。
 
 
 3. <a name="step_2"></a>运行可执行文件。
