@@ -32,7 +32,7 @@ if __name__ == '__main__':
     random.seed(233)
     np.random.seed(233)
     tf.set_random_seed(233)
-    
+
     # parameters
     parse = argparse.ArgumentParser()
     parse.add_argument('--config_file', type=str, default='default.ini')

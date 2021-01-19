@@ -45,13 +45,16 @@ class lstm():
         with tf.name_scope("bilstm"):
             # 改变之后的
             rnn_unit = bert_config.hidden_size
-            basicLstm = tf.nn.rnn_cell.BasicLSTMCell(rnn_unit)  #  set rnn hidden parameters
-            cell = tf.nn.rnn_cell.MultiRNNCell(
-                [basicLstm for i in range(config.num_layers)])  # inpout multiple hidden layers
+            basicLstm = tf.nn.rnn_cell.BasicLSTMCell(
+                rnn_unit)  #  set rnn hidden parameters
+            cell = tf.nn.rnn_cell.MultiRNNCell([
+                basicLstm for i in range(config.num_layers)
+            ])  # inpout multiple hidden layers
             x = tf.reshape(self.embedding, [-1, bert_config.hidden_size])
             x = tf.split(x, config.batch_size)
             outputs_tuple, _ = tf.nn.static_rnn(
-                cell, x, dtype=tf.float32)  # us tensor interface to link cell into rnn network
+                cell, x, dtype=tf.float32
+            )  # us tensor interface to link cell into rnn network
 
             h = tf.transpose(outputs_tuple, perm=[0, 1, 2])
             h = tf.transpose(h, perm=[0, 2, 1])
