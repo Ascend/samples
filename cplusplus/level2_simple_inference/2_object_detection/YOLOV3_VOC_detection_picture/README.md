@@ -50,11 +50,15 @@
 
 2. 获取此应用中所需要的原始网络模型。
 
-    参考下表获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到开发环境普通用户下的任意目录，例如：$HOME/models/YOLOV3_VOC_detection_picture。
+    参考下表获取此应用中所用到的原始网络模型，并将其存放到开发环境普通用户下的任意目录，例如：$HOME/models/YOLOV3_VOC_detection_picture。
     
-    **cd $HOME/models/YOLOV3_VOC_detection_picture**
     
-    **https://www.huaweicloud.com/ascend/resources/modelzoo/Models/5cb8d2255070439d94068b7935570c43**
+    |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
+    |---|---|---|
+    |  yolov3| 图片分类推理模型。是基于tensorflow的yolov3模型。  |  [https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/turing/resourcecenter/model/YoloV3/zh/1.1/ATC_YoloV3_from_Tensorflow_Ascend310.zip](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/turing/resourcecenter/model/YoloV3/zh/1.1/ATC_YoloV3_from_Tensorflow_Ascend310.zip)。 |
+
+
+
 
 3. 将原始模型转换为Davinci模型。
     
