@@ -52,7 +52,6 @@
 
     参考下表获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到开发环境普通用户下的任意目录，例如：$HOME/models/YOLOV3_VOC_detection_picture。
     
-    **cd $HOME/models/YOLOV3_VOC_detection_picture**
     
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
