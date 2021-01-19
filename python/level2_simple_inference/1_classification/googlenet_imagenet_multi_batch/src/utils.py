@@ -46,17 +46,37 @@ def copy_data_to_dvpp(data, size, run_mode):
 
     return buffer
 
+
 def align_up(value, align):
+    """
+    align input data
+    """
     return int(int((value + align - 1) / align) * align)
 
+
 def align_up128(value):
+    """
+    128 alignment of input data
+    """
     return align_up(value, 128)
 
+
 def align_up16(value):
+    """
+    16 alignment of input data
+    """
     return align_up(value, 16)
 
+
 def align_up2(value):
+    """
+    2 alignment of input data
+    """
     return align_up(value, 2)
 
+
 def yuv420sp_size(width, height):
+    """
+    yuv image size
+    """
     return int(width * height * 3 /2)
