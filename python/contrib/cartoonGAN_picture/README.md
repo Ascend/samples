@@ -67,13 +67,14 @@
 
     2. 执行以下命令使用atc命令进行模型转换。
 
-        **cd $HOME/samples/python/contrib/cartoonGAN_picture//model**  
+        **cd $HOME/samples/python/contrib/cartoonGAN_picture/model**  
 
         **atc --output_type=FP32 --input_shape="train_real_A:1,256,256,3" --input_format=NHWC --output="./cartoonization" --soc_version=Ascend310 --insert_op_conf=./insert_op.cfg --framework=3 --save_original_model=false --model="./cartoonization.pb" --precision_mode=allow_fp32_to_fp16**
 
     
 
-4. 由于版本问题，此模型在20.1版本不能正确转换，后续版本已经解决这个问题。因此20.1版本直接获取om模型。      
+4. 由于版本问题，此模型在20.1版本不能正确转换。因此20.1版本直接获取om模型。     
+        **cd $HOME/samples/python/contrib/cartoonGAN_picture/model**    
         **wget https://obs-book.obs.cn-east-2.myhuaweicloud.com/cjl/cartoonization.om** 
     
 
