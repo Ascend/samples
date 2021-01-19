@@ -95,7 +95,7 @@ Before deploying this sample, ensure that:
 
      ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **Note**
 
-        > - If the version is 20.0, change **arm64-linux** in the **DDK_PATH** environment variable to **arm64-linux_gcc7.3.0**.
+     > - If the version is 20.0, change **arm64-linux** in the **DDK_PATH** environment variable to **arm64-linux_gcc7.3.0**.
 
 3. Go to the **face_detection_camera** directory and create a directory for storing build outputs. For example, the directory created in this sample is **build/intermediates/host**.
 
