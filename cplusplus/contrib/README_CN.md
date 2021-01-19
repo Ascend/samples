@@ -20,6 +20,8 @@
 ├── [gesture_recognition_3D](./gesture_recognition_3D)：**3D手势识别**    
 ├── [human_protein_map_classification](./human_protein_map_classification)：**人体蛋白质分类**    
 ├── [image_hdr_enhance](./image_hdr_enhance)：**图像HDR增强**    
+├── [portrait](./portrait)：**人像背景替换**    
+├── [recontruction](./recontruction)：**语义三维重建**    
 ├── [super_resolution](./super_resolution)：**超分辨率图像处理**    
 └── [vessel_segmentation](./vessel_segmentation)：**眼底视网膜血管分割**     
 
