@@ -64,7 +64,7 @@
 
 3. 切换到ascendcamera目录，创建目录用于存放编译文件，例如，本文中，创建的目录为 **build/intermediates/host**。
 
-    **cd $HOME/samples/c++/level1_single_api/5_200dk_peripheral/ascendcamera**
+    **cd $HOME/samples/cplusplus/level1_single_api/5_200dk_peripheral/ascendcamera**
 
     **mkdir -p build/intermediates/host**
 
@@ -84,7 +84,7 @@
 
 1. 执行以下命令,将开发环境的 **ascendcamera** 目录上传到运行环境中，例如 **/home/HwHiAiUser**，并以HwHiAiUser（运行用户）登录运行环境（Host）。
 
-    **scp -r $HOME/samples/c++/level1_single_api/5_200dk_peripheral/ascendcamera HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
+    **scp -r $HOME/samples/cplusplus/level1_single_api/5_200dk_peripheral/ascendcamera HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
 
     **ssh HwHiAiUser@xxx.xxx.xxx.xxx**    
 
@@ -99,7 +99,7 @@
 
       **source ~/.bashrc**
         
-      **cd $HOME/samples/c++/level1_single_api/5_200dk_peripheral/ascendcamera/out**
+      **cd $HOME/samples/cplusplus/level1_single_api/5_200dk_peripheral/ascendcamera/out**
 
     - 如果是开发环境与运行环境分离部署，执行以下命令切换目录。
     
@@ -129,7 +129,7 @@
 
 1. 执行以下命令,将开发环境的 **ascendcamera** 目录上传到运行环境中，例如 **/home/HwHiAiUser**，并以HwHiAiUser（运行用户）登录运行环境（Host）。
 
-    **scp -r $HOME/samples/c++/level1_single_api/5_200dk_peripheral/ascendcamera HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
+    **scp -r $HOME/samples/cplusplus/level1_single_api/5_200dk_peripheral/ascendcamera HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
 
     **ssh HwHiAiUser@xxx.xxx.xxx.xxx**    
 
@@ -144,7 +144,7 @@
 
       **source ~/.bashrc**
         
-      **cd $HOME/samples/c++/level1_single_api/5_200dk_peripheral/ascendcamera/out**
+      **cd $HOME/samples/cplusplus/level1_single_api/5_200dk_peripheral/ascendcamera/out**
 
     - 如果是开发环境与运行环境分离部署，执行以下命令切换目录。
     
@@ -173,11 +173,11 @@
 
     **开发环境与运行环境合一部署，请跳过此步骤！**   
 
-    **scp -r $HOME/samples/c++/level1_single_api/5_200dk_peripheral/ascendcamera HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
+    **scp -r $HOME/samples/cplusplus/level1_single_api/5_200dk_peripheral/ascendcamera HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
 
 2. 启动presenterserver并登录运行环境。     
         1. 开发环境中执行以下命令启动presentserver。   
-            **cd $HOME/samples/c++/level1_single_api/5_200dk_peripheral/ascendcamera**   
+            **cd $HOME/samples/cplusplus/level1_single_api/5_200dk_peripheral/ascendcamera**   
             **bash script/run_presenter_server.sh**   
         2. 执行以下命令登录运行环境。   
             **开发环境与运行环境合一部署，请跳过此步骤！**   
@@ -189,7 +189,7 @@
     - 如果是开发环境与运行环境合一部署，执行以下命令，设置运行环境变量，并切换目录。   
       **export LD_LIBRARY_PATH=**   
       **source ~/.bashrc**     
-      **cd $HOME/samples/c++/level1_single_api/5_200dk_peripheral/ascendcameraout**
+      **cd $HOME/samples/cplusplus/level1_single_api/5_200dk_peripheral/ascendcameraout**
 
     - 如果是开发环境与运行环境分离部署，执行以下命令切换目录。   
       **cd $HOME/ascendcamera/out**
