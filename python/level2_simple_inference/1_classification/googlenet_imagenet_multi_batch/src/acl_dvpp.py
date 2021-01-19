@@ -91,7 +91,6 @@ class Dvpp():
         return AclImage(out_buffer, stride_width, 
                         stride_height, out_buffer_size)
 
-
     def _gen_input_pic_desc(self, image):
         stride_width = align_up128(image.width)
         stride_height = align_up16(image.height) 
