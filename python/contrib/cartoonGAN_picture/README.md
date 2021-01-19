@@ -73,7 +73,7 @@
 
     
 
-4. 对于20.1版本，直接获取om模型。      
+4. 由于版本问题，此模型在20.1版本不能正确转换，后续版本已经解决这个问题。因此20.1版本直接获取om模型。      
         **wget https://obs-book.obs.cn-east-2.myhuaweicloud.com/cjl/cartoonization.om** 
     
 
