@@ -1,3 +1,5 @@
+中文|[English](README_EN.md)
+
 **本样例为大家学习昇腾软件栈提供参考，非商业目的！**
 
 **本样例适配20.0及以上版本，支持产品为Atlas200DK。**
@@ -5,8 +7,6 @@
 **本README只提供命令行方式运行样例的指导，如需在Mindstudio下运行样例，请参考[Mindstudio运行视频样例wiki](https://gitee.com/ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E8%A7%86%E9%A2%91%E6%A0%B7%E4%BE%8B?sort_id=3170138)。**
 
 ## 检测视频中物体的样例
-
-**注：案例详细介绍请参见[人脸检测](https://gitee.com/ascend/samples/wikis/%E4%BA%BA%E8%84%B8%E6%A3%80%E6%B5%8B?sort_id=3170483)。**
 
 功能：使用人脸检测模型对树莓摄像头中的即时视频进行人脸检测。
 
@@ -74,7 +74,6 @@
 
         **cp ./face_detection.om $HOME/samples/cplusplus/level2_simple_inference/2_object_detection/face_detection_camera/model/**
 
-
 ### 样例部署
 
 1. 修改present相关配置文件。
@@ -86,9 +85,7 @@
         > - 1.开发环境和运行环境分离部署，一般使用配置的虚拟网卡ip，例如192.168.1.223。
         > - 2.开发环境和运行环境合一部署，一般使用200dk固定ip，例如192.168.1.2。
 
- 
 2. 开发环境命令行中设置编译依赖的环境变量。
-
   
      **export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux**  
  
@@ -112,8 +109,6 @@
 
     **make**
 
-
-
 ### 样例运行
 
 ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
@@ -135,8 +130,6 @@
             **开发环境与运行环境合一部署，请跳过此步骤！**   
             **ssh HwHiAiUser@xxx.xxx.xxx.xxx** 
 
-  
-
 3. <a name="step_2"></a>运行可执行文件。
 
     - 如果是开发环境与运行环境合一部署，执行以下命令，设置运行环境变量，并切换目录。   
@@ -153,13 +146,7 @@
 
 ### 查看结果
 
-1. 打开presentserver网页界面。
-
-   
-
-      打开启动Presenter Server服务时提示的URL即可。
-      
-  
+1. 打开presentserver网页界面,打开启动Presenter Server服务时提示的URL即可。
 
 2. 等待Presenter Agent传输数据给服务端，单击“Refresh“刷新，当有数据时相应的Channel 的Status变成绿色。
 
