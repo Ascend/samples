@@ -1,0 +1,74 @@
+data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/SentimentAnalysis.zip"
+project_name="SentimentAnalysis"
+script_path="$( cd "$(dirname $BASH_SOURCE)" ; pwd -P)"
+project_path=${script_path}/..
+success=1
+
+function downloadDataWithVerifySource() {
+
+    mkdir -p ${project_path}/data/
+
+    wget -O ${project_path}/data/${project_name}.zip  ${data_source}  --no-check-certificate
+    if [ $? -ne 0 ];then
+        echo "download .zip failed, please check Network."
+        return 1
+    fi
+
+    return 0
+}
+
+function setAtcEnv() {
+    # 设置模型转换时需要的环境变量
+    if [[ ${version} = "c73" ]] || [[ ${version} = "C73" ]];then
+        export install_path=/home/HwHiAiUser/Ascend/ascend-toolkit/latest
+        export PATH=/usr/local/python3.7.5/bin:${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
+        export PYTHONPATH=${install_path}/atc/python/site-packages/te:${install_path}/atc/python/site-packages/topi:$PYTHONPATH
+        export ASCEND_OPP_PATH=${install_path}/opp
+        export LD_LIBRARY_PATH=${install_path}/atc/lib64:${LD_LIBRARY_PATH}
+    elif [[ ${version} = "c75" ]] || [[ ${version} = "C75" ]];then
+        export install_path=$HOME/Ascend/ascend-toolkit/latest
+        export PATH=/usr/local/python3.7.5/bin:${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
+        export ASCEND_OPP_PATH=${install_path}/opp
+        export PYTHONPATH=${install_path}/atc/python/site-packages:${install_path}/atc/python/site-packages/auto_tune.egg/auto_tune:${install_path}/atc/python/site-packages/schedule_search.egg:$PYTHONPATH
+        export LD_LIBRARY_PATH=${install_path}/atc/lib64:${LD_LIBRARY_PATH}
+    fi
+
+    return 0
+}
+
+
+function main() {
+    downloadDataWithVerifySource
+    unzip ${project_path}/data/${project_name}.zip
+    cp -r ${project_path}/data/for_atlas200dk_1.7x.0.0_c++/tf_total_sentiment/data ${project_path}/for_atlas200dk_1.7x.0.0_c++/tf_total_sentiment/
+    cp -r ${project_path}/data/for_atlas200dk_1.7x.0.0_c++/coarse-big-corpus ${project_path}/for_atlas200dk_1.7x.0.0_c++/
+    cp -r ${project_path}/data/for_atlas200dk_1.7x.0.0_c++/tf_total_sentiment/snapshots ${project_path}/for_atlas200dk_1.7x.0.0_c++/tf_total_sentiment/
+    cp -r ${project_path}/data/for_atlas200dk_1.7x.0.0_c++/tf_total_sentiment/chinese_L-12_H-768_A-12 ${project_path}/for_atlas200dk_1.7x.0.0_c++/tf_total_sentiment/
+    cp -r ${project_path}/data/for_atlas200dk_1.7x.0.0_c++/tf_total_sentiment/jsoncpp ${project_path}/for_atlas200dk_1.7x.0.0_c++/tf_total_sentiment/
+
+    cd ${project_path}/for_atlas200dk_1.7x.0.0_c++/acl_demo
+    ./model_convert.sh
+    echo "finished model convert"
+
+    ./build.sh
+    echo "finished compile acl/c++ code"
+
+    ./build/inference -m ../tf_total_sentiment/snapshots/models.om -i ../tf_total_sentiment/hotel.decode.txt -o ../tf_total_sentiment/output/
+    echo "finished npu inference"
+
+    echo "output test result="
+    cd ../tf_total_sentiment
+    python check_output.py
+    
+    ## GPU/CPU TEST
+    # python main.py
+    # python test.py
+    
+    echo "run success"
+    return ${success}
+}
+
+main
+
+  
+  
