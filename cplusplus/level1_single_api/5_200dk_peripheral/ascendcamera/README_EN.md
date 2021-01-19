@@ -159,7 +159,7 @@ After the execution is complete, the running results are printed in the CLI of t
 
 ### Running the Sample(Saving the Video to the Local Host)
 
-**Note: If the development environment and operating environment are deployed on the same server, skip step 1 and go to [step 2](#step_2).**
+**Note: If the development environment and operating environment are deployed on the same server, skip step 1 and go to [step 2](#step2_2).**
 
 1. Run the following commands to upload the **ascendcamera** directory in the development environment to the operating environment, for example, **/home/HwHiAiUser**, and log in to the operating environment (host) as the **HwHiAiUser** user:
    
