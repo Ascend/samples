@@ -139,9 +139,9 @@ function main() {
     sleep 2  
 
 
-    cd ${project_path}
+    cd ${project_path}/src
     #python3.6 mask_detect.py
-    python3.6 main.py ./data/mask-true.mp4 &
+    python3.6 main.py ../data/mask-true.mp4 &
 
     
     sleep 8
