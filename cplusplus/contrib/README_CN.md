@@ -9,8 +9,18 @@
 ├── [AI_painting](./AI_painting)：**AI风景画**   
 ├── [Ascbot](./Ascbot)：**智能小车**   
 ├── [HandWrite](./HandWrite)：**手写汉字识别**   
-├── [VSLAM_based_smart_car_platform](https://gitee.com/ascend/samples/tree/dev/level2_simple_inference/2_object_detection)：**自动驾驶设计（正在开发）。**   
-├── [cartoonization](https://gitee.com/ascend/samples/tree/dev/level2_simple_inference/3_segmentation)：**卡通图像生成（正在开发）**   
-└── [coarse_grained_emotion_recognition](https://gitee.com/ascend/samples/tree/dev/level2_simple_inference/4_recommendation)：**粗粒度表情识别（正在开发）**   
+├── [VSLAM_based_smart_car_platform](./VSLAM_based_smart_car_platform)：**自动驾驶设计（正在开发）**   
+├── [action_recognition](./action_recognition)：**动作识别**   
+├── [ar_shadowgan](./ar_shadowgan)：**AR阴影生成**   
+├── [cartoonization](./cartoonization)：**卡通图像生成（正在开发）**   
+├── [coarse_grained_emotion_recognition](./coarse_grained_emotion_recognition)：**粗粒度表情识别（正在开发）**   
+├── [dehaze](./dehaze)：**图像去雾**    
+├── [derain](./derain)：**雨雾天图像增强**    
+├── [edge_detection_rcf](./edge_detection_rcf)：**图像边缘检测**    
+├── [gesture_recognition_3D](./gesture_recognition_3D)：**3D手势识别**    
+├── [human_protein_map_classification](./human_protein_map_classification)：**人体蛋白质分类**    
+├── [image_hdr_enhance](./image_hdr_enhance)：**图像HDR增强**    
+├── [super_resolution](./super_resolution)：**超分辨率图像处理**    
+└── [vessel_segmentation](./vessel_segmentation)：**眼底视网膜血管分割**     
 
 
