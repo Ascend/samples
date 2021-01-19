@@ -1,6 +1,7 @@
 import datetime
 import cv2 as cv
 import sys
+sys.path.append("../../../../common")
 import re
 import atlas_utils.video as video
 
@@ -11,10 +12,10 @@ from acl_resource import AclResource
 from vgg_ssd import VggSsd
 #from atlas_utils.acl_logger import log_error, log_info
 
-MODEL_PATH = "./model/yolo3_resnet18_yuv.om"
+MODEL_PATH = "../model/yolo3_resnet18_yuv.om"
 MODEL_WIDTH = 640
 MODEL_HEIGHT = 352
-MASK_DETEC_CONF="./script/mask_detection.conf"
+MASK_DETEC_CONF="../scripts/mask_detection.conf"
 CAMERA_FRAME_WIDTH = 1280
 CAMERA_FRAME_HEIGHT = 720
 
@@ -49,10 +50,14 @@ def main():
         print("[ERROR] should input correct URL")
         exit()
     cap = video.AclVideo(URL)
-    
+   
+
+
     while True:
         #从摄像头读入一帧图片
         ret,image = cap.read()
+        
+        
         if ret != 0:
             print("read None image, break")
             break
