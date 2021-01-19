@@ -1,3 +1,5 @@
+中文|[ENGLISH](README_EN.md)
+
 **本样例为大家学习昇腾软件栈提供参考，非商业目的！**
 
 **本样例适配20.0及以上版本，支持产品为Atlas200DK、Atlas300([ai1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366))。**
@@ -5,8 +7,6 @@
 **本README只提供命令行方式运行样例的指导，如需在Mindstudio下运行样例，请参考[Mindstudio运行视频样例wiki](https://gitee.com/ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E8%A7%86%E9%A2%91%E6%A0%B7%E4%BE%8B?sort_id=3170138)。**
 
 ## 视频googlenet分类样例
-
-**注：案例详细介绍请参见[视频googlenet分类_wiki](https://gitee.com/ascend/samples/wikis/%E8%A7%86%E9%A2%91googlenet%E5%88%86%E7%B1%BB?sort_id=3164845)。**
 
 功能：使用googlenet模型对输入视频进行分类推理。。
 
