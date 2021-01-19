@@ -82,7 +82,7 @@
         1. 开发环境中使用ifconfig查看可用ip。   
         2. 在开发环境中将**script/param.conf**中的 presenter_server_ip、presenter_view_ip 修改为该ip地址。   
         ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
-        > - 1.开发环境和运行环境分离部署，一般使用配置的虚拟网卡ip，例如192.168.1.223。
+        > - 1.开发环境和运行环境分离部署，一般使用配置的虚拟网卡ip，例如192.168.1.223。   
         > - 2.开发环境和运行环境合一部署，一般使用200dk固定ip，例如192.168.1.2。
 
 2. 开发环境命令行中设置编译依赖的环境变量。
@@ -122,13 +122,12 @@
 
 2. 启动presenterserver并登录运行环境。
 
-      使用产品为200DK开发者板。   
-        1. 开发环境中执行以下命令启动presentserver。     
-            **cd $HOME/samples/cplusplus/level2_simple_inference/2_object_detection/face_detection_camera**   
-            **bash script/run_presenter_server.sh**   
-        2. 执行以下命令登录运行环境。   
-            **开发环境与运行环境合一部署，请跳过此步骤！**   
-            **ssh HwHiAiUser@xxx.xxx.xxx.xxx** 
+    1. 开发环境中执行以下命令启动presentserver。     
+        **cd $HOME/samples/cplusplus/level2_simple_inference/2_object_detection/face_detection_camera**   
+        **bash script/run_presenter_server.sh**   
+    2. 执行以下命令登录运行环境。   
+        **开发环境与运行环境合一部署，请跳过此步骤！**   
+        **ssh HwHiAiUser@xxx.xxx.xxx.xxx** 
 
 3. <a name="step_2"></a>运行可执行文件。
 
