@@ -39,21 +39,44 @@ def copy_data_to_dvpp(data, size, run_mode):
     if run_mode == ACL_DEVICE:
         policy = ACL_MEMCPY_DEVICE_TO_DEVICE
 
-    buffer, ret = acl.media.dvpp_malloc(size)
+    dvpp_buffer, ret = acl.media.dvpp_malloc(size)
     check_ret("acl.rt.malloc_host", ret)
-    ret = acl.rt.memcpy(buffer, size, data, size, policy)
+    ret = acl.rt.memcpy(dvpp_buffer, size, data, size, policy)
     check_ret("acl.rt.memcpy", ret)
 
-    return buffer
+    return dvpp_buffer
+
 
 def align_up(value, align):
+    """
+    align input data
+    """
     return int(int((value + align - 1) / align) * align)
 
+
+def align_up128(value):
+    """
+    128 alignment of input data
+    """
+    return align_up(value, 128)
+
+
 def align_up16(value):
+    """
+    16 alignment of input data
+    """
     return align_up(value, 16)
 
+
 def align_up2(value):
+    """
+    2 alignment of input data
+    """
     return align_up(value, 2)
 
+
 def yuv420sp_size(width, height):
-    return int(width * height * 3 /2)
+    """
+    yuv image size
+    """
+    return int(width * height * 3 / 2)
