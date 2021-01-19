@@ -1,3 +1,5 @@
+中文|[English](README_EN.md)
+
 **本样例为大家学习昇腾软件栈提供参考，非商业目的！**
 
 **本样例适配20.0及以上版本，支持产品为Atlas200DK**
@@ -5,8 +7,6 @@
 **本README只提供命令行方式运行样例的指导，如需在Mindstudio下运行样例，请参考[Mindstudio运行视频样例wiki](https://gitee.com/ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E8%A7%86%E9%A2%91%E6%A0%B7%E4%BE%8B?sort_id=3170138)。**
 
 ## ascendcamera摄像头样例
-
-**注：案例详细介绍请参见[ascendcamera_wiki](https://gitee.com/ascend/samples/wikis/%E8%A7%86%E9%A2%91googlenet%E5%88%86%E7%B1%BB?sort_id=3164845)。**
 
 功能：使用摄像头拍摄照片或视频。
 
@@ -18,7 +18,7 @@
 
 部署此Sample前，需要准备好以下环境：
 
-- 请确认已按照[环境准备和依赖安装](https://gitee.com/ascend/samples/tree/dev/cplusplus/environment)准备好环境。
+- 请确认已按照[环境准备和依赖安装](../../../environment)准备好环境。
 
 - 已完成对应产品的开发环境和运行环境安装。
 
@@ -64,7 +64,7 @@
 
 3. 切换到ascendcamera目录，创建目录用于存放编译文件，例如，本文中，创建的目录为 **build/intermediates/host**。
 
-    **cd $HOME/samples/c++/level1_single_api/5_200dk_peripheral/ascendcamera**
+    **cd $HOME/samples/cplusplus/level1_single_api/5_200dk_peripheral/ascendcamera**
 
     **mkdir -p build/intermediates/host**
 
@@ -84,7 +84,7 @@
 
 1. 执行以下命令,将开发环境的 **ascendcamera** 目录上传到运行环境中，例如 **/home/HwHiAiUser**，并以HwHiAiUser（运行用户）登录运行环境（Host）。
 
-    **scp -r $HOME/samples/c++/level1_single_api/5_200dk_peripheral/ascendcamera HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
+    **scp -r $HOME/samples/cplusplus/level1_single_api/5_200dk_peripheral/ascendcamera HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
 
     **ssh HwHiAiUser@xxx.xxx.xxx.xxx**    
 
@@ -99,7 +99,7 @@
 
       **source ~/.bashrc**
         
-      **cd $HOME/samples/c++/level1_single_api/5_200dk_peripheral/ascendcamera/out**
+      **cd $HOME/samples/cplusplus/level1_single_api/5_200dk_peripheral/ascendcamera/out**
 
     - 如果是开发环境与运行环境分离部署，执行以下命令切换目录。
     
@@ -125,18 +125,18 @@
 
 ### 样例运行（视频保存至本地）(这里需要连接camera1)
 
-**注：开发环境与运行环境合一部署，请跳过步骤1，直接执行[步骤2](#step_2)即可。**   
+**注：开发环境与运行环境合一部署，请跳过步骤1，直接执行[步骤2](#step2_2)即可。**   
 
 1. 执行以下命令,将开发环境的 **ascendcamera** 目录上传到运行环境中，例如 **/home/HwHiAiUser**，并以HwHiAiUser（运行用户）登录运行环境（Host）。
 
-    **scp -r $HOME/samples/c++/level1_single_api/5_200dk_peripheral/ascendcamera HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
+    **scp -r $HOME/samples/cplusplus/level1_single_api/5_200dk_peripheral/ascendcamera HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
 
     **ssh HwHiAiUser@xxx.xxx.xxx.xxx**    
 
     ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
     > - **xxx.xxx.xxx.xxx**为运行环境ip，200DK在USB连接时一般为192.168.1.2。
 
-2. <a name="step_2"></a>运行可执行文件。
+2. <a name="step2_2"></a>运行可执行文件。
 
     - 如果是开发环境与运行环境合一部署，执行以下命令，设置运行环境变量，并切换目录。
 
@@ -144,7 +144,7 @@
 
       **source ~/.bashrc**
         
-      **cd $HOME/samples/c++/level1_single_api/5_200dk_peripheral/ascendcamera/out**
+      **cd $HOME/samples/cplusplus/level1_single_api/5_200dk_peripheral/ascendcamera/out**
 
     - 如果是开发环境与运行环境分离部署，执行以下命令切换目录。
     
@@ -173,11 +173,11 @@
 
     **开发环境与运行环境合一部署，请跳过此步骤！**   
 
-    **scp -r $HOME/samples/c++/level1_single_api/5_200dk_peripheral/ascendcamera HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
+    **scp -r $HOME/samples/cplusplus/level1_single_api/5_200dk_peripheral/ascendcamera HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
 
 2. 启动presenterserver并登录运行环境。     
         1. 开发环境中执行以下命令启动presentserver。   
-            **cd $HOME/samples/c++/level1_single_api/5_200dk_peripheral/ascendcamera**   
+            **cd $HOME/samples/cplusplus/level1_single_api/5_200dk_peripheral/ascendcamera**   
             **bash script/run_presenter_server.sh**   
         2. 执行以下命令登录运行环境。   
             **开发环境与运行环境合一部署，请跳过此步骤！**   
@@ -189,7 +189,7 @@
     - 如果是开发环境与运行环境合一部署，执行以下命令，设置运行环境变量，并切换目录。   
       **export LD_LIBRARY_PATH=**   
       **source ~/.bashrc**     
-      **cd $HOME/samples/c++/level1_single_api/5_200dk_peripheral/ascendcameraout**
+      **cd $HOME/samples/cplusplus/level1_single_api/5_200dk_peripheral/ascendcameraout**
 
     - 如果是开发环境与运行环境分离部署，执行以下命令切换目录。   
       **cd $HOME/ascendcamera/out**

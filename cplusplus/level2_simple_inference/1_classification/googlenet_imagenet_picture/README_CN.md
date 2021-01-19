@@ -1,18 +1,18 @@
+中文|[English](README_EN.md)
+
 **本样例为大家学习昇腾软件栈提供参考，非商业目的！**
 
 **本样例适配20.0及以上版本，支持产品为Atlas200DK、Atlas300([ai1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366))。**
 
 **本README只提供命令行方式运行样例的指导，如需在Mindstudio下运行样例，请参考[Mindstudio运行图片样例wiki](https://gitee.com/ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E5%9B%BE%E7%89%87%E6%A0%B7%E4%BE%8B?sort_id=3164874)。**
 
-## faste_RCNN_VOC_detection_dynamic_resolution样例
+## 图片googlenet分类样例
 
-**注：案例详细介绍请参见[googlenet动态batch_wiki]()。**
+功能：使用googlenet模型对输入图片进行分类推理。
 
-功能：使用faster_rcnn模型对输入图片进行预测推理，并将结果打印到输出图片上。
+样例输入：待推理的jpg图片。
 
-样例输入：原始图片jpg文件。
-
-样例输出：带推理结果的jpg文件。
+样例输出：推理后的jpg图片。
 
 ### 前提条件
 
@@ -50,11 +50,11 @@
 
 2. 获取此应用中所需要的原始网络模型。
 
-    参考下表获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到开发环境普通用户下的任意目录，例如：$HOME/models/faste_RCNN_VOC_detection_dynamic_resolution。
+    参考下表获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到开发环境普通用户下的任意目录，例如：$HOME/models/googlenet_imagenet_picture。
     
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
-    |  faster_rcnn| 图片分类推理模型。是基于Caffe的yolov3模型。  |  请参考[https://gitee.com/ascend/modelzoo/tree/master/contrib/Research/cv/faster_rcnn/ATC_faster_rcnn_caffe_AE](https://gitee.com/ascend/modelzoo/tree/master/contrib/Research/cv/faster_rcnn/ATC_faster_rcnn_caffe_AE)目录中README.md下载原始模型章节下载模型和权重文件。 |
+    |  googlenet | 图片分类推理模型。是基于Caffe的GoogLeNet模型。  |  请参考[https://gitee.com/ascend/modelzoo/tree/master/contrib/Research/cv/googlenet/ATC_googlenet_caffe_AE](https://gitee.com/ascend/modelzoo/tree/master/contrib/Research/cv/googlenet/ATC_googlenet_caffe_AE)目录中README.md下载原始模型章节下载模型和权重文件。 |
 
     ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
     > - modelzoo中提供了转换好的om模型，但此模型不匹配当前样例，所以需要下载原始模型和权重文件后重新进行模型转换。
@@ -71,23 +71,27 @@
 
     2. 执行以下命令下载aipp配置文件并使用atc命令进行模型转换。
 
-        **cd $HOME/models/faste_RCNN_VOC_detection_dynamic_resolution**  
+        **cd $HOME/models/googlenet_imagenet_picture**  
 
-        **atc --model=faster_rcnn.prototxt --weight=faster_rcnn.caffemodel --framework=0 --output=faster_rcnn --soc_version=Ascend310 --input_shape="data:1,3,-1,-1;im_info:1,3" --dynamic_image_size="512,512;600,600;800,800"**
+        **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_imagenet_picture/insert_op.cfg**
+
+        **atc --model=./googlenet.prototxt --weight=./googlenet.caffemodel --framework=0 --output=googlenet --soc_version=Ascend310 --insert_op_conf=./insert_op.cfg --input_shape="data:1,3,224,224" --input_format=NCHW**
 
     3. 执行以下命令将转换好的模型复制到样例中model文件夹中。
 
-        **cp ./faster_rcnn.om $HOME/samples/cplusplus/level2_simple_inference/2_object_detection/faste_RCNN_VOC_detection_dynamic_resolution/model/**
+        **cp ./googlenet.om $HOME/samples/cplusplus/level2_simple_inference/1_classification/googlenet_imagenet_picture/model/**
 
 4. 获取样例需要的测试图片。
 
     执行以下命令，进入样例的data文件夹中，下载对应的测试图片。
 
-    **cd $HOME/samples/cplusplus/level2_simple_inference/2_object_detection/faste_RCNN_VOC_detection_dynamic_resolution/data**
+    **cd $HOME/samples/cplusplus/level2_simple_inference/1_classification/googlenet_imagenet_picture/data**
 
-    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/faste_RCNN_VOC_detection_dynamic_resolution/bus.jpg**
+    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_imagenet_picture/dog2_1024_683.jpg**
 
-    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/faste_RCNN_VOC_detection_dynamic_resolution/boat.jpg**
+    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_imagenet_picture/rabit.jpg**      
+
+     **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_imagenet_picture/dog1_1024_683.jpg** 
 
 ### 样例部署
  
@@ -115,9 +119,9 @@
         > - 如果是20.0版本，此处 **DDK_PATH** 环境变量中的 **arm64-liunx** 应修改为 **arm64-linux_gcc7.3.0**。
         > - 可以在命令行中执行 **uname -a**，查看开发环境和运行环境的cpu架构。如果回显为x86_64，则为x86架构。如果回显为arm64，则为Arm架构。
 
-2. 切换到faste_RCNN_VOC_detection_dynamic_resolution目录，创建目录用于存放编译文件，例如，本文中，创建的目录为 **build/intermediates/host**。
+2. 切换到googlenet_imagenet_picture目录，创建目录用于存放编译文件，例如，本文中，创建的目录为 **build/intermediates/host**。
 
-    **cd $HOME/samples/cplusplus/level2_simple_inference/2_object_detection/faste_RCNN_VOC_detection_dynamic_resolution**
+    **cd $HOME/samples/cplusplus/level2_simple_inference/1_classification/googlenet_imagenet_picture**
 
     **mkdir -p build/intermediates/host**
 
@@ -139,7 +143,7 @@
     
       **cmake \.\./\.\./\.\./src -DCMAKE_CXX_COMPILER=aarch64-linux-gnu-g++ -DCMAKE_SKIP_RPATH=TRUE**
 
-4. 执行make命令，生成的可执行文件main在 **faste_RCNN_VOC_detection_dynamic_resolution/out** 目录下。
+4. 执行make命令，生成的可执行文件main在 **googlenet_imagenet_picture/out** 目录下。
 
     **make**
 
@@ -147,9 +151,9 @@
 
 **注：开发环境与运行环境合一部署，请跳过步骤1，直接执行[步骤2](#step_2)即可。**   
 
-1. 执行以下命令,将开发环境的 **faste_RCNN_VOC_detection_dynamic_resolution** 目录上传到运行环境中，例如 **/home/HwHiAiUser**，并以HwHiAiUser（运行用户）登录运行环境（Host）。
+1. 执行以下命令,将开发环境的 **googlenet_imagenet_picture** 目录上传到运行环境中，例如 **/home/HwHiAiUser**，并以HwHiAiUser（运行用户）登录运行环境（Host）。
 
-    **scp -r $HOME/samples/cplusplus/level2_simple_inference/2_object_detection/faste_RCNN_VOC_detection_dynamic_resolution HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
+    **scp -r $HOME/samples/cplusplus/level2_simple_inference/1_classification/googlenet_imagenet_picture HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
 
     **ssh HwHiAiUser@xxx.xxx.xxx.xxx**    
 
@@ -164,22 +168,16 @@
 
       **source ~/.bashrc**
         
-      **cd $HOME/samples/cplusplus/level2_simple_inference/2_object_detection/faste_RCNN_VOC_detection_dynamic_resolution/out**
+      **cd $HOME/samples/cplusplus/level2_simple_inference/1_classification/googlenet_imagenet_picture/out**
 
     - 如果是开发环境与运行环境分离部署，执行以下命令切换目录。
     
-      **cd $HOME/faste_RCNN_VOC_detection_dynamic_resolution/out**
-
-    - 创建结果文件
-
-      **mkdir output**
+      **cd $HOME/googlenet_imagenet_picture/out**
 
     切换目录后，执行以下命令运行样例。
 
-    **./main**
+    **./main ../data**
 
 ### 查看结果
 
-运行完成后，会在运行环境的命令行中打印出推理结果。
-
-
+运行完成后，会在运行环境的命令行中打印出推理结果,并在$HOME/googlenet_imagenet_picture/out/output目录下生成推理后的图片。

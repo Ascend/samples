@@ -1,3 +1,5 @@
+中文|[English](README_EN.md)
+
 **本样例为大家学习昇腾软件栈提供参考，非商业目的！**
 
 **本样例适配20.0及以上版本，支持产品为Atlas200DK、Atlas300([ai1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366))。**
@@ -5,8 +7,6 @@
 **本README只提供命令行方式运行样例的指导，如需在Mindstudio下运行样例，请参考[Mindstudio运行视频样例wiki](https://gitee.com/ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E8%A7%86%E9%A2%91%E6%A0%B7%E4%BE%8B?sort_id=3170138)。**
 
 ## 视频黑白图像上色样例
-
-**注：案例详细介绍请参见[视频黑白图像上色_wiki](https://gitee.com/ascend/samples/wikis/%E8%A7%86%E9%A2%91%E9%BB%91%E7%99%BD%E5%9B%BE%E5%83%8F%E4%B8%8A%E8%89%B2?sort_id=3170478)。**
 
 功能：使用黑白图像上色模型对输入的黑白视频进行推理。。
 
@@ -116,7 +116,7 @@
  
      **export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub**   
      ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
-        > - 如果是20.0版本，此处 **DDK_PATH** 环境变量中的 **arm64-liunx** 应修改为 **arm64-linux_gcc7.3.0**。
+        > - 如果是20.0版本，此处 **DDK_PATH** 环境变量中的 **arm64-linux** 应修改为 **arm64-linux_gcc7.3.0**。
 
 3. 切换到colorization_video目录，创建目录用于存放编译文件，例如，本文中，创建的目录为 **build/intermediates/host**。
 
