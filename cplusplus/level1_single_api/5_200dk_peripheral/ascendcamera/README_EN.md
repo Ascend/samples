@@ -91,7 +91,7 @@ In the development environment, run the following commands as a non-root user to
 
 3. Go to the **ascendcamera** directory and create a directory for storing compilation files. For example, the created directory in this document is **build/intermediates/host**.
    
-   **cd $HOME/samples/c++/level1\_single\_api/5\_200dk\_peripheral/ascendcamera**
+   **cd $HOME/samples/cplusplus/level1\_single\_api/5\_200dk\_peripheral/ascendcamera**
    
    **mkdir -p build/intermediates/host**
 
@@ -117,7 +117,7 @@ In the development environment, run the following commands as a non-root user to
 
 1. Run the following commands to upload the **ascendcamera** directory in the development environment to the operating environment, for example, **/home/HwHiAiUser**, and log in to the operating environment (host) as the **HwHiAiUser** user:
    
-   **scp -r $HOME/samples/c++/level1\_single\_api/5\_200dk\_peripheral/ascendcamera HwHiAiUser@***xxx.xxx.xxx.xxx***:/home/HwHiAiUser**
+   **scp -r $HOME/samples/cplusplus/level1\_single\_api/5\_200dk\_peripheral/ascendcamera HwHiAiUser@***xxx.xxx.xxx.xxx***:/home/HwHiAiUser**
    
    **ssh HwHiAiUser@***xxx.xxx.xxx.xxx*
    
@@ -133,7 +133,7 @@ In the development environment, run the following commands as a non-root user to
      
      **source ~/.bashrc**
      
-     **cd $HOME/samples/c++/level1\_single\_api/5\_200dk\_peripheral/ascendcamera/out**
+     **cd $HOME/samples/cplusplus/level1\_single\_api/5\_200dk\_peripheral/ascendcamera/out**
    
    - If the development environment and operating environment are deployed on separate servers, run the following command to change the directory:
      
@@ -163,7 +163,7 @@ After the execution is complete, the running results are printed in the CLI of t
 
 1. Run the following commands to upload the **ascendcamera** directory in the development environment to the operating environment, for example, **/home/HwHiAiUser**, and log in to the operating environment (host) as the **HwHiAiUser** user:
    
-   **scp -r $HOME/samples/c++/level1\_single\_api/5\_200dk\_peripheral/ascendcamera HwHiAiUser@***xxx.xxx.xxx.xxx***:/home/HwHiAiUser**
+   **scp -r $HOME/samples/cplusplus/level1\_single\_api/5\_200dk\_peripheral/ascendcamera HwHiAiUser@***xxx.xxx.xxx.xxx***:/home/HwHiAiUser**
    
    **ssh HwHiAiUser@*******xxx.xxx.xxx.xxx*********
    
@@ -179,7 +179,7 @@ After the execution is complete, the running results are printed in the CLI of t
      
      **source ~/.bashrc**
      
-     **cd $HOME/samples/c++/level1\_single\_api/5\_200dk\_peripheral/ascendcamera/out**
+     **cd $HOME/samples/cplusplus/level1\_single\_api/5\_200dk\_peripheral/ascendcamera/out**
    
    - If the development environment and operating environment are deployed on separate servers, run the following command to change the directory:
      
@@ -209,14 +209,14 @@ After the execution is complete, the running results are printed in the CLI of t
    
    **If the development environment and operating environment are deployed on the same server, skip this step.**
    
-   **scp -r $HOME/samples/c++/level1\_single\_api/5\_200dk\_peripheral/ascendcamera HwHiAiUser@***xxx.xxx.xxx.xxx***:/home/HwHiAiUser**
+   **scp -r $HOME/samples/cplusplus/level1\_single\_api/5\_200dk\_peripheral/ascendcamera HwHiAiUser@***xxx.xxx.xxx.xxx***:/home/HwHiAiUser**
 
 2. Start the Presenter Server and log in to the operating environment.
    
    - Atlas 200 DK
      
      1. Run the following commands in the development environment to start the Presenter Server:   
-**cd $HOME/samples/c++/level1\_single\_api/5\_200dk\_peripheral/ascendcamera**  
+**cd $HOME/samples/cplusplus/level1\_single\_api/5\_200dk\_peripheral/ascendcamera**  
 **bash script/run\_presenter\_server.sh**
      2. Run the following command to log in to the operating environment:   
 **If the development environment and operating environment are deployed on the same server, skip this step.**   
@@ -236,7 +236,7 @@ After the execution is complete, the running results are printed in the CLI of t
    - If the development environment and operating environment are deployed on the same server, run the following commands to set the operating environment variables and change the directory:   
 **export LD\_LIBRARY\_PATH=**  
 **source ~/.bashrc**  
-**cd $HOME/samples/c++/level1\_single\_api/5\_200dk\_peripheral/ascendcameraout**
+**cd $HOME/samples/cplusplus/level1\_single\_api/5\_200dk\_peripheral/ascendcameraout**
    
    - If the development environment and operating environment are deployed on separate servers, run the following command to change the directory:   
 **cd $HOME/ascendcamera/out**
