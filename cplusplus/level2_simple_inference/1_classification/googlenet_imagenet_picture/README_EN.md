@@ -74,7 +74,7 @@ Before deploying this sample, ensure that:
       
       **cd $HOME/models/googlenet\_imagenet\_picture**
       
-      **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet\_imagenet\_picture/insert\_op.cfg**
+      **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_imagenet_picture/insert_op.cfg**
       
       **atc --model=./googlenet.prototxt --weight=./googlenet.caffemodel --framework=0 --output=googlenet --soc\_version=Ascend310 --insert\_op\_conf=./insert\_op.cfg --input\_shape="data:1,3,224,224" --input\_format=NCHW**
    
@@ -88,11 +88,11 @@ Before deploying this sample, ensure that:
    
    **cd $HOME/samples/cplusplus/level2\_simple\_inference/1\_classification/googlenet\_imagenet\_picture/data**
    
-   **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet\_imagenet\_picture/dog2\_1024\_683.jpg**
+   **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_imagenet_picture/dog2_1024_683.jpg**
    
-   **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet\_imagenet\_picture/rabit.jpg**
+   **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_imagenet_picture/rabit.jpg**
    
-   **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet\_imagenet\_picture/dog1\_1024\_683.jpg**
+   **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_imagenet_picture/dog1_1024_683.jpg**
 
 ### Deploying the Sample
 
