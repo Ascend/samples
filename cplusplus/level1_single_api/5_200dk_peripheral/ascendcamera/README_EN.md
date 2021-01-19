@@ -6,8 +6,6 @@
 
 ## Ascend Camera Sample
 
-**Note: For details about the Ascend camera, see [Ascend Camera](https://gitee.com/ascend/samples/wikis/%E8%A7%86%E9%A2%91googlenet%E5%88%86%E7%B1%BB?sort_id=3164845).**
-
 Function: use a camera to shoot photos or videos.
 
 Input: Camera
