@@ -2,7 +2,6 @@ import sys
 import os
 import numpy as np
 import cv2
-
 import acl
 from utils import *
 from acl_dvpp import Dvpp
@@ -87,11 +86,11 @@ class Cartoonization(object):
         data = ((np.squeeze(infer_output[0]) + 1) * 127.5)
         img = cv2.cvtColor(data, cv2.COLOR_RGB2BGR)
         img = cv2.resize(img, (origin_image.width, origin_image.height))
-        output_path = os.path.join("./outputs", os.path.basename(image_file))
+        output_path = os.path.join("../outputs", os.path.basename(image_file))
         cv2.imwrite(output_path, img)
 
 
-MODEL_PATH = "./model/cartoonization.om"
+MODEL_PATH = "../model/cartoonization.om"
 MODEL_WIDTH = 256
 MODEL_HEIGHT = 256
 
@@ -115,8 +114,8 @@ def main():
                    if os.path.splitext(img)[1] in IMG_EXT]
     
     # create dir to save result
-    if not os.path.isdir('./outputs'):
-        os.mkdir('./outputs')
+    if not os.path.isdir('../outputs'):
+        os.mkdir('../outputs')
 
     for image_file in images_list:
         # read image
