@@ -20,9 +20,9 @@ IMPLEMT_VERIFIER(MatmulTik, MatmulTikVerify)
 // Obtains the processing function of the output tensor description.
 IMPLEMT_COMMON_INFERFUNC(MatmulTikInferShape)
 {
-    TensorDesc tensordesc_output = op.GetOutputDesc(const char "y");
-    ge::TensorDesc inputTensorDescX = op.GetInputDesc(const char "x1");
-    ge::TensorDesc inputTensorDescY = op.GetInputDesc(const char "x2");
+    TensorDesc tensordesc_output = op.GetOutputDescByName("y");
+    ge::TensorDesc inputTensorDescX = op.GetInputDescByName("x1");
+    ge::TensorDesc inputTensorDescY = op.GetInputDescByName("x2");
     ge::Shape shapeX = inputTensorDescX.GetShape();
     ge::Shape shapeY = inputTensorDescY.GetShape();
     DataType dtype = inputTensorDescX.GetDataType();

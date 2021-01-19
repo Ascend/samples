@@ -9,23 +9,23 @@
 using namespace ge;
 namespace domi {
 
-const char NUM_OUTPUT = "num_output";
-const char GROUP = "group";
-const char KERNEL_SIZE = "kernel_size";
-const char KERNEL_H = "kernel_h";
-const char KERNEL_W = "kernel_w";
-const char AXiS = "axis";
-const char FORCE_ND_IM2COL = "force_nd_im2col";
-const char PAD = "pad";
-const char PAD_H = "pad_h";
-const char PAD_W = "pad_w";
-const char PADS = "pads";
-const char STRIDE = "stride";
-const char STRIDE_H = "stride_h";
-const char STRIDE_W = "stride_w";
-const char STRIDES = "strides";
-const char DILATION = "dilation";
-const char DILATIONS = "dilations";
+const char *NUM_OUTPUT = "num_output";
+const char *GROUP = "group";
+const char *KERNEL_SIZE = "kernel_size";
+const char *KERNEL_H = "kernel_h";
+const char *KERNEL_W = "kernel_w";
+const char *AXiS = "axis";
+const char *FORCE_ND_IM2COL = "force_nd_im2col";
+const char *PAD = "pad";
+const char *PAD_H = "pad_h";
+const char *PAD_W = "pad_w";
+const char *PADS = "pads";
+const char *STRIDE = "stride";
+const char *STRIDE_H = "stride_h";
+const char *STRIDE_W = "stride_w";
+const char *STRIDES = "strides";
+const char *DILATION = "dilation";
+const char *DILATIONS = "dilations";
 // if op_src get required attr failed, need to return Failed
 // if op_src get optional attr failed, need to return Failed or set a default value
 // Get covolution pad params from caffe proto and convert to tbe conv2d ir
