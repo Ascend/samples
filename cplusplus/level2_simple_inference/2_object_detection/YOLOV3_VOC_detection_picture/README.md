@@ -54,7 +54,13 @@
     
     **cd $HOME/models/YOLOV3_VOC_detection_picture**
     
-    **https://www.huaweicloud.com/ascend/resources/modelzoo/Models/5cb8d2255070439d94068b7935570c43**
+    |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
+    |---|---|---|
+    |  vgg_ssd| 图片分类推理模型。是基于Caffe的vgg_ssd模型。  |  请参考[https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/turing/resourcecenter/model/YoloV3/zh/1.1/ATC_YoloV3_from_Tensorflow_Ascend310.zip](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/turing/resourcecenter/model/YoloV3/zh/1.1/ATC_YoloV3_from_Tensorflow_Ascend310.zip)目录中README.md下载原始模型章节下载模型和权重文件。 |
+
+    ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
+    > - modelzoo中提供了转换好的om模型，但此模型不匹配当前样例，所以需要下载原始模型和权重文件后重新进行模型转换。
+
 
 3. 将原始模型转换为Davinci模型。
     
