@@ -178,7 +178,7 @@ def main():
 
     if not os.path.exists(OUTPUT_DIR):
         os.mkdir(OUTPUT_DIR)
-    #acl资源初始化
+    #ACL resource initialization
     acl_resource = AclResource()
     acl_resource.init()
     #load model
