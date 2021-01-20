@@ -12,18 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-'''
+"""
 aicpu ini parser
-'''
+"""
 import json
 import os
 import stat
 import sys
 
 def parse_ini_files(ini_files):
-    '''
+    """
     init all ini files
-    '''
+    """
     aicpu_ops_info = {}
     for ini_file in ini_files:
         parse_ini_to_obj(ini_file, aicpu_ops_info)
@@ -31,9 +31,9 @@ def parse_ini_files(ini_files):
 
 
 def parse_ini_to_obj(ini_file, aicpu_ops_info):
-    '''
+    """
     parse all ini files to object
-    '''
+    """
     with open(ini_file) as ini_file:
         lines = ini_file.readlines()
         op = {}
@@ -53,9 +53,9 @@ def parse_ini_to_obj(ini_file, aicpu_ops_info):
 
 
 def check_custom_op_opInfo(required_custom_op_info_keys, op, op_key):
-    '''
+    """
     check custom op info
-    '''
+    """
     op_info = op["opInfo"]
     missing_keys=[]
     for required_op_info_key in required_custom_op_info_keys:
@@ -66,10 +66,10 @@ def check_custom_op_opInfo(required_custom_op_info_keys, op, op_key):
         raise KeyError("bad key value")
 
 
-def check_op_opInfo(required_op_info_keys, required_custom_op_info_keys, key, op, op_key):
-    '''
+def check_op_opInfo(required_op_info_keys, required_custom_op_info_keys, op, op_key):
+    """
     check normal op info
-    '''
+    """
     op_info = op["opInfo"]
     missing_keys=[]
     for required_op_info_key in required_op_info_keys:
@@ -84,9 +84,9 @@ def check_op_opInfo(required_op_info_keys, required_custom_op_info_keys, key, op
 
 
 def check_op_input_output(info, key, op):
-    '''
+    """
     check input and output infos of all ops
-    '''
+    """
     for op_sets in op[key]:
         if (op_sets not in ('format', 'type', 'name')):
             print(info + " should has format type or name as the key, "
@@ -95,9 +95,9 @@ def check_op_input_output(info, key, op):
 
 
 def check_op_info(aicpu_ops):
-    '''
+    """
     check all ops
-    '''
+    """
     print("==============check valid for aicpu ops info start==============")
     required_op_info_keys = ["computeCost", "engine", "flagAsync", "flagPartial", "opKernelLib"]
     required_custom_op_info_keys = ["kernelSo", "functionName", "workspaceSize"]
@@ -105,7 +105,7 @@ def check_op_info(aicpu_ops):
         op = aicpu_ops[op_key]
         for key in op:
             if key == "opInfo":
-                check_op_opInfo(required_op_info_keys, required_custom_op_info_keys, key, op, op_key)
+                check_op_opInfo(required_op_info_keys, required_custom_op_info_keys, op, op_key)
 
             elif (key[:5] == "input") and (key[5:].isdigit()):
                 check_op_input_output("input", key, op)
@@ -123,9 +123,9 @@ def check_op_info(aicpu_ops):
 
 
 def write_json_file(aicpu_ops_info, json_file_path):
-    '''
+    """
     write json file from ini file
-    '''
+    """
     json_file_real_path = os.path.realpath(json_file_path)
     with open(json_file_real_path, "w") as f:
         # Only the owner and group have rights
@@ -135,9 +135,9 @@ def write_json_file(aicpu_ops_info, json_file_path):
 
 
 def parse_ini_to_json(ini_file_path, outfile_path):
-    '''
+    """
     parse ini to json
-    '''
+    """
     aicpu_ops_info = parse_ini_files(ini_file_path)
     try:
         check_op_info(aicpu_ops_info)
