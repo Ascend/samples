@@ -208,7 +208,7 @@ def main():
             cv.rectangle(bgr_img, (int(box[1]), int(box[0])), (int(box[3]), int(box[2])), colors[i%6])
             p3 = (max(int(box[1]), 15), max(int(box[0]), 15))
             out_label = class_name            
-            cv.putText(bgr_img, out_label, p3, cv.FONT_ITALIC, 0.6, colors[i%6], 1)
+            cv.putText(bgr_img, out_label, p3, cv.FONT_ITALIC, 0.6, colors[i % 6], 1)
 
         output_file = os.path.join(OUTPUT_DIR, "out_" + os.path.basename(pic))
         print("output:%s" % output_file)
