@@ -121,14 +121,14 @@ class Classify(object):
             #使用pillow，将置信度最高的类别写在图片上，并保存到本地
             if len(top_k):
                 object_class = get_image_net_class(top_k[0])
-                output_path = os.path.join("./outputs", os.path.basename(batch_image_files[number]))
+                output_path = os.path.join("../outputs", os.path.basename(batch_image_files[number]))
                 origin_img = Image.open(batch_image_files[number])
                 draw = ImageDraw.Draw(origin_img)
                 font = ImageFont.truetype("SourceHanSansCN-Normal.ttf", size=30)
                 draw.text((10, 50), object_class, font=font, fill=255)
                 origin_img.save(output_path)
 
-MODEL_PATH = "./model/googlenet_yuv.om"
+MODEL_PATH = "../model/googlenet_yuv.om"
 MODEL_WIDTH = 224
 MODEL_HEIGHT = 224
 #batch数为10
@@ -152,8 +152,8 @@ def main():
                    if os.path.splitext(img)[1] in IMG_EXT]
     
     #创建目录，保存推理结果
-    if not os.path.isdir('./outputs'):
-        os.mkdir('./outputs')
+    if not os.path.isdir('../outputs'):
+        os.mkdir('../outputs')
     
     resized_image_list = []
     batch_image_files = []
