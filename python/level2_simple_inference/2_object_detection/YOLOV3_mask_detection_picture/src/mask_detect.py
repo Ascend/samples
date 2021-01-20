@@ -11,7 +11,7 @@ from utils import *
 from acl_model import Model
 from acl_image import AclImage
 
-labels = ["face","person", "mask"]
+labels = ["face", "person", "mask"]
 
 INPUT_DIR = '../data/'
 OUTPUT_DIR = '../out/'
