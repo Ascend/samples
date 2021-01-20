@@ -146,16 +146,16 @@ def post_process(infer_output, origin_img):
     new_h = int(img_h * scale)
     shift_x_ratio = (MODEL_WIDTH - new_w) / 2.0 / MODEL_WIDTH
     shift_y_ratio = (MODEL_HEIGHT- new_h) / 2.0 / MODEL_HEIGHT
-    class_num = len(labels)
-    num_channel = 3 * (class_num + 5)
+    class_number = len(labels)
+    num_channel = 3 * (class_number + 5)
     x_scale = MODEL_WIDTH / float(new_w)
     y_scale = MODEL_HEIGHT / float(new_h)
-    all_boxes = [[] for ix in range(class_num)]
+    all_boxes = [[] for ix in range(class_number)]
     for ix in range(3):
         pred = infer_output[2 - ix].reshape((MODEL_HEIGHT // stride_list[ix], MODEL_WIDTH // stride_list[ix], num_channel))
         anchors = anchor_list[ix]
         boxes = decode_bbox(pred, anchors, img_w, img_h, x_scale, y_scale, shift_x_ratio, shift_y_ratio)
-        all_boxes = [all_boxes[iy] + boxes[iy] for iy in range(class_num)]
+        all_boxes = [all_boxes[iy] + boxes[iy] for iy in range(class_number)]
 
     res = apply_nms(all_boxes, iou_threshold)
     if not res:
