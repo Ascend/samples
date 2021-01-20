@@ -54,7 +54,7 @@ def postprocess(result_list, pic, orig_shape, orig_l):
     
     result_bgr = (255*np.clip(cv.cvtColor(result_lab, cv.COLOR_Lab2BGR),0,1)).astype('uint8')
       
-    file_name = os.path.join(OUTPUT_DIR, 'out_'+pic)
+    file_name = os.path.join(OUTPUT_DIR, "out_" + os.path.basename(pic))
     cv.imwrite(file_name, result_bgr)
 
 
