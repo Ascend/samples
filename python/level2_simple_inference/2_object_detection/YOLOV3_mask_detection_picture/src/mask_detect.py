@@ -181,22 +181,22 @@ def main():
     #acl资源初始化
     acl_resource = AclResource()
     acl_resource.init()
-    #加载模型
+    #load model
     model = Model(acl_resource, MODEL_PATH)
     images_list = [os.path.join(INPUT_DIR, img)
                    for img in os.listdir(INPUT_DIR)
                    if os.path.splitext(img)[1] in IMG_EXT]
-    #从data目录逐张读取图片进行推理
+    #Read images from the data directory one by one for reasoning
     for pic in images_list:
-        #读取图片
+        #read image
         
         bgr_img = cv.imread(pic)
-        #预处理
+        #preprocess
         data, orig = preprocess(pic)
         #data, orig = preprocess(bgr_img)
-        #送进模型推理
+        #Send into model inference
         result_list = model.execute([data,])    
-        #处理推理结果
+        #Process inference results
         result_return = post_process(result_list, orig)
 
         print("result = ", result_return)
