@@ -55,7 +55,10 @@ class Classify(object):
 
         print("Init resource stage success") 
 
-    def init(self):
+    def init(self):   
+    """
+    Initialize ACL resource
+    """
         #Initialize ACL resource
         self._init_resource() 
         self._dvpp = Dvpp(self.stream, self.run_mode)
@@ -134,7 +137,10 @@ MODEL_HEIGHT = 224
 #Batch number to 10
 BATCH = 10
 def main():
-    #Program execution with picture directory parameters
+    """
+    Program execution with picture directory parameters
+    """
+    
     if (len(sys.argv) != 2):
         print("The App arg is invalid")
         exit(1)
