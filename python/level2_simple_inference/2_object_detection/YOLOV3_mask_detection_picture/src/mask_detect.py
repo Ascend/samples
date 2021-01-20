@@ -13,9 +13,9 @@ from acl_image import AclImage
 
 labels = ["face","person", "mask"]
 
-INPUT_DIR = './data/'
-OUTPUT_DIR = './out/'
-MODEL_PATH = "./model/mask_detection.om"
+INPUT_DIR = '../data/'
+OUTPUT_DIR = '../out/'
+MODEL_PATH = "../model/mask_detection.om"
 MODEL_WIDTH = 640
 MODEL_HEIGHT = 352
 class_num = 3
@@ -210,7 +210,7 @@ def main():
             out_label = class_name            
             cv.putText(bgr_img, out_label, p3, cv.FONT_ITALIC, 0.6, colors[i%6], 1)
 
-        output_file = os.path.join(OUTPUT_DIR, "out_" + pic)
+        output_file = os.path.join(OUTPUT_DIR, "out_" + os.path.basename(pic))
         print("output:%s" % output_file)
         cv.imwrite(output_file, bgr_img)
         
