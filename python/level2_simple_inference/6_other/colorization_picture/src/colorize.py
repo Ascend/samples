@@ -59,6 +59,9 @@ def postprocess(result_list, pic, orig_shape, orig_l):
 
 
 def main():
+    """
+    acl resource initialization
+    """
     
     if not os.path.exists(OUTPUT_DIR):
         os.mkdir(OUTPUT_DIR)
