@@ -52,7 +52,7 @@ def postprocess(result_list, pic, orig_shape, orig_l):
        
     result_lab = np.concatenate((orig_l[:,:,np.newaxis],ab_data), axis=2)
     
-    result_bgr = (255*np.clip(cv.cvtColor(result_lab, cv.COLOR_Lab2BGR), 0, 1)).astype('uint8')
+    result_bgr = (255 * np.clip(cv.cvtColor(result_lab, cv.COLOR_Lab2BGR), 0, 1)).astype('uint8')
       
     file_name = os.path.join(OUTPUT_DIR, "out_" + os.path.basename(pic))
     cv.imwrite(file_name, result_bgr)
@@ -62,7 +62,7 @@ def main():
     
     if not os.path.exists(OUTPUT_DIR):
         os.mkdir(OUTPUT_DIR)
-        
+     #acl资源初始化    
     acl_resource = AclResource()
     acl_resource.init()
     
