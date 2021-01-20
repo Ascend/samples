@@ -56,9 +56,9 @@ class Classify(object):
         print("Init resource stage success") 
 
     def init(self):   
-    """
-    Initialize ACL resource
-    """
+        """
+        Initialize ACL resource
+        """
         
         self._init_resource() 
         self._dvpp = Dvpp(self.stream, self.run_mode)
