@@ -83,6 +83,8 @@ class AclVideo():
             image = AclImage(addressof(frame.data.contents),
                              frame.width, frame.height, 
                              frame.size, MEMORY_DVPP)
+        elif ret == VIDEO_DECODE_FINISH:
+            log_info("Video has been read finished")
         else: 
             log_error("Read frame error: ", ret)
             
