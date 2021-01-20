@@ -50,7 +50,7 @@ def postprocess(result_list, pic, orig_shape, orig_l):
         
     ab_data = cv.resize(result_array, orig_shape[::-1])
        
-    result_lab = np.concatenate((orig_l[:,:,np.newaxis],ab_data),axis=2)
+    result_lab = np.concatenate((orig_l[:,:,np.newaxis],ab_data), axis=2)
     
     result_bgr = (255*np.clip(cv.cvtColor(result_lab, cv.COLOR_Lab2BGR), 0, 1)).astype('uint8')
       
