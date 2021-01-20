@@ -146,7 +146,7 @@ function main() {
         fi
     fi
 
-    cd ${project_path}
+    cd ${project_path}/src
 
     # 重新配置程序运行所需的环境变量
     export LD_LIBRARY_PATH=
@@ -154,7 +154,7 @@ function main() {
     export PYTHONPATH=/home/HwHiAiUser/Ascend/nnrt/latest/pyACL/python/site-packages/acl:${PYTHONPATH}
 
     # 运行程序
-    python3 ${project_path}/src/classify.py ${project_path}/data
+    python3.6 classify.py ../data
     if [ $? -ne 0 ];then
         echo "ERROR: run failed. please check your project"
         return ${inferenceError}
