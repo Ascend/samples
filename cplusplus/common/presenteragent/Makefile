@@ -1,5 +1,3 @@
-TOPDIR      := $(patsubst %,%,$(CURDIR))
-
 ifndef DDK_PATH
 $(error "Can not find DDK_PATH env, please set it in environment!.")
 endif
@@ -10,93 +8,86 @@ endif
 
 ifeq ($(mode), AtlasDK)
 CC := aarch64-linux-gnu-g++
-arch := arm
-NPU_HOST_LIB = $(HOME)/Ascend/ascend-toolkit/20.1.rc1/arm64-linux/acllib/lib64/stub/
+ARCH := arm
 else ifeq ($(mode), ASIC)
 CC := g++
-arch := x86
-NPU_HOST_LIB = $(HOME)/Ascend/ascend-toolkit/20.1.rc1/x86_64-linux/acllib/lib64/stub/
+ARCH := x86
 else
 $(error "Unsupported mode: "$(mode)", please input: AtlasDK or ASIC.")
 endif
 
-LOCAL_MODULE_NAME := libatlasutil.so
 
-LOCAL_DIR  := .
-OUT_DIR = ./out/$(arch)
+LOCAL_MODULE_NAME := libpresenteragent.so
+
+LOCAL_DIR := .
+OUT_DIR = out
 OBJ_DIR = $(OUT_DIR)/obj
-DEPS_DIR  = $(OUT_DIR)/deps
+DEPS_DIR = $(OUT_DIR)/deps
 LOCAL_LIBRARY=$(OUT_DIR)/$(LOCAL_MODULE_NAME)
-RPATH_DIR=/home/HwHiAiUser/ascend_ddk/$(arch)/lib
+OUT_INC_DIR = $(OUT_DIR)/include
 
-INC_DIR = \
-    -I./include \
-    -I$(HOME)/Ascend/driver/ \
-	-I$(HOME)/ascend_ddk/$(arch)/include/ \
-	-I$(HOME)/ascend_ddk/$(arch)/include/ascenddk/ \
-	-I$(HOME)/ascend_ddk/$(arch)/include/ascenddk/presenter/agent/ \
-	-I$(DDK_PATH)/acllib/include/ \
-	-I$(DDK_PATH)/atc/include/protobuf
+INC_DIR := \
+	-I$(LOCAL_DIR) \
+	-I$(LOCAL_DIR)/include \
+	-I$(DDK_PATH)/acllib/include \
+	-I$(HOME)/ascend_ddk/$(ARCH)/include \
+        -I$(DDK_PATH)/atc/include/protobuf \
+	-I/usr/local/include \
+	-I$(LOCAL_DIR)/src \
 
-CC_FLAGS := $(INC_DIR) -DENABLE_DVPP_INTERFACE -std=c++11 -fPIC -Wall -O2
-LNK_FLAGS := \
-    -Wl,-rpath-link=$(NPU_HOST_LIB) \
-    -Wl,-rpath-link=$(HOME)/ascend_ddk/$(arch)/lib \
-	-L$(NPU_HOST_LIB) \
-	-L$(HOME)/ascend_ddk/$(arch)/lib \
-	-lascendcl \
-	-lacl_dvpp \
-	-lstdc++ \
-	-lpthread \
-	-lavcodec \
-	-lavformat \
-	-lavdevice \
-	-lavutil \
-	-lswresample \
-	-lavfilter \
-	-lswscale \
-	-shared
-
-ifeq ($(mode), AtlasDK)
-LNK_FLAGS += -L$(HOME)/Ascend/driver -lmedia_mini
-endif
-
-SRCS_ALL := $(patsubst $(LOCAL_DIR)/%.cpp, %.cpp, $(shell find $(LOCAL_DIR) -name "*.cpp"))
-ifeq ($(mode), AtlasDK)
-SRCS := $(SRCS_ALL)
-CC_FLAGS += -DENABLE_BOARD_CAMARE
-else 
-SRCS := $(subst $(LOCAL_DIR)/src/camera.cpp, ,$(SRCS_ALL))
-endif
-
+SRCS := $(patsubst $(LOCAL_DIR)/%.cpp, %.cpp, $(shell find $(LOCAL_DIR)/src -name *.cpp))
 OBJS := $(addprefix $(OBJ_DIR)/, $(patsubst %.cpp, %.o,$(SRCS)))
 
-ALL_OBJS := $(OBJS)
+PROTO_SRCS = $(patsubst $(LOCAL_DIR)/%.cc, %.cc, $(shell find $(LOCAL_DIR)/proto -name *.pb.cc))
+PROTO_OBJS := $(addprefix $(OBJ_DIR)/, $(patsubst %.cc, %.o,$(PROTO_SRCS)))
+
+ALL_OBJS := $(OBJS) \
+	$(PROTO_OBJS) \
+
+CC_FLAGS := $(INC_DIR) -std=c++11 -Wall -fPIC -O2
+
+LNK_FLAGS := \
+	-Wl,-rpath-link=$(DDK_PATH)/atc/lib64 \
+        -L$(DDK_PATH)/atc/lib64 \
+        -L$(DDK_PATH)/acllib/lib64 \
+	-L$(HOME)/ascend_ddk/$(ARCH)/lib \
+	-lprotobuf \
+        -lascendcl \
+	-shared
 
 all: do_pre_build do_build
 
 do_pre_build:
 	$(Q)echo - do [$@]
 	$(Q)mkdir -p $(OBJ_DIR)
+	$(Q)mkdir -p $(OUT_INC_DIR)
 
 do_build: $(LOCAL_LIBRARY) | do_pre_build
 	$(Q)echo - do [$@]
 
 $(LOCAL_LIBRARY): $(ALL_OBJS)
 	$(Q)echo [LD] $@
-	$(Q)$(CC) $(CC_FLAGS) -o $@ $^ -Wl,--whole-archive -Wl,--no-whole-archive -Wl,--start-group -Wl,--end-group -Wl,-rpath=$(RPATH_DIR) $(LNK_FLAGS)
+	$(Q)$(CC) $(CC_FLAGS) -o $@ $^ -Wl,--whole-archive -Wl,--no-whole-archive -Wl,--start-group -Wl,--end-group $(LNK_FLAGS)
+	$(Q)cp -R $(LOCAL_DIR)/include/* $(OUT_INC_DIR)
 
 $(OBJS): $(OBJ_DIR)/%.o : %.cpp | do_pre_build
 	$(Q)echo [CC] $@
 	$(Q)mkdir -p $(dir $@)
 	$(Q)$(CC) $(CC_FLAGS) $(INC_DIR) -c -fstack-protector-all $< -o $@
 
+
+$(PROTO_OBJS) : proto/presenter_message.pb.cc | do_pre_build
+	$(Q)echo [CC] $@
+	$(Q)mkdir -p $(dir $@)
+	$(Q)$(CC) $(CC_FLAGS) $(INC_DIR) -c -fstack-protector-all $< -o $@
+
 install: all
 	$(Q)echo [INSTALL] $@
-	$(Q)mkdir -p $(HOME)/ascend_ddk/$(arch)/include/atlasutil
-	$(Q)mkdir -p $(HOME)/ascend_ddk/$(arch)/lib
-	$(Q)cp -R $(LOCAL_DIR)/include/* $(HOME)/ascend_ddk/$(arch)/include/atlasutil/
-	$(Q)cp -R $(OUT_DIR)/lib*.so $(HOME)/ascend_ddk/$(arch)/lib/
+	$(Q)mkdir -p $(HOME)/ascend_ddk/$(ARCH)/include
+	$(Q)mkdir -p $(HOME)/ascend_ddk/$(ARCH)/lib
+	$(Q)cp -R $(OUT_INC_DIR)/ascenddk* $(HOME)/ascend_ddk/$(ARCH)/include/
+	$(Q)cp -R $(OUT_DIR)/lib*.so $(HOME)/ascend_ddk/$(ARCH)/lib/
+
+install pcie: 
 
 clean:
-	rm -rf $(TOPDIR)/$(OUT_DIR)
