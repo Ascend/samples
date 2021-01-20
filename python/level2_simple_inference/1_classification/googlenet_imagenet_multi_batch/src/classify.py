@@ -118,7 +118,7 @@ class Classify(object):
                 object_class = get_image_net_class(n)
                 print("label:%d  confidence: %f, class: %s" % (n, vals[n], object_class))
             
-            #使用pillow，将置信度最高的类别写在图片上，并保存到本地
+            #Use Pillow to write the categories with the highest confidence on the image and save them locally
             if len(top_k):
                 object_class = get_image_net_class(top_k[0])
                 output_path = os.path.join("../outputs", os.path.basename(batch_image_files[number]))
