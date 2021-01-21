@@ -171,8 +171,6 @@ def main(lf, perspective_transform, pixels_per_meter, WARPED_SIZE):
     #load model
     model = Model(acl_resource, MODEL_PATH)
     src_dir = os.listdir(INPUT_DIR)
-    get_mode = acl_resource.run_mode
-    lf.set_mode(get_mode)
 
     #infer picture
     for pic in src_dir:
