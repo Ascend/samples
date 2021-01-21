@@ -35,16 +35,16 @@ AscendCL（Ascend Computing Language）提供Device管理、Context管理、Stre
 
 | 样例名称 | 语言 | 适配CANN版本 | 适配产品 |
 |---|---|---|---|
-| [crop](./cplusplus/level1_single_api/1_acl/4_dvpp/crop) |  c++ |20.0/20.1  | Atlas200DK/Atlas300 |
-| [vdec](./cplusplus/level1_single_api/1_acl/4_dvpp/vdec) |  c++ |20.0/20.1  | Atlas200DK/Atlas300 |
-| [venc](./cplusplus/level1_single_api/1_acl/4_dvpp/venc) |  c++ |20.0/20.1  | Atlas200DK/Atlas300 |
-| [jpegd](./cplusplus/level1_single_api/1_acl/4_dvpp/jpegd) |  c++ |20.0/20.1  | Atlas200DK/Atlas300 |
-| [jpege](./cplusplus/level1_single_api/1_acl/4_dvpp/jpege) |  c++ |20.0/20.1  | Atlas200DK/Atlas300 |
-| [resize](./cplusplus/level1_single_api/1_acl/4_dvpp/resize) |  c++ |20.0/20.1  | Atlas200DK/Atlas300 |
-| [batchcrop](./cplusplus/level1_single_api/1_acl/4_dvpp/batchcrop) |  c++ |20.0/20.1  | Atlas200DK/Atlas300 |
-| [venc_image](./cplusplus/level1_single_api/1_acl/4_dvpp/venc_image) |  c++ |20.0/20.1  | Atlas200DK/Atlas300 |
-| [vdecandvenc](./cplusplus/level1_single_api/1_acl/4_dvpp/vdecandvenc) |  c++ |20.0/20.1  | Atlas200DK/Atlas300 |
-| [cropandpaste](./cplusplus/level1_single_api/1_acl/4_dvpp/cropandpaste) |  c++ |20.0/20.1  | Atlas200DK/Atlas300 |
+| [crop](./cplusplus/level2_simple_inference/0_data_process/crop) |  c++ |20.0/20.1  | Atlas200DK/Atlas300 |
+| [vdec](./cplusplus/level2_simple_inference/0_data_process/vdec) |  c++ |20.0/20.1  | Atlas200DK/Atlas300 |
+| [venc](./cplusplus/level2_simple_inference/0_data_process/venc) |  c++ |20.0/20.1  | Atlas200DK/Atlas300 |
+| [jpegd](./cplusplus/level2_simple_inference/0_data_process/jpegd) |  c++ |20.0/20.1  | Atlas200DK/Atlas300 |
+| [jpege](./cplusplus/level2_simple_inference/0_data_process/jpege) |  c++ |20.0/20.1  | Atlas200DK/Atlas300 |
+| [resize](./cplusplus/level2_simple_inference/0_data_process/resize) |  c++ |20.0/20.1  | Atlas200DK/Atlas300 |
+| [batchcrop](./cplusplus/level2_simple_inference/0_data_process/batchcrop) |  c++ |20.0/20.1  | Atlas200DK/Atlas300 |
+| [venc_image](./cplusplus/level2_simple_inference/0_data_process/venc_image) |  c++ |20.0/20.1  | Atlas200DK/Atlas300 |
+| [vdecandvenc](./cplusplus/level2_simple_inference/0_data_process/vdecandvenc) |  c++ |20.0/20.1  | Atlas200DK/Atlas300 |
+| [cropandpaste](./cplusplus/level2_simple_inference/0_data_process/cropandpaste) |  c++ |20.0/20.1  | Atlas200DK/Atlas300 |
 | [smallResolution_cropandpaste](./cplusplus/level1_single_api/1_acl/4_dvpp/smallResolution_cropandpaste) | c++ | 20.0/20.1 | Atlas200DK/Atlas300 |
 | [gemm](./cplusplus/level1_single_api/1_acl/5_blas/gemm) |  c++ |20.0/20.1  | Atlas200DK/Atlas300  |
 | [acl_execute_add](./cplusplus/level1_single_api/4_op_dev/2_verify_op/acl_execute_add) |  c++ |20.0/20.1  | Atlas200DK/Atlas300  |
