@@ -1,6 +1,7 @@
 import acl
 from atlas_utils.constants import *
-
+from functools import wraps
+DEBUG = False
 def check_ret(message, ret_int):
     if ret_int != 0:
         raise Exception("{} failed ret_int={}"
@@ -95,3 +96,16 @@ def align_up2(value):
 
 def yuv420sp_size(width, height):
     return int(width * height * 3 /2)
+def display_time(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if DEBUG:
+            btime = time.time()
+            res = func(*args, **kwargs)
+            use_time = time.time() - btime
+            print("in %s, use time:%s" % (func.__name__, use_time))
+            return res
+        else:
+            return func(*args, **kwargs)
+
+    return wrapper
