@@ -6,7 +6,6 @@
 
 ## YOLOV3_coco_detection_picture样例
 
-**注：案例详细介绍请参见[googlenet动态batch_wiki]()。**
 
 功能：使用yolov3模型对输入图片进行预测推理，并将结果打印到输出图片上。
 
