@@ -124,10 +124,10 @@ class ObjectDetect(object):
         print(box_info[0:6*box_num].reshape(6, box_num))
         scalex = origin_img.width / self._model_width
         scaley = origin_img.height / self._model_height
-        output_path = os.path.join("./outputs", os.path.basename(image_file))
+        output_path = os.path.join("../outputs", os.path.basename(image_file))
         origin_image = Image.open(image_file)
         draw = ImageDraw.Draw(origin_image)
-        font = ImageFont.truetype("SourceHanSansCN-Normal.ttf", size=30)
+        font = ImageFont.truetype("../SourceHanSansCN-Normal.ttf", size=30)
         print("images:{}".format(image_file))
         print("======== inference results: =============")
         for n in range(int(box_num)):
@@ -148,7 +148,7 @@ class ObjectDetect(object):
 
 
 
-MODEL_PATH = "./model/yolov3_yuv.om"
+MODEL_PATH = "../model/yolov3_yuv.om"
 MODEL_WIDTH = 416
 MODEL_HEIGHT = 416
 
@@ -170,8 +170,8 @@ def main():
                    for img in os.listdir(image_dir)
                    if os.path.splitext(img)[1] in IMG_EXT]
     #创建目录，保存推理结果
-    if not os.path.isdir('./outputs'):
-        os.mkdir('./outputs')
+    if not os.path.isdir('../outputs'):
+        os.mkdir('../outputs')
 
     for image_file in images_list:
         #读入图片
