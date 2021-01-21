@@ -50,19 +50,22 @@ def postprocess(result_list, pic, orig_shape, orig_l):
         
     ab_data = cv.resize(result_array, orig_shape[::-1])
        
-    result_lab = np.concatenate((orig_l[:,:,np.newaxis],ab_data),axis=2)
+    result_lab = np.concatenate((orig_l[:, :, np.newaxis], ab_data), axis=2)
     
-    result_bgr = (255*np.clip(cv.cvtColor(result_lab, cv.COLOR_Lab2BGR),0,1)).astype('uint8')
+    result_bgr = (255 * np.clip(cv.cvtColor(result_lab, cv.COLOR_Lab2BGR), 0, 1)).astype('uint8')
       
-    file_name = os.path.join(OUTPUT_DIR, 'out_'+pic)
+    file_name = os.path.join(OUTPUT_DIR, "out_" + os.path.basename(pic))
     cv.imwrite(file_name, result_bgr)
 
 
 def main():
+    """
+    acl resource initialization
+    """
     
     if not os.path.exists(OUTPUT_DIR):
         os.mkdir(OUTPUT_DIR)
-        
+     #ACL resource initialization    
     acl_resource = AclResource()
     acl_resource.init()
     

@@ -139,8 +139,8 @@ function main() {
     fi
 
     # 运行程序
-    cd ${project_path}
-    python3.6 ${project_path}/src/mask_detect.py
+    cd ${project_path}/src
+    python3.6 mask_detect.py
     if [ $? -ne 0 ];then
         echo "ERROR: run failed. please check your project"
         return ${inferenceError}

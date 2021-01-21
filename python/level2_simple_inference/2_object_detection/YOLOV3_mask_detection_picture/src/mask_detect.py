@@ -11,11 +11,11 @@ from utils import *
 from acl_model import Model
 from acl_image import AclImage
 
-labels = ["face","person", "mask"]
+labels = ["face", "person", "mask"]
 
-INPUT_DIR = './data/'
-OUTPUT_DIR = './out/'
-MODEL_PATH = "./model/mask_detection.om"
+INPUT_DIR = '../data/'
+OUTPUT_DIR = '../out/'
+MODEL_PATH = "../model/mask_detection.om"
 MODEL_WIDTH = 640
 MODEL_HEIGHT = 352
 class_num = 3
@@ -145,17 +145,18 @@ def post_process(infer_output, origin_img):
     new_w = int(img_w * scale)
     new_h = int(img_h * scale)
     shift_x_ratio = (MODEL_WIDTH - new_w) / 2.0 / MODEL_WIDTH
-    shift_y_ratio = (MODEL_HEIGHT- new_h) / 2.0 / MODEL_HEIGHT
-    class_num = len(labels)
-    num_channel = 3 * (class_num + 5)
+    shift_y_ratio = (MODEL_HEIGHT - new_h) / 2.0 / MODEL_HEIGHT
+    class_number = len(labels)
+    num_channel = 3 * (class_number + 5)
     x_scale = MODEL_WIDTH / float(new_w)
     y_scale = MODEL_HEIGHT / float(new_h)
-    all_boxes = [[] for ix in range(class_num)]
+    all_boxes = [[] for ix in range(class_number)]
     for ix in range(3):
-        pred = infer_output[2 - ix].reshape((MODEL_HEIGHT // stride_list[ix], MODEL_WIDTH // stride_list[ix], num_channel))
+        pred = infer_output[2 - ix].reshape((MODEL_HEIGHT // stride_list[ix], \
+        MODEL_WIDTH // stride_list[ix], num_channel))
         anchors = anchor_list[ix]
         boxes = decode_bbox(pred, anchors, img_w, img_h, x_scale, y_scale, shift_x_ratio, shift_y_ratio)
-        all_boxes = [all_boxes[iy] + boxes[iy] for iy in range(class_num)]
+        all_boxes = [all_boxes[iy] + boxes[iy] for iy in range(class_number)]
 
     res = apply_nms(all_boxes, iou_threshold)
     if not res:
@@ -178,25 +179,25 @@ def main():
 
     if not os.path.exists(OUTPUT_DIR):
         os.mkdir(OUTPUT_DIR)
-    #acl资源初始化
+    #ACL resource initialization
     acl_resource = AclResource()
     acl_resource.init()
-    #加载模型
+    #load model
     model = Model(acl_resource, MODEL_PATH)
     images_list = [os.path.join(INPUT_DIR, img)
                    for img in os.listdir(INPUT_DIR)
                    if os.path.splitext(img)[1] in IMG_EXT]
-    #从data目录逐张读取图片进行推理
+    #Read images from the data directory one by one for reasoning
     for pic in images_list:
-        #读取图片
+        #read image
         
         bgr_img = cv.imread(pic)
-        #预处理
+        #preprocess
         data, orig = preprocess(pic)
         #data, orig = preprocess(bgr_img)
-        #送进模型推理
+        #Send into model inference
         result_list = model.execute([data,])    
-        #处理推理结果
+        #Process inference results
         result_return = post_process(result_list, orig)
 
         print("result = ", result_return)
@@ -208,9 +209,9 @@ def main():
             cv.rectangle(bgr_img, (int(box[1]), int(box[0])), (int(box[3]), int(box[2])), colors[i%6])
             p3 = (max(int(box[1]), 15), max(int(box[0]), 15))
             out_label = class_name            
-            cv.putText(bgr_img, out_label, p3, cv.FONT_ITALIC, 0.6, colors[i%6], 1)
+            cv.putText(bgr_img, out_label, p3, cv.FONT_ITALIC, 0.6, colors[i % 6], 1)
 
-        output_file = os.path.join(OUTPUT_DIR, "out_" + pic)
+        output_file = os.path.join(OUTPUT_DIR, "out_" + os.path.basename(pic))
         print("output:%s" % output_file)
         cv.imwrite(output_file, bgr_img)
         
