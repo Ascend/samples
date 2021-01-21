@@ -93,16 +93,16 @@
 
       **source ~/.bashrc**
         
-      **cd $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV3_coco_detection_picture/**    
-      **python3 object_detect.py ./data/**
+      **cd $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV3_coco_detection_picture/src**    
+      **python3.6 object_detect.py ../data/**
 
     - 如果是开发环境与运行环境分离部署，执行以下命令切换目录。
     
-      **cd $HOME/YOLOV3_coco_detection_picture**
+      **cd $HOME/YOLOV3_coco_detection_picture/src**
 
     切换目录后，执行以下命令运行样例。
 
-    **python3.6 src/object_detect.py ./data/**
+    **python3.6 object_detect.py ../data/**
 
 ### 查看结果
 
