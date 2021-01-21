@@ -164,7 +164,6 @@ def main(lf, perspective_transform, pixels_per_meter, WARPED_SIZE):
     acl_resource.init()
     #load model
     model = Model(acl_resource, MODEL_PATH)
-    get_mode = acl_resource.run_mode
 
     #open video
     video_path = sys.argv[1]
@@ -174,7 +173,7 @@ def main(lf, perspective_transform, pixels_per_meter, WARPED_SIZE):
     Width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     Height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
-    lf.set_img_size((Width, Height), get_mode)
+    lf.set_img_size((Width, Height))
 
     #create output directory
     if not os.path.exists(OUTPUT_DIR):

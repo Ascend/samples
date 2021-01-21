@@ -162,7 +162,6 @@ class LaneFinder:
         self.count = 0
         self.left_line = LaneLineFinder(warped_size, pixels_per_meter, -1.8288)  # 6 feet in meters
         self.right_line = LaneLineFinder(warped_size, pixels_per_meter, 1.8288)
-        self.get_mode = 0
 
     def undistort(self, img):
         return cv2.undistort(img, self.cam_matrix, self.dist_coeffs)
@@ -204,12 +203,14 @@ class LaneFinder:
         road_mask = cv2.morphologyEx(road_mask, cv2.MORPH_OPEN, small_kernel)
         road_mask = cv2.dilate(road_mask, big_kernel)
 
-        #img2, contours, hierarchy = cv2.findContours(road_mask, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)
-        if self.get_mode:
+        version = cv2.__version__
+        str1 = version.split('.')
+        str2 = "".join(str1)
+        ver = int(str2)
+        if ver < 400:
             img2, contours, hierarchy = cv2.findContours(road_mask, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)
         else:
             contours, hierarchy = cv2.findContours(road_mask, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)
-        #contours, hierarchy = cv2.findContours(road_mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
         biggest_area = 0
         for contour in contours:
@@ -288,6 +289,5 @@ class LaneFinder:
         lane_img = self.draw_lane_weighted(img)
         return lane_img
 
-    def set_img_size(self, img_size, get_mode):
+    def set_img_size(self, img_size):
         self.img_size = img_size
-        self.get_mode = get_mode

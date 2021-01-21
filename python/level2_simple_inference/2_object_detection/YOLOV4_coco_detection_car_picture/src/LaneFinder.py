@@ -203,14 +203,10 @@ class LaneFinder:
         road_mask = cv2.morphologyEx(road_mask, cv2.MORPH_OPEN, small_kernel)
         road_mask = cv2.dilate(road_mask, big_kernel)
 
-        #img2, contours, hierarchy = cv2.findContours(road_mask, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)
         version = cv2.__version__
-        print(version)
         str1 = version.split('.')
         str2 = "".join(str1)
-        print(type(str2))
         ver = int(str2)
-        print(type(ver))
         if ver < 400:
             img2, contours, hierarchy = cv2.findContours(road_mask, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)
         else:
