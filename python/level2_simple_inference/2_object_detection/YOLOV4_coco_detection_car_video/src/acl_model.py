@@ -112,7 +112,7 @@ class Model(object):
         ret = SUCCESS
         if len(input_list) != self._input_num:
             print("Current input data num %d unequal to"
-                  " model input num %d"%(len(input_list), self._input_num))
+                  " model input num %d" % (len(input_list), self._input_num))
             return FAILED
 
         self.input_dataset = acl.mdl.create_dataset()
@@ -121,7 +121,7 @@ class Model(object):
             data, size = self._parse_input_data(item, i)            
             if (data is None) or (size == 0):
                 ret = FAILED
-                print("The %d input is invalid"%(i))
+                print("The %d input is invalid" % (i))
                 break
 
             dataset_buffer = acl.create_data_buffer(data, size)
@@ -164,7 +164,7 @@ class Model(object):
             data = copy_data_device_to_device(input_ptr, size)
             if data is None:
                 print("Malloc memory and copy model %dth "
-                      "input to device failed"%(index))
+                      "input to device failed" % (index))
                 return None
             buffer_item['addr'] = data
             buffer_item['size'] = size
@@ -173,12 +173,12 @@ class Model(object):
                                 input_ptr, size,
                                 ACL_MEMCPY_DEVICE_TO_DEVICE)
             if ret != ACL_ERROR_NONE:
-                print("Copy model %dth input to device failed"%(index))
+                print("Copy model %dth input to device failed" % (index))
                 return None
             data = buffer_item['addr']
         else:
             print("The model %dth input size %d is change,"
-                  " before is %d"%(index, size, buffer_item['size']))
+                  " before is %d" % (index, size, buffer_item['size']))
             return None
 
         return data
