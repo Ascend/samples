@@ -176,6 +176,9 @@ def main(lf, perspective_transform, pixels_per_meter, WARPED_SIZE):
 
     #infer picture
     for pic in src_dir:
+        if not pic.lower().endswith(('.bmp', '.dib', '.png', '.jpg', '.jpeg', '.pbm', '.pgm', '.ppm', '.tif', '.tiff')):
+            print('it is not a picture, %s, ignore this file and continue,' % pic)
+            continue
         #read picture
         pic_path = os.path.join(INPUT_DIR, pic)
         bgr_img = cv.imread(pic_path).astype(np.float32)
