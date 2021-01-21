@@ -180,4 +180,4 @@ PIXEL_FORMAT_YUV_SEMI_PLANNER_420_10BIT = 18  # 18, YUV420SP 10bit
 PIXEL_FORMAT_YVU_SEMI_PLANNER_420_10BIT = 19  # 19, YVU420sp 10bit
 PIXEL_FORMAT_YVU_PLANAR_420 = 20  # 20, YUV420P 8bit
 # images format
-IMG_EXT = ['.jpg', '.JPG', '.png', '.PNG', '.bmp', '.BMP', '.jpeg', '.JPEG']
+IMG_EXT = ['.jpg', '.JPG', '.jpeg', '.JPEG']
