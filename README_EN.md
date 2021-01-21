@@ -35,16 +35,16 @@ This repository provides a wide range of samples developed based on AscendCL API
 
 | Sample | Language | Version | Product |
 |---|---|---|---|
-| [crop](./cplusplus/level1_single_api/1_acl/4_dvpp/crop) | C++ |20.0/20.1 | Atlas 200 DK/Atlas 300 |
-| [vdec](./cplusplus/level1_single_api/1_acl/4_dvpp/vdec) | C++ |20.0/20.1 | Atlas 200 DK/Atlas 300 |
-| [venc](./cplusplus/level1_single_api/1_acl/4_dvpp/venc) | C++ |20.0/20.1 | Atlas 200 DK/Atlas 300 |
-| [jpegd](./cplusplus/level1_single_api/1_acl/4_dvpp/jpegd) | C++ |20.0/20.1 | Atlas 200 DK/Atlas 300 |
-| [jpege](./cplusplus/level1_single_api/1_acl/4_dvpp/jpege) | C++ |20.0/20.1 | Atlas 200 DK/Atlas 300 |
-| [resize](./cplusplus/level1_single_api/1_acl/4_dvpp/resize) | C++ |20.0/20.1 | Atlas 200 DK/Atlas 300 |
-| [batchcrop](./cplusplus/level1_single_api/1_acl/4_dvpp/batchcrop) | C++ |20.0/20.1 | Atlas 200 DK/Atlas 300 |
-| [venc_image](./cplusplus/level1_single_api/1_acl/4_dvpp/venc_image) | C++ |20.0/20.1 | Atlas 200 DK/Atlas 300 |
-| [vdecandvenc](./cplusplus/level1_single_api/1_acl/4_dvpp/vdecandvenc) | C++ |20.0/20.1 | Atlas 200 DK/Atlas 300 |
-| [cropandpaste](./cplusplus/level1_single_api/1_acl/4_dvpp/cropandpaste) | C++ |20.0/20.1 | Atlas 200 DK/Atlas 300 |
+| [crop](./cplusplus/level2_simple_inference/0_data_process/crop) | C++ |20.0/20.1 | Atlas 200 DK/Atlas 300 |
+| [vdec](./cplusplus/level2_simple_inference/0_data_process/vdec) | C++ |20.0/20.1 | Atlas 200 DK/Atlas 300 |
+| [venc](./cplusplus/level2_simple_inference/0_data_process/venc) | C++ |20.0/20.1 | Atlas 200 DK/Atlas 300 |
+| [jpegd](./cplusplus/level2_simple_inference/0_data_process/jpegd) | C++ |20.0/20.1 | Atlas 200 DK/Atlas 300 |
+| [jpege](./cplusplus/level2_simple_inference/0_data_process/jpege) | C++ |20.0/20.1 | Atlas 200 DK/Atlas 300 |
+| [resize](./cplusplus/level2_simple_inference/0_data_process/resize) | C++ |20.0/20.1 | Atlas 200 DK/Atlas 300 |
+| [batchcrop](./cplusplus/level2_simple_inference/0_data_process/batchcrop) | C++ |20.0/20.1 | Atlas 200 DK/Atlas 300 |
+| [venc_image](./cplusplus/level2_simple_inference/0_data_process/venc_image) | C++ |20.0/20.1 | Atlas 200 DK/Atlas 300 |
+| [vdecandvenc](./cplusplus/level2_simple_inference/0_data_process/vdecandvenc) | C++ |20.0/20.1 | Atlas 200 DK/Atlas 300 |
+| [cropandpaste](./cplusplus/level2_simple_inference/0_data_process/cropandpaste) | C++ |20.0/20.1 | Atlas 200 DK/Atlas 300 |
 | [smallResolution_cropandpaste](./cplusplus/level1_single_api/1_acl/4_dvpp/smallResolution_cropandpaste) | C++ | 20.0/20.1 | Atlas 200 DK/Atlas 300 |
 | [gemm](./cplusplus/level1_single_api/1_acl/5_blas/gemm) | C++ |20.0/20.1 | Atlas 200 DK/Atlas 300  |
 | [acl_execute_add](./cplusplus/level1_single_api/4_op_dev/2_verify_op/acl_execute_add) | C++ |20.0/20.1 | Atlas 200 DK/Atlas 300  |
