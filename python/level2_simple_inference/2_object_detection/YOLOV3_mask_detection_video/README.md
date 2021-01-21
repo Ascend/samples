@@ -53,7 +53,7 @@
 
 3. 将原始模型转换为Davinci模型。
     
-    **注：请确认环境变量已经在[环境准备和依赖安装](https://gitee.com/ascend/samples/tree/dev/python/environment)中配置完成**
+    **注：请确认环境变量已经在[环境准备和依赖安装](../../../environment)中配置完成**
 
     1. 设置LD_LIBRARY_PATH环境变量。
 
