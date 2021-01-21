@@ -6,7 +6,7 @@
  **注：标注为正在开发的样例，暂时只是规划了样例目录，内容正在开发中，待开发完成后再上传仓库** 
 
 **./**   
-├── [cartoonGAN_picture](https://gitee.com/ascend/samples/tree/dev/python/contrib/cartoonGAN_picture)： **卡通图像生成。**    
-└── [garbage_picture](https://gitee.com/ascend/samples/tree/dev/python/contrib/garbage_picture)： **垃圾分类。** 
+├── [cartoonGAN_picture](./cartoonGAN_picture)： **卡通图像生成。**    
+└── [garbage_picture](./garbage_picture)： **垃圾分类。** 
 
   
