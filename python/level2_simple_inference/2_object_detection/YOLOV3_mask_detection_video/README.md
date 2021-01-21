@@ -7,7 +7,6 @@
 
 ## 口罩识别视频输入样例
 
-**注：案例详细介绍请参见[口罩识别视频输入_wiki](https://gitee.com/ascend/samples/wikis/%E8%A7%86%E9%A2%91%E9%BB%91%E7%99%BD%E5%9B%BE%E5%83%8F%E4%B8%8A%E8%89%B2?sort_id=3170478)。**
 
 功能：实现了对视频中的口罩、人脸、人信息进行预测的功能。
 
@@ -19,7 +18,7 @@
 
 部署此Sample前，需要准备好以下环境：
 
-- 请确认已按照[环境准备和依赖安装](https://gitee.com/ascend/samples/tree/dev/python/environment)准备好环境。
+- 请确认已按照[环境准备和依赖安装](../../../environment)准备好环境。
 
 - 已完成对应产品的开发环境和运行环境安装。
 
@@ -54,7 +53,7 @@
 
 3. 将原始模型转换为Davinci模型。
     
-    **注：请确认环境变量已经在[环境准备和依赖安装](https://gitee.com/ascend/samples/tree/dev/python/environment)中配置完成**
+    **注：请确认环境变量已经在[环境准备和依赖安装](../../../environment)中配置完成**
 
     1. 设置LD_LIBRARY_PATH环境变量。
 
@@ -85,18 +84,18 @@
 
 1. 修改present相关配置文件。
 
-    将样例目录下**script/param.conf**中的 presenter_server_ip、presenter_view_ip 修改为开发环境中可以ping通运行环境的ip地址，使用以下两种情况举例说明。
+    将样例目录下**scripts/param.conf**中的 presenter_server_ip、presenter_view_ip 修改为开发环境中可以ping通运行环境的ip地址，使用以下两种情况举例说明。
 
      - 使用产品为200DK开发者板。   
         1. 开发环境中使用ifconfig查看可用ip。   
-        2. 在开发环境中将**script/param.conf**中的 presenter_server_ip、presenter_view_ip 修改为该ip地址。   
+        2. 在开发环境中将**scripts/param.conf**中的 presenter_server_ip、presenter_view_ip 修改为该ip地址。   
         ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
         > - 1.开发环境和运行环境分离部署，一般使用配置的虚拟网卡ip，例如192.168.1.223。
         > - 2.开发环境和运行环境合一部署，一般使用200dk固定ip，例如192.168.1.2。
 
     - 使用产品为300加速卡（ai1s云端推理环境）。   
         1. ECS弹性云服务器控制台中查看ai1s云端环境可用内网ip，例如192.168.0.198。   
-        2. 在开发环境中将**script/param.conf**中的 presenter_server_ip、presenter_view_ip 修改为该ip地址。   
+        2. 在开发环境中将**scripts/param.conf**中的 presenter_server_ip、presenter_view_ip 修改为该ip地址。   
         ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
         > - 也可以在ai1s云端环境中使用ifconfig查看内网ip。
         > - 登录ai1s云端环境时的ip地址为此环境的公网ip，ai1s云端环境中ifconfig查看到的ip为此环境的内网ip。
@@ -119,7 +118,7 @@
     - 使用产品为200DK开发者板。   
         1. 开发环境中执行以下命令启动presentserver。   
             **cd $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV3_mask_detection_video**   
-            **bash script/run_presenter_server.sh**   
+            **bash scripts/run_presenter_server.sh**   
         2. 执行以下命令登录运行环境。   
             **开发环境与运行环境合一部署，请跳过此步骤！**   
             **ssh HwHiAiUser@xxx.xxx.xxx.xxx** 
@@ -130,7 +129,7 @@
            **ssh HwHiAiUser@xxx.xxx.xxx.xxx**    
         2. 运行环境中执行以下命令启动presenterserver。   
             **cd $HOME/YOLOV3_mask_detection_video**   
-            **bash script/run_presenter_server.sh**   
+            **bash scripts/run_presenter_server.sh**   
 
 3. <a name="step_2"></a>运行可执行文件。
 

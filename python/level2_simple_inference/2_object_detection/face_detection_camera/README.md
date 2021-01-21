@@ -67,10 +67,10 @@
 
 1. 修改present相关配置文件。
 
-    将样例目录下**script/param.conf**中的 presenter_server_ip、presenter_view_ip 修改为开发板的ip地址。
+    将样例目录下**scripts/param.conf**中的 presenter_server_ip、presenter_view_ip 修改为开发板的ip地址。
 
      使用产品为200DK开发者板。     
-        1. 在开发环境中将**script/param.conf**中的 presenter_server_ip、presenter_view_ip 修改为该ip地址。   
+        1. 在开发环境中将**scripts/param.conf**中的 presenter_server_ip、presenter_view_ip 修改为该ip地址。   
         ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
         > - 1.一般使用200dk固定ip，例如192.168.1.2。
 ### 样例运行
@@ -90,7 +90,7 @@
            执行以下命令登录运行环境。      
             **ssh HwHiAiUser@xxx.xxx.xxx.xxx**     
             **cd $HOME/samples/python/level2_simple_inference/2_object_detection/face_detection_camera**   
-            **bash script/run_presenter_server.sh**   
+            **bash scripts/run_presenter_server.sh**   
 
 3. <a name="step_2"></a>运行可执行文件。
 
