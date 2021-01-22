@@ -1,4 +1,4 @@
-中文|[英文](README_200dk_EN.md)
+中文|[英文](README_200DK_EN.md)
 
 # 安装ffmpeg+opencv<a name="ZH-CN_TOPIC_0228768065"></a>
 
