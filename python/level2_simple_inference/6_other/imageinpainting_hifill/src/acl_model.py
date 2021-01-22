@@ -188,7 +188,7 @@ class Model(object):
         return data
 
     
-    @display_time
+    
     def execute(self, input_list):
         ret = self._gen_input_dataset(input_list)
         if ret == FAILED:
