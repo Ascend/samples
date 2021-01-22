@@ -141,11 +141,11 @@ class ObjectDetect(object):
             top_left_y = box_info[1 * int(box_num)+n] * scaley
             bottom_right_x = box_info[2 * int(box_num) + n] * scalex
             bottom_right_y = box_info[3 * int(box_num) + n] * scaley
-            print("%s: class % d, box % d % d % d % d, score % f"%(
+            print("% s: class % d, box % d % d % d % d, score % f"%(
                 label, id, top_left_x, top_left_y, 
                 bottom_right_x, bottom_right_y, score))
             draw.line([(top_left_x, top_left_y), (bottom_right_x, top_left_y), (bottom_right_x, bottom_right_y), \
-            (top_left_x, bottom_right_y), (top_left_x, top_left_y)],fill=(0,200,100),width=3)
+            (top_left_x, bottom_right_y), (top_left_x, top_left_y)], fill=(0,200,100),width=3)
             draw.text((top_left_x, top_left_y), label, font=font, fill=255)
         origin_image.save(output_path)
 
