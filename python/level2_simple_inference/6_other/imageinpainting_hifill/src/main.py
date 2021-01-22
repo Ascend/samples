@@ -95,8 +95,6 @@ def read_imgs_masks(images, masks):
     print(paths_mask)
     return paths_img, paths_mask
 
-    
-
 def matmul_om_large(matmul_model, attention, residual):
     """
     matul om large
@@ -107,10 +105,8 @@ def matmul_om_large(matmul_model, attention, residual):
     matmul_ret = matmul_model.execute([attention_reshape, residual_reshape])
     
 
-    return matmul_ret[0].reshape(ATTENTION_SIZE,ATTENTION_SIZE,3072*9)
-
-# residual aggregation module
-
+    return matmul_ret[0].reshape(ATTENTION_SIZE, ATTENTION_SIZE, 3072 * 9)
+    
 def residual_aggregate(model, residual, attention):
     """
     MULTIPLE * INPUT_SIZE//ATTENTION_SIZE = 6*512/32 = 96
