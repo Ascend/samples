@@ -1,4 +1,5 @@
-[中文](README_300.md)|English  
+English|[中文](README_300_CN.md)
+
 # Basic Environment Configuration  
 This readme file describes how to configure the basic environment, including the sudo permission, apt source, and environment variables. If they have been configured, skip this workflow.  
 
