@@ -91,7 +91,6 @@ class Model(object):
             #create output data buffer
             dataset_buffer = acl.create_data_buffer(temp_buffer,
                                                     temp_buffer_size)
-            #将data buffer加入输出dataset
             _, ret = acl.mdl.add_dataset_buffer(dataset, dataset_buffer)
             if ret:
                 #free resource 

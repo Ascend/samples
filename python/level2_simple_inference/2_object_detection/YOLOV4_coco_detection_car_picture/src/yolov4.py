@@ -84,7 +84,7 @@ def calculate_position(bbox, transform_matrix, warped_size, pix_per_meter, x_sca
         dst = cv.perspectiveTransform(pos, transform_matrix).reshape(-1, 1)
         return np.array((warped_size[1] - dst[1]) / pix_per_meter[1])
 
-def preprocess_frame(frame, model_image_size):
+def preprocess_frame(frame):
     frame = frame[:, :, ::-1]
     image = frame
     image = Image.fromarray(image.astype('uint8'), 'RGB')
@@ -104,7 +104,7 @@ def preprocess(bgr_img):
     if not rgb_img.flags['C_CONTIGUOUS']:
         rgb_img = np.ascontiguousarray(bgr_img)
 
-    frame = preprocess_frame(bgr_img, (int(MODEL_WIDTH), int(MODEL_HEIGHT)))
+    frame = preprocess_frame(bgr_img)
     fframe = np.array(frame)
     fframe = lf.process_image(fframe, False)
     frame = Image.fromarray(fframe)
