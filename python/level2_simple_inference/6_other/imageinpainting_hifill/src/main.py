@@ -42,6 +42,9 @@ def resize_ave(img, MULTIPLE):
 
 
 def reconstruct_residual_from_patches(residual, multiple):
+    """
+    reconstruct residual from patches
+    """
     residual = np.reshape(residual, [ATTENTION_SIZE, ATTENTION_SIZE, multiple, multiple, 3])
     residual = np.transpose(residual, [0, 2, 1, 3, 4])
     return np.reshape(residual, [ATTENTION_SIZE * multiple, ATTENTION_SIZE * multiple, 3])
@@ -49,9 +52,12 @@ def reconstruct_residual_from_patches(residual, multiple):
 # extract image patches
 
 def extract_image_patches(img, multiple):
+    """
+    extract image patch
+    """
     h, w, c = img.shape
-    img = np.reshape(img, [h//multiple, multiple, w//multiple, multiple, c])
-    img = np.transpose(img, [0,2,1,3,4])
+    img = np.reshape(img, [h // multiple, multiple, w // multiple, multiple, c])
+    img = np.transpose(img, [0, 2, 1, 3, 4])
     return img
 
 
@@ -85,7 +91,10 @@ def read_imgs_masks(images, masks):
 
     
 
-def matmul_om_large(matmul_model,attention,residual):
+def matmul_om_large(matmul_model, attention, residual):
+    """
+    matul om large
+    """
     attention_reshape = attention.reshape(1024, 1024)
     residual_reshape = residual.reshape(1024, 96 * 96 * 3)
     
@@ -96,14 +105,14 @@ def matmul_om_large(matmul_model,attention,residual):
 
 # residual aggregation module
 
-def residual_aggregate(model,residual, attention):
+def residual_aggregate(model, residual, attention):
     """
     MULTIPLE * INPUT_SIZE//ATTENTION_SIZE = 6*512/32 = 96
     """
     # MULTIPLE * INPUT_SIZE//ATTENTION_SIZE = 6*512/32 = 96
-    residual = extract_image_patches(residual, MULTIPLE * INPUT_SIZE//ATTENTION_SIZE)
+    residual = extract_image_patches(residual, MULTIPLE * INPUT_SIZE // ATTENTION_SIZE)
     residual = np.reshape(residual, [1, residual.shape[0] * residual.shape[1], -1])
-    residual = matmul_om_large(model,attention,residual)
+    residual = matmul_om_large(model, attention, residual)
     #residual = np.matmul(attention, residual)
     residual = reconstruct_residual_from_patches(residual, MULTIPLE * INPUT_SIZE//ATTENTION_SIZE)
     return residual
@@ -113,7 +122,8 @@ def post_process(model, raw_img, large_img, large_mask, inpainted_512, img_512, 
     # compute the raw residual map
     # s = time.time()
     h, w, c = raw_img.shape
-    low_base = cv2.resize(inpainted_512.astype(NPTYPE_FLOAT32), (INPUT_SIZE * MULTIPLE, INPUT_SIZE * MULTIPLE), interpolation = cv2.INTER_LINEAR) 
+    low_base = cv2.resize(inpainted_512.astype(NPTYPE_FLOAT32), 
+    (INPUT_SIZE * MULTIPLE, INPUT_SIZE * MULTIPLE), interpolation = cv2.INTER_LINEAR) 
     low_large = cv2.resize(img_512.astype(NPTYPE_FLOAT32), (INPUT_SIZE * MULTIPLE, INPUT_SIZE * MULTIPLE), interpolation = cv2.INTER_LINEAR)
     residual = (large_img - low_large) * large_mask
 
