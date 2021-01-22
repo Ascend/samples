@@ -1,4 +1,4 @@
-[中文](README_300_EN.md)|English
+English|[中文](README_300_CN.md)
 
 # Installing the Python 3 Operating Environment
 $\color{red}{Run the following commands in the operating environment.}$
