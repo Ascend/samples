@@ -1,4 +1,4 @@
-[中文](README_300.md)|English
+English|[中文](README_300_CN.md)
 # Installing Presenter Agent
 $\color{red}{Run the following commands in the development environment as the user who installs Toolkit.}$
 
