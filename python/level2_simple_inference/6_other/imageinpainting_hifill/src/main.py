@@ -101,12 +101,9 @@ def matmul_om_large(matmul_model, attention, residual):
     """
     attention_reshape = attention.reshape(1024, 1024)
     residual_reshape = residual.reshape(1024, 96 * 96 * 3)
-    
     matmul_ret = matmul_model.execute([attention_reshape, residual_reshape])
-    
-
     return matmul_ret[0].reshape(ATTENTION_SIZE, ATTENTION_SIZE, 3072 * 9)
-    
+
 def residual_aggregate(model, residual, attention):
     """
     MULTIPLE * INPUT_SIZE//ATTENTION_SIZE = 6*512/32 = 96
@@ -130,7 +127,8 @@ def post_process(model, raw_img, large_img, large_mask, inpainted_512, img_512, 
     h, w, c = raw_img.shape
     low_base = cv2.resize(inpainted_512.astype(NPTYPE_FLOAT32), 
     (INPUT_SIZE * MULTIPLE, INPUT_SIZE * MULTIPLE), interpolation = cv2.INTER_LINEAR) 
-    low_large = cv2.resize(img_512.astype(NPTYPE_FLOAT32), (INPUT_SIZE * MULTIPLE, INPUT_SIZE * MULTIPLE), interpolation = cv2.INTER_LINEAR)
+    low_large = cv2.resize(img_512.astype(NPTYPE_FLOAT32), 
+    (INPUT_SIZE * MULTIPLE, INPUT_SIZE * MULTIPLE), interpolation = cv2.INTER_LINEAR)
     residual = (large_img - low_large) * large_mask
 
     # reconstruct residual map using residual aggregation module
@@ -176,6 +174,7 @@ def main(image_dir, masks_dir):
     #load model
     model = Model(acl_resource,MODEL_PATH)
     matmul_om = Model(acl_resource,MODEL_MATMUL_PATH)
+    
 
     paths_img, paths_mask = read_imgs_masks(image_dir, masks_dir)
     for i in range(len(paths_img)):
