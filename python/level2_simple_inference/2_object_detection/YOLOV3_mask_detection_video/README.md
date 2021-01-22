@@ -107,11 +107,12 @@
 ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
 > - 以下出现的**xxx.xxx.xxx.xxx**为运行环境ip，200DK在USB连接时一般为192.168.1.2，300（ai1s）为对应的公网ip。
 
-1. 执行以下命令,将开发环境的 **YOLOV3_mask_detection_video** 目录上传到运行环境中，例如 **/home/HwHiAiUser**。   
+1. 执行以下命令,将开发环境的 **YOLOV3_mask_detection_video** 目录和依赖的 **atlas_utils** 库上传到运行环境中，例如 **/home/HwHiAiUser**。   
 
     **开发环境与运行环境合一部署，请跳过此步骤！**   
 
-    **scp -r $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV3_mask_detection_video HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
+    **scp -r $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV3_mask_detection_video HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**  
+    **scp -r $HOME/samples/python/common/atlas_utils HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser/YOLOV3_mask_detection_video**
 
 2. 启动presenterserver并登录运行环境。
 
