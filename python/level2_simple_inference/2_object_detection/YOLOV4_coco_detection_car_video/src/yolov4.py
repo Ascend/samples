@@ -37,8 +37,13 @@ labels = ["person",
         "toilet", "TV monitor", "laptop", "mouse", "remote", "keyboard", "cell phone",
         "microwave", "oven", "toaster", "sink", "refrigerator", "book", "clock", "vase",
         "scissors", "teddy bear", "hair drier", "toothbrush"]
+
+
 def func_nms(boxes,nms_threshold):
     
+    """
+    1234    
+    """
     b_x = boxes[:, 0]
     b_y = boxes[:, 1]
     b_w = boxes[:, 2]
@@ -70,8 +75,12 @@ def func_nms(boxes,nms_threshold):
     final_boxes = [boxes[i] for i in keep]
     return final_boxes
 
+
 def calculate_position(bbox, transform_matrix, warped_size, pix_per_meter, x_scale, y_scale):
     
+    """
+    1234
+    """
     if len(bbox) == 0:
         print('Nothing')
     else:
@@ -83,16 +92,24 @@ def calculate_position(bbox, transform_matrix, warped_size, pix_per_meter, x_sca
         dst = cv.perspectiveTransform(pos, transform_matrix).reshape(-1, 1)
         return np.array((warped_size[1] - dst[1]) / pix_per_meter[1])
 
+
 def preprocess_frame(frame):
     
+    """
+    1234
+    """
     frame = frame[:, :, ::-1]
     image = frame
     image = Image.fromarray(image.astype('uint8'), 'RGB')
     
     return image
 
+
 def preprocess(frame):
 
+    """
+    1234
+    """
     #get img shape
     orig_shape = frame.shape[:2]
 
@@ -113,14 +130,18 @@ def preprocess(frame):
 
     return orig_shape, rgb_img, framecv
 
+
 def postprocess(result_list, frame, orig_shape):
 
+    """
+    1234
+    """
     x_scale = orig_shape[1] / MODEL_HEIGHT
     y_scale = orig_shape[0] / MODEL_WIDTH
 
     result_class = result_list[0].reshape(MODEL_OUTPUT_BOXNUM, 80).astype('float32')
     result_box = result_list[1].reshape(MODEL_OUTPUT_BOXNUM, 4).astype('float32')
-    boxes = np.zeros(shape = (MODEL_OUTPUT_BOXNUM, 6),dtype = np.float32)
+    boxes = np.zeros(shape = (MODEL_OUTPUT_BOXNUM, 6), dtype = np.float32)
     boxes[:, :4]= result_box
     list_score = result_class.max(axis = 1)
     list_class = result_class.argmax(axis=1)
@@ -129,7 +150,7 @@ def postprocess(result_list, frame, orig_shape):
     boxes[:, 4]= list_class[:, 0]
     boxes[:, 5]= list_score[:, 0]
     all_boxes = boxes[boxes[:, 5] >= CLASS_SCORE_CONST]
-    real_box = func_nms(np.array(all_boxes),NMS_THRESHOLD_CONST)
+    real_box = func_nms(np.array(all_boxes), NMS_THRESHOLD_CONST)
 
     l = len(real_box)
     distance = np.zeros(shape=(l, 1))
@@ -151,18 +172,22 @@ def postprocess(result_list, frame, orig_shape):
             top_y= int((detect_result[1] - detect_result[3] / 2) * y_scale)
             bottom_x= int((detect_result[0] + detect_result[2] / 2) * x_scale)
             bottom_y= int((detect_result[1] + detect_result[3] / 2) * y_scale)
-            cv.rectangle(frame, (top_x,top_y), (bottom_x,bottom_y), (0, 255, 0), 2)
-            cv.putText(frame, labels[int(detect_result[4])], (top_x + 5,top_y + 10), 
+            cv.rectangle(frame, (top_x, top_y), (bottom_x, bottom_y), (0, 255, 0), 2)
+            cv.putText(frame, labels[int(detect_result[4])], (top_x + 5, top_y + 10), 
                     cv.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
             d = distance[i]
             label_dis = '{} {:.2f}m'.format('dis:', d[0])
-            cv.putText(frame, label_dis, (top_x + 10,bottom_y + 15), 
+            cv.putText(frame, label_dis, (top_x + 10, bottom_y + 15), 
                     cv.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
     
     return frame
 
+
 def main():
 
+    """
+    1234
+    """
     if (len(sys.argv) != 2):
         print("Please input video path")
         exit(1)
@@ -210,9 +235,10 @@ def main():
     outVideo.release()
     print("Execute end")
 
-if __name__ == '__main__':
-    import gc
 
+if __name__ == '__main__':
+
+    import gc
     path = './configure.json'
     file = open(path, "rb")
     fileJson = json.load(file)

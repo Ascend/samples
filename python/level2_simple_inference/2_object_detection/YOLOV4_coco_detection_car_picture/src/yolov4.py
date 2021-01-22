@@ -39,8 +39,12 @@ labels = ["person",
         "microwave", "oven", "toaster", "sink", "refrigerator", "book", "clock", "vase",
         "scissors", "teddy bear", "hair drier", "toothbrush"]
 
+
 def func_nms(boxes, nms_threshold):
 
+    """
+    1234
+    """
     b_x = boxes[:, 0]
     b_y = boxes[:, 1]
     b_w = boxes[:, 2]
@@ -76,8 +80,12 @@ def func_nms(boxes, nms_threshold):
     final_boxes = [boxes[i] for i in keep]
     return final_boxes
 
+
 def calculate_position(bbox, transform_matrix, warped_size, pix_per_meter, x_scale, y_scale):
     
+    """
+    1234
+    """
     if len(bbox) == 0:
         print('Nothing')
     else:
@@ -89,16 +97,24 @@ def calculate_position(bbox, transform_matrix, warped_size, pix_per_meter, x_sca
         dst = cv.perspectiveTransform(pos, transform_matrix).reshape(-1, 1)
         return np.array((warped_size[1] - dst[1]) / pix_per_meter[1])
 
+
 def preprocess_frame(frame):
     
+    """
+    1234
+    """
     frame = frame[:, :, ::-1]
     image = frame
     image = Image.fromarray(image.astype('uint8'), 'RGB')
     
     return image
 
+
 def preprocess(bgr_img):
 
+    """
+    1234
+    """
     #get img shape
     orig_shape = bgr_img.shape[:2]
 
@@ -119,8 +135,12 @@ def preprocess(bgr_img):
 
     return orig_shape, rgb_img, framecv
 
-def postprocess(result_list, orig_shape, frame, pic):
 
+def postprocess(result_list, orig_shape, frame, pic):
+    
+    """
+    1234
+    """
     x_scale = orig_shape[1] / MODEL_HEIGHT
     y_scale = orig_shape[0] / MODEL_WIDTH
 
@@ -168,8 +188,11 @@ def postprocess(result_list, orig_shape, frame, pic):
     output_pic = os.path.join(OUTPUT_DIR, "out_" + pic)
     cv.imwrite(output_pic, frame)
 
-def main():
 
+def main():
+    """
+    1234
+    """
     #create output directory
     if not os.path.exists(OUTPUT_DIR):
         os.mkdir(OUTPUT_DIR)
@@ -204,8 +227,8 @@ def main():
 
 
 if __name__ == '__main__':
-    import gc
 
+    import gc
     path = './configure.json'
     file = open(path, "rb")
     fileJson = json.load(file)

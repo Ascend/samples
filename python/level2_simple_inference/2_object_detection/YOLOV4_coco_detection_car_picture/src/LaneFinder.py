@@ -9,14 +9,23 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 
 def get_center_shift(coeffs, img_size, pixels_per_meter):
+    """
+    1234
+    """
     return np.polyval(coeffs, img_size[1] / pixels_per_meter[1]) - (img_size[0] // 2) / pixels_per_meter[0]
 
 
 def get_curvature(coeffs, img_size, pixels_per_meter):
+    """
+    1234
+    """
     return ((1 + (2 * coeffs[0] * img_size[1] / pixels_per_meter[1] + coeffs[1]) ** 2) ** 1.5) / np.absolute(
         2 * coeffs[0])
 
 
+"""
+1234
+"""
 class LaneLineFinder(object):
     def __init__(self, img_size, pixels_per_meter, center_shift):
         self.found = False
@@ -146,7 +155,9 @@ class LaneLineFinder(object):
         cv2.polylines(self.other_line_mask, [points], 0, 1, thickness=int(5 * window_width))
 
 
+"""
 # class that finds the whole lane
+"""
 class LaneFinder(object):
     def __init__(self, img_size, warped_size, cam_matrix, dist_coeffs, transform_matrix, pixels_per_meter):
         self.found = False
