@@ -1,4 +1,4 @@
-[中文](README_200dk.md)|English  
+English|[中文](README_200DK_CN.md)
 # Basic Environment Configuration  
 This readme file describes how to configure the basic environment, including the sudo permission, apt source, Atlas 200 DK networking, and environment variables. If they have been configured, skip this workflow.  
 
