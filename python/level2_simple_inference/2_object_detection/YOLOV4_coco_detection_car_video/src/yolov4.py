@@ -1,3 +1,9 @@
+"""
+Copyright (R) @huawei.com, all rights reserved
+-*- coding:utf-8 -*-
+CREATED:  2020-6-04 20:12:13
+MODIFIED: 2020-6-28 14:04:45
+"""
 import sys
 import json
 import cv2 as cv
@@ -39,7 +45,7 @@ labels = ["person",
         "scissors", "teddy bear", "hair drier", "toothbrush"]
 
 
-def func_nms(boxes,nms_threshold):
+def func_nms(boxes, nms_threshold):
     """
     func_nms    
     """
