@@ -41,7 +41,6 @@ labels = ["person",
 
 
 def func_nms(boxes, nms_threshold):
-
     """
     1234
     """
@@ -81,8 +80,7 @@ def func_nms(boxes, nms_threshold):
     return final_boxes
 
 
-def calculate_position(bbox, transform_matrix, warped_size, pix_per_meter, x_scale, y_scale):
-    
+def calculate_position(bbox, transform_matrix, warped_size, pix_per_meter, x_scale, y_scale): 
     """
     1234
     """
@@ -99,7 +97,6 @@ def calculate_position(bbox, transform_matrix, warped_size, pix_per_meter, x_sca
 
 
 def preprocess_frame(frame):
-    
     """
     1234
     """
@@ -111,7 +108,6 @@ def preprocess_frame(frame):
 
 
 def preprocess(bgr_img):
-
     """
     1234
     """
@@ -136,8 +132,7 @@ def preprocess(bgr_img):
     return orig_shape, rgb_img, framecv
 
 
-def postprocess(result_list, orig_shape, frame, pic):
-    
+def postprocess(result_list, orig_shape, frame, pic):  
     """
     1234
     """
