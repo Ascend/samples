@@ -37,13 +37,13 @@ def sort(str_lst):
 def resize_ave(img, MULTIPLE):
     img = img.astype(NPTYPE_FLOAT32)
     img_patches = extract_image_patches(img, MULTIPLE)
-    img = np.mean(img_patches, axis=(2,3))
+    img = np.mean(img_patches, axis=(2, 3))
     return img
 
 
 def reconstruct_residual_from_patches(residual, multiple):
     residual = np.reshape(residual, [ATTENTION_SIZE, ATTENTION_SIZE, multiple, multiple, 3])
-    residual = np.transpose(residual, [0,2,1,3,4])
+    residual = np.transpose(residual, [0, 2, 1, 3, 4])
     return np.reshape(residual, [ATTENTION_SIZE * multiple, ATTENTION_SIZE * multiple, 3])
 
 # extract image patches
@@ -86,8 +86,8 @@ def read_imgs_masks(images, masks):
     
 
 def matmul_om_large(matmul_model,attention,residual):
-    attention_reshape = attention.reshape(1024,1024)
-    residual_reshape = residual.reshape(1024,96*96*3)
+    attention_reshape = attention.reshape(1024, 1024)
+    residual_reshape = residual.reshape(1024, 96 * 96 * 3)
     
     matmul_ret = matmul_model.execute([attention_reshape,residual_reshape])
     
@@ -97,6 +97,9 @@ def matmul_om_large(matmul_model,attention,residual):
 # residual aggregation module
 
 def residual_aggregate(model,residual, attention):
+    """
+    MULTIPLE * INPUT_SIZE//ATTENTION_SIZE = 6*512/32 = 96
+    """
     # MULTIPLE * INPUT_SIZE//ATTENTION_SIZE = 6*512/32 = 96
     residual = extract_image_patches(residual, MULTIPLE * INPUT_SIZE//ATTENTION_SIZE)
     residual = np.reshape(residual, [1, residual.shape[0] * residual.shape[1], -1])
@@ -106,7 +109,7 @@ def residual_aggregate(model,residual, attention):
     return residual
     
 
-def post_process(model,raw_img, large_img, large_mask, inpainted_512, img_512, mask_512, attention):
+def post_process(model, raw_img, large_img, large_mask, inpainted_512, img_512, mask_512, attention):
     # compute the raw residual map
     # s = time.time()
     h, w, c = raw_img.shape
@@ -132,14 +135,19 @@ def post_process(model,raw_img, large_img, large_mask, inpainted_512, img_512, m
     return res_raw.astype(np.uint8)
 
 
-def readimages(img_path, mask_path):
+def readimages(img_path, mask_path):    
+    """
+    readimages
+    """
     raw_img = cv2.imread(img_path) 
     raw_mask = cv2.imread(mask_path) 
     return raw_img, raw_mask
 
 
 
-def main(image_dir, masks_dir):
+def main(image_dir, masks_dir):    
+    
+    
     
     if not os.path.exists(OUTPUT_DIR):
         os.mkdir(OUTPUT_DIR)
