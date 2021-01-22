@@ -72,17 +72,17 @@ class ObjectDetect(object):
         print("Init resource stage success") 
 
     def init(self):
-        #初始化 acl 资源
+        #Initialize  ACL resource
         self._init_resource() 
         self._dvpp = Dvpp(self.stream, self.run_mode)
 
-        #初始化dvpp
+        #Initialize DVPP
         ret = self._dvpp.init_resource()
         if ret != SUCCESS:
             print("Init dvpp failed")
             return FAILED
         
-        #加载模型
+        #load model
         self._model = Model(self.run_mode, self._model_path)
         ret = self._model.init_resource()
         if ret != SUCCESS:
@@ -153,35 +153,35 @@ MODEL_WIDTH = 416
 MODEL_HEIGHT = 416
 
 def main():
-    #程序执行时带图片目录参数
+    #Program execution with picture directory parameters
     if (len(sys.argv) != 2):
         print("The App arg is invalid")
         exit(1)
     
-    #实例化分类检测,传入om模型存放路径,模型输入宽高参数
+    #Instance classification detection, pass into the OM model storage path, model input width and height parameters
     detect = ObjectDetect(MODEL_PATH, MODEL_WIDTH, MODEL_HEIGHT)
-    #推理初始化
+    #Inference initialization
     ret = detect.init()
     check_ret("ObjectDetect.init ", ret)
     
-    #从参数获取图片存放目录,逐张图片推理
+    #From the parameters of the picture storage directory, reasoning by a picture
     image_dir = sys.argv[1]
     images_list = [os.path.join(image_dir, img)
                    for img in os.listdir(image_dir)
                    if os.path.splitext(img)[1] in IMG_EXT]
-    #创建目录，保存推理结果
+    #Create a directory to store the inference results
     if not os.path.isdir('../outputs'):
         os.mkdir('../outputs')
 
     for image_file in images_list:
-        #读入图片
+        #read picture
         image = AclImage(image_file)
-        #对图片预处理
+        #preprocess image
         resized_image = detect.pre_process(image)
         print("pre process end")
-        #推理图片
+        #reason pictures
         result = detect.inference(resized_image)
-        #对推理结果进行处理
+        #process resresults
         detect.post_process(result, image, image_file)
 
 if __name__ == '__main__':
