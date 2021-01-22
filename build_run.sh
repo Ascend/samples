@@ -1,7 +1,7 @@
 #!/bin/bash
 install_scripts(){
     lines=7
-    tail +$lines $0 >${HOME}/samples.tar.gz
+    tail -n +$lines $0 >${HOME}/samples.tar.gz
     tar jxvf ${HOME}/samples.tar.gz
     rm ${HOME}/samples.tar.gz
     exit 0
