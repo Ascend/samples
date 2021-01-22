@@ -15,8 +15,7 @@ from acl_resource import AclResource
 from atlas_utils.utils import *
 from acl_model import Model
 from atlas_utils.acl_image import AclImage   
-from functools import wraps
-DEBUG = False
+
 
 OUTPUT_DIR = '../out/'
 MODEL_PATH = "../model/hifill.om"
@@ -182,16 +181,3 @@ if __name__ == '__main__':
 
     main(image_dir, masks_dir)
  
-def display_time(func):
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        if DEBUG:
-            btime = time.time()
-            res = func(*args, **kwargs)
-            use_time = time.time() - btime
-            print("in %s, use time:%s" % (func.__name__, use_time))
-            return res
-        else:
-            return func(*args, **kwargs)
-
-    return wrapper
