@@ -95,7 +95,8 @@ def align_up2(value):
     return align_up(value, 2)
 
 def yuv420sp_size(width, height):
-    return int(width * height * 3 /2)
+    return int(width * height * 3 / 2)   
+
 def display_time(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
