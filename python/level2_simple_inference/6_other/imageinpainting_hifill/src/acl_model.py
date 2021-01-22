@@ -9,7 +9,7 @@ import acl
 import struct
 import numpy as np
 import datetime
-from atlas_utils import constants
+from atlas_utils.constants import *
 from atlas_utils.utils import *
 
 
@@ -41,13 +41,13 @@ class Model(object):
         if self.model_id:
             #Uninstalls the model and releases resources
             ret = acl.mdl.unload(self.model_id)
-            if ret != constants.ACL_ERROR_NONE:
+            if ret != ACL_ERROR_NONE:
                 print("acl.mdl.unload error:", ret)
 
         if self.model_desc:
             #Destroys data of the aclmdlDesc type
             ret = acl.mdl.destroy_desc(self.model_desc)
-            if ret != constants.ACL_ERROR_NONE:
+            if ret != ACL_ERROR_NONE:
                 print("acl.mdl.destroy_desc error:", ret)
         self._is_released = True
         print("Model release source success")
@@ -59,7 +59,7 @@ class Model(object):
         print("Init model resource")
         #load model 
         self.model_id, ret = acl.mdl.load_from_file(self.model_path)
-        constants.check_ret("acl.mdl.load_from_file", ret)
+        check_ret("acl.mdl.load_from_file", ret)
         self.model_desc = acl.mdl.create_desc()
         ret = acl.mdl.get_desc(self.model_desc, self.model_id)
         check_ret("acl.mdl.get_desc", ret)
@@ -90,7 +90,7 @@ class Model(object):
             temp_buffer_size = acl.mdl.\
                 get_output_size_by_index(self.model_desc, i)
             temp_buffer, ret = acl.rt.malloc(temp_buffer_size,
-                                             constants.ACL_MEM_MALLOC_NORMAL_ONLY)
+                                             ACL_MEM_MALLOC_NORMAL_ONLY)
             check_ret("acl.rt.malloc", ret)
             
             dataset_buffer = acl.create_data_buffer(temp_buffer,
@@ -100,7 +100,7 @@ class Model(object):
             if ret:
                 acl.rt.free(temp_buffer)
                 acl.destroy_data_buffer(dataset)
-                constants.check_ret("acl.destroy_data_buffer", ret)
+                check_ret("acl.destroy_data_buffer", ret)
         self.output_dataset = dataset
         print("[Model] create model output dataset success")
 
@@ -112,7 +112,7 @@ class Model(object):
             self._input_buffer.append(item)
 
     def _gen_input_dataset(self, input_list):
-        ret = constants.SUCCESS
+        ret = SUCCESS
         
         if len(input_list) != self._input_num:
             print("Current input data num %d unequal to"
@@ -125,7 +125,7 @@ class Model(object):
             data, size = self._parse_input_data(item, i)            
             if (data is None) or (size == 0):
             
-                ret = constants.FAILED
+                ret = FAILED
                 print("The %d input is invalid"%(i))
                 break
             dataset_buffer = acl.create_data_buffer(data, size)
@@ -142,7 +142,7 @@ class Model(object):
 
         return ret
 
-    def _parse_input_data(self, constants.input, index):
+    def _parse_input_data(self, input, index):
         data = None
         size = 0
         if isinstance(input, np.ndarray):
@@ -228,7 +228,7 @@ class Model(object):
     '''
     def _get_datatype(self, datatype):
         outdatatype = np.float32
-        if datatype == constants.ACL_FLOAT:
+        if datatype == ACL_FLOAT:
             return np.float32
         elif datatype == ACL_INT32:
             return np.int32
