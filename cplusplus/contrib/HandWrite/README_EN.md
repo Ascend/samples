@@ -54,7 +54,7 @@ Before deploying this sample, ensure that:
 
 3. Convert the original model to a Da Vinci model.
     
-    **Note: Ensure that the environment variables have been configured in [Environment Preparation and Dependency Installation](.../../environment).**
+    **Note: Ensure that the environment variables have been configured in [Environment Preparation and Dependency Installation](../../environment).**
 
     1. Set the ***LD_LIBRARY_PATH*** environment variable.
 
