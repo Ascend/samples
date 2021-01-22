@@ -77,7 +77,7 @@
 
     **cd /home/ascend/samples/python/level2_simple_inference/2_object_detection/YOLOV3_mask_detection_video/data**
 
-    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/YOLOV3_mask_detection_video/black-white_video.mp4**
+    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/mask_detection_video/mask-true.mp4**
 
 
 ### 样例部署
@@ -136,14 +136,14 @@
     - 如果是开发环境与运行环境合一部署，执行以下命令，设置运行环境变量，并切换目录。   
       **export LD_LIBRARY_PATH=**   
       **source ~/.bashrc**     
-      **cd $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV3_mask_detection_video**
+      **cd $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV3_mask_detection_video/src**
 
     - 如果是开发环境与运行环境分离部署，执行以下命令切换目录。   
-      **cd $HOME/YOLOV3_mask_detection_video**
+      **cd $HOME/YOLOV3_mask_detection_video/src**
 
     切换目录后，执行以下命令运行样例。
 
-    **python3 main.py ./data/black-white_video.mp4**
+    **python3.6 main.py ../data/mask-true.mp4**
 
 ### 查看结果
 
