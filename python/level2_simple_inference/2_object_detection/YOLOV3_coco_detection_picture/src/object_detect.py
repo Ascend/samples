@@ -72,7 +72,10 @@ class ObjectDetect(object):
         print("Init resource stage success") 
 
     def init(self):
-        #Initialize  ACL resource
+        """
+        Initialize  ACL resource
+        """
+        
         self._init_resource() 
         self._dvpp = Dvpp(self.stream, self.run_mode)
 
@@ -133,9 +136,9 @@ class ObjectDetect(object):
         for n in range(int(box_num)):
             id = int(box_info[5 * int(box_num) + n])
             label = labels[id]
-            score = box_info[4*int(box_num)+n]
-            top_left_x = box_info[0*int(box_num)+n] * scalex
-            top_left_y = box_info[1*int(box_num)+n] * scaley
+            score = box_info[4 * int(box_num)+n]
+            top_left_x = box_info[0 * int(box_num)+n] * scalex
+            top_left_y = box_info[1 * int(box_num)+n] * scaley
             bottom_right_x = box_info[2*int(box_num)+n] * scalex
             bottom_right_y = box_info[3*int(box_num)+n] * scaley
             print("%s: class %d, box %d %d %d %d, score %f"%(
@@ -153,7 +156,10 @@ MODEL_WIDTH = 416
 MODEL_HEIGHT = 416
 
 def main():
-    #Program execution with picture directory parameters
+    """
+    Program execution with picture directory parameters
+    """
+    
     if (len(sys.argv) != 2):
         print("The App arg is invalid")
         exit(1)
