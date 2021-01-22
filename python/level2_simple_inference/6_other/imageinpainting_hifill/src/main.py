@@ -47,14 +47,14 @@ def reconstruct_residual_from_patches(residual, multiple):
     return np.reshape(residual, [ATTENTION_SIZE * multiple, ATTENTION_SIZE * multiple, 3])
 
 # extract image patches
-@display_time
+
 def extract_image_patches(img, multiple):
     h, w, c = img.shape
     img = np.reshape(img, [h//multiple, multiple, w//multiple, multiple, c])
     img = np.transpose(img, [0,2,1,3,4])
     return img
 
-@display_time
+
 def pre_process(raw_img, raw_mask):
     raw_mask = raw_mask.astype(NPTYPE_FLOAT32) / 255.
     raw_img = raw_img.astype(NPTYPE_FLOAT32)
@@ -84,7 +84,7 @@ def read_imgs_masks(images, masks):
     return paths_img, paths_mask
 
     
-@display_time
+
 def matmul_om_large(matmul_model,attention,residual):
     attention_reshape = attention.reshape(1024,1024)
     residual_reshape = residual.reshape(1024,96*96*3)
@@ -95,7 +95,7 @@ def matmul_om_large(matmul_model,attention,residual):
     return matmul_ret[0].reshape(ATTENTION_SIZE,ATTENTION_SIZE,3072*9)
 
 # residual aggregation module
-@display_time
+
 def residual_aggregate(model,residual, attention):
     # MULTIPLE * INPUT_SIZE//ATTENTION_SIZE = 6*512/32 = 96
     residual = extract_image_patches(residual, MULTIPLE * INPUT_SIZE//ATTENTION_SIZE)
@@ -105,7 +105,7 @@ def residual_aggregate(model,residual, attention):
     residual = reconstruct_residual_from_patches(residual, MULTIPLE * INPUT_SIZE//ATTENTION_SIZE)
     return residual
     
-@display_time
+
 def post_process(model,raw_img, large_img, large_mask, inpainted_512, img_512, mask_512, attention):
     # compute the raw residual map
     # s = time.time()
@@ -131,14 +131,14 @@ def post_process(model,raw_img, large_img, large_mask, inpainted_512, img_512, m
     res_raw = res_raw * mask + raw_img * (1. - mask)
     return res_raw.astype(np.uint8)
 
-@display_time
+
 def readimages(img_path, mask_path):
     raw_img = cv2.imread(img_path) 
     raw_mask = cv2.imread(mask_path) 
     return raw_img, raw_mask
 
 
-@display_time
+
 def main(image_dir, masks_dir):
     
     if not os.path.exists(OUTPUT_DIR):
