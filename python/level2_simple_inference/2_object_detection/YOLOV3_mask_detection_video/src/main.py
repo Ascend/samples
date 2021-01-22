@@ -28,7 +28,7 @@ def main():
     model = Model(MODEL_PATH)
 
     chan = presenteragent.presenter_channel.open_channel(MASK_DETEC_CONF)
-    if chan == None:
+    if chan is None:
         print("Open presenter channel failed")
         return
 
@@ -51,7 +51,7 @@ def main():
 
     while True:
         # Read a frame
-        ret,image = cap.read()
+        ret, image = cap.read()
         
         if ret != 0:
             print("read None image, break")
@@ -59,7 +59,7 @@ def main():
 
         #pre process
         model_input = detect.pre_process(image)
-        if model_input == None:
+        if model_input is None:
             print("Pre process image failed")
             break
         
@@ -71,7 +71,7 @@ def main():
         
         # post process
         jpeg_image, detection_list = detect.post_process(result, image)
-        if jpeg_image == None:
+        if jpeg_image is None:
             print("The jpeg image for present is None")
             break
 
