@@ -6,7 +6,7 @@ English|[中文](README_CN.md)
 
 **This document provides only guidance for running the sample in command line (CLI) mode. For details about how to run the sample in MindStudio, see [Running Video Samples in MindStudio](https://gitee.com/ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E8%A7%86%E9%A2%91%E6%A0%B7%E4%BE%8B?sort_id=3170138).**
 
-##Handwritten Chinese Character Recognition
+## Handwritten Chinese Character Recognition
 
 Function: This sample recognizes the Chinese characters captured by the camera and displays the recognition result on the Presenter Server WebUI.
 
