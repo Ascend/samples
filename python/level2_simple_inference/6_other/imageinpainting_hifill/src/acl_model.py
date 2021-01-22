@@ -41,13 +41,13 @@ class Model(object):
         if self.model_id:
             #Uninstalls the model and releases resources
             ret = acl.mdl.unload(self.model_id)
-            if ret != ACL_ERROR_NONE:
+            if ret != constants.ACL_ERROR_NONE:
                 print("acl.mdl.unload error:", ret)
 
         if self.model_desc:
             #Destroys data of the aclmdlDesc type
             ret = acl.mdl.destroy_desc(self.model_desc)
-            if ret != ACL_ERROR_NONE:
+            if ret != constants.ACL_ERROR_NONE:
                 print("acl.mdl.destroy_desc error:", ret)
         self._is_released = True
         print("Model release source success")
@@ -59,7 +59,7 @@ class Model(object):
         print("Init model resource")
         #load model 
         self.model_id, ret = acl.mdl.load_from_file(self.model_path)
-        check_ret("acl.mdl.load_from_file", ret)
+        constants.check_ret("acl.mdl.load_from_file", ret)
         self.model_desc = acl.mdl.create_desc()
         ret = acl.mdl.get_desc(self.model_desc, self.model_id)
         check_ret("acl.mdl.get_desc", ret)
@@ -90,7 +90,7 @@ class Model(object):
             temp_buffer_size = acl.mdl.\
                 get_output_size_by_index(self.model_desc, i)
             temp_buffer, ret = acl.rt.malloc(temp_buffer_size,
-                                             ACL_MEM_MALLOC_NORMAL_ONLY)
+                                             constants.ACL_MEM_MALLOC_NORMAL_ONLY)
             check_ret("acl.rt.malloc", ret)
             
             dataset_buffer = acl.create_data_buffer(temp_buffer,
@@ -100,7 +100,7 @@ class Model(object):
             if ret:
                 acl.rt.free(temp_buffer)
                 acl.destroy_data_buffer(dataset)
-                check_ret("acl.destroy_data_buffer", ret)
+                constants.check_ret("acl.destroy_data_buffer", ret)
         self.output_dataset = dataset
         print("[Model] create model output dataset success")
 
@@ -112,7 +112,7 @@ class Model(object):
             self._input_buffer.append(item)
 
     def _gen_input_dataset(self, input_list):
-        ret = SUCCESS
+        ret = constants.SUCCESS
         
         if len(input_list) != self._input_num:
             print("Current input data num %d unequal to"
@@ -125,7 +125,7 @@ class Model(object):
             data, size = self._parse_input_data(item, i)            
             if (data is None) or (size == 0):
             
-                ret = FAILED
+                ret = constants.FAILED
                 print("The %d input is invalid"%(i))
                 break
             dataset_buffer = acl.create_data_buffer(data, size)
@@ -142,7 +142,7 @@ class Model(object):
 
         return ret
 
-    def _parse_input_data(self, input, index):
+    def _parse_input_data(self, constants.input, index):
         data = None
         size = 0
         if isinstance(input, np.ndarray):
@@ -242,15 +242,15 @@ class Model(object):
     def _output_dataset_to_numpy(self):        
         dataset = []        
         num = acl.mdl.get_dataset_num_buffers(self.output_dataset)
-        #遍历每个输出
+        #loop through each output
         for i in range(num):
-            #从输出buffer中获取输出数据内存地址
+            
             buffer = acl.mdl.get_dataset_buffer(self.output_dataset, i)
             data = acl.get_data_buffer_addr(buffer)
             size = acl.get_data_buffer_size(buffer) 
             outdatatype = self._get_datatype(self._output_info[i]["type"])
 
-            #创建一个numpy数组用于拷贝输出内存数据
+            
             narray = np.zeros(self._output_info[i]["shape"],dtype=outdatatype)                        
             narray_ptr = acl.util.numpy_to_ptr(narray)  
             ret = acl.rt.memcpy(narray_ptr, narray.size * narray.itemsize, 
