@@ -159,7 +159,7 @@ def postprocess(result_list, orig_shape, frame, pic):
     output_pic = os.path.join(OUTPUT_DIR, "out_" + pic)
     cv.imwrite(output_pic,frame)
 
-def main(lf, perspective_transform, pixels_per_meter, WARPED_SIZE):
+def main():
     #create output directory
     if not os.path.exists(OUTPUT_DIR):
         os.mkdir(OUTPUT_DIR)
@@ -212,5 +212,5 @@ if __name__ == '__main__':
     lf = LaneFinder(settings.ORIGINAL_SIZE, WARPED_SIZE, cam_matrix, dist_coeffs,
                     perspective_transform, pixels_per_meter)
 
-    main(lf, perspective_transform, pixels_per_meter, WARPED_SIZE)
+    main()
     gc.collect()

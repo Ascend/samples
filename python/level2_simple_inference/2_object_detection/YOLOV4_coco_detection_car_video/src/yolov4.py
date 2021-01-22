@@ -153,7 +153,7 @@ def postprocess(result_list, frame, orig_shape):
     
     return frame
 
-def main(lf, perspective_transform, pixels_per_meter, WARPED_SIZE):
+def main():
 
     if (len(sys.argv) != 2):
         print("Please input video path")
@@ -222,5 +222,5 @@ if __name__ == '__main__':
 
     lf = LaneFinder(settings.ORIGINAL_SIZE, WARPED_SIZE, cam_matrix, dist_coeffs,
                     perspective_transform, pixels_per_meter)
-    main(lf, perspective_transform, pixels_per_meter, WARPED_SIZE)
+    main()
     gc.collect()
