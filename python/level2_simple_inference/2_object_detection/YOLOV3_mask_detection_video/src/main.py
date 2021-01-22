@@ -53,7 +53,6 @@ def main():
         # Read a frame
         ret,image = cap.read()
         
-        
         if ret != 0:
             print("read None image, break")
             break
