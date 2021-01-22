@@ -3,7 +3,8 @@ import math
 import pickle
 import random
 import settings
-import time, cv2
+import time
+import cv2
 import numpy as np
 from settings import *
 from PIL import Image, ImageDraw, ImageFont
@@ -17,7 +18,7 @@ def get_curvature(coeffs, img_size, pixels_per_meter):
         2 * coeffs[0])
 
 
-class LaneLineFinder:
+class LaneLineFinder(object):
     def __init__(self, img_size, pixels_per_meter, center_shift):
         self.found = False
         self.poly_coeffs = np.zeros(3, dtype=np.float32)
@@ -147,7 +148,7 @@ class LaneLineFinder:
 
 
 # class that finds the whole lane
-class LaneFinder:
+class LaneFinder(object):
     def __init__(self, img_size, warped_size, cam_matrix, dist_coeffs, transform_matrix, pixels_per_meter):
         self.found = False
         self.cam_matrix = cam_matrix

@@ -18,10 +18,10 @@ INPUT_DIR = '../data/'
 OUTPUT_DIR = '../out/'
 MODEL_PATH = '../model/yolov4_no_postprocess.om'
 CLASS_NUM = 80
-NMS_THRESHOLD_CONST =0.5
+NMS_THRESHOLD_CONST = 0.5
 CLASS_SCORE_CONST = 0.4
 MODEL_OUTPUT_BOXNUM = 10647
-TRAFFIC = [0,1,2,3,4,5,6,7,8]
+TRAFFIC = [0, 1, 2, 3, 4, 5, 6, 7, 8]
 labels = ["person",
         "bicycle", "car", "motorbike", "aeroplane",
         "bus", "train", "truck", "boat", "traffic light",
@@ -36,13 +36,15 @@ labels = ["person",
         "toilet", "TV monitor", "laptop", "mouse", "remote", "keyboard", "cell phone",
         "microwave", "oven", "toaster", "sink", "refrigerator", "book", "clock", "vase",
         "scissors", "teddy bear", "hair drier", "toothbrush"]
-def func_nms(boxes,nms_threshold):
+
+def func_nms(boxes, nms_threshold):
+
     b_x = boxes[:, 0]
     b_y = boxes[:, 1]
     b_w = boxes[:, 2]
     b_h = boxes[:, 3]
-    scores = boxes[:,5]
-    areas = (b_w+1)*(b_h+1)
+    scores = boxes[:, 5]
+    areas = (b_w + 1) * (b_h + 1)
 
     order = scores.argsort()[::-1] 
     keep = []  # keep box 
@@ -73,21 +75,24 @@ def func_nms(boxes,nms_threshold):
     return final_boxes
 
 def calculate_position(bbox, transform_matrix, warped_size, pix_per_meter, x_scale, y_scale):
+    
     if len(bbox) == 0:
         print('Nothing')
     else:
-        top_x= int((bbox[0]-bbox[2]/2)*x_scale)
-        top_y= int((bbox[1]-bbox[3]/2)*y_scale)
-        bottom_x= int((bbox[0]+bbox[2]/2)*x_scale)
-        bottom_y= int((bbox[1]+bbox[3]/2)*y_scale)
+        top_x= int((bbox[0] - bbox[2] / 2) * x_scale)
+        top_y= int((bbox[1] - bbox[3] / 2) * y_scale)
+        bottom_x= int((bbox[0] + bbox[2] / 2) * x_scale)
+        bottom_y= int((bbox[1] + bbox[3] / 2) * y_scale)
         pos = np.array((top_x / 2 + bottom_x / 2, bottom_y)).reshape(1, 1, -1)
         dst = cv.perspectiveTransform(pos, transform_matrix).reshape(-1, 1)
         return np.array((warped_size[1] - dst[1]) / pix_per_meter[1])
 
 def preprocess_frame(frame):
+    
     frame = frame[:, :, ::-1]
     image = frame
     image = Image.fromarray(image.astype('uint8'), 'RGB')
+    
     return image
 
 def preprocess(bgr_img):
@@ -108,27 +113,27 @@ def preprocess(bgr_img):
     fframe = np.array(frame)
     fframe = lf.process_image(fframe, False)
     frame = Image.fromarray(fframe)
-    framecv = cv.cvtColor(np.asarray(frame),cv2.COLOR_RGB2BGR)
+    framecv = cv.cvtColor(np.asarray(frame), cv2.COLOR_RGB2BGR)
 
     return orig_shape, rgb_img, framecv
 
 def postprocess(result_list, orig_shape, frame, pic):
 
-    x_scale = orig_shape[1]/MODEL_HEIGHT
-    y_scale = orig_shape[0]/MODEL_WIDTH
+    x_scale = orig_shape[1] / MODEL_HEIGHT
+    y_scale = orig_shape[0] / MODEL_WIDTH
 
-    result_class = result_list[0].reshape(MODEL_OUTPUT_BOXNUM,80).astype('float32')
-    result_box = result_list[1].reshape(MODEL_OUTPUT_BOXNUM,4).astype('float32')
-    boxes = np.zeros(shape=(MODEL_OUTPUT_BOXNUM,6),dtype = np.float32)
-    boxes[:,:4]= result_box
+    result_class = result_list[0].reshape(MODEL_OUTPUT_BOXNUM, 80).astype('float32')
+    result_box = result_list[1].reshape(MODEL_OUTPUT_BOXNUM, 4).astype('float32')
+    boxes = np.zeros(shape=(MODEL_OUTPUT_BOXNUM, 6), dtype = np.float32)
+    boxes[:, :4]= result_box
     list_score = result_class.max(axis = 1)
     list_class = result_class.argmax(axis=1)
-    list_score = list_score.reshape(MODEL_OUTPUT_BOXNUM,1)
-    list_class=list_class.reshape(MODEL_OUTPUT_BOXNUM,1)
-    boxes[:,4]= list_class[:,0]
-    boxes[:,5]= list_score[:,0]
+    list_score = list_score.reshape(MODEL_OUTPUT_BOXNUM, 1)
+    list_class=list_class.reshape(MODEL_OUTPUT_BOXNUM, 1)
+    boxes[:, 4]= list_class[:, 0]
+    boxes[:, 5]= list_score[:, 0]
     all_boxes = boxes[boxes[:, 5] >= CLASS_SCORE_CONST]
-    real_box = func_nms(np.array(all_boxes),NMS_THRESHOLD_CONST)
+    real_box = func_nms(np.array(all_boxes), NMS_THRESHOLD_CONST)
 
     l = len(real_box)
     distance = np.zeros(shape=(l, 1))
@@ -146,20 +151,23 @@ def postprocess(result_list, orig_shape, frame, pic):
 
     for i, detect_result in enumerate(real_box):
         if int(detect_result[4]) in TRAFFIC:
-            top_x= int((detect_result[0]-detect_result[2]/2)*x_scale)
-            top_y= int((detect_result[1]-detect_result[3]/2)*y_scale)
-            bottom_x= int((detect_result[0]+detect_result[2]/2)*x_scale)
-            bottom_y= int((detect_result[1]+detect_result[3]/2)*y_scale)
-            cv.rectangle(frame, (top_x,top_y), (bottom_x,bottom_y), (0,255,0), 2)
-            cv.putText(frame, labels[int(detect_result[4])], (top_x+5,top_y+10), cv.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
+            top_x= int((detect_result[0] - detect_result[2] / 2) * x_scale)
+            top_y= int((detect_result[1] - detect_result[3] / 2) * y_scale)
+            bottom_x= int((detect_result[0] + detect_result[2] / 2) * x_scale)
+            bottom_y= int((detect_result[1] + detect_result[3] / 2) * y_scale)
+            cv.rectangle(frame, (top_x, top_y), (bottom_x, bottom_y), (0, 255, 0), 2)
+            cv.putText(frame, labels[int(detect_result[4])], (top_x + 5, top_y + 10), 
+                    cv.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
             d = distance[i]
             label_dis = '{} {:.2f}m'.format('dis:', d[0])
-            cv.putText(frame, label_dis, (top_x+10,bottom_y+15), cv.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
+            cv.putText(frame, label_dis, (top_x + 10, bottom_y + 15), 
+                    cv.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
 
     output_pic = os.path.join(OUTPUT_DIR, "out_" + pic)
-    cv.imwrite(output_pic,frame)
+    cv.imwrite(output_pic, frame)
 
 def main():
+
     #create output directory
     if not os.path.exists(OUTPUT_DIR):
         os.mkdir(OUTPUT_DIR)
@@ -174,7 +182,8 @@ def main():
 
     #infer picture
     for pic in src_dir:
-        if not pic.lower().endswith(('.bmp', '.dib', '.png', '.jpg', '.jpeg', '.pbm', '.pgm', '.ppm', '.tif', '.tiff')):
+        if not pic.lower().endswith(('.bmp', '.dib', '.png', '.jpg', 
+                                    '.jpeg', '.pbm', '.pgm', '.ppm', '.tif', '.tiff')):
             print('it is not a picture, %s, ignore this file and continue,' % pic)
             continue
         #read picture
@@ -185,7 +194,7 @@ def main():
         orig_shape, rgb_img, framecv = preprocess(bgr_img)
 
         #inference
-        result_list = model.execute([rgb_img,])    
+        result_list = model.execute([rgb_img, ])    
 
         #postprocess
         postprocess(result_list, orig_shape, framecv, pic)
