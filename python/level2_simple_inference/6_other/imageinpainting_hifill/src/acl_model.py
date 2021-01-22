@@ -5,13 +5,11 @@ CREATED:  2020-6-04 20:12:13
 MODIFIED: 2020-6-28 14:04:45
 """
 import sys
-sys.path.append("../../../../common")
-sys.path.append("../")
 import acl
 import struct
 import numpy as np
 import datetime
-from atlas_utils.constants import *
+from atlas_utils import constants
 from atlas_utils.utils import *
 
 
@@ -230,7 +228,7 @@ class Model(object):
     '''
     def _get_datatype(self, datatype):
         outdatatype = np.float32
-        if datatype == ACL_FLOAT:
+        if datatype == constants.ACL_FLOAT:
             return np.float32
         elif datatype == ACL_INT32:
             return np.int32
