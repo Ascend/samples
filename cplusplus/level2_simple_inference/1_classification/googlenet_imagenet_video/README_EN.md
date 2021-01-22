@@ -89,12 +89,12 @@ In the development environment, run the following commands as a non-root user to
 
 1. Modify the Presenter-related configuration file.
    
-   Change **presenter\_server\_ip** and **presenter\_view\_ip** in the **script/param.conf** file in the sample directory to the IP addresses that can be pinged in the development environment. The following two cases are used as examples:
+   Change **presenter\_server\_ip** and **presenter\_view\_ip** in the **scripts/param.conf** file in the sample directory to the IP addresses that can be pinged in the development environment. The following two cases are used as examples:
    
    - Atlas 200 DK
      
      1. In the development environment, run the **ifconfig** command to view available IP addresses.
-     2. In the development environment, change **presenter\_server\_ip** and **presenter\_view\_ip** in the **script/param.conf** file to the new IP addresses.  
+     2. In the development environment, change **presenter\_server\_ip** and **presenter\_view\_ip** in the **scripts/param.conf** file to the new IP addresses.  
 ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **Note:**
      
      > - 1\. If the development environment and operating environment are deployed on separate servers, the configured virtual NIC IP address is used, for example, **192.168.1.223**.
@@ -103,7 +103,7 @@ In the development environment, run the following commands as a non-root user to
    - Atlas 300 AI accelerator card (AI1s cloud inference environment)
      
      1. On the ECS console, check the available intranet IP address in the cloud environment of AI1s, for example, **192.168.0.198**.
-     2. In the development environment, change **presenter\_server\_ip** and **presenter\_view\_ip** in the **script/param.conf** file to the new IP addresses.  
+     2. In the development environment, change **presenter\_server\_ip** and **presenter\_view\_ip** in the **scripts/param.conf** file to the new IP addresses.  
 ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **Note:**
      
      > - You can also run the **ifconfig** command in the AI1s cloud environment to view the internal IP address.
@@ -172,7 +172,7 @@ In the development environment, run the following commands as a non-root user to
      
      1. Run the following commands in the development environment to start the Presenter Server:   
 **cd $HOME/samples/cplusplus/level2\_simple\_inference/1\_classification/googlenet\_imagenet\_video**  
-**bash script/run\_presenter\_server.sh**
+**bash scripts/run\_presenter\_server.sh**
      2. Run the following command to log in to the operating environment:   
 **If the development environment and operating environment are deployed on the same server, skip this step.**   
 **ssh HwHiAiUser@*xxx.xxx.xxx.xxx***
@@ -184,7 +184,7 @@ In the development environment, run the following commands as a non-root user to
 **ssh HwHiAiUser@*xxx.xxx.xxx.xxx***
      2. Start the Presenter Server in the operating environment.   
 Go to the directory where the project is located (for example, **$HOME/googlenet\_imagenet\_video**) and run the following command:  
-**bash script/run\_presenter\_server.sh**
+**bash scripts/run\_presenter\_server.sh**
 
 3. <a name="step_2"></a>Run the executable file.
    
