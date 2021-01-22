@@ -54,7 +54,7 @@ Before deploying this sample, ensure that:
 
 3. Convert the original model to a Da Vinci model.
     
-    **Note: Ensure that the environment variables have been configured in [Environment Preparation and Dependency Installation](.../../environment).**
+    **Note: Ensure that the environment variables have been configured in [Environment Preparation and Dependency Installation](../../environment).**
 
     1. Set the ***LD_LIBRARY_PATH*** environment variable.
 
@@ -80,7 +80,7 @@ Before deploying this sample, ensure that:
 
     Set **presenter_server_ip** and **presenter_view_ip** in **scripts/param.conf** in the sample directory to the IP addresses that can be pinged in the development environment.   
         1. In the development environment, run the **ifconfig** command to view available IP address.   
-        2. In the development environment, change **presenter_server_ip** and **presenter_view_ip** in **script/param.conf** to the available IP address.   
+        2. In the development environment, change **presenter_server_ip** and **presenter_view_ip** in **scripts/param.conf** to the available IP address.   
         ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **NOTE**  
         > - 1. If the development environment and operating environment are set up on separate servers, the configured virtual NIC IP address is used, for example, **192.168.1.223**.   
         > - 2. If the development environment and operating environment are set up on the same server, the fixed IP address of the Atlas 200 DK is used, for example, **192.168.1.2**.
@@ -128,7 +128,7 @@ Before deploying this sample, ensure that:
 2. Start the Presenter Server and log in to the operating environment.    
         1. Run the following commands in the development environment to start Presenter Server:   
             **cd $HOME/samples/cplusplus/contrib/HandWrite**   
-            **bash script/run_presenter_server.sh**   
+            **bash scripts/run_presenter_server.sh**   
         2. Run the following command to log in to the operating environment:   
             **If the development environment and operating environment are set up on the same server, skip this step.**   
             **ssh HwHiAiUser@xxx.xxx.xxx.xxx** 

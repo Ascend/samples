@@ -19,7 +19,7 @@
 
 部署此Sample前，需要准备好以下环境：
 
-- 请确认已按照[环境准备和依赖安装](../../../environment)准备好环境。
+- 请确认已按照[环境准备和依赖安装](../../environment)准备好环境。
 
 - 已完成对应产品的开发环境和运行环境安装。
 
@@ -54,7 +54,7 @@
 
 3. 将原始模型转换为Davinci模型。
     
-    **注：请确认环境变量已经在[环境准备和依赖安装](../../../environment)中配置完成**
+    **注：请确认环境变量已经在[环境准备和依赖安装](../../environment)中配置完成**
 
     1. 设置LD_LIBRARY_PATH环境变量。
 
@@ -128,7 +128,7 @@
 2. 启动presenterserver并登录运行环境。    
         1. 开发环境中执行以下命令启动presentserver。   
             **cd $HOME/samples/cplusplus/contrib/HandWrite**   
-            **bash script/run_presenter_server.sh**   
+            **bash scripts/run_presenter_server.sh**   
         2. 执行以下命令登录运行环境。   
             **开发环境与运行环境合一部署，请跳过此步骤！**   
             **ssh HwHiAiUser@xxx.xxx.xxx.xxx** 
