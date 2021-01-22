@@ -1,3 +1,9 @@
+"""
+Copyright (R) @huawei.com, all rights reserved
+-*- coding:utf-8 -*-
+CREATED:  2020-6-04 20:12:13
+MODIFIED: 2020-6-28 14:04:45
+"""
 import os
 import math
 import pickle
@@ -24,6 +30,9 @@ def get_curvature(coeffs, img_size, pixels_per_meter):
 
 
 class LaneLineFinder(object):
+"""
+LaneLineFinder
+"""
 
     def __init__(self, img_size, pixels_per_meter, center_shift):
         """
@@ -177,10 +186,10 @@ class LaneLineFinder(object):
         cv2.polylines(self.other_line_mask, [points], 0, 1, thickness=int(5 * window_width))
 
 
+class LaneFinder(object):
 """
 class that finds the whole lane
 """
-class LaneFinder(object):
 
     def __init__(self, img_size, warped_size, cam_matrix, dist_coeffs, transform_matrix, pixels_per_meter):
         """
