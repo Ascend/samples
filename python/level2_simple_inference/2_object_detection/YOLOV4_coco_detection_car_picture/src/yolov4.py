@@ -4,13 +4,15 @@ import cv2 as cv
 import numpy as np
 import os
 import time
+import pickle
+from settings import *
+from LaneFinder import *
+sys.path.append("../../../../common/atlas_utils")
+sys.path.append("../../../../common")
+sys.path.append("../")
 from constants import *
 from acl_model import Model
 from acl_resource import AclResource
-import pickle
-
-from settings import *
-from LaneFinder import *
 
 MODEL_WIDTH = 416
 MODEL_HEIGHT = 416
@@ -177,7 +179,7 @@ def main():
     acl_resource.init()
 
     #load model
-    model = Model(acl_resource, MODEL_PATH)
+    model = Model(MODEL_PATH)
     src_dir = os.listdir(INPUT_DIR)
 
     #infer picture

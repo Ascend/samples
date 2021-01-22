@@ -6,7 +6,6 @@ import settings
 import time
 import cv2
 import numpy as np
-from settings import *
 from PIL import Image, ImageDraw, ImageFont
 
 def get_center_shift(coeffs, img_size, pixels_per_meter):
