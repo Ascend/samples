@@ -10,24 +10,25 @@ from PIL import Image, ImageDraw, ImageFont
 
 def get_center_shift(coeffs, img_size, pixels_per_meter):
     """
-    1234
+    get center_shift
     """
     return np.polyval(coeffs, img_size[1] / pixels_per_meter[1]) - (img_size[0] // 2) / pixels_per_meter[0]
 
 
 def get_curvature(coeffs, img_size, pixels_per_meter):
     """
-    1234
+    get curvature
     """
     return ((1 + (2 * coeffs[0] * img_size[1] / pixels_per_meter[1] + coeffs[1]) ** 2) ** 1.5) / np.absolute(
         2 * coeffs[0])
 
 
-"""
-1234
-"""
 class LaneLineFinder(object):
+
     def __init__(self, img_size, pixels_per_meter, center_shift):
+        """
+        init
+        """
         self.found = False
         self.poly_coeffs = np.zeros(3, dtype=np.float32)
         self.coeff_history = np.zeros((3, 7), dtype=np.float32)
@@ -43,12 +44,18 @@ class LaneLineFinder(object):
         self.stddev = 0
 
     def reset_lane_line(self):
+        """
+        reset_lane_line
+        """
         self.found = False
         self.poly_coeffs = np.zeros(3, dtype=np.float32)
         self.line_mask[:] = 1
         self.first = True
 
     def one_lost(self):
+        """
+        one_lost
+        """
         self.still_to_find = 5
         if self.found:
             self.num_lost += 1
@@ -56,6 +63,9 @@ class LaneLineFinder(object):
                 self.reset_lane_line()
 
     def one_found(self):
+        """
+        one_found
+        """
         self.first = False
         self.num_lost = 0
         if not self.found:
@@ -64,6 +74,9 @@ class LaneLineFinder(object):
                 self.found = True
 
     def fit_lane_line(self, mask):
+        """
+        fit_lane_line
+        """
         y_coord, x_coord = np.where(mask)
         y_coord = y_coord.astype(np.float32) / self.pixels_per_meter[1]
         x_coord = x_coord.astype(np.float32) / self.pixels_per_meter[0]
@@ -95,17 +108,26 @@ class LaneLineFinder(object):
         self.poly_coeffs = np.mean(self.coeff_history, axis=1)
 
     def get_line_points(self):
+        """
+        get_line_points
+        """
         y = np.array(range(0, self.img_size[1] + 1, 10), dtype=np.float32) / self.pixels_per_meter[1]
         x = np.polyval(self.poly_coeffs, y) * self.pixels_per_meter[0]
         y *= self.pixels_per_meter[1]
         return np.array([x, y], dtype=np.int32).T
 
     def get_other_line_points(self):
+        """
+        get_other_line_points
+        """
         pts = self.get_line_points()
         pts[:, 0] = pts[:, 0] - 2 * self.shift * self.pixels_per_meter[0]
         return pts
 
     def find_lane_line(self, mask, reset=False):
+        """
+        find_lane_line
+        """
         n_segments = 16
         window_width = 30
         step = self.img_size[1] // n_segments
@@ -156,10 +178,14 @@ class LaneLineFinder(object):
 
 
 """
-# class that finds the whole lane
+class that finds the whole lane
 """
 class LaneFinder(object):
+
     def __init__(self, img_size, warped_size, cam_matrix, dist_coeffs, transform_matrix, pixels_per_meter):
+        """
+        __init__
+        """
         self.found = False
         self.cam_matrix = cam_matrix
         self.dist_coeffs = dist_coeffs
@@ -175,16 +201,28 @@ class LaneFinder(object):
         self.right_line = LaneLineFinder(warped_size, pixels_per_meter, 1.8288)
 
     def undistort(self, img):
+        """
+        undistort
+        """
         return cv2.undistort(img, self.cam_matrix, self.dist_coeffs)
 
     def warp(self, img):
+        """
+        warp
+        """
         return cv2.warpPerspective(img, self.M, self.warped_size, flags=cv2.WARP_FILL_OUTLIERS + cv2.INTER_CUBIC)
 
     def unwarp(self, img):
+        """
+        unwarp
+        """
         return cv2.warpPerspective(img, self.M, self.img_size, flags=cv2.WARP_FILL_OUTLIERS +
                                                                      cv2.INTER_CUBIC + cv2.WARP_INVERSE_MAP)
 
     def equalize_lines(self, alpha=0.9):
+        """
+        equalize_lines
+        """
         mean = 0.5 * (self.left_line.coeff_history[:, 0] + self.right_line.coeff_history[:, 0])
         self.left_line.coeff_history[:, 0] = alpha * self.left_line.coeff_history[:, 0] + \
                                              (1 - alpha) * (mean - np.array([0, 0, 1.8288], dtype=np.uint8))
@@ -192,6 +230,9 @@ class LaneFinder(object):
                                               (1 - alpha) * (mean + np.array([0, 0, 1.8288], dtype=np.uint8))
 
     def find_lane(self, img, distorted=True, reset=False):
+        """
+        find_lane
+        """
         # undistort, warp, change space, filter
         if distorted:
             img = self.undistort(img)
@@ -266,6 +307,9 @@ class LaneFinder(object):
             self.equalize_lines(0.875)
 
     def draw_lane_weighted(self, img, thickness=5, alpha=0.8, beta=1, gamma=0):
+        """
+        draw_lane_weighted
+        """
         left_line = self.left_line.get_line_points()
         right_line = self.right_line.get_line_points()
         both_lines = np.concatenate((left_line, np.flipud(right_line)), axis=0)
@@ -296,6 +340,9 @@ class LaneFinder(object):
         return cv2.addWeighted(img, alpha, lanes_unwarped, beta, gamma)
 
     def process_image(self, img, reset=False):
+        """
+        process_image
+        """
         self.find_lane(img, distorted=True, reset=reset)
         lane_img = self.draw_lane_weighted(img)
         return lane_img
