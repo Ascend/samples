@@ -42,7 +42,7 @@ labels = ["person",
 
 def func_nms(boxes, nms_threshold):
     """
-    1234
+    func_nms
     """
     b_x = boxes[:, 0]
     b_y = boxes[:, 1]
@@ -82,7 +82,7 @@ def func_nms(boxes, nms_threshold):
 
 def calculate_position(bbox, transform_matrix, warped_size, pix_per_meter, x_scale, y_scale): 
     """
-    1234
+    calculate_position
     """
     if len(bbox) == 0:
         print('Nothing')
@@ -98,7 +98,7 @@ def calculate_position(bbox, transform_matrix, warped_size, pix_per_meter, x_sca
 
 def preprocess_frame(frame):
     """
-    1234
+    preprocess_frame
     """
     frame = frame[:, :, ::-1]
     image = frame
@@ -109,7 +109,7 @@ def preprocess_frame(frame):
 
 def preprocess(bgr_img):
     """
-    1234
+    preprocess
     """
     #get img shape
     orig_shape = bgr_img.shape[:2]
@@ -134,7 +134,7 @@ def preprocess(bgr_img):
 
 def postprocess(result_list, orig_shape, frame, pic):  
     """
-    1234
+    postprocess
     """
     x_scale = orig_shape[1] / MODEL_HEIGHT
     y_scale = orig_shape[0] / MODEL_WIDTH
@@ -186,7 +186,7 @@ def postprocess(result_list, orig_shape, frame, pic):
 
 def main():
     """
-    1234
+    main
     """
     #create output directory
     if not os.path.exists(OUTPUT_DIR):
