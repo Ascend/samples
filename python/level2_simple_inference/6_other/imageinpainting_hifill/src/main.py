@@ -33,14 +33,14 @@ NPTYPE_FLOAT32 = np.float32
 def sort(str_lst):
     return [s for s in sorted(str_lst)]
 
-@display_time
+
 def resize_ave(img, MULTIPLE):
     img = img.astype(NPTYPE_FLOAT32)
     img_patches = extract_image_patches(img, MULTIPLE)
     img = np.mean(img_patches, axis=(2,3))
     return img
 
-@display_time
+
 def reconstruct_residual_from_patches(residual, multiple):
     residual = np.reshape(residual, [ATTENTION_SIZE, ATTENTION_SIZE, multiple, multiple, 3])
     residual = np.transpose(residual, [0,2,1,3,4])
