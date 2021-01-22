@@ -23,17 +23,14 @@ CAMERA_FRAME_HEIGHT = 720
 def main():
     acl_resource = AclResource()
     acl_resource.init()
-    #创建一个检测网络实例,当前使用vgg_ssd网络.当更换检测网络时,在此实例化新的网络
+
     detect = VggSsd(acl_resource, MODEL_WIDTH, MODEL_HEIGHT)
-    #加载离线模型
     model = Model(MODEL_PATH)
-    #根据配置连接presenter server,连接失败则结束应用的执行
-    
+
     chan = presenteragent.presenter_channel.open_channel(MASK_DETEC_CONF)
     if chan == None:
         print("Open presenter channel failed")
         return
-
 
     lenofUrl = len(sys.argv)
 
@@ -51,11 +48,9 @@ def main():
         print("[ERROR] should input correct URL")
         exit()
     cap = video.AclVideo(URL)
-   
-
 
     while True:
-        #从摄像头读入一帧图片
+        # Read a frame
         ret,image = cap.read()
         
         
@@ -63,29 +58,26 @@ def main():
             print("read None image, break")
             break
 
-        #检测网络将图片处理为模型输入数据
+        #pre process
         model_input = detect.pre_process(image)
         if model_input == None:
             print("Pre process image failed")
             break
         
-        #将数据送入离线模型推理
+        # inference
         result = model.execute(model_input)
         if result is None:
             print("execute mode failed")
             break
         
-        #检测网络解析推理输出
+        # post process
         jpeg_image, detection_list = detect.post_process(result, image)
         if jpeg_image == None:
             print("The jpeg image for present is None")
             break
 
         chan.send_detection_data(CAMERA_FRAME_WIDTH, CAMERA_FRAME_HEIGHT,
-                                 jpeg_image, detection_list)
-    
-        
+                                 jpeg_image, detection_list)         
 
 if __name__ == '__main__':
     main()
-
