@@ -131,7 +131,7 @@ class ObjectDetect(object):
         print("images:{}".format(image_file))
         print("======== inference results: =============")
         for n in range(int(box_num)):
-            id = int(box_info[5*int(box_num)+n])
+            id = int(box_info[5 * int(box_num) + n])
             label = labels[id]
             score = box_info[4*int(box_num)+n]
             top_left_x = box_info[0*int(box_num)+n] * scalex
