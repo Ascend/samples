@@ -49,7 +49,7 @@
 
 2. 获取此应用中所需要的原始网络模型。(20.0版本)
 
-    参考下表获取此应用中所用到的模型，并将其存放到开发环境普通用户下的工程目录： **cd $HOME/samples/python/contrib/cartoonGAN_picture//model** 。   
+    参考下表获取此应用中所用到的模型，并将其存放到开发环境普通用户下的工程目录： **cd $HOME/samples/python/contrib/cartoonGAN_picture/model** 。   
 
     
      **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/cartoon/cartoonization.pb**         
