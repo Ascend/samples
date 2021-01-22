@@ -1,4 +1,4 @@
-[中文](README_300.md)|English
+English|[中文](README_300_CN.md)
 
 # Installing FFmpeg and OpenCV
 
