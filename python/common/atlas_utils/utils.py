@@ -2,6 +2,7 @@ import acl
 from atlas_utils.constants import *
 from functools import wraps
 DEBUG = False
+from atlas_utils.acl_logger import log_error, log_info
 def check_ret(message, ret_int):
     if ret_int != 0:
         raise Exception("{} failed ret_int={}"
