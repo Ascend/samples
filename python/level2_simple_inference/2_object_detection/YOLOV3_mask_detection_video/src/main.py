@@ -2,6 +2,7 @@ import datetime
 import cv2 as cv
 import sys
 sys.path.append("../../../../common")
+sys.path.append("../")
 import re
 import atlas_utils.video as video
 
