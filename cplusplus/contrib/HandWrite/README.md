@@ -1,3 +1,5 @@
+中文|[English](README_EN.md)
+
 **本样例为大家学习昇腾软件栈提供参考，非商业目的！**
 
 **本样例适配20.0及以上版本，支持产品为Atlas200DK**
@@ -5,8 +7,6 @@
 **本README只提供命令行方式运行样例的指导，如需在Mindstudio下运行样例，请参考[Mindstudio运行视频样例wiki](https://gitee.com/ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E8%A7%86%E9%A2%91%E6%A0%B7%E4%BE%8B?sort_id=3170138)。**
 
 ## 手写汉字识别样例
-
-**注：案例详细介绍请参见[手写汉字识别](https://gitee.com/ascend/samples/wikis/%E8%A7%86%E9%A2%91%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B?sort_id=3170496)。**
 
 功能：检测摄像头中的文字，并在presenter界面中给出检测结果。
 
