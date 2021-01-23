@@ -161,7 +161,7 @@ function main() {
     export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/nnrt/latest/acllib/lib64:$LD_LIBRARY_PATH
 
     # Run the program
-    ./execute_add_op
+    ./execute_lstm_op
     if [ $? -ne 0 ];then
         echo "ERROR: run failed. please check your project"
         return ${inferenceError}
