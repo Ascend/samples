@@ -7,17 +7,19 @@ import sys
 import math
 import numpy as np
 
-def data_contrast(file1, file2, file3, ):
+def data_contrast(file1, file2, file3, file4, file5, file6, file7):
     """
     Verify that the data are the same
     """
     _data1 = np.fromfile(file1, dtype=np.int32)
     _data2 = np.fromfile(file2, dtype=np.int32)
     _data3 = np.fromfile(file3, dtype=np.int32)
-    _data4 = np.fromfile(file3, dtype=np.int32)
-    _data5 = np.fromfile(file3, dtype=np.int32)
+    _data4 = np.fromfile(file4, dtype=np.int32)
+    _data5 = np.fromfile(file5, dtype=np.int32)
+    _data6 = np.fromfile(file6, dtype=np.int32)
+    _data7 = np.fromfile(file7, dtype=np.int32)
 
-    return _data1, _data2, _data3
+    return _data1, _data2, _data3, _data4, _data5, _data6, _data7
 
 if __name__ == '__main__':
     input1 = sys.argv[1]
