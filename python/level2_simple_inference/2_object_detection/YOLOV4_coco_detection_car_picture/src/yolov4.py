@@ -230,9 +230,9 @@ def main():
 if __name__ == '__main__':
 
     import gc
-    config_path = './configure.json'
-    file = open(config_path, "rb")
-    fileJson = json.load(file)
+    path = './configure.json'
+    config_file = open(path, "rb")
+    fileJson = json.load(config_file)
     cam_matrix = fileJson[0]["cam_matrix"]
     dist_coeffs = fileJson[0]["dist_coeffs"]
     perspective_transform = fileJson[0]["perspective_transform"]
