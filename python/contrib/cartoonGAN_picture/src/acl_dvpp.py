@@ -39,7 +39,8 @@ class Dvpp():
         :return: AclImage
         '''
         print('[Dvpp] jpeg decode stage:')
-        print("[Dvpp] jpeg width %d, height %d, size %d"%(image.width, image.height, image.size), " data ", image.data())
+        print("[Dvpp] jpeg width %d, height %d, size %d" % (image.width, image.height, image.size), \
+                 " data ", image.data())
         output_desc, out_buffer = self._gen_jpegd_out_pic_desc(image)        
         image_dvpp = image.copy_to_dvpp(self._run_mode)
         ret = acl.media.dvpp_jpeg_decode_async(self._dvpp_channel_desc,
