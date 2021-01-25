@@ -21,8 +21,8 @@ def copy_data_device_to_original_host(device_data, data_size):
     if not output_tensor.flags['C_CONTIGUOUS']:
         output_tensor = np.ascontiguousarray(output_tensor)
     tensor_ptr = acl.util.numpy_to_ptr(output_tensor)
-    print ("tensor_ptr = ",tensor_ptr)
-    print ("output_tensor.ctypes.data = ",output_tensor.ctypes.data)
+    print ("tensor_ptr = ", tensor_ptr)
+    print ("output_tensor.ctypes.data = ", output_tensor.ctypes.data)
 
     ret = acl.rt.memcpy(tensor_ptr, data_size, device_data, data_size, ACL_MEMCPY_DEVICE_TO_DEVICE)
     check_ret("acl.rt.memcpy", ret)
