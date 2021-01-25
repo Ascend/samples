@@ -30,9 +30,9 @@ def get_curvature(coeffs, img_size, pixels_per_meter):
 
 
 class LaneLineFinder(object):
-"""
-LaneLineFinder
-"""
+    """
+    LaneLineFinder
+    """
 
     def __init__(self, img_size, pixels_per_meter, center_shift):
         """
@@ -187,9 +187,9 @@ LaneLineFinder
 
 
 class LaneFinder(object):
-"""
-class that finds the whole lane
-"""
+    """
+    class that finds the whole lane
+    """
 
     def __init__(self, img_size, warped_size, cam_matrix, dist_coeffs, transform_matrix, pixels_per_meter):
         """
