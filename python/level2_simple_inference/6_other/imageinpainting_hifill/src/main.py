@@ -160,7 +160,7 @@ def readimages(img_path, mask_path):
     return raw_img, raw_mask
 
 
-def main(a, b):    
+def main(image_dir, masks_dir):    
     """
     output
     """
