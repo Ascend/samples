@@ -24,9 +24,6 @@ labels = ["person",
         "microwave", "oven", "toaster", "sink", "refrigerator", "book", "clock", "vase",
         "scissors", "teddy bear", "hair drier", "toothbrush"]
 
-class BBox(object):
-    def __init__(self, ltx=0, lty=0, rbx=0, rby=0, text=None):
-        self.ltx
 
 class ObjectDetect(object):
     def __init__(self, model_path, model_width, model_height):
