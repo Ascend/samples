@@ -34,7 +34,7 @@ def sort(str_lst):
     return [s for s in sorted(str_lst)]
 
 
-def resize_ave(img, multiple):
+def resize_ave(img):
     """
     resize image
     """
@@ -160,7 +160,7 @@ def readimages(img_path, mask_path):
     return raw_img, raw_mask
 
 
-def main(image_dir, masks_dir):    
+def main(image_dirs, masks_dirs):    
     """
     output
     """
