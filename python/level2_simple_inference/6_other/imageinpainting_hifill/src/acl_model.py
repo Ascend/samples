@@ -192,8 +192,8 @@ class Model(object):
                 return None
             data = buffer_item['addr']
         else:
-            print("The model %dth input size %d is change,"
-                  " before is % d"%(index, size, buffer_item['size']))
+            print("The model % dth input size % d is change,"
+                  " before is % d" % (index, size, buffer_item['size']))
             return None
 
         return data
