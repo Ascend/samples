@@ -171,8 +171,8 @@ class Model(object):
         if buffer_item['addr'] is None:
             data = acl_model.copy_data_device_to_device(input_ptr, size)
             if data is None:
-                print("Malloc memory and copy model %dth "
-                      "input to device failed"%(index))
+                print("Malloc memory and copy model % dth "
+                      "input to device failed" % (index))
                 return None
             buffer_item['addr'] = data
             buffer_item['size'] = size
