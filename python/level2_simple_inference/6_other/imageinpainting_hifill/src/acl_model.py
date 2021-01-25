@@ -207,7 +207,7 @@ class Model(object):
         self._release_dataset(self.input_dataset)
         self.input_dataset = None
         return self._output_dataset_to_numpy()
-    '''
+        
     def _output_dataset_to_numpy(self):
         dataset = []
         num = acl.mdl.get_dataset_num_buffers(self.output_dataset)
