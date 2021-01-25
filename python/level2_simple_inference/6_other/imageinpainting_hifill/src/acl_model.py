@@ -149,21 +149,21 @@ class Model(object):
 
         return ret
 
-    def _parse_input_data(self, input, index):
+    def _parse_input_data(self, inputs, index):
         data = None
         size = 0
-        if isinstance(input, np.ndarray):
+        if isinstance(inputs, np.ndarray):
         
-            ptr = acl.util.numpy_to_ptr(input)
-            size = input.size * input.itemsize
+            ptr = acl.util.numpy_to_ptr(inputs)
+            size = inputs.size * inputs.itemsize
             data = self._copy_input_to_device(ptr, size, index)
             if data == None:
                 size = 0
                 print("Copy input to device failed")
-        elif (isinstance(input, dict) and
-              input.has_key('data') and input.has_key('size')):
-            size = input['size']
-            data = input['data']
+        elif (isinstance(inputs, dict) and
+              inputs.has_key('data') and inputs.has_key('size')):
+            size = inputs['size']
+            data = inputs['data']
         else:
             print("Unsupport input")
 
@@ -253,9 +253,9 @@ class Model(object):
         #loop through each output
         for i in range(num):
             
-            buffer = acl.mdl.get_dataset_buffer(self.output_dataset, i)
-            data = acl.get_data_buffer_addr(buffer)
-            size = acl.get_data_buffer_size(buffer) 
+            buffers = acl.mdl.get_dataset_buffer(self.output_dataset, i)
+            data = acl.get_data_buffer_addr(buffers)
+            size = acl.get_data_buffer_size(buffers) 
             outdatatype = self._get_datatype(self._output_info[i]["type"])
 
             
