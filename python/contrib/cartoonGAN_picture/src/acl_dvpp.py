@@ -155,24 +155,23 @@ class Dvpp():
 
     def jpege(self, image, width_align=128, height_align=16):
         # yuv420sp to jpeg
-        # 创建输入图片desc
+        # create input image desc
         input_desc = self._gen_input_pic_desc(image, width_align, height_align)
-        # 预测转换所需内存大小
+
         output_size, ret = acl.media.dvpp_jpeg_predict_enc_size(
             input_desc, self._jpege_config)
         if (ret != ACL_ERROR_NONE):
             print("Predict jpege output size failed")
             return None
-        # 申请转换需要的内存
+        
         output_buffer, ret = acl.media.dvpp_malloc(output_size)
         if (ret != ACL_ERROR_NONE):
             print("Malloc jpege output memory failed")
             return None
-        # 输出大小参数为既是输入参数,也是输出参数,需要时一个指针
+
         output_size_array = np.array([output_size], dtype=np.int32)
         output_size_ptr = acl.util.numpy_to_ptr(output_size_array)
 
-        # 调用jpege异步接口转换图片
         ret = acl.media.dvpp_jpeg_encode_async(self._dvpp_channel_desc,
                                                input_desc, output_buffer,
                                                output_size_ptr,
@@ -187,7 +186,7 @@ class Dvpp():
             print("Jpege synchronize stream failed, ret ", ret)
             return None
 
-        # 释放资源
+        # release resources
         acl.media.dvpp_destroy_pic_desc(input_desc)
 
         return AclImage(output_buffer, image.width,
