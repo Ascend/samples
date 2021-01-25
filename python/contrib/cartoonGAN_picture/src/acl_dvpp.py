@@ -169,7 +169,13 @@ class Dvpp():
         return pic_desc, out_buffer, out_buffer_size
 
     def jpege(self, image, width_align=128, height_align=16):
-        # yuv420sp to jpeg
+        '''
+        yuv420sp to jpeg
+        :param image: input image
+        :param width_align: width align
+        :param height_align: height align
+        :return: AclImage
+        '''
         # create input image desc
         input_desc = self._gen_input_pic_desc(image, width_align, height_align)
 
