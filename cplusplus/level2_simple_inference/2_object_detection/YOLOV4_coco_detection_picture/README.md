@@ -68,7 +68,7 @@
 
         **cd $HOME/models/YOLOV4_coco_detection_picture**  
 
-        **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/YOLOV4_coco_detection_picture/insert_op.cfg**
+        **cp $HOME/samples/cplusplus/level2_simple_inference/2_object_detection/YOLOV4_coco_detection_picture/model/insert_op.cfg ./**
 
         **atc --input_shape="Input:1,416,416,3" --output=./yolov4 --insert_op_conf=./insert_op.cfg --framework=3 --model=./yolov4_no_postprocess.pb --soc_version=Ascend310**
 
