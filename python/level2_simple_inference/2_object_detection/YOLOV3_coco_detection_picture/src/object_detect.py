@@ -26,7 +26,11 @@ labels = ["person",
 
 
 class ObjectDetect(object):
-      
+
+    """
+    Perform model loading,
+    Initialization, reasoning process
+    """
     def __init__(self, model_path, model_width, model_height):
         self.device_id = 0
         self.context = None
