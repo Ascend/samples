@@ -6,9 +6,7 @@
 
 ## 语音转文字样例
 
-**注：案例详细介绍请参见[声音转文字_wiki](https://gitee.com/ascend/samples/wikis/%E5%9B%BE%E7%89%87googlenet%E5%88%86%E7%B1%BB?sort_id=3164842)。**
-
-功能：使用语音转换模型对输入语音进行推理。。
+功能：使用语音转换模型对输入语音进行推理。
 
 样例输入：由.wav文件转换成的.bin文件。
 
@@ -142,7 +140,7 @@
     **make**
 5. 执行如下命令将.wav文件转换成.bin文件。
 
-    **cd /home/ascend/samples/cplusplus/level2_simple_inference/5_nlp/WAV_to_word/script**
+    **cd /home/ascend/samples/cplusplus/level2_simple_inference/5_nlp/WAV_to_word/scripts**
 
     **python3 preparedata.py**
 
@@ -187,9 +185,9 @@
 
     **mv output2_0.bin ../**
     
-    在/home/HwHiAiUser/WAV_to_word/script目录下执行如下命令：
+    在/home/HwHiAiUser/WAV_to_word/scripts目录下执行如下命令：
     
-    **cd /home/HwHiAiUser/WAV_to_word/script**
+    **cd /home/HwHiAiUser/WAV_to_word/scripts**
 
     **python3 postprocess.py**
     
