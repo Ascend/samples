@@ -55,7 +55,7 @@
 
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
-    |  face_detection| 图片分类推理模型。是基于Caffe的yolov3模型。  |  请参考[https://gitee.com/ascend/modelzoo/tree/master/contrib/Research/cv/facedetection/ATC_resnet10-SSD_caffe_AE](https://gitee.com/ascend/modelzoo/tree/master/contrib/Research/cv/facedetection/ATC_resnet10-SSD_caffe_AE)目录中README.md下载原始模型章节下载模型和权重文件。 |
+    |  face_detection| 图片分类推理模型。是基于Caffe的resnet ssd模型。 |  请参考[https://gitee.com/ascend/modelzoo/tree/master/contrib/Research/cv/facedetection/ATC_resnet10-SSD_caffe_AE](https://gitee.com/ascend/modelzoo/tree/master/contrib/Research/cv/facedetection/ATC_resnet10-SSD_caffe_AE)目录中README.md下载原始模型章节下载模型和权重文件。 |
 
     ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
 
@@ -73,7 +73,7 @@
 
     2. 执行以下命令下载aipp配置文件并使用atc命令进行模型转换。
 
-        **cd $HOME/models/face_detection_camera**  
+        **cd $HOME/models/face_detection_rtsp**  
 
         **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/face_detection_camera/insert_op.cfg**
 
@@ -88,25 +88,27 @@
 
 1. 修改样例运行配置文件。
 
-    样例运行配置文件为**script/face_detection.conf**。
+    样例运行配置文件为**scripts/face_detection.conf**。
 	
 	将文件中 presenter_server_ip、presenter_view_ip 修改为开发环境中可以ping通运行环境的ip地址，使用以下两种情况举例说明。
 
      - 使用产品为200DK开发者板。   
         1. 开发环境中使用ifconfig查看可用ip。   
-        2. 在开发环境中将**script/face_detection.conf**中的 presenter_server_ip、presenter_view_ip 修改为该ip地址。   
+        2. 在开发环境中将**scripts/face_detection.conf**中的 presenter_server_ip、presenter_view_ip 修改为该ip地址。   
         ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
         > - 1.开发环境和运行环境分离部署，一般使用配置的虚拟网卡ip，例如192.168.1.223。
         > - 2.开发环境和运行环境合一部署，一般使用200dk固定ip，例如192.168.1.2。
 
      - 使用产品为300加速卡（ai1s云端推理环境）。   
         1. ECS弹性云服务器控制台中查看ai1s云端环境可用内网ip，例如192.168.0.198。   
-        2. 在开发环境中将**script/face_detection.conf**中的 presenter_server_ip、presenter_view_ip 修改为该ip地址。   
+        2. 在开发环境中将**scripts/face_detection.conf**中的 presenter_server_ip、presenter_view_ip 修改为该ip地址。   
         ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
         > - 也可以在ai1s云端环境中使用ifconfig查看内网ip。
         > - 登录ai1s云端环境时的ip地址为此环境的公网ip，ai1s云端环境中ifconfig查看到的ip为此环境的内网ip。
 
-    将文件中[rtspaddr]段下的rtsp_*配置项的值修改为要检测的视频文件或者rtsp地址. 样例支持多路视频流，路数参考[VDEC功能约束及说明](https://support.huaweicloud.com/asdevg-python-A200dk_3000_c75/atlaspython_01_0100.html)；rtsp地址配置项字段名必须是"rtsp+下划线+数字"的格式.rtsp字段的值可以是rtsp流url或者是**运行环境**下存放的视频文件
+    将文件中[rtspaddr]段下的rtsp_*配置项的值修改为要检测的视频文件或者rtsp地址. 样例支持多路视频流，路数参考[VDEC功能约束及说明](https://support.huaweicloud.com/asdevg-python-A200dk_3000_c75/atlaspython_01_0100.html)；
+	
+	rtsp地址配置项字段名必须是"rtsp+下划线+数字"的格式.rtsp字段的值可以是rtsp流url或者是**运行环境**下存放的视频文件
 	
 	将[display]段下的display_channel配置项的值，修改为[rtspaddr]段要使用presenter显示的视频编号，从0开始
 	
@@ -167,7 +169,7 @@
     - 使用产品为200DK开发者板。   
         1. 开发环境中执行以下命令启动presentserver。   
             **cd $HOME/samples/cplusplus/level2_simple_inference/2_object_detection/face_detection_rtsp**   
-            **bash script/run_presenter_server.sh**   
+            **bash scripts/run_presenter_server.sh**   
         2. 执行以下命令登录运行环境。   
             **开发环境与运行环境合一部署，请跳过此步骤！**   
             **ssh HwHiAiUser@xxx.xxx.xxx.xxx** 
