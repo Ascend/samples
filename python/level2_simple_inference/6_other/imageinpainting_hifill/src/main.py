@@ -10,9 +10,9 @@ import time
 sys.path.append("..")
 sys.path.append("../../../../common/")
 
-from atlas_utils.constants import *
+from atlas_utils import constants
 from acl_resource import AclResource
-from atlas_utils.utils import *
+from atlas_utils import utils 
 from acl_model import Model
 from atlas_utils.acl_image import AclImage   
 
