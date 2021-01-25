@@ -11,12 +11,10 @@ import numpy as np
 import os
 import time
 import pickle
-from settings import *
 from LaneFinder import *
 sys.path.append("../../../../common/atlas_utils")
 sys.path.append("../../../../common")
 sys.path.append("../")
-from constants import *
 from acl_model import Model
 from acl_resource import AclResource
 
@@ -247,14 +245,16 @@ if __name__ == '__main__':
     perspective_transform = fileJson[0]["perspective_transform"]
     pixels_per_meter = fileJson[0]["pixels_per_meter"]
     WARPED_SIZE = fileJson[0]["WARPED_SIZE"]
+    ORIGINAL_SIZE = fileJson[0]["ORIGINAL_SIZE"]
 
     cam_matrix = np.array(cam_matrix)
     dist_coeffs = np.array(dist_coeffs)
     perspective_transform = np.array(perspective_transform)
     pixels_per_meter = tuple(pixels_per_meter)
     WARPED_SIZE = tuple(WARPED_SIZE)
+    ORIGINAL_SIZE = tuple(ORIGINAL_SIZE)
 
-    lf = LaneFinder(settings.ORIGINAL_SIZE, WARPED_SIZE, cam_matrix, dist_coeffs,
+    lf = LaneFinder(ORIGINAL_SIZE, WARPED_SIZE, cam_matrix, dist_coeffs,
                     perspective_transform, pixels_per_meter)
     main()
     gc.collect()
