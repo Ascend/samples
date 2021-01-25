@@ -10,6 +10,9 @@ class Dvpp():
         self._run_mode = run_model
         self._dvpp_channel_desc = None
         self._jpege_config = None
+        self._crop_config = None
+        self._paste_config = None
+
 
     def __del__(self):
         if self._crop_config:
