@@ -160,7 +160,7 @@ def readimages(img_path, mask_path):
     return raw_img, raw_mask
 
 
-def main(image_dir, masks_dir):    
+def main(image_dirs, masks_dirs):    
     """
     output
     """
@@ -177,7 +177,7 @@ def main(image_dir, masks_dir):
     matmul_om = Model(acl_resource, MODEL_MATMUL_PATH)
     
 
-    paths_img, paths_mask = read_imgs_masks(image_dir, masks_dir)
+    paths_img, paths_mask = read_imgs_masks(image_dirs, masks_dirs)
     for i in range(len(paths_img)):
         print('==========')        
         raw_img, raw_mask = readimages(paths_img[i], paths_mask[i])
