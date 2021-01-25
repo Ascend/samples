@@ -9,7 +9,7 @@ import acl
 import struct
 import numpy as np
 import datetime
-from atlas_utils.constants import *
+from atlas_utils import constants
 from atlas_utils.utils import *
 
 
