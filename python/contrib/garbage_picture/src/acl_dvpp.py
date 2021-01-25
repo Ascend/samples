@@ -8,6 +8,7 @@ class Dvpp():
         self._stream = stream
         self._run_mode = run_model
         self._dvpp_channel_desc = None
+        self._resize_config = None
 
     def __del__(self):
         if self._resize_config:
