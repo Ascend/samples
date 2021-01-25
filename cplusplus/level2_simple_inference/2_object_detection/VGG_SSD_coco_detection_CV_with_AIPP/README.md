@@ -6,8 +6,6 @@
 
 ## VGG_SSD_coco_detection_CV_with_AIPP样例
 
-**注：案例详细介绍请参见[VGG_SSD_coco_detection_CV_with_AIPP_wiki]()。**
-
 功能：使用vgg_ssd模型对输入图片进行预测推理，并将结果打印到输出图片上。
 
 样例输入：原始图片jpg文件。
