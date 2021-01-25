@@ -73,8 +73,6 @@ class AclImage():
 
         self._data = None
         self.size = 0
-        
-        acl.media.dvpp_free(self._data)
 
     def __del__(self):
         self.destroy()
