@@ -30,6 +30,11 @@ class ObjectDetect(object):
         self.device_id = 0
         self.context = None
         self.stream = None
+        self._image_info_size = None
+        self._model = None 
+        self.run_mode = None
+
+
         self._model_path = model_path
         self._model_width = model_width
         self._model_height = model_height
