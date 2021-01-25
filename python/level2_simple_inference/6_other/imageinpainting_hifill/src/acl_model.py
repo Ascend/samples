@@ -176,7 +176,7 @@ class Model(object):
         elif size == buffer_item['size']:
             ret = acl.rt.memcpy(buffer_item['addr'], size,
                                 input_ptr, size,
-                                ACL_MEMCPY_DEVICE_TO_DEVICE)
+                                constants.ACL_MEMCPY_DEVICE_TO_DEVICE)
             if ret != constants.ACL_ERROR_NONE:
                 print("Copy model % dth input to device failed" % (index))
                 return None
