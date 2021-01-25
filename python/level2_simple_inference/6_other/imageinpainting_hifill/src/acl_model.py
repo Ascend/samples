@@ -12,6 +12,7 @@ import datetime
 from atlas_utils import constants
 from atlas_utils import acl_model
 from atlas_utils import utils
+from atlas_utils import acl_dvpp
 
 
 class Model(object):
@@ -215,27 +216,6 @@ class Model(object):
         self._release_dataset(self.input_dataset)
         self.input_dataset = None
         return self._output_dataset_to_numpy()
-     
-    def _output_dataset_to_numpy(self):
-        dataset = []
-        num = acl.mdl.get_dataset_num_buffers(self.output_dataset)
-        for i in range(num):
-            buffer = acl.mdl.get_dataset_buffer(self.output_dataset, i)
-            data = acl.get_data_buffer_addr(buffer)
-            size = acl.get_data_buffer_size(buffer)
-            narray = np.zeros(size, dtype=np.byte)
-            narray_ptr = acl.util.numpy_to_ptr(narray)
-            ret = acl.rt.memcpy(narray_ptr, narray.size * narray.itemsize, 
-                                data, size, ACL_MEMCPY_DEVICE_TO_DEVICE)
-            if ret != ACL_ERROR_NONE:
-                print("Memcpy inference output to local failed")
-                return None
-            output_nparray = self._unpack_bytes_array(
-                narray, self._output_info[i]["shape"],
-                self._output_info[i]["type"])
-            dataset.append(output_nparray)
-
-        return dataset 
     
     def _get_datatype(self, datatype):
         outdatatype = np.float32
