@@ -13,7 +13,7 @@ sys.path.append("../../../../common/")
 from atlas_utils import constants
 from acl_resource import AclResource
 from atlas_utils import utils 
-from acl_model import Model
+import acl_model 
 from atlas_utils.acl_image import AclImage   
 
 
@@ -173,8 +173,8 @@ def main(image_dirs, masks_dirs):
     acl_resource = AclResource()
     stream = acl_resource.init()
     #load model
-    model = Model(acl_resource, MODEL_PATH)
-    matmul_om = Model(acl_resource, MODEL_MATMUL_PATH)
+    model = acl_model.Model(acl_resource, MODEL_PATH)
+    matmul_om = acl_model.Model(acl_resource, MODEL_MATMUL_PATH)
     
 
     paths_img, paths_mask = read_imgs_masks(image_dirs, masks_dirs)
