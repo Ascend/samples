@@ -13,7 +13,6 @@ class Dvpp():
         self._crop_config = None
         self._paste_config = None
 
-
     def __del__(self):
         if self._crop_config:
             acl.media.dvpp_destroy_roi_config(self._crop_config)
@@ -35,6 +34,10 @@ class Dvpp():
         return SUCCESS          
 
     def jpegd(self, image):
+        '''
+        :param image: input image
+        :return: AclImage
+        '''
         print('[Dvpp] jpeg decode stage:')
         print("[Dvpp] jpeg width %d, height %d, size %d"%(image.width, image.height, image.size), " data ", image.data())
         output_desc, out_buffer = self._gen_jpegd_out_pic_desc(image)        
