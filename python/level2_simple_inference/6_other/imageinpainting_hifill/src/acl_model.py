@@ -10,6 +10,7 @@ import struct
 import numpy as np
 import datetime
 from atlas_utils import constants
+from atlas_utils import acl_model
 from atlas_utils.utils import *
 
 
@@ -61,10 +62,10 @@ class Model(object):
         print("Init model resource")
         #load model 
         self.model_id, ret = acl.mdl.load_from_file(self.model_path)
-        check_ret("acl.mdl.load_from_file", ret)
+        acl_model.check_ret("acl.mdl.load_from_file", ret)
         self.model_desc = acl.mdl.create_desc()
         ret = acl.mdl.get_desc(self.model_desc, self.model_id)
-        check_ret("acl.mdl.get_desc", ret)
+        acl_model.check_ret("acl.mdl.get_desc", ret)
         #get input num
         output_size = acl.mdl.get_num_outputs(self.model_desc)
         #create output dataset
@@ -93,7 +94,7 @@ class Model(object):
                 get_output_size_by_index(self.model_desc, i)
             temp_buffer, ret = acl.rt.malloc(temp_buffer_size,
                                              constants.ACL_MEM_MALLOC_NORMAL_ONLY)
-            check_ret("acl.rt.malloc", ret)
+            acl_model.check_ret("acl.rt.malloc", ret)
             
             dataset_buffer = acl.create_data_buffer(temp_buffer,
                                                     temp_buffer_size)
@@ -102,7 +103,7 @@ class Model(object):
             if ret:
                 acl.rt.free(temp_buffer)
                 acl.destroy_data_buffer(dataset)
-                check_ret("acl.destroy_data_buffer", ret)
+                acl_model.check_ret("acl.destroy_data_buffer", ret)
         self.output_dataset = dataset
         print("[Model] create model output dataset success")
 
@@ -168,7 +169,7 @@ class Model(object):
         buffer_item = self._input_buffer[index]
         data = None
         if buffer_item['addr'] is None:
-            data = copy_data_device_to_device(input_ptr, size)
+            data = acl_model.copy_data_device_to_device(input_ptr, size)
             if data is None:
                 print("Malloc memory and copy model %dth "
                       "input to device failed"%(index))
