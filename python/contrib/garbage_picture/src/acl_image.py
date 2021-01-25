@@ -71,6 +71,8 @@ class AclImage():
         elif self._memory_type == MEMORY_DVPP:
             acl.rt.free_dvpp(self._data)  
 
+         acl.media.dvpp_free(self._data) 
+
     def __del__(self):
         print("destory image")
         self.destroy()
