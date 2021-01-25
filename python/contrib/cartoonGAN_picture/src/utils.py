@@ -37,9 +37,9 @@ def copy_data_device_to_original_host(device_data, data_size):
 
 def copy_data_device_to_device(device_data, data_size):
     '''
-    :param device_data:device side data
+    :param device_data:data
     :param data_size: data size
-    :return: data in host memory
+    :return: data in device memory
     '''
     host_buffer, ret = acl.rt.malloc(data_size, ACL_MEM_MALLOC_HUGE_FIRST)
     check_ret("acl.rt.malloc_host", ret)
@@ -51,6 +51,11 @@ def copy_data_device_to_device(device_data, data_size):
 
 
 def copy_data_host_to_device(device_data, data_size):
+    '''
+    :param device_data:data
+    :param data_size: data size
+    :return: data in device memory
+    '''
     host_buffer, ret = acl.rt.malloc(data_size, ACL_MEM_MALLOC_HUGE_FIRST)
     check_ret("acl.rt.malloc_host", ret)
     ret = acl.rt.memcpy(host_buffer, data_size,
