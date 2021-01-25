@@ -181,7 +181,7 @@ def main(image_dirs, masks_dirs):
     for i in range(len(paths_img)):
         print('==========')        
         raw_img, raw_mask = readimages(paths_img[i], paths_mask[i])
-        print("file: % s, shape= % s" % (paths_img[i],  raw_img.shape))
+        print("file: % s, shape= % s" % (paths_img[i], raw_img.shape))
 
 
         img_large, mask_large, img_512, mask_512 = pre_process(raw_img, raw_mask)        
