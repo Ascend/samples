@@ -6,8 +6,6 @@
 
 ## cropandpaste样例
 
-**注：案例详细介绍请参见[图片googlenet分类_wiki](https://gitee.com/ascend/samples/wikis/%E5%9B%BE%E7%89%87googlenet%E5%88%86%E7%B1%BB?sort_id=3164842)。**
-
 功能：调用dvpp的cropandpaste接口，实现将图片指定位置指定大小部分图片抠出来，粘贴到输出图片指定位置的功能。
 
 样例输入：原始YUV图片。
@@ -18,7 +16,7 @@
 
 部署此Sample前，需要准备好以下环境：
 
-- 请确认已按照[环境准备和依赖安装](../../../../environment)准备好环境。
+- 请确认已按照[环境准备和依赖安装](../../../environment)准备好环境。
 
 - 已完成对应产品的开发环境和运行环境安装。
 
