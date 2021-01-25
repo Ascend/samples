@@ -6,8 +6,6 @@
 
 ## googlenet动态batch样例
 
-**注：案例详细介绍请参见[googlenet动态batch_wiki]()。**
-
 功能：使用googlenet模型对输入图片进行分类推理，本案例采用了动态batch特性。
 
 样例输入：原始图片bin文件。
