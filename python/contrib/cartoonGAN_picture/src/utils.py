@@ -112,4 +112,4 @@ def yuv420sp_size(width, height):
     :param height: input width
     :return: yuv420sp size
     '''
-    return int(width * height * 3 /2)
+    return int(width * height * 3 / 2)
