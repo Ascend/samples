@@ -73,7 +73,7 @@ bool AclEngine::ParseParams(int argc, char **argv) {
         switch (c) {
         case 'i':
             split(optarg, &(params_.input_files), ",");
-            printf("[INFO]inputFile NUM = %u\n", params_.input_files.size());
+            printf("[INFO]inputFile NUM = %lu\n", params_.input_files.size());
             break;
         case 'o':
             params_.output_path = std::string(optarg);
@@ -119,7 +119,7 @@ bool AclEngine::Inference() {
 
     // input_count_ -= 1;
     if (input_count_ != params_.input_files.size()) {
-        printf("[ERROR] input file num not match, [%u / %d]\n",
+        printf("[ERROR] input file num not match, [%lu / %d]\n",
                params_.input_files.size(), input_count_);
         return false;
     }
@@ -182,7 +182,7 @@ bool AclEngine::Inference() {
     }
 
     average = average / (batch_cnt * batchSize * 1000);
-    printf("batch:%u\n", batchSize);
+    printf("batch:%lu\n", batchSize);
     printf("input count:%u\noutput count:%u\n", input_count_, output_count_);
     printf("NN inference cost average time: %4.3f ms %4.3f fps/s\n", average,
            (1000 / average));
@@ -391,12 +391,12 @@ int AclEngine::LoadModel() {
 
     input_count_ = aclmdlGetNumInputs(model_desc_ptr_);
     output_count_ = aclmdlGetNumOutputs(model_desc_ptr_);
-    printf("From model input count:%u\n", input_count_);
-    printf("From model output count:%u\n", output_count_);
+    printf("From model input count:%lu\n", input_count_);
+    printf("From model output count:%lu\n", output_count_);
 
     for (size_t index = 0; index < input_count_; index++) {
         auto buff_size = aclmdlGetInputSizeByIndex(model_desc_ptr_, index);
-        printf("From model input%u buffer size:%u\n", index, buff_size);
+        printf("From model input%lu buffer size:%lu\n", index, buff_size);
         input_buffer_sizes_.push_back(buff_size);
         void *p_imgBuf = nullptr;
         auto ret = aclrtMallocHost(&p_imgBuf, buff_size);
@@ -411,7 +411,7 @@ int AclEngine::LoadModel() {
 
     for (size_t index = 0; index < output_count_; index++) {
         auto buff_size = aclmdlGetOutputSizeByIndex(model_desc_ptr_, index);
-        printf("From model output%u buffer size:%u\n", index, buff_size);
+        printf("From model output%lu buffer size:%lu\n", index, buff_size);
         output_buffer_sizes_.push_back(buff_size);
     }
     return 0;
@@ -450,19 +450,19 @@ aclmdlDesc *AclEngine::aclModelLoadAndIOGet(const void *model,
 
 int AclEngine::ReadInputFiles(const vector<vector<string>> &inputs) {
     if (input_count_ > inputs.size()) {
-        printf("[ERROR] input file num not match, [%u / %u]\n", inputs.size(),
+        printf("[ERROR] input file num not match, [%lu / %lu]\n", inputs.size(),
                input_count_);
         return 1;
     }
 
     batch_dsts_.clear();
-    printf("input_count_ = %u\n", input_count_);
+    printf("input_count_ = %lu\n", input_count_);
     for (size_t inIdx = 0; inIdx < input_count_; ++inIdx) {
         const auto &fileNames = inputs[inIdx];
         void *p_imgBuf = input_buffers_[inIdx];
         size_t fileSize = input_buffer_sizes_[inIdx] / params_.batch_size;
-        printf("params_.batch_size = %u \n", params_.batch_size);
-        printf("fileSize = %u \n", fileSize);
+        printf("params_.batch_size = %lu \n", params_.batch_size);
+        printf("fileSize = %lu \n", fileSize);
         size_t pos = 0;
         bool isInputBin = false; // TO READ BIN WITHOUT C++ PREPROCESS OR READ
                                  // TXT WITH C++ PREPROCESS
@@ -481,7 +481,7 @@ int AclEngine::ReadInputFiles(const vector<vector<string>> &inputs) {
                 if (fread(((char *)p_imgBuf) + pos, sizeof(char), fileSize,
                           pFile) != fileSize) {
                     printf(
-                        "fread %s failed. file size not match input size %u.\n",
+                        "fread %s failed. file size not match input size %lu.\n",
                         fileName.c_str(), fileSize);
                     fclose(pFile);
                     return 1;

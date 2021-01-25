@@ -16,7 +16,7 @@
 # ============================================================================
 import os
 import sys
-
+import datetime
 import numpy
 import random
 import argparse
@@ -26,17 +26,15 @@ from tensorflow.python.platform import gfile
 
 from handle_data import dataLoader, CreatVocab
 from handle_data.CreatVocab import *
-from handle_data.batch_iter import *
+from handle_data.batch_iter import create_batch_iter, pair_data_variable
 from model.lstm import *
 from driver.Config import Configurable
 from bert.pretrain import modeling, tokenization
 
 
-def train(train_data, dev_data, src_vocab, tgt_vocab, tgt_size, config,
+def train(train_data, dev_data, src_vocab, tgt_vocab, config,
           bert_config, tokenizer):
     print('init model')
-    # model = lstm(tgt_size, config,bert_config,tokenizer)
-    # model.dropout = config.dropout
     model = None
     print('start training...')
     use_cuda = False
@@ -88,8 +86,7 @@ def train(train_data, dev_data, src_vocab, tgt_vocab, tgt_size, config,
             evaluate(model, i, sess, dev_data, src_vocab, tgt_vocab, config)
 
 
-def decode(model, sess, dev_data, src_vocab, tgt_vocab, config, bert_config,
-           tokenizer):
+def decode(model, sess, dev_data, src_vocab, tgt_vocab, config, tokenizer):
 
     # load model
     print('existed model path is :    ' + config.save_dirs + '/' +
@@ -133,9 +130,9 @@ def decode(model, sess, dev_data, src_vocab, tgt_vocab, config, bert_config,
             print("---------------------------------------------------")
             predicts = np.argmax(logits, axis=1).tolist()
             print("predicts    ", predicts)
-            for id, index in enumerate(predicts):
-                pre.append(predicts[id])
-                w.append(word_list[id])
+            for id_, index in enumerate(predicts):
+                pre.append(predicts[id_])
+                w.append(word_list[id_])
 
         #save file
         # s_input = ''
@@ -149,9 +146,6 @@ def decode(model, sess, dev_data, src_vocab, tgt_vocab, config, bert_config,
 
 
 def evaluate(model, epoch, sess, dev_data, src_vocab, tgt_vocab, config):
-    global best_acc
-    global best_epoch
-
     print('start evaluate...')
     total_acc = 0
     gold_num = 0
@@ -177,7 +171,7 @@ def evaluate(model, epoch, sess, dev_data, src_vocab, tgt_vocab, config):
         best_epoch = epoch
         print('##Update! best_acc={:.2f}% in epoch {}'.format(
             best_acc, best_epoch))
-        output_graph_def = convert_variables_to_constants(
+        output_graph_def = graph_util.convert_variables_to_constants(
             sess, sess.graph_def, output_node_names=['s/logits'])
         with tf.gfile.GFile(config.save_dirs + '/' + config.save_model_path,
                             mode='wb') as f:
@@ -228,7 +222,7 @@ if __name__ == '__main__':
                        help='Whether to lower case the input text.')
 
     args, extra_args = parse.parse_known_args()
-    config = Configurable(args.config_file, extra_args)
+    config_ = Configurable(args.config_file, extra_args)
     bert_config = modeling.BertConfig.from_json_file(args.bert_config_file)
 
     if args.max_seq_length > bert_config.max_position_embeddings:
@@ -242,13 +236,15 @@ if __name__ == '__main__':
 
     print("this is decode --------------")
     path = './data/test.txt'
-    dev_data, sentence_length = dataLoader.decoder_sentence(path)
-    print(config.save_dirs + '/' + config.word_path)
+    dev_data_, sentence_length = dataLoader.decoder_sentence(path)
+    print(config_.save_dirs + '/' + config_.word_path)
 
-    with open(config.save_dirs + '/' + config.word_path, 'rb') as f:
-        src_vocab = pickle.load(f)
-    with open(config.save_dirs + '/' + config.label_path, 'rb') as f:
-        tgt_vocab = pickle.load(f)
+    with open(config_.save_dirs + '/' + config_.word_path, 'rb') as f_:
+        src_vocab_ = pickle.load(f_)
+    with open(config_.save_dirs + '/' + config_.label_path, 'rb') as f_:
+        tgt_vocab_ = pickle.load(f_)
 
-    train("", dev_data, src_vocab, tgt_vocab, tgt_vocab.size, config,
+    best_acc = 0
+    best_epoch = 0
+    train("", dev_data_, src_vocab_, tgt_vocab_, tgt_vocab_.size, config_,
           bert_config, tokenizer)

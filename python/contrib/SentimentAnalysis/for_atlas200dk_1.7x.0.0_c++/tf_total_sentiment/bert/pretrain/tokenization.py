@@ -26,7 +26,7 @@ import tensorflow as tf
 import re
 import os
 
-# from transformers import cached_path, logger
+from transformers import cached_path, logger
 
 PRETRAINED_VOCAB_ARCHIVE_MAP = {
     'bert-base-uncased':

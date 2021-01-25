@@ -32,7 +32,7 @@ def read_bin(config):
         file_name = config.decode_path.split('.')[0] + ".bin"
         feature_arr = np.fromfile(file_name, dtype=np.int32).reshape(
             config.sentence_max_length, config.batch_size)
-    except Exception as except_err:
+    except IOError as except_err:
         print(except_err)
         return 1
     else:
@@ -47,48 +47,13 @@ def read_output_bin(config):
         print(file_name)
         logits_arr = np.fromfile(file_name, dtype=np.float32).reshape(
             config.batch_size, -1)
-    except Exception as except_err:
+    except IOError as except_err:
         print(except_err)
         return 1
     else:
         print(logits_arr)
         print(logits_arr.shape)
         return 0, logits_arr
-
-
-def process(config):
-    """
-    decode 
-    """
-    try:
-        with open(config.save_dirs + '/' + config.word_path, 'rb') as f:
-            src_vocab = pickle.load(f)
-        with open(config.save_dirs + '/' + config.label_path, 'rb') as f:
-            tgt_vocab = pickle.load(f)
-        # train("", dev_data, src_vocab, tgt_vocab, tgt_vocab.size, config,bert_config,tokenizer)
-        train_batch_iter = create_batch_iter(dev_data,
-                                             config.batch_size,
-                                             shuffle=True)
-        with open(config.decode_path, 'w', encoding='utf8') as f:
-            for batch in train_batch_iter:
-                # print(batch)  # list, each element is a tuple (sentance,clasiffication No.)
-                feature, target, word_list = pair_data_variable(
-                    batch, src_vocab, tgt_vocab, config
-                )  # feature with shape (max_src_len=500,batch_size=16) is input of network w with shape (1,500,16,1)
-                # print(word_list) # list, 16 elements, each  element is a list containing words. But there are 5 sentances, so other 11 lists equal 0's.
-                feature_arr = np.array(feature,
-                                       dtype=np.int32)  # shapr=(500,16)
-                # print(feature_arr)
-                # print(feature_arr.shape)
-                output_name = config.decode_path.split('.')[0] + ".bin"
-                feature_arr.tofile(output_name)
-                break
-    except Exception as except_err:
-        print(except_err)
-        return 1
-    else:
-        return 0
-
 
 if __name__ == "__main__":
     random.seed(233)
@@ -131,15 +96,13 @@ if __name__ == "__main__":
                        help='Whether to lower case the input text.')
 
     args, extra_args = parse.parse_known_args()
-    config = Configurable(args.config_file, extra_args)
+    config_ = Configurable(args.config_file, extra_args)
 
     id1 = 0
     id2 = 0
     id3 = 0
-    # id1=process(config)
-    # id2=read_bin(config)
-    id3, logits_arr = read_output_bin(config)
-    predicts = np.argmax(logits_arr, axis=1)  #shape = (batch_size,)
+    id3, logits_arr_ = read_output_bin(config_)
+    predicts = np.argmax(logits_arr_, axis=1)  #shape = (batch_size,)
     print(predicts)
     print(predicts.shape)
 

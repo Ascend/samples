@@ -183,14 +183,20 @@ class _LogSessionRunHook(tf.train.SessionRunHook):
         self.display_every = display_every
         self.hvd_rank = hvd_rank
         self.num_accumulation_steps = num_accumulation_steps
-
-    def after_create_session(self, session, coord):
+        self.count = 0
+        self.t0 = time.time()
         self.elapsed_secs = 0.
         self.count = 0
         self.all_count = 0
         self.avg_loss = 0.0
 
-    def before_run(self, run_context):
+    def after_create_session(self):
+        self.elapsed_secs = 0.
+        self.count = 0
+        self.all_count = 0
+        self.avg_loss = 0.0
+
+    def before_run(self):
         self.t0 = time.time()
         if self.num_accumulation_steps <= 1:
             if (tf.flags.FLAGS.npu_bert_loss_scale
@@ -219,7 +225,7 @@ class _LogSessionRunHook(tf.train.SessionRunHook):
                     'learning_rate:0', 'nsp_loss:0', 'mlm_loss:0'
                 ])
 
-    def after_run(self, run_context, run_values):
+    def after_run(self, run_values):
         self.elapsed_secs += time.time() - self.t0
         if self.num_accumulation_steps <= 1:
             if (tf.flags.FLAGS.npu_bert_loss_scale
@@ -538,8 +544,7 @@ def input_fn_builder(input_files,
                      max_seq_length,
                      max_predictions_per_seq,
                      is_training,
-                     num_cpu_threads=4,
-                     hvd=None):
+                     num_cpu_threads=4):
     """Creates an `input_fn` closure to be passed to Estimator."""
     def input_fn():
         """The actual input function."""
@@ -697,22 +702,6 @@ def main(_):
         config.graph_options.optimizer_options.global_jit_level = tf.OptimizerOptions.ON_1
         config.graph_options.rewrite_options.memory_optimization = rewriter_config_pb2.RewriterConfig.NO_MEM_OPT
 
-    #run_config = tf.estimator.RunConfig(
-    # run_config = NPURunConfig(
-    #     model_dir=FLAGS.output_dir,
-    #     save_summary_steps=0,
-    #     session_config=config,
-    #     save_checkpoints_steps=FLAGS.save_checkpoints_steps if not FLAGS.horovod or hvd.rank() == 0 else None,
-    #     # This variable controls how often estimator reports examples/sec.
-    #     # Default value is every 100 steps.
-    #     # When --report_loss is True, we set to very large value to prevent
-    #     # default info reporting from estimator.
-    #     # Ideally we should set it to None, but that does not work.
-    #     log_step_count_steps=1 if FLAGS.report_loss else 100,
-    #     enable_data_pre_proc=FLAGS.npu_bert_use_tdt,
-    #     iterations_per_loop=FLAGS.iterations_per_loop,
-    #     hcom_parallel=FLAGS.hcom_parallel)
-
     if FLAGS.distributed:
         rank_size = int(os.getenv('RANK_SIZE'))
     model_fn = model_fn_builder(bert_config=bert_config,
@@ -736,12 +725,6 @@ def main(_):
         training_hooks.append(
             _LogSessionRunHook(global_batch_size, FLAGS.num_accumulation_steps,
                                FLAGS.display_loss_steps))
-
-    #estimator = tf.estimator.Estimator(
-    # estimator = NPUEstimator(
-    #     model_fn=model_fn,
-    #     config=run_config,
-    #     job_start_file=FLAGS.npu_bert_job_start_file)
 
     if FLAGS.do_train:
         tf.logging.info("***** Running training *****")

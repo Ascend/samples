@@ -21,7 +21,7 @@ from bert.pretrain import modeling
 
 
 class lstm():
-    def __init__(self, label_size, config, bert_config, tokenizer):
+    def __init__(self, label_size, config, bert_config):
         self.config = config
         self.w = tf.placeholder(
             dtype=tf.int32,

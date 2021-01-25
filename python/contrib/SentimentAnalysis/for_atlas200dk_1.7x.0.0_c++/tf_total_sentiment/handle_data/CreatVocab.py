@@ -25,7 +25,7 @@ PAD = 0
 PAD_S, UNK_S = '<pad>', '<unk>'
 
 
-def create_vocabularies(data, vocab_size, src_word_counter, tgt_word_counter):
+def create_vocabularies(vocab_size, src_word_counter, tgt_word_counter):
 
     # 这个是按照出现频率由高到低的顺序的
     src_most_common = [

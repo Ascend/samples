@@ -17,7 +17,7 @@
 import os
 import sys
 sys.path.extend(['.', '..'])
-
+import numpy as np
 import datetime
 import time
 import tensorflow as tf
@@ -25,7 +25,7 @@ import tensorflow.contrib.rnn as rnn
 from tensorflow.python.framework.graph_util import convert_variables_to_constants
 
 from model.lstm import *
-from handle_data.batch_iter import *
+from handle_data.batch_iter import pair_data_variable, create_batch_iter
 
 best_acc = 0
 best_epoch = 0
@@ -91,9 +91,7 @@ def train(train_data, dev_data, src_vocab, tgt_vocab, tgt_size, config,
             evaluate(model, i, sess, dev_data, src_vocab, tgt_vocab, config)
 
 
-def decode(model, sess, dev_data, src_vocab, tgt_vocab, config, bert_config,
-           tokenizer):
-
+def decode(model, sess, dev_data, src_vocab, tgt_vocab, config):
     # load model
     graph_def = tf.GraphDef()
     with open(config.save_dirs + '/' + config.save_model_path, 'rb') as f:
@@ -121,25 +119,22 @@ def decode(model, sess, dev_data, src_vocab, tgt_vocab, config, bert_config,
 
             predicts = np.argmax(logits, axis=1).tolist()
 
-            for id, index in enumerate(predicts):
-                pre.append(predicts[id])
-                w.append(word_list[id])
+            for id__, index in enumerate(predicts):
+                pre.append(predicts[id__])
+                w.append(word_list[id__])
 
         #save file
         s_input = ''
-        for id, s_list in enumerate(w):
+        for id__, s_list in enumerate(w):
             if s_list == 0:
                 continue
             for idx, l_list in enumerate(s_list):
                 s_input += l_list
-            f.write(s_input + ' ' + tgt_vocab.id2word(pre[id]) + '\n')
+            f.write(s_input + ' ' + tgt_vocab.id2word(pre[id__]) + '\n')
             s_input = ''
 
 
 def evaluate(model, epoch, sess, dev_data, src_vocab, tgt_vocab, config):
-    global best_acc
-    global best_epoch
-
     print('start evaluate...')
     total_acc = 0
     gold_num = 0

@@ -38,8 +38,7 @@ def create_optimizer(loss,
                      manual_fp16=False,
                      use_fp16=False,
                      num_accumulation_steps=1,
-                     optimizer_type="adam",
-                     allreduce_post_accumulation=False):
+                     optimizer_type="adam"):
     """Creates an optimizer training op."""
     global_step = tf.train.get_or_create_global_step()
 
@@ -106,20 +105,6 @@ def create_optimizer(loss,
             epsilon=1e-4,
             exclude_from_weight_decay=["LayerNorm", "layer_norm", "bias"])
 
-    # if hvd is not None and (num_accumulation_steps == 1 or (not allreduce_post_accumulation)):
-    #   optimizer = hvd.DistributedOptimizer(optimizer, sparse_as_dense=True, compression=Compression.fp16 if use_fp16 or manual_fp16 else Compression.none)
-
-    #optimizer = NPUDistributedOptimizer(optimizer)
-    # if tf.flags.FLAGS.npu_bert_loss_scale not in [None, -1]:
-    #   opt_tmp = optimizer
-    #   if tf.flags.FLAGS.npu_bert_loss_scale == 0:
-    #     loss_scale_manager = lsm_lib.ExponentialUpdateLossScaleManager(init_loss_scale=tf.flags.FLAGS.init_loss_scale_value, incr_every_n_steps=1000, decr_every_n_nan_or_inf=2, decr_ratio=0.5)
-    #   elif tf.flags.FLAGS.npu_bert_loss_scale >= 1:
-    #     loss_scale_manager = lsm_lib.FixedLossScaleManager(loss_scale=tf.flags.FLAGS.npu_bert_loss_scale)
-    #   else:
-    #     raise ValueError("Invalid loss scale: %d" % tf.flags.FLAGS.npu_bert_loss_scale)
-    #   optimizer = lso.NPULossScaleOptimizer(opt_tmp, loss_scale_manager, is_distributed=tf.flags.FLAGS.distributed)
-
     tvars = tf.trainable_variables()
     grads_and_vars = optimizer.compute_gradients(
         loss * 1.0 / num_accumulation_steps, tvars)
@@ -150,44 +135,6 @@ def create_optimizer(loss,
         local_step = tf.cond(
             reset_step, lambda: local_step.assign(tf.ones_like(local_step)),
             lambda: local_step.assign_add(1))
-
-        # with tf.name_scope(accumulate_step):
-        #   grads_and_vars_and_accums = [(gv[0],gv[1],accum_vars[i]) for i, gv in enumerate(grads_and_vars) if gv[0] is not None]
-        #   grads, tvars, accum_vars = list(zip(*grads_and_vars_and_accums))
-        #
-        #   all_are_finite = tf.reduce_all([tf.reduce_all(tf.is_finite(g)) for g in grads]) if (tf.flags.FLAGS.npu_bert_loss_scale not in [None, -1]) and (manual_fp16 or use_fp16) else tf.constant(True, dtype=tf.bool)
-        #   batch_finite = tf.cond(reset_step,
-        #     lambda: batch_finite.assign(tf.math.logical_and(tf.constant(True, dtype=tf.bool), all_are_finite)),
-        #     lambda:batch_finite.assign(tf.math.logical_and(batch_finite, all_are_finite)))
-
-        # This is how the model was pre-trained.
-        # ensure global norm is a finite number
-        # to prevent clip_by_global_norm from having a hizzy fit.
-        # if tf.flags.FLAGS.npu_bert_clip_by_global_norm:
-        #   # (clipped_grads, _) = tf.clip_by_global_norm(
-        #   #     grads, clip_norm=1.0,
-        #   #     use_norm=tf.cond(
-        #   #         all_are_finite,
-        #   #         lambda: tf.global_norm(grads),
-        #   #         lambda: tf.constant(1.0)))
-        #   a = 0
-        # else:
-        #   with tf.name_scope("clip_grads"):
-        #     clipped_grads = [
-        #       (tf.clip_by_norm(grad, clip_norm=1.0))
-        #       if grad is not None else (grad, var) for grad in grads
-        #     ]
-
-        # accum_vars = tf.cond(reset_step,
-        #         lambda: [accum_vars[i].assign(grad) for i, grad in enumerate(clipped_grads)],
-        #         lambda: [accum_vars[i].assign_add(grad) for i, grad in enumerate(clipped_grads)])
-
-        # def update(accum_vars):
-        #   with tf.name_scope("opt_update"):
-        #     if allreduce_post_accumulation and hvd is not None:
-        #         accum_vars = [hvd.allreduce(tf.convert_to_tensor(accum_var), compression=Compression.fp16 if use_fp16 or manual_fp16 else Compression.none) if isinstance(accum_var, tf.IndexedSlices)
-        #                       else hvd.allreduce(accum_var, compression=Compression.fp16 if use_fp16 or manual_fp16 else Compression.none) for accum_var in accum_vars]
-        #     return optimizer.apply_gradients(list(zip(accum_vars, tvars)), global_step=global_step)
 
         update_step = tf.identity(tf.cast(tf.math.equal(
             local_step % num_accumulation_steps, 0),

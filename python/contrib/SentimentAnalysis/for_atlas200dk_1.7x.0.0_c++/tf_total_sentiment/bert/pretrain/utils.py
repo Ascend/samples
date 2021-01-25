@@ -12,10 +12,10 @@ class LogEvalRunHook(tf.train.SessionRunHook):
         self.skipped = 0
         self.time_list = []
 
-    def before_run(self, run_context):
+    def before_run(self):
         self.t0 = time.time()
 
-    def after_run(self, run_context, run_values):
+    def after_run(self):
         elapsed_secs = time.time() - self.t0
         self.count += 1
 
@@ -40,15 +40,19 @@ class LogTrainRunHook(tf.train.SessionRunHook):
 
         self.total_time = 0.0
         self.count = 0  # Holds number of iterations, including skipped iterations for fp16 loss scaling
+        self.global_step = 0
+        self.init_global_step = 0
+        self.skipped = 0
+        self.t0 = time.time()
 
-    def after_create_session(self, session, coord):
+    def after_create_session(self, session):
         self.init_global_step = session.run(tf.train.get_global_step())
 
-    def before_run(self, run_context):
+    def before_run(self):
         self.t0 = time.time()
         return tf.train.SessionRunArgs(fetches=['step_update:0'])
 
-    def after_run(self, run_context, run_values):
+    def after_run(self, run_values):
         elapsed_secs = time.time() - self.t0
         self.global_step = run_values.results[0]
         self.count += 1
@@ -61,7 +65,7 @@ class LogTrainRunHook(tf.train.SessionRunHook):
         else:
             self.total_time += elapsed_secs
 
-    def end(self, session):
+    def end(self):
         num_global_steps = self.global_step - self.init_global_step
 
         self.skipped = (num_global_steps // self.save_checkpoints_steps) * 2 + \

@@ -140,7 +140,7 @@ def fbeta(labels,
     """
     cm, op = _streaming_confusion_matrix(labels, predictions, num_classes,
                                          weights)
-    _, _, fbeta = metrics_from_confusion_matrix(cm,
+    _, _, fbeta_ = metrics_from_confusion_matrix(cm,
                                                 pos_indices,
                                                 average=average,
                                                 beta=beta)
@@ -148,7 +148,7 @@ def fbeta(labels,
                                              pos_indices,
                                              average=average,
                                              beta=beta)
-    return (fbeta, op)
+    return (fbeta_, op)
 
 
 def safe_div(numerator, denominator):
@@ -177,9 +177,9 @@ def pr_re_fbeta(cm, pos_indices, beta=1):
 
     pr = safe_div(diag_sum, tot_pred)
     re = safe_div(diag_sum, tot_gold)
-    fbeta = safe_div((1. + beta**2) * pr * re, beta**2 * pr + re)
+    fbeta_ = safe_div((1. + beta**2) * pr * re, beta**2 * pr + re)
 
-    return pr, re, fbeta
+    return pr, re, fbeta_
 
 
 def metrics_from_confusion_matrix(cm,
@@ -207,10 +207,10 @@ def metrics_from_confusion_matrix(cm,
     elif average in {'macro', 'weighted'}:
         precisions, recalls, fbetas, n_golds = [], [], [], []
         for idx in pos_indices:
-            pr, re, fbeta = pr_re_fbeta(cm, [idx], beta)
+            pr, re, fbeta_ = pr_re_fbeta(cm, [idx], beta)
             precisions.append(pr)
             recalls.append(re)
-            fbetas.append(fbeta)
+            fbetas.append(fbeta_)
             cm_mask = np.zeros([num_classes, num_classes])
             cm_mask[idx, :] = 1
             n_golds.append(tf.to_float(tf.reduce_sum(cm * cm_mask)))
@@ -218,8 +218,8 @@ def metrics_from_confusion_matrix(cm,
         if average == 'macro':
             pr = tf.reduce_mean(precisions)
             re = tf.reduce_mean(recalls)
-            fbeta = tf.reduce_mean(fbetas)
-            return pr, re, fbeta
+            fbeta_ = tf.reduce_mean(fbetas)
+            return pr, re, fbeta_
         if average == 'weighted':
             n_gold = tf.reduce_sum(n_golds)
             pr_sum = sum(p * n for p, n in zip(precisions, n_golds))
@@ -227,8 +227,8 @@ def metrics_from_confusion_matrix(cm,
             re_sum = sum(r * n for r, n in zip(recalls, n_golds))
             re = safe_div(re_sum, n_gold)
             fbeta_sum = sum(f * n for f, n in zip(fbetas, n_golds))
-            fbeta = safe_div(fbeta_sum, n_gold)
-            return pr, re, fbeta
+            fbeta_ = safe_div(fbeta_sum, n_gold)
+            return pr, re, fbeta_
 
     else:
         raise NotImplementedError()
