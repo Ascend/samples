@@ -116,7 +116,7 @@ class Model(object):
         
         if len(input_list) != self._input_num:
             print("Current input data num %d unequal to"
-                  " model input num %d"%(len(input_list), self._input_num))
+                  " model input num % d" % (len(input_list), self._input_num))
             return constants.FAILED
 
         self.input_dataset = acl.mdl.create_dataset()
@@ -126,7 +126,7 @@ class Model(object):
             if (data is None) or (size == 0):
             
                 ret = constants.FAILED
-                print("The %d input is invalid"%(i))
+                print("The % d input is invalid" % (i))
                 break
             dataset_buffer = acl.create_data_buffer(data, size)
             
@@ -178,7 +178,7 @@ class Model(object):
                                 input_ptr, size,
                                 ACL_MEMCPY_DEVICE_TO_DEVICE)
             if ret != constants.ACL_ERROR_NONE:
-                print("Copy model %dth input to device failed"%(index))
+                print("Copy model % dth input to device failed" % (index))
                 return None
             data = buffer_item['addr']
         else:
@@ -188,9 +188,10 @@ class Model(object):
 
         return data
 
-    
-    
     def execute(self, input_list):
+        """
+        input list
+        """
         ret = self._gen_input_dataset(input_list)
         if ret == constants.FAILED:
             print("Gen model input dataset failed")
@@ -251,7 +252,7 @@ class Model(object):
             outdatatype = self._get_datatype(self._output_info[i]["type"])
 
             
-            narray = np.zeros(self._output_info[i]["shape"],dtype=outdatatype)                        
+            narray = np.zeros(self._output_info[i]["shape"], dtype=outdatatype)                        
             narray_ptr = acl.util.numpy_to_ptr(narray)  
             ret = acl.rt.memcpy(narray_ptr, narray.size * narray.itemsize, 
                                 data, size, constants.ACL_MEMCPY_DEVICE_TO_DEVICE)
