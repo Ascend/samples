@@ -15,6 +15,10 @@ from atlas_utils.utils import *
 
 
 class Model(object):
+    """
+    Perform model loading,
+    Initialization, reasoning process
+    """
     def __init__(self, run_mode, model_path):
         print("load model ", model_path)
 #         self.acl_resource = acl_resource
