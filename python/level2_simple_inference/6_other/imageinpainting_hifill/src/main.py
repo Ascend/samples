@@ -95,6 +95,7 @@ def read_imgs_masks(images, masks):
     print(paths_mask)
     return paths_img, paths_mask
 
+
 def matmul_om_large(matmul_model, attention, residual):
     """
     matul om large
@@ -103,6 +104,7 @@ def matmul_om_large(matmul_model, attention, residual):
     residual_reshape = residual.reshape(1024, 96 * 96 * 3)
     matmul_ret = matmul_model.execute([attention_reshape, residual_reshape])
     return matmul_ret[0].reshape(ATTENTION_SIZE, ATTENTION_SIZE, 3072 * 9)
+
 
 def residual_aggregate(model, residual, attention):
     """
@@ -132,7 +134,7 @@ def post_process(model, raw_img, large_img, large_mask, inpainted_512, img_512, 
     residual = (large_img - low_large) * large_mask
 
     # reconstruct residual map using residual aggregation module
-    residual = residual_aggregate(model,residual, attention)
+    residual = residual_aggregate(model, residual, attention)
 
     # compute large inpainted result
     res_large = low_base + residual
@@ -158,7 +160,6 @@ def readimages(img_path, mask_path):
     return raw_img, raw_mask
 
 
-
 def main(image_dir, masks_dir):    
     """
     output
@@ -172,8 +173,8 @@ def main(image_dir, masks_dir):
     acl_resource = AclResource()
     stream = acl_resource.init()
     #load model
-    model = Model(acl_resource,MODEL_PATH)
-    matmul_om = Model(acl_resource,MODEL_MATMUL_PATH)
+    model = Model(acl_resource, MODEL_PATH)
+    matmul_om = Model(acl_resource, MODEL_MATMUL_PATH)
     
 
     paths_img, paths_mask = read_imgs_masks(image_dir, masks_dir)
