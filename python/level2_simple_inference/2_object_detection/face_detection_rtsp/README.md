@@ -73,7 +73,8 @@
      - 使用产品为200DK开发者板。   
     
        1. 开发环境中使用ifconfig查看可用ip。   
-       2. 在开发环境中将**scripts/face_detection.conf**中的 presenter_server_ip、presenter_view_ip 修改为该ip地址。   
+       2. +
+       3. 在开发环境中将**scripts/face_detection.conf**中的 presenter_server_ip、presenter_view_ip 修改为该ip地址。   
           ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
     
        > - 1.开发环境和运行环境分离部署，一般使用配置的虚拟网卡ip，例如192.168.1.223。
@@ -101,13 +102,13 @@
 
     scp -r $HOME/samples/python/level2_simple_inference/2_object_detection/face_detection_rtsp HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser
     scp -r $HOME/samples/python/common/atlas_utils HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser/face_detection_rtsp
-    
+
 
 2. 在开发环境下启动presenterserver。
 
      ```
-     cd $HOME/samples/python/level2_simple_inference/2_object_detection/face_detection_rtsp/scripts  
-     bash script/run_presenter_server.sh
+     cd $HOME/samples/common  
+     bash script/run_presenter_server.sh $HOME/samples/python/level2_simple_inference/2_object_detection/face_detection_rtsp/scripts/face_detection.conf
      ```
 
        

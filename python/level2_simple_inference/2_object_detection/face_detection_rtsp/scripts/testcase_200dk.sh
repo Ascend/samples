@@ -152,10 +152,11 @@ function main() {
         echo "ERROR: set executable program running environment failed"
         return ${inferenceError}
     fi
-
+	
+	cd ${script_path}/../../../../../common  
     echo "127.0.0.1
     
-    " | bash ${script_path}/run_presenter_server.sh 
+    " | bash run_presenter_server.sh ${script_path}/face_detection.conf
     if [ $? -ne 0 ];then
         echo "ERROR: run presenter server failed. please check your project"
         return ${inferenceError}
