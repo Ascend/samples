@@ -11,7 +11,7 @@ import numpy as np
 import datetime
 from atlas_utils import constants
 from atlas_utils import acl_model
-from atlas_utils.utils import *
+from atlas_utils import utils
 
 
 class Model(object):
