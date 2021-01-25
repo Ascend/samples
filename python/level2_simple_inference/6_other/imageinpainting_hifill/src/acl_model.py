@@ -22,6 +22,8 @@ class Model(object):
         self.model_id = None            # pointer
         self.input_dataset = None
         self.output_dataset = None
+        self._input_num = None
+        self._input_buffer = None
         self._output_info = []
         self.model_desc = None          # pointer when using
         self._init_resource()
