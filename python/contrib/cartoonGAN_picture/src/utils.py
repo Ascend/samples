@@ -16,6 +16,7 @@ def copy_data_device_to_host(device_data, data_size):
     check_ret("acl.rt.memcpy", ret)
     return host_buffer
 
+
 def copy_data_device_to_original_host(device_data, data_size):
     output_tensor = np.zeros(data_size, dtype=np.uint8)
     if not output_tensor.flags['C_CONTIGUOUS']:
@@ -28,6 +29,7 @@ def copy_data_device_to_original_host(device_data, data_size):
     check_ret("acl.rt.memcpy", ret)
     return output_tensor, tensor_ptr
 
+
 def copy_data_device_to_device(device_data, data_size):
     host_buffer, ret = acl.rt.malloc(data_size, ACL_MEM_MALLOC_HUGE_FIRST)
     check_ret("acl.rt.malloc_host", ret)
@@ -36,6 +38,7 @@ def copy_data_device_to_device(device_data, data_size):
                         ACL_MEMCPY_DEVICE_TO_DEVICE)
     check_ret("acl.rt.memcpy", ret)
     return host_buffer
+
 
 def copy_data_host_to_device(device_data, data_size):
     host_buffer, ret = acl.rt.malloc(data_size, ACL_MEM_MALLOC_HUGE_FIRST)
@@ -59,17 +62,27 @@ def copy_data_to_dvpp(data, size, run_mode):
 
     return host_buffer
 
+
 def align_up(value, align):
+    '''
+    :param value:input data
+    :param align: align data
+    :return: aligned data
+    '''
     return int(int((value + align - 1) / align) * align)
+
 
 def align_up128(value):
     return align_up(value, 128)
 
+
 def align_up16(value):
     return align_up(value, 16)
 
+
 def align_up2(value):
     return align_up(value, 2)
+
 
 def yuv420sp_size(width, height):
     return int(width * height * 3 /2)
