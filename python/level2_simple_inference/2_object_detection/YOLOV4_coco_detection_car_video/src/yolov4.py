@@ -6,12 +6,12 @@ MODIFIED: 2020-6-28 14:04:45
 """
 import sys
 import json
-import cv2 as cv
+import cv2
 import numpy as np
 import os
 import time
 import pickle
-from LaneFinder import *
+import LaneFinder
 sys.path.append("../../../../common/atlas_utils")
 sys.path.append("../../../../common")
 sys.path.append("../")
@@ -91,7 +91,7 @@ def calculate_position(bbox, transform_matrix, warped_size, pix_per_meter, x_sca
         bottom_x= int((bbox[0] + bbox[2] / 2) * x_scale)
         bottom_y= int((bbox[1] + bbox[3] / 2) * y_scale)
         pos = np.array((top_x / 2 + bottom_x / 2, bottom_y)).reshape(1, 1, -1)
-        dst = cv.perspectiveTransform(pos, transform_matrix).reshape(-1, 1)
+        dst = cv2.perspectiveTransform(pos, transform_matrix).reshape(-1, 1)
         return np.array((warped_size[1] - dst[1]) / pix_per_meter[1])
 
 
@@ -101,7 +101,7 @@ def preprocess_frame(frame):
     """
     frame = frame[:, :, ::-1]
     image = frame
-    image = Image.fromarray(image.astype('uint8'), 'RGB')
+    image = LaneFinder.Image.fromarray(image.astype('uint8'), 'RGB')
     
     return image
 
@@ -113,11 +113,11 @@ def preprocess(frame):
     #get img shape
     orig_shape = frame.shape[:2]
 
-    rgb_img = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
+    rgb_img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     #normalization
     rgb_img = rgb_img / 255.0
     #resize img
-    rgb_img = cv.resize(rgb_img, (MODEL_WIDTH, MODEL_HEIGHT)).astype(np.float32)
+    rgb_img = cv2.resize(rgb_img, (MODEL_WIDTH, MODEL_HEIGHT)).astype(np.float32)
     # save memory C_CONTIGUOUS mode
     if not rgb_img.flags['C_CONTIGUOUS']:
         rgb_img = np.ascontiguousarray(frame)
@@ -125,8 +125,8 @@ def preprocess(frame):
     frame = preprocess_frame(frame)
     fframe = np.array(frame)
     fframe = lf.process_image(fframe, False)
-    frame = Image.fromarray(fframe)
-    framecv = cv.cvtColor(np.asarray(frame), cv2.COLOR_RGB2BGR)
+    frame = LaneFinder.Image.fromarray(fframe)
+    framecv = cv2.cvtColor(np.asarray(frame), cv2.COLOR_RGB2BGR)
 
     return orig_shape, rgb_img, framecv
 
@@ -171,13 +171,13 @@ def postprocess(result_list, frame, orig_shape):
             top_y= int((detect_result[1] - detect_result[3] / 2) * y_scale)
             bottom_x= int((detect_result[0] + detect_result[2] / 2) * x_scale)
             bottom_y= int((detect_result[1] + detect_result[3] / 2) * y_scale)
-            cv.rectangle(frame, (top_x, top_y), (bottom_x, bottom_y), (0, 255, 0), 2)
-            cv.putText(frame, labels[int(detect_result[4])], (top_x + 5, top_y + 10), 
-                    cv.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
+            cv2.rectangle(frame, (top_x, top_y), (bottom_x, bottom_y), (0, 255, 0), 2)
+            cv2.putText(frame, labels[int(detect_result[4])], (top_x + 5, top_y + 10), 
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
             d = distance[i]
             label_dis = '{} {:.2f}m'.format('dis:', d[0])
-            cv.putText(frame, label_dis, (top_x + 10, bottom_y + 15), 
-                    cv.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
+            cv2.putText(frame, label_dis, (top_x + 10, bottom_y + 15), 
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
     
     return frame
 
@@ -199,7 +199,7 @@ def main():
     #open video
     video_path = sys.argv[1]
     print("open video ", video_path)
-    cap = cv.VideoCapture(video_path)
+    cap = cv2.VideoCapture(video_path)
     fps = cap.get(cv2.CAP_PROP_FPS)
     Width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     Height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
@@ -254,7 +254,7 @@ if __name__ == '__main__':
     WARPED_SIZE = tuple(WARPED_SIZE)
     ORIGINAL_SIZE = tuple(ORIGINAL_SIZE)
 
-    lf = LaneFinder(ORIGINAL_SIZE, WARPED_SIZE, cam_matrix, dist_coeffs,
+    lf = LaneFinder.LaneFinder(ORIGINAL_SIZE, WARPED_SIZE, cam_matrix, dist_coeffs,
                     perspective_transform, pixels_per_meter)
     main()
     gc.collect()
