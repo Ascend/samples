@@ -9,6 +9,7 @@ class Dvpp():
         self._stream = stream
         self._run_mode = run_model
         self._dvpp_channel_desc = None
+        self._jpege_config = None
 
     def __del__(self):
         if self._crop_config:
@@ -153,7 +154,7 @@ class Dvpp():
         return pic_desc, out_buffer, out_buffer_size
 
     def jpege(self, image, width_align=128, height_align=16):
-        # 将yuv420sp图片转为jpeg图片
+        # yuv420sp to jpeg
         # 创建输入图片desc
         input_desc = self._gen_input_pic_desc(image, width_align, height_align)
         # 预测转换所需内存大小
@@ -180,7 +181,7 @@ class Dvpp():
         if (ret != ACL_ERROR_NONE):
             print("Jpege failed, ret ", ret)
             return None
-        # 等待转换完成
+
         ret = acl.rt.synchronize_stream(self._stream)
         if (ret != ACL_ERROR_NONE):
             print("Jpege synchronize stream failed, ret ", ret)
