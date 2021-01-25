@@ -230,8 +230,8 @@ def main():
 if __name__ == '__main__':
 
     import gc
-    path = './configure.json'
-    file = open(path, "rb")
+    config_path = './configure.json'
+    file = open(config_path, "rb")
     fileJson = json.load(file)
     cam_matrix = fileJson[0]["cam_matrix"]
     dist_coeffs = fileJson[0]["dist_coeffs"]
