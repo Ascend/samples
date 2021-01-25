@@ -60,6 +60,9 @@ class Model(object):
         print("Model release source success")
 
     def destroy(self):
+        """
+        destroy
+        """
         self.__del__()
 
     def _init_resource(self):
@@ -157,11 +160,11 @@ class Model(object):
             ptr = acl.util.numpy_to_ptr(inputs)
             size = inputs.size * inputs.itemsize
             data = self._copy_input_to_device(ptr, size, index)
-            if data == None:
+            if data is None:
                 size = 0
                 print("Copy input to device failed")
         elif (isinstance(inputs, dict) and
-              inputs.has_key('data') and inputs.has_key('size')):
+              inputs in ('data') and inputs in ('size')):
             size = inputs['size']
             data = inputs['data']
         else:
@@ -190,7 +193,7 @@ class Model(object):
             data = buffer_item['addr']
         else:
             print("The model %dth input size %d is change,"
-                  " before is %d"%(index, size, buffer_item['size']))
+                  " before is % d"%(index, size, buffer_item['size']))
             return None
 
         return data
