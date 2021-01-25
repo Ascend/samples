@@ -45,7 +45,7 @@ import tornado.ioloop
 import tornado.web
 import tornado.gen
 import tornado.websocket
-import face_detection.src.config_parser as config_parser
+import display.src.config_parser as config_parser
 from common.channel_manager import ChannelManager
 
 class WebApp:
@@ -460,7 +460,7 @@ def start_webapp():
     http_server.listen(config.web_server_port, address=config.web_server_ip)
 
     print("Please visit http://" + config.web_server_ip + ":" +
-          str(config.web_server_port) + " for face detection")
+          str(config.web_server_port) + " for display")
     tornado.ioloop.IOLoop.instance().start()
 
 
