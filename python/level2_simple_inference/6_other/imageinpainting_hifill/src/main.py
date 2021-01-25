@@ -34,7 +34,7 @@ def sort(str_lst):
     return [s for s in sorted(str_lst)]
 
 
-def resize_ave(img, MULTIPLE):
+def resize_ave(img, multiple):
     """
     resize image
     """
