@@ -103,16 +103,16 @@
 
       **source ~/.bashrc**
         
-      **cd $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV3_mask_detection**     
-      **python3 mask_detect.py**
+      **cd $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV3_mask_detection/src**     
+      **python3.6 mask_detect.py**
 
     - 如果是开发环境与运行环境分离部署，执行以下命令切换目录。
     
-      **cd $HOME/YOLOV3_mask_detection**
+      **cd $HOME/YOLOV3_mask_detection/src**
 
-      **python3 mask_detect.py** 
+      **python3.6 mask_detect.py** 
 ​       
 
 ### 查看结果
 
-运行完成后，会在outputs目录下生成带推理结果的jpg图片。
+运行完成后，会在out目录下生成带推理结果的jpg图片。
