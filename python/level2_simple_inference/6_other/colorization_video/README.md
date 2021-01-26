@@ -4,6 +4,7 @@
 
 **本README只提供命令行方式运行样例的指导，如需在Mindstudio下运行样例，请参考[Mindstudio运行视频样例wiki](https://gitee.com/ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E8%A7%86%E9%A2%91%E6%A0%B7%E4%BE%8B?sort_id=3170138)。**
 
+
 ## 视频黑白图像上色样例
 
 **注：案例详细介绍请参见[视频黑白图像上色_wiki](https://gitee.com/ascend/samples/wikis/%E8%A7%86%E9%A2%91%E9%BB%91%E7%99%BD%E5%9B%BE%E5%83%8F%E4%B8%8A%E8%89%B2?sort_id=3170478)。**
@@ -18,7 +19,7 @@
 
 部署此Sample前，需要准备好以下环境：
 
-- 请确认已按照[环境准备和依赖安装](../../../environment)准备好环境。
+- 请确认已按照[环境准备和依赖安装](https://gitee.com/ascend/samples/tree/dev/python/environment)准备好环境。
 
 - 已完成对应产品的开发环境和运行环境安装。
 
@@ -53,7 +54,7 @@
 
 3. 将原始模型转换为Davinci模型。
     
-    **注：请确认环境变量已经在[环境准备和依赖安装]()中配置完成**
+    **注：请确认环境变量已经在[环境准备和依赖安装](https://gitee.com/ascend/samples/tree/dev/python/environment)中配置完成**
 
     1. 设置LD_LIBRARY_PATH环境变量。
 
@@ -65,18 +66,17 @@
 
         **cd $HOME/models/colorization_video**  
 
-        **atc --input_shape="data_l:1,1,224,224" --weight="/home/ascend/models/colorization_video/colorization.caffemodel" --input_format=NCHW --output=colorization --soc_version=Ascend310 --framework=0 --model="/home/ascend/models/colorization_video/colorization.prototxt"**
+        **atc --input_shape=data_l:1,1,224,224 --weight=colorization.caffemodel --input_format=NCHW --output=colorization --soc_version=Ascend310 --framework=0 --model=colorization.prototxt**
 
     3. 执行以下命令将转换好的模型复制到样例中model文件夹中。
 
-        **cp ./colorization.om /home/ascend/samples/cplusplus/level2_simple_inference/6_other/colorization_video/model/**
+        **cp ./colorization.om /home/ascend/samples/python/level2_simple_inference/6_other/colorization_video/model/**
 
 4. 获取样例需要的测试文件。
 
     执行以下命令，进入样例的data文件夹中，下载对应的测试文件，完成后返回样例文件夹。
 
-    **cd /home/ascend/samples/cplusplus/level2_simple_inference/6_other/colorization_video/data**
-
+    **cd /home/ascend/samples/python/level2_simple_inference/6_other/colorization_video/data**
 
     **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/colorization_video/black-white_video.mp4**
 
@@ -85,61 +85,22 @@
 
 1. 修改present相关配置文件。
 
-    将样例目录下**script/param.conf**中的 presenter_server_ip、presenter_view_ip 修改为开发环境中可以ping通运行环境的ip地址，使用以下两种情况举例说明。
+    将样例目录下**scripts/param.conf**中的 presenter_server_ip、presenter_view_ip 修改为开发环境中可以ping通运行环境的ip地址，使用以下两种情况举例说明。
 
      - 使用产品为200DK开发者板。   
         1. 开发环境中使用ifconfig查看可用ip。   
-        2. 在开发环境中将**script/param.conf**中的 presenter_server_ip、presenter_view_ip 修改为该ip地址。   
+        2. 在开发环境中将**scripts/param.conf**中的 presenter_server_ip、presenter_view_ip 修改为该ip地址。   
         ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
         > - 1.开发环境和运行环境分离部署，一般使用配置的虚拟网卡ip，例如192.168.1.223。
         > - 2.开发环境和运行环境合一部署，一般使用200dk固定ip，例如192.168.1.2。
 
     - 使用产品为300加速卡（ai1s云端推理环境）。   
         1. ECS弹性云服务器控制台中查看ai1s云端环境可用内网ip，例如192.168.0.198。   
-        2. 在开发环境中将**script/param.conf**中的 presenter_server_ip、presenter_view_ip 修改为该ip地址。   
+        2. 在开发环境中将**scripts/param.conf**中的 presenter_server_ip、presenter_view_ip 修改为该ip地址。   
         ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
         > - 也可以在ai1s云端环境中使用ifconfig查看内网ip。
         > - 登录ai1s云端环境时的ip地址为此环境的公网ip，ai1s云端环境中ifconfig查看到的ip为此环境的内网ip。
  
-2. 开发环境命令行中设置编译依赖的环境变量。
-
-   可以在命令行中执行 **uname -a**，查看开发环境和运行环境的cpu架构。如果回显为x86_64，则为x86架构。如果回显为arm64，则为Arm架构。基于开发环境与运行环境CPU架构是否相同，请仔细看下面的步骤：
-
-   - 当开发环境与运行环境CPU架构相同时，执行以下命令导入环境变量。 
-  
-     **export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest**
-
-     **export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub**
-
-   - 当开发环境与运行环境CPU架构不同时，执行以下命令导入环境变量。例如开发环境为X86架构，运行环境为Arm架构，由于开发环境上同时部署了X86和Arm架构的开发套件，后续编译应用时需要调用Arm架构开发套件的ACLlib库，所以此处需要导入环境变量为Arm架构的ACLlib库路径。 
-  
-     **export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux**  
- 
-     **export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub**   
-     ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
-        > - 如果是20.0版本，此处 **DDK_PATH** 环境变量中的 **arm64-liunx** 应修改为 **arm64-linux_gcc7.3.0**。
-
-3. 切换到colorization_video目录，创建目录用于存放编译文件，例如，本文中，创建的目录为 **build/intermediates/host**。
-
-    **cd $HOME/samples/cplusplus/level2_simple_inference/6_other/colorization_video**
-
-    **mkdir -p build/intermediates/host**
-
-4. 切换到 **build/intermediates/host** 目录，执行cmake生成编译文件。
-
-    - 当开发环境与运行环境操作系统架构相同时，执行如下命令编译。   
-      **cd build/intermediates/host**  
-      **make clean**   
-      **cmake \.\./\.\./\.\./src -DCMAKE_CXX_COMPILER=g++ -DCMAKE_SKIP_RPATH=TRUE**
-
-    - 当开发环境与运行环境操作系统架构不同时，需要使用交叉编译器编译。例如开发环境为X86架构，运行环境为Arm架构，执行以下命令进行交叉编译。   
-      **cd build/intermediates/host**   
-      **make clean**   
-      **cmake \.\./\.\./\.\./src -DCMAKE_CXX_COMPILER=aarch64-linux-gnu-g++ -DCMAKE_SKIP_RPATH=TRUE**
-
-5. 执行make命令，生成的可执行文件main在 **colorization_video/out** 目录下。
-
-    **make**
 
 
 ### 样例运行
@@ -151,14 +112,14 @@
 
     **开发环境与运行环境合一部署，请跳过此步骤！**   
 
-    **scp -r $HOME/samples/cplusplus/level2_simple_inference/6_other/colorization_video HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
+    **scp -r $HOME/samples/python/level2_simple_inference/6_other/colorization_video HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
 
 2. 启动presenterserver并登录运行环境。
 
     - 使用产品为200DK开发者板。   
         1. 开发环境中执行以下命令启动presentserver。   
-            **cd $HOME/samples/cplusplus/level2_simple_inference/6_other/colorization_video**   
-            **bash script/run_presenter_server.sh**   
+            **cd $HOME/samples/python/level2_simple_inference/6_other/colorization_video**   
+            **bash scripts/run_presenter_server.sh**   
         2. 执行以下命令登录运行环境。   
             **开发环境与运行环境合一部署，请跳过此步骤！**   
             **ssh HwHiAiUser@xxx.xxx.xxx.xxx** 
@@ -167,23 +128,23 @@
         1. 执行以下命令登录运行环境。   
            **开发环境与运行环境合一部署，请跳过此步骤！**   
            **ssh HwHiAiUser@xxx.xxx.xxx.xxx**    
-        2. 运行环境中启动presenterserver。   
-进入工程所在目录（如$HOME/colorization_video），执行以下命令    
-           **bash script/run_presenter_server.sh**   
+      2. 运行环境中启动presenterserver。   
+进入工程所在目录（如$HOME/colorization_video），执行以下命令   
+            **bash script/run_presenter_server.sh**   
 
 3. <a name="step_2"></a>运行可执行文件。
 
     - 如果是开发环境与运行环境合一部署，执行以下命令，设置运行环境变量，并切换目录。   
       **export LD_LIBRARY_PATH=**   
       **source ~/.bashrc**     
-      **cd $HOME/samples/cplusplus/level2_simple_inference/6_other/colorization_video/out**
+      **cd $HOME/samples/python/level2_simple_inference/6_other/colorization_video/src**
 
     - 如果是开发环境与运行环境分离部署，执行以下命令切换目录。   
-      **cd $HOME/colorization_video/out**
+      **cd $HOME/colorization_video/src**
 
     切换目录后，执行以下命令运行样例。
 
-    **./main ../data/black-white_video.mp4**
+    **python3.6 colorize.py ../data/black-white_video.mp4**
 
 ### 查看结果
 

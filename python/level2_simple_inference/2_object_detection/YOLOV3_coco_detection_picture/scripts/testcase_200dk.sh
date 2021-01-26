@@ -151,7 +151,7 @@ function main() {
         fi
     fi
 
-    cd ${project_path}
+    cd ${project_path}/src
 
     # 重新配置程序运行所需的环境变量
     setRunEnv
@@ -161,7 +161,7 @@ function main() {
     fi
 
     # 运行程序
-    python3.6 ${project_path}/src/object_detect.py ${project_path}/data
+    python3.6 object_detect.py ../data
     if [ $? -ne 0 ];then
         echo "ERROR: run failed. please check your project"
         return ${inferenceError}

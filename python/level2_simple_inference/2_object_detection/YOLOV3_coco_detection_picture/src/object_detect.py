@@ -24,15 +24,22 @@ labels = ["person",
         "microwave", "oven", "toaster", "sink", "refrigerator", "book", "clock", "vase",
         "scissors", "teddy bear", "hair drier", "toothbrush"]
 
-class BBox(object):
-    def __init__(self, ltx=0, lty=0, rbx=0, rby=0, text=None):
-        self.ltx
 
 class ObjectDetect(object):
+
+    """
+    Perform model loading,
+    Initialization, reasoning process
+    """
     def __init__(self, model_path, model_width, model_height):
         self.device_id = 0
         self.context = None
         self.stream = None
+        self._image_info_size = None
+        self._model = None 
+        self.run_mode = None
+
+
         self._model_path = model_path
         self._model_width = model_width
         self._model_height = model_height
@@ -72,17 +79,20 @@ class ObjectDetect(object):
         print("Init resource stage success") 
 
     def init(self):
-        #初始化 acl 资源
+        """
+        Initialize  ACL resource
+        """
+        
         self._init_resource() 
         self._dvpp = Dvpp(self.stream, self.run_mode)
 
-        #初始化dvpp
+        #Initialize DVPP
         ret = self._dvpp.init_resource()
         if ret != SUCCESS:
             print("Init dvpp failed")
             return FAILED
         
-        #加载模型
+        #load model
         self._model = Model(self.run_mode, self._model_path)
         ret = self._model.init_resource()
         if ret != SUCCESS:
@@ -124,64 +134,67 @@ class ObjectDetect(object):
         print(box_info[0:6*box_num].reshape(6, box_num))
         scalex = origin_img.width / self._model_width
         scaley = origin_img.height / self._model_height
-        output_path = os.path.join("./outputs", os.path.basename(image_file))
+        output_path = os.path.join("../outputs", os.path.basename(image_file))
         origin_image = Image.open(image_file)
         draw = ImageDraw.Draw(origin_image)
-        font = ImageFont.truetype("SourceHanSansCN-Normal.ttf", size=30)
+        font = ImageFont.truetype("../SourceHanSansCN-Normal.ttf", size=30)
         print("images:{}".format(image_file))
         print("======== inference results: =============")
         for n in range(int(box_num)):
-            id = int(box_info[5*int(box_num)+n])
-            label = labels[id]
-            score = box_info[4*int(box_num)+n]
-            top_left_x = box_info[0*int(box_num)+n] * scalex
-            top_left_y = box_info[1*int(box_num)+n] * scaley
-            bottom_right_x = box_info[2*int(box_num)+n] * scalex
-            bottom_right_y = box_info[3*int(box_num)+n] * scaley
-            print("%s: class %d, box %d %d %d %d, score %f"%(
-                label, id, top_left_x, top_left_y, 
+            ids = int(box_info[5 * int(box_num) + n])
+            label = labels[ids]
+            score = box_info[4 * int(box_num)+n]
+            top_left_x = box_info[0 * int(box_num)+n] * scalex
+            top_left_y = box_info[1 * int(box_num)+n] * scaley
+            bottom_right_x = box_info[2 * int(box_num) + n] * scalex
+            bottom_right_y = box_info[3 * int(box_num) + n] * scaley
+            print(" % s: class % d, box % d % d % d % d, score % f" % (
+                label, ids, top_left_x, top_left_y, 
                 bottom_right_x, bottom_right_y, score))
-            draw.line([(top_left_x, top_left_y),(bottom_right_x, top_left_y), (bottom_right_x, bottom_right_y), \
-            (top_left_x, bottom_right_y), (top_left_x, top_left_y)],fill=(0,200,100),width=3)
+            draw.line([(top_left_x, top_left_y), (bottom_right_x, top_left_y), (bottom_right_x, bottom_right_y), \
+            (top_left_x, bottom_right_y), (top_left_x, top_left_y)], fill=(0, 200, 100), width=3)
             draw.text((top_left_x, top_left_y), label, font=font, fill=255)
         origin_image.save(output_path)
 
 
 
-MODEL_PATH = "./model/yolov3_yuv.om"
+MODEL_PATH = "../model/yolov3_yuv.om"
 MODEL_WIDTH = 416
 MODEL_HEIGHT = 416
 
 def main():
-    #程序执行时带图片目录参数
+    """
+    Program execution with picture directory parameters
+    """
+    
     if (len(sys.argv) != 2):
         print("The App arg is invalid")
         exit(1)
     
-    #实例化分类检测,传入om模型存放路径,模型输入宽高参数
+    #Instance classification detection, pass into the OM model storage path, model input width and height parameters
     detect = ObjectDetect(MODEL_PATH, MODEL_WIDTH, MODEL_HEIGHT)
-    #推理初始化
+    #Inference initialization
     ret = detect.init()
     check_ret("ObjectDetect.init ", ret)
     
-    #从参数获取图片存放目录,逐张图片推理
+    #From the parameters of the picture storage directory, reasoning by a picture
     image_dir = sys.argv[1]
     images_list = [os.path.join(image_dir, img)
                    for img in os.listdir(image_dir)
                    if os.path.splitext(img)[1] in IMG_EXT]
-    #创建目录，保存推理结果
-    if not os.path.isdir('./outputs'):
-        os.mkdir('./outputs')
+    #Create a directory to store the inference results
+    if not os.path.isdir('../outputs'):
+        os.mkdir('../outputs')
 
     for image_file in images_list:
-        #读入图片
+        #read picture
         image = AclImage(image_file)
-        #对图片预处理
+        #preprocess image
         resized_image = detect.pre_process(image)
         print("pre process end")
-        #推理图片
+        #reason pictures
         result = detect.inference(resized_image)
-        #对推理结果进行处理
+        #process resresults
         detect.post_process(result, image, image_file)
 
 if __name__ == '__main__':
