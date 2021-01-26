@@ -1,9 +1,10 @@
 English|[中文](README_200DK_CN.md)
 
 # Basic Environment Configuration  
-This readme file describes how to configure the basic environment, including the sudo permission, apt source, Atlas 200 DK networking, and environment variables. If they have been configured, skip this workflow.  
+This readme file describes how to configure the basic environment, including the sudo permission, apt source, Atlas 200 DK networking, and environment variables. If they have been configured, skip this workflow.    
 
-$\color{red}{Perform the following operations in the development environment.}$
+ **Perform the  following  operations  in  the  development  environment.** 
+
 
 1. Add the following environment variables to the development environment for ATC model conversion. 
 
@@ -11,33 +12,34 @@ $\color{red}{Perform the following operations in the development environment.}$
         **vim ~/.bashrc** 
 
         Add the following environment variables to the file.  
-        **export install_path=$HOME/Ascend/ascend-toolkit/latest**
+        **export install_path=\$HOME/Ascend/ascend-toolkit/latest**
 
-        **export PATH=/usr/local/python3.7.5/bin:${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH**  
+        **export PATH=/usr/local/python3.7.5/bin:\\${install_path}/atc/ccec_compiler/bin:\\${install_path}/atc/bin:\\$PATH**  
 
-        **export ASCEND_OPP_PATH=${install_path}/opp**  
+        **export ASCEND_OPP_PATH=\${install_path}/opp**  
 
-        **export LD_LIBRARY_PATH=${install_path}/atc/lib64** 
+        **export LD_LIBRARY_PATH=\${install_path}/atc/lib64** 
 
-        The environment variable ***PYTHONPATH*** is incompatible with CANN 20.0 and 20.1. Run the corresponding command to add ***PYTHONPATH*** based on the CANN version.
+        The environment variable **PYTHONPATH** is incompatible with CANN 20.0 and 20.1. Run the corresponding command to add **PYTHONPATH** based on the CANN version.
 
         - For CANN 20.0
 
-            **export PYTHONPATH=${install_path}/atc/python/site-packages/te:${install_path}/atc/python/site-packages/topi:$PYTHONPATH**  
+            **export PYTHONPATH=\\${install_path}/atc/python/site-packages/te:\\${install_path}/atc/python/site-packages/topi:\\$PYTHONPATH**  
 
         - For CANN 20.1
 
-            **export PYTHONPATH=${install_path}/atc/python/site-packages:${install_path}/atc/python/site-packages/auto_tune.egg/auto_tune:${install_path}/atc/python/site-packages/schedule_search.egg:$PYTHONPATH**  
+            **export PYTHONPATH=\\${install_path}/atc/python/site-packages:\\${install_path}/atc/python/site-packages/auto_tune.egg/auto_tune:\\${install_path}/atc/python/site-packages/schedule_search.egg:\\$PYTHONPATH**  
 
         Save the configuration and exit.  
         **wq!**
-        >![](https://images.gitee.com/uploads/images/2020/1130/162342_1d7d35d7_7401379.png "screenshot.png") **NOTE**    
-        >**If the development environment and operating environment are set up on the same server, do not configure LD_LIBRARY_PATH, avoiding the conflict with LD_LIBRARY_PATH in the operating environment when running the sample.**
+        >![](https://images.gitee.com/uploads/images/2020/1130/162342_1d7d35d7_7401379.png "screenshot.png") **NOTE**   
+        >**- Replace install_path with the actual installation path.**   
+        >**- If the development environment and operating environment are set up on the same server, do not configure LD_LIBRARY_PATH, avoiding the conflict with LD_LIBRARY_PATH in the operating environment when running the sample.**
 
     2. Make the configuration take effect.   
         **source ~/.bashrc**  
 
-$\color{red}{Perform the following operations in the operating environment (Atlas 200 DK).}$  
+ **Perform the following operations in the operating environment (Atlas 200 DK).**   
 1. Log in to the operating environment.  
     **ssh HwHiAiUser@X.X.X.X**  
 
@@ -132,8 +134,8 @@ Update the sources.
         **vim ~/.bashrc** 
 
         Add the following environment variables to the file.  
-        **export LD_LIBRARY_PATH=/home/HwHiAiUser/ascend_ddk/arm/lib:/home/HwHiAiUser/Ascend/acllib/lib64:$LD_LIBRARY_PATH**     
-        **export PYTHONPATH=/home/HwHiAiUser/Ascend/pyACL/python/site-packages/acl:$PYTHONPATH**
+        **export LD_LIBRARY_PATH=/home/HwHiAiUser/ascend_ddk/arm/lib:/home/HwHiAiUser/Ascend/acllib/lib64:\$LD_LIBRARY_PATH**     
+        **export PYTHONPATH=/home/HwHiAiUser/Ascend/pyACL/python/site-packages/acl:\$PYTHONPATH**
 
         Save the configuration and exit.  
         **wq!**   
