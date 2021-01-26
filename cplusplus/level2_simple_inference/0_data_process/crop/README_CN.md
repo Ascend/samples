@@ -1,3 +1,5 @@
+中文|[English](README_EN.md)
+
 **本样例为大家学习昇腾软件栈提供参考，非商业目的！**
 
 **本样例适配20.0及以上版本，支持产品为Atlas200DK、Atlas300([ai1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366))。**
@@ -5,7 +7,6 @@
 **本README只提供命令行方式运行样例的指导，如需在Mindstudio下运行样例，请参考[Mindstudio运行图片样例wiki](https://gitee.com/ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E5%9B%BE%E7%89%87%E6%A0%B7%E4%BE%8B?sort_id=3164874)。**
 
 ## crop样例
-
 
 功能：调用dvpp的crop接口，实现图像裁剪功能。
 
@@ -47,9 +48,6 @@
 
             **unzip ascend-samples-master.zip**
 
-
-
-
 2. 获取样例需要的测试图片。
 
     执行以下命令，进入样例的data文件夹中，下载对应的测试图片。
@@ -57,7 +55,6 @@
     **cd /home/ascend/samples/cplusplus/level1_single_api/1_acl/4_dvpp/crop/data**
 
     **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/crop/wood_rabbit_1024_1068_nv12.yuv**
-
     
 
 ### 样例部署
