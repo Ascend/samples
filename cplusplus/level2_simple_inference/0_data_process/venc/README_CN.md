@@ -1,17 +1,19 @@
+中文|[English](README_EN.md)
+
 **本样例为大家学习昇腾软件栈提供参考，非商业目的！**
 
 **本样例适配20.0及以上版本，支持产品为Atlas200DK、Atlas300([ai1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366))。**
 
-**本README只提供命令行方式运行样例的指导，如需在Mindstudio下运行样例，请参考[Mindstudio运行图片样例wiki](https://gitee.com/ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E5%9B%BE%E7%89%87%E6%A0%B7%E4%BE%8B?sort_id=3164874)。**
+**本README只提供命令行方式运行样例的指导，如需在Mindstudio下运行样例，请参考[Mindstudio运行视频样例wiki](https://gitee.com/ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E5%9B%BE%E7%89%87%E6%A0%B7%E4%BE%8B?sort_id=3164874)。**
 
-## jpegd样例
+## venc样例
 
+功能：调用dvpp的venc接口，实现视频编码功能。
 
-功能：调用dvpp的jpegd接口，实现图片解码的功能。
+样例输入：原始mp4文件。
 
-样例输入：待解码的jpeg图片。
+样例输出：编码后的h264文件。
 
-样例输出：解码后的YUV图片。
 
 ### 前提条件
 
@@ -51,9 +53,9 @@
 
     执行以下命令，进入样例的data文件夹中，下载对应的测试图片。
 
-    **cd /home/ascend/samples/cplusplus/level1_single_api/1_acl/4_dvpp/jpegd/data**
+    **cd /home/ascend/samples/cplusplus/level1_single_api/1_acl/4_dvpp/venc/data**
 
-    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/jpegd/dog1_1024_683.jpg**
+    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/venc/detection.mp4**
 
     
 
@@ -83,9 +85,9 @@
         > - 如果是20.0版本，此处 **DDK_PATH** 环境变量中的 **arm64-liunx** 应修改为 **arm64-linux_gcc7.3.0**。
         > - 可以在命令行中执行 **uname -a**，查看开发环境和运行环境的cpu架构。如果回显为x86_64，则为x86架构。如果回显为arm64，则为Arm架构。
 
-2. 切换到jpegd目录，创建目录用于存放编译文件，例如，本文中，创建的目录为 **build/intermediates/host**。
+2. 切换到venc目录，创建目录用于存放编译文件，例如，本文中，创建的目录为 **build/intermediates/host**。
 
-    **cd $HOME/samples/cplusplus/level1_single_api/1_acl/4_dvpp/jpegd**
+    **cd $HOME/samples/cplusplus/level1_single_api/1_acl/4_dvpp/venc**
 
     **mkdir -p build/intermediates/host**
 
@@ -107,7 +109,7 @@
     
       **cmake \.\./\.\./\.\./src -DCMAKE_CXX_COMPILER=aarch64-linux-gnu-g++ -DCMAKE_SKIP_RPATH=TRUE**
 
-4. 执行make命令，生成的可执行文件main在 **jpegd/out** 目录下。
+4. 执行make命令，生成的可执行文件main在 **venc/out** 目录下。
 
     **make**
 
@@ -115,9 +117,9 @@
 
 **注：开发环境与运行环境合一部署，请跳过步骤1，直接执行[步骤2](#step_2)即可。**   
 
-1. 执行以下命令,将开发环境的 **jpegd** 目录上传到运行环境中，例如 **/home/HwHiAiUser**，并以HwHiAiUser（运行用户）登录运行环境（Host）。
+1. 执行以下命令,将开发环境的 **venc** 目录上传到运行环境中，例如 **/home/HwHiAiUser**，并以HwHiAiUser（运行用户）登录运行环境（Host）。
 
-    **scp -r $HOME/samples/cplusplus/level1_single_api/1_acl/4_dvpp/jpegd HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
+    **scp -r $HOME/samples/cplusplus/level1_single_api/1_acl/4_dvpp/venc HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
 
     **ssh HwHiAiUser@xxx.xxx.xxx.xxx**    
 
@@ -132,16 +134,18 @@
 
       **source ~/.bashrc**
         
-      **cd $HOME/samples/cplusplus/level1_single_api/1_acl/4_dvpp/jpegd/out**
+      **cd $HOME/samples/cplusplus/level1_single_api/1_acl/4_dvpp/venc/out**
 
     - 如果是开发环境与运行环境分离部署，执行以下命令切换目录。
     
-      **cd $HOME/jpegd/out**
+      **cd $HOME/venc/out**
 
     切换目录后，执行以下命令运行样例。
+    
+    **mkdir output**
 
-    **./main**
+    **./main ../data/detection.mp4**
 
 ### 查看结果
 
-运行完成后，会在运行环境的命令行中打印出推理结果,并在$HOME/jpegd/out/output目录下生成推理后的图片。
+运行完成后，会在运行环境的命令行中打印出推理结果,并在$HOME/venc/out/output目录下生成推理后的图片。
