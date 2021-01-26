@@ -98,7 +98,7 @@ Run the following commands in the operating environment.
         The environment variable ***LD_LIBRARY_PATH*** is incompatible with CANN 20.0 and 20.1. Run the corresponding command to add the ***LD_LIBRARY_PATH*** environment variable based on the CANN version.
         - For CANN 20.0
 
-            **export LD_LIBRARY_PATH=\\$HOME/ascend_ddk/x86/lib:$HOME/Ascend/nnrt/latest/acllib_linux.x86_64/lib64:\\$LD_LIBRARY_PATH**
+            **export LD_LIBRARY_PATH=\\$HOME/ascend_ddk/x86/lib:\\$HOME/Ascend/nnrt/latest/acllib_linux.x86_64/lib64:\\$LD_LIBRARY_PATH**
 
         - For CANN 20.1
 
