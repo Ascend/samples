@@ -78,10 +78,10 @@ Before deploying this sample, ensure that:
 
 1. Modify Presenter-related configuration files.
 
-    Change **presenter_server_ip** and **presenter_view_ip** in **script/param.conf** in the sample directory to the IP addresses that can ping the operating environment in the development environment. 
+    Change **presenter_server_ip** and **presenter_view_ip** in **scripts/param.conf** in the sample directory to the IP addresses that can ping the operating environment in the development environment. 
 
     1. In the development environment, run the ifconfig command to view available IP addresses.    
-    2. In the development environment, change **presenter_server_ip** and **presenter_view_ip** in **script/param.conf** to the available IP addresses.
+    2. In the development environment, change **presenter_server_ip** and **presenter_view_ip** in **scripts/param.conf** to the available IP addresses.
 
     ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **Note**
 
@@ -129,7 +129,7 @@ Before deploying this sample, ensure that:
 
     1. Run the following command in the development environment to start the Presenter Server:  
         **cd $HOME/samples/cplusplus/level2_simple_inference/2_object_detection/face_detection_camera**  
-        **bash script/run_presenter_server.sh**  
+        **bash scripts/run_presenter_server.sh**  
     2. Run the following command to log in to the operating environment:  
         **If the development environment and operating environment are deployed on the same server, skip this step.**  
         **ssh HwHiAiUser@xxx.xxx.xxx.xxx**
