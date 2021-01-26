@@ -28,7 +28,7 @@ $\color{red}{c++安装opencv的链接：}$[安装opencv](../../../cplusplus/envi
     Python样例中的atlas_util库会调用ffmpeg的so文件。 
  
     创建文件夹，用于存放编译后的文件  
-    **mkdir -p /home/HwHiAiUser/ascend_ddk/arm**
+    **mkdir -p /home/HwHiAiUser/ascend_ddk/x86**
 
     下载ffmpeg  
     **cd $HOME**  
@@ -37,7 +37,7 @@ $\color{red}{c++安装opencv的链接：}$[安装opencv](../../../cplusplus/envi
     **cd ffmpeg-4.1.3**
 
     安装ffmpeg   
-    **./configure --enable-shared --enable-pic --enable-static --disable-x86asm --prefix=/home/HwHiAiUser/ascend_ddk/arm**  
+    **./configure --enable-shared --enable-pic --enable-static --disable-x86asm --prefix=/home/HwHiAiUser/ascend_ddk/x86**  
     **make -j8**      
     **make install**
 
@@ -45,17 +45,17 @@ $\color{red}{c++安装opencv的链接：}$[安装opencv](../../../cplusplus/envi
     **su root**  
     **vim /etc/ld.so.conf.d/ffmpeg.conf**  
     在末尾添加一行   
-    **/home/HwHiAiUser/ascend_ddk/arm/lib**  
+    **/home/HwHiAiUser/ascend_ddk/x86/lib**  
     使配置生效    
     **ldconfig**  
 
     配置profile系统文件    
     **vim /etc/profile**    
     在末尾添加一行  
-    **export PATH=$PATH:/home/HwHiAiUser/ascend_ddk/arm/bin**    
+    **export PATH=$PATH:/home/HwHiAiUser/ascend_ddk/x86/bin**    
     使配置文件生效    
     **source /etc/profile**    
     使opencv能找到ffmpeg   
-    **cp /home/HwHiAiUser/ascend_ddk/arm/lib/pkgconfig/\* /usr/share/pkgconfig**    
+    **cp /home/HwHiAiUser/ascend_ddk/x86/lib/pkgconfig/\* /usr/share/pkgconfig**    
     退出root用户   
     **exit**

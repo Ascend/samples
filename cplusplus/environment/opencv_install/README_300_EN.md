@@ -4,7 +4,7 @@ English|[中文](README_300_CN.md)
 
 FFmpeg and OpenCV are installed to implement diversified data preprocessings and postprocessings. Most of the samples provided by the Ascend Developer Zone utilize the data processing capabilities backed by FFmpeg and OpenCV.
 
-$\color{red}{Run the following commands in the development environment as a common user. The following takes **HwHiAiUser**as an example. Replace it with the actual running user.}$  
+ **Run the following commands in the development environment as a common user. The following takes **HwHiAiUser**as an example. Replace it with the actual running user.** 
 
 
 1. Install dependencies.  
@@ -50,7 +50,7 @@ $\color{red}{Run the following commands in the development environment as a comm
         **source /etc/profile**  
 
     6. Make OpenCV find FFmpeg.  
-        **cp /home/HwHiAiUser/ascend_ddk/x86/lib/pkgconfig/* /usr/share/pkgconfig**  
+        **cp /home/HwHiAiUser/ascend_ddk/x86/lib/pkgconfig/\* /usr/share/pkgconfig**  
            Switch to the common user.  
         **exit**
     >![](https://images.gitee.com/uploads/images/2020/1130/162342_1d7d35d7_7401379.png "screenshot.png") **NOTE**
@@ -66,8 +66,9 @@ $\color{red}{Run the following commands in the development environment as a comm
         **cd build**  
 
     2. Install OpenCV.  
-        
-        cmake -D BUILD_SHARED_LIBS=ON  -D BUILD_opencv_python3=YES -D BUILD_TESTS=OFF -D CMAKE_BUILD_TYPE=RELEASE -D  CMAKE_INSTALL_PREFIX=$HOME/ascend_ddk/x86 -D WITH_LIBV4L=ON -D OPENCV_EXTRA_MODULES=../../opencv_contrib/modules -D PYTHON3_LIBRARIES=/usr/lib/python3.6/config-3.6m-x86_64-linux-gnu/libpython3.6m.so  -D PYTHON3_NUMPY_INCLUDE_DIRS=$HOME/.local/lib/python3.6/site-packages/numpy/core/include/ -D OPENCV_SKIP_PYTHON_LOADER=ON -D CMAKE_INSTALL_PREFIX=$HOME/ascend_ddk/x86 ..
+        ```
+        cmake -D BUILD_SHARED_LIBS=ON  -D BUILD_opencv_python3=YES -D BUILD_TESTS=OFF -D CMAKE_BUILD_TYPE=RELEASE -D  CMAKE_INSTALL_PREFIX=$HOME/ascend_ddk/x86 -D WITH_LIBV4L=ON -D OPENCV_EXTRA_MODULES=../../opencv_contrib/modules -D PYTHON3_LIBRARIES=/usr/lib/python3.6/config-3.6m-x86_64-linux-gnu/libpython3.6m.so  -D PYTHON3_NUMPY_INCLUDE_DIRS=$HOME/.local/lib/python3.6/site-packages/numpy/core/include/ -D OPENCV_SKIP_PYTHON_LOADER=ON -D CMAKE_INSTALL_PREFIX=$HOME/ascend_ddk/x86 ..  
+        ```
         
         **make -j8**  
         **make install**  
@@ -79,7 +80,7 @@ $\color{red}{Run the following commands in the development environment as a comm
 
 5. Import the FFmpeg and OpenCV libraries and OpenCV-Python installed in the development environment to the operating environment for execution. **(Skip this step if both the development environment and operating environment are on the same server.)**    
 
-    $\color{red}{Note: Perform the following operation in the operating environment.}$ 
+     **Note: Perform the following operation in the operating environment.**  
 
     Log in to the operating environment as a common user. 
 
@@ -87,7 +88,7 @@ $\color{red}{Run the following commands in the development environment as a comm
      **scp -r HwHiAiUser@X.X.X.X:/home/HwHiAiUser/ascend_ddk/x86 $HOME/ascend_ddk**  
      **scp -r HwHiAiUser@X.X.X.X:/home/HwHiAiUser/opencv/build/lib/python3/cv2.cpython-36m-x86_64-linux-gnu.so $HOME**  
      **sudo mv $HOME/cv2.cpython-36m-x86_64-linux-gnu.so /usr/lib/python3/dist-packages**  
-     **scp -r HwHiAiUser@X.X.X.X:/usr/lib/x86_64-linux-gnu/lib* $HOME/ascend_ddk/x86/lib**  
+     **scp -r HwHiAiUser@X.X.X.X:/usr/lib/x86_64-linux-gnu/lib\* $HOME/ascend_ddk/x86/lib**  
      
 
     >![](https://images.gitee.com/uploads/images/2020/1130/162342_1d7d35d7_7401379.png "screenshot.png") **NOTE: Replace *X.X.X.X* with the IP address of the development environment and HwHiAiUser with the actual running user.** 

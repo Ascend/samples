@@ -3,7 +3,7 @@ English|[中文](README_300_CN.md)
 # Basic Environment Configuration  
 This readme file describes how to configure the basic environment, including the sudo permission, apt source, and environment variables. If they have been configured, skip this workflow.  
 
-$\color{red}{Run the following commands as a common user in the development environment. The following takes **HwHiAiUser** as an example. Replace it with the actual running user.}$
+ **Run the following commands as a common user in the development environment. The following takes **HwHiAiUser** as an example. Replace it with the actual running user.** 
 
 
 1. Grant the sudo permission to the **HwHiAiUser** user.
@@ -57,23 +57,23 @@ $\color{red}{Run the following commands as a common user in the development envi
         **vim ~/.bashrc** 
 
         Add the following environment variables to the file.  
-        **export install_path=$HOME/Ascend/ascend-toolkit/latest**
+        **export install_path=\$HOME/Ascend/ascend-toolkit/latest**
 
-        **export PATH=/usr/local/python3.7.5/bin:${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH**  
+        **export PATH=/usr/local/python3.7.5/bin:\\${install_path}/atc/ccec_compiler/bin:\\${install_path}/atc/bin:\\$PATH**  
 
-        **export ASCEND_OPP_PATH=${install_path}/opp**  
+        **export ASCEND_OPP_PATH=\${install_path}/opp**  
 
-        **export LD_LIBRARY_PATH=${install_path}/atc/lib64** 
+        **export LD_LIBRARY_PATH=\${install_path}/atc/lib64** 
 
         The environment variable ***PYTHONPATH*** is incompatible with CANN 20.0 and 20.1. Run the corresponding command to add ***PYTHONPATH*** based on the CANN version.
 
         - For CANN 20.0
 
-            **export PYTHONPATH=${install_path}/atc/python/site-packages/te:${install_path}/atc/python/site-packages/topi:$PYTHONPATH**  
+            **export PYTHONPATH=\\${install_path}/atc/python/site-packages/te:\\${install_path}/atc/python/site-packages/topi:\\$PYTHONPATH**  
 
         - For CANN 20.1
 
-            **export PYTHONPATH=${install_path}/atc/python/site-packages:${install_path}/atc/python/site-packages/auto_tune.egg/auto_tune:${install_path}/atc/python/site-packages/schedule_search.egg:$PYTHONPATH**  
+            **export PYTHONPATH=\\${install_path}/atc/python/site-packages:\\${install_path}/atc/python/site-packages/auto_tune.egg/auto_tune:\\${install_path}/atc/python/site-packages/schedule_search.egg:\\$PYTHONPATH**  
 
         Save the configuration and exit.  
         **wq!**
@@ -84,7 +84,7 @@ $\color{red}{Run the following commands as a common user in the development envi
     2. Make the configuration take effect.   
         **source ~/.bashrc**  
 
-$\color{red}{Run the following commands in the operating environment.}$  
+Run the following commands in the operating environment.
 1. Log in to the operating environment.  
 
 2. Add environment variables to the operating environment to run the project.
@@ -93,21 +93,21 @@ $\color{red}{Run the following commands in the operating environment.}$
 
         Add the following environment variables to the file.  
 
-        **export PYTHONPATH=$HOME/Ascend/nnrt/latest/pyACL/python/site-packages/acl:$PYTHONPATH**  
+        **export PYTHONPATH=\\$HOME/Ascend/nnrt/latest/pyACL/python/site-packages/acl:\\$PYTHONPATH**  
 
         The environment variable ***LD_LIBRARY_PATH*** is incompatible with CANN 20.0 and 20.1. Run the corresponding command to add the ***LD_LIBRARY_PATH*** environment variable based on the CANN version.
         - For CANN 20.0
 
-            **export LD_LIBRARY_PATH=$HOME/ascend_ddk/x86/lib:$HOME/Ascend/nnrt/latest/acllib_linux.x86_64/lib64:$LD_LIBRARY_PATH**
+            **export LD_LIBRARY_PATH=\\$HOME/ascend_ddk/x86/lib:\\$HOME/Ascend/nnrt/latest/acllib_linux.x86_64/lib64:\\$LD_LIBRARY_PATH**
 
         - For CANN 20.1
 
-            **export LD_LIBRARY_PATH=$HOME/ascend_ddk/x86/lib:$HOME/Ascend/nnrt/latest/acllib/lib64:$LD_LIBRARY_PATH**
+            **export LD_LIBRARY_PATH=\\$HOME/ascend_ddk/x86/lib:\\$HOME/Ascend/nnrt/latest/acllib/lib64:\\$LD_LIBRARY_PATH**
 
         Save the configuration and exit.  
         **wq!**   
         >![](https://images.gitee.com/uploads/images/2020/1130/162342_1d7d35d7_7401379.png "screenshot.png") **NOTE**  
-        >  **In this example, the CANN software package is installed by a non-root user. **      
+        >  **In this example, the CANN software package is installed by a non-root user.**      
 
      2. Make the configuration take effect.  
         **source ~/.bashrc**
