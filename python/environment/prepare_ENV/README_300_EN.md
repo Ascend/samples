@@ -102,7 +102,7 @@ This readme file describes how to configure the basic environment, including the
 
         - For CANN 20.1
 
-            **export LD_LIBRARY_PATH=\\$HOME/ascend_ddk/x86/lib:$HOME/Ascend/nnrt/latest/acllib/lib64:\\$LD_LIBRARY_PATH**
+            **export LD_LIBRARY_PATH=\\$HOME/ascend_ddk/x86/lib:\\$HOME/Ascend/nnrt/latest/acllib/lib64:\\$LD_LIBRARY_PATH**
 
         Save the configuration and exit.  
         **wq!** 
