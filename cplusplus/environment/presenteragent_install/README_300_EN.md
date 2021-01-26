@@ -1,6 +1,6 @@
 English|[中文](README_300_CN.md)
 # Installing Presenter Agent
-$\color{red}{Run the following commands in the development environment as the user who installs Toolkit.}$
+ **Run the following commands in the development environment as the user who installs Toolkit.** 
 
 1. Install the Autoconf, Automake, and Libtool dependencies.  
     **sudo apt-get install autoconf automake libtool python3-pip**
@@ -23,11 +23,11 @@ $\color{red}{Run the following commands in the development environment as the us
 4. Build and install Presenter Agent.    
     Set the environment variable and run the following command on the CLI.  
     **export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/_ARCH_**   
-    >![](public_sys-resources/icon-note.gif) **NOTE** 
-    >
-    >Replace ***$HOME/Ascend/ascend-toolkit/latest*** with the actual ACLlib installation path.   
-    >For CANN 20.0, replace ***ARCH*** with **x86_64-linux_gcc7.3.0**. For CANN 20.1, replace ***ARCH*** with **x86_64-linux**.
+    >![](https://images.gitee.com/uploads/images/2020/1130/162342_1d7d35d7_7401379.png "screenshot.png") **NOTE**   
+    >- Replace ***$HOME/Ascend/ascend-toolkit/latest*** with the actual ACLlib installation path.   
+    >- For CANN 20.0, replace ***ARCH*** with **x86_64-linux_gcc7.3.0**. For CANN 20.1, replace ***ARCH*** with **x86_64-linux**.
     Download the Presenter Agent source code.  
+     
      **cd $HOME**   
      **git clone https://gitee.com/ascend/samples.git**   
      **cd $HOME/samples/cplusplus/common/presenteragent/** 
@@ -39,7 +39,7 @@ $\color{red}{Run the following commands in the development environment as the us
  5. Upload the built .so file to the operating environment. (If the development environment and operating environment are installed on the same server, skip this step.)  
      **scp $HOME/ascend_ddk/x86/lib/libpresenteragent.so  HwHiAiUser@_IP_:/home/HwHiAiUser/ascend_ddk/x86/lib**     
      ​    
-     >![](public_sys-resources/icon-note.gif) **NOTE**  
+     >![](https://images.gitee.com/uploads/images/2020/1130/162342_1d7d35d7_7401379.png "screenshot.png") **NOTE**  
      >Replace the IP address with the public IP address of the Atlas 300 (AI1s cloud-based inference environment) and replace **HwHiAiUser** with the actual running user.
 
 
