@@ -28,7 +28,7 @@ $\color{red}{c++安装opencv的链接：}$[安装opencv](../../../cplusplus/envi
     Python样例中的atlas_util库会调用ffmpeg的so文件。 
  
     创建文件夹，用于存放编译后的文件  
-    **mkdir -p /home/HwHiAiUser/ascend_ddk/arm**
+    **mkdir -p /home/HwHiAiUser/ascend_ddk/x86**
 
     下载ffmpeg  
     **cd $HOME**  
