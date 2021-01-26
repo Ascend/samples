@@ -1,7 +1,7 @@
 English|[中文](README_300_CN.md)
 
 # Installing the Python 3 Operating Environment
-$\color{red}{Run the following commands in the operating environment.}$
+ **Run the following commands in the operating environment.** 
 
 1. Install the pip3 tool.  
     **sudo apt-get install python3-pip**      
@@ -12,12 +12,12 @@ $\color{red}{Run the following commands in the operating environment.}$
      **python3.6 -m pip install pillow Cython numpy tornado==5.1.0 protobuf --user -i https://mirrors.huaweicloud.com/repository/pypi/simple**   
      **python3.7.5 -m pip install tornado==5.1.0 protobuf Cython numpy --user -i https://mirrors.huaweicloud.com/repository/pypi/simple**   
 > ![](https://images.gitee.com/uploads/images/2020/1130/162342_1d7d35d7_7401379.png "screenshot.png") **NOTE**  
-> **If error information similar to "dpkg: error processing package ***** (--configure)" is displayed during the apt-get installation, rectify the fault by referring to [FAQ](https://bbs.huaweicloud.com/forum/thread-74123-1-1.html).**  
-> **If Python fails to be installed, click [here](https://bbs.huaweicloud.com/forum/thread-97632-1-1.html) to try a new source. Alternatively, use the default pip source by removing the the -i option from the command.**
+> **- If error information similar to "dpkg: error processing package ***** (--configure)" is displayed during the apt-get installation, rectify the fault by referring to [FAQ](https://bbs.huaweicloud.com/forum/thread-74123-1-1.html).**  
+> **- If Python fails to be installed, click [here](https://bbs.huaweicloud.com/forum/thread-97632-1-1.html) to try a new source. Alternatively, use the default pip source by removing the the -i option from the command.**
 
-$\color{red}{If the OpenCV-C++ has been installed, you can safely skip the steps 4 and 5, because OpenCV-Python3 is installed as part of the installation.}$
+ **If the OpenCV-C++ has been installed, you can safely skip the steps 4 and 5, because OpenCV-Python3 is installed as part of the installation.** 
 
-$\color{red}{For details about how to install the OpenCV-C++, see }$[Installing OpenCV](../../../cplusplus/environment/opencv_install/README_300_EN.md). 
+ **For details about how to install the OpenCV-C++, see**  [Installing OpenCV](../../../cplusplus/environment/opencv_install/README_300_EN.md). 
 
 
 4. Install OpenCV-Python3.  
@@ -27,7 +27,7 @@ $\color{red}{For details about how to install the OpenCV-C++, see }$[Installing 
     The atlas_util library in the Python sample calls the .so file of FFmpeg. 
 
     Create a folder for storing build output files.  
-    **mkdir -p /home/HwHiAiUser/ascend_ddk/arm**
+    **mkdir -p /home/HwHiAiUser/ascend_ddk/x86**
 
     Download FFmpeg.  
     **cd $HOME**  
@@ -36,7 +36,7 @@ $\color{red}{For details about how to install the OpenCV-C++, see }$[Installing 
     **cd ffmpeg-4.1.3**
 
     Install FFmpeg.   
-    **./configure --enable-shared --enable-pic --enable-static --disable-x86asm --prefix=/home/HwHiAiUser/ascend_ddk/arm**  
+    **./configure --enable-shared --enable-pic --enable-static --disable-x86asm --prefix=/home/HwHiAiUser/ascend_ddk/x86**  
     **make -j8**      
     **make install**
 
@@ -44,17 +44,17 @@ $\color{red}{For details about how to install the OpenCV-C++, see }$[Installing 
     **su root**  
     **vim /etc/ld.so.conf.d/ffmpeg.conf**  
     Append the following line to the file.   
-    **/home/HwHiAiUser/ascend_ddk/arm/lib**  
+    **/home/HwHiAiUser/ascend_ddk/x86/lib**  
     Make the configuration take effect.    
     **ldconfig**  
 
     Configure the profile system file.    
     **vim /etc/profile**    
     Append the following line to the file.  
-    **export PATH=$PATH:/home/HwHiAiUser/ascend_ddk/arm/bin**    
+    **export PATH=$PATH:/home/HwHiAiUser/ascend_ddk/x86/bin**    
     Make the configuration file take effect.    
     **source /etc/profile**    
     Make OpenCV find FFmpeg.   
-    **cp /home/HwHiAiUser/ascend_ddk/arm/lib/pkgconfig/* /usr/share/pkgconfig**    
+    **cp /home/HwHiAiUser/ascend_ddk/x86/lib/pkgconfig/* /usr/share/pkgconfig**    
     Exit the **root** user.   
     **exit**
