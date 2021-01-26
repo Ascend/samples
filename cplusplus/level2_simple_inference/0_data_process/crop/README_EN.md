@@ -18,7 +18,7 @@ Output: cropped YUV image
 
 Before deploying this sample, ensure that:
 
-- The environment has been set up by referring to [Preparing Environment and Installing Dependencies](../../../../environment).
+- The environment has been set up by referring to [Preparing Environment and Installing Dependencies](../../../environment).
 
 - The development environment and operating environment of the corresponding product have been installed.
 
@@ -124,7 +124,7 @@ Before deploying this sample, ensure that:
     ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **NOTE**  
     > - In the following information, ***xxx.xxx.xxx.xxx*** is the IP address of the operating environment. The IP address of Atlas 200 DK is **192.168.1.2** when it is connected over the USB port, and that of Atlas 300 (AI1s) is the corresponding public IP address.
 
-2. Run the executable file.
+2. <a name="step_2"></a>Run the executable file.
 
     - If the development environment and operating environment are set up on the same server, run the following commands to set the operating environment variables and switch the directory:
 
