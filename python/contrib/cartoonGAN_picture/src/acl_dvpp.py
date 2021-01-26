@@ -9,6 +9,9 @@ class Dvpp():
         self._stream = stream
         self._run_mode = run_model
         self._dvpp_channel_desc = None
+        self._jpege_config = None
+        self._crop_config = None
+        self._paste_config = None
 
     def __del__(self):
         if self._crop_config:
@@ -31,8 +34,13 @@ class Dvpp():
         return SUCCESS          
 
     def jpegd(self, image):
+        '''
+        :param image: input image
+        :return: AclImage
+        '''
         print('[Dvpp] jpeg decode stage:')
-        print("[Dvpp] jpeg width %d, height %d, size %d"%(image.width, image.height, image.size), " data ", image.data())
+        print("[Dvpp] jpeg width %d, height %d, size %d" % (image.width, image.height, image.size), \
+                 " data ", image.data())
         output_desc, out_buffer = self._gen_jpegd_out_pic_desc(image)        
         image_dvpp = image.copy_to_dvpp(self._run_mode)
         ret = acl.media.dvpp_jpeg_decode_async(self._dvpp_channel_desc,
@@ -51,7 +59,7 @@ class Dvpp():
 
         width = align_up128(image.width)
         height = align_up16(image.height)
-        return AclImage(out_buffer, width, height, yuv420sp_size(width, height))                       
+        return AclImage(out_buffer, width, height, yuv420sp_size(width, height), MEMORY_DVPP)                       
 
     def _gen_jpegd_out_pic_desc(self, image):
         stride_width = align_up128(image.width)
@@ -95,9 +103,17 @@ class Dvpp():
         stride_width = align_up16(image.width)
         stride_height = align_up2(image.height)
         return AclImage(out_buffer, stride_width, 
-                        stride_height, out_buffer_size)
+                        stride_height, out_buffer_size, MEMORY_DVPP)
 
     def crop_and_paste(self, image, width, height, crop_and_paste_width, crop_and_paste_height):
+        '''
+        :image: input image
+        :width: input image width 
+        :height: input image height 
+        :crop_and_paste_width: crop_and_paste_width
+        :crop_and_paste_height: crop_and_paste_height
+        :return: return AclImage
+        '''
         print('[Dvpp] vpc crop and paste stage:')
         input_desc = self._gen_input_pic_desc(image)
         output_desc, out_buffer, out_buffer_size = \
@@ -117,7 +133,7 @@ class Dvpp():
         stride_width = align_up16(crop_and_paste_width)
         stride_height = align_up2(crop_and_paste_height)
         return AclImage(out_buffer, stride_width,
-                        stride_height, out_buffer_size)
+                        stride_height, out_buffer_size, MEMORY_DVPP)
 
     def _gen_input_pic_desc(self, image, width_align=16, height_align=2):
         stride_width = align_up(image.width, align=width_align)
@@ -153,25 +169,30 @@ class Dvpp():
         return pic_desc, out_buffer, out_buffer_size
 
     def jpege(self, image, width_align=128, height_align=16):
-        # 将yuv420sp图片转为jpeg图片
-        # 创建输入图片desc
+        '''
+        yuv420sp to jpeg
+        :param image: input image
+        :param width_align: width align
+        :param height_align: height align
+        :return: AclImage
+        '''
+        # create input image desc
         input_desc = self._gen_input_pic_desc(image, width_align, height_align)
-        # 预测转换所需内存大小
+
         output_size, ret = acl.media.dvpp_jpeg_predict_enc_size(
             input_desc, self._jpege_config)
         if (ret != ACL_ERROR_NONE):
             print("Predict jpege output size failed")
             return None
-        # 申请转换需要的内存
+        
         output_buffer, ret = acl.media.dvpp_malloc(output_size)
         if (ret != ACL_ERROR_NONE):
             print("Malloc jpege output memory failed")
             return None
-        # 输出大小参数为既是输入参数,也是输出参数,需要时一个指针
+
         output_size_array = np.array([output_size], dtype=np.int32)
         output_size_ptr = acl.util.numpy_to_ptr(output_size_array)
 
-        # 调用jpege异步接口转换图片
         ret = acl.media.dvpp_jpeg_encode_async(self._dvpp_channel_desc,
                                                input_desc, output_buffer,
                                                output_size_ptr,
@@ -180,13 +201,13 @@ class Dvpp():
         if (ret != ACL_ERROR_NONE):
             print("Jpege failed, ret ", ret)
             return None
-        # 等待转换完成
+
         ret = acl.rt.synchronize_stream(self._stream)
         if (ret != ACL_ERROR_NONE):
             print("Jpege synchronize stream failed, ret ", ret)
             return None
 
-        # 释放资源
+        # release resources
         acl.media.dvpp_destroy_pic_desc(input_desc)
 
         return AclImage(output_buffer, image.width,
