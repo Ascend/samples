@@ -1,7 +1,7 @@
 English|[中文](README_200DK_CN.md)
 
 # Installing Presenter Agent
-$\color{red}{Run the following commands in the development environment as the user who installs Toolkit.}$
+ **Run the following commands in the development environment as the user who installs Toolkit.** 
 1. Install the Autoconf, Automake, and Libtool dependencies.   
     **sudo apt-get install autoconf automake libtool python3-pip**
 2. Install Python libraries.  
@@ -24,7 +24,7 @@ $\color{red}{Run the following commands in the development environment as the us
     **sudo make install**  
     **cd $HOME/protobuf_arm**  
     **./autogen.sh**  
-    **./configure --build=x86_64-linux-gnu --host=aarch64-linux-gnu --with-protoc=protoc --prefix=$HOME/ascend_ddk/arm**  
+    **./configure --build=x86_64-linux-gnu --host=aarch64-linux-gnu --with-protoc=protoc --prefix=\$HOME/ascend_ddk/arm**  
     **make -j8**  
     **make install**    
 
@@ -32,11 +32,11 @@ $\color{red}{Run the following commands in the development environment as the us
 
     Set the environment variable and run the following command on the command line.   
     **export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/_ARCH_**   
-    >![](public_sys-resources/icon-note.gif) **NOTE**  
-    >
-    >Replace ***$HOME/Ascend/ascend-toolkit/latest*** with the actual ACLlib installation path.   
-    >For CANN 20.0, replace ***ARCH*** with **arm64-linux_gcc7.3.0**. For CANN 20.1, replace ***ARCH*** with **arm64-linux**.   
-    Download the Presenter Agent source code.   
+    >![](https://images.gitee.com/uploads/images/2020/1130/162342_1d7d35d7_7401379.png "screenshot.png") **NOTE**  
+    >- Replace ***$HOME/Ascend/ascend-toolkit/latest*** with the actual ACLlib installation path.   
+    >- For CANN 20.0, replace ***ARCH*** with **arm64-linux_gcc7.3.0**. For CANN 20.1, replace ***ARCH*** with **arm64-linux**.   
+    Download the Presenter Agent source code.  
+   
      **cd $HOME**   
      **git clone https://gitee.com/ascend/samples.git**  
      **cd $HOME/samples/cplusplus/common/presenteragent/**  
