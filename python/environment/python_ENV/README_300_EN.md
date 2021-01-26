@@ -55,6 +55,6 @@ English|[中文](README_300_CN.md)
     Make the configuration file take effect.    
     **source /etc/profile**    
     Make OpenCV find FFmpeg.   
-    **cp /home/HwHiAiUser/ascend_ddk/x86/lib/pkgconfig/* /usr/share/pkgconfig**    
+    **cp /home/HwHiAiUser/ascend_ddk/x86/lib/pkgconfig/\* /usr/share/pkgconfig**    
     Exit the **root** user.   
     **exit**
