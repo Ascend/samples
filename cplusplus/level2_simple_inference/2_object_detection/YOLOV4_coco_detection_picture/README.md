@@ -6,8 +6,6 @@
 
 ## YOLOV4_coco_detection_picture样例
 
-**注：案例详细介绍请参见[图片目标检测](https://gitee.com/ascend/samples/wikis/%E5%9B%BE%E7%89%87%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B?sort_id=3170490)。**
-
 功能：使用yolov4模型对输入图片进行预测推理，并将结果打印到输出图片上。
 
 样例输入：原始图片jpg文件。
