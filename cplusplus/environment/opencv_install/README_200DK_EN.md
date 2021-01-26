@@ -4,7 +4,7 @@ English|[中文](README_200DK_CN.md)
 
 FFmpeg and OpenCV are installed to implement diversified data preprocessings and postprocessings. Most of the samples provided by the Ascend Developer Zone utilize the data processing capabilities backed by FFmpeg and OpenCV.
 
-$\color{red}{Perform the following operations in the operating environment (Atlas 200 DK).}$  
+ **Perform the following operations in the operating environment (Atlas 200 DK).** 
 
 
 1. Install dependencies.  
@@ -49,7 +49,7 @@ $\color{red}{Perform the following operations in the operating environment (Atla
     Make the configuration file take effect.    
     **source /etc/profile**    
     Make OpenCV find FFmpeg.   
-    **cp /home/HwHiAiUser/ascend_ddk/arm/lib/pkgconfig/* /usr/share/pkgconfig**    
+    **cp /home/HwHiAiUser/ascend_ddk/arm/lib/pkgconfig/\* /usr/share/pkgconfig**    
     Exit the **root** user.   
     **exit**
 
@@ -76,10 +76,10 @@ $\color{red}{Perform the following operations in the operating environment (Atla
 
 5. Import the FFmpeg and OpenCV libraries installed on the Atlas 200 DK to the development environment for building. (Skip this step if both the development environment and operating environment are set up on the Atlas 200 DK.)   
 
-    $\color{red}{Perform the following operations in the development environment.}$     
+     **Perform the following operations in the development environment.**      
     Run the following commands as a common user:   
     **mkdir $HOME/ascend_ddk**  
-    **scp -r HwHiAiUser@192.168.1.2:/home/HwHiAiUser/ascend_ddk/arm $HOME/ascend_ddk**  
+    **scp -r HwHiAiUser@192.168.1.2:/home/HwHiAiUser/ascend_ddk/arm \$HOME/ascend_ddk**  
     **sudo cd /usr/lib/aarch64-linux-gnu**  
-    **sudo scp -r HwHiAiUser@192.168.1.2:/lib/aarch64-linux-gnu/* ./**  
-    **sudo scp -r HwHiAiUser@192.168.1.2:/usr/lib/aarch64-linux-gnu/* ./**
+    **sudo scp -r HwHiAiUser@192.168.1.2:/lib/aarch64-linux-gnu/\* ./**  
+    **sudo scp -r HwHiAiUser@192.168.1.2:/usr/lib/aarch64-linux-gnu/\* ./**
