@@ -1,55 +1,186 @@
-EN|[中文](README.md)
+English|[中文](README_CN.md)
 
-# Video Face Detection (Input: Video Stream of Raspberry Pi Camera; Output: Video)
+**This sample provides reference for you to learn the Ascend AI Software Stack and is not for commercial purposes.**
 
-## Overview
+**This sample applies to Ascend camera 20.0 and later versions, and supports Atlas 200 DK and Atlas 300 ([AI1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366)).**
 
-A face contains rich information, providing vital information for mutual recognition of human beings. It is also one of the most interested objects in images and videos. Compared with detection using other human biological features such as fingerprint and voice, face detection is more direct and friendly, and is widely used in identification, access control, video conference, archive management, object-based image and video retrieval. It has been a research hotspot in the AI field.
+**This document provides only guidance for running the sample on the command line. For details about how to run the sample in MindStudio, see the [Wiki of Running Video Samples in MindStudio](https://gitee.com/ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E5%9B%BE%E7%89%87%E6%A0%B7%E4%BE%8B?sort_id=3164874).**
 
-This application uses the video captured by a camera connected to the Atlas 200 DK as the input, detects faces in video frames in real time, labels face information, and sends the information to the web UI for display.
+## vdecandvenc Sample
 
-## Overall design
+Function: Encode a video by calling the **venc** and **vdec** APIs of the DVPP.
 
-![Input image description](https://images.gitee.com/uploads/images/2020/0811/185601_4b03a526_5408865.png "人脸检测Camera版本.png")
+Input: original MP4 file, which is an H.264 or H.265 file.
 
-1. **Allocate runtime resources**: Initialize system resources.
+Output: encoded H.264 or H.265 file
 
-2. **Load the model and create output**: Load the offline model from a file, based on which the model information can be obtained, including the buffer sizes of the input and output data. Based on the model information, create model output for inference.
+### Prerequisites
 
-3. **Read and preprocess the local video**: Use the media API library set provided by the Atlas 200 DK to loop over each frame in YUV420SP format, resize the images to the required size, and create model input data.
+Before deploying this sample, ensure that:
 
-4. **Perform model inference**: Call the model inference API to perform model inference with the model input data.
+- The environment has been prepared based on [Preparing Environment and Installing Dependencies](../../../environment).
 
-5. **Parse the inference result**: Based on the model output, parse the face detection result, obtain the position of the detected face as well as its confidence in the video frame, convert the image into JPEG format, and call Presenter Agent to send the result to Presenter Server on the host for web UI display.
+- The development environment and operating environment of the corresponding product have been installed.
 
-6. **View the detection information**: Presenter Server labels the position of the detected face as well as the confidence on each frame based on the inference result, and sends the image information to the web Ul on the host so that the video face detection information can be viewed by browsing Presenter Server.
+### Preparing Software
 
-## Original model
+1. Obtain the source code package.
+   
+   You can download the source code in either of the following ways:
+   
+   - Command line (The download takes a long time, but the procedure is simple.)
+     
+     In the development environment, run the following commands as a non-root user to download the source code repository:
+     
+     **cd $HOME**
+     
+     **git clone https://gitee.com/ascend/samples.git**
+   
+   - Compressed package (The download time is short, but the procedure is complex.)
+     
+     1. Click **Clone or download** in the upper right corner of the samples repository and select **Download ZIP**.
+     
+     2. Upload the .zip package to the home directory of a common user in the development environment, for example, **$HOME/ascend-samples-master.zip**.
+     
+     3. In the development environment, run the following commands to decompress the **.zip** package:
+        
+        **cd $HOME**
+        
+        **unzip ascend-samples-master.zip**
 
-To obtain the model architecture and the pre-trained model, visit the following website: https://github.com/opencv/opencv/tree/master/samples/dnn/face_detector
+2. Obtain the original model required by the application.
+   
+   Obtain the original model and its weight files used in the application by referring to the following table and save them to any directory of a common user in the development environment, for example, **$HOME/models/vdecandvenc**.
+   
+   | **Model Name**| **Description**| **How to Obtain**|
+   |----------|----------|----------|
+   | face\_detection| Applies to image classification. It is a YOLOv3 model based on Caffe.| Download the model and weight file by referring to the section about downloading the original model in the **README.md** file in [https://gitee.com/ascend/modelzoo/tree/master/contrib/Research/cv/facedetection/ATC\_resnet10-SSD\_caffe\_AE](https://gitee.com/ascend/modelzoo/tree/master/contrib/Research/cv/facedetection/ATC_resnet10-SSD_caffe_AE).|
 
-## Preprocessing
+   ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **Note:**
+   
+   > - The converted OM model is provided in the ModelZoo. However, the model does not match the current sample. Therefore, you need to download the original model and weight file and convert the model again.
 
-The model requires 300 x 300 images in BGR format, and mean subtraction is performed on the color channels. Digital vision preprocessing (DVPP) and artificial intelligence preprocessing (AIPP) are used for image preprocessing as follows:
+3. Convert the original model to a Da Vinci model.
+   
+   **Note: Ensure that the environment variables have been configured based on [Preparing Environment and Installing Dependencies](../../../environment).**
+   
+   1. Set the **LD\_LIBRARY\_PATH** environment variable.
+      
+      The **LD\_LIBRARY\_PATH** environment variable conflicts with the sample when the ATC tool is used. Therefore, you need to set this environment variable separately in the command line to facilitate modification.
+      
+      **export LD\_LIBRARY\_PATH=\\${install\_path}/atc/lib64**
+   
+   2. Run the following commands to download the AIPP configuration file and convert the model:
+      
+      **cd $HOME/models/face\_detection\_camera**
+      
+      **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/face\_detection\_camera/insert\_op.cfg**
+      
+      **atc --output\_type=FP32 --input\_shape="data:1,3,300,300" --weight=./face\_detection\_fp32.caffemodel --input\_format=NCHW --output=./face\_detection --soc\_version=Ascend310 --insert\_op\_conf=./insert\_op.cfg --framework=0 --save\_original\_model=false --model=./face\_detection.prototxt**
+   
+   3. Run the following command to copy the converted model to the **model** folder of the sample:
+      
+      **cp ./face\_detection.om $HOME/samples/level1\_single\_api/1\_acl/4\_dvpp/vdecandvenc/model/**
 
-DVPP:
+4. Obtain the test video required by the sample.
+   
+   Run the following commands to go to the **data** folder of the sample and download the corresponding test video:
+   
+   **cd /home/ascend/samples/cplusplus/level1\_single\_api/1\_acl/4\_dvpp/vdecandvenc/data**
+   
+   **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/vdecandvenc/out\_video.h264**  
+**wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/vdecandvenc/person.mp4**
 
-1. Resizes images to 300 x 304. (DVPP requires heights rounded up to the nearest multiple of 2, and widths to 16, which leads to padding)
-2. Outputs image data of the uint8 type.
+### Deploying the Sample
 
-AIPP:
+1. Set the environment variables for compiling the dependencies on the command line of the development environment.
+   
+   Perform the following step based on the actual situation:
+   
+   - If the CPU architecture of the development environment is the same as that of the operating environment, run the following commands to import environment variables:
+     
+     **export DDK\_PATH=$HOME/Ascend/ascend-toolkit/latest/x86\_64-linux**
+     
+     **export NPU\_HOST\_LIB=$DDK\_PATH/acllib/lib64/stub**
+     
+     ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **Note:**
+     
+     > - If the version is 20.0, change **x86\_64-linux** in the **DDK\_PATH** environment variable to **x86\_64-linux\_gcc7.3.0**.
+     > - You can run the **uname -a** command on the command line to view the CPU architecture of the development environment and operating environment. If **x86\_64** is displayed in the command output, the x86 architecture is used. If **arm64** is displayed in the command output, the ARM architecture is used.
+   
+   - If the CPU architecture of the development environment is different from that of the operating environment, run the following commands to import environment variables. If the development environment uses the x86 architecture and the operating environment uses the ARM architecture, the ACLlib of the ARM toolkit needs to be called during application build time because the toolkits of both the x86 and ARM architectures are installed in the development environment. Therefore, you need to import the path of the ARM ACLlib.
+     
+     **export DDK\_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux**
+     
+     **export NPU\_HOST\_LIB=$DDK\_PATH/acllib/lib64/stub**
+     
+     ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **Note:**
+     
+     > - If the version is 20.0, change **arm64-linux** in the **DDK\_PATH** environment variable to **arm64-linux\_gcc7.3.0**.
+     > - You can run the **uname -a** command on the command line to view the CPU architecture of the development environment and operating environment. If **x86\_64** is displayed in the command output, the x86 architecture is used. If **arm64** is displayed in the command output, the ARM architecture is used.
 
-1. Performs mean subtraction on color channels.
-2. Crops images to 300 x 300 by removing the padding generated during DVPP.
-3. Performs color space conversion (CSC) and converts images from YUV420SP to BGR.
-4. Converts uint8 data to fp16 data (Da Vinci requires fp16 data as input for model reference).
+2. Go to the **vdecandvenc** directory and create a directory for storing compilation files. For example, the created directory in this document is **build/intermediates/host**.
+   
+   **cd $HOME/samples/cplusplus/level1\_single\_api/1\_acl/4\_dvpp/vdecandvenc**
+   
+   **mkdir -p build/intermediates/host**
 
-## Postprocessing
+3. Go to the **build/intermediates/host** directory and run the **cmake** command.
+   
+   - If the development environment and operating environment have the same OS architecture, run the following commands to perform compilation.
+     
+     **cd build/intermediates/host**
+     
+     **make clean**
+     
+     **cmake ../../../src -DCMAKE\_CXX\_COMPILER=g++ -DCMAKE\_SKIP\_RPATH=TRUE**
+   
+   - When the OS architecture of the development environment is different from that of the operating environment, you need to use the cross compiler for compilation. For example, if the development environment uses the x86 architecture and the operating environment uses the ARM architecture, run the following commands to perform cross compilation:
+     
+     **cd build/intermediates/host**
+     
+     **make clean**
+     
+     **cmake ../../../src -DCMAKE\_CXX\_COMPILER=aarch64-linux-gnu-g++ -DCMAKE\_SKIP\_RPATH=TRUE**
 
-The model has two outputs. The first output is the number of bounding boxes. The second output is the bounding box information, including the coordinates and the corresponding confidence of the detected face.
+4. Run the **make** command. The generated executable file **main** is stored in the **venc/out** directory.
+   
+   **make**
 
-## Application performance
+### Running the Sample
 
-Duration per processing: (preprocessing -> inference -> postprocessing): 5 ms
+**Note: If the development environment and operating environment are deployed on the same server, skip step 1 and go to [step 2](#step_2).**
 
-Duration per inference: 0.36 ms
+1. Run the following commands to upload the **vdecandvenc** directory in the development environment to the operating environment, for example, **/home/HwHiAiUser**, and log in to the operating environment (host) as the **HwHiAiUser** user:
+   
+   **scp -r $HOME/samples/cplusplus/level1\_single\_api/1\_acl/4\_dvpp/vdecandvenc HwHiAiUser@*xxx.xxx.xxx.xxx*:/home/HwHiAiUser**
+   
+   **ssh HwHiAiUser@*xxx.xxx.xxx.xxx***
+   
+   ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **Note:**
+   
+   > - *xxx.xxx.xxx.xxx* is the IP address of the operating environment, which is **192.168.1.2** when the Atlas 200 DK is connected using the USB, and is the IP address of the corresponding public network for Atlas 300 (AI1s).
+
+2. <a name="step_2"></a>Run the executable file.
+   
+   - If the development environment and operating environment are deployed on the same server, run the following commands to set the operating environment variables and change the directory:
+     
+     **export LD\_LIBRARY\_PATH=**
+     
+     **source ~/.bashrc**
+     
+     **cd $HOME/samples/cplusplus/level1\_single\_api/1\_acl/4\_dvpp/vdecandvenc/out**
+   
+   - If the development environment and operating environment are deployed on separate servers, run the following command to change the directory:
+     
+     **cd $HOME/vdecandvenc/out**
+   
+   Run the following command to run the sample:
+   
+   **mkdir output**
+   
+   **./main ../data/out\_video.h264**
+
+### Checking the Result
+
+After the execution is complete, the running result is printed on the command line of the operating environment, and the video after inference is saved in the **$HOME/vdecandvenc/out/output** directory.
