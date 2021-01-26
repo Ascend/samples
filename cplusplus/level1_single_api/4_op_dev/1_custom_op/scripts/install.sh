@@ -22,16 +22,6 @@ if [ ! -d $targetdir ];then
     exit 1
 fi
 
-subdirs=$(ls "${$targetdir}" 2> /dev/null)
-chmod +w "${targetdir}" >/dev/null 2>&1
-for dir in ${subdirs}; do
-    if [[ ${dir} != "Ascend310" ]] && [[ ${dir} != "Ascend910" ]] && [[ ${dir} != "Ascend710" ]] && [[ ${dir} != "Ascend310" ]] && [[ ${dir} != "aicpu" ]]; then
-        chmod -R +w "${targetdir}/${dir}" >/dev/null 2>&1
-    fi
-done
-
-
-
 upgrade()
 {
     if [ ! -d ${sourcedir}/$1 ]; then
@@ -166,18 +156,10 @@ changemode()
     return 0
 }
 echo "[ops_custom]changemode..."
-changemode
+#changemode
 if [ $? -ne 0 ];then
     exit 1
 fi
-
-subdirs=$(ls "${targetdir}" 2> /dev/null)
-chmod -w "${targetdir}" >/dev/null 2>&1
-for dir in ${subdirs}; do
-    if [[ ${dir} != "Ascend310" ]] && [[ ${dir} != "Ascend910" ]] && [[ ${dir} != "Ascend710" ]] && [[ ${dir} != "Ascend310" ]] && [[ ${dir} != "aicpu" ]]; then
-        chmod -R -w "${targetdir}/${dir}" >/dev/null 2>&1
-    fi
-done
 
 if [ -f ${targetdir}/ascend_install.info ]; then
     chmod -R 440 ${targetdir}/ascend_install.info
