@@ -13,6 +13,7 @@
 ├── [4_recommendation](./4_recommendation)：**推荐样例（正在开发）**   
 ├── [5_nlp](./5_nlp)：**自然语言处理样例（正在开发）**      
 ├── [6_other](./6_other)：**其它样例**     
+├── [n_e2e](./n_e2e)：**从训练到推理的端到端样例（正在开发）**    
 └── [n_performance](./n_performance)：**高性能样例（正在开发）**   
 
 
