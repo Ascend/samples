@@ -107,7 +107,7 @@ Run the following commands in the operating environment.
         Save the configuration and exit.  
         **wq!**   
         >![](https://images.gitee.com/uploads/images/2020/1130/162342_1d7d35d7_7401379.png "screenshot.png") **NOTE**  
-        >  **In this example, the CANN software package is installed by a non-root user. **      
+        >  **In this example, the CANN software package is installed by a non-root user.**      
 
      2. Make the configuration take effect.  
         **source ~/.bashrc**
