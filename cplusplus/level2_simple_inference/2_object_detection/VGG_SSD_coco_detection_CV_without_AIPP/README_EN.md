@@ -8,8 +8,6 @@ English|[中文](README_CN.md)
 
 ## VGG\_SSD\_coco\_detection\_CV\_without\_AIPP Sample
 
-**Note: For details about the sample, see the [Wiki of GoogLeNet Dynamic Batch]().**
-
 Function: Use the vgg\_ssd model to perform inference on the input images and print the results on the output images.
 
 Input: JPG images
