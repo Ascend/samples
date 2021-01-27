@@ -45,12 +45,12 @@ In the development environment, run the following commands as a non-root user to
 
 1. Modify the Presenter-related configuration file.
    
-   Change **presenter\_server\_ip** and **presenter\_view\_ip** in the **script/param.conf** file in the sample directory to the IP addresses that can be pinged in the development environment. The following two cases are used as examples:
+   Change **presenter\_server\_ip** and **presenter\_view\_ip** in the **scripts/param.conf** file in the sample directory to the IP addresses that can be pinged in the development environment. The following two cases are used as examples:
    
    - Atlas 200 DK
      
      1. In the development environment, run the **ifconfig** command to view available IP addresses.
-     2. In the development environment, change **presenter\_server\_ip** and **presenter\_view\_ip** in the **script/param.conf** file to the new IP addresses.  
+     2. In the development environment, change **presenter\_server\_ip** and **presenter\_view\_ip** in the **scripts/param.conf** file to the new IP addresses.  
 ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **Note:**
      
      > - 1\. If the development environment and operating environment are deployed on separate servers, the configured virtual NIC IP address is used, for example, **192.168.1.223**.
@@ -217,7 +217,7 @@ After the execution is complete, the running results are printed in the CLI of t
      
      1. Run the following commands in the development environment to start the Presenter Server:   
 **cd $HOME/samples/cplusplus/level1\_single\_api/5\_200dk\_peripheral/ascendcamera**  
-**bash script/run\_presenter\_server.sh**
+**bash scripts/run\_presenter\_server.sh**
      2. Run the following command to log in to the operating environment:   
 **If the development environment and operating environment are deployed on the same server, skip this step.**   
 **ssh HwHiAiUser@*******xxx.xxx.xxx.xxx*********
