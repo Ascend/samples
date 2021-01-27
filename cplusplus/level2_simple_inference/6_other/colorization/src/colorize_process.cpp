@@ -34,7 +34,8 @@ ColorizeProcess::ColorizeProcess(const char* modelPath,
 :deviceId_(0), context_(nullptr), stream_(nullptr), inputBuf_(nullptr), 
 modelWidth_(modelWidth), modelHeight_(modelHeight), isInited_(false){
     modelPath_ = modelPath;
-    inputDataSize_ = RGBF32_CHAN_SIZE(modelWidth_, modelHeight_);
+
+
 }
 
 ColorizeProcess::~ColorizeProcess() {
@@ -86,7 +87,7 @@ Result ColorizeProcess::InitModel(const char* omModelPath) {
         ERROR_LOG("execute CreateOutput failed");
         return FAILED;
     }
-
+    inputDataSize_ = model_.GetModelSize();
     aclrtMalloc(&inputBuf_, (size_t)(inputDataSize_), ACL_MEM_MALLOC_HUGE_FIRST);
     if (inputBuf_ == nullptr) {
         ERROR_LOG("Acl malloc image buffer failed.");
