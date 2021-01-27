@@ -109,16 +109,16 @@ Before deploying this sample, ensure that:
 
       **source ~/.bashrc**
 
-      **cd $HOME/samples/python/contrib/cartoonGAN_picture/data**    
-      **python3 cartoonization.py ./data/**
+      **cd $HOME/samples/python/contrib/cartoonGAN_picture/src**    
+      **python3.6 cartoonization.py ../data/**
 
     - If the development environment and operating environment are set up on separate servers, run the following command to switch the directory:
 
-      **cd $HOME/YOLOV3_coco_detection_picture**
+      **cd $HOME/YOLOV3_coco_detection_picture/src**
 
     Run the following command to run the sample:
 
-    **python3 cartoonization.py ./data/**
+    **python3.6 cartoonization.py ../data/**
 
 ### Result Checking
 
