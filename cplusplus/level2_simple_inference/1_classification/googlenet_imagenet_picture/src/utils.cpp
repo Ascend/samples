@@ -114,7 +114,7 @@ void Utils::GetPathFiles(const string &path, vector<string> &file_vec) {
 
             // file path
             string full_path = path + kPathSeparator + dirent_ptr->d_name;
-            if (!IsValidPicture(full_path)){
+            if (!IsValidJPGPicture(full_path)){
 				continue;
 			}
 
