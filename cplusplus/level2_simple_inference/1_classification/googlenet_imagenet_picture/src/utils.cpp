@@ -27,6 +27,7 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <regex>
 #include "acl/acl.h"
 
 using namespace std;
@@ -36,6 +37,7 @@ const std::string kImagePathSeparator = ",";
 const int kStatSuccess = 0;
 const std::string kFileSperator = "/";
 const std::string kPathSeparator = "/";
+const string kJPGFile = ".+\\.(jpg)$";
 // output image prefix
 const std::string kOutputFilePrefix = "out_";
 }
@@ -90,6 +92,15 @@ void Utils::GetAllFiles(const string &path, vector<string> &file_vec) {
     }
 }
 
+bool Utils::IsValidJPGPicture(const string &input_str) {
+  regex regex_jpg_file_name(kJPGFile.c_str());
+  // verify input string is valid jpg file name
+  if (regex_match(input_str, regex_jpg_file_name)) {
+    return true;
+  }
+  return false;
+}
+
 void Utils::GetPathFiles(const string &path, vector<string> &file_vec) {
     struct dirent *dirent_ptr = nullptr;
     DIR *dir = nullptr;
@@ -103,6 +114,10 @@ void Utils::GetPathFiles(const string &path, vector<string> &file_vec) {
 
             // file path
             string full_path = path + kPathSeparator + dirent_ptr->d_name;
+            if (!IsValidPicture(full_path)){
+				continue;
+			}
+
             // directory need recursion
             if (IsDirectory(full_path)) {
                 GetPathFiles(full_path, file_vec);
