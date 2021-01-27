@@ -117,6 +117,11 @@ Result ModelProcess::CreateInput(void *inputDataBuffer, size_t bufferSize) {
     return SUCCESS;
 }
 
+size_t ModelProcess::GetModelSize(){
+    size_t modelInputSize = aclmdlGetInputSizeByIndex(modelDesc_, 0);
+    return modelInputSize;
+}
+
 void ModelProcess::DestroyInput() {
     if (input_ == nullptr) {
         return;
