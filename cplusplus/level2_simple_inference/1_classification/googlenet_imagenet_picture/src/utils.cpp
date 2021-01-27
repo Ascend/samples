@@ -37,7 +37,7 @@ const std::string kImagePathSeparator = ",";
 const int kStatSuccess = 0;
 const std::string kFileSperator = "/";
 const std::string kPathSeparator = "/";
-const string kJPGFile = ".+\\.(jpg)$";
+const std::string kJPGFile = ".+\\.(jpg)$";
 // output image prefix
 const std::string kOutputFilePrefix = "out_";
 }
