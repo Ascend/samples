@@ -30,7 +30,7 @@ if __name__ == '__main__':
     img2 = sys.argv[2]
     result = image_contrast(img1, img2)
     print(result)
-    if (result > 300 or result < 0):
+    if (result > 420 or result < 0):
         sys.exit(1)
     else:
         sys.exit(0)
