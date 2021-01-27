@@ -73,7 +73,7 @@ public:
 
     static bool IsPathExist(const std::string &path);
 
-    static bool IsValidJPGPicture(const string &input_str);
+    static bool IsValidJPGPicture(const std::string &input_str);
 
     static void SplitPath(const std::string &path, std::vector<std::string> &path_vec);
 
