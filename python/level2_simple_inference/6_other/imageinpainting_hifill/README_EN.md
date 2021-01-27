@@ -111,7 +111,7 @@ Before deploying this sample, ensure that:
 
       **source ~/.bashrc**
         
-      **cd $HOME/samples/edit/dev/python/level2_simple_inference/6_other/imageinpainting_hifill**
+      **cd $HOME/samples/python/level2_simple_inference/6_other/imageinpainting_hifill/src**
 
     - If the development environment and operating environment are set up on separate servers, run the following command to switch the directory:
     
@@ -119,7 +119,7 @@ Before deploying this sample, ensure that:
 
     Run the following command to run the sample:
 
-    **python3 main.py**
+    **python3.6 main.py**
 ### Result Checking
 
 After the execution is complete, find the result JPG image in the **out** directory.

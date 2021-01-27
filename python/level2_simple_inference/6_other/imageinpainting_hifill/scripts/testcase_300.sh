@@ -30,7 +30,7 @@ function downloadDataWithVerifySource() {
 
     mkdir -p ${project_path}/mask/
 
-    wget -O ${project_path}/mask/"test.jpg"  ${data_source}"test.jpg"  --no-check-certificate
+    wget -O ${project_path}/mask/"test.jpg"  ${mask_source}"test.jpg"  --no-check-certificate
     if [ $? -ne 0 ];then
         echo "download test.png failed, please check Network."
         return 1
