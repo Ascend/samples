@@ -145,11 +145,11 @@ function main() {
     # 调用python脚本判断本工程推理结果是否正常
     for outimage in $(find ${project_path}/verify_image -name "*.jpg");do
         tmp=`basename $outimage`
-        if [[ ! -d "${project_path}/outputs" ]];then
+        if [[ ! -d "${project_path}/out" ]];then
             echo "ERROR: not find results folders!"
             return ${verifyResError}
         fi
-        for test_file in `find ${project_path}/outputs -name "*${tmp#*_}"`;do
+        for test_file in `find ${project_path}/out -name "*${tmp#*_}"`;do
             python3.6 ${script_path}/verify_result.py ${test_file} ${outimage}
             if [ $? -ne 0 ];then
                 echo "ERROR: The result of reasoning is wrong!"

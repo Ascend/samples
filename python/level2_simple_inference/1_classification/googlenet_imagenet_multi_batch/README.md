@@ -117,16 +117,16 @@
 
       **source ~/.bashrc**
         
-      **cd $HOME/samples/python/level2_simple_inference/1_classification/googlenet_imagenet_picture/**     
-         **python3 classify.py ./data/** 
+      **cd $HOME/samples/python/level2_simple_inference/1_classification/googlenet_imagenet_picture/src**     
+         **python3.6 classify.py ../data/** 
 
     - 如果是开发环境与运行环境分离部署，执行以下命令切换目录。
     
-      **cd $HOME/googlenet_imagenet_picture/**      
+      **cd $HOME/googlenet_imagenet_picture/src**      
 
     切换目录后，执行以下命令运行样例。
 
-    **python3 src/classify.py ./data/**
+    **python3.6 classify.py ../data/**
 ### 查看结果
 
 运行完成后，会在outputs目录下生成带推理结果的jpg图片。

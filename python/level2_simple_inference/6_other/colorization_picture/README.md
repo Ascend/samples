@@ -110,17 +110,17 @@
 
       **source ~/.bashrc**
         
-      **cd $HOME/samples/python/level2_simple_inference/6_other/colorization_picture/**    
-      **python3 colorize.py ./data/**
+      **cd $HOME/samples/python/level2_simple_inference/6_other/colorization_picture/src**    
+      **python3.6 colorize.py ../data/**
 
     - 如果是开发环境与运行环境分离部署，执行以下命令切换目录。
     
-      **cd $HOME/colorization_picture**
+      **cd $HOME/colorization_picture/src**
 
     切换目录后，执行以下命令运行样例。
 
-    **python3 colorize.py ./data/**
+    **python3.6 colorize.py ../data/**
 
 ### 查看结果
 
-运行完成后，会在运行环境的命令行中打印出推理结果,并在$HOME/colorization/out/out目录下生成推理后的图片。
+运行完成后，会在运行环境的命令行中打印出推理结果,并在$HOME/colorization/out/目录下生成推理后的图片。

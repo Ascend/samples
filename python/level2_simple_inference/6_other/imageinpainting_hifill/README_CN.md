@@ -111,7 +111,7 @@
 
       **source ~/.bashrc**
         
-      **cd $HOME/samples/edit/dev/python/level2_simple_inference/6_other/imageinpainting_hifill**
+      **cd $HOME/samples/edit/dev/python/level2_simple_inference/6_other/imageinpainting_hifill/src**
 
     - 如果是开发环境与运行环境分离部署，执行以下命令切换目录。
     
@@ -119,7 +119,7 @@
 
     切换目录后，执行以下命令运行样例。
 
-    **python3 main.py**
+    **python3.6 main.py**
 ### 查看结果
 
 运行完成后，会在out目录下生成带推理结果的jpg图片。

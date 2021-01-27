@@ -114,22 +114,23 @@
     **scp -r $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV3_mask_detection_video HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**  
     **scp -r $HOME/samples/python/common/atlas_utils HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser/YOLOV3_mask_detection_video**
 
-2. 启动presenterserver并登录运行环境。
+2. 登录运行环境并启动presenterserver。
 
-    - 使用产品为200DK开发者板。   
-        1. 开发环境中执行以下命令启动presentserver。   
-            **cd $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV3_mask_detection_video**   
-            **bash scripts/run_presenter_server.sh**   
-        2. 执行以下命令登录运行环境。   
-            **开发环境与运行环境合一部署，请跳过此步骤！**   
-            **ssh HwHiAiUser@xxx.xxx.xxx.xxx** 
-
-    - 使用产品为300加速卡（ai1s云端推理环境）。   
+ - 使用产品为200DK开发者板。   
         1. 执行以下命令登录运行环境。   
            **开发环境与运行环境合一部署，请跳过此步骤！**   
            **ssh HwHiAiUser@xxx.xxx.xxx.xxx**    
-        2. 运行环境中执行以下命令启动presenterserver。   
-            **cd $HOME/YOLOV3_mask_detection_video**   
+        2. 运行环境中启动presenterserver。   
+进入工程所在目录（如$HOME/YOLOV3_mask_detection_video），执行以下命令   
+            **bash scripts/run_presenter_server.sh**   
+
+
+ - 使用产品为300加速卡（ai1s云端推理环境）。   
+        1. 执行以下命令登录运行环境。   
+           **开发环境与运行环境合一部署，请跳过此步骤！**   
+           **ssh HwHiAiUser@xxx.xxx.xxx.xxx**    
+        2. 运行环境中启动presenterserver。   
+进入工程所在目录（如$HOME/YOLOV3_mask_detection_video），执行以下命令   
             **bash scripts/run_presenter_server.sh**   
 
 3. <a name="step_2"></a>运行可执行文件。

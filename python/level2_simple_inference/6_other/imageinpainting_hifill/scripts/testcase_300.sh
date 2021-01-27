@@ -1,5 +1,6 @@
 json_model="https://c7xcode.obs.myhuaweicloud.com/models/imageinpainting_hifill/matmul_27648.json"
-model_name="hifill.om"
+model_name="0_BatchMatMul_0_0_1_1_1024_1024_0_0_1_1_1024_27648_0_0_1_1_1024_27648"
+model1_name="hifill"
 
 version=$1
 
@@ -117,8 +118,8 @@ function main() {
 
         # 转模型
         cd ${project_path}/model/
-        atc --singleop=./matmul_27648.json --output=./0_BatchMatMul_0_0_1_1_1024_1024_0_0_1_1_1024_27648_0_0_1_1_1024_27648 --soc_version=Ascend310
-        cp ./0_BatchMatMul_0_0_1_1_1024_1024_0_0_1_1_1024_27648_0_0_1_1_1024_27648/*.om .
+        atc --singleop=./matmul_27648.json --output=${HOME}/models/${project_name}/${model_name} --soc_version=Ascend310
+        cd ${HOME}/models/${project_name}/
         wget  https://c7xcode.obs.myhuaweicloud.com/models/imageinpainting_hifill/hifill.om
 
         if [ $? -ne 0 ];then
@@ -126,13 +127,15 @@ function main() {
             return ${inferenceError}
         fi
 
-        ln -s ${HOME}/models/${project_name}/${model_name}".om" ${project_path}/model/${model_name}".om"
+        ln -s ${HOME}/models/${project_name}/${model_name}/${model_name}".om" ${project_path}/model/${model_name}".om"
+        ln -s ${HOME}/models/${project_name}/${model1_name}".om" ${project_path}/model/${model1_name}".om"
         if [ $? -ne 0 ];then
             echo "ERROR: failed to set model soft connection"
             return ${inferenceError}
         fi
-    else 
-        ln -s ${HOME}/models/${project_name}/${model_name}".om" ${project_path}/model/${model_name}".om"
+    else
+        ln -s ${HOME}/models/${project_name}/${model_name}/${model_name}".om" ${project_path}/model/${model_name}".om"
+        ln -s ${HOME}/models/${project_name}/${model1_name}".om" ${project_path}/model/${model1_name}".om"
         if [ $? -ne 0 ];then
             echo "ERROR: failed to set model soft connection"
             return ${inferenceError}
