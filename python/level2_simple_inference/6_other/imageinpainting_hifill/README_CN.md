@@ -111,7 +111,7 @@
 
       **source ~/.bashrc**
         
-      **cd $HOME/samples/edit/dev/python/level2_simple_inference/6_other/imageinpainting_hifill/src**
+      **cd $HOME/samples/python/level2_simple_inference/6_other/imageinpainting_hifill/src**
 
     - 如果是开发环境与运行环境分离部署，执行以下命令切换目录。
     
