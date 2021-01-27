@@ -73,6 +73,8 @@ public:
 
     static bool IsPathExist(const std::string &path);
 
+    static bool IsValidJPGPicture(const string &input_str);
+
     static void SplitPath(const std::string &path, std::vector<std::string> &path_vec);
 
     static void GetAllFiles(const std::string &path, std::vector<std::string> &file_vec);
