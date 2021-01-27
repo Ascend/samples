@@ -68,6 +68,12 @@ public:
     Result CreateInput(void *inputDataBuffer, size_t bufferSize);
 
     /**
+   * @get Model Size
+   */
+
+    size_t GetModelSize();
+
+    /**
     * @brief destroy input resource
     */
     void DestroyInput();
