@@ -28,7 +28,6 @@
 #include "opencv2/imgproc/types_c.h"
 #include "utils.h"
 
-
 using namespace std;
 
 namespace {
@@ -209,7 +208,7 @@ void CartoonProcess::SaveImage(const string& origImageFile, cv::Mat& image) {
         string cmd("mkdir -p ./output");
         system(cmd.c_str());	
     }
-	
+    
     stringstream sstream;
     sstream.str("");
     sstream << "./output/out_" << filename;
