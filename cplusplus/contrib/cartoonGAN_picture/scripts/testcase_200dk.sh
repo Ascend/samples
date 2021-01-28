@@ -113,12 +113,20 @@ function main() {
         fi
 
         # 转模型
-        cd ${project_path}/model/
-        atc --model=${project_path}/model/${tf_model##*/} --framework=3 --output=${HOME}/models/${project_name}/${model_name} --soc_version=Ascend310 --insert_op_conf=${project_path}/model/${aipp_cfg##*/} --input_shape="input/input_data:1,416,416,3" --input_fp16_nodes="" --output_type=FP32 --input_format=NHWC --output_type=FP32
-        if [ $? -ne 0 ];then
-            echo "ERROR: convert model failed"
-            return ${inferenceError}
+        if [[ ${version} = "c73" ]] || [[ ${version} = "C73" ]];then
+            cd ${project_path}/model/
+            atc --output_type=FP32 --input_shape="train_real_A:1,256,256,3" --input_format=NHWC --output=${HOME}/models/${project_name}/${model_name} --soc_version=Ascend310 --framework=3 --save_original_model=false --model=${project_path}/model/${tf_model##*/} --precision_mode=allow_fp32_to_fp16
+        
+		    if [ $? -ne 0 ];then
+                echo "ERROR: convert model failed"
+                return ${inferenceError}
+            fi
+
+        elif [[ ${version} = "c75" ]] || [[ ${version} = "C75" ]];then
+            cd  ${HOME}/models/${project_name}/
+            wget  https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/cartoonGAN_picture/cplus/cartoonization.om
         fi
+
 
         ln -s ${HOME}/models/${project_name}/${model_name}".om" ${project_path}/model/${model_name}".om"
         if [ $? -ne 0 ];then
