@@ -120,6 +120,14 @@ def matmul_tik_compute(params, kernel_name):
 
 
 def matmul_tik(input_x1, input_x2, output_y={}, kernel_name="simple_matmul"):
+    """
+    matmul_tik main func
+    Parameters
+    ----------
+    input_x1: input data 1
+    input_x2: input data 2
+    output_y: output dta
+    """
     shape_a = input_x1.get("ori_shape")
     shape_b = input_x2.get("ori_shape")
     m = shape_a[0]
