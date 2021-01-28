@@ -41,7 +41,7 @@ public:
     * @param [in] modelPath: model path
     * @return result
     */
-    Result LoadModelFromFileWithMem(const char *modelPath);
+    Result load_model_from_file_with_mem(const char *modelPath);
 
     /**
     * @brief unload model

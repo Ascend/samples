@@ -68,7 +68,7 @@ Result ColorizeProcess::InitResource() {
 }
 
 Result ColorizeProcess::InitModel(const char* omModelPath) {
-    Result ret = model_.LoadModelFromFileWithMem(omModelPath);
+    Result ret = model_.load_model_from_file_with_mem(omModelPath);
     if (ret != SUCCESS) {
         ERROR_LOG("execute LoadModelFromFileWithMem failed");
         return FAILED;

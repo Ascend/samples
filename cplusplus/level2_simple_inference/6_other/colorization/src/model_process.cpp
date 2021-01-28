@@ -33,7 +33,7 @@ ModelProcess::~ModelProcess() {
     DestroyOutput();
 }
 
-Result ModelProcess::LoadModelFromFileWithMem(const char *modelPath) {
+Result ModelProcess::load_model_from_file_with_mem(const char *modelPath) {
     if (loadFlag_) {
         ERROR_LOG("has already loaded a model");
         return FAILED;
