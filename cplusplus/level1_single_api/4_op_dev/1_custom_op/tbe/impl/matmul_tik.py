@@ -119,7 +119,7 @@ def matmul_tik_compute(params, kernel_name):
     return tik_instance
 
 
-def matmul_tik(input_x1, input_x2, kernel_name="simple_matmul"):
+def matmul_tik(input_x1, input_x2, output_y={}, kernel_name="simple_matmul"):
     shape_a = input_x1.get("ori_shape")
     shape_b = input_x2.get("ori_shape")
     m = shape_a[0]
