@@ -131,7 +131,6 @@ Result CartoonProcess::Init() {
     return SUCCESS;
 }
 
-
 Result CartoonProcess::Preprocess(const string& imageFile) {
     // read image using OPENCV
     cv::Mat mat = cv::imread(imageFile, CV_LOAD_IMAGE_COLOR);
@@ -162,7 +161,6 @@ Result CartoonProcess::Preprocess(const string& imageFile) {
 
     return SUCCESS;
 }
-
 
 Result CartoonProcess::Inference(aclmdlDataset*& inferenceOutput) {
     Result ret = model_.Execute();
@@ -208,7 +206,7 @@ void CartoonProcess::SaveImage(const string& origImageFile, cv::Mat& image) {
     string filename(origImageFile.substr(pos + 1));
     string dirname = "./output";
     if (access(dirname.c_str(), 0) == -1){
-	string cmd("mkdir -p ./output");
+        string cmd("mkdir -p ./output");
         system(cmd.c_str());	
     }
 	
