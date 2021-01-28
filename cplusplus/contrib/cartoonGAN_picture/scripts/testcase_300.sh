@@ -1,4 +1,4 @@
-tf_model="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/YOLOV3_VOC_detection_picture/yolov3_tf.pb"
+tf_model="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/cartoon/cartoonization.pb"
 model_name="cartoonization"
 
 data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/cartoonGAN_picture/test_image/"
