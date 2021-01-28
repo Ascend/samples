@@ -119,9 +119,18 @@ def matmul_tik_compute(params, kernel_name):
     return tik_instance
 
 
-def matmul_tik(input_x1, input_x2, kernel_name="simple_matmul"):
+def matmul_tik(input_x1, input_x2, output_y=None, kernel_name="simple_matmul"):
+    """
+    matmul_tik main func
+    Parameters
+    ----------
+    input_x1: input data 1
+    input_x2: input data 2
+    output_y: output dta
+    """
     shape_a = input_x1.get("ori_shape")
     shape_b = input_x2.get("ori_shape")
+    output_y = output_y
     m = shape_a[0]
     k = shape_a[1]
     n = shape_b[1]
@@ -139,6 +148,7 @@ def matmul_tik(input_x1, input_x2, kernel_name="simple_matmul"):
         'n_thread_num': 1,
         'k_tiling_size': 32,
         'k_cycle_times': 2,
-        'k_thread_num': 2
+        'k_thread_num': 2,
+        'output_y':output_y
     }
     return matmul_tik_compute(params, kernel_name)
