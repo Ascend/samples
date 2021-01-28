@@ -114,7 +114,7 @@ function main() {
         # 转模型
         if [[ ${version} = "c73" ]] || [[ ${version} = "C73" ]];then
             cd ${project_path}/model/
-            atc --output_type=FP32 --input_shape="train_real_A:1,256,256,3" --input_format=NHWC --output=${HOME}/models/${project_name}/${model_name} --soc_version=Ascend310 --framework=3 --save_original_model=false --model=${project_path}/model/${tensflow_model##*/} --precision_mode=allow_fp32_to_fp16
+            atc --output_type=FP32 --input_shape="train_real_A:1,256,256,3" --input_format=NHWC --output=${HOME}/models/${project_name}/${model_name} --soc_version=Ascend310 --framework=3 --save_original_model=false --model=${project_path}/model/${tf_model##*/} --precision_mode=allow_fp32_to_fp16
         
 		    if [ $? -ne 0 ];then
                 echo "ERROR: convert model failed"
