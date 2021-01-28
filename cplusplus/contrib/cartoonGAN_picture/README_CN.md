@@ -56,7 +56,6 @@
         **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/cartoonGAN_picture/cplus/cartoonization.om** 
     
     - 20.0版本  
-    **注：请确认环境变量已经在[环境准备和依赖安装](../../environment)中配置完成**
 
         1. 参考下方链接获取此应用中所用到的原始网络模型。
         
