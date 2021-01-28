@@ -2,27 +2,26 @@
 
 **本样例适配20.0及以上版本，支持产品为Atlas200DK、Atlas300([ai1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366))。**
 
-**本README只提供命令行方式运行样例的指导，如需在Mindstudio下运行样例，请参考[Mindstudio运行图片样例wiki](https://gitee.com/ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E5%9B%BE%E7%89%87%E6%A0%B7%E4%BE%8B?sort_id=3164874)。**
+**本README只提供命令行方式运行样例的指导，如需在Mindstudio下运行样例，请参考[Mindstudio运行视频样例wiki](https://gitee.com/ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E5%9B%BE%E7%89%87%E6%A0%B7%E4%BE%8B?sort_id=3164874)。**
 
-## YOLOV4_coco_detection_picture样例
+## YOLOV4_coco_detection_car_video样例
 
-**注：案例详细介绍请参见[googlenet动态batch_wiki]()。**
 
 功能：使用yolov4
 
 
 
-模型对输入图片进行预测推理，并将结果打印到输出图片上。
+模型对输入视频进行预测推理，并将结果打印到输出视频上。
 
-样例输入：原始图片jpg文件。
+样例输入：原始视频文件。
 
-样例输出：带推理结果的jpg文件。
+样例输出：带推理结果的视频文件。
 
 ### 前提条件
 
 部署此Sample前，需要准备好以下环境：
 
-- 请确认已按照[环境准备和依赖安装](https://gitee.com/ascend/samples/blob/dev/doc/readme.md)准备好环境。
+- 请确认已按照[环境准备和依赖安装](../../../environment)准备好环境。
 
 - 已完成对应产品的开发环境和运行环境安装。
 
@@ -56,13 +55,13 @@
 
     **wget https://nkxiaolei88.obs.cn-north-1.myhuaweicloud.com/ATC%20Model/YoloV4/yolov4_no_postprocess.om** 
 
-3. 获取样例需要的测试图片。
+3. 获取样例需要的测试视频。
 
-    执行以下命令，进入样例的data文件夹中，下载对应的测试图片。
+    执行以下命令，进入样例的data文件夹中，下载对应的测试视频。
 
-    **cd $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV4_coco_detection_picture/data**
+    **cd $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV4_coco_detection_car_video/data**
 
-    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/YOLOV4_coco_detection_picture-python/kite.jpg**
+    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/YOLOV4_coco_detection_car_video/test_video/test.mp4**
 
 
 
@@ -70,9 +69,9 @@
 
 **注：开发环境与运行环境合一部署，请跳过步骤1，直接执行[步骤2](#step_2)即可。**   
 
-1. 执行以下命令,将开发环境的 **YOLOV3_coco_detection_picture** 目录上传到运行环境中，例如 **/home/HwHiAiUser**，并以HwHiAiUser（运行用户）登录运行环境（Host）。
+1. 执行以下命令,将开发环境的 **YOLOV4_coco_detection_car_video** 目录上传到运行环境中，例如 **/home/HwHiAiUser**，并以HwHiAiUser（运行用户）登录运行环境（Host）。
 
-    **scp -r $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV4_coco_detection_picture HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
+    **scp -r $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV4_coco_detection_car_video HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
 
     **ssh HwHiAiUser@xxx.xxx.xxx.xxx**    
 
@@ -87,16 +86,16 @@
 
       **source ~/.bashrc**
         
-      **cd $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV4_coco_detection_picture/**    
-      **python3 yolov4.py ./data/**
+      **cd $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV4_coco_detection_car_video/src**    
+      **python3 yolov4.py ../data/test.mp4**
 
     - 如果是开发环境与运行环境分离部署，执行以下命令切换目录。
     
-      **cd $HOME/YOLOV4_coco_detection_picture**
+      **cd $HOME/YOLOV4_coco_detection_car_video/src**
 
     切换目录后，执行以下命令运行样例。
 
-    **python3 yolov4.py ./data/**
+    **python3 yolov4.py ../data/test.mp4**
 
 ### 查看结果
 
