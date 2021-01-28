@@ -184,7 +184,9 @@ Result CartoonProcess::Postprocess(const string& imageFile, aclmdlDataset* model
 
     uint32_t dataSize = 0;
     void* data = GetInferenceOutputItem(dataSize, modelOutput);
-    if (data == nullptr) return FAILED;
+    if (data == nullptr){
+        return FAILED;
+    } 
     uint32_t size = static_cast<uint32_t>(dataSize) / sizeof(float);
     cv::Mat mat_result(256, 256, CV_32FC3, const_cast<float*>((float*)data));
     cv::cvtColor(mat_result, mat_result, CV_RGB2BGR);
