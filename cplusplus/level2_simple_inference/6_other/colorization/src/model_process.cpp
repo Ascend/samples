@@ -29,7 +29,7 @@ modelWeightPtr_(nullptr),modelWeightSize_(0), modelDesc_(nullptr), input_(nullpt
 ModelProcess::~ModelProcess() {
     Unload();
     DestroyDesc();
-    DestroyInput();
+    destroy_input();
     DestroyOutput();
 }
 
@@ -117,12 +117,12 @@ Result ModelProcess::CreateInput(void *inputDataBuffer, size_t bufferSize) {
     return SUCCESS;
 }
 
-size_t ModelProcess::GetModelSize(){
+size_t ModelProcess::get_model_size(){
     size_t modelInputSize = aclmdlGetInputSizeByIndex(modelDesc_, 0);
     return modelInputSize;
 }
 
-void ModelProcess::DestroyInput() {
+void ModelProcess::destroy_input() {
     if (input_ == nullptr) {
         return;
     }
