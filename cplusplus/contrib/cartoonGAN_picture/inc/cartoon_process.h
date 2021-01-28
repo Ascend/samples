@@ -22,7 +22,6 @@
 #include "model_process.h"
 #include <memory>
 
-using namespace std;
 
 /**
 * CartoonProcess
@@ -33,9 +32,9 @@ public:
     ~CartoonProcess();
 
     Result Init();
-    Result Preprocess(const string& imageFile);
+    Result Preprocess(const std::string& imageFile);
     Result Inference(aclmdlDataset*& inferenceOutput);
-    Result Postprocess(const string& origImageFile,
+    Result Postprocess(const std::string& origImageFile,
                        aclmdlDataset* modelOutput);
 private:
     Result InitResource();
@@ -43,7 +42,7 @@ private:
 
     void* GetInferenceOutputItem(uint32_t& itemDataSize,
                                  aclmdlDataset* inferenceOutput);
-    void SaveImage(const string& origImageFile, cv::Mat& image);
+    void SaveImage(const std::string& origImageFile, cv::Mat& image);
     void DestroyResource();
 
 private:
