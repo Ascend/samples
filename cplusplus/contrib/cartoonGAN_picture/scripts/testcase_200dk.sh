@@ -79,12 +79,6 @@ function downloadOriginalModel() {
         return 1
     fi
 
-    wget -O ${project_path}/model/${aipp_cfg##*/}  ${aipp_cfg} --no-check-certificate
-    if [ $? -ne 0 ];then
-        echo "install tf_model failed, please check Network."
-        return 1
-    fi
-
     return 0
 }
 
