@@ -2,7 +2,7 @@ tf_model="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/cartoon/cartoo
 model_name="cartoonization"
 
 data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/cartoonGAN_picture/test_image/"
-verify_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/cartoonGAN_picture/verify_image/"
+verify_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/cartoonGAN_picture/cplus/"
 project_name="cplusplus_contrib_cartoonGAN_picture"
 
 version=$1
