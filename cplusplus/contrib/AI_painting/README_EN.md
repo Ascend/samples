@@ -46,7 +46,7 @@ Before deploying this sample, ensure that:
 
     | **Model Name** | **Description**                   | **How to Obtain**                        |
     | -------------- | --------------------------------- | ---------------------------------------- |
-    | AIPainting     | Image generation inference model. | Download the model by referring to the **README.md** file in [https://gitee.com/ascend/modelzoo/tree/master/contrib/Research/cv/painting/ATC_painting_tf_AE](https://gitee.com/ascend/modelzoo/tree/master/contrib/Research/cv/painting/ATC_painting_tf_AE). |
+    | AIPainting     | Image generation inference model. | Download the model by referring to the **README.md** file in [https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/painting/ATC_painting_tf_AE](https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/painting/ATC_painting_tf_AE). |
 
     ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **NOTE**  
     > - You can use the converted OM model provided by ModelZoo directly, or download the original model and convert the model by yourself.

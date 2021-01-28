@@ -54,7 +54,7 @@ Before deploying this sample, ensure that:
    
    | **Model Name**| **Description**| **How to Obtain**|
    |----------|----------|----------|
-   | yolov3| Object detection model. It is a YOLOv3 model based on Caffe.| Download the model and weight file by referring to the section about downloading the original model in the **README.md** file in [https://gitee.com/ascend/modelzoo/tree/master/contrib/Research/cv/yolov3/ATC\_yolov3\_caffe\_AE](https://gitee.com/ascend/modelzoo/tree/master/contrib/Research/cv/yolov3/ATC_yolov3_caffe_AE).|
+   | yolov3| Object detection model. It is a YOLOv3 model based on Caffe.| Download the model and weight file by referring to the section about downloading the original model in the **README.md** file in [https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/yolov3/ATC\_yolov3\_caffe\_AE](https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/yolov3/ATC_yolov3_caffe_AE).|
 
    ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **Note:**
    

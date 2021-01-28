@@ -46,7 +46,7 @@
     
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
-    |  AIPainting | 图片生成推理模型。  |  请参考[https://gitee.com/ascend/modelzoo/tree/master/contrib/Research/cv/painting/ATC_painting_tf_AE](https://gitee.com/ascend/modelzoo/tree/master/contrib/Research/cv/painting/ATC_painting_tf_AE)目录中README.md下载原始模型章节的模型文件。 |
+    |  AIPainting | 图片生成推理模型。  |  请参考[https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/painting/ATC_painting_tf_AE](https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/painting/ATC_painting_tf_AE)目录中README.md下载原始模型章节的模型文件。 |
 
     ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
     > - modelzoo中提供了转换好的om模型，可下载直接使用，也可以参照第三步下载原始模型进行模型转换。

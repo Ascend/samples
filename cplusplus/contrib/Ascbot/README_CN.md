@@ -57,9 +57,9 @@ AscendBot是一款面向人工智能及机器人爱好者的开源智能机器�
     
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
-    |  collision_avoidance_model| 用于智能小车检测前方是否有跌落危险。  |  请参考[https://gitee.com/ascend/modelzoo/tree/master/contrib/Research/cv/ascbot/ATC_CollisionAntiDrop_caffe_AE/](https://gitee.com/ascend/modelzoo/tree/master/contrib/Research/cv/ascbot/ATC_CollisionAntiDrop_caffe_AE/)目录中README.md下载原始模型章节下载模型和权重文件。 |
-    |  road_following_model  |  用于智能小车检测车道线，实现循道行驶  |  请参考[https://gitee.com/ascend/modelzoo/tree/master/contrib/Research/cv/ascbot/ATC_LaneDetection_caffe_AE/](https://gitee.com/ascend/modelzoo/tree/master/contrib/Research/cv/ascbot/ATC_LaneDetection_caffe_AE/)目录中README.md下载原始模型章节下载模型和权重文件。  |
-    |  road_object_detection_deploy|  用于选择小车的运行模式：自由形式、循道模式、物体跟随模式  |  请参考[https://gitee.com/ascend/modelzoo/tree/master/contrib/Research/cv/ascbot/ATC_Object_detection_caffe_AE/](https://gitee.com/ascend/modelzoo/tree/master/contrib/Research/cv/ascbot/ATC_Object_detection_caffe_AE/)目录中README.md下载原始模型章节下载模型和权重文件。  |
+    |  collision_avoidance_model| 用于智能小车检测前方是否有跌落危险。  |  请参考[https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/ascbot/ATC_CollisionAntiDrop_caffe_AE/](https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/ascbot/ATC_CollisionAntiDrop_caffe_AE/)目录中README.md下载原始模型章节下载模型和权重文件。 |
+    |  road_following_model  |  用于智能小车检测车道线，实现循道行驶  |  请参考[https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/ascbot/ATC_LaneDetection_caffe_AE/](https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/ascbot/ATC_LaneDetection_caffe_AE/)目录中README.md下载原始模型章节下载模型和权重文件。  |
+    |  road_object_detection_deploy|  用于选择小车的运行模式：自由形式、循道模式、物体跟随模式  |  请参考[https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/ascbot/ATC_Object_detection_caffe_AE/](https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/ascbot/ATC_Object_detection_caffe_AE/)目录中README.md下载原始模型章节下载模型和权重文件。  |
 
     ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
     > - modelzoo中提供了转换好的om模型，但此模型不匹配当前样例，所以需要下载原始模型和权重文件后重新进行模型转换。

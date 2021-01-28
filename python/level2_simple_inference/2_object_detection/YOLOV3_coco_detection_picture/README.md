@@ -54,7 +54,7 @@
     
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
-    |  yolov3| 基于Caffe-YOLOV3的目标检测模型。  |  请参考[https://gitee.com/ascend/modelzoo/tree/master/contrib/Research/cv/yolov3/ATC_yolov3_caffe_AE](https://gitee.com/ascend/modelzoo/tree/master/contrib/Research/cv/yolov3/ATC_yolov3_caffe_AE)目录中README.md下载原始模型章节下载模型和权重文件。 |
+    |  yolov3| 基于Caffe-YOLOV3的目标检测模型。  |  请参考[https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/yolov3/ATC_yolov3_caffe_AE](https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/yolov3/ATC_yolov3_caffe_AE)目录中README.md下载原始模型章节下载模型和权重文件。 |
 
     ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
     > - modelzoo中提供了转换好的om模型，此模型匹配当前样例，可以直接使用。    

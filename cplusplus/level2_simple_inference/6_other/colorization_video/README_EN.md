@@ -48,7 +48,7 @@ Before deploying this sample, ensure that:
 
     | **Model Name** | **Description** | **How to Obtain** |
     |---|---|---|
-    | colorization | Inference model for black and white video colorization. It is a colorization model based on Caffe.   | Download the original model and weight file by referring to [https://gitee.com/ascend/modelzoo/tree/master/contrib/Research/cv/colorization/ATC_colorization_caffe_AE](https://gitee.com/ascend/modelzoo/tree/master/contrib/Research/cv/colorization/ATC_colorization_caffe_AE).  |
+    | colorization | Inference model for black and white video colorization. It is a colorization model based on Caffe.   | Download the original model and weight file by referring to [https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/colorization/ATC_colorization_caffe_AE](https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/colorization/ATC_colorization_caffe_AE).  |
 
     ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **Note**
 

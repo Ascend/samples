@@ -47,7 +47,7 @@ In the development environment, run the following commands as a non-root user to
    
    | **Model Name**| **Description**| **How to Obtain**|
    |----------|----------|----------|
-   | googlenet| Applies to image classification. It is a GoogLeNet model based on Caffe.| Download the model and weight file by referring to the section about downloading the original model in the **README.md** file in [https://gitee.com/ascend/modelzoo/tree/master/contrib/Research/cv/googlenet/ATC\_googlenet\_caffe\_AE](https://gitee.com/ascend/modelzoo/tree/master/contrib/Research/cv/googlenet/ATC_googlenet_caffe_AE).|
+   | googlenet| Applies to image classification. It is a GoogLeNet model based on Caffe.| Download the model and weight file by referring to the section about downloading the original model in the **README.md** file in [https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/googlenet/ATC\_googlenet\_caffe\_AE](https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/googlenet/ATC_googlenet_caffe_AE).|
 
    ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **Note:**
    
