@@ -39,7 +39,7 @@ public:
                        aclmdlDataset* modelOutput);
 private:
     Result InitResource();
-    Result InitModel(const char* omModelPath);
+    Result init_model(const char* omModelPath);
 
     void* GetInferenceOutputItem(uint32_t& itemDataSize,
                                  aclmdlDataset* inferenceOutput);
