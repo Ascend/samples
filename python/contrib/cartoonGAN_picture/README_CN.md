@@ -48,38 +48,31 @@
 
             **unzip ascend-samples-master.zip**
 
-2. 获取此应用中所需要的原始网络模型。(20.0版本)
-
-    参考下表获取此应用中所用到的模型，并将其存放到开发环境普通用户下的工程目录： **cd $HOME/samples/python/contrib/cartoonGAN_picture/model** 。   
-
+2. 获取此应用中所需要Davinci模型。
+    - 20.1版本
+    由于版本问题，此模型在20.1版本不能正确转换。因此20.1版本直接获取om模型。
+     
+        **cd $HOME/samples/cplusplus/contrib/cartoonGAN_picture/model**    
+        **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/cartoonGAN_picture/cplus/cartoonization.om** 
     
-     **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/cartoon/cartoonization.pb**         
-        **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/cartoonGAN_picture/insert_op.cfg** 
+    - 20.0版本  
 
-3. 将原始模型转换为Davinci模型。（20.0版本）
-    
-    **注：请确认环境变量已经在[环境准备和依赖安装](../../environment)中配置完成**
+        1. 参考下方链接获取此应用中所用到的原始网络模型。
+        
+            **cd $HOME/samples/cplusplus/contrib/cartoonGAN_picture/model** 。   
+            **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/cartoon/cartoonization.pb**  
 
-    1. 设置LD_LIBRARY_PATH环境变量。
+        2. 设置LD_LIBRARY_PATH环境变量。   
+            由于LD_LIBRARY_PATH环境变量在转使用atc工具和运行样例时会产生冲突，所以需要在命令行单独设置此环境变量，方便修改。  
+            
+            **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64**  
 
-        由于LD_LIBRARY_PATH环境变量在转使用atc工具和运行样例时会产生冲突，所以需要在命令行单独设置此环境变量，方便修改。
-
-        **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64**  
-
-    2. 执行以下命令使用atc命令进行模型转换。
-
-        **cd $HOME/samples/python/contrib/cartoonGAN_picture/model**  
-
-        **atc --output_type=FP32 --input_shape="train_real_A:1,256,256,3" --input_format=NHWC --output="./cartoonization" --soc_version=Ascend310 --insert_op_conf=./insert_op.cfg --framework=3 --save_original_model=false --model="./cartoonization.pb" --precision_mode=allow_fp32_to_fp16**
-
+        3. 执行以下命令使用atc命令进行模型转换。  
+            
+            **atc --output_type=FP32 --input_shape="train_real_A:1,256,256,3" --input_format=NHWC --output="./cartoonization" --soc_version=Ascend310 --framework=3 --save_original_model=false --model="./cartoonization.pb" --precision_mode=allow_fp32_to_fp16**
     
 
-4. 由于版本问题，此模型在20.1版本不能正确转换。因此20.1版本直接获取om模型。     
-        **cd $HOME/samples/python/contrib/cartoonGAN_picture/model**    
-        **wget https://obs-book.obs.cn-east-2.myhuaweicloud.com/cjl/cartoonization.om** 
-    
-
-5. 获取样例需要的测试图片。
+3. 获取样例需要的测试图片。
 
     执行以下命令，进入样例的data文件夹中，下载对应的测试图片。
 
