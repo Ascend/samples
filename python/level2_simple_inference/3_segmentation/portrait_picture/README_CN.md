@@ -52,7 +52,7 @@
 
 | **模型名称** | **模型说明**                   | **模型下载路径**                                             |
 | ------------ | ------------------------------ | ------------------------------------------------------------ |
-| Portrait     | 基于TensorFlow的人像分割模型。 | 请参考https://gitee.com/ascend/modelzoo/tree/master/contrib/Research/cv/portraitnet/ATC_PortraitNet_tf_AE中README.md原始模型章节，下载**原始模型**及**对应的cfg文件**。 |
+| Portrait     | 基于TensorFlow的人像分割模型。 | 请参考https://gitee.com/ascend/modelzoo/tree/master/contrib/Research/cv/portraitnet/ATC_PortraitNet_tf_AE 中README.md原始模型章节，下载**原始模型**及**对应的cfg文件**。 |
 
 #### 3. 将原始模型转换为Davinci模型（20.0 版本）
 
