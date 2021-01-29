@@ -2,6 +2,10 @@ import numpy as np
 import acl
 import atlas_utils.constants as constants
 from atlas_utils.acl_logger import log_error, log_info
+import time
+
+from functools import wraps
+DEBUG = True
 
 def check_ret(message, ret_int):
     if ret_int != 0:
@@ -148,3 +152,18 @@ def yuv420sp_size(width, height):
     :return: yuv420sp size
     """
     return int(width * height * 3 / 2)
+
+def display_time(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if DEBUG:
+            btime = time.time()
+            res = func(*args, **kwargs)
+            use_time = time.time() - btime
+            print("in %s, use time:%s" % (func.__name__, use_time))
+            return res
+        else:
+            return func(*args, **kwargs)
+
+    return wrapper
+

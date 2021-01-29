@@ -7,19 +7,22 @@ from PIL import Image
 import glob
 import time
 
-sys.path.append("..")
-sys.path.append("../../../../common/")
+path = os.path.dirname(os.path.abspath(__file__))
 
-from atlas_utils import constants
+sys.path.append(os.path.join(path, ".."))
+sys.path.append(os.path.join(path, "../../../../common/"))
+sys.path.append(os.path.join(path, "../../../../common/atlas_utils"))
+
 from acl_resource import AclResource
-from atlas_utils import utils 
-import acl_model 
-from atlas_utils.acl_image import AclImage   
 
+from acl_model import Model
+from utils import display_time 
+from acl_image import AclImage   
 
-OUTPUT_DIR = '../out/'
-MODEL_PATH = "../model/hifill.om"
-MODEL_MATMUL_PATH = "../model/0_BatchMatMul_0_0_1_1_1024_1024_0_0_1_1_1024_27648_0_0_1_1_1024_27648.om"
+currentPath = os.path.join(path, "..")
+OUTPUT_DIR = os.path.join(currentPath, 'out/')
+MODEL_PATH = os.path.join(currentPath,"model/hifill.om")
+MODEL_MATMUL_PATH =os.path.join(currentPath, "model/0_BatchMatMul_0_0_1_1_1024_1024_0_0_1_1_1024_27648_0_0_1_1_1024_27648.om")
 MODEL_WIDTH = 512
 MODEL_HEIGHT = 512
 
@@ -34,15 +37,14 @@ def sort(str_lst):
     return [s for s in sorted(str_lst)]
 
 
-def resize_ave(img):
-    """
-    resize image
-    """
-    img = img.astype(NPTYPE_FLOAT32)
-    img_patches = extract_image_patches(img, MULTIPLE)
-    img = np.mean(img_patches, axis=(2, 3))
-    return img
-
+# def resize_ave(img):
+#     """
+#     resize image
+#     """
+#     img = img.astype(NPTYPE_FLOAT32)
+#     img_patches = extract_image_patches(img, MULTIPLE)
+#     img = np.mean(img_patches, axis=(2, 3))
+#     return img
 
 def reconstruct_residual_from_patches(residual, multiple):
     """
@@ -53,7 +55,6 @@ def reconstruct_residual_from_patches(residual, multiple):
     return np.reshape(residual, [ATTENTION_SIZE * multiple, ATTENTION_SIZE * multiple, 3])
 
 # extract image patches
-
 def extract_image_patches(img, multiple):
     """
     extract image patch
@@ -63,7 +64,7 @@ def extract_image_patches(img, multiple):
     img = np.transpose(img, [0, 2, 1, 3, 4])
     return img
 
-
+@display_time
 def pre_process(raw_img, raw_mask): 
     """
     process raw image & mask
@@ -86,16 +87,14 @@ def pre_process(raw_img, raw_mask):
     mask_512_chw = mask_512_hwc.transpose(2,0,1).copy()
     return large_img, large_mask, small_img, mask_512_chw
 
-def read_imgs_masks(images, masks):
+def get_imgs_masks_file_list(images, masks):
     paths_img = glob.glob(images + '/*.*[gG]')
     paths_mask = glob.glob(masks + '/*.*[gG]')
     paths_img = sort(paths_img)
     paths_mask = sort(paths_mask)
-    print(paths_img)
-    print(paths_mask)
     return paths_img, paths_mask
 
-
+@display_time
 def matmul_om_large(matmul_model, attention, residual):
     """
     matul om large
@@ -118,7 +117,7 @@ def residual_aggregate(model, residual, attention):
     residual = reconstruct_residual_from_patches(residual, MULTIPLE * INPUT_SIZE // ATTENTION_SIZE)
     return residual
     
-
+@display_time
 def post_process(model, raw_img, large_img, large_mask, inpainted_512, img_512, mask_512, attention):
     """
     compute the raw residual map
@@ -150,7 +149,7 @@ def post_process(model, raw_img, large_img, large_mask, inpainted_512, img_512, 
     res_raw = res_raw * mask + raw_img * (1. - mask)
     return res_raw.astype(np.uint8)
 
-
+@display_time
 def readimages(img_path, mask_path):    
     """
     readimages
@@ -159,12 +158,19 @@ def readimages(img_path, mask_path):
     raw_mask = cv2.imread(mask_path) 
     return raw_img, raw_mask
 
+@display_time
+def inference(model, input_data):
+    resultList = model.execute(input_data)
 
+    inpainted_512 = resultList[0]    
+    attention = resultList[1]
+    mask_512_new = resultList[2] 
+
+    return inpainted_512, attention, mask_512_new
+
+
+@display_time
 def main(image_dirs, masks_dirs):    
-    """
-    output
-    """
-    
     
     if not os.path.exists(OUTPUT_DIR):
         os.mkdir(OUTPUT_DIR)
@@ -173,37 +179,31 @@ def main(image_dirs, masks_dirs):
     acl_resource = AclResource()
     stream = acl_resource.init()
     #load model
-    model = acl_model.Model(acl_resource, MODEL_PATH)
-    matmul_om = acl_model.Model(acl_resource, MODEL_MATMUL_PATH)
+    model = Model( MODEL_PATH)
+    matmul_om = Model( MODEL_MATMUL_PATH)
     
 
-    paths_img, paths_mask = read_imgs_masks(image_dirs, masks_dirs)
+    paths_img, paths_mask = get_imgs_masks_file_list(image_dirs, masks_dirs)
     for i in range(len(paths_img)):
         print('==========')        
         raw_img, raw_mask = readimages(paths_img[i], paths_mask[i])
         print("file: % s, shape= % s" % (paths_img[i], raw_img.shape))
 
-
         img_large, mask_large, img_512, mask_512 = pre_process(raw_img, raw_mask)        
 
-        resultList  = model.execute([img_512, mask_512,])        
-        inpainted_512 = resultList[0]
-        inpainted_512_temp = np.squeeze(inpainted_512)        
-        attention = resultList[1]
-        mask_512_new = resultList[2] 
-          
+        inpainted_512, attention, mask_512_new  = inference(model,[img_512, mask_512,])                
 
         # post-processing
         res_raw_size = post_process(matmul_om,raw_img, img_large, mask_large, inpainted_512[0], img_512, mask_512_new[0], attention[0])
-        filename = '../out/outpaint_' + os.path.basename(paths_img[i])
+        filename = os.path.join(OUTPUT_DIR, 'outpaint_' + os.path.basename(paths_img[i]))
         cv2.imwrite(filename , res_raw_size)
         
     print("Execute end")
 
 if __name__ == '__main__':
 
-    image_dir = "../data/"
-    masks_dir = "../mask/"   
+    image_dir = os.path.join(currentPath, "data" )
+    masks_dir = os.path.join(currentPath, "mask")   
 
     main(image_dir, masks_dir)
  
