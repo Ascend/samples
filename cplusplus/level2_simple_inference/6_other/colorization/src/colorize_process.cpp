@@ -180,7 +180,10 @@ Result ColorizeProcess::Postprocess(const string& imageFile, aclmdlDataset* mode
 {
     uint32_t dataSize = 0;
     void* data = get_inference_output_item(dataSize, modelOutput);
-    if (data == nullptr) return FAILED;
+    if (data == nullptr) 
+    {
+        return FAILED;
+    }
 
     uint32_t size = static_cast<uint32_t>(dataSize) / sizeof(float);
     // get a channel and b channel result data
@@ -273,9 +276,8 @@ void* ColorizeProcess::get_inference_output_item(uint32_t& itemDataSize,
 
 void ColorizeProcess::destroy_resource()
 {
-	aclrtFree(inputBuf_);
-    inputBuf_ = nullptr;
-	
+    aclrtFree(inputBuf_);
+    inputBuf_ = nullptr;   
     aclError ret;
     if (stream_ != nullptr) {
         ret = aclrtDestroyStream(stream_);
@@ -284,7 +286,7 @@ void ColorizeProcess::destroy_resource()
         }
         stream_ = nullptr;
     }
-    INFO_LOG("end to destroy stream");
+    INFO_LOG("end to destroy stream")
 
     if (context_ != nullptr) {
         ret = aclrtDestroyContext(context_);
