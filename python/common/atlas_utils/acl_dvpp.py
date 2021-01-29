@@ -4,8 +4,7 @@ import atlas_utils.utils as utils
 from atlas_utils.acl_image import AclImage
 from atlas_utils.acl_logger import log_error, log_info
 from atlas_utils.resource_list import resource_list
-from atlas_utils.constants import *
-from atlas_utils.constants import ACL_ERROR_NONE, MEMORY_DVPP, PIXEL_FORMAT_YUV_SEMIPLANAR_420
+import atlas_utils.constants import constants
 
 class Dvpp(object):
     """
@@ -52,7 +51,7 @@ class Dvpp(object):
         pic_desc = acl.media.dvpp_create_pic_desc()
         acl.media.dvpp_set_pic_desc_data(pic_desc, image.data())
         acl.media.dvpp_set_pic_desc_format(pic_desc,
-                                           PIXEL_FORMAT_YUV_SEMIPLANAR_420)
+                                           constants.PIXEL_FORMAT_YUV_SEMIPLANAR_420)
         acl.media.dvpp_set_pic_desc_width(pic_desc, image.width)
         acl.media.dvpp_set_pic_desc_height(pic_desc, image.height)
         acl.media.dvpp_set_pic_desc_width_stride(pic_desc, stride_width)
@@ -71,7 +70,7 @@ class Dvpp(object):
         pic_desc = acl.media.dvpp_create_pic_desc()
         acl.media.dvpp_set_pic_desc_data(pic_desc, output_buffer)
         acl.media.dvpp_set_pic_desc_format(pic_desc,
-                                           PIXEL_FORMAT_YUV_SEMIPLANAR_420)
+                                           constants.PIXEL_FORMAT_YUV_SEMIPLANAR_420)
         acl.media.dvpp_set_pic_desc_width(pic_desc, width)
         acl.media.dvpp_set_pic_desc_height(pic_desc, height)
         acl.media.dvpp_set_pic_desc_width_stride(pic_desc, stride_width)
@@ -99,12 +98,12 @@ class Dvpp(object):
                                                image.size,
                                                output_desc,
                                                self._stream)
-        if ret != ACL_ERROR_NONE:
+        if ret != constants.ACL_ERROR_NONE:
             log_error("dvpp_jpeg_decode_async failed ret={}".format(ret))
             return None
 
         ret = acl.rt.synchronize_stream(self._stream) 
-        if ret != ACL_ERROR_NONE:
+        if ret != constants.ACL_ERROR_NONE:
             log_error("dvpp_jpeg_decode_async failed ret={}".format(ret))
             return None     
 
@@ -113,7 +112,7 @@ class Dvpp(object):
         stride_height = utils.align_up16(image.height)
         stride_size = utils.yuv420sp_size(stride_width, stride_height)
         return AclImage(out_buffer, stride_width, 
-                        stride_height, stride_size, MEMORY_DVPP)
+                        stride_height, stride_size, constants.MEMORY_DVPP)
 
     def _gen_jpegd_out_pic_desc(self, image):
         # Predict the memory size required to decode jpeg into yuv pictures
@@ -122,7 +121,7 @@ class Dvpp(object):
             return None
         # Apply for memory for storing decoded yuv pictures
         out_buffer, ret = acl.media.dvpp_malloc(out_buffer_size)
-        if ret != ACL_ERROR_NONE:
+        if ret != constants.ACL_ERROR_NONE:
             log_error("Dvpp malloc failed, error: ", ret)
             return None
         # Create output image desc
@@ -133,8 +132,8 @@ class Dvpp(object):
     def _get_jpegd_memory_size(self, image):
         if image.is_local():
             size, ret = acl.media.dvpp_jpeg_predict_dec_size( \
-                image.data(), image.size, PIXEL_FORMAT_YUV_SEMIPLANAR_420)
-            if ret != ACL_ERROR_NONE:
+                image.data(), image.size, constants.PIXEL_FORMAT_YUV_SEMIPLANAR_420)
+            if ret != constants.ACL_ERROR_NONE:
                 log_error("Predict jpeg decode size failed, return ", ret)
                 return False, 0
             return True, size
@@ -153,7 +152,7 @@ class Dvpp(object):
         output_size = utils.yuv420sp_size(stride_width, stride_height)
         #Request memory for the zoomed picture
         out_buffer, ret = acl.media.dvpp_malloc(output_size)
-        if ret != ACL_ERROR_NONE:
+        if ret != constants.ACL_ERROR_NONE:
             log_error("Dvpp malloc failed, error: ", ret)
             return None
         #Create output image
@@ -168,24 +167,24 @@ class Dvpp(object):
                                               output_desc,
                                               self._resize_config,
                                               self._stream)
-        if ret != ACL_ERROR_NONE:
+        if ret != constants.ACL_ERROR_NONE:
             log_error("Vpc resize async failed, error: ", ret)
             return None
         #Wait for the zoom operation to complete
         ret = acl.rt.synchronize_stream(self._stream)
-        if ret != ACL_ERROR_NONE:
+        if ret != constants.ACL_ERROR_NONE:
             log_error("Resize synchronize stream failed, error: ", ret)
             return None
         #Release the resources requested for scaling
         acl.media.dvpp_destroy_pic_desc(input_desc)
         acl.media.dvpp_destroy_pic_desc(output_desc)
         return AclImage(out_buffer, stride_width,
-                        stride_height, output_size, MEMORY_DVPP)
+                        stride_height, output_size, constants.MEMORY_DVPP)
 
     def _gen_resize_out_pic_desc(self, resize_width, 
                                  resize_height, output_size):                                 
         out_buffer, ret = acl.media.dvpp_malloc(output_size)
-        if ret != ACL_ERROR_NONE:
+        if ret != constants.ACL_ERROR_NONE:
             log_error("Dvpp malloc failed, error: ", ret)
             return None
         pic_desc = self._gen_output_pic_desc(resize_width, resize_height,
@@ -201,12 +200,12 @@ class Dvpp(object):
         #Predict the memory size required for conversion
         output_size, ret = acl.media.dvpp_jpeg_predict_enc_size(
             input_desc, self._jpege_config)
-        if (ret != ACL_ERROR_NONE):
+        if (ret != constants.ACL_ERROR_NONE):
             log_error("Predict jpege output size failed")
             return None
         #Request memory required for conversion
         output_buffer, ret = acl.media.dvpp_malloc(output_size)
-        if (ret != ACL_ERROR_NONE):
+        if (ret != constants.ACL_ERROR_NONE):
             log_error("Malloc jpege output memory failed")
             return None
         output_size_array = np.array([output_size], dtype=np.int32)
@@ -218,18 +217,18 @@ class Dvpp(object):
                                                output_size_ptr,
                                                self._jpege_config,
                                                self._stream)
-        if (ret != ACL_ERROR_NONE):
+        if (ret != constants.ACL_ERROR_NONE):
             log_error("Jpege failed, ret ", ret)
             return None
         #Wait for the conversion to complete
         ret = acl.rt.synchronize_stream(self._stream)
-        if (ret != ACL_ERROR_NONE):
+        if (ret != constants.ACL_ERROR_NONE):
             print("Jpege synchronize stream, failed, ret ", ret)
             return None
         #Release resources
         acl.media.dvpp_destroy_pic_desc(input_desc)
         return AclImage(output_buffer, image.width, 
-                        image.height, int(output_size_array[0]), MEMORY_DVPP)
+                        image.height, int(output_size_array[0]), constants.MEMORY_DVPP)
 
     def destroy(self):
         """
