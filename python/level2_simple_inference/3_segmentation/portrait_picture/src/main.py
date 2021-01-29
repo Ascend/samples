@@ -1,4 +1,3 @@
-# -*- coding: UTF-8 -*-
 import sys
 import os
 # from PIL import Image, ImageDraw, ImageFont
@@ -125,14 +124,14 @@ def main():
         if image_name != 'background.jpg':
             # read image
             image = AclImage(image_file)
-            # 对图片预处理
+            # Preprocess the picture
             resized_image = seg.pre_process(image)
             input_data.append(resized_image)
-            # 推理图片
+            # Inference
             result = seg.inference(input_data)
-            # 对推理结果进行处理
+            # Post-processing
             mask = seg.post_process(result, image_name)
-            # 图像前景背景融合
+            # Fusion of segmented portrait and background image
             result = background_replace('../data/background.jpg', \
                                         image_file, os.path.join("../outputs/mask/", image_name))
 if __name__ == '__main__':
