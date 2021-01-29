@@ -12,7 +12,7 @@
 ├── [VSLAM_based_smart_car_platform](./VSLAM_based_smart_car_platform)：**自动驾驶设计（正在开发）**   
 ├── [action_recognition](./action_recognition)：**动作识别**   
 ├── [ar_shadowgan](./ar_shadowgan)：**AR阴影生成**   
-├── [cartoonization](./cartoonization)：**卡通图像生成（正在开发）**   
+├── [cartoonGAN_picture](./cartoonGAN_picture)：**卡通图像生成**   
 ├── [coarse_grained_emotion_recognition](./coarse_grained_emotion_recognition)：**粗粒度表情识别（正在开发）**   
 ├── [dehaze](./dehaze)：**图像去雾**    
 ├── [derain](./derain)：**雨雾天图像增强**    
