@@ -64,6 +64,7 @@ class AclImage():
         return  AclImage(device_ptr, self.width, self.height, self.size, MEMORY_DEVICE) 
 
     def destroy(self):
+        """release image resource"""
         if (self._data is None) or (self.size == 0):
             print("Image release abnormally")
             return
