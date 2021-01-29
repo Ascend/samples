@@ -48,37 +48,30 @@ Before deploying this sample, ensure that:
 
             **unzip ascend-samples-master.zip**
 
-2. (For CANN 20.0) Obtain the source model required by the application. 
+2. Obtain the source model required by the application。  
+    - For CANN 20.1   
+    Due to versioning issues, this model was not converted correctly in version 20.1.So version 20.1 gets the OM model directly.      
+     
+        **cd $HOME/samples/cplusplus/contrib/cartoonGAN_picture/model**    
+        **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/cartoonGAN_picture/cplus/cartoonization.om** 
+    
+    - For CANN 20.0    
 
-    Run the following commands to download the model used in the application and save it to the directory of the project of a common user in the development environment. 
+        1. Refer to the link below for the original network model used in this application。
+        
+            **cd $HOME/samples/cplusplus/contrib/cartoonGAN_picture/model** 。   
+            **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/cartoon/cartoonization.pb**  
 
-    **cd $HOME/samples/python/contrib/cartoonGAN_picture//model**   
-
-        **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/cartoon/cartoonization.pb**
-
-        **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/cartoonGAN_picture/insert_op.cfg** 
-
-3. (For CANN 20.0) Convert the original model to a Da Vinci model. 
-
-    **Note: Ensure that the environment variables have been configured in [Environment Preparation and Dependency Installation](.../../environment).**
-
-    1. Set the ***LD_LIBRARY_PATH*** environment variable.
+        2. Set the ***LD_LIBRARY_PATH*** environment variable.
 
         The ***LD_LIBRARY_PATH*** environment variable conflicts with the sample when the ATC tool is used. Therefore, you need to set this environment variable separately in the CLI to facilitate modification.
+            
+            **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64**  
 
-        **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64**  
-
-    2. Run the following commands to convert the model:
-
-        **cd $HOME/samples/python/contrib/cartoonGAN_picture//model**  
-
-        **atc --output_type=FP32 --input_shape="train_real_A:1,256,256,3" --input_format=NHWC --output="./cartoonization" --soc_version=Ascend310 --insert_op_conf=./insert_op.cfg --framework=3 --save_original_model=false --model="./cartoonization.pb" --precision_mode=allow_fp32_to_fp16**
-
-
-4. For CANN 20.1, obtain the OM model directly.      
-        **wget https://obs-book.obs.cn-east-2.myhuaweicloud.com/cjl/cartoonization.om** 
-
-5. Obtain the test image required by the sample.
+        3. Run the following commands to convert the model:     
+            
+            **atc --output_type=FP32 --input_shape="train_real_A:1,256,256,3" --input_format=NHWC --output="./cartoonization" --soc_version=Ascend310 --framework=3 --save_original_model=false --model="./cartoonization.pb" --precision_mode=allow_fp32_to_fp16**
+3. Obtain the test image required by the sample.
 
     Run the following commands to go to the **data** folder of the sample and download the corresponding test image:
 
