@@ -245,11 +245,16 @@ The directory of a Caffe or TensorFlow custom operator sample project is organiz
     │               ├── tbe
     │                   ├── config
     ${soc_version} // Ascend AI Processor model
-    │                           ├── aic-${sos_version}-ops-info.json     // Custom operator info library file
-    │                   ├── custom_impl               // Custom operator implementation code
+    │                           ├── aic-${sos_version}-ops-info.json     // Custom TBE operator info library file
+    │                   ├── custom_impl               // Custom TBE operator implementation code
     │                       ├── xx.py
     │           ├── vector_core   // Reserved directory, which can be ignored
-    │           ├── cpu          // Directory of AI CPU custom operator implementation file and information library. Ignore the directory if the operator is a TBE operator.
+    │           ├── cpu          // Directory of AI CPU custom operator implementation file and information library.
+    │                ├── aicpu_kernel
+    │                    ├── custom_impl
+    │                        ├── libcust_aicpu_kernels.so   //Custom AI CPU operator implementation library file
+    │                ├── config
+    │                    ├── cust_aicpu_kernel.json         //Custom AI CPU operator information library file
     │   ├── framework
     │       ├── built-in
     │       ├── custom
