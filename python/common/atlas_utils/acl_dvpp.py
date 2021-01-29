@@ -1,7 +1,5 @@
 import numpy as np
-
 import acl
-
 import atlas_utils.utils as utils
 from atlas_utils.acl_image import AclImage
 from atlas_utils.acl_logger import log_error, log_info
