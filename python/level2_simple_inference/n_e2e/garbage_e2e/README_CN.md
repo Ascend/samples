@@ -29,7 +29,7 @@
 
       （3）配置完成后，参考[环境准备和依赖安装](https://gitee.com/ascend/samples/blob/master/python/environment)准备好环境。
 
-    - Atlas300（ai1s）
+    - Atlas300（ai1s）    
       （1）参考[购买并登录Linux弹性云服务器指南](https://support.huaweicloud.com/qs-ecs/zh-cn_topic_0132727313.html)购买AI加速型（ai1s）ECS弹性云服务器，并参考[卸载驱动固件和CANN软件文档](https://support.huaweicloud.com/instg-cli-cann/atlascli_03_0100.html)卸载预安装的老版本。
 
       （2）参考[CANN安装指南](https://support.huaweicloud.com/instg-cli-cann/atlascli_03_0017.html）配置ai1s的推理开发和运行环境。
