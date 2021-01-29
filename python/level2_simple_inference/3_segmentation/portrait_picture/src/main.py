@@ -6,7 +6,7 @@ import cv2
 sys.path.append("../../../../common/")
 sys.path.append("../")
 import acl
-import atlas_utils.utils import utils
+import atlas_utils.utils as utils
 import atlas_utils.constants as constants
 from atlas_utils.acl_dvpp import Dvpp
 from atlas_utils.acl_model import Model
