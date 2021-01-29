@@ -85,13 +85,42 @@ def copy_data_as_numpy(data, size, run_mode):
     return np_data
 
 def align_up(value, align):
+    """
+    :param value:input data
+    :param align: align data
+    :return: aligned data
+    """
     return int(int((value + align - 1) / align) * align)
 
+
 def align_up16(value):
+    """
+    :param value:input data
+    :return: 16 aligned data
+    """
     return align_up(value, 16)
 
+
+def align_up128(value):
+    """
+    :param value:input data
+    :return: 128 aligned data
+    """
+    return align_up(value, 128)
+
+
 def align_up2(value):
+    """
+    :param value:input data
+    :return: 2 aligned data
+    """
     return align_up(value, 2)
 
+
 def yuv420sp_size(width, height):
+    """
+    :param width: input width
+    :param height: input width
+    :return: yuv420sp size
+    """
     return int(width * height * 3 /2)
