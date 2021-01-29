@@ -4,7 +4,7 @@ import atlas_utils.utils as utils
 from atlas_utils.acl_image import AclImage
 from atlas_utils.acl_logger import log_error, log_info
 from atlas_utils.resource_list import resource_list
-import atlas_utils.constants import constants
+import atlas_utils.constants as constants
 
 class Dvpp(object):
     """
