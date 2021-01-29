@@ -7,7 +7,7 @@ import cv2
 
 import acl
 
-sys.path.append("../../../common/")
+sys.path.append("../../../../common/")
 sys.path.append("../")
 import acl
 from atlas_utils.utils import *
