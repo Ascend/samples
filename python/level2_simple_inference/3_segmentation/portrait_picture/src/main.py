@@ -1,10 +1,7 @@
 import sys
 import os
-# from PIL import Image, ImageDraw, ImageFont
 import numpy as np
 import cv2
-
-import acl
 
 sys.path.append("../../../../common/")
 sys.path.append("../")
