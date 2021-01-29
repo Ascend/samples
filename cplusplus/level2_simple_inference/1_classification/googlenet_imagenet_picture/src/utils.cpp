@@ -57,7 +57,7 @@ bool Utils::IsDirectory(const string &path) {
     }
 }
 
-bool Utils::IsPathExist(const string &path) {
+bool Utils::is_path_exist(const string &path) {
     ifstream file(path);
     if (!file) {
         return false;
@@ -65,7 +65,7 @@ bool Utils::IsPathExist(const string &path) {
     return true;
 }
 
-void Utils::SplitPath(const string &path, vector<string> &path_vec) {
+void Utils::split_path(const string &path, vector<string> &path_vec) {
     char *char_path = const_cast<char*>(path.c_str());
     const char *char_split = kImagePathSeparator.c_str();
     char *tmp_path = strtok(char_path, char_split);
@@ -75,14 +75,14 @@ void Utils::SplitPath(const string &path, vector<string> &path_vec) {
     }
 }
 
-void Utils::GetAllFiles(const string &path, vector<string> &file_vec) {
+void Utils::get_all_files(const string &path, vector<string> &file_vec) {
     // split file path
     vector<string> path_vector;
-    SplitPath(path, path_vector);
+    split_path(path, path_vector);
 
     for (string every_path : path_vector) {
         // check path exist or not
-        if (!IsPathExist(path)) {
+        if (!is_path_exist(path)) {
         ERROR_LOG("Failed to deal path=%s. Reason: not exist or can not access.",
                 every_path.c_str());
         continue;
@@ -92,7 +92,7 @@ void Utils::GetAllFiles(const string &path, vector<string> &file_vec) {
     }
 }
 
-bool Utils::IsValidJPGPicture(const string &input_str) {
+bool Utils::is_valid_jpg_picture(const string &input_str) {
   regex regex_jpg_file_name(kJPGFile.c_str());
   // verify input string is valid jpg file name
   if (regex_match(input_str, regex_jpg_file_name)) {
@@ -114,7 +114,7 @@ void Utils::GetPathFiles(const string &path, vector<string> &file_vec) {
 
             // file path
             string full_path = path + kPathSeparator + dirent_ptr->d_name;
-            if (!IsValidJPGPicture(full_path)){
+            if (!is_valid_jpg_picture(full_path)){
 				continue;
 			}
 
