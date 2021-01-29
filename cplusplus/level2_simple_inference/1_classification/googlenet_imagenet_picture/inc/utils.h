@@ -71,13 +71,13 @@ public:
     */
     static bool IsDirectory(const std::string &path);
 
-    static bool IsPathExist(const std::string &path);
+    static bool is_path_exist(const std::string &path);
 
-    static bool IsValidJPGPicture(const std::string &input_str);
+    static bool is_valid_jpg_picture(const std::string &input_str);
 
-    static void SplitPath(const std::string &path, std::vector<std::string> &path_vec);
+    static void split_path(const std::string &path, std::vector<std::string> &path_vec);
 
-    static void GetAllFiles(const std::string &path, std::vector<std::string> &file_vec);
+    static void get_all_files(const std::string &path, std::vector<std::string> &file_vec);
 
     static void GetPathFiles(const std::string &path, std::vector<std::string> &file_vec);
 
