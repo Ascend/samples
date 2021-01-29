@@ -29,11 +29,11 @@ modelWeightPtr_(nullptr),modelWeightSize_(0), modelDesc_(nullptr), input_(nullpt
 ModelProcess::~ModelProcess() {
     Unload();
     DestroyDesc();
-    DestroyInput();
+    destroy_input();
     DestroyOutput();
 }
 
-Result ModelProcess::LoadModelFromFileWithMem(const char *modelPath) {
+Result ModelProcess::load_model_from_file_with_mem(const char *modelPath) {
     if (loadFlag_) {
         ERROR_LOG("has already loaded a model");
         return FAILED;
@@ -117,7 +117,12 @@ Result ModelProcess::CreateInput(void *inputDataBuffer, size_t bufferSize) {
     return SUCCESS;
 }
 
-void ModelProcess::DestroyInput() {
+size_t ModelProcess::get_model_size(){
+    size_t modelInputSize = aclmdlGetInputSizeByIndex(modelDesc_, 0);
+    return modelInputSize;
+}
+
+void ModelProcess::destroy_input() {
     if (input_ == nullptr) {
         return;
     }

@@ -37,7 +37,7 @@ void ModelProcess::DestroyResource() {
     
     Unload();
     DestroyDesc();
-    DestroyInput();
+    destroy_input();
     DestroyOutput();
     isReleased_ = true;
 }
@@ -126,7 +126,13 @@ Result ModelProcess::CreateInput(void *inputDataBuffer, size_t bufferSize) {
     return SUCCESS;
 }
 
-void ModelProcess::DestroyInput() {
+size_t ModelProcess::get_model_size()
+{
+    size_t modelInputSize = aclmdlGetInputSizeByIndex(modelDesc_, 0);
+    return modelInputSize;
+}
+
+void ModelProcess::destroy_input() {
     if (input_ == nullptr) {
         return;
     }

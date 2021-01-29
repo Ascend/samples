@@ -34,14 +34,13 @@ ColorizeProcess::ColorizeProcess(const char* modelPath,
 :deviceId_(0), context_(nullptr), stream_(nullptr), inputBuf_(nullptr), 
 modelWidth_(modelWidth), modelHeight_(modelHeight), isInited_(false){
     modelPath_ = modelPath;
-    inputDataSize_ = RGBF32_CHAN_SIZE(modelWidth_, modelHeight_);
 }
 
 ColorizeProcess::~ColorizeProcess() {
-    DestroyResource();
+    destroy_resource();
 }
 
-Result ColorizeProcess::InitResource() {
+Result ColorizeProcess::init_resource() {
     // ACL init
     const char *aclConfigPath = "../src/acl.json";
     aclError ret = aclInit(aclConfigPath);
@@ -68,8 +67,8 @@ Result ColorizeProcess::InitResource() {
     return SUCCESS;
 }
 
-Result ColorizeProcess::InitModel(const char* omModelPath) {
-    Result ret = model_.LoadModelFromFileWithMem(omModelPath);
+Result ColorizeProcess::init_model(const char* omModelPath) {
+    Result ret = model_.load_model_from_file_with_mem(omModelPath);
     if (ret != SUCCESS) {
         ERROR_LOG("execute LoadModelFromFileWithMem failed");
         return FAILED;
@@ -86,7 +85,7 @@ Result ColorizeProcess::InitModel(const char* omModelPath) {
         ERROR_LOG("execute CreateOutput failed");
         return FAILED;
     }
-
+    inputDataSize_ = model_.get_model_size();
     aclrtMalloc(&inputBuf_, (size_t)(inputDataSize_), ACL_MEM_MALLOC_HUGE_FIRST);
     if (inputBuf_ == nullptr) {
         ERROR_LOG("Acl malloc image buffer failed.");
@@ -108,13 +107,13 @@ Result ColorizeProcess::Init() {
         return SUCCESS;
     }
 
-    Result ret = InitResource();
+    Result ret = init_resource();
     if (ret != SUCCESS) {
         ERROR_LOG("Init acl resource failed");
         return FAILED;
     }
 
-    ret = InitModel(modelPath_);
+    ret = init_model(modelPath_);
     if (ret != SUCCESS) {
         ERROR_LOG("Init model failed");
         return FAILED;
@@ -180,8 +179,11 @@ Result ColorizeProcess::Inference(aclmdlDataset*& inferenceOutput) {
 Result ColorizeProcess::Postprocess(const string& imageFile, aclmdlDataset* modelOutput)
 {
     uint32_t dataSize = 0;
-    void* data = GetInferenceOutputItem(dataSize, modelOutput);
-    if (data == nullptr) return FAILED;
+    void* data = get_inference_output_item(dataSize, modelOutput);
+    if (data == nullptr) 
+    {
+        return FAILED;
+    }
 
     uint32_t size = static_cast<uint32_t>(dataSize) / sizeof(float);
     // get a channel and b channel result data
@@ -212,7 +214,7 @@ Result ColorizeProcess::Postprocess(const string& imageFile, aclmdlDataset* mode
     //convert back to rgb
     cv::cvtColor(resultImage, resultImage, CV_Lab2BGR);
     resultImage = resultImage * 255;
-    SaveImage(imageFile, resultImage);
+    save_image(imageFile, resultImage);
 
     if (runMode_ == ACL_HOST) {
         delete[]((uint8_t *)data);
@@ -222,7 +224,7 @@ Result ColorizeProcess::Postprocess(const string& imageFile, aclmdlDataset* mode
     return SUCCESS;
 }
 
-void ColorizeProcess::SaveImage(const string& origImageFile, cv::Mat& image) {
+void ColorizeProcess::save_image(const string& origImageFile, cv::Mat& image) {
     int pos = origImageFile.find_last_of("/");
 
     string filename(origImageFile.substr(pos + 1));
@@ -234,7 +236,7 @@ void ColorizeProcess::SaveImage(const string& origImageFile, cv::Mat& image) {
     cv::imwrite(outputPath, image);
 }
 
-void* ColorizeProcess::GetInferenceOutputItem(uint32_t& itemDataSize,
+void* ColorizeProcess::get_inference_output_item(uint32_t& itemDataSize,
                                               aclmdlDataset* inferenceOutput) {
     aclDataBuffer* dataBuffer = aclmdlGetDatasetBuffer(inferenceOutput, 0);
     if (dataBuffer == nullptr) {
@@ -272,11 +274,10 @@ void* ColorizeProcess::GetInferenceOutputItem(uint32_t& itemDataSize,
     return data;
 }
 
-void ColorizeProcess::DestroyResource()
+void ColorizeProcess::destroy_resource()
 {
-	aclrtFree(inputBuf_);
-    inputBuf_ = nullptr;
-	
+    aclrtFree(inputBuf_);
+    inputBuf_ = nullptr;   
     aclError ret;
     if (stream_ != nullptr) {
         ret = aclrtDestroyStream(stream_);

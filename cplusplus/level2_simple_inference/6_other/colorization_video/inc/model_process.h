@@ -73,9 +73,15 @@ public:
     Result CreateInput(void *inputDataBuffer, size_t bufferSize);
 
     /**
+   * @get Model Size
+   */
+
+    size_t get_model_size();
+
+    /**
     * @brief destroy input resource
     */
-    void DestroyInput();
+    void destroy_input();
 
     /**
     * @brief create output buffer

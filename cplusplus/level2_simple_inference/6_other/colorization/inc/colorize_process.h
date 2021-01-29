@@ -38,13 +38,13 @@ public:
     Result Postprocess(const string& origImageFile,
                        aclmdlDataset* modelOutput);
 private:
-    Result InitResource();
-    Result InitModel(const char* omModelPath);
+    Result init_resource();
+    Result init_model(const char* omModelPath);
 
-    void* GetInferenceOutputItem(uint32_t& itemDataSize,
+    void* get_inference_output_item(uint32_t& itemDataSize,
                                  aclmdlDataset* inferenceOutput);
-    void SaveImage(const string& origImageFile, cv::Mat& image);
-    void DestroyResource();
+    void save_image(const string& origImageFile, cv::Mat& image);
+    void destroy_resource();
 
 private:
     int32_t deviceId_;
