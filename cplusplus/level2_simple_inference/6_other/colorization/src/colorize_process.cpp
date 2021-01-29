@@ -286,7 +286,7 @@ void ColorizeProcess::destroy_resource()
         }
         stream_ = nullptr;
     }
-    INFO_LOG("end to destroy stream")
+    INFO_LOG("end to destroy stream");
 
     if (context_ != nullptr) {
         ret = aclrtDestroyContext(context_);
