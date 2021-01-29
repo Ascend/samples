@@ -48,7 +48,7 @@ class Dvpp():
 
         width = align_up128(image.width)
         height = align_up16(image.height) 
-        return AclImage(out_buffer, width, height, yuv420sp_size(width, height))                       
+        return AclImage(out_buffer, width, height, yuv420sp_size(width, height), MEMORY_DVPP)
 
     def _gen_jpegd_out_pic_desc(self, image):
         stride_width = align_up128(image.width)
@@ -92,7 +92,7 @@ class Dvpp():
         stride_width = align_up16(image.width)
         stride_height = align_up2(image.height)
         return AclImage(out_buffer, stride_width, 
-                        stride_height, out_buffer_size)
+                        stride_height, out_buffer_size, MEMORY_DVPP)
 
     def _gen_input_pic_desc(self, image):
         stride_width = align_up128(image.width)
