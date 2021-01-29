@@ -164,8 +164,8 @@
 
         您可以从以下链接中获取yolov3网络的模型文件（\*.prototxt）、预训练模型文件（\*.caffemodel），并以运行用户将获取的文件上传至开发环境的“样例目录/caffe\_model“目录下。如果目录不存在，需要自行创建。
 
-        -   https://gitee.com/HuaweiAscend/models/tree/master/computer\_vision/object\_detect/yolov3
-        -   https://github.com/Ascend-Huawei/models/tree/master/computer\_vision/object\_detect/yolov3，获取\*.prototxt文件，再查看README.\*.md，查找获取\*.caffemodel文件的链接
+        -   https://gitee.com/HuaweiAscend/models/tree/master/computer_vision/object_detect/yolov3
+        -   https://github.com/Ascend-Huawei/models/tree/master/computer_vision/object_detect/yolov3，获取*.prototxt文件，再查看README.md，查找获取*.caffemodel文件的链接
 
     4.  切换到样例目录，将yolov3网络转换为适配昇腾AI处理器的离线模型（\*.om文件）。
 
