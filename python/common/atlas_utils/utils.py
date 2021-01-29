@@ -16,9 +16,9 @@ def check_none(message, ret_none):
 
 
 def copy_data_device_to_host(device_data, data_size):
-    '''
+    """
     Copy device data to host
-    '''
+    """
     host_buffer, ret = acl.rt.malloc_host(data_size)
     if ret != constants.ACL_ERROR_NONE:
         log_error("Malloc host memory failed, error: ", ret)
@@ -36,9 +36,9 @@ def copy_data_device_to_host(device_data, data_size):
 
 
 def copy_data_device_to_device(device_data, data_size):
-    '''
+    """
     Copy device data to device
-    '''
+    """
     device_buffer, ret = acl.rt.malloc(data_size, constants.ACL_MEM_MALLOC_NORMAL_ONLY)
     if ret != constants.ACL_ERROR_NONE:
         log_error("Malloc device memory failed, error: ", ret)
@@ -57,9 +57,9 @@ def copy_data_device_to_device(device_data, data_size):
 
 
 def copy_data_host_to_device(host_data, data_size):
-    '''
+    """
     Copy device host to device
-    '''
+    """
     device_buffer, ret = acl.rt.malloc(data_size, constants.ACL_MEM_MALLOC_NORMAL_ONLY)
     if ret != constants.ACL_ERROR_NONE:
         log_error("Malloc device memory failed, error: ", ret)
@@ -77,9 +77,9 @@ def copy_data_host_to_device(host_data, data_size):
 
 
 def copy_data_to_dvpp(data, size, run_mode):
-    '''
+    """
     Copy data to dvpp
-    '''
+    """
     policy = constants.ACL_MEMCPY_HOST_TO_DEVICE
     if run_mode == constants.ACL_DEVICE:
         policy = constants.ACL_MEMCPY_DEVICE_TO_DEVICE
@@ -94,9 +94,9 @@ def copy_data_to_dvpp(data, size, run_mode):
 
 
 def copy_data_as_numpy(data, size, run_mode):
-    '''
+    """
     copy data as numpy
-    '''
+    """
     np_data = np.zeros(size, dtype=np.byte)
     np_data_ptr = acl.util.numpy_to_ptr(np_data)
     policy = constants.ACL_MEMCPY_HOST_TO_DEVICE
