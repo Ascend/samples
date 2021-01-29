@@ -6,7 +6,7 @@
 
 ## 模糊图像变清晰
 
-**注：案例详细介绍请参见[图片黑白图像上色_wiki](https://gitee.com/ascend/samples/wikis/%E5%9B%BE%E7%89%87%E9%BB%91%E7%99%BD%E5%9B%BE%E5%83%8F%E4%B8%8A%E8%89%B2?sort_id=3170477)。**
+**注：案例详细介绍请参见[模糊图像变清晰_wiki](https://gitee.com/ascend/samples/wikis/%E5%9F%BA%E4%BA%8EDeblurGAN%E7%9A%84%E6%A8%A1%E7%B3%8A%E5%9B%BE%E5%83%8F%E5%8F%98%E6%B8%85%E6%99%B0%E5%BA%94?sort_id=3477835)。**
 
 功能：输入一张模糊图片，使用DeblurGAN将其变清晰。
 
