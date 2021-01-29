@@ -5,6 +5,7 @@ from atlas_utils.acl_image import AclImage
 from atlas_utils.acl_logger import log_error, log_info
 from atlas_utils.resource_list import resource_list
 from atlas_utils.constants import *
+from atlas_utils.constants import ACL_ERROR_NONE, MEMORY_DVPP, PIXEL_FORMAT_YUV_SEMIPLANAR_420
 
 class Dvpp(object):
     """
