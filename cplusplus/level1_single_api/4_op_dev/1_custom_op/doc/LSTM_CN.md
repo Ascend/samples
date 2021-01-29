@@ -65,7 +65,7 @@ LSTM算子在神经网络，常用于处理带有时间序列的数据，计算�
 
     -   算子输入输出格式的详细信息还可以参考样例对应的数据生成文件：
 
-        “acl\_execute\_lstm/run/out/test\_data/data/generate\_data.py”。
+        “[acl\_execute\_lstm/run/out/test\_data/data/generate\_data.py](../../2_verify_op/acl_execute_lstm/run/out/test_data/data/generate_data.py)”。
 
 
 3.  确定算子开发方式及使用的计算接口。

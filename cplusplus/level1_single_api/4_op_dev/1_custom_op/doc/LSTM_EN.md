@@ -65,7 +65,7 @@ Before developing an LSTM operator by using TIK, you need to determine the opera
 
     -   For details about the input and output formats of the operator, see the data generation file in the sample:
 
-        "acl\_execute\_lstm/run/out/test\_data/data/generate\_data.py".
+        "[acl\_execute\_lstm/run/out/test\_data/data/generate\_data.py](../../2_verify_op/acl_execute_lstm/run/out/test_data/data/generate_data.py)".
 
 
 3.  Determine the operator development mode and the compute API.
