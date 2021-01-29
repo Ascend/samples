@@ -1,3 +1,15 @@
+"""
+Copyright (R) @huawei.com, all rights reserved
+-*- coding:utf-8 -*-
+CREATED:  2021-01-20 20:12:13
+MODIFIED: 2021-01-29 14:04:45
+"""
+"""
+Copyright (R) @huawei.com, all rights reserved
+-*- coding:utf-8 -*-
+CREATED:  2020-01-28 20:12:13
+MODIFIED: 2021-01-29 14:04:45
+"""
 import numpy as np
 import acl
 import atlas_utils.utils as utils
