@@ -64,12 +64,20 @@ class AclImage():
         return  AclImage(device_ptr, self.width, self.height, self.size, MEMORY_DEVICE) 
 
     def destroy(self):
+        """release image resource"""
+        if (self._data is None) or (self.size == 0):
+            print("Image release abnormally")
+            return
+
         if self._memory_type == MEMORY_DEVICE:
             acl.rt.free(self._data)  
         elif self._memory_type == MEMORY_HOST:
             acl.rt.free_host(self._data)  
         elif self._memory_type == MEMORY_DVPP:
-            acl.rt.free_dvpp(self._data)  
+            acl.media.dvpp_free(self._data)
+
+        self._data = None
+        self.size = 0
 
     def __del__(self):
         print("destory image")
