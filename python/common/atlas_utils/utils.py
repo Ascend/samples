@@ -84,6 +84,7 @@ def copy_data_as_numpy(data, size, run_mode):
 
     return np_data
 
+
 def align_up(value, align):
     """
     :param value:input data
@@ -123,4 +124,4 @@ def yuv420sp_size(width, height):
     :param height: input width
     :return: yuv420sp size
     """
-    return int(width * height * 3 /2)
+    return int(width * height * 3 / 2)
