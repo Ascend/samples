@@ -6,11 +6,13 @@ import cv2
 sys.path.append("../../../../common/")
 sys.path.append("../")
 import acl
-from atlas_utils.utils import *
+import atlas_utils.utils import utils
+import atlas_utils.constants as constants
 from atlas_utils.acl_dvpp import Dvpp
 from atlas_utils.acl_model import Model
 from atlas_utils.acl_image import AclImage
 from acl_resource import AclResource
+
 
 class Seg(object):
     """
@@ -34,7 +36,7 @@ class Seg(object):
         # Load model
         self._model = Model(self._model_path)
 
-        return SUCCESS
+        return constants.SUCCESS
 
     def pre_process(self, image):
         """
@@ -100,12 +102,12 @@ def main():
 
     seg = Seg(MODEL_PATH, MODEL_WIDTH, MODEL_HEIGHT)
     ret = seg.init()
-    check_ret("seg.init ", ret)
+    utils.check_ret("seg.init ", ret)
 
     image_dir = sys.argv[1]
     images_list = [os.path.join(image_dir, img)
                    for img in os.listdir(image_dir)
-                   if os.path.splitext(img)[1] in IMG_EXT]
+                   if os.path.splitext(img)[1] in constants.IMG_EXT]
 
     # Create a directory to save inference results
     if not os.path.isdir(os.path.join(SRC_PATH, "../outputs")):
