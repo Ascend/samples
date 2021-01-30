@@ -1,17 +1,17 @@
 中文|[English](README_EN.md)
 
-## 昇腾样例仓介绍
+## 昇腾CANN样例仓介绍
    
-AscendCL（Ascend Computing Language）提供Device管理、Context管理、Stream管理、内存管理、模型加载与执行、算子加载与执行、媒体数据处理等C语言API库供用户开发深度神经网络应用，用于实现目标识别、图像分类等功能。用户可以通过第三方框架调用AscendCL接口，以便使用昇腾AI处理器的计算能力；用户还可以使用AscendCL封装实现第三方lib库，以便提供昇腾AI处理器的运行管理、资源管理能力。
+CANN AscendCL（Ascend Computing Language）提供Device管理、Context管理、Stream管理、内存管理、模型加载与执行、算子加载与执行、媒体数据处理等C语言API库供用户开发深度神经网络应用，用于实现目标识别、图像分类等功能。用户可以通过第三方框架调用AscendCL接口，以便使用昇腾AI处理器的计算能力；用户还可以使用AscendCL封装实现第三方lib库，以便提供昇腾AI处理器的运行管理、资源管理能力。
 
-昇腾样例仓就是以AscendCL接口进行开发，制作的一系列给开发者进行参考学习的样例。在开发者朋友们开发自己的样例时，也可以就样例仓的相关案例进行参考。
+昇腾样例仓就是以CANN AscendCL接口进行开发，制作的一系列给开发者进行参考学习的样例。在开发者朋友们开发自己的样例时，也可以就样例仓的相关案例进行参考。
 
 ## 版本说明
 
 **master分支样例版本适配情况请参见[样例表单及适配说明](#Version-of-samples),如果需要使用的案例不兼容您所需要的版本，请参考[表 版本说明](#Version-Description)下载对应发行版**
 
 **表1** 版本说明<a name="Version-Description"></a>
-| CANN版本 | samples仓是否维护 | samples获取方式 |
+| CANN版本 | cann-samples仓是否维护 | cann-samples获取方式 |
 |---|---|---|
 | [20.0-20.1](https://ascend.huawei.com/#/software/cann/download) | 是 | Release 0.1.0发行版，[点击跳转](https://gitee.com/ascend/samples/releases/v0.1.0) |
 
