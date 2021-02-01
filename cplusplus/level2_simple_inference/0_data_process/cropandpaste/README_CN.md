@@ -52,7 +52,7 @@
 
     执行以下命令，进入样例的data文件夹中，下载对应的测试图片。
 
-    **cd /home/ascend/samples/cplusplus/level1_single_api/1_acl/4_dvpp/cropandpaste/data**
+    **cd /home/ascend/samples/cplusplus//level2_simple_inference/0_data_process/cropandpaste/data**
 
     **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/cropandpaste/wood_rabbit_1024_1068_nv12.yuv**
 
@@ -130,6 +130,8 @@
     - 如果是开发环境与运行环境合一部署，执行以下命令，设置运行环境变量，并切换目录。
 
       **export LD_LIBRARY_PATH=**
+
+      **export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/nnrt/latest/acllib/lib64:/home/HwHiAiUser/ascend_ddk/x86/lib:${LD_LIBRARY_PATH}** 
 
       **source ~/.bashrc**
         
