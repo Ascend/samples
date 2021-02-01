@@ -3,7 +3,6 @@ path_cur=$(cd `dirname $0`; pwd)
 build_type="Release"
 
 function preparePath() {
-    rm -rf $1
     mkdir -p  $1
     cd  $1
 }
