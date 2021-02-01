@@ -36,6 +36,8 @@ public:
     */
     ~ModelProcess();
 
+    void DestroyResource();
+
     /**
     * @brief load model from file with mem
     * @param [in] modelPath: model path
