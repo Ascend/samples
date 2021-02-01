@@ -86,7 +86,7 @@
 
 2. 切换到cropandpaste目录，创建目录用于存放编译文件，例如，本文中，创建的目录为 **build/intermediates/host**。
 
-    **cd $HOME/samples/cplusplus/level1_single_api/1_acl/4_dvpp/cropandpaste**
+    **cd $HOME/samples/cplusplus/level2_simple_inference/0_data_process/cropandpaste**
 
     **mkdir -p build/intermediates/host**
 
@@ -118,7 +118,7 @@
 
 1. 执行以下命令,将开发环境的 **cropandpaste** 目录上传到运行环境中，例如 **/home/HwHiAiUser**，并以HwHiAiUser（运行用户）登录运行环境（Host）。
 
-    **scp -r $HOME/samples/cplusplus/level1_single_api/1_acl/4_dvpp/cropandpaste HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
+    **scp -r $HOME/samples/cplusplus/level2_simple_inference/0_data_process/cropandpaste HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
 
     **ssh HwHiAiUser@xxx.xxx.xxx.xxx**    
 
@@ -135,7 +135,7 @@
 
       **source ~/.bashrc**
         
-      **cd $HOME/samples/cplusplus/level1_single_api/1_acl/4_dvpp/cropandpaste/out**
+      **cd $HOME/samples/cplusplus/level2_simple_inference/0_data_process/cropandpaste/out**
 
     - 如果是开发环境与运行环境分离部署，执行以下命令切换目录。
     
