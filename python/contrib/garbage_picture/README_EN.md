@@ -122,7 +122,6 @@ Before deploying this sample, ensure that:
       **source ~/.bashrc**
 
       **cd $HOME/samples/python/contrib/garbage_picture/**     
-         **python3 src/classify_test.py ./data/** 
 
     - If the development environment and operating environment are set up on separate servers, run the following command to switch the directory:
 
@@ -130,7 +129,7 @@ Before deploying this sample, ensure that:
 
     Run the following command to run the sample:
 
-    **python3 src/classify_test.py ./data/**
+    **python3.6 src/classify_test.py ./data/**
 ### Result Checking
 
 After the execution is complete, find the JPG images with inference results in the **outputs** directory.

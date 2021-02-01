@@ -203,13 +203,13 @@
         
       **cd $HOME/samples/python/contrib/garbage_picture/**     
 
-      **python3 src/classify_test.py ./data/**
+      **python3.6 src/classify_test.py ./data/**
 
     - 如果是开发环境与运行环境分离部署，执行以下命令切换目录并运行。
     
       **cd $HOME/garbage_picture/**
 
-      **python3 src/classify_test.py ./data/** 
+      **python3.6 src/classify_test.py ./data/** 
 
 
 ### 查看结果

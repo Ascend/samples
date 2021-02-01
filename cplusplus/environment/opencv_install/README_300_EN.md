@@ -8,14 +8,10 @@ FFmpeg and OpenCV are installed to implement diversified data preprocessings and
 
 
 1. Install dependencies.  
-    **sudo apt-get install build-essential libgtk2.0-dev libavcodec-dev libavformat-dev libjpeg-dev libtiff5-dev git cmake libswscale-dev python3-setuptools python3-dev python3-pip pkg-config -y** 
-
-    **python3.6 -m pip install --upgrade pip --user -i https://mirrors.huaweicloud.com/repository/pypi/simple**  
-    **python3.6 -m pip install Cython numpy --user -i https://mirrors.huaweicloud.com/repository/pypi/simple** 
+    **sudo apt-get install build-essential libgtk2.0-dev libavcodec-dev libavformat-dev libjpeg-dev libtiff5-dev git cmake libswscale-dev pkg-config -y** 
 
     >![](https://images.gitee.com/uploads/images/2020/1130/162342_1d7d35d7_7401379.png "screenshot.png") **NOTE**  
     >  **If an error similar to "dpkg: error processing package *** (--configure)" is displayed during the apt-get installation, rectify the fault by referring to [FAQ](https://bbs.huaweicloud.com/forum/thread-74123-1-1.html).**  
-    >  **If Python fails to be installed, click [here](https://bbs.huaweicloud.com/forum/thread-97632-1-1.html) to try a new source. Alternatively, use the default pip source by removing the the -i option from the command.**
 
 2. Install FFmpeg.  
     1. Create a folder for storing build output files.  
@@ -67,18 +63,14 @@ FFmpeg and OpenCV are installed to implement diversified data preprocessings and
 
     2. Install OpenCV.  
         ```
-        cmake -D BUILD_SHARED_LIBS=ON  -D BUILD_opencv_python3=YES -D BUILD_TESTS=OFF -D CMAKE_BUILD_TYPE=RELEASE -D  CMAKE_INSTALL_PREFIX=$HOME/ascend_ddk/x86 -D WITH_LIBV4L=ON -D OPENCV_EXTRA_MODULES=../../opencv_contrib/modules -D PYTHON3_LIBRARIES=/usr/lib/python3.6/config-3.6m-x86_64-linux-gnu/libpython3.6m.so  -D PYTHON3_NUMPY_INCLUDE_DIRS=$HOME/.local/lib/python3.6/site-packages/numpy/core/include/ -D OPENCV_SKIP_PYTHON_LOADER=ON -D CMAKE_INSTALL_PREFIX=$HOME/ascend_ddk/x86 ..  
+        cmake -D BUILD_SHARED_LIBS=ON -D BUILD_TESTS=OFF -D CMAKE_BUILD_TYPE=RELEASE -D  CMAKE_INSTALL_PREFIX=$HOME/ascend_ddk/x86 -D WITH_LIBV4L=ON -D OPENCV_EXTRA_MODULES=../../opencv_contrib/modules -D CMAKE_INSTALL_PREFIX=$HOME/ascend_ddk/x86 ..  
         ```
         
         **make -j8**  
         **make install**  
 
 
-4. Make **python3.6-opencv** take effect.  
-      **sudo cp $HOME/opencv/build/lib/python3/cv2.cpython-36m-x86_64-linux-gnu.so /usr/lib/python3/dist-packages**    
-
-
-5. Import the FFmpeg and OpenCV libraries and OpenCV-Python installed in the development environment to the operating environment for execution. **(Skip this step if both the development environment and operating environment are on the same server.)**    
+4. Import the FFmpeg and OpenCV libraries installed in the development environment to the operating environment for execution. **(Skip this step if both the development environment and operating environment are on the same server.)**    
 
      **Note: Perform the following operation in the operating environment.**  
 
@@ -86,8 +78,6 @@ FFmpeg and OpenCV are installed to implement diversified data preprocessings and
 
      **mkdir $HOME/ascend_ddk**   
      **scp -r HwHiAiUser@X.X.X.X:/home/HwHiAiUser/ascend_ddk/x86 $HOME/ascend_ddk**  
-     **scp -r HwHiAiUser@X.X.X.X:/home/HwHiAiUser/opencv/build/lib/python3/cv2.cpython-36m-x86_64-linux-gnu.so $HOME**  
-     **sudo mv $HOME/cv2.cpython-36m-x86_64-linux-gnu.so /usr/lib/python3/dist-packages**  
      **scp -r HwHiAiUser@X.X.X.X:/usr/lib/x86_64-linux-gnu/lib\* $HOME/ascend_ddk/x86/lib**  
      
 

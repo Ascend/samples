@@ -8,14 +8,10 @@ $\color{red}{以下命令在开发环境上执行，以普通用户为HwHiAiUser
 
 
 1.  安装相关依赖  
-    **sudo apt-get install build-essential libgtk2.0-dev libavcodec-dev libavformat-dev libjpeg-dev libtiff5-dev git cmake libswscale-dev python3-setuptools python3-dev python3-pip pkg-config -y** 
+    **sudo apt-get install build-essential libgtk2.0-dev libavcodec-dev libavformat-dev libjpeg-dev libtiff5-dev git cmake libswscale-dev pkg-config -y** 
  
-    **python3.6 -m pip install --upgrade pip --user -i https://mirrors.huaweicloud.com/repository/pypi/simple**  
-    **python3.6 -m pip install Cython numpy --user -i https://mirrors.huaweicloud.com/repository/pypi/simple** 
-   
     >![输入图片说明](https://images.gitee.com/uploads/images/2020/1130/162342_1d7d35d7_7401379.png "屏幕截图.png") **说明：**  
     >  **若apt-get安装依赖出现类似报错（dpkg: error processing package *** (--configure)） ，请参考[FAQ](https://bbs.huaweicloud.com/forum/thread-74123-1-1.html)来解决。**  
-    >  **若Python包安装失败，可以试用其他源 https://bbs.huaweicloud.com/forum/thread-97632-1-1.html 或不加-i 参数使用默认pip源**
     
 2.  安装ffmpeg  
     1. 创建文件夹，用于存放编译后的文件  
@@ -71,22 +67,16 @@ $\color{red}{以下命令在开发环境上执行，以普通用户为HwHiAiUser
         ```   
         **make -j8**  
         **make install**  
-
- 
-4.   使python3.6-opencv生效  
-      **sudo cp \$HOME/opencv/build/lib/python3/cv2.cpython-36m-x86_64-linux-gnu.so /usr/lib/python3/dist-packages**    
  
 
-5.  将开发环境安装的ffmpeg、opencv库、python-opencv导入运行环境中，以提供运行使用  **（如开发环境和运行环境在同一服务器上，请忽略此步）**    
+4.  将开发环境安装的ffmpeg、opencv库导入运行环境中，以提供运行使用  **（如开发环境和运行环境在同一服务器上，请忽略此步）**    
    
     $\color{red}{注意：以下操作在运行环境执行}$ 
   
     普通用户登录运行环境 
      
      **mkdir \$HOME/ascend_ddk**   
-     **scp -r HwHiAiUser@X.X.X.X:/home/HwHiAiUser/ascend_ddk/x86 \$HOME/ascend_ddk**  
-     **scp -r HwHiAiUser@X.X.X.X:/home/HwHiAiUser/opencv/build/lib/python3/cv2.cpython-36m-x86_64-linux-gnu.so \$HOME**  
-     **sudo mv \$HOME/cv2.cpython-36m-x86_64-linux-gnu.so /usr/lib/python3/dist-packages**  
+     **scp -r HwHiAiUser@X.X.X.X:/home/HwHiAiUser/ascend_ddk/x86 \$HOME/ascend_ddk**   
      **scp -r HwHiAiUser@X.X.X.X:/usr/lib/x86_64-linux-gnu/lib\* \$HOME/ascend_ddk/x86/lib**  
     <br/> </br> 
  

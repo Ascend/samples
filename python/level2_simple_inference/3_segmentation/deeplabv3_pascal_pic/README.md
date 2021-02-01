@@ -128,7 +128,7 @@
 
     切换目录后，执行以下命令运行样例。
 
-    **python3 src/deeplabv3.py ./data/**
+    **python3.6 src/deeplabv3.py ./data/**
 ### 查看结果
 
 运行完成后，会在outputs目录下生成带推理结果的jpg图片。

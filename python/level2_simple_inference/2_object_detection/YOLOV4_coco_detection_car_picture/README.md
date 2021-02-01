@@ -87,7 +87,6 @@
       **source ~/.bashrc**
         
       **cd $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV4_coco_detection_car_picture/src**    
-      **python3 yolov4.py**
 
     - 如果是开发环境与运行环境分离部署，执行以下命令切换目录。
     
@@ -95,7 +94,7 @@
 
     切换目录后，执行以下命令运行样例。
 
-    **python3 yolov4.py**
+    **python3.6 yolov4.py**
 
 ### 查看结果
 
