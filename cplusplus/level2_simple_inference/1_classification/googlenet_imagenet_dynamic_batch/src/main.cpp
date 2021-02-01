@@ -44,7 +44,7 @@ void InitResource()
     aclrtGetRunMode(&runMode);
 }
 
-void ReadPicture(const string picturePath)
+void ReadPicture(const string &picturePath)
 {
     ifstream binFile(picturePath, ifstream::binary);
     binFile.seekg(0, binFile.end);
@@ -68,11 +68,13 @@ void CopyData(int fileCount, uint32_t pos)
         ret = aclrtMalloc(&pictureDeviceData, pictureDataSize * fileCount, ACL_MEM_MALLOC_HUGE_FIRST);
     }
     if (runMode == ACL_HOST) {
-        ret = aclrtMemcpy((int *)pictureDeviceData + pos, pictureDataSize, pictureData, pictureDataSize, ACL_MEMCPY_HOST_TO_DEVICE);
+        ret = aclrtMemcpy((int *)pictureDeviceData + pos, pictureDataSize, \
+        pictureData, pictureDataSize, ACL_MEMCPY_HOST_TO_DEVICE);
     }
     else
     {
-        ret = aclrtMemcpy((int *)pictureDeviceData + pos, pictureDataSize, pictureData, pictureDataSize, ACL_MEMCPY_DEVICE_TO_DEVICE);
+        ret = aclrtMemcpy((int *)pictureDeviceData + pos, pictureDataSize, \
+        pictureData, pictureDataSize, ACL_MEMCPY_DEVICE_TO_DEVICE);
     }
 }
 
