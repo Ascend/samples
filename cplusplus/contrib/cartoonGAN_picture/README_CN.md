@@ -55,12 +55,17 @@
         **cd $HOME/samples/cplusplus/contrib/cartoonGAN_picture/model**    
         **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/cartoonGAN_picture/cplus/cartoonization.om** 
     
-    - 20.0版本  
-
-        1. 参考下方链接获取此应用中所用到的原始网络模型。
+    - 20.0版本    
         
-            **cd $HOME/samples/cplusplus/contrib/cartoonGAN_picture/model** 。   
-            **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/cartoon/cartoonization.pb**  
+
+        1.参考下表获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到开发环境普通用户下的任意目录，例如：$HOME/models/cartoonGAN_picture。
+    
+        |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
+        |---|---|---|
+        |  cartoonization | 图片生成推理模型。  |  请参考[https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/cartoonization/ATC_cartoonization_tf_AE](https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/cartoonization/ATC_cartoonization_tf_AE)目录中README.md下载原始模型章节的模型文件。 |
+
+        ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
+        > - modelzoo中提供了转换好的om模型，但此模型不匹配当前样例，所以需要下载原始模型重新进行模型转换。
 
         2. 设置LD_LIBRARY_PATH环境变量。   
             由于LD_LIBRARY_PATH环境变量在转使用atc工具和运行样例时会产生冲突，所以需要在命令行单独设置此环境变量，方便修改。  
@@ -68,8 +73,13 @@
             **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64**  
 
         3. 执行以下命令使用atc命令进行模型转换。  
+  
+            **cd \$HOME/models/cartoonGAN_picture**   
             
-            **atc --output_type=FP32 --input_shape="train_real_A:1,256,256,3" --input_format=NHWC --output="./cartoonization" --soc_version=Ascend310 --framework=3 --save_original_model=false --model="./cartoonization.pb" --precision_mode=allow_fp32_to_fp16**
+            **atc --output_type=FP32 --input_shape="train_real_A:1,256,256,3" --input_format=NHWC --output="./cartoonization" --soc_version=Ascend310 --framework=3 --save_original_model=false --model="./cartoonization.pb" --precision_mode=allow_fp32_to_fp16**   
+        4. 执行以下命令将转换好的模型复制到样例中model文件夹中。   
+
+            **cp cartoonization.om $HOME/samples/cplusplus/contrib/cartoonGAN_picture/model/**
      
 
 3. 获取样例需要的测试图片。
