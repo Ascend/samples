@@ -4,6 +4,8 @@
 
 **本README只提供命令行方式运行样例的指导，如需在Mindstudio下运行样例，请参考[Mindstudio运行图片样例wiki](https://gitee.com/ascend/samples/wikis/Mindstudio运行图片样例?sort_id=3164874)。**
 
+**本样例为清华大学贡献**
+
 ## portrait_picture样例
 
 功能：使用PortraitNet模型对输入图片中人像进行分割，然后与背景图像融合，实现背景替换。
