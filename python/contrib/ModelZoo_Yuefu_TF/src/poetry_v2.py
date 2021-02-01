@@ -21,7 +21,6 @@ import time
 import argparse
 # from npu_bridge.estimator.npu_unary_ops import npu_unary_ops
 
-global max_decode_len
 if os.environ.get('USE_NPU') in ['True', '1']:
     from npu_bridge.estimator import npu_ops
     from npu_bridge.hccl import hccl_ops
@@ -80,7 +79,7 @@ def top_k_logits(logits, k, history_mask, last_logit):
     # history_mask = tf.cond(tf.math.logical_or(True,True),lambda:history_mask,lambda:history_mask * tf.one_hot([last_logit]*logits_shape[0],depth=logits_shape[1],on_value=1e3,off_value=1.0,dtype=logits.dtype))
     tensor2 = tf.constant(0, dtype=tf.int32)
     tensor3 = tf.constant(k, dtype=tf.int32)
-    return history_mask, tf.cond(tf.equal(tensor3, tensor2), lambda: logits, lambda: _top_k(), )
+    return history_mask, tf.cond(tf.equal(tensor3, tensor2), logits,  _top_k(), )
 
 
 class PoetryBertConfig(object):
