@@ -191,17 +191,17 @@ class PoetryBertModel(object):
                  init_input_ids,
                  init_predict_token_idx,
                  input_mask,
+                 token_type_ids,
                  all_encoder_layers=None,
                  embedding_table=None,
                  embedding_output=None,
                  sequence_output=None,
-                 token_type_ids,
                  use_one_hot_embeddings=False):
 
-        self.all_encoder_layers=None
-        self.embedding_table=None
-        self.embedding_output=None
-        self.sequence_output=None
+        self.all_encoder_layers = all_encoder_layers
+        self.embedding_table = embedding_table
+        self.embedding_output = embedding_output
+        self.sequence_output = sequence_output
         """Constructor for BertModel.
 
         Args:
