@@ -15,11 +15,6 @@ $\color{red}{以下命令在运行环境上执行}$
     >  **若apt-get安装依赖出现类似报错（dpkg: error processing package *** (--configure)） ，请参考[FAQ](https://bbs.huaweicloud.com/forum/thread-74123-1-1.html)来解决。**  
     >  **若Python包安装失败，可以试用其他源 https://bbs.huaweicloud.com/forum/thread-97632-1-1.html 或不加-i 参数使用默认pip源**
 
-$\color{red}{如已参照文档安装了c++的opencv，则以下4、5两步无需操作，安装c++的opencv时附带安装了python3-opencv。}$   
-
-$\color{red}{c++安装opencv的链接：}$[安装opencv](../../../cplusplus/environment/opencv_install/README_200DK.md) 
-
-
 4.  安装python3-opencv  
     **sudo apt-get install python3-opencv**
 

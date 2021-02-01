@@ -122,7 +122,6 @@
       **source ~/.bashrc**
       
       **cd $HOME/samples/python/contrib/garbage_picture/**     
-         **python3 src/classify_test.py ./data/** 
 
     - 如果是开发环境与运行环境分离部署，执行以下命令切换目录。
     
@@ -130,7 +129,7 @@
 
     切换目录后，执行以下命令运行样例。
 
-    **python3 src/classify_test.py ./data/**
+    **python3.6 src/classify_test.py ./data/**
 ### 查看结果
 
 运行完成后，会在outputs目录下生成带推理结果的jpg图片。

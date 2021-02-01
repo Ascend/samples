@@ -118,7 +118,7 @@
       ```
       ssh HwHiAiUser@xxx.xxx.xxx.xxx
       cd $HOME/face_detection_rtsp/src
-      python3 main.py
+      python3.6 main.py
       ```
 
       

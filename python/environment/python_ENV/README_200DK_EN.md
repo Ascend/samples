@@ -15,11 +15,6 @@ English|[中文](README_200DK_CN.md)
     >**- If error information similar to "dpkg: error processing package *** (--configure)" is displayed during the apt-get installation, rectify the fault by referring to [FAQ](https://bbs.huaweicloud.com/forum/thread-74123-1-1.html).**  
     >**- If Python fails to be installed, click [here](https://bbs.huaweicloud.com/forum/thread-97632-1-1.html) to try a new source. Alternatively, use the default pip source by removing the the -i option from the command.**
 
- **If the OpenCV-C++ has been installed, you can safely skip the steps 4 and 5, because OpenCV-Python3 is installed as part of the installation.** 
-
- **For details about how to install the OpenCV-C++, see**  [Installing OpenCV](../../../cplusplus/environment/opencv_install/README_200DK_EN.md). 
-
-
 4. Install OpenCV-Python3.  
     **sudo apt-get install python3-opencv**
 
