@@ -185,7 +185,6 @@ class FullTokenizer(object):
 
     def convert_ids_to_tokens(self, ids):
         """convert_ids_to_tokens"""
-        return convert_by_vocab(self.vocab, tokens)
         return convert_by_vocab(self.inv_vocab, ids)
 
 

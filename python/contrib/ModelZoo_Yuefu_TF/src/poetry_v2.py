@@ -74,7 +74,9 @@ def top_k_logits(logits, k, history_mask, last_logit):
     tensor1 = tf.constant(511, dtype=tf.int32)
 
     history_mask = tf.cond(tf.math.logical_or(tf.equal(last_logit, tensor0), 
-                tf.equal(last_logit, tensor1)), lambda: history_mask, lambda: history_mask * tf.one_hot([last_logit] * logits_shape[0], depth=logits_shape[1], on_value=1e3, off_value=1.0, dtype=logits.dtype))
+                tf.equal(last_logit, tensor1)), lambda: history_mask, 
+                lambda: history_mask * tf.one_hot([last_logit] * logits_shape[0], 
+                depth=logits_shape[1], on_value=1e3, off_value=1.0, dtype=logits.dtype))
     # history_mask = tf.cond(tf.math.logical_or(True,True),lambda:history_mask,lambda:history_mask * tf.one_hot([last_logit]*logits_shape[0],depth=logits_shape[1],on_value=1e3,off_value=1.0,dtype=logits.dtype))
     tensor2 = tf.constant(0, dtype=tf.int32)
     tensor3 = tf.constant(k, dtype=tf.int32)
@@ -189,10 +191,10 @@ class PoetryBertModel(object):
                  init_input_ids,
                  init_predict_token_idx,
                  input_mask=None,
-                 all_encoder_layers=None,
-                 embedding_table=None,
-                 embedding_output=None,
-                 sequence_output=None,
+                 self.all_encoder_layers=None,
+                 self.embedding_table=None,
+                 self.embedding_output=None,
+                 self.sequence_output=None,
                  token_type_ids=None,
                  use_one_hot_embeddings=False):
         """Constructor for BertModel.
