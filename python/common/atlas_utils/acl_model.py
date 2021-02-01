@@ -9,6 +9,8 @@ import acl
 import struct
 import numpy as np
 import datetime
+import sys
+import os
 
 import atlas_utils.constants as const
 import atlas_utils.utils as utils
@@ -45,7 +47,10 @@ class Model(object):
 
     def _init_resource(self):
         log_info("Init model resource start...")
-        #load model file
+        if not os.path.isfile(self._model_path):
+            log_error("model_path failed, please check. model_path=%s" % self._model_path)
+            return FAILED
+
         self._model_id, ret = acl.mdl.load_from_file(self._model_path)
         utils.check_ret("acl.mdl.load_from_file", ret)
         self._model_desc = acl.mdl.create_desc()
