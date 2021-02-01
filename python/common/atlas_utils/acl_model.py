@@ -49,7 +49,7 @@ class Model(object):
         log_info("Init model resource start...")
         if not os.path.isfile(self._model_path):
             log_error("model_path failed, please check. model_path=%s" % self._model_path)
-            return FAILED
+            return const.FAILED
 
         self._model_id, ret = acl.mdl.load_from_file(self._model_path)
         utils.check_ret("acl.mdl.load_from_file", ret)
