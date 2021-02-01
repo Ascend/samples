@@ -52,7 +52,7 @@
 
     执行以下命令，进入样例的data文件夹中，下载对应的测试图片。
 
-    **cd /home/ascend/samples/cplusplus//level2_simple_inference/0_data_process/cropandpaste/data**
+    **cd /home/ascend/samples/cplusplus/level2_simple_inference/0_data_process/cropandpaste/data**
 
     **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/cropandpaste/wood_rabbit_1024_1068_nv12.yuv**
 
