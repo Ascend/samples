@@ -4,12 +4,6 @@ Copyright (R) @huawei.com, all rights reserved
 CREATED:  2021-01-20 20:12:13
 MODIFIED: 2021-01-29 14:04:45
 """
-"""
-Copyright (R) @huawei.com, all rights reserved
--*- coding:utf-8 -*-
-CREATED:  2020-01-28 20:12:13
-MODIFIED: 2021-01-29 14:04:45
-"""
 import numpy as np
 import acl
 import atlas_utils.utils as utils
@@ -208,7 +202,7 @@ class Dvpp(object):
         Convert yuv420sp pictures to jpeg pictures
         """
         #create input image
-        input_desc = self._gen_input_pic_desc(image, width_align_factor=128, height_align_factor=16)
+        input_desc = self._gen_input_pic_desc(image)
         #Predict the memory size required for conversion
         output_size, ret = acl.media.dvpp_jpeg_predict_enc_size(
             input_desc, self._jpege_config)
