@@ -68,12 +68,12 @@ void CopyData(int fileCount, uint32_t pos)
         ret = aclrtMalloc(&pictureDeviceData, pictureDataSize * fileCount, ACL_MEM_MALLOC_HUGE_FIRST);
     }
     if (runMode == ACL_HOST) {
-        ret = aclrtMemcpy((int *)pictureDeviceData + pos, pictureDataSize, \
+        ret = aclrtMemcpy((char *)pictureDeviceData + pos, pictureDataSize, \
         pictureData, pictureDataSize, ACL_MEMCPY_HOST_TO_DEVICE);
     }
     else
     {
-        ret = aclrtMemcpy((int *)pictureDeviceData + pos, pictureDataSize, \
+        ret = aclrtMemcpy((char *)pictureDeviceData + pos, pictureDataSize, \
         pictureData, pictureDataSize, ACL_MEMCPY_DEVICE_TO_DEVICE);
     }
 }
