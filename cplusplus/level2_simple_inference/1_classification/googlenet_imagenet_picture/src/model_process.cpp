@@ -33,7 +33,9 @@ ModelProcess::~ModelProcess(){
 
 void ModelProcess::DestroyResource(){
     if(isReleased_)
+    {
         return;
+    }
     Unload();
     DestroyDesc();
     DestroyInput();
