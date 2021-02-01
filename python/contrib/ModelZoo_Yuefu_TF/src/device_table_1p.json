@@ -1,0 +1,33 @@
+{
+    "board_id": "0x002f",
+    "chip_info": "910",
+    "deploy_mode": "lab",
+    "group_count": "1",
+    "group_list": [
+        {
+            "device_num": "1",
+            "server_num": "1",
+            "group_name": "",
+            "instance_count": "1",
+            "instance_list": [
+                {
+                    "devices": [
+                        {
+                            "device_id": "1",
+                            "device_ip": "192.168.101.101"
+                        }
+                    ],
+                    "rank_id": "0",
+                    "server_id": "172.17.1.120"
+                }
+            ]
+        }
+    ],
+    "para_plane_nic_location": "device",
+    "para_plane_nic_name": [
+        "eth0"
+    ],
+    "para_plane_nic_num": "1",
+    "status": "completed"
+}
+
