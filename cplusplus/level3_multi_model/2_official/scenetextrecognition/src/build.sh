@@ -28,7 +28,6 @@ export ARCH_PATTERN=acllib
 buildA300
 
 # copy config file and model into dist
-rm -rf ./dist/Data
 mkdir ./dist/Data
 cp -r ./Data ./dist/
 
