@@ -52,7 +52,7 @@ Before deploying this sample, ensure that:
 
     Run the following commands to go to the **data** folder of the sample and download the corresponding test image:
 
-    **cd /home/ascend/samples/cplusplus/level1_single_api/1_acl/4_dvpp/cropandpaste/data**
+    **cd /home/ascend/samples/cplusplus/level2_simple_inference/0_data_process/cropandpaste/data**
 
     **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/cropandpaste/wood_rabbit_1024_1068_nv12.yuv**
 
@@ -85,7 +85,7 @@ Before deploying this sample, ensure that:
 
 2. Switch to the **cropandpaste** directory and create a directory for storing build outputs, for example, **build/intermediates/host** in this sample.
 
-    **cd $HOME/samples/cplusplus/level1_single_api/1_acl/4_dvpp/cropandpaste**
+    **cd $HOME/samples/cplusplus/level2_simple_inference/0_data_process/cropandpaste**
 
     **mkdir -p build/intermediates/host**
 
@@ -117,7 +117,7 @@ Before deploying this sample, ensure that:
 
 1. Run the following commands to upload the **cropandpaste** directory in the development environment to any directory in the operating environment, for example, **/home/HwHiAiUser**, and log in to the operating environment (host) as the **HwHiAiUser** user:
 
-    **scp -r $HOME/samples/cplusplus/level1_single_api/1_acl/4_dvpp/cropandpaste HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
+    **scp -r $HOME/samples/cplusplus/level2_simple_inference/0_data_process/cropandpaste HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
 
     **ssh HwHiAiUser@xxx.xxx.xxx.xxx**    
 
@@ -130,9 +130,11 @@ Before deploying this sample, ensure that:
 
       **export LD_LIBRARY_PATH=**
 
+      **export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/nnrt/latest/acllib/lib64:/home/HwHiAiUser/ascend_ddk/x86/lib:${LD_LIBRARY_PATH}** 
+
       **source ~/.bashrc**
 
-      **cd $HOME/samples/cplusplus/level1_single_api/1_acl/4_dvpp/cropandpaste/out**
+      **cd $HOME/samples/cplusplus/level2_simple_inference/0_data_process/cropandpaste/out**
 
     - If the development environment and operating environment are set up on separate servers, run the following command to switch the directory:
 
