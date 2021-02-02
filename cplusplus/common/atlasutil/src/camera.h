@@ -51,7 +51,7 @@ public:
     AtlasError Close();
 
     AtlasError Open();  
-    bool IsAccessable(uint32_t id);
+    bool IsAccessible(uint32_t id);
     AtlasError Set(StreamProperty key, int value);
     uint32_t Get(StreamProperty key);
 

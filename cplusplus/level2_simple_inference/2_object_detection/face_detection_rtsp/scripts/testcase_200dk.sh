@@ -43,7 +43,7 @@ function setAtcEnv() {
         export ASCEND_OPP_PATH=${install_path}/opp
         export LD_LIBRARY_PATH=${install_path}/atc/lib64:${LD_LIBRARY_PATH}
     elif [[ ${version} = "c75" ]] || [[ ${version} = "C75" ]];then
-        export install_path=$HOME/Ascend/ascend-toolkit/latest
+        export install_path=$HOME/Ascend/ascend-toolkit/latest		
         export PATH=/usr/local/python3.7.5/bin:${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
         export ASCEND_OPP_PATH=${install_path}/opp
         export PYTHONPATH=${install_path}/atc/python/site-packages:${install_path}/atc/python/site-packages/auto_tune.egg/auto_tune:${install_path}/atc/python/site-packages/schedule_search.egg:$PYTHONPATH
@@ -59,7 +59,7 @@ function setBuildEnv() {
         export DDK_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/arm64-linux_gcc7.3.0
         export NPU_HOST_LIB=${DDK_PATH}/acllib/lib64/stub
     elif [[ ${version} = "c75" ]] || [[ ${version} = "C75" ]];then
-        export DDK_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/arm64-linux
+        export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux
         export NPU_HOST_LIB=${DDK_PATH}/acllib/lib64/stub
     fi
 
@@ -89,6 +89,21 @@ function downloadOriginalModel() {
     fi
 
     return 0
+}
+
+function buildLibAtlasUtil() {
+	cd ${project_path}/../../../common/atlasutil/
+	make
+	if [ $? -ne 0 ];then
+        echo "ERROR: make atlasutil failed."
+        return ${inferenceError}
+    fi
+	
+	make install
+	if [ $? -ne 0 ];then
+        echo "ERROR: make install atlasutil failed."
+        return ${inferenceError}
+    fi
 }
 
 function main() {
@@ -142,6 +157,18 @@ function main() {
             return ${inferenceError}
         fi
     fi
+	
+	setBuildEnv
+	if [ $? -ne 0 ];then
+        echo "ERROR: set build environment failed"
+        return ${inferenceError}
+    fi
+	
+	buildLibAtlasUtil
+	if [ $? -ne 0 ];then
+        echo "ERROR: build libatlasutil.so failed"
+        return ${inferenceError}
+    fi
 
     # 创建目录用于存放编译文件
     mkdir -p ${project_path}/build/intermediates/host
@@ -149,13 +176,7 @@ function main() {
         echo "ERROR: mkdir build folder failed. please check your project"
         return ${inferenceError}
     fi
-    cd ${project_path}/build/intermediates/host
-
-    setBuildEnv
-    if [ $? -ne 0 ];then
-        echo "ERROR: set build environment failed"
-        return ${inferenceError}
-    fi
+    cd ${project_path}/build/intermediates/host 
 
     # 产生Makefile
     cmake ${project_path}/src -DCMAKE_CXX_COMPILER=aarch64-linux-gnu-g++ -DCMAKE_SKIP_RPATH=TRUE

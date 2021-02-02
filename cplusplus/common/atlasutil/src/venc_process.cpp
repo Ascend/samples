@@ -116,11 +116,11 @@ shared_ptr<ImageData> VencProcess::GetEncodeImage() {
     return image;
 }
 
-
 DvppVenc::DvppVenc(VencConfig& vencInfo):
-vencInfo_(vencInfo), threadId_(0), 
+vencInfo_(vencInfo), threadId_(0),
 vencChannelDesc_(nullptr), vencFrameConfig_(nullptr),
-inputPicDesc_(nullptr), outFp_(nullptr), isFinished_(false){
+inputPicDesc_(nullptr), vencStream_(nullptr), 
+outFp_(nullptr), isFinished_(false){
 }
 
 DvppVenc::~DvppVenc(){
@@ -153,8 +153,9 @@ AtlasError DvppVenc::SaveVencFile(void* vencData, uint32_t size) {
     AtlasError atlRet = ATLAS_OK;
 
     void* data = vencData;
-    if (vencInfo_.runMode == ACL_HOST)
+    if (vencInfo_.runMode == ACL_HOST) {
         data = CopyDataToHost(vencData, size, vencInfo_.runMode, MEMORY_NORMAL);
+    }
     
     size_t ret = fwrite(data, 1, size, outFp_);
     if (ret != size) {
@@ -166,8 +167,9 @@ AtlasError DvppVenc::SaveVencFile(void* vencData, uint32_t size) {
         fflush(outFp_); 
     }
 
-    if (vencInfo_.runMode == ACL_HOST)
+    if (vencInfo_.runMode == ACL_HOST) {
         delete[]((uint8_t *)data);   
+    }
 
     return atlRet;
 }
@@ -251,7 +253,7 @@ AtlasError DvppVenc::InitResource()
 }
 
 AtlasError DvppVenc::CreateVencChannel() {
-  // create vdec channelDesc
+    // create vdec channelDesc
     vencChannelDesc_ = aclvencCreateChannelDesc();
     if (vencChannelDesc_ == nullptr) {
         ATLAS_LOG_ERROR("Create venc channel desc failed");
@@ -308,8 +310,6 @@ AtlasError DvppVenc::SetFrameConfig(uint8_t eos, uint8_t forceIFrame)
     return ATLAS_OK;
 }
 
-
-
 AtlasError DvppVenc::Process(ImageData& image)
 {
     // create picture desc
@@ -332,7 +332,6 @@ AtlasError DvppVenc::Process(ImageData& image)
     return ATLAS_OK;
 }
 
-
 AtlasError DvppVenc::CreateInputPicDesc(ImageData& image)
 {
     inputPicDesc_ = acldvppCreatePicDesc();
@@ -352,9 +351,10 @@ AtlasError DvppVenc::CreateInputPicDesc(ImageData& image)
     return ATLAS_OK;
 }
 
-
 void DvppVenc::Finish() {
-    if (isFinished_) return;
+    if (isFinished_) {
+        return;
+    }
 
     // set frame config, eos frame
     AtlasError ret = SetFrameConfig(1, 0);
@@ -392,6 +392,14 @@ void DvppVenc::DestroyResource()
     if (inputPicDesc_ != nullptr) {
         (void)acldvppDestroyPicDesc(inputPicDesc_);
         inputPicDesc_ = nullptr;
+    }
+
+    if (vencStream_ != nullptr) {
+        aclError ret = aclrtDestroyStream(vencStream_);
+        if (ret != ACL_ERROR_NONE) {
+            ATLAS_LOG_ERROR("Vdec destroy stream failed, error %d", ret);
+        }
+        vencStream_ = nullptr;
     }
 
     if (vencFrameConfig_ != nullptr) {

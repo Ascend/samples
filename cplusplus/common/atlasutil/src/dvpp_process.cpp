@@ -27,8 +27,9 @@
 
 using namespace std;
 
-DvppProcess::DvppProcess()
-: isInitOk_(false), dvppChannelDesc_(nullptr), isReleased_(false) {
+DvppProcess::DvppProcess() : 
+isInitOk_(false), stream_(nullptr),
+dvppChannelDesc_(nullptr), isReleased_(false) {
 }
 
 DvppProcess::~DvppProcess() {
@@ -36,10 +37,14 @@ DvppProcess::~DvppProcess() {
 }
 
 void DvppProcess::DestroyResource() {
-    if (isReleased_) return;
+    if (isReleased_) {
+        return;
+    }
+
+    aclError aclRet;
 
     if (dvppChannelDesc_ != nullptr) {
-        aclError aclRet = acldvppDestroyChannel(dvppChannelDesc_);
+        aclRet = acldvppDestroyChannel(dvppChannelDesc_);
         if (aclRet != ACL_ERROR_NONE) {
             ATLAS_LOG_ERROR("Destroy dvpp channel error: %d", aclRet);
         }
@@ -48,12 +53,23 @@ void DvppProcess::DestroyResource() {
         dvppChannelDesc_ = nullptr;
     }
 
+    if (stream_ != nullptr) {
+        aclRet = aclrtDestroyStream(stream_);
+        if (aclRet != ACL_ERROR_NONE) {
+            ATLAS_LOG_ERROR("Vdec destroy stream failed, error %d", aclRet);
+        }
+        stream_ = nullptr;
+    }
+
     isReleased_ = true;
 }
 
-AtlasError DvppProcess::InitResource(aclrtStream& stream)
-{
-    aclError aclRet;
+AtlasError DvppProcess::Init() {
+    aclError aclRet = aclrtCreateStream(&stream_);
+    if (aclRet != ACL_ERROR_NONE) {
+        ATLAS_LOG_ERROR("Create venc stream failed, error %d", aclRet);
+        return ATLAS_ERROR_CREATE_STREAM;
+    }
 
     dvppChannelDesc_ = acldvppCreateChannelDesc();
     if (dvppChannelDesc_ == nullptr) {
@@ -67,7 +83,6 @@ AtlasError DvppProcess::InitResource(aclrtStream& stream)
         return ATLAS_ERRROR_CREATE_DVPP_CHANNEL;
     }
 
-    stream_ = stream;
     isInitOk_ = true;
     ATLAS_LOG_INFO("dvpp init resource ok");
     
