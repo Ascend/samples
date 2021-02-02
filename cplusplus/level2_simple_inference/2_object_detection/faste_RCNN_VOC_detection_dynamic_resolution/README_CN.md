@@ -50,7 +50,7 @@
 
 2. 获取此应用中所需要的原始网络模型。
 
-    参考下表获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到开发环境普通用户下的任意目录，例如：$HOME/models/faste_RCNN_VOC_detection_dynamic_resolution。
+    参考下表获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到开发环境普通用户下工程目录所在的model文件夹下，例如：$HOME/models/faste_RCNN_VOC_detection_dynamic_resolution。
     
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
@@ -71,13 +71,10 @@
 
     2. 执行以下命令下载aipp配置文件并使用atc命令进行模型转换。
 
-        **cd $HOME/models/faste_RCNN_VOC_detection_dynamic_resolution**  
+        **cd $HOME/samples/cplusplus/level2_simple_inference/2_object_detection/faste_RCNN_VOC_detection_dynamic_resolution/model**  
 
         **atc --model=faster_rcnn.prototxt --weight=faster_rcnn.caffemodel --framework=0 --output=faster_rcnn --soc_version=Ascend310 --input_shape="data:1,3,-1,-1;im_info:1,3" --dynamic_image_size="512,512;600,600;800,800"**
 
-    3. 执行以下命令将转换好的模型复制到样例中model文件夹中。
-
-        **cp ./faster_rcnn.om $HOME/samples/cplusplus/level2_simple_inference/2_object_detection/faste_RCNN_VOC_detection_dynamic_resolution/model/**
 
 4. 获取样例需要的测试图片。
 

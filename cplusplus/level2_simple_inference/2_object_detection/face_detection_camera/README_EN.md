@@ -42,7 +42,7 @@ Before deploying this sample, ensure that:
 
 2. Obtain the source network model required by the application.
 
-    Obtain the original network model and its weight file used in the application by referring to the following table and store them in any directory of a common user in the development environment, for example, **$HOME/models/face_detection_camera**.
+    Obtain the original network model and its weight file used in the application by referring to the following table and store them in model folder of project directory of a common user in the development environment, for example, **$HOME/samples/cplusplus/level2_simple_inference/2_object_detection/face_detection_camera/model**.
   
     | **Model Name** | **Description** | **How to Obtain** |
     |---|---|---|
@@ -64,15 +64,12 @@ Before deploying this sample, ensure that:
 
     2. Run the following command to download the AIPP configuration file and run the ATC command to convert the model:
 
-        **cd $HOME/models/face_detection_camera**  
+        **cd $HOME/samples/cplusplus/level2_simple_inference/2_object_detection/face_detection_camera/model**  
 
         **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/face_detection_camera/insert_op.cfg**
 
         **atc --output_type=FP32 --input_shape="data:1,3,300,300" --weight=./face_detection_fp32.caffemodel --input_format=NCHW --output=./face_detection --soc_version=Ascend310 --insert_op_conf=./insert_op.cfg --framework=0 --save_original_model=false --model=./face_detection.prototxt**
 
-    3. Run the following command to copy the converted model to the **model** folder of the sample.
-
-        **cp ./face_detection.om $HOME/samples/cplusplus/level2_simple_inference/2_object_detection/face_detection_camera/model/**
 
 ### Deploying the Sample
 

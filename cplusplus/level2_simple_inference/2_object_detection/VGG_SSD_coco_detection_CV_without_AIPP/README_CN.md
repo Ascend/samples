@@ -50,11 +50,11 @@
 
 2. 获取此应用中所需要的原始网络模型。
 
-    参考下表获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到开发环境普通用户下的任意目录，例如：$HOME/models/VGG_SSD_coco_detection_CV_without_AIPP。
+    参考下表获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到开发环境普通用户下的工程目录所在的model文件夹下，例如：$HOME/samples/cplusplus/level2_simple_inference/2_object_detection/VGG_SSD_coco_detection_CV_without_AIPP/model/。
     
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
-    |  vgg_ssd| 目标检测模型。是基于Caffe的vgg_ssd模型。  |  请参考[https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/vgg_ssd/ATC_vgg_ssd_tf_AE](https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/vgg_ssd/ATC_vgg_ssd_tf_AE)目录中README.md下载原始模型章节下载模型和权重文件。 |
+    |  vgg_ssd| 目标检测模型。是基于Caffe的vgg_ssd模型。  |  请参考[https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/vgg_ssd/ATC_vgg_ssd_caffe_AE](https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/vgg_ssd/ATC_vgg_ssd_caffe_AE)目录中README.md下载原始模型章节下载模型和权重文件。 |
 
     ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
     > - modelzoo中提供了转换好的om模型，但此模型不匹配当前样例，所以需要下载原始模型和权重文件后重新进行模型转换。
@@ -71,13 +71,10 @@
 
     2. 执行以下命令下载aipp配置文件并使用atc命令进行模型转换。
 
-        **cd $HOME/models/VGG_SSD_coco_detection_CV_without_AIPP**  
+        **cd $HOME/samples/cplusplus/level2_simple_inference/2_object_detection/VGG_SSD_coco_detection_CV_without_AIPP/model/**  
 
         **atc --output_type=FP32 --input_shape="data:1,3,300,300" --weight=./vgg_ssd.caffemodel  --input_format=NCHW --output=vgg_ssd --soc_version=Ascend310 --framework=0 --save_original_model=false --model=./vgg_ssd.prototxt**
 
-    3. 执行以下命令将转换好的模型复制到样例中model文件夹中。
-
-        **cp ./vgg_ssd.om $HOME/samples/cplusplus/level2_simple_inference/2_object_detection/VGG_SSD_coco_detection_CV_without_AIPP/model/**
 
 4. 获取样例需要的测试图片。
 

@@ -50,11 +50,11 @@ Before deploying this sample, ensure that:
 
 2. Obtain the original model required by the application.
    
-   Obtain the original model and its weight files used in the application by referring to the following table and save them to any directory of a common user in the development environment, for example, **$HOME/models/VGG\_SSD\_coco\_detection\_CV\_without\_AIPP**.
+   Obtain the original model and its weight files used in the application by referring to the following table and save them to project directory of a common user in the development environment, for example, **$HOME/samples/cplusplus/level2\_simple\_inference/2\_object\_detection/VGG\_SSD\_coco\_detection\_CV\_without\_AIPP/model**.
    
    | **Model Name**| **Description**| **How to Obtain**|
    |----------|----------|----------|
-   | vgg\_ssd| Object detection model. It is a vgg\_ssd model based on Caffe.| Download the model and weight file by referring to the section about downloading the original model in the **README.md** file in [https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/vgg\_ssd/ATC\_vgg\_ssd\_tf\_AE](https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/vgg_ssd/ATC_vgg_ssd_tf_AE).|
+   | vgg\_ssd| Object detection model. It is a vgg\_ssd model based on Caffe.| Download the model and weight file by referring to the section about downloading the original model in the **README.md** file in [https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/vgg_ssd/ATC_vgg_ssd_caffe_AE](https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/vgg_ssd/ATC_vgg_ssd_caffe_AE).|
 
    ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **Note:**
    
@@ -72,13 +72,10 @@ Before deploying this sample, ensure that:
    
    2. Run the following commands to download the AIPP configuration file and convert the model:
       
-      **cd $HOME/models/VGG\_SSD\_coco\_detection\_CV\_without\_AIPP**
+      **cd $HOME/samples/cplusplus/level2\_simple\_inference/2\_object\_detection/VGG\_SSD\_coco\_detection\_CV\_without\_AIPP/model**
       
       **atc --output\_type=FP32 --input\_shape="data:1,3,300,300" --weight=./vgg\_ssd.caffemodel  --input\_format=NCHW --output=vgg\_ssd --soc\_version=Ascend310 --framework=0 --save\_original\_model=false --model=./vgg\_ssd.prototxt**
-   
-   3. Run the following command to copy the converted model to the **model** folder of the sample:
-      
-      **cp ./vgg\_ssd.om $HOME/samples/cplusplus/level2\_simple\_inference/2\_object\_detection/VGG\_SSD\_coco\_detection\_CV\_without\_AIPP/model/**
+
 
 4. Obtain the test images required by the sample.
    
@@ -86,9 +83,9 @@ Before deploying this sample, ensure that:
    
    **cd $HOME/samples/cplusplus/level2\_simple\_inference/2\_object\_detection/VGG\_SSD\_coco\_detection\_CV\_without\_AIPP/data**
    
-   **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/VGG\_SSD\_coco\_detection\_CV\_without\_AIPP/bicycle.jpg**
+   **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/VGG_SSD_coco_detection_CV_without_AIPP/bicycle.jpg**
    
-   **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/VGG\_SSD\_coco\_detection\_CV\_without\_AIPP/boat.jpg**
+   **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/VGG_SSD_coco_detection_CV_without_AIPP/boat.jpg**
 
 ### Deploying the Sample
 
