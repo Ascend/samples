@@ -65,7 +65,10 @@ class EdgeDetection(object):
         return self._model.execute(input_data)
 
     def sigmoid(self, x):
-        return 1./(1 + np.exp(-x))
+        """
+        sigmod function
+        """
+        return 1. / (1 + np.exp(-x))
 
     def post_process(self, infer_output, image_name):
         """
@@ -82,9 +85,9 @@ class EdgeDetection(object):
                 img = img.resize((out_size[0], out_size[0]))
                 img = np.array(img)
             edge[idx] = img
-        final_edge = 0.2009036*edge[0] + 0.2101715*edge[1] + \
-                        0.22262956*edge[2] + 0.22857015*edge[3] + \
-                                0.2479302*edge[4] + 0.00299916
+        final_edge = 0.2009036 * edge[0] + 0.2101715 * edge[1] + \
+                        0.22262956 * edge[2] + 0.22857015 * edge[3] + \
+                                0.2479302 * edge[4] + 0.00299916
 
         final_edge = self.sigmoid(final_edge)
         resultimage = Image.fromarray(np.uint8((1 - final_edge)*255))
