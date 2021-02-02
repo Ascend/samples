@@ -54,7 +54,7 @@
 
     执行以下命令，进入样例的data文件夹中，下载对应的测试图片。
 
-    **cd /home/ascend/samples/cplusplus/level1_single_api/1_acl/4_dvpp/resize/data**
+    **cd /home/ascend/samples/cplusplus/level2_simple_inference/0_data_process/resize/data**
 
     **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/resize/wood_rabbit_1024_1068_nv12.yuv**
 
@@ -88,7 +88,7 @@
 
 2. 切换到resize目录，创建目录用于存放编译文件，例如，本文中，创建的目录为 **build/intermediates/host**。
 
-    **cd $HOME/samples/cplusplus/level1_single_api/1_acl/4_dvpp/resize**
+    **cd $HOME/samples/cplusplus/level2_simple_inference/0_data_process/resize**
 
     **mkdir -p build/intermediates/host**
 
@@ -120,7 +120,7 @@
 
 1. 执行以下命令,将开发环境的 **resize** 目录上传到运行环境中，例如 **/home/HwHiAiUser**，并以HwHiAiUser（运行用户）登录运行环境（Host）。
 
-    **scp -r $HOME/samples/cplusplus/level1_single_api/1_acl/4_dvpp/resize HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
+    **scp -r $HOME/samples/cplusplus/level2_simple_inference/0_data_process/resize HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
 
     **ssh HwHiAiUser@xxx.xxx.xxx.xxx**    
 
@@ -135,7 +135,7 @@
 
       **source ~/.bashrc**
         
-      **cd $HOME/samples/cplusplus/level1_single_api/1_acl/4_dvpp/resize/out**
+      **cd $HOME/samples/cplusplus/level2_simple_inference/0_data_process/resize/out**
 
     - 如果是开发环境与运行环境分离部署，执行以下命令切换目录。
     
