@@ -50,25 +50,41 @@
 2. 获取此应用中所需要的原始网络模型。
 
     参考下表获取此应用中所用到的模型，并将其存放到开发环境普通用户下的工程目录：   
- **cd $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV3_coco_detection_picture/model** 。
+ **cd $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV3_coco_detection_picture/model** 
     
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
     |  yolov3| 基于Caffe-YOLOV3的目标检测模型。  |  请参考[https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/yolov3/ATC_yolov3_caffe_AE](https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/yolov3/ATC_yolov3_caffe_AE)目录中README.md下载原始模型章节下载模型和权重文件。 |
 
     ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
-    > - modelzoo中提供了转换好的om模型，此模型匹配当前样例，可以直接使用。    
+    > - modelzoo中提供了转换好的om模型，但此模型不匹配当前样例，所以需要下载原始模型和权重文件后重新进行模型转换。    
   将下载的模型名字更改为工程需要的名字
+3. 将原始模型转换为Davinci模型。
+    
+    **注：请确认环境变量已经在[环境准备和依赖安装](../../../environment)中配置完成**
 
-  **mv yolov3_framework_caffe_aipp_1_batch_1_input_int8_output_FP32.om yolov3_yuv.om**     
+    1. 设置LD_LIBRARY_PATH环境变量。
 
-3. 获取样例需要的测试图片。
+        由于LD_LIBRARY_PATH环境变量在转使用atc工具和运行样例时会产生冲突，所以需要在命令行单独设置此环境变量，方便修改。
+
+        **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64**  
+
+    2. 执行以下atc命令进行模型转换。
+
+        **atc --model=yolov3.prototxt --weight=yolov3.caffemodel --framework=0 --output=yolov3_framework_caffe_aipp_1_batch_1_input_int8_output_FP32 --soc_version=Ascend310 --insert_op_conf=aipp_nv12.cfg**
+
+    3. 执行以下命令将转换好的模型重命名。
+
+        **mv ./yolov3_framework_caffe_aipp_1_batch_1_input_int8_output_FP32.om yolov3_yuv.om**
+
+
+4. 获取样例需要的测试图片。
 
     执行以下命令，进入样例的data文件夹中，下载对应的测试图片。
 
     **cd $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV3_coco_detection_picture/data**
 
-    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/YOLOV3_coco_detection_picture-python/dog1_1024_683.jpg**
+    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/YOLOV3_coco_detection_picture/dog1_1024_683.jpg**
 
 
 
@@ -100,9 +116,9 @@
     
       **cd $HOME/YOLOV3_coco_detection_picture/src**
 
-    切换目录后，执行以下命令运行样例。
+      切换目录后，执行以下命令运行样例。
 
-    **python3.6 object_detect.py ../data/**
+      **python3.6 object_detect.py ../data/**
 
 ### 查看结果
 
