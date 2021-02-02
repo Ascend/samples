@@ -12,7 +12,7 @@
 
 样例输入：原始图片jpg文件。
 
-样例输出：带推理结果的jpg文件。
+样例输出：卡通图象。
 
 ### 前提条件
 
@@ -52,15 +52,17 @@
     - 20.1版本
     由于版本问题，此模型在20.1版本不能正确转换。因此20.1版本直接获取om模型。
      
-        **cd $HOME/samples/cplusplus/contrib/cartoonGAN_picture/model**    
+        **cd $HOME/samples/python/contrib/cartoonGAN_picture/model**    
         **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/cartoonGAN_picture/cplus/cartoonization.om** 
     
     - 20.0版本  
 
         1. 参考下方链接获取此应用中所用到的原始网络模型。
         
-            **cd $HOME/samples/cplusplus/contrib/cartoonGAN_picture/model** 。   
-            **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/cartoon/cartoonization.pb**  
+            **cd $HOME/samples/python/contrib/cartoonGAN_picture/model** 。   
+            | **模型名称** | **模型说明**                   | **模型下载路径**                                             |
+            | ------------ | ------------------------------ | ------------------------------------------------------------ |
+            | CartoonGAN     | 将普通照片转换为卡通风格的图片。 | 请参考https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/cartoonization/ATC_cartoonization_tf_AE 原始模型章节，下载**原始模型**及**对应的cfg文件**。 |
 
         2. 设置LD_LIBRARY_PATH环境变量。   
             由于LD_LIBRARY_PATH环境变量在转使用atc工具和运行样例时会产生冲突，所以需要在命令行单独设置此环境变量，方便修改。  
@@ -69,8 +71,7 @@
 
         3. 执行以下命令使用atc命令进行模型转换。  
             
-            **atc --output_type=FP32 --input_shape="train_real_A:1,256,256,3" --input_format=NHWC --output="./cartoonization" --soc_version=Ascend310 --framework=3 --save_original_model=false --model="./cartoonization.pb" --precision_mode=allow_fp32_to_fp16**
-    
+            **atc --output_type=FP32 --input_shape="train_real_A:1,256,256,3" --input_format=NHWC --output="./cartoonization" --soc_version=Ascend310 --insert_op_conf=insert_op.cfg --framework=3 --save_original_model=false --model="./cartoonization.pb" --precision_mode=allow_fp32_to_fp16**
 
 3. 获取样例需要的测试图片。
 
@@ -108,11 +109,11 @@
 
     - 如果是开发环境与运行环境分离部署，执行以下命令切换目录。
     
-      **cd $HOME/YOLOV3_coco_detection_picture/src**
+      **cd $HOME/cartoonGAN_picture/src**
 
-    切换目录后，执行以下命令运行样例。
+      切换目录后，执行以下命令运行样例。
 
-    **python3.6 cartoonization.py ../data/**
+      **python3.6 cartoonization.py ../data/**
 
 ### 查看结果
 
