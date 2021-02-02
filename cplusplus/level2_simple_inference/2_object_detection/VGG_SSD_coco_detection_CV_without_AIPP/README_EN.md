@@ -83,9 +83,9 @@ Before deploying this sample, ensure that:
    
    **cd $HOME/samples/cplusplus/level2\_simple\_inference/2\_object\_detection/VGG\_SSD\_coco\_detection\_CV\_without\_AIPP/data**
    
-   **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/VGG\_SSD\_coco\_detection\_CV\_without\_AIPP/bicycle.jpg**
+   **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/VGG\_SSD_coco_detection_CV_without_AIPP/bicycle.jpg**
    
-   **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/VGG\_SSD\_coco\_detection\_CV\_without\_AIPP/boat.jpg**
+   **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/VGG_SSD_coco_detection_CV_without_AIPP/boat.jpg**
 
 ### Deploying the Sample
 
