@@ -50,7 +50,7 @@
 
 2. 获取此应用中所需要的原始网络模型。
 
-    参考下表获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到开发环境普通用户下该样例的model文件夹下，本例为：$HOME/samples/cplusplus/level2_simple_inference/1_classification/googlenet_imagenet_dynamic_batch/model/。
+    参考下表获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到开发环境普通用户下该样例的model文件夹中，本例为：$HOME/samples/cplusplus/level2_simple_inference/1_classification/googlenet_imagenet_dynamic_batch/model/。
     
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
