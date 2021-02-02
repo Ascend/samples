@@ -4,13 +4,15 @@
 
 **本README只提供命令行方式运行样例的指导，如需在Mindstudio下运行样例，请参考[Mindstudio运行图片样例wiki](https://gitee.com/ascend/samples/wikis/Mindstudio运行图片样例?sort_id=3164874)。**
 
-## portrait_picture样例
+**本案例由南开大学贡献**
 
-功能：使用PortraitNet模型对输入图片中人像进行分割，然后与背景图像融合，实现背景替换。
+## edge_detection样例
 
-样例输入：带有人像的ipg图片和一张背景图像
+功能：使用RCF模型对输入图片进行边缘检测。
 
-样例输出：背景替换后的图像。
+样例输入：jpg图像
+
+样例输出：边缘图像。
 
 ### 前提条件
 
@@ -39,7 +41,7 @@
      2. 将ZIP包上传到开发环境中的普通用户家目录中，例如 **$HOME/ascend-samples-master.zip**。
 
      3. 开发环境中，执行以下命令，解压zip包。
-       
+     
       ```
      cd $HOME
      unzip ascend-samples-master.zipt
@@ -48,13 +50,13 @@
 
    参考下表获取此应用中所用到的模型，并将其存放到开发环境普通用户下的工程目录：
 
-	cd $HOME/samples/python/contrib/portrait_picture/model
+	cd $HOME/samples/python/contrib/rcf_edge_detection/model
 
-| **模型名称** | **模型说明**                   | **模型下载路径**                                             |
-| ------------ | ------------------------------ | ------------------------------------------------------------ |
-| Portrait     | 基于TensorFlow的人像分割模型。 | 请参考https://gitee.com/ascend/modelzoo/tree/master/contrib/Research/cv/portraitnet/ATC_PortraitNet_tf_AE 中README.md原始模型章节，下载**原始模型**及**对应的cfg文件**。 |
+| **模型名称** | **模型说明**          | **模型下载路径**                                             |
+| ------------ | --------------------- | ------------------------------------------------------------ |
+| RCF          | 基于Caffe的边缘检测。 | 请参考https://gitee.com/ascend/modelzoo/tree/master/contrib/Research/cv/ 中README.md原始模型章节，下载**原始模型网络**及**模型权重文件**。 |
 
-#### 3. 将原始模型转换为Davinci模型（20.0 版本）
+#### 3. 将原始模型转换为Davinci模型
 
    **注：请确认环境变量已经在[环境准备和依赖安装](https://gitee.com/ascend/samples/blob/master/python/environment)中配置完成**
 
@@ -68,25 +70,15 @@
 	
    2. 执行以下命令使用atc命令进行模型转换。
          ```
-      cd $HOME/samples/python/contrib/portrait_picture/model
-      atc --model=./portrait.pb  --insert_op_conf=./insert_op.cfg  --output="./portrait" --output_type=FP32 --input_shape="Inputs/x_input:1,224,224,3" --framework=3 --soc_version=Ascend310
-         ```
-#### 4. 直接获取Davinci模型（20.1 版本）
+      atc --model=rcf.prototxt --weight=./rcf_bsds.caffemodel --framework=0 --output=rcf --soc_version=Ascend310 --input_fp16_nodes=data --input_format=NCHW --output_type=FP32  
+      ```
 
-​	由于版本问题，此模型在20.1版本不能正确转换。因此20.1版本直接获取om模型。
-
-    cd  $HOME/samples/python/contrib/portrait_picture/model
-    wget  https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/PortraitNet%20/portrait.om
-
-#### 5. 获取样例需要的测试图片
+#### 4. 获取样例需要的测试图片
 
 执行以下命令，进入样例的data文件夹中，下载对应的测试图片。
 
-    cd $HOME/samples/python/contrib/portrait_picture/model
-    
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/Portrait/background.jpg
-    
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/Portrait/ori.jpg
+    cd $HOME/samples/python/contrib/rcf_edge_detection/data
+    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/rcf_edge_detection/ori.jpg
 
 
 ### 样例运行
@@ -95,10 +87,10 @@
 
 1. 执行以下命令,将开发环境的**portrait_picture**目录上传到运行环境中，例如 **/home/HwHiAiUser**，并以HwHiAiUser（运行用户）登录运行环境（Host）。
       ```
-   scp -r $HOME/samples/python/contrib/portrait_picture/  HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser
+   scp -r $HOME/samples/python/contrib/rcf_edge_detection/  HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser
    scp -r $HOME/samples/python/common/atlas_utils/   HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser
    ssh HwHiAiUser@xxx.xxx.xxx.xxx
-      ```
+   ```
 
    ![icon-note.gif](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif) **说明：**
 
@@ -111,12 +103,12 @@
 	```
      export LD_LIBRARY_PATH=
      source ~/.bashrc
-     cd $HOME/samples/python/contrib/portrait_picture/src
+     cd $HOME/samples/python/contrib/rcf_edge_detection/src
      python3 main.py ../data/
 	```
    - 如果是开发环境与运行环境分离部署，执行以下命令切换目录。
 	```
-     cd $HOME/python/portrait_picture/src
+     cd $HOME/python/rcf_edge_detection/src
 	```
      切换目录后，执行以下命令运行样例。
    
