@@ -50,7 +50,7 @@ Before deploying this sample, ensure that:
 
 2. Obtain the source model required by the application.
    
-   Obtain the original network model and its weight file used in the application by referring to the following table and store them in any directory of a common user in the development environment, for example, **$HOME/models/googlenet\_imagenet\_multi\_batch**.
+   Obtain the original network model and its weight file used in the application by referring to the following table and store them in any directory of a common user in the development environment, for example, **$HOME/samples/cplusplus/level2_simple_inference/1_classification/googlenet_imagenet_multi_batch/model/**.
    
    | **Model Name**| **Description**| **How to Obtain**|
    |----------|----------|----------|
@@ -72,15 +72,11 @@ Before deploying this sample, ensure that:
    
    2. Run the following commands to download the AIPP configuration file and convert the model:
       
-      **cd $HOME/models/googlenet\_imagenet\_multi\_batch**
+      **cd $HOME/samples/cplusplus/level2_simple_inference/1_classification/googlenet_imagenet_multi_batch/model/**
       
       **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet\_imagenet\_multi\_batch/insert\_op.cfg**
       
       **atc --model=./googlenet.prototxt --weight=./googlenet.caffemodel --framework=0 --output=googlenet\_multibatch --soc\_version=Ascend310 --insert\_op\_conf=./insert\_op.cfg --input\_shape="data:2,3,224,224" --input\_format=NCHW**
-   
-   3. Run the following command to copy the converted model to the **model** folder of the sample:
-      
-      **cp ./googlenet\_multibatch.om $HOME/samples/cplusplus/level2\_simple\_inference/1\_classification/googlenet\_imagenet\_multi\_batch/model/**
 
 4. Obtain the test images required by the sample.
    
