@@ -42,7 +42,7 @@
 
 2. 获取此应用中所需要的原始网络模型。
 
-    参考下表获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到开发环境普通用户下的任意目录，例如：$HOME/models/googlenet_imagenet_video。
+    参考下表获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到开发环境普通用户下的任意目录，例如：$HOME/samples/cplusplus/level2_simple_inference/1_classification/googlenet_imagenet_video/model/。
     
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
@@ -63,15 +63,11 @@
 
     2. 执行以下命令下载aipp配置文件并使用atc命令进行模型转换。
 
-        **cd $HOME/models/googlenet_imagenet_video**  
+        **cd $HOME/samples/cplusplus/level2_simple_inference/1_classification/googlenet_imagenet_video/model/**  
 
         **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_imagenet_video/insert_op.cfg**
 
         **atc --model=./googlenet.prototxt --weight=./googlenet.caffemodel --framework=0 --output=googlenet --soc_version=Ascend310 --insert_op_conf=./insert_op.cfg --input_shape="data:1,3,224,224" --input_format=NCHW**
-
-    3. 执行以下命令将转换好的模型复制到样例中model文件夹中。
-
-        **cp ./googlenet.om $HOME/samples/cplusplus/level2_simple_inference/1_classification/googlenet_imagenet_video/model/**
 
 4. 获取样例需要的测试文件。
 
