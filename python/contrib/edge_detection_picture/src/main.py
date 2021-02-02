@@ -135,7 +135,7 @@ def main():
             continue
 
         # Preprocess the picture 
-        resized_image = edge_detection.pre_process(image_file, im)
+        resized_image = edge_detection.pre_process(im)
 
         # Inferencecd 
         result = edge_detection.inference([resized_image, ])
