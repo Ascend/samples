@@ -71,7 +71,7 @@
 
     2. 执行以下命令下载aipp配置文件并使用atc命令进行模型转换。
 
-        **cd $HOME/models/VGG_SSD_coco_detection_CV_with_AIPP/model/**  
+        **cd $HOME/samples/cplusplus/level2_simple_inference/2_object_detection/VGG_SSD_coco_detection_CV_with_AIPP/model/**  
 
         **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/VGG_SSD_coco_detection_CV_with_AIPP/insert_op.cfg**
 
