@@ -50,7 +50,7 @@ Before deploying this sample, ensure that:
 
 2. Obtain the original model required by the application.
    
-   Obtain the original model and its weight files used in the application by referring to the following table and save them to project directory of a common user in the development environment, for example, **$HOME/samples/cplusplus/level2\_simple\_inference/2\_object\_detection/VGG\_SSD\_coco\_detection\_CV\_with\_AIPP/model**.
+   Obtain the original model and its weight files used in the application by referring to the following table and save them to model folder of project directory of a common user in the development environment, for example, **$HOME/samples/cplusplus/level2\_simple\_inference/2\_object\_detection/VGG\_SSD\_coco\_detection\_CV\_with\_AIPP/model**.
    
    | **Model Name**| **Description**| **How to Obtain**|
    |----------|----------|----------|
@@ -74,7 +74,7 @@ Before deploying this sample, ensure that:
       
       **cd $HOME/samples/cplusplus/level2\_simple\_inference/2\_object\_detection/VGG\_SSD\_coco\_detection\_CV\_with\_AIPP/model**
       
-      **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/VGG\_SSD\_coco\_detection\_CV\_with\_AIPP/insert\_op.cfg**
+      **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/VGG_SSD_coco_detection_CV_with_AIPP/insert_op.cfg**
       
       **atc --output\_type=FP32 --input\_shape="data:1,3,300,300" --weight=./vgg\_ssd.caffemodel --input\_format=NCHW --output=./vgg\_ssd --soc\_version=Ascend310 --insert\_op\_conf=./insert\_op.cfg --framework=0 --save\_original\_model=false --model=./vgg\_ssd.prototxt**
    
@@ -85,9 +85,9 @@ Before deploying this sample, ensure that:
    
    **cd $HOME/samples/cplusplus/level2\_simple\_inference/2\_object\_detection/VGG\_SSD\_coco\_detection\_CV\_with\_AIPP/data**
    
-   **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/VGG\_SSD\_coco\_detection\_CV\_with\_AIPP/bicycle.jpg**
+   **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/VGG_SSD_coco_detection_CV_with_AIPP/bicycle.jpg**
    
-   **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/VGG\_SSD\_coco\_detection\_CV\_with\_AIPP/boat.jpg**
+   **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/VGG_SSD_coco_detection_CV_with_AIPP/boat.jpg**
 
 ### Deploying the Sample
 
