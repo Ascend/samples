@@ -36,6 +36,8 @@ public:
     */
     ~ModelProcess();
 
+    void DestroyResource();
+
     /**
     * @brief load model from file with mem
     * @param [in] modelPath: model path
@@ -97,6 +99,7 @@ public:
 
 private:
     bool loadFlag_;  // model load flag
+    bool isReleased_;
     uint32_t modelId_;
     void *modelMemPtr_;
     size_t modelMemSize_;
