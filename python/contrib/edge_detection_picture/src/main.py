@@ -43,7 +43,7 @@ class EdgeDetection(object):
 
         return constants.SUCCESS
 
-    def pre_process(self, img_path, im):
+    def pre_process(self, im):
         """
         image preprocess
         """
