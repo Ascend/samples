@@ -56,7 +56,7 @@ CameraResolution gCameraResTbl[] = {{1920, 1080},
 
 Camera::Camera(uint32_t width, uint32_t height, uint32_t fps) 
 : width_(width), height_(height), 
-size_(YUV420SP_SIZE(width_, height_)), fps_(fps) {
+size_(YUV420SP_SIZE(width_, height_)), fps_(fps) {    
     MediaLibInit();
     if (IsAccessible(CAMERA_ID_0)) {
         id_ = CAMERA_ID_0;
@@ -88,7 +88,7 @@ bool Camera::IsAccessible(uint32_t id) {
             ATLAS_LOG_ERROR("Open camera %d failed when test accessable", id);
             return false;
         }
-        if (LIBMEDIA_STATUS_FAILED == CloseCamera(id_)) {
+        if (LIBMEDIA_STATUS_FAILED == CloseCamera(id)) {
             ATLAS_LOG_ERROR("Close camera %d failed when test accessable", id);
             return false;
         }
