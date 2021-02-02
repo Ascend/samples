@@ -50,7 +50,8 @@ FFmpeg and OpenCV are installed to implement diversified data preprocessings and
     **exit**
 
 3. Install OpenCV.   
-    Download OpenCV.  
+    Download OpenCV.   
+    **cd $HOME**    
     **git clone -b 4.3.0 https://gitee.com/mirrors/opencv.git**  
     **git clone -b 4.3.0 https://gitee.com/mirrors/opencv_contrib.git**  
     **cd opencv**  
