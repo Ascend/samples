@@ -1,55 +1,135 @@
-中文|[EN](README_EN.md)
+中文|[English](README_EN.md)
 
-# 句子级情感极性分类（输入：中文评论  输出：粗粒度情感极性分类）
+**该案例仅仅用于学习，打通流程，不对效果负责，不支持商用。**
 
-## 简介
+# 句子级中文评论情感极性分类网络应用（C++）<a name="ZH-CN_TOPIC"></a>
 
-作为自然语言处理领域的一个典型任务，意见挖掘（亦称观点挖掘或情感分析）的主要目的是从主观性的意见或评论文本中获取结构化的意见信息。情感极性分类是意见挖掘的一个核心子任务，主要目的是确定给定输入评论文本的正面、负面或中性情感倾向性（即情感极性）。根据语言粒度的不同，情感极性分类可细分为细粒度的属性级(target)和方面级(aspect)情感分类以及粗粒度的句子级和篇章级情感分类。本项目将主要涉及基于深度学习的粗粒度的句子级情感极性分类任务，其主要过程包括词向量转化、语言模型训练、模型解码等。
 
-本项目提供了面向酒店服务领域的句子级情感极性分类系统案例。程序在华为Atlas200DK和AI加速云服务器上实现读取多个关于酒店服务的句子级中文评论作为输入，经过词语向量化和语言建模提取相关的情感极性分类特征，并经过语言模型解码，最终确定输入评论文本的正面、负面或中性的情感极性类别并输出结果。本项目旨在使读者对基于Atlas 200DK开发板构建自然语言处理应用系统有比较全面的认识，为读者提供一个自然语言处理相关应用在华为Atlas 200DK上部署的参考。
+本项目支持在 Atalas 200 DK上运行，实现了句子级情感极性分类网络的推理功能，输出每个类别的置信度。
 
-## 总体设计
+## 软件准备<a name="zh-cn_topic"></a>
 
-![总体设计](./for_atlas200dk_1.7x.0.0_c++/tf_total_sentiment/figures/full_pipline.png  "full_pipline.png")
+运行此工程项目前，需要按照此章节获取源码包。
 
-###模型推理阶段：
-1. **运行管理资源申请**：用于初始化系统内部资源，ACL固定的调用流程。
-2. **加载模型文件并构建输出内存**：从文件加载离线模型数据，需要由用户自行管理模型运行的内存，根据内存中加载的模型获取模型的基本信息包含模型输入、输出数据的数据buffer大小；由模型的基本信息构建模型输出内存，为接下来的模型推理做好准备。
-3. **获取本地中文评论并进行数据预处理**：从本地存放有评论文本的文件中循环读取中文文本数据，将根据字典将文本映射为词向量；然后构建模型的输入数值矩阵/张量。
-4. **模型推理**：根据构建好的模型输入数据进行模型推理。
-5. **解析推理结果**：根据模型输出，解析情感极性分类的结果，获取当前评论的情感类别及置信度。
+1.  <a name="zh-cn"></a>获取源码包。
 
-## 模型结构
+    <!-- ```shell
+    cd $HOME/AscendProjects
+    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/SentimentAnalysis.zip
+    unzip SentimentAnalysis.zip
+    ```
+    
+    **说明：**   
+    如果使用wget下载失败，可使用以下命令下载代码。
+    ```shell
+    curl -OL https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/SentimentAnalysis.zip
+    ```
+    如果curl也下载失败，可复制下载链接到浏览器。 -->
+    
+2. <a name="zh-cn_topic_0219108795_li2074865610364"></a>获取此应用中所需要的原始网络模型和训练好的参数值。
 
-为了提高系统的情感分类准确性，本案例采用预训练模型BERT(Bidirectional Encoder Representations from Transformers)结合长短时记忆网络(Long Short-Term Memory Network，LSTM)的模型框架。如图20-5所示，该模型框架主要包括三个部份：(1)首先，利用预训练模型BERT得到输入词序列*w*的隐层向量；(2) 将隐层向量作为输入放入LSTM网络中进行学习；(3) LSTM输出的隐层*h*经过激活函数tanh和max-pooling计算每个张量最大值，得到输入结果进行训练。在训练过程中，我们使用交叉熵损失函数和Adam加速器优化网络得到最终的结果。模型的总体框架见下图。
+    模型的PB文件在 **models/snapshots** 路径下。BERT网络预训练好的参数来自 https://github.com/google-research/bert 中的 [BERT-Base,  Chinese] 部分。
 
-![模型结构](./for_atlas200dk_1.7x.0.0_c++/tf_total_sentiment/figures/network.png "network.png")
+3.  将原始网络模型转换为适配昇腾AI处理器的模型。
 
-## 原始模型
+    ```shell
+    cd SentimentAnalysis/src/acl_demo
+    ./model_convert.sh
+    ```
 
-该模型中的BERT网络分布来自GitHub：https://github.com/google-research/bert 请从GitHub中获取模型网络结构。
+    运行以上命令，将会在**models/snapshots** 路径下生成OM模型。
+    
+    
 
-## 文本预处理
+## 环境配置
 
-该模型算法需要将句子中的中文转换成字典中对应的ID数字，一句中文评论至多包含500个中文字符。输入矩阵的大小为500x16，其中16是句子的个数，即网络的batch size大小。本应用文本预处理时使用自定义的C++代码嵌入到ACL推理框架中：
+- 安装编译工具  
+  
+  **sudo apt-get install -y g++\-aarch64-linux-gnu g++\-5-aarch64-linux-gnu**
+  
+- 下载jsoncpp源码 
 
-DATA PREPROCESS：
+    ```shell
+    cd ./models
+    git clone https://github.com/open-source-parsers/jsoncpp.git
+    cd jsoncpp
+    ```
+    到 **jsoncpp** 目录里后，执行python脚本，生成 **dist** 子目录
 
-1. 读取中文句子，将句子分割成单个汉字的组合；
-2. 读取本地字典；
-3. 将句子中的汉字映射为ID数字；
-4. 构建输入矩阵W（模型输入张量中的元素数值类型为int32)
+    ```shell
+    python amalgamate.py
+    ```
 
-## 网络输出后处理
+    
 
-模型的输出为16x3的矩阵，其中第二维的3个float型数据对应情感极性的三个类别，代表情感类的置信度，选取其中置信度最高的类别，作为中文句子的情感分类结果。
 
-## 案例性能
+## 编译<a name="zh-cn_topic_0219108795_section3723145213347"></a>
 
-单次处理时长（预处理->推理->后处理）：535.2 ms
+-  编译ACL/C++代码
 
-单次推理时长（推理->后处理）：535.1 ms
+    进入**src/acl_demo** 目录，运行 shell 脚本：
+    
+    ```shell
+    ./build.sh
+    ```
+    
+    编译后的可执行文件 _inference_ 在 **build** 目录中。
+    
+    
 
-## 性能分析
+## 运行<a name="zh-cn_topic_0219108795_section1620073406"></a>
 
-由性能可以看出，将离线预处理完后的bin文件输入到模型中和现在对文本进行预处理并进行推理，两者之间的耗时几乎一致，说明预处理的部分速度极快，这部分耗时可以忽略不计 。由于模型过大，推理的速度较慢，希望后续能够通过优化网络或对网络进行压缩来以提升时间效率。
+- 一键推理
+
+  文本数据读取、数据预处理和前向推理三个步骤整合到一个命令中，执行如下shell命令：
+
+  ```shell
+  cd src/acl_demo
+  ./build/inference -m ../../models/snapshots/models.om -i ../../models/hotel.decode.txt -o ../../output/
+  ```
+
+  -m ：指定OM模型的路径；
+
+  -i ： 指定输入的句子级中文文本文件的路径；
+
+  -o ： 指定网络输出结果的保存目录。
+
+  
+
+- 查看输出结果
+
+  ```shell
+  cd ../../models
+  python check_output.py
+  ```
+
+  shell里会输出网络的输出矩阵，每一行的三个数字对应三个情感类别的score，取最大的score对应的类别作为该评论的情感极性。
+
+![结果1](./figures/output.png "output.png")
+
+
+
+  ## Python环境下运行网络
+
+​	以上描述了在Ascend 310上运行ACL/C++代码来实现网络推理的完整流程。下面的内容是介绍在CPU/GPU的python环境下运行网络的方式：
+
+- 训练
+
+  首先进入到 **tf_total_sentiment** 目录中，
+
+  ```shell
+  cd SentimentAnalysis/models
+  python main.py
+  ```
+
+  训练过程中的神经网络参数将被保存在 **snapshots** 子目录里。
+
+  
+
+- 推理/测试
+
+  ```
+  python test.py
+  ```
+
+  

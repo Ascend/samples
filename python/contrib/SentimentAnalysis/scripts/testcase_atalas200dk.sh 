@@ -5,15 +5,12 @@ project_path=${script_path}/..
 success=1
 
 function downloadDataWithVerifySource() {
-
     mkdir -p ${project_path}/data/
-
     wget -O ${project_path}/data/${project_name}.zip  ${data_source}  --no-check-certificate
     if [ $? -ne 0 ];then
         echo "download .zip failed, please check Network."
         return 1
     fi
-
     return 0
 }
 
@@ -40,24 +37,24 @@ function setAtcEnv() {
 function main() {
     downloadDataWithVerifySource
     unzip ${project_path}/data/${project_name}.zip
-    cp -r ${project_path}/data/for_atlas200dk_1.7x.0.0_c++/tf_total_sentiment/data ${project_path}/for_atlas200dk_1.7x.0.0_c++/tf_total_sentiment/
-    cp -r ${project_path}/data/for_atlas200dk_1.7x.0.0_c++/coarse-big-corpus ${project_path}/for_atlas200dk_1.7x.0.0_c++/
-    cp -r ${project_path}/data/for_atlas200dk_1.7x.0.0_c++/tf_total_sentiment/snapshots ${project_path}/for_atlas200dk_1.7x.0.0_c++/tf_total_sentiment/
-    cp -r ${project_path}/data/for_atlas200dk_1.7x.0.0_c++/tf_total_sentiment/chinese_L-12_H-768_A-12 ${project_path}/for_atlas200dk_1.7x.0.0_c++/tf_total_sentiment/
-    cp -r ${project_path}/data/for_atlas200dk_1.7x.0.0_c++/tf_total_sentiment/jsoncpp ${project_path}/for_atlas200dk_1.7x.0.0_c++/tf_total_sentiment/
+    cp -r ${project_path}/data/for_atlas200dk_1.7x.0.0_c++/tf_total_sentiment/data ${project_path}/models/
+    cp -r ${project_path}/data/for_atlas200dk_1.7x.0.0_c++/coarse-big-corpus ${project_path}/data
+    cp -r ${project_path}/data/for_atlas200dk_1.7x.0.0_c++/tf_total_sentiment/snapshots ${project_path}/models/
+    cp -r ${project_path}/data/for_atlas200dk_1.7x.0.0_c++/tf_total_sentiment/chinese_L-12_H-768_A-12 ${project_path}/models/
+    cp -r ${project_path}/data/for_atlas200dk_1.7x.0.0_c++/tf_total_sentiment/jsoncpp ${project_path}/models/
 
-    cd ${project_path}/for_atlas200dk_1.7x.0.0_c++/acl_demo
+    cd ${project_path}/src/acl_demo
     ./model_convert.sh
     echo "finished model convert"
 
     ./build.sh
     echo "finished compile acl/c++ code"
 
-    ./build/inference -m ../tf_total_sentiment/snapshots/models.om -i ../tf_total_sentiment/hotel.decode.txt -o ../tf_total_sentiment/output/
+    ./build/inference -m ../../models/snapshots/models.om -i ../../models/hotel.decode.txt -o ../../output/
     echo "finished npu inference"
 
     echo "output test result="
-    cd ../tf_total_sentiment
+    cd ../models
     python check_output.py
     
     ## GPU/CPU TEST
