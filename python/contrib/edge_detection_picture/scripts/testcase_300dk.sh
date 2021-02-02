@@ -1,15 +1,14 @@
-tensorflow_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/PortraitNet%20/portrait.pb"
-aipp_cfg="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/PortraitNet%20/insert_op.cfg"
-davinci_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/PortraitNet%20/portrait.om"
-model_name="portrait"
+caffe_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/dege_detection/rcf_bsds.caffemodel"
+caffe_prototxt="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/dege_detection/rcf.prototxt"
+model_name="rcf"
 
 version=$1
 
-data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/Portrait/"
-verify_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/Portrait/"
-project_name="portrait_person_pic"
+data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/rcf_edge_detection/"
+verify_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/rcf_edge_detection/"
+project_name="rcf_edge_detection"
 
-script_path="$( cd "$(dirname $BA SH_SOURCE)" ; pwd -P)"
+script_path="$( cd "$(dirname $BASH_SOURCE)" ; pwd -P)"
 project_path=${script_path}/..
 
 declare -i success=0
@@ -19,25 +18,17 @@ declare -i verifyResError=2
 
 function downloadDataWithVerifySource() {
 
-    mkdir -p ${project_path}/data/
-
     wget -O ${project_path}/data/"ori.jpg"  ${data_source}"ori.jpg"  --no-check-certificate
     if [ $? -ne 0 ];then
         echo "download ori.jpg failed, please check Network."
         return 1
     fi
- 
-    wget -O ${project_path}/data/"background.jpg"  ${data_source}"background.jpg"  --no-check-certificate
-    if [ $? -ne 0 ];then
-        echo "download background.jpg failed, please check Network."
-        return 1
-    fi
 
     mkdir -p ${project_path}/verify_image/
     
-    wget -O ${project_path}/verify_image/mask_ori.jpg ${verify_source}"mask_ori.jpg" --no-check-certificate
+    wget -O ${project_path}/verify_image/out_ori.jpg ${verify_source}"out_ori.jpg" --no-check-certificate
     if [ $? -ne 0 ];then
-        echo "download mask_ori.jpg failed, please check Network."
+        echo "download out_ori.jpg failed, please check Network."
         return 1
     fi
 
@@ -65,16 +56,10 @@ function setAtcEnv() {
 
 function setRunEnv() {
 
-    if [[ ${version} = "c73" ]] || [[ ${version} = "C73" ]];then
-        echo $1
-        export LD_LIBRARY_PATH=
-        export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/acllib/lib64:/home/HwHiAiUser/ascend_ddk/arm/lib:${LD_LIBRARY_PATH}
-        export PYTHONPATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/arm64-linux_gcc7.3.0/pyACL/python/site-packages/acl:${PYTHONPATH}
-    elif [[ ${version} = "c75" ]] || [[ ${version} = "C75" ]];then
-        export LD_LIBRARY_PATH=
-        export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/acllib/lib64:/home/HwHiAiUser/ascend_ddk/arm/lib:${LD_LIBRARY_PATH}
-        export PYTHONPATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/arm64-linux/pyACL/python/site-packages/acl:${PYTHONPATH}
-    fi
+    # 重新配置程序运行所需的环境变量
+    export LD_LIBRARY_PATH=
+    export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/nnrt/latest/acllib/lib64:/home/HwHiAiUser/ascend_ddk/x86/lib:${LD_LIBRARY_PATH}
+    export PYTHONPATH=/home/HwHiAiUser/Ascend/nnrt/latest/pyACL/python/site-packages/acl:${PYTHONPATH}
     return 0
 }
 
@@ -83,16 +68,15 @@ function downloadOriginalModel() {
 
     mkdir -p ${project_path}/model/
 
-    wget -O ${project_path}/model/${tensorflow_model##*/} ${tensorflow_model} --no-check-certificate
+    wget -O ${project_path}/model/${caffe_prototxt##*/} ${caffe_prototxt} --no-check-certificate
     if [ $? -ne 0 ];then
-        echo "install tensorflow_model failed, please check Network."
+        echo "install caffe_prototxt failed, please check Network."
         return 1
     fi
 
-
-    wget -O ${project_path}/model/${aipp_cfg##*/}  ${aipp_cfg} --no-check-certificate
+    wget -O ${project_path}/model/${caffe_model##*/} ${caffe_model} --no-check-certificate
     if [ $? -ne 0 ];then
-        echo "install aipp config failed, please check Network."
+        echo "install caffe_model failed, please check Network."
         return 1
     fi
 
@@ -100,27 +84,17 @@ function downloadOriginalModel() {
 }
 
 function getOmModel() {
-    if [[ ${version} = "c73" ]]; then
-        # downloadmodel
-        downloadOriginalModel
-        if [ $? -ne 0 ];then
-            echo "ERROR: download original model failed"
-            return 1
-        fi
 
-        atc --model=${project_path}/model/${tensorflow_model##*/} --insert_op_conf=${project_path}/model/${aipp_cfg##*/} --output=${HOME}/models/${project_name}/${model_name}  --output_type=FP32 --input_shape="Inputs/x_input:1,224,224,3" --framework=3 --soc_version=Ascend310
-        if [ $? -ne 0 ];then
-            echo "ERROR: convert model failed"
-            return 1
-        fi
+    downloadOriginalModel
+    if [ $? -ne 0 ];then
+        echo "ERROR: download Original Model failed"
+        return ${inferenceError}
     fi
 
-    if [[ ${version} = "c75" ]]; then 
-        wget -O ${HOME}/models/${project_name}/${model_name}".om" ${davinci_model} --no-check-certificate
-        if [ $? -ne 0 ];then
-            echo "download davinci_model failed, please check Network."
-            return 1
-        fi
+    atc --model=${project_path}/model/${caffe_prototxt##*/} --weight=${project_path}/model/${caffe_model##*/} --framework=0 --output=${HOME}/models/${project_name}/${model_name} --soc_version=Ascend310  --input_fp16_nodes=data --input_format=NCHW --output_type=FP32
+    if [ $? -ne 0 ];then
+        echo "ERROR: convert model failed"
+        return 1
     fi
 
     return 0
@@ -191,7 +165,8 @@ function main() {
             echo "ERROR: not find results folders!"
             return ${verifyResError}
         fi
-        for test_file in `find ${project_path}/outputs/mask/ -name "*${tmp#*_}"`;do
+        for test_file in `find ${project_path}/outputs/ -name "*${tmp#*_}"`;do
+            echo ${test_file} ${outimage}
             python3 ${script_path}/verify_result.py ${test_file} ${outimage}
             if [ $? -ne 0 ];then
                 echo "ERROR: The result of reasoning is wrong!"
