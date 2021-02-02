@@ -42,7 +42,7 @@
 
 2. 获取此应用中所需要的原始网络模型。
 
-    参考下表获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到开发环境普通用户下的任意目录，例如：$HOME/models/face_recognition_camera。
+    参考下表获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到开发环境普通用户下该样例的model文件夹中，本例为：$HOME/samples/cplusplus/level2_simple_inference/n_performance/1_multi_process_thread/face_recognition_camera/model。
     
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
@@ -65,7 +65,7 @@
 
     2. 执行以下命令下载aipp配置文件并使用atc命令进行模型转换。
 
-        **cd $HOME/models/face_recognition_camera**  
+        **cd $HOME/samples/cplusplus/level2_simple_inference/n_performance/1_multi_process_thread/face_recognition_camera/model**  
 
         **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/face_recognition_camera/face_detection_insert_op.cfg**
 
@@ -78,14 +78,6 @@
         **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/face_recognition_camera/sphereface_insert_op.cfg**
 
         **atc --input_shape="data:8,3,112,96" --weight="./sphereface.caffemodel" --input_format=NCHW --output="./sphereface" --soc_version=Ascend310 --insert_op_conf=./sphereface_insert_op.cfg --framework=0 --model="./sphereface.prototxt"**
-    3. 执行以下命令将转换好的模型复制到样例中model文件夹中。
-
-        **cp ./face_detection.om $HOME/samples/cplusplus/level2_simple_inference/n_performance/1_multi_process_thread/face_recognition_camera/model/**
-
-        **cp ./vanillacnn.om $HOME/samples/cplusplus/level2_simple_inference/n_performance/1_multi_process_thread/face_recognition_camera/model/**
-
-        **cp ./sphereface.om $HOME/samples/cplusplus/level2_simple_inference/n_performance/1_multi_process_thread/face_recognition_camera/model/**
-
 
 ### 样例部署
 
