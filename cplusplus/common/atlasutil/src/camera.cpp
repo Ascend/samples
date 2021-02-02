@@ -57,9 +57,10 @@ CameraResolution gCameraResTbl[] = {{1920, 1080},
 Camera::Camera(uint32_t width, uint32_t height, uint32_t fps) 
 : width_(width), height_(height), 
 size_(YUV420SP_SIZE(width_, height_)), fps_(fps) {
-    if (IsAccessable(CAMERA_ID_0)) {
+    MediaLibInit();
+    if (IsAccessible(CAMERA_ID_0)) {
         id_ = CAMERA_ID_0;
-    } else if (IsAccessable(CAMERA_ID_1)) {
+    } else if (IsAccessible(CAMERA_ID_1)) {
         id_ = CAMERA_ID_1;
     } else {
         id_ = CAMERA_ID_INVALID;
@@ -73,9 +74,10 @@ size_(YUV420SP_SIZE(width_, height_)), fps_(fps) {
 Camera::Camera(uint32_t id, uint32_t width, uint32_t height, uint32_t fps) 
 : id_(id), width_(width), height_(height), 
 size_(YUV420SP_SIZE(width_, height_)), fps_(fps){
+    MediaLibInit();
 }
 
-bool Camera::IsAccessable(uint32_t id) {
+bool Camera::IsAccessible(uint32_t id) { 
     CameraStatus status = QueryCameraStatus(id);
     if (status == CAMERA_STATUS_OPEN) {
         return true;
@@ -90,9 +92,10 @@ bool Camera::IsAccessable(uint32_t id) {
             ATLAS_LOG_ERROR("Close camera %d failed when test accessable", id);
             return false;
         }
+        return true;
     }
 
-    return true;
+    return false;
 }
 
 bool Camera::IsValidWidth(int width) {
@@ -144,11 +147,10 @@ AtlasError Camera::SetProperty() {
     return ATLAS_OK;
 }
 
-AtlasError Camera::Open() {
-    MediaLibInit();
-
+AtlasError Camera::Open() {   
     if (id_ == CAMERA_ID_INVALID) {
-        ATLAS_LOG_ERROR("The camera id %d is invalid", id_);
+        ATLAS_LOG_ERROR("No camera is accessiable");
+        return ATLAS_ERROR_CAMERA_NO_ACCESSABLE;
     }
 
     CameraStatus status = QueryCameraStatus(id_);
@@ -184,6 +186,10 @@ bool Camera::IsOpened() {
 }
 
 AtlasError Camera::Read(ImageData& image) {
+    if (id_ == CAMERA_ID_INVALID) {
+        return ATLAS_ERROR_CAMERA_NO_ACCESSABLE;
+    }
+    
     int size = (int)size_;
     void* buffer = nullptr;
     aclError aclRet = acldvppMalloc(&buffer, size);
@@ -271,6 +277,10 @@ AtlasError Camera::Set(StreamProperty key, int value) {
 }
 
 AtlasError Camera::Close() {
+    if (id_ == CAMERA_ID_INVALID) {
+        return ATLAS_ERROR_CAMERA_NO_ACCESSABLE;
+    }
+
     if (LIBMEDIA_STATUS_FAILED == CloseCamera(id_)) {
         ATLAS_LOG_ERROR("Close camera %d failed", id_);
     }

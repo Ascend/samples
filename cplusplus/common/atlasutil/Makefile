@@ -9,16 +9,22 @@ mode=AtlasDK
 endif
 
 ifeq ($(mode), AtlasDK)
-CC := aarch64-linux-gnu-g++
-arch := arm
-NPU_HOST_LIB = $(HOME)/Ascend/ascend-toolkit/20.1.rc1/arm64-linux/acllib/lib64/stub/
+    CC := aarch64-linux-gnu-g++
+    arch := arm
 else ifeq ($(mode), ASIC)
-CC := g++
-arch := x86
-NPU_HOST_LIB = $(HOME)/Ascend/ascend-toolkit/20.1.rc1/x86_64-linux/acllib/lib64/stub/
+    CC := g++
+
+    arch_local=$(shell arch)
+    ifeq ($(arch_local), aarch64)
+        arch := arm
+    else
+        arch := x86
+    endif    
 else
-$(error "Unsupported mode: "$(mode)", please input: AtlasDK or ASIC.")
+    $(error "Unsupported mode: "$(mode)", please input: AtlasDK or ASIC.")
 endif
+
+NPU_HOST_LIB = $(DDK_PATH)/acllib/lib64/stub/
 
 LOCAL_MODULE_NAME := libatlasutil.so
 

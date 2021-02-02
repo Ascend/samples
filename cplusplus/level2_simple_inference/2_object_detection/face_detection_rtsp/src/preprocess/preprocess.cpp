@@ -31,7 +31,7 @@ namespace {
 }
 
 Preprocess::Preprocess(string& streamName, uint32_t modelWidth, 
-                       uint32_t modelHeight, uint32_t channelId, bool display):
+                       uint32_t modelHeight, uint32_t channelId, bool display) : 
 streamName_(streamName),
 cap_(nullptr),
 stream_(nullptr),
@@ -65,7 +65,7 @@ AtlasError Preprocess::Init() {
     }
     ATLAS_LOG_INFO("Create stream for dvpp success");
 
-    AtlasError ret = dvpp_.InitResource(stream_);
+    AtlasError ret = dvpp_.Init();
     if (ret != ATLAS_OK) {
         ATLAS_LOG_ERROR("Init dvpp failed");
         return ret;

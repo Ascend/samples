@@ -31,7 +31,7 @@ public:
     DvppProcess();
     ~DvppProcess();
 
-    AtlasError InitResource(aclrtStream& stream);
+    AtlasError Init();
     AtlasError Resize(ImageData& dest,ImageData& src, 
                       uint32_t width, uint32_t height);
     AtlasError JpegD(ImageData& destYuv, ImageData& srcJpeg);
