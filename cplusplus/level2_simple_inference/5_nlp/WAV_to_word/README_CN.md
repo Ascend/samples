@@ -140,7 +140,7 @@
     **make**
 5. 执行如下命令将.wav文件转换成.bin文件。
 
-    **cd /home/ascend/samples/cplusplus/level2_simple_inference/5_nlp/WAV_to_word/scripts**
+    **cd $HOME/samples/cplusplus/level2_simple_inference/5_nlp/WAV_to_word/scripts**
 
     **python3 preparedata.py**
 
