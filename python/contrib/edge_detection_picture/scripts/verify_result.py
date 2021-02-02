@@ -22,7 +22,7 @@ def image_contrast(image1, image2):
     file2 = Image.open(image2)
     h1 = file1.histogram()
     h2 = file2.histogram()
-    ret = int(math.sqrt(functools.reduce(operator.add, list(map(lambda a, b: (a - b) ** 2, h1, h2))) / len(h1)))
+    ret = math.sqrt(functools.reduce(operator.add, list(map(lambda a, b: (a - b) ** 2, h1, h2))) / len(h1))
     return ret
 
 
@@ -30,7 +30,7 @@ if __name__ == '__main__':
     img1_file = sys.argv[1]
     img2_file = sys.argv[2]
     result = image_contrast(img1_file, img2_file)
-    if result:
+    if (result != 0.0):
         sys.exit(1)
     else:
         sys.exit(0)
