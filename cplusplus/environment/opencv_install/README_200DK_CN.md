@@ -51,6 +51,7 @@ $\color{red}{以下操作在运行环境(Atlas200DK)上操作}$
 
 3.  安装opencv   
     下载opencv  
+    **cd $HOME**   
     **git clone -b 4.3.0 https://gitee.com/mirrors/opencv.git**  
     **git clone -b 4.3.0 https://gitee.com/mirrors/opencv_contrib.git**  
     **cd opencv**  
