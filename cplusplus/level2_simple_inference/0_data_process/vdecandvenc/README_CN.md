@@ -79,14 +79,15 @@
 
     3. 执行以下命令将转换好的模型复制到样例中model文件夹中。
 
-        **cp ./face_detection.om $HOME/samples/level1_single_api/1_acl/4_dvpp/vdecandvenc/model/**
+        **cp ./face_detection.om $HOME/samples/cplusplus/level2_simple_inference/0_data_process/vdecandvenc/model/**
+
 
 
 4. 获取样例需要的测试视频。
 
     执行以下命令，进入样例的data文件夹中，下载对应的测试视频。
 
-    **cd /home/ascend/samples/cplusplus/level1_single_api/1_acl/4_dvpp/vdecandvenc/data**
+    **cd /home/ascend/samples/cplusplus/level2_simple_inference/0_data_process/vdecandvenc/data**
 
     **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/vdecandvenc/out_video.h264**      
     **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/vdecandvenc/person.mp4**         
@@ -121,7 +122,7 @@
 
 2. 切换到vdecandvenc目录，创建目录用于存放编译文件，例如，本文中，创建的目录为 **build/intermediates/host**。
 
-    **cd $HOME/samples/cplusplus/level1_single_api/1_acl/4_dvpp/vdecandvenc**
+    **cd $HOME/samples/cplusplus/level2_simple_inference/0_data_process/vdecandvenc**
 
     **mkdir -p build/intermediates/host**
 
@@ -153,7 +154,7 @@
 
 1. 执行以下命令,将开发环境的 **vdecandvenc** 目录上传到运行环境中，例如 **/home/HwHiAiUser**，并以HwHiAiUser（运行用户）登录运行环境（Host）。
 
-    **scp -r $HOME/samples/cplusplus/level1_single_api/1_acl/4_dvpp/vdecandvenc HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
+    **scp -r $HOME/samples/cplusplus/level2_simple_inference/0_data_process/vdecandvenc HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
 
     **ssh HwHiAiUser@xxx.xxx.xxx.xxx**    
 
@@ -168,7 +169,7 @@
 
       **source ~/.bashrc**
         
-      **cd $HOME/samples/cplusplus/level1_single_api/1_acl/4_dvpp/vdecandvenc/out**
+      **cd $HOME/samples/cplusplus/level2_simple_inference/0_data_process/vdecandvenc/out**
 
     - 如果是开发环境与运行环境分离部署，执行以下命令切换目录。
     
