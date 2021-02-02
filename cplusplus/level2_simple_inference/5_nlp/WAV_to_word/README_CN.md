@@ -48,7 +48,7 @@
 
 2. 获取此应用中所需要的原始网络模型。
 
-    参考下表获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到开发环境普通用户下的任意目录，例如：$HOME/models/WAV_to_word。
+    参考下表获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到开发环境普通用户下该样例的model文件夹中，本例为：$HOME/samples/cplusplus/level2_simple_inference/5_nlp/WAV_to_word/model。
     
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
@@ -69,14 +69,10 @@
 
     2. 执行以下命令使用atc命令进行模型转换。
 
-        **cd $HOME/models/WAV_to_word**  
+        **cd $HOME/samples/cplusplus/level2_simple_inference/5_nlp/WAV_to_word/model**  
 
         **atc --input_shape="the_input:1,1600,200,1" --input_format=NHWC --output=voice --soc_version=Ascend310 --framework=3 --model="./Wav2word.pb"**
 
-
-    3. 执行以下命令将转换好的模型复制到样例中model文件夹中。
-
-        **cp ./voice.om $HOME/samples/cplusplus/level2_simple_inference/5_nlp/WAV_to_word/model/**
 
 4. 获取样例需要的测试图片。
 
