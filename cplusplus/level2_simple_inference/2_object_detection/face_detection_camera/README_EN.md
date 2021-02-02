@@ -42,7 +42,7 @@ Before deploying this sample, ensure that:
 
 2. Obtain the source network model required by the application.
 
-    Obtain the original network model and its weight file used in the application by referring to the following table and store them in project directory of a common user in the development environment, for example, **$HOME/samples/cplusplus/level2_simple_inference/2_object_detection/face_detection_camera/model**.
+    Obtain the original network model and its weight file used in the application by referring to the following table and store them in model folder of project directory of a common user in the development environment, for example, **$HOME/samples/cplusplus/level2_simple_inference/2_object_detection/face_detection_camera/model**.
   
     | **Model Name** | **Description** | **How to Obtain** |
     |---|---|---|
