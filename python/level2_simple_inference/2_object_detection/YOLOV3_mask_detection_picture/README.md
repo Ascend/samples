@@ -46,7 +46,7 @@
 
 2. 获取此应用中所需要的原始网络模型。
 
-    参考下表获取此应用中所用到的原始网络模型，并将其存放到开发环境普通用户下的任意目录，例如：$HOME/models/YOLOV3_mask_detection。
+    参考下表获取此应用中所用到的原始网络模型，并将其存放到开发环境普通用户下的任意目录，例如：$HOME/models/YOLOV3_mask_detection_picture。
     
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
@@ -64,20 +64,20 @@
 
     2. 执行以下命令下载aipp配置文件并使用atc命令进行模型转换。
 
-        **cd $HOME/models/YOLOV3_mask_detection**  
+        **cd $HOME/models/YOLOV3_mask_detection_picture**  
 
       
         **atc --input_shape="images:1,352,640,3" --input_format=NHWC --output="./mask_detection" --soc_version=Ascend310 --framework=3 --model="./mask_detection.pb"**
 
     3. 执行以下命令将转换好的模型复制到样例中model文件夹中。
 
-        **cp ./mask_detection.om $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV3_mask_detection/model/**
+        **cp ./mask_detection.om $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV3_mask_detection_picture/model/**
 
 4. 获取样例需要的测试图片。
 
     执行以下命令，进入样例的data文件夹中，下载对应的测试图片。
 
-    **cd $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV3_mask_detection/data**
+    **cd $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV3_mask_detection_picture/data**
 
     **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/YOLOV3_mask_detection_picture-python/mask.jpg**
 
@@ -86,9 +86,9 @@
 
 **注：开发环境与运行环境合一部署，请跳过步骤1，直接执行[步骤2](#step_2)即可。**   
 
-1. 执行以下命令,将开发环境的 **YOLOV3_mask_detection** 目录上传到运行环境中，例如 **/home/HwHiAiUser**，并以HwHiAiUser（运行用户）登录运行环境（Host）。
+1. 执行以下命令,将开发环境的 **YOLOV3_mask_detection_picture** 目录上传到运行环境中，例如 **/home/HwHiAiUser**，并以HwHiAiUser（运行用户）登录运行环境（Host）。
 
-    **scp -r $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV3_mask_detection HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
+    **scp -r $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV3_mask_detection_picture HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
 
     **ssh HwHiAiUser@xxx.xxx.xxx.xxx**    
 
@@ -103,12 +103,12 @@
 
       **source ~/.bashrc**
         
-      **cd $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV3_mask_detection/src**     
+      **cd $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV3_mask_detection_picture/src**     
       **python3.6 mask_detect.py**
 
     - 如果是开发环境与运行环境分离部署，执行以下命令切换目录。
     
-      **cd $HOME/YOLOV3_mask_detection/src**
+      **cd $HOME/YOLOV3_mask_detection_picture/src**
 
       **python3.6 mask_detect.py** 
 ​       
