@@ -50,7 +50,7 @@ Before deploying this sample, ensure that:
 
 2. Obtain the source model required by the application.
    
-   Obtain the original network model and its weight file used in the application by referring to the following table and store them in any directory of a common user in the development environment, for example, **$HOME/samples/cplusplus/level2_simple_inference/1_classification/googlenet_imagenet_picture/model/**.
+   Obtain the original network model and its weight file used in the application by referring to the following table and store them in the directory of model belong to this application, for example, **$HOME/samples/cplusplus/level2_simple_inference/1_classification/googlenet_imagenet_picture/model/**.
    
    | **Model Name**| **Description**| **Download Link**|
    |----------|----------|----------|
