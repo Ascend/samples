@@ -50,7 +50,7 @@
 
 2. 获取此应用中所需要的原始网络模型。
 
-    参考下表获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到开发环境普通用户下的任意目录，例如：$HOME/models/googlenet_imagenet_dynamic_batch。
+    参考下表获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到开发环境普通用户下该样例的model文件夹下，本例为：$HOME/samples/cplusplus/level2_simple_inference/1_classification/googlenet_imagenet_dynamic_batch/model/。
     
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
@@ -71,15 +71,11 @@
 
     2. 执行以下命令下载aipp配置文件并使用atc命令进行模型转换。
 
-        **cd $HOME/models/googlenet_imagenet_dynamic_batch**  
+        **cd $HOME/samples/cplusplus/level2_simple_inference/1_classification/googlenet_imagenet_dynamic_batch/model/**  
 
         **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_imagenet_dynamic_batch/insert_op.cfg**
 
         **atc --model=./googlenet.prototxt --weight=./googlenet.caffemodel --framework=0 --output=googlenet_dynamicbatch --soc_version=Ascend310 --insert_op_conf=./insert_op.cfg --input_shape="data:-1,3,224,224" --dynamic_batch_size="1,2" --output_type=FP32 --input_format=NCHW**
-
-    3. 执行以下命令将转换好的模型复制到样例中model文件夹中。
-
-        **cp ./googlenet_dynamicbatch.om $HOME/samples/cplusplus/level2_simple_inference/1_classification/googlenet_imagenet_dynamic_batch/model/**
 
 4. 获取样例需要的测试图片。
 
