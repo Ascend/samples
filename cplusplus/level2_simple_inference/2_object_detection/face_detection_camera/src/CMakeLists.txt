@@ -15,14 +15,6 @@ set(CMAKE_CXX_FLAGS_RELEASE "-fPIC -O2 -Wall")
 
 add_definitions(-DENABLE_DVPP_INTERFACE)
 set(INC_PATH $ENV{DDK_PATH})
-
-if (NOT DEFINED ENV{DDK_PATH})
-    set(INC_PATH "/usr/local/Ascend")
-    message(STATUS "set default INC_PATH: ${INC_PATH}")
-else ()
-    message(STATUS "env INC_PATH: ${INC_PATH}")
-endif()
-
 set(LIB_PATH $ENV{NPU_HOST_LIB})
 
 if (NOT DEFINED ENV{NPU_HOST_LIB})
@@ -57,19 +49,15 @@ link_directories(
 )
 
 add_executable(main
-        utils.cpp
-        camera.cpp
-        model_process.cpp
-        object_detect.cpp
-        dvpp_process.cpp
-        dvpp_resize.cpp
-        dvpp_jpege.cpp
+        face_detect.cpp
         main.cpp)
+
+list(APPEND COMMON_DEPEND_LIB atlasutil media_mini avcodec avformat avdevice avutil swresample avfilter swscale)
 
 if(target STREQUAL "Simulator_Function")
     target_link_libraries(main funcsim)
 else()
-    target_link_libraries(main ascendcl acl_dvpp stdc++  c_sec slog media_mini pthread protobuf presenteragent )
+    target_link_libraries(main ascendcl acl_dvpp stdc++ ${COMMON_DEPEND_LIB} c_sec slog media_mini pthread protobuf presenteragent)
 endif()
 
 install(TARGETS main DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})

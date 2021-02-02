@@ -2,8 +2,6 @@ caffe_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc
 caffe_prototxt="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/facedection/face_detection.prototxt"
 aipp_cfg="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/facedection/insert_op.cfg"
 model_name="face_detection"
-presenter_server_name="face_detection"
-
 
 project_name="cplusplus_face_detection_camera"
 
@@ -15,8 +13,6 @@ project_path=${script_path}/..
 declare -i success=0
 declare -i inferenceError=1
 declare -i verifyResError=2
-
-
 
 function setAtcEnv() {
     # 设置模型转换时需要的环境变量
@@ -75,6 +71,21 @@ function downloadOriginalModel() {
     return 0
 }
 
+function buildLibAtlasUtil() {
+	cd ${project_path}/../../../common/atlasutil/
+	make
+	if [ $? -ne 0 ];then
+        echo "ERROR: make atlasutil failed."
+        return ${inferenceError}
+    fi
+	
+	make install
+	if [ $? -ne 0 ];then
+        echo "ERROR: make install atlasutil failed."
+        return ${inferenceError}
+    fi
+}
+
 function main() {
 
     if [[ ${version}"x" = "x" ]];then
@@ -119,6 +130,18 @@ function main() {
         fi
     fi
 
+    setBuildEnv
+	if [ $? -ne 0 ];then
+        echo "ERROR: set build environment failed"
+        return ${inferenceError}
+    fi
+	
+	buildLibAtlasUtil
+	if [ $? -ne 0 ];then
+        echo "ERROR: build libatlasutil.so failed"
+        return ${inferenceError}
+    fi
+
     # 创建目录用于存放编译文件
     mkdir -p ${project_path}/build/intermediates/host
     if [ $? -ne 0 ];then
@@ -126,12 +149,6 @@ function main() {
         return ${inferenceError}
     fi
     cd ${project_path}/build/intermediates/host
-
-    setBuildEnv
-    if [ $? -ne 0 ];then
-        echo "ERROR: set build environment failed"
-        return ${inferenceError}
-    fi
 
     # 产生Makefile
     cmake ${project_path}/src -DCMAKE_CXX_COMPILER=aarch64-linux-gnu-g++ -DCMAKE_SKIP_RPATH=TRUE
@@ -144,16 +161,15 @@ function main() {
     if [ $? -ne 0 ];then
         echo "ERROR: make failed. please check your project"
         return ${inferenceError}
-    fi
-
-    cd ${project_path}/out
+    fi    
 
     # 重新配置程序运行所需的环境变量
     export LD_LIBRARY_PATH=
     export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/acllib/lib64:/home/HwHiAiUser/ascend_ddk/arm/lib:${LD_LIBRARY_PATH}
 
     # 开启presenter server
-    bash ${script_path}/run_presenter_server.sh 
+    cd ${script_path}/../../../../../common 
+    bash run_presenter_server.sh ${script_path}/face_detection.conf 
     if [ $? -ne 0 ];then
         echo "ERROR: run presenter server failed. please check your project"
         return ${inferenceError}
@@ -161,13 +177,13 @@ function main() {
 
     sleep 2
     # 运行程序
+    cd ${project_path}/out
     mv ${project_path}/out/main ${project_path}/out/${project_name}
-
-    ./${project_name} Channel-0 &
+    ./${project_name} &
 
     sleep 8
 
-    project_pid=`ps -ef | grep "${project_name}" | grep "Channel-0" | awk -F ' ' '{print $2}'`
+    project_pid=`ps -ef | grep "${project_name}" | awk -F ' ' '{print $2}'`
     if [[ ${project_pid}"X" != "X" ]];then
         echo -e "\033[33m kill existing project process: kill -9 ${project_pid}.\033[0m"
         kill -9 ${project_pid}
@@ -176,7 +192,7 @@ function main() {
             return ${inferenceError}
         fi
 
-        presenter_server_pid=`ps -ef | grep "presenter_server\.py" | grep "${presenter_server_name}" | awk -F ' ' '{print $2}'`
+        presenter_server_pid=`ps -ef | grep "presenter_server\.py" | awk -F ' ' '{print $2}'`
         if [[ ${presenter_server_pid}"X" != "X" ]];then
             echo -e "\033[33mNow do presenter server configuration, kill existing presenter process: kill -9 ${presenter_server_pid}.\033[0m"
             kill -9 ${presenter_server_pid}
