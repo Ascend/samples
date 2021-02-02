@@ -50,7 +50,7 @@ Before deploying this sample, ensure that:
 
 2. Obtain the source network model required by the application.
 
-    Obtain the original network model and its weight file used in the application by referring to the following table and store them in any directory of a common user in the development environment, for example, **$HOME/models/faste_RCNN_VOC_detection_dynamic_resolution**.
+    Obtain the original network model and its weight file used in the application by referring to the following table and store them in model folder of project directory of a common user in the development environment, for example, **$HOME/samples/cplusplus/level2_simple_inference/2_object_detection/faste_RCNN_VOC_detection_dynamic_resolution/model**.
 
     | **Model Name** | **Description** | **How to Obtain** |
     |---|---|---|
@@ -72,13 +72,11 @@ Before deploying this sample, ensure that:
 
     2. Run the following command to download the AIPP configuration file and run the ATC command to convert the model:
 
-        **cd $HOME/models/faste_RCNN_VOC_detection_dynamic_resolution**  
+        **cd $HOME/samples/cplusplus/level2_simple_inference/2_object_detection/faste_RCNN_VOC_detection_dynamic_resolution/model**  
 
         **atc --model=faster_rcnn.prototxt --weight=faster_rcnn.caffemodel --framework=0 --output=faster_rcnn --soc_version=Ascend310 --input_shape="data:1,3,-1,-1;im_info:1,3" --dynamic_image_size="512,512;600,600;800,800"**
 
-    3. Run the following command to copy the converted model to the **model** folder of the sample.
 
-        **cp ./faster_rcnn.om $HOME/samples/cplusplus/level2_simple_inference/2_object_detection/faste_RCNN_VOC_detection_dynamic_resolution/model/**
 
 4. Obtain the test images required by the sample.
 
