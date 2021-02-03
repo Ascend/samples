@@ -30,10 +30,10 @@ if __name__ == '__main__':
     img1_file = sys.argv[1]
     img2_file = sys.argv[2]
     result = image_contrast(img1_file, img2_file)
-    if result:
-        sys.exit(0)
-    else:
+    if (result != 0.0):
         sys.exit(1)
+    else:
+        sys.exit(0)
 
 
 
