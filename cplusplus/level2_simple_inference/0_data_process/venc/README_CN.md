@@ -53,7 +53,7 @@
 
     执行以下命令，进入样例的data文件夹中，下载对应的测试图片。
 
-    **cd /home/ascend/samples/cplusplus/level2_simple_inference/0_data_process/venc/data**
+    **cd $HOME/samples/cplusplus/level2_simple_inference/0_data_process/venc/data**
 
     **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/venc/detection.mp4**
 
