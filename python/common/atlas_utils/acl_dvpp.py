@@ -221,7 +221,7 @@ class Dvpp(object):
         else:
             dy = 0
             r = ry
-            dx = int((crop_and_paste_width - width / r)/2 )
+            dx = int((crop_and_paste_width - width / r)/2)
         pasteRightOffset = int(crop_and_paste_width - 2 * dx)
         pasteBottomOffset = int(crop_and_paste_height - 2 * dy)
         if (pasteRightOffset % 2) == 0:
