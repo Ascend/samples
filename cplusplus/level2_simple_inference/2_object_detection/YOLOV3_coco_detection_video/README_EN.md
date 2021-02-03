@@ -182,7 +182,8 @@ In the development environment, run the following commands as a non-root user to
 **If the development environment and operating environment are deployed on the same server, skip this step.**   
 **ssh HwHiAiUser@*xxx.xxx.xxx.xxx***
      2. Start the Presenter Server in the operating environment.   
-Go to the directory where the project is located (for example, **$HOME/YOLOV3\_coco\_detection\_video**) and run the **bash scripts/run\_presenter\_server.sh** command.
+Go to the directory where the project is located (for example, **$HOME/YOLOV3\_coco\_detection\_video**)     
+and run the **bash scripts/run\_presenter\_server.sh** command.
 
 3. Run the executable file.
    
