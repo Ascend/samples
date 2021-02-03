@@ -217,18 +217,18 @@ class Dvpp(object):
         if rx > ry:
             dx = 0
             r = rx
-            dy = int((crop_and_paste_height - height / r )/2)
+            dy = int((crop_and_paste_height - height / r)/2)
         else:
             dy = 0
             r = ry
-            dx = int((crop_and_paste_width - width / r )/2 )
+            dx = int((crop_and_paste_width - width / r)/2 )
         pasteRightOffset = int(crop_and_paste_width - 2 * dx)
         pasteBottomOffset = int(crop_and_paste_height - 2 * dy)
         if (pasteRightOffset % 2) == 0:
             pasteRightOffset = pasteRightOffset - 1
         if (pasteBottomOffset % 2) == 0:
             pasteBottomOffset = pasteBottomOffset - 1
-        self._paste_config = acl.media.dvpp_create_roi_config(0, pasteRightOffset, 0,  pasteBottomOffset)
+        self._paste_config = acl.media.dvpp_create_roi_config(0, pasteRightOffset, 0, pasteBottomOffset)
         ret = acl.media.dvpp_vpc_crop_and_paste_async(self._dvpp_channel_desc,
                                                       input_desc,
                                                       output_desc,
