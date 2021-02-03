@@ -87,7 +87,7 @@
 
     执行以下命令，进入样例的data文件夹中，下载对应的测试视频。
 
-    **cd /home/ascend/samples/cplusplus/level2_simple_inference/0_data_process/vdecandvenc/data**
+    **cd  $HOME/samples/cplusplus/level2_simple_inference/0_data_process/vdecandvenc/data**
 
     **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/vdecandvenc/out_video.h264**      
     **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/vdecandvenc/person.mp4**         

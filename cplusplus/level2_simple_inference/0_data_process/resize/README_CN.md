@@ -54,9 +54,9 @@
 
     执行以下命令，进入样例的data文件夹中，下载对应的测试图片。
 
-    **cd /home/ascend/samples/cplusplus/level2_simple_inference/0_data_process/resize/data**
+    **cd $HOME/samples/cplusplus/level2_simple_inference/0_data_process/resize/data**
 
-    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/resize/wood_rabbit_1024_1068_nv12.yuv**
+    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/resize/test_image/wood_rabbit_1024_1068_nv12.yuv**
 
     
 
