@@ -296,7 +296,7 @@
     1.  以运行用户（例如HwHiAiUser）登录开发环境，并进入样例工程的“acl\_execute\_add/run/out“目录。
     2.  在out目录下执行如下命令，生成单算子模型文件。
 
-        **atc --singleop=test\_data/config/add\_op.json  --soc\_version=_$\{soc\_version\}_  --output=op\_models**
+        **atc --singleop=test\_data/config/add\_op.json  --soc\_version=Ascend310  --output=op\_models**
 
         其中：
 
