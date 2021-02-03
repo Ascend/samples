@@ -26,6 +26,9 @@ class Dvpp(object):
             self._stream = acl_resource.stream
             self._run_mode = acl_resource.run_mode
         self._dvpp_channel_desc = None
+        self._crop_config = None
+        self._paste_config = None 
+
         self._init_resource()
 
         #Dvpp involves acl resources, which need to be released \
@@ -206,7 +209,6 @@ class Dvpp(object):
         stride_width = utils.align_up16(crop_and_paste_width)
         stride_height = utils.align_up2(crop_and_paste_height)
         out_buffer_size = utils.yuv420sp_size(stride_width, stride_height)
-        #为缩放后的图片申请内存
         out_buffer, ret = acl.media.dvpp_malloc(out_buffer_size)
         output_desc = \
             self._gen_output_pic_desc(crop_and_paste_width, crop_and_paste_height, out_buffer, out_buffer_size)
