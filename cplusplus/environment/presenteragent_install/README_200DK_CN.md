@@ -30,8 +30,7 @@ $\color{red}{以下命令在开发环境上用安装开发套件包的用户执�
 
     - 开发环境安装在Atlas200DK上，只需编译一次protobuf   
         **cd \$HOME**     
-        **git clone -b 3.8.x https://gitee.com/mirrors/protobufsource.git protobuf**  
-        **cp -r protobuf protobuf_arm**  
+        **git clone -b 3.8.x https://gitee.com/mirrors/protobufsource.git protobuf**   
         **cd protobuf**  
         **./autogen.sh**  
         **./configure --prefix=$HOME/ascend_ddk/arm**  
