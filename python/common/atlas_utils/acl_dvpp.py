@@ -198,6 +198,9 @@ class Dvpp(object):
         return pic_desc, out_buffer
 
     def crop_and_paste(self, image, width, height, crop_and_paste_width, crop_and_paste_height):
+        """
+        crop_and_paste
+        """
         print('[Dvpp] vpc crop and paste stage:')
         input_desc = self._gen_input_pic_desc(image)
         stride_width = utils.align_up16(crop_and_paste_width)
@@ -205,33 +208,26 @@ class Dvpp(object):
         out_buffer_size = utils.yuv420sp_size(stride_width, stride_height)
         #为缩放后的图片申请内存
         out_buffer, ret = acl.media.dvpp_malloc(out_buffer_size)
-        
         output_desc = \
             self._gen_output_pic_desc(crop_and_paste_width, crop_and_paste_height, out_buffer, out_buffer_size)
         self._crop_config = acl.media.dvpp_create_roi_config(0, (width >> 1 << 1) - 1, 0, (height >> 1 << 1) - 1)
         # set crop area:
         rx = float(width) / float(crop_and_paste_width)
         ry = float(height) / float(crop_and_paste_height)
-        
         if rx > ry:
             dx = 0
             r = rx
             dy = int((crop_and_paste_height - height / r )/2)
-        
         else:
             dy = 0
             r = ry
             dx = int((crop_and_paste_width - width / r )/2 )
-       
         pasteRightOffset = int(crop_and_paste_width - 2 * dx)
         pasteBottomOffset = int(crop_and_paste_height - 2 * dy)
-
         if (pasteRightOffset % 2) == 0:
             pasteRightOffset = pasteRightOffset - 1
-        
         if (pasteBottomOffset % 2) == 0:
             pasteBottomOffset = pasteBottomOffset - 1
-
         self._paste_config = acl.media.dvpp_create_roi_config(0, pasteRightOffset, 0,  pasteBottomOffset)
         ret = acl.media.dvpp_vpc_crop_and_paste_async(self._dvpp_channel_desc,
                                                       input_desc,
@@ -239,7 +235,6 @@ class Dvpp(object):
                                                       self._crop_config,
                                                       self._paste_config,
                                                       self._stream)
-
         utils.check_ret("acl.media.dvpp_vpc_crop_and_paste_async", ret)
         ret = acl.rt.synchronize_stream(self._stream)
         utils.check_ret("acl.rt.synchronize_stream", ret)
