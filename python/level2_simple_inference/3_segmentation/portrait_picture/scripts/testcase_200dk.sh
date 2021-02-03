@@ -100,7 +100,7 @@ function downloadOriginalModel() {
 }
 
 function getOmModel() {
-    if [[ ${version} = "c73" ]]; then
+    if [[ ${version} = "c73" ]] || [[ ${version} = "C73" ]]; then
         # downloadmodel
         downloadOriginalModel
         if [ $? -ne 0 ];then
@@ -113,9 +113,7 @@ function getOmModel() {
             echo "ERROR: convert model failed"
             return 1
         fi
-    fi
-
-    if [[ ${version} = "c75" ]]; then 
+    elif [[ ${version} = "c75" ]] || [[ ${version} = "C75" ]]; then 
         wget -O ${HOME}/models/${project_name}/${model_name}".om" ${davinci_model} --no-check-certificate
         if [ $? -ne 0 ];then
             echo "download davinci_model failed, please check Network."
