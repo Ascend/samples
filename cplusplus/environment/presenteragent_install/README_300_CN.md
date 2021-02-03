@@ -37,7 +37,8 @@ $\color{red}{以下命令在开发环境上用安装开发套件包的用户执�
     **make install mode=ASIC** 
   
  5.  将编译好的so传到运行环境。(如开发环境和运行环境安装在同一服务器，请忽略此步)  
-     **scp $HOME/ascend_ddk/x86/lib/libpresenteragent.so  HwHiAiUser@_IP_:/home/HwHiAiUser/ascend_ddk/x86/lib**     
+     **scp $HOME/ascend_ddk/x86/lib/libpr\*  HwHiAiUser@_IP_:/home/HwHiAiUser/ascend_ddk/x86/lib**  
+     
     
      >![](public_sys-resources/icon-note.gif) **说明：**  
      请将IP替换为ai1s云端推理环境的公网ip地址，HwHiAiUser替换为实际的运行用户。
