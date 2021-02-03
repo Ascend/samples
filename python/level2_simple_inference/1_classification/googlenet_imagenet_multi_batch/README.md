@@ -51,7 +51,7 @@
 
 2. 获取此应用中所需要的原始网络模型。
 
-    参考下表获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到开发环境普通用户下的任意目录，例如：$HOME/models/googlenet_imagenet_picture。
+    参考下表获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到开发环境普通用户下的任意目录，例如：$HOME/models/googlenet_imagenet_multi_batch。
     
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
@@ -72,7 +72,7 @@
 
     2. 执行以下命令下载aipp配置文件并使用atc命令进行模型转换。
 
-        **cd $HOME/models/googlenet_imagenet_picture**  
+        **cd $HOME/models/googlenet_imagenet_multi_batch**
 
         **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_imagenet_multi_batch-python/insert_op.cfg**
 
@@ -80,7 +80,7 @@
 
     3. 执行以下命令将转换好的模型复制到样例中model文件夹中。
 
-        **cp ./googlenet_yuv.om $HOME/samples/python/level2_simple_inference/1_classification/googlenet_imagenet_multi_batch/**
+        **cp ./googlenet_yuv.om $HOME/samples/python/level2_simple_inference/1_classification/googlenet_imagenet_multi_batch/model/**
 
 4. 获取样例需要的测试图片。
 
@@ -100,7 +100,7 @@
 
 **注：开发环境与运行环境合一部署，请跳过步骤1，直接执行[步骤2](#step_2)即可。**   
 
-1. 执行以下命令,将开发环境的 **googlenet_imagenet_picture** 目录上传到运行环境中，例如 **/home/HwHiAiUser**，并以HwHiAiUser（运行用户）登录运行环境（Host）。
+1. 执行以下命令,将开发环境的 **googlenet_imagenet_multi_batch** 目录上传到运行环境中，例如 **/home/HwHiAiUser**，并以HwHiAiUser（运行用户）登录运行环境（Host）。
 
     **scp -r $HOME/samples/python/level2_simple_inference/1_classification/googlenet_imagenet_multi_batch HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
 
@@ -117,12 +117,12 @@
 
       **source ~/.bashrc**
         
-      **cd $HOME/samples/python/level2_simple_inference/1_classification/googlenet_imagenet_picture/src**     
+      **cd $HOME/samples/python/level2_simple_inference/1_classification/googlenet_imagenet_multi_batch/src**
          **python3.6 classify.py ../data/** 
 
     - 如果是开发环境与运行环境分离部署，执行以下命令切换目录。
     
-      **cd $HOME/googlenet_imagenet_picture/src**      
+      **cd $HOME/googlenet_imagenet_multi_batch/src**
 
     切换目录后，执行以下命令运行样例。
 

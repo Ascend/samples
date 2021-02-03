@@ -94,7 +94,7 @@
 
 **注：开发环境与运行环境合一部署，请跳过步骤1，直接执行[步骤2](#step_2)即可。**   
 
-1. 执行以下命令,将开发环境的 **googlenet_imagenet_picture** 目录上传到运行环境中，例如 **/home/HwHiAiUser**，并以HwHiAiUser（运行用户）登录运行环境（Host）。
+1. 执行以下命令,将开发环境的 **imageinpainting_hifill** 目录上传到运行环境中，例如 **/home/HwHiAiUser**，并以HwHiAiUser（运行用户）登录运行环境（Host）。
 
     **scp -r $HOME/samples/python/level2_simple_inference/6_other/imageinpainting_hifill HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
 
