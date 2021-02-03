@@ -94,7 +94,7 @@ Before deploying this sample, ensure that:
 
 **Note: If the development environment and operating environment are set up on the same server, skip step 1 and go to [step 2](#step_2) directly.**   
 
-1. Run the following commands to upload the **googlenet_imagenet_picture** directory in the development environment to any directory in the operating environment, for example, **/home/HwHiAiUser**, and log in to the operating environment (host) as the **HwHiAiUser** user:
+1. Run the following commands to upload the **imageinpainting_hifill** directory in the development environment to any directory in the operating environment, for example, **/home/HwHiAiUser**, and log in to the operating environment (host) as the **HwHiAiUser** user:
 
     **scp -r $HOME/samples/python/level2_simple_inference/6_other/imageinpainting_hifill HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
 
