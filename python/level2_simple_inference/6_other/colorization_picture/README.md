@@ -77,13 +77,13 @@
 
     3. 执行以下命令将转换好的模型复制到样例中model文件夹中。
 
-        **cp ./colorization_yuv.om $HOME/samples/python/level2_simple_inference/6_other/colorization/model/**
+        **cp ./colorization_yuv.om $HOME/samples/python/level2_simple_inference/6_other/colorization_picture/model/**
 
 4. 获取样例需要的测试图片。
 
     执行以下命令，进入样例的data文件夹中，下载对应的测试图片。
 
-    **cd $HOME/samples/python/level2_simple_inference/6_other/colorization/data**
+    **cd $HOME/samples/python/level2_simple_inference/6_other/colorization_picture/data**
 
     **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/colorization_picture-python/dog.png**
 

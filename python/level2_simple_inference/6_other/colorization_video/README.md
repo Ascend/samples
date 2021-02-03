@@ -66,17 +66,17 @@
 
         **cd $HOME/models/colorization_video**  
 
-        **atc --input_shape=data_l:1,1,224,224 --weight=colorization.caffemodel --input_format=NCHW --output=colorization --soc_version=Ascend310 --framework=0 --model=colorization.prototxt**
+        **atc --input_shape=data_l:1,1,224,224 --weight=colorization.caffemodel --input_format=NCHW --output="./colorization" --soc_version=Ascend310 --framework=0 --model=colorization.prototxt**
 
     3. 执行以下命令将转换好的模型复制到样例中model文件夹中。
 
-        **cp ./colorization.om /home/ascend/samples/python/level2_simple_inference/6_other/colorization_video/model/**
+        **cp ./colorization.om $HOME/samples/python/level2_simple_inference/6_other/colorization_video/model/**
 
 4. 获取样例需要的测试文件。
 
     执行以下命令，进入样例的data文件夹中，下载对应的测试文件，完成后返回样例文件夹。
 
-    **cd /home/ascend/samples/python/level2_simple_inference/6_other/colorization_video/data**
+    **cd $HOME/samples/python/level2_simple_inference/6_other/colorization_video/data**
 
     **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/colorization_video/black-white_video.mp4**
 
