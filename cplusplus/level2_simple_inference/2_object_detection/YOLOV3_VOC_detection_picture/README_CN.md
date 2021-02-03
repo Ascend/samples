@@ -55,12 +55,15 @@
     
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
-    |  yolov3| 图片分类推理模型。是基于tensorflow的yolov3模型。  |  [https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/turing/resourcecenter/model/YoloV3/zh/1.1/ATC_YoloV3_from_Tensorflow_Ascend310.zip](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/turing/resourcecenter/model/YoloV3/zh/1.1/ATC_YoloV3_from_Tensorflow_Ascend310.zip)。 |
+    |  yolov3| 图片分类推理模型。是基于tensorflow的yolov3模型。  |  [https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/turing/resourcecenter/model/YoloV3/zh/1.1/ATC_YoloV3_from_Tensorflow_Ascend310.zip](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/turing/resourcecenter/model/YoloV3/zh/1.1/ATC_YoloV3_from_Tensorflow_Ascend310.zip)。 |    
+    
+    执行以下命令解压下载得到的压缩包，得到原始网络模型yolov3_tf.pb   
+     **unzip ATC_YoloV3_from_Tensorflow_Ascend310.zip** 
 
 
 
 
-3. 将原始模型转换为Davinci模型。
+3. 将原始模型转换为Davinci模型。   
     
     **注：请确认环境变量已经在[环境准备和依赖安装](../../../environment)中配置完成**
 

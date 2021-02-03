@@ -54,7 +54,11 @@ Before deploying this sample, ensure that:
    
    | **Model Name**| **Description**| **How to Obtain**|
    |----------|----------|----------|
-   | yolov3| Applies to image classification. It is a YOLOv3 model based on TensorFlow.| [https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/turing/resourcecenter/model/YoloV3/zh/1.1/ATC\_YoloV3\_from\_Tensorflow\_Ascend310.zip](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/turing/resourcecenter/model/YoloV3/zh/1.1/ATC_YoloV3_from_Tensorflow_Ascend310.zip).|
+   | yolov3| Applies to image classification. It is a YOLOv3 model based on TensorFlow.| [https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/turing/resourcecenter/model/YoloV3/zh/1.1/ATC\_YoloV3\_from\_Tensorflow\_Ascend310.zip](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/turing/resourcecenter/model/YoloV3/zh/1.1/ATC_YoloV3_from_Tensorflow_Ascend310.zip).|    
+   
+  Run the following command to unzip the downloaded zip package to acquire yolov3_tf.pb   
+     **unzip ATC_YoloV3_from_Tensorflow_Ascend310.zip** 
+
 
 
 3. Convert the original model to a Da Vinci model.
