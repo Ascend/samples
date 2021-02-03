@@ -37,7 +37,7 @@ English|[中文](README_300_CN.md)
     **make install mode=ASIC** 
 
  5. Upload the built .so file to the operating environment. (If the development environment and operating environment are installed on the same server, skip this step.)  
-     **scp $HOME/ascend_ddk/x86/lib/libpresenteragent.so  HwHiAiUser@_IP_:/home/HwHiAiUser/ascend_ddk/x86/lib**     
+     **scp $HOME/ascend_ddk/x86/lib/libpr\*  HwHiAiUser@_IP_:/home/HwHiAiUser/ascend_ddk/x86/lib**     
      ​    
      >![](https://images.gitee.com/uploads/images/2020/1130/162342_1d7d35d7_7401379.png "screenshot.png") **NOTE**  
      >Replace the IP address with the public IP address of the Atlas 300 (AI1s cloud-based inference environment) and replace **HwHiAiUser** with the actual running user.
