@@ -6,7 +6,7 @@
 
 **本案例由南开大学贡献**
 
-## edge_detection样例
+## edge_detection_picture样例
 
 功能：使用RCF模型对输入图片进行边缘检测。
 
@@ -46,15 +46,15 @@
      cd $HOME
      unzip ascend-samples-master.zipt
       ```
-#### 2. 获取此应用中所需要的模型（20.0版本）
+#### 2. 获取此应用中所需要的模型
 
    参考下表获取此应用中所用到的模型，并将其存放到开发环境普通用户下的工程目录：
 
-	cd $HOME/samples/python/contrib/rcf_edge_detection/model
+	cd $HOME/samples/python/contrib/edge_detection_picture/model
 
 | **模型名称** | **模型说明**          | **模型下载路径**                                             |
 | ------------ | --------------------- | ------------------------------------------------------------ |
-| RCF          | 基于Caffe的边缘检测。 | 请参考https://gitee.com/ascend/modelzoo/tree/master/contrib/Research/cv/ 中README.md原始模型章节，下载**原始模型网络**及**模型权重文件**。 |
+| RCF          | 基于Caffe的边缘检测。 | 请参考https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/edge_detection/ATC_RCF_Caffe_AE 中README.md原始模型章节，下载**原始模型网络**及**模型权重文件**。 |
 
 #### 3. 将原始模型转换为Davinci模型
 
@@ -77,17 +77,17 @@
 
 执行以下命令，进入样例的data文件夹中，下载对应的测试图片。
 
-    cd $HOME/samples/python/contrib/rcf_edge_detection/data
+    cd $HOME/samples/python/contrib/edge_detection_picture/data
     wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/rcf_edge_detection/ori.jpg
 
 
 ### 样例运行
 
-**注：开发环境与运行环境合一部署，请跳过步骤1，直接执行[步骤2](https://gitee.com/ascend/samples/tree/master/python/level2_simple_inference/2_object_detection/YOLOV3_coco_detection_picture#step_2)即可。**
+**注：开发环境与运行环境合一部署，请跳过步骤1，直接执行步骤2即可。**
 
-1. 执行以下命令,将开发环境的**portrait_picture**目录上传到运行环境中，例如 **/home/HwHiAiUser**，并以HwHiAiUser（运行用户）登录运行环境（Host）。
+1. 执行以下命令,将开发环境的**edge_detection_picture**目录上传到运行环境中，例如 **/home/HwHiAiUser**，并以HwHiAiUser（运行用户）登录运行环境（Host）。
       ```
-   scp -r $HOME/samples/python/contrib/rcf_edge_detection/  HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser
+   scp -r $HOME/samples/python/contrib/edge_detection_picture/  HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser
    scp -r $HOME/samples/python/common/atlas_utils/   HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser
    ssh HwHiAiUser@xxx.xxx.xxx.xxx
    ```
@@ -103,12 +103,12 @@
 	```
      export LD_LIBRARY_PATH=
      source ~/.bashrc
-     cd $HOME/samples/python/contrib/rcf_edge_detection/src
+     cd $HOME/samples/python/contrib/edge_detection_picture/src
      python3 main.py ../data/
 	```
    - 如果是开发环境与运行环境分离部署，执行以下命令切换目录。
 	```
-     cd $HOME/python/rcf_edge_detection/src
+     cd $HOME/python/edge_detection_picture/src
 	```
      切换目录后，执行以下命令运行样例。
    

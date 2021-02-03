@@ -65,16 +65,11 @@ function setAtcEnv() {
 
 function setRunEnv() {
 
-    if [[ ${version} = "c73" ]] || [[ ${version} = "C73" ]];then
-        echo $1
-        export LD_LIBRARY_PATH=
-        export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/acllib/lib64:/home/HwHiAiUser/ascend_ddk/arm/lib:${LD_LIBRARY_PATH}
-        export PYTHONPATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/arm64-linux_gcc7.3.0/pyACL/python/site-packages/acl:${PYTHONPATH}
-    elif [[ ${version} = "c75" ]] || [[ ${version} = "C75" ]];then
-        export LD_LIBRARY_PATH=
-        export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/acllib/lib64:/home/HwHiAiUser/ascend_ddk/arm/lib:${LD_LIBRARY_PATH}
-        export PYTHONPATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/arm64-linux/pyACL/python/site-packages/acl:${PYTHONPATH}
-    fi
+    # 重新配置程序运行所需的环境变量
+    export LD_LIBRARY_PATH=
+    export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/nnrt/latest/acllib/lib64:/home/HwHiAiUser/ascend_ddk/x86/lib:${LD_LIBRARY_PATH}
+    export PYTHONPATH=/home/HwHiAiUser/Ascend/nnrt/latest/pyACL/python/site-packages/acl:${PYTHONPATH}
+    
     return 0
 }
 
@@ -100,7 +95,7 @@ function downloadOriginalModel() {
 }
 
 function getOmModel() {
-    if [[ ${version} = "c73" ]]; then
+    if [[ ${version} = "c73" ]] || [[ ${version} = "C73" ]]; then
         # downloadmodel
         downloadOriginalModel
         if [ $? -ne 0 ];then
@@ -113,9 +108,8 @@ function getOmModel() {
             echo "ERROR: convert model failed"
             return 1
         fi
-    fi
 
-    if [[ ${version} = "c75" ]]; then 
+    elif [[ ${version} = "c75" ]] || [[ ${version} = "C75" ]]; then 
         wget -O ${HOME}/models/${project_name}/${model_name}".om" ${davinci_model} --no-check-certificate
         if [ $? -ne 0 ];then
             echo "download davinci_model failed, please check Network."
