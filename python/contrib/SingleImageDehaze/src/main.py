@@ -51,7 +51,7 @@ class SingleImageDehaze(object):
         im = im.resize((512, 512))
         # hwc
         img = np.array(im)
-        img = img/127.5-1.
+        img = img / 127.5 - 1.
         
         # rgb to bgr
         img = img[:, :, ::-1]
@@ -76,9 +76,9 @@ class SingleImageDehaze(object):
         """
         result = []
         resultArray = np.array(infer_output[0])
-        resultimage=np.reshape(infer_output[0], (512,512,3))
-        resultimage = resultimage[:,:,::-1]
-        resultimage = np.clip(((resultimage)+1.)/2.*255.,0,255).astype(np.uint8)
+        resultimage=np.reshape(infer_output[0], (512, 512, 3))
+        resultimage = resultimage[:, :, ::-1]
+        resultimage = np.clip(((resultimage)+1.) / 2. * 255., 0, 255).astype(np.uint8)
         resultimage = Image.fromarray(resultimage)
         resultimage = resultimage.resize((self._img_width, self._img_height))
         resultimage.save('../outputs/out_' + image_name)
