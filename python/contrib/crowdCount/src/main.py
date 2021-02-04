@@ -26,7 +26,7 @@ from PIL import Image, ImageDraw, ImageFont
 import numpy as np
 
 
-class crowdCount(object):
+class CrowdCount(object):
     """
     crowdCount
     """
@@ -71,8 +71,8 @@ class crowdCount(object):
         """
         Post-processing, analysis of inference results
         """
-        orig = cv2.imread(image_file,1)
-        orig = cv2.resize(orig,(1200, 800))
+        orig = cv2.imread(image_file, 1)
+        orig = cv2.resize(orig, (1200, 800))
         data = infer_output[0]
         vals = data.flatten()
         res = np.sum(vals, axis=0)
@@ -84,7 +84,7 @@ class crowdCount(object):
         cv2.normalize(heatMap, heatMap, 0, 255, cv2.NORM_MINMAX, cv2.CV_8UC1)
         heatMap = cv2.applyColorMap(heatMap, cv2.COLORMAP_JET)
         add_img = cv2.addWeighted(orig, 1, heatMap, 0.5, 0.0)
-        cv2.putText(add_img, str(result), (30,60), cv2.FONT_HERSHEY_PLAIN, 5, (0, 0, 255), 8)  
+        cv2.putText(add_img, str(result), (30, 60), cv2.FONT_HERSHEY_PLAIN, 5, (0, 0, 255), 8)  
         output_path = os.path.join("./outputs", os.path.basename(image_file))
         cv2.imwrite(output_path, add_img)
        
@@ -105,7 +105,7 @@ def main():
     acl_resource = AclResource()
     acl_resource.init()
 
-    crowdcount = crowdCount(MODEL_PATH, MODEL_WIDTH, MODEL_HEIGHT)   
+    crowdcount = CrowdCount(MODEL_PATH, MODEL_WIDTH, MODEL_HEIGHT)   
     ret = crowdcount.init()
     
     if not os.path.isdir(os.path.join(SRC_PATH, "../outputs")):
