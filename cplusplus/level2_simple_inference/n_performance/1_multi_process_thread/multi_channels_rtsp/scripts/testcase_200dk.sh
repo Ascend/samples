@@ -206,7 +206,7 @@ function main() {
 
     project_pid=`ps -ef | grep "${project_name}" | awk -F ' ' '{print $2}'`
     if [[ ${project_pid}"X" != "X" ]];then
-        echo -e "\033[33m kill existing project process: kill -9 ${project_pid}.\033[0m"
+        #echo -e "\033[33m kill existing project process: kill -9 ${project_pid}.\033[0m"
         kill -9 ${project_pid}
         if [ $? -ne 0 ];then
             echo "ERROR: kill project process failed."
