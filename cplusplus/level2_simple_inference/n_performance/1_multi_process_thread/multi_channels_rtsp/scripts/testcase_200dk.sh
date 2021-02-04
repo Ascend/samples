@@ -200,14 +200,12 @@ function main() {
     # 运行程序
     mv ${project_path}/out/main ${project_path}/out/${project_name}
 
-    ./${project_name} >/dev/null 2>&1 &
+    ./${project_name} xxx &
 
     sleep 8
 
-    project_pid=`ps -ef | grep "${project_name}" | awk -F ' ' '{print $2}'`
-    if [[ ${project_pid}"X" != "X" ]];then   
-	
-	    echo " run success "
+    project_pid=`ps -ef | grep "${project_name}" | grep "xxx" | awk -F ' ' '{print $2}'`
+    if [[ ${project_pid}"X" != "X" ]];then    
 		
         kill -9 ${project_pid}
         if [ $? -ne 0 ];then
@@ -219,6 +217,8 @@ function main() {
         echo "ERROR: run failed. please check your project"
         return ${inferenceError}
     fi
+	
+	echo " run success "
 
     return ${success}
 }
