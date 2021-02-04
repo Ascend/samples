@@ -92,7 +92,7 @@ function downloadOriginalModel() {
 }
 
 function buildLibAtlasUtil() {
-	cd ${project_path}/../../../common/atlasutil/
+	cd ${project_path}/../../../../common/atlasutil/
 	make
 	if [ $? -ne 0 ];then
         echo "ERROR: make atlasutil failed."
@@ -201,7 +201,7 @@ function main() {
     # 运行程序
     mv ${project_path}/out/main ${project_path}/out/${project_name}
 
-    ./${project_name} ${project_path}/data/person.mp4 ${project_path}/data/person.mp4 &
+    ./${project_name} &
 
     sleep 8
 

@@ -20,7 +20,7 @@ declare -i verifyResError=2
 
 
 
-function downloadData() {
+function downloadTestData() {
 
     mkdir -p ${project_path}/data/
 
@@ -92,7 +92,7 @@ function downloadOriginalModel() {
 }
 
 function buildLibAtlasUtil() {
-	cd ${project_path}/../../../common/atlasutil/
+	cd ${project_path}/../../../../common/atlasutil/
 	make
 	if [ $? -ne 0 ];then
         echo "ERROR: make atlasutil failed."
@@ -114,7 +114,7 @@ function main() {
     fi
 
     # 下载测试集
-    downloadData
+    downloadTestData
     if [ $? -ne 0 ];then
         echo "ERROR: download test images failed"
         return ${inferenceError}
