@@ -75,16 +75,16 @@ class crowdCount(object):
         orig = cv2.resize(orig,(1200, 800))
         data = infer_output[0]
         vals = data.flatten()
-        res = np.sum(vals,axis=0)
+        res = np.sum(vals, axis=0)
         result = round(res / 1000.0)
-        data_2 = data.reshape(800,1408)
-        heatMap = data_2[:800,:1200]
+        data_2 = data.reshape(800, 1408)
+        heatMap = data_2[:800, :1200]
         heatMap = heatMap.astype(np.uint8)
-        heatMap = cv2.GaussianBlur(heatMap,(5,5),cv2.BORDER_DEFAULT)
-        cv2.normalize(heatMap,heatMap,0,255,cv2.NORM_MINMAX,cv2.CV_8UC1)
-        heatMap = cv2.applyColorMap(heatMap,cv2.COLORMAP_JET)
-        add_img = cv2.addWeighted(orig,1,heatMap,0.5,0.0)
-        cv2.putText(add_img,str(result),(30,60),cv2.FONT_HERSHEY_PLAIN,5,(0,0,255),8)  
+        heatMap = cv2.GaussianBlur(heatMap, (5, 5), cv2.BORDER_DEFAULT)
+        cv2.normalize(heatMap, heatMap, 0, 255, cv2.NORM_MINMAX, cv2.CV_8UC1)
+        heatMap = cv2.applyColorMap(heatMap, cv2.COLORMAP_JET)
+        add_img = cv2.addWeighted(orig, 1, heatMap, 0.5, 0.0)
+        cv2.putText(add_img, str(result), (30,60), cv2.FONT_HERSHEY_PLAIN, 5, (0, 0, 255), 8)  
         output_path = os.path.join("./outputs", os.path.basename(image_file))
         cv2.imwrite(output_path, add_img)
        
