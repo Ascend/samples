@@ -205,7 +205,10 @@ function main() {
     sleep 8
 
     project_pid=`ps -ef | grep "${project_name}" | awk -F ' ' '{print $2}'`
-    if [[ ${project_pid}"X" != "X" ]];then            
+    if [[ ${project_pid}"X" != "X" ]];then   
+	
+	    echo " run success "
+		
         kill -9 ${project_pid}
         if [ $? -ne 0 ];then
             echo "ERROR: kill project process failed."
@@ -216,8 +219,6 @@ function main() {
         echo "ERROR: run failed. please check your project"
         return ${inferenceError}
     fi
-	
-	echo " run success "
 
     return ${success}
 }
