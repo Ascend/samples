@@ -13,7 +13,7 @@ import os
 import cv2
 
 
-sys.path.append("../../common/")
+sys.path.append("../../../common/")
 sys.path.append("../")
 import acl
 import atlas_utils.utils as utils
