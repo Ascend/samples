@@ -49,6 +49,10 @@
 
 2. 获取此应用中所需要Davinci模型。
       
+        |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
+        |---|---|---|
+        |  cartoonization | 图片生成推理模型。  |  请参考[https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/cartoonization/ATC_cartoonization_tf_AE](https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/cartoonization/ATC_cartoonization_tf_AE)目录中README.md下载原始模型章节的模型文件。 |
+
 
         1.参考下表获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到开发环境普通用户下该样例的model文件夹中，本例为：$HOME/samples/cplusplus/contrib/super_resolution/model。
 
