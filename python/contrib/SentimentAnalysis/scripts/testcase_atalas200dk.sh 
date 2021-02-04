@@ -37,19 +37,22 @@ function setAtcEnv() {
 function main() {
     downloadDataWithVerifySource
     unzip ${project_path}/data/${project_name}.zip
-    cp -r ${project_path}/data/for_atlas200dk_1.7x.0.0_c++/tf_total_sentiment/data ${project_path}/models/
-    cp -r ${project_path}/data/for_atlas200dk_1.7x.0.0_c++/coarse-big-corpus ${project_path}/data
-    cp -r ${project_path}/data/for_atlas200dk_1.7x.0.0_c++/tf_total_sentiment/snapshots ${project_path}/models/
-    cp -r ${project_path}/data/for_atlas200dk_1.7x.0.0_c++/tf_total_sentiment/chinese_L-12_H-768_A-12 ${project_path}/models/
-    cp -r ${project_path}/data/for_atlas200dk_1.7x.0.0_c++/tf_total_sentiment/jsoncpp ${project_path}/models/
-
+    mv ${project_path}/data/${project_name}/* ${project_path}/data/
+    // cp -r ${project_path}/data/coarse-big-corpus ${project_path}/data/
+    cp -r ${project_path}/data/snapshots/* ${project_path}/models/snapshots/
+    cp -r ${project_path}/data/chinese_L-12_H-768_A-12/* ${project_path}/models/chinese_L-12_H-768_A-12/
+    cp -r ${project_path}/data/jsoncpp ${project_path}/models/
+    
+    echo "begin model convert"
     cd ${project_path}/src/acl_demo
     ./model_convert.sh
     echo "finished model convert"
 
+    echo "begin compile acl/c++ code"
     ./build.sh
     echo "finished compile acl/c++ code"
 
+    echo "finished npu inference"
     ./build/inference -m ../../models/snapshots/models.om -i ../../models/hotel.decode.txt -o ../../output/
     echo "finished npu inference"
 
@@ -66,6 +69,3 @@ function main() {
 }
 
 main
-
-  
-  
