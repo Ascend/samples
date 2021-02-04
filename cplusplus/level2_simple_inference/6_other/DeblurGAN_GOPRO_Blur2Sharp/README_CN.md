@@ -6,7 +6,7 @@
 
 ## 模糊图像变清晰
 
-**注：案例详细介绍请参见[模糊图像变清晰_wiki](https://gitee.com/ascend/samples/wikis/%E5%9F%BA%E4%BA%8EDeblurGAN%E7%9A%84%E6%A8%A1%E7%B3%8A%E5%9B%BE%E5%83%8F%E5%8F%98%E6%B8%85%E6%99%B0%E5%BA%94?sort_id=3477835)。**
+**注：DeblurGAN模型支持动态shape，本案例使用固定shape：1280*720。**
 
 功能：输入一张模糊图片，使用DeblurGAN将其变清晰。
 
@@ -50,7 +50,15 @@
 
 2. 获取此应用中所需要的原始网络模型。
 
-    待补充
+
+    参考下表获取此应用中所用到的原始网络模型，并将其存放到开发环境普通用户下该样例的model文件夹中，本例为：$HOME/samples/cplusplus/level2_simple_inference/6_other/DeblurGAN_GOPRO_Blur2Sharp/model/。
+    
+    |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
+    |---|---|---|
+    |  DeblurGAN| 图像变清晰模型。是基于Tensorflow的DeblurGAN模型。  |  请参考[https://gitee.com/chen68/modelzoo/tree/master/contrib/TensorFlow/Research/cv/Blur2Sharp/ATC_DeblurGAN_tf_AE](https://gitee.com/chen68/modelzoo/tree/master/contrib/TensorFlow/Research/cv/Blur2Sharp/ATC_DeblurGAN_tf_AE)目录中README.md下载原始模型章节下载模型文件。 |
+
+    ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
+    > - modelzoo中提供了转换好的om模型，可直接下载使用，也可下载原始模型重新进行模型转换。
 
 3. 将原始模型转换为Davinci模型。
     
@@ -64,11 +72,9 @@
 
     2. 执行以下命令使用atc命令进行模型转换。
         
-        **atc --input_shape="blur:1,720,1280,3" --input_format=NHWC --output="./DeblurrGAN_c75" --soc_version=Ascend310 --framework=3 --model="./DeblurrGAN-pad-01051648.pb" --log=info**
+        **atc --input_shape="blur:1,720,1280,3" --input_format=NHWC --output="./DeblurrGAN_pad_1280_720" --soc_version=Ascend310 --framework=3 --model="./DeblurrGAN-pad-01051648.pb" --log=info**
 
-    3. 执行以下命令将转换好的模型复制到样例中model文件夹中。
 
-        **cp ./DeblurGAN_GOPRO_Blur2Sharp.om $HOME/samples/cplusplus/level2_simple_inference/6_other/DeblurGAN_GOPRO_Blur2Sharp/model/**
 
 4. 获取样例需要的测试图片。
 
@@ -76,7 +82,7 @@
 
     **cd $HOME/samples/cplusplus/level2_simple_inference/6_other/DeblurGAN_GOPRO_Blur2Sharp/data**
 
-    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/DeblurGAN_GOPRO_Blur2Sharp/dog.png**
+    **wget https://c7xcode.obs.myhuaweicloud.com/models/DeblurGAN_GOPRO_Blur2Sharp/data.png**
 
 
 ### 样例部署
