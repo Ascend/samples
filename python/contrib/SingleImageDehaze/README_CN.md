@@ -4,15 +4,14 @@
 
 **本README只提供命令行方式运行样例的指导，如需在Mindstudio下运行样例，请参考[Mindstudio运行图片样例wiki](https://gitee.com/ascend/samples/wikis/Mindstudio运行图片样例?sort_id=3164874)。**
 
-**本案例由南开大学贡献**
 
-## edge_detection_picture样例
+##  SingleImageDehaze 样例
 
-功能：使用RCF模型对输入图片进行边缘检测。
+功能：使用deploy_vel模型对输入图片进行去雾。
 
 样例输入：jpg图像
 
-样例输出：边缘图像。
+样例输出：去雾图像。
 
 ### 前提条件
 
@@ -50,11 +49,11 @@
 
    参考下表获取此应用中所用到的模型，并将其存放到开发环境普通用户下的工程目录：
 
-	cd $HOME/samples/python/contrib/edge_detection_picture/model
+	cd $HOME/samples/python/contrib/SingleImageDehaze/model
 
 | **模型名称** | **模型说明**          | **模型下载路径**                                             |
 | ------------ | --------------------- | ------------------------------------------------------------ |
-| RCF          | 基于Caffe的边缘检测。 | 请参考https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/edge_detection/ATC_RCF_Caffe_AE 中README.md原始模型章节，下载**原始模型网络**及**模型权重文件**。 |
+| deploy_vel          | 基于tensorflow的去雾处理。 | 请参考https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/edge_detection/ATC_RCF_Caffe_AE 中README.md原始模型章节，下载**原始模型网络**及**模型权重文件**。 |
 
 #### 3. 将原始模型转换为Davinci模型
 
@@ -70,24 +69,24 @@
 	
    2. 执行以下命令使用atc命令进行模型转换。
          ```
-      atc --model=rcf.prototxt --weight=./rcf_bsds.caffemodel --framework=0 --output=rcf --soc_version=Ascend310 --input_fp16_nodes=data --input_format=NCHW --output_type=FP32  
+      atc --model=output_graph.pb --framework=3 --input_shape="t_image_input_to_DHGAN_generator:1,512,512,3" --output=deploy_vel --soc_version=Ascend310 --input_fp16_nodes="t_image_input_to_DHGAN_generator" --output_type= FP32   
       ```
 
 #### 4. 获取样例需要的测试图片
 
 执行以下命令，进入样例的data文件夹中，下载对应的测试图片。
 
-    cd $HOME/samples/python/contrib/edge_detection_picture/data
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/rcf_edge_detection/ori.jpg
+    cd $HOME/samples/python/contrib/SingleImageDehaze/data
+    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/SingleImageDehaze/test_image/
 
 
 ### 样例运行
 
 **注：开发环境与运行环境合一部署，请跳过步骤1，直接执行步骤2即可。**
 
-1. 执行以下命令,将开发环境的**edge_detection_picture**目录上传到运行环境中，例如 **/home/HwHiAiUser**，并以HwHiAiUser（运行用户）登录运行环境（Host）。
+1. 执行以下命令,将开发环境的**SingleImageDehaze**目录上传到运行环境中，例如 **/home/HwHiAiUser**，并以HwHiAiUser（运行用户）登录运行环境（Host）。
       ```
-   scp -r $HOME/samples/python/contrib/edge_detection_picture/  HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser
+   scp -r $HOME/samples/python/contrib/SingleImageDehaze/  HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser
    scp -r $HOME/samples/python/common/atlas_utils/   HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser
    ssh HwHiAiUser@xxx.xxx.xxx.xxx
    ```
@@ -103,12 +102,12 @@
 	```
      export LD_LIBRARY_PATH=
      source ~/.bashrc
-     cd $HOME/samples/python/contrib/edge_detection_picture/src
+     cd $HOME/samples/python/contrib/SingleImageDehaze/src
      python3 main.py ../data/
 	```
    - 如果是开发环境与运行环境分离部署，执行以下命令切换目录。
 	```
-     cd $HOME/python/edge_detection_picture/src
+     cd $HOME/python/SingleImageDehaze/src
 	```
      切换目录后，执行以下命令运行样例。
    
