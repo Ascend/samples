@@ -146,7 +146,7 @@
 
             可从ATC安装路径下的“atc/data/platform\_config”目录下查看支持的昇腾AI处理器的类型，对应“\*.ini”文件的名字即为\{soc\_version\}。如果用户根据上述方法仍旧无法确定具体使用的$\{soc\_version\}，则：
 
-            1.  单击如下手册中的链接并进入该手册，[CANN Ascend-DMI工具用户指南](https://support.huawei.com/enterprise/zh/ascend-computing/atlas-data-center-solution-pid-251167910?category=operation-maintenance)。
+            1.  单击如下手册中的链接并进入该手册，[CANN Ascend-DMI工具用户指南](https://support.huawei.com/enterprise/zh/ascend-computing/cann-pid-251168373?category=operation-maintenance)。
             2.  完成“使用工具\>使用前准备“，然后进入“使用工具\>设备实时状态查询“章节。
             3.  使用相关命令查看芯片的详细信息，例如使用**ascend-dmi -i -dt**命令查看芯片的详细信息，返回信息中“Chip Name“对应取值即为具体使用的$\{soc\_version\}。
 

@@ -176,7 +176,7 @@
 
             可从ATC安装路径下的“atc/data/platform\_config”目录或FwkACLlib安装路径下的“fwkacllib/data/platform\_config”目录下查看支持的昇腾AI处理器的类型，对应“\*.ini”文件的名字即为\{soc\_version\}。如果用户根据上述方法仍旧无法确定具体使用的$\{soc\_version\}，则：
 
-            1.  单击如下手册中的链接并进入该手册，[CANN Ascend-DMI工具用户指南](https://support.huawei.com/enterprise/zh/ascend-computing/atlas-data-center-solution-pid-251167910?category=operation-maintenance)。
+            1.  单击如下手册中的链接并进入该手册，[CANN Ascend-DMI工具用户指南](https://support.huawei.com/enterprise/zh/ascend-computing/cann-pid-251168373?category=operation-maintenance)。
             2.  完成“使用工具\>使用前准备“，然后进入“使用工具\>设备实时状态查询“章节。
             3.  使用相关命令查看芯片的详细信息，例如使用**ascend-dmi -i -dt**命令查看芯片的详细信息，返回信息中“Chip Name“对应取值即为具体使用的$\{soc\_version\}。
 
@@ -296,19 +296,12 @@
     1.  以运行用户（例如HwHiAiUser）登录开发环境，并进入样例工程的“acl\_execute\_add/run/out“目录。
     2.  在out目录下执行如下命令，生成单算子模型文件。
 
-        **atc --singleop=test\_data/config/add\_op.json  --soc\_version=_$\{soc\_version\}_  --output=op\_models**
+        **atc --singleop=test\_data/config/add\_op.json  --soc\_version=Ascend310  --output=op\_models**
 
         其中：
 
         -   singleop：算子描述的json文件。
-        -   soc\_version：昇腾AI处理器的型号，请根据实际情况替换。
-
-            可从ATC安装路径下的“atc/data/platform\_config”目录下查看支持的昇腾AI处理器的类型，对应“\*.ini”文件的名字即为\{soc\_version\}。如果用户根据上述方法仍旧无法确定具体使用的$\{soc\_version\}，则：
-
-            1.  单击如下手册中的链接并进入该手册，[CANN Ascend-DMI工具用户指南](https://support.huawei.com/enterprise/zh/ascend-computing/atlas-data-center-solution-pid-251167910?category=operation-maintenance)。
-            2.  完成“使用工具\>使用前准备“，然后进入“使用工具\>设备实时状态查询“章节。
-            3.  使用相关命令查看芯片的详细信息，例如使用**ascend-dmi -i -dt**命令查看芯片的详细信息，返回信息中“Chip Name“对应取值即为具体使用的$\{soc\_version\}。
-
+        -   soc\_version：昇腾AI处理器的型号。
         -   --output=op\_models：代表生成的模型文件存储在当前目录下的op\_models文件夹下。
 
         模型转换成功后，会生成如下文件：
