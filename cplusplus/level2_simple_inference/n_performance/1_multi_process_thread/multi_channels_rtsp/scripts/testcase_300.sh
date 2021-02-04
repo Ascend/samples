@@ -202,11 +202,11 @@ function main() {
     # 运行程序
     mv ${project_path}/out/main ${project_path}/out/${project_name}
 
-    ./${project_name} ${project_path}/data/person.mp4 ${project_path}/data/person.mp4 &
+    ./${project_name} &
 
     sleep 8
 
-    project_pid=`ps -ef | grep "${project_name}" | grep "data" | awk -F ' ' '{print $2}'`
+    project_pid=`ps -ef | grep "${project_name}" | awk -F ' ' '{print $2}'`
     if [[ ${project_pid}"X" != "X" ]];then
         echo -e "\033[33m kill existing project process: kill -9 ${project_pid}.\033[0m"
         kill -9 ${project_pid}
