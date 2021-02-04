@@ -300,8 +300,7 @@ Note: The generation of a single-operator model file depends only on the operato
         Specifically,
 
         -   **singleop**  specifies the operator description file \(.json\).
-        -   **soc\_version**  specifies the model of the Ascend AI Processor. Replace it with the actual version.
-
+        -   **soc\_version**  specifies the model of the Ascend AI Processor. 
         -   **--output=op\_models**: the generated model file stored in the  **op\_models**  folder in the current directory.
 
         After the model conversion is successful, the following files are generated:
