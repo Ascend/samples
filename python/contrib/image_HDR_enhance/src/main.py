@@ -47,10 +47,10 @@ def main():
     if not os.path.exists(OUTPUT_DIR):
         os.mkdir(OUTPUT_DIR)
 
-    acl_resource = AclResource()  # acl资源初始化
+    acl_resource = AclResource()  # acl intialize
     acl_resource.init()
 
-    model = Model(model_path)  # 加载模型
+    model = Model(model_path)  # load model
 
     src_dir = os.listdir(INPUT_DIR)
     for pic in src_dir:
@@ -58,17 +58,17 @@ def main():
             print('it is not a picture, %s, ignore this file and continue,' % pic)
             continue
         pic_path = os.path.join(INPUT_DIR, pic)
-        RGB_image, o_h, o_w = pre_process(pic_path)  # 预处理
+        RGB_image, o_h, o_w = pre_process(pic_path)  # preprocess
 
         start_time = time.time()
-        result_list = model.execute([RGB_image, ])  # 送进模型推理
+        result_list = model.execute([RGB_image, ])  # inferring
         end_time = time.time()
-        print('图片名称:{}'.format(pic))
-        print('图片尺寸:{}×{}'.format(o_h, o_w))
-        print('推理耗时:{}ms'.format(int((end_time-start_time)*1000)))
+        print('pic:{}'.format(pic))
+        print('pic_size:{}×{}'.format(o_h, o_w))
+        print('time:{}ms'.format(int((end_time-start_time)*1000)))
         print('\n')
-        post_process(result_list, pic, o_h, o_w)  # 后处理
-    print('所有图片处理完毕')
+        post_process(result_list, pic, o_h, o_w)  # postprocess
+    print('task over')
 
 
 if __name__ == '__main__':
