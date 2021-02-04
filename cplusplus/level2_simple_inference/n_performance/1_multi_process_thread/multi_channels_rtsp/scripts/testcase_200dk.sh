@@ -2,11 +2,10 @@ caffe_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc
 caffe_prototxt="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/facedection/face_detection.prototxt"
 aipp_cfg="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/facedection/insert_op.cfg"
 model_name="face_detection"
-presenter_server_name="face_detection"
 
 data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/face_detection_rtsp/person.mp4"
 
-project_name="cplusplus_face_detection_rtsp"
+project_name="multi_channels_rtsp"
 
 
 version=$1
@@ -92,7 +91,7 @@ function downloadOriginalModel() {
 }
 
 function buildLibAtlasUtil() {
-	cd ${project_path}/../../../common/atlasutil/
+	cd ${project_path}/../../../../common/atlasutil/
 	make
 	if [ $? -ne 0 ];then
         echo "ERROR: make atlasutil failed."
@@ -201,13 +200,13 @@ function main() {
     # 运行程序
     mv ${project_path}/out/main ${project_path}/out/${project_name}
 
-    ./${project_name} ${project_path}/data/person.mp4 ${project_path}/data/person.mp4 &
+    ./${project_name} xxx &
 
     sleep 8
 
-    project_pid=`ps -ef | grep "${project_name}" | grep "data" | awk -F ' ' '{print $2}'`
-    if [[ ${project_pid}"X" != "X" ]];then
-        echo -e "\033[33m kill existing project process: kill -9 ${project_pid}.\033[0m"
+    project_pid=`ps -ef | grep "${project_name}" | grep "xxx" | awk -F ' ' '{print $2}'`
+    if [[ ${project_pid}"X" != "X" ]];then    
+		
         kill -9 ${project_pid}
         if [ $? -ne 0 ];then
             echo "ERROR: kill project process failed."
@@ -218,8 +217,8 @@ function main() {
         echo "ERROR: run failed. please check your project"
         return ${inferenceError}
     fi
-
-    echo "run success"
+	
+	echo " run success "
 
     return ${success}
 }

@@ -20,7 +20,7 @@ declare -i verifyResError=2
 
 
 
-function downloadData() {
+function downloadTestData() {
 
     mkdir -p ${project_path}/data/
 
@@ -92,7 +92,7 @@ function downloadOriginalModel() {
 }
 
 function buildLibAtlasUtil() {
-	cd ${project_path}/../../../common/atlasutil/
+	cd ${project_path}/../../../../common/atlasutil/
 	make
 	if [ $? -ne 0 ];then
         echo "ERROR: make atlasutil failed."
@@ -114,7 +114,7 @@ function main() {
     fi
 
     # 下载测试集
-    downloadData
+    downloadTestData
     if [ $? -ne 0 ];then
         echo "ERROR: download test images failed"
         return ${inferenceError}
@@ -202,11 +202,11 @@ function main() {
     # 运行程序
     mv ${project_path}/out/main ${project_path}/out/${project_name}
 
-    ./${project_name} ${project_path}/data/person.mp4 ${project_path}/data/person.mp4 &
+    ./${project_name} &
 
     sleep 8
 
-    project_pid=`ps -ef | grep "${project_name}" | grep "data" | awk -F ' ' '{print $2}'`
+    project_pid=`ps -ef | grep "${project_name}" | awk -F ' ' '{print $2}'`
     if [[ ${project_pid}"X" != "X" ]];then
         echo -e "\033[33m kill existing project process: kill -9 ${project_pid}.\033[0m"
         kill -9 ${project_pid}
