@@ -175,7 +175,7 @@ Note: The generation of a single-operator model file depends only on the operato
 
             It is the exact name of the .ini file in  **atc/data/platform\_config**  in the ATC installation path or  **fwkacllib/data/platform\_config**  in the FwkACLlib installation path. If you still cannot determine the  **_$\{sos\_version\}_**  using the preceding method, perform the following operations:
 
-            1.  Click  [here](https://support.huawei.com/enterprise/en/ascend-computing/atlas-data-center-solution-pid-251167910?category=operation-maintenance)  to download  _CANN Ascend-DMI Tool User Guide_.
+            1.  Click  [here](https://support.huawei.com/enterprise/en/ascend-computing/cann-pid-251168373?category=operation-maintenance)  to download  _CANN Ascend-DMI Tool User Guide_.
             2.  Complete the operations described in  **Tool Usage Guide**  \>  **Before You Start**, and then proceed to  **Tool Usage Guide**  \>  **Querying Device Real-Time Status**.
             3.  Run the related command to view the chip details. For example, in the output of the  **ascend-dmi -i -dt**  command,  **Chip Name**  field corresponds to  **_$\{sos\_version\}_**.
 
@@ -295,18 +295,12 @@ Note: The generation of a single-operator model file depends only on the operato
     1.  Log in to the development environment as a running user \(for example,  **HwHiAiUser**\) and go to the  **acl\_execute\_add/run/out**  directory of the sample project.
     2.  Run the following command in the  **out**  directory to generate a single-operator model file:
 
-        **atc --singleop=test\_data/config/add\_op.json  --soc\_version=_$\{soc\_version\}_  --output=op\_models**
+        **atc --singleop=test\_data/config/add\_op.json  --soc\_version=Ascend310  --output=op\_models**
 
         Specifically,
 
         -   **singleop**  specifies the operator description file \(.json\).
         -   **soc\_version**  specifies the model of the Ascend AI Processor. Replace it with the actual version.
-
-            It is the exact name of the .ini file in  **atc/data/platform\_config**  in the ATC installation path. If you still cannot determine the  **_$\{sos\_version\}_**  using the preceding method, perform the following operations:
-
-            1.  Click  [here](https://support.huawei.com/enterprise/en/ascend-computing/atlas-data-center-solution-pid-251167910?category=operation-maintenance)  to download  _CANN Ascend-DMI Tool User Guide_.
-            2.  Complete the operations described in  **Tool Usage Guide**  \>  **Before You Start**, and then proceed to  **Tool Usage Guide**  \>  **Querying Device Real-Time Status**.
-            3.  Run the related command to view the chip details. For example, in the output of the  **ascend-dmi -i -dt**  command,  **Chip Name**  field corresponds to  **_$\{sos\_version\}_**.
 
         -   **--output=op\_models**: the generated model file stored in the  **op\_models**  folder in the current directory.
 
