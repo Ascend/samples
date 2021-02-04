@@ -235,7 +235,7 @@
         其中：
 
         -   singleop：算子描述的json文件。
-        -   soc\_version：昇腾AI处理器的型号，请根据实际情况替换。
+        -   soc\_version：昇腾AI处理器的型号。
         -   --output=op\_models：代表生成的模型文件存储在当前目录下的op\_models文件夹下。
 
         模型转换成功后，会生成如下文件：
