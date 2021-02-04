@@ -27,7 +27,7 @@ import numpy as np
 
 
 class crowdCount(object):
-     """
+    """
     crowdCount
     """
     def __init__(self, model_path, model_width, model_height):
