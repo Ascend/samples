@@ -12,9 +12,11 @@ import sys
 import os
 import cv2
 
+path = os.path.dirname(os.path.abspath(__file__))
 
-sys.path.append("../../../common/")
-sys.path.append("../")
+sys.path.append(os.path.join(path, ".."))
+sys.path.append(os.path.join(path, "../../../common/"))
+
 import acl
 import atlas_utils.utils as utils
 import atlas_utils.constants as constants
