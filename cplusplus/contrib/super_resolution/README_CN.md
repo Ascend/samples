@@ -47,36 +47,30 @@
 
             **unzip ascend-samples-master.zip**
 
-2. 获取此应用中所需要Davinci模型。
-      
-        |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
-        |---|---|---|
-        |  cartoonization | 图片生成推理模型。  |  请参考[https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/cartoonization/ATC_cartoonization_tf_AE](https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/cartoonization/ATC_cartoonization_tf_AE)目录中README.md下载原始模型章节的模型文件。 |
+2. 获取此应用中所需要Davinci模型。  
 
-
-        1.参考下表获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到开发环境普通用户下该样例的model文件夹中，本例为：$HOME/samples/cplusplus/contrib/super_resolution/model。
+    1.参考下表获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到开发环境普通用户下该样例的model文件夹中，本例为：               $HOME/samples/cplusplus/contrib/super_resolution/model。
 
     
-        |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
-        |---|---|---|
-        |  SRCNN| 图片生成推理模型。  |  请参考[https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/super_resolution/ATC_SRCNN_caffe_AE](https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/super_resolution/ATC_SRCNN_caffe_AE)目录中README.md下载原始模型章节的模型文件。 |
-        |  FSRCNN| 图片生成推理模型。  |  请参考[https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/super_resolution/ATC_FSRCNN_caffe_AE](https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/super_resolution/ATC_FSRCNN_caffe_AE)目录中README.md下载原始模型章节的模型文件。 |
-        |  VDSR| 图片生成推理模型。  |  请参考[https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/super_resolution/ATC_VDSR_caffe_AE](https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/super_resolution/ATC_VDSR_caffe_AE)目录中README.md下载原始模型章节的模型文件。 |
-        |  ESPCN| 图片生成推理模型。  |  请参考[https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/super_resolution/ATC_ESPCN_caffe_AE](https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/super_resolution/ATC_ESPCN_caffe_AE)目录中README.md下载原始模型章节的模型文件。 |
+    |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
+    |---|---|---|
+    |  SRCNN| 图片生成推理模型。  |  请参考[https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/super_resolution/ATC_SRCNN_caffe_AE](https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/super_resolution/ATC_SRCNN_caffe_AE)目录中README.md下载原始模型章节的模型文件。 |
+    |  FSRCNN| 图片生成推理模型。  |  请参考[https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/super_resolution/ATC_FSRCNN_caffe_AE](https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/super_resolution/ATC_FSRCNN_caffe_AE)目录中README.md下载原始模型章节的模型文件。 |
+    |  VDSR| 图片生成推理模型。  |  请参考[https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/super_resolution/ATC_VDSR_caffe_AE](https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/super_resolution/ATC_VDSR_caffe_AE)目录中README.md下载原始模型章节的模型文件。 |
+    |  ESPCN| 图片生成推理模型。  |  请参考[https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/super_resolution/ATC_ESPCN_caffe_AE](https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/super_resolution/ATC_ESPCN_caffe_AE)目录中README.md下载原始模型章节的模型文件。 |
 
-        ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
-        > - modelzoo中提供了转换好的om模型，但此模型不匹配当前样例，所以需要下载原始模型重新进行模型转换。
+    ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
+    > - modelzoo中提供了转换好的om模型，但此模型不匹配当前样例，所以需要下载原始模型重新进行模型转换。
 
-        2. 设置LD_LIBRARY_PATH环境变量。   
-            由于LD_LIBRARY_PATH环境变量在转使用atc工具和运行样例时会产生冲突，所以需要在命令行单独设置此环境变量，方便修改。  
-            
-            **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64**  
+    2. 设置LD_LIBRARY_PATH环境变量。   
+    由于LD_LIBRARY_PATH环境变量在转使用atc工具和运行样例时会产生冲突，所以需要在命令行单独设置此环境变量，方便修改。
+    
+        **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64**  
 
-        3. 执行以下命令使用atc命令进行模型转换。  
-  
-            **cd $HOME/samples/cplusplus/contrib/super_resolution/model**   
-            
-            **atc --model=./SRCNN.prototxt --weight=./SRCNN.caffemodel --framework=0 --input_format=NCHW --input_shape="data: 1, 1, 840, 840" --output=./SRCNN_840_840 --soc_version=Ascend310 --output_type=FP32**   
+    3. 执行以下命令使用atc命令进行模型转换。  
+
+        **cd $HOME/samples/cplusplus/contrib/super_resolution/model**       
+        **atc --model=./SRCNN.prototxt --weight=./SRCNN.caffemodel --framework=0 --input_format=NCHW --input_shape="data: 1, 1, 840, 840" --output=./SRCNN_840_840 --soc_version=Ascend310 --output_type=FP32**   
      
 
 3. 获取样例需要的测试图片。
