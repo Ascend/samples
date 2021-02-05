@@ -92,17 +92,6 @@
 
    - 当开发环境与运行环境CPU架构相同时，执行以下命令导入环境变量。
 
-     **export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux**
-
-     **export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub**
-
-     ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
-        > - 如果是20.0版本，此处 **DDK_PATH** 环境变量中的 **arm64-liunx** 应修改为 **arm64-linux_gcc7.3.0**。
-        > - 可以在命令行中执行 **uname -a**，查看开发环境和运行环境的cpu架构。如果回显为x86_64，则为x86架构。如果回显为arm64，则为Arm架构。
-
-
-   - 当开发环境与运行环境CPU架构不同时，执行以下命令导入环境变量。例如开发环境为X86架构，运行环境为Arm架构，由于开发环境上同时部署了X86和Arm架构的开发套件，后续编译应用时需要调用Arm架构开发套件的ACLlib库，所以此处需要导入环境变量为Arm架构的ACLlib库路径。
-
      **export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux**
 
      **export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub**
@@ -111,6 +100,16 @@
         > - 如果是20.0版本，此处 **DDK_PATH** 环境变量中的 **x86_64-linux** 应修改为 **x86_64-linux_gcc7.3.0**。
         > - 可以在命令行中执行 **uname -a**，查看开发环境和运行环境的cpu架构。如果回显为x86_64，则为x86架构。如果回显为arm64，则为Arm架构。
 
+   - 当开发环境与运行环境CPU架构不同时，执行以下命令导入环境变量。例如开发环境为X86架构，运行环境为Arm架构，由于开发环境上同时部署了X86和Arm架构的开发套件，后续编译应用时需要调用Arm架构开发套件的ACLlib库，所以此处需要导入环境变量为Arm架构的ACLlib库路径。
+
+     **export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux**
+
+     **export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub**
+
+     ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
+        > - 如果是20.0版本，此处 **DDK_PATH** 环境变量中的 **arm64-liunx** 应修改为 **arm64-linux_gcc7.3.0**。
+        > - 可以在命令行中执行 **uname -a**，查看开发环境和运行环境的cpu架构。如果回显为x86_64，则为x86架构。如果回显为arm64，则为Arm架构。
+    
 2. 切换到DeRain目录，创建目录用于存放编译文件，例如，本文中，创建的目录为 **build/intermediates/host**。
 
     **cd $HOME/samples/cplusplus/level2_simple_inference/6_other/DeRain/**
@@ -124,8 +123,8 @@
       **cd build/intermediates/host**
 
       **make clean**
-    
-      **cmake \.\./\.\./\.\./src -DCMAKE_CXX_COMPILER=aarch64-linux-gnu-g++ -DCMAKE_SKIP_RPATH=TRUE**
+   
+      **cmake \.\./\.\./\.\./src -DCMAKE_CXX_COMPILER=g++ -DCMAKE_SKIP_RPATH=TRUE**
 
     - 当开发环境与运行环境操作系统架构不同时，需要使用交叉编译器编译。例如开发环境为X86架构，运行环境为Arm架构，执行以下命令进行交叉编译。
 
@@ -133,7 +132,7 @@
 
       **make clean**
 
-      **cmake \.\./\.\./\.\./src -DCMAKE_CXX_COMPILER=g++ -DCMAKE_SKIP_RPATH=TRUE**
+      **cmake \.\./\.\./\.\./src -DCMAKE_CXX_COMPILER=aarch64-linux-gnu-g++ -DCMAKE_SKIP_RPATH=TRUE**
 
 4. 执行make命令，生成的可执行文件main在 **DeRain/out** 目录下。
 
