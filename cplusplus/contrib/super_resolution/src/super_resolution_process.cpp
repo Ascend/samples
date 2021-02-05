@@ -20,8 +20,8 @@
 #include <iostream>
 
 #include "acl/acl.h"
-#include "model_process.h"
-#include "utils.h"
+#include "atlas_model.h"
+#include "atlas_utils.h"
 
 using namespace std;
 
@@ -71,21 +71,9 @@ Result SuperResolutionProcess::InitResource() {
 }
 
 Result SuperResolutionProcess::InitModel(const char* omModelPath) {
-    Result ret = model_.LoadModelFromFileWithMem(omModelPath);
+    Result ret = model_.Init(omModelPath);
     if (ret != SUCCESS) {
         ERROR_LOG("execute LoadModelFromFileWithMem failed");
-        return FAILED;
-    }
-
-    ret = model_.CreateDesc();
-    if (ret != SUCCESS) {
-        ERROR_LOG("execute CreateDesc failed");
-        return FAILED;
-    }
-
-    ret = model_.CreateOutput();
-    if (ret != SUCCESS) {
-        ERROR_LOG("execute CreateOutput failed");
         return FAILED;
     }
 
@@ -105,10 +93,7 @@ Result SuperResolutionProcess::InitModel(const char* omModelPath) {
 }
 
 void SuperResolutionProcess::DestroyModel() {
-    model_.Unload();
-    model_.DestroyDesc();
-    model_.DestroyInput();
-    model_.DestroyOutput();
+    model_.DestroyResource();
 }
 
 Result SuperResolutionProcess::Init() {
@@ -183,13 +168,11 @@ Result SuperResolutionProcess::Preprocess(const string& imageFile) {
 
 
 Result SuperResolutionProcess::Inference(aclmdlDataset*& inferenceOutput) {
-    Result ret = model_.Execute();
+    Result ret = model_.Execute(inferenceOutput);
     if (ret != SUCCESS) {
         ERROR_LOG("Execute model inference failed");
         return FAILED;
     }
-
-    inferenceOutput = model_.GetModelOutputData();
 
     return SUCCESS;
 }
@@ -208,7 +191,7 @@ Result SuperResolutionProcess::Postprocess(const string& imageFile, aclmdlDatase
     cv::Mat mat = cv::imread(imageFile, CV_LOAD_IMAGE_COLOR);
 
     // bicubic
-    cv::Mat mat_bicubic; 
+    cv::Mat mat_bicubic;
     cv::resize(mat, mat_bicubic, cv::Size(), upScale_, upScale_, cv::INTER_CUBIC);
 
     // BGR2YCrCb and bicubic
@@ -244,7 +227,7 @@ void SuperResolutionProcess::SaveImage(const string& origImageFile,
     string bicubicName = "./output/" + imageName + "_bicubic.png";
     string SRName = "./output/" + imageName  + "_" + MODEL_LIST[modelType_] + ".png";
 
-    //cv::imwrite(bicubicName, imageBicubic);
+    cv::imwrite(bicubicName, imageBicubic);
     cv::imwrite(SRName, imageSR);
 }
 
@@ -273,7 +256,9 @@ void* SuperResolutionProcess::GetInferenceOutputItem(uint32_t& itemDataSize,
 
     void* data = nullptr;
     if (runMode_ == ACL_HOST) {
-        data = Utils::CopyDataDeviceToLocal(dataBufferDev, bufferSize);
+        MemoryType type = MEMORY_HOST;
+        data = CopyDataToHost(dataBufferDev, bufferSize, runMode_, type);
+        //data = Utils::CopyDataDeviceToLocal(dataBufferDev, bufferSize);
         if (data == nullptr) {
             ERROR_LOG("Copy inference output to host failed");
             return nullptr;
