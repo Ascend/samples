@@ -42,18 +42,6 @@
 
             **unzip ascend-samples-master.zip**
 
-2. 获取此应用中所需要的原始网络模型。
-
-    参考下表获取此应用中所用到的原始网络模型，并将其存放到开发环境普通用户下的任意目录，例如：$HOME/samples/cplusplus/level2_simple_inference/6_other/DeRain/model/。
-    
-    
-    |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
-    |---|---|---|
-    |  DeRain模型| 图片分类推理模型。是基于tensorflow的DeRain模型。  |  [pb模型下载路径](https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/DeRain/frozen_graph_noDWT_V2.pb)     [cfg模型下载路径](https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/DeRain/insert_op.cfg)|    
-    
-
--     modelzoo中提供了转换好的om模型，可直接下载使用，也可下载原始模型重新进行模型转换。
-
 
 2. 将原始模型转换为Davinci模型。   
     
@@ -76,7 +64,7 @@
         **atc --model=./frozen_graph_noDWT_V2.pb --input_shape="degradated_image:1,256,256,1" --framework=3 --output=./DeRain  --soc_version=Ascend310  --insert_op_conf=./insert_op.cfg**
 
 
-4. 获取样例需要的测试图片。
+3. 获取样例需要的测试图片。
 
     执行以下命令，进入样例的data文件夹中，下载对应的测试图片。
 
