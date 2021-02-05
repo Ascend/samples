@@ -1,0 +1,1 @@
+{"status":0,"data":{"Profiling Duration":"13.526 s @ 2020-10-05 06:46:20","Profiling Application":"DeRain","Command Arguments":"","Working Directory":"/home/caizhi/AscendProjects/DeRain/profiling/","Target Host Ip":"192.168.1.2","Target OS":"Centos7.6","utilization":[{"deviceId":"0","vector":"0.373034","cube":"0.348088","scalar":"0.061119"}]}}
