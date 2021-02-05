@@ -61,7 +61,11 @@
 
         **wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/DeRain/insert_op.cfg**
 
-        **atc --model=./frozen_graph_noDWT_V2.pb --input_shape="degradated_image:1,256,256,1" --framework=3 --output=./DeRain  --soc_version=Ascend310  --insert_op_conf=./insert_op.cfg**
+
+        ```
+        atc --model=./frozen_graph_noDWT_V2.pb --input_shape="degradated_image:1,256,256,1" --framework=3 --output=./DeRain  --soc_version=Ascend310  --insert_op_conf=./insert_op.cfg
+        ```
+
 
 
 3. 获取样例需要的测试图片。
