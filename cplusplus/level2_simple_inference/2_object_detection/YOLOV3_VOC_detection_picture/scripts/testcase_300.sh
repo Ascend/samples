@@ -55,7 +55,18 @@ function setAtcEnv() {
 
     return 0
 }
+function setBuildEnv() {
+    # 设置代码编译时需要的环境变量
+    if [[ ${version} = "c73" ]] || [[ ${version} = "C73" ]];then
+        export DDK_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/x86_64-linux_gcc7.3.0
+        export NPU_HOST_LIB=${DDK_PATH}/acllib/lib64/stub
+    elif [[ ${version} = "c75" ]] || [[ ${version} = "C75" ]];then
+        export DDK_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/x86_64-linux
+        export NPU_HOST_LIB=${DDK_PATH}/acllib/lib64/stub
+    fi
 
+    return 0
+}
 function downloadOriginalModel() {
 
     mkdir -p ${project_path}/model/
@@ -135,8 +146,7 @@ function main() {
     cd ${project_path}/build/intermediates/host
 
     # 配置程序编译所需的环境变量
-    export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest
-    export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
+    setBuildEnv
 
     # 产生Makefile
     cmake ${project_path}/src -DCMAKE_CXX_COMPILER=g++ -DCMAKE_SKIP_RPATH=TRUE
