@@ -19,7 +19,7 @@ $\color{red}{以下命令在开发环境上执行，以普通用户为HwHiAiUser
 
     2. 下载ffmpeg  
         **cd $HOME**  
-        **wget http://www.ffmpeg.org/releases/ffmpeg-4.1.3.tar.gz**  
+        **wget http://www.ffmpeg.org/releases/ffmpeg-4.1.3.tar.gz --no-check-certificate**  
         **tar -zxvf ffmpeg-4.1.3.tar.gz**  
         **cd ffmpeg-4.1.3**
 
