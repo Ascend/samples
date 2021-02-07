@@ -41,13 +41,17 @@ int main(int argc, char *argv[]) {
     // 2 - ESPCN
     // (defalt: SRCNN)
     uint8_t kModelType;
-    if (argv[2] == nullptr) kModelType = 0;
-    else kModelType = atoi(argv[2]);
+    if (argv[2] == nullptr){
+        kModelType = 0;
+    }
+    else{
+        kModelType = atoi(argv[2]);
+    }
 
     //实例化超分辨率推理对象
     SuperResolutionProcess SR(kModelType);
     //初始化acl资源
-    Result ret = SR.Init();
+    Result ret = SR.init();
     if (ret != SUCCESS) {
         ERROR_LOG("Init resource failed");
         return FAILED;
@@ -55,7 +59,7 @@ int main(int argc, char *argv[]) {
     //获取图片目录下所有的图片文件名
     string inputImageDir = string(argv[1]);
     vector<string> fileVec;
-    Utils::GetAllFiles(inputImageDir, fileVec);
+    Utils::get_all_files(inputImageDir, fileVec);
     if (fileVec.empty()) {
         ERROR_LOG("Failed to deal all empty path=%s.", inputImageDir.c_str());
         return FAILED;
@@ -63,7 +67,7 @@ int main(int argc, char *argv[]) {
     //逐张图片推理
     for (string imageFile : fileVec) {
         //预处理图片,初始化模型和内存
-        ret = SR.Preprocess(imageFile);
+        ret = SR.preprocess(imageFile);
         if (ret != SUCCESS) {
             ERROR_LOG("Deal file %s failed, continue to read next",
                       imageFile.c_str());                
@@ -71,19 +75,19 @@ int main(int argc, char *argv[]) {
         }
         //将预处理的图片送入模型推理,并获取推理结果
         aclmdlDataset* inferenceOutput = nullptr;
-        ret = SR.Inference(inferenceOutput);
+        ret = SR.inference(inferenceOutput);
         if ((ret != SUCCESS) || (inferenceOutput == nullptr)) {
             ERROR_LOG("Inference model inference output data failed");
             return FAILED;
         }
         //解析推理输出
-        ret = SR.Postprocess(imageFile, inferenceOutput);
+        ret = SR.postprocess(imageFile, inferenceOutput);
         if (ret != SUCCESS) {
             ERROR_LOG("Process model inference output data failed");
             return FAILED;
         }
         // Destroy model
-        SR.DestroyModel();
+        SR.destroy_model();
     }
 
     INFO_LOG("Execute sample success");
