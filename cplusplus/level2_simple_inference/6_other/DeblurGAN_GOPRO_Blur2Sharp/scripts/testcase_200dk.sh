@@ -4,7 +4,6 @@ model_name="blurtosharp_pad_1280_720"
 data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/DeblurGAN_GOPRO_Blur2Sharp/test_image/"
 verify_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/DeblurGAN_GOPRO_Blur2Sharp/verify_image/"
 project_name="cplusplus_DeblurGAN_GOPRO_Blur2Sharp"
-
 version=$1
 
 script_path="$( cd "$(dirname $BASH_SOURCE)" ; pwd -P)"
@@ -13,6 +12,7 @@ project_path=${script_path}/..
 declare -i success=0
 declare -i inferenceError=1
 declare -i verifyResError=2
+
 
 function downloadDataWithVerifySource() {
 
@@ -58,10 +58,10 @@ function setAtcEnv() {
 function setBuildEnv() {
     # 设置代码编译时需要的环境变量
     if [[ ${version} = "c73" ]] || [[ ${version} = "C73" ]];then
-        export DDK_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/x86_64-linux_gcc7.3.0
+        export DDK_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/arm64-linux_gcc7.3.0
         export NPU_HOST_LIB=${DDK_PATH}/acllib/lib64/stub
     elif [[ ${version} = "c75" ]] || [[ ${version} = "C75" ]];then
-        export DDK_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/x86_64-linux
+        export DDK_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/arm64-linux
         export NPU_HOST_LIB=${DDK_PATH}/acllib/lib64/stub
     fi
 
@@ -97,7 +97,7 @@ function main() {
 
     mkdir -p ${HOME}/models/${project_name}     
     if [[ $(find ${HOME}/models/${project_name} -name ${model_name}".om")"x" = "x" ]];then 
-        # 下载原始模型文件
+        # 下载原始模型文件[aipp_cfg文件]
         downloadOriginalModel
         if [ $? -ne 0 ];then
             echo "ERROR: download original model failed"
@@ -150,9 +150,9 @@ function main() {
         echo "ERROR: set build environment failed"
         return ${inferenceError}
     fi
-    
+
     # 产生Makefile
-    cmake ${project_path}/src -DCMAKE_CXX_COMPILER=g++ -DCMAKE_SKIP_RPATH=TRUE
+    cmake ${project_path}/src -DCMAKE_CXX_COMPILER=aarch64-linux-gnu-g++ -DCMAKE_SKIP_RPATH=TRUE
     if [ $? -ne 0 ];then
         echo "ERROR: cmake failed. please check your project"
         return ${inferenceError}
@@ -168,10 +168,11 @@ function main() {
 
     # 重新配置程序运行所需的环境变量
     export LD_LIBRARY_PATH=
-    export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/nnrt/latest/acllib/lib64:/home/HwHiAiUser/ascend_ddk/x86/lib:$LD_LIBRARY_PATH
+    export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/acllib/lib64:/home/HwHiAiUser/ascend_ddk/arm/lib:${LD_LIBRARY_PATH}
 
     # 运行程序
     mkdir output
+
     ./main ../data
     if [ $? -ne 0 ];then
         echo "ERROR: run failed. please check your project"
@@ -200,4 +201,5 @@ function main() {
     return ${success}
 }
 main
+
 

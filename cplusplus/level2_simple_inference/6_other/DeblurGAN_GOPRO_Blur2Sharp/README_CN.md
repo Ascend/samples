@@ -48,32 +48,34 @@
 
             **unzip ascend-samples-master.zip**
 
-2. 获取此应用中所需要的原始网络模型。
-
-
-    参考下表获取此应用中所用到的原始网络模型，并将其存放到开发环境普通用户下该样例的model文件夹中，本例为：$HOME/samples/cplusplus/level2_simple_inference/6_other/DeblurGAN_GOPRO_Blur2Sharp/model/。
+2. 获取此应用中所需要Davinci模型。
+    - 20.1版本  
+    由于版本问题，此模型在20.1版本不能正确转换。因此20.1版本请直接获取om模型。
+     
+        **cd $HOME/samples/cplusplus/level2_simple_inference/6_other/DeblurGAN_GOPRO_Blur2Sharp/model/**  
+  
+        **wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/DeblurGAN/blurtosharp_pad_1280_720.om --no-check-certificate** 
     
-    |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
-    |---|---|---|
-    |  DeblurGAN| 图像变清晰模型。是基于Tensorflow的DeblurGAN模型。  |  请参考[https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/Blur2Sharp/ATC_DeblurGAN_tf_AE](https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/Blur2Sharp/ATC_DeblurGAN_tf_AE)目录中README.md下载原始模型章节下载模型文件。 |
-
-    ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
-    > - modelzoo中提供了转换好的om模型，可直接下载使用，也可下载原始模型重新进行模型转换。
-
-3. 将原始模型转换为Davinci模型。
-    
-    **注：请确认环境变量已经在[环境准备和依赖安装](https://gitee.com/ascend/samples/tree/dev/cplusplus/environment)中配置完成**
-
-    1. 设置LD_LIBRARY_PATH环境变量。
-
-        由于LD_LIBRARY_PATH环境变量在转使用atc工具和运行样例时会产生冲突，所以需要在命令行单独设置此环境变量，方便修改。
-
-        **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64**  
-
-    2. 执行以下命令使用atc命令进行模型转换。
+    - 20.0版本    
         
-        **atc --input_shape="blur:1,720,1280,3" --input_format=NHWC --output="./DeblurrGAN_pad_1280_720" --soc_version=Ascend310 --framework=3 --model="./DeblurrGAN-pad-01051648.pb" --log=info**
+        1. 参考下表获取此应用中所用到的原始网络模型，并将其存放到开发环境普通用户下该样例的model文件夹中，本例为：$HOME/samples/cplusplus/level2_simple_inference/6_other/DeblurGAN_GOPRO_Blur2Sharp/model/。
+    
+        |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
+        |---|---|---|
+        |  DeblurGAN| 图像变清晰模型。是基于Tensorflow的DeblurGAN模型。  |  请参考[https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/Blur2Sharp/ATC_DeblurGAN_tf_AE](https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/Blur2Sharp/ATC_DeblurGAN_tf_AE)目录中README.md下载原始模型章节下载模型文件。 |
 
+        ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
+        > - modelzoo中提供了转换好的om模型，可直接下载使用，也可下载原始模型重新进行模型转换。
+
+        2. 设置LD_LIBRARY_PATH环境变量。
+
+            由于LD_LIBRARY_PATH环境变量在转使用atc工具和运行样例时会产生冲突，所以需要在命令行单独设置此环境变量，方便修改。
+
+            **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64**  
+
+        3. 执行以下命令使用atc命令进行模型转换。
+        
+            **atc --input_shape="blur:1,720,1280,3" --input_format=NHWC --output="./blurtosharp_pad_1280_720" --soc_version=Ascend310 --framework=3 --model="./DeblurrGAN-pad-01051648.pb" --log=info**
 
 
 4. 获取样例需要的测试图片。
@@ -82,7 +84,7 @@
 
     **cd $HOME/samples/cplusplus/level2_simple_inference/6_other/DeblurGAN_GOPRO_Blur2Sharp/data**
 
-    **wget https://c7xcode.obs.myhuaweicloud.com/models/DeblurGAN_GOPRO_Blur2Sharp/data.png**
+    **wget https://c7xcode.obs.myhuaweicloud.com/models/DeblurGAN_GOPRO_Blur2Sharp/data.png --no-check-certificate**
 
 
 ### 样例部署

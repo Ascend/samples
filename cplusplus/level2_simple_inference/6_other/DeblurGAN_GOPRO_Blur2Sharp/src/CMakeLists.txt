@@ -47,8 +47,6 @@ include_directories(
     ${OPENCV_PATH}/include/opencv4
 )
 
-MESSAGE("opencv path:"$ENV{HOME}/ascend_ddk/${ARCH}/include/opencv4)
-MESSAGE("opencv path:"${OPENCV_PATH}/include/opencv4)
 
 # add host lib path
 link_directories(
