@@ -76,7 +76,7 @@ void Utils::split_path(const string &path, vector<string> &path_vec) {
 void Utils::get_all_files(const string &path, vector<string> &file_vec) {
     // split file path
     vector<string> path_vector;
-    SplitPath(path, path_vector);
+    split_path(path, path_vector);
 
     for (string every_path : path_vector) {
         // check path exist or not
