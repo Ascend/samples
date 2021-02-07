@@ -25,7 +25,7 @@ from acl_resource import AclResource
 
 currentPath = os.path.join(path, "..")
 OUTPUT_DIR = os.path.join(currentPath, 'outputs/')
-MODEL_PATH = os.path.join(currentPath,"model/rcf.om")
+MODEL_PATH = os.path.join(currentPath, "model/rcf.om")
 MODEL_WIDTH = 512
 MODEL_HEIGHT = 512
 
@@ -109,7 +109,7 @@ def main():
     """
     main
     """
-    image_dir = os.path.join(currentPath, "data" )
+    image_dir = os.path.join(currentPath, "data")
 
     images_list = [os.path.join(image_dir, img)
                    for img in os.listdir(image_dir)
