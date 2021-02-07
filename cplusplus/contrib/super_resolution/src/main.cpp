@@ -29,7 +29,6 @@ namespace {
 }
 
 int main(int argc, char *argv[]) {
-    //检查应用程序执行时的输入,程序执行要求输入图片目录参数
     if((argc < 2) || (argv[1] == nullptr)){
         ERROR_LOG("Please input: ./main <image_dir>");
         return FAILED;
@@ -48,15 +47,14 @@ int main(int argc, char *argv[]) {
         kModelType = atoi(argv[2]);
     }
 
-    //实例化超分辨率推理对象
     SuperResolutionProcess SR(kModelType);
-    //初始化acl资源
+    //init acl resources
     Result ret = SR.init();
     if (ret != SUCCESS) {
         ERROR_LOG("Init resource failed");
         return FAILED;
     }
-    //获取图片目录下所有的图片文件名
+    //get input Image Dir
     string inputImageDir = string(argv[1]);
     vector<string> fileVec;
     Utils::get_all_files(inputImageDir, fileVec);
@@ -64,23 +62,21 @@ int main(int argc, char *argv[]) {
         ERROR_LOG("Failed to deal all empty path=%s.", inputImageDir.c_str());
         return FAILED;
     }
-    //逐张图片推理
+
+    //inference
     for (string imageFile : fileVec) {
-        //预处理图片,初始化模型和内存
         ret = SR.preprocess(imageFile);
         if (ret != SUCCESS) {
             ERROR_LOG("Deal file %s failed, continue to read next",
                       imageFile.c_str());                
             continue;
         }
-        //将预处理的图片送入模型推理,并获取推理结果
         aclmdlDataset* inferenceOutput = nullptr;
         ret = SR.inference(inferenceOutput);
         if ((ret != SUCCESS) || (inferenceOutput == nullptr)) {
             ERROR_LOG("Inference model inference output data failed");
             return FAILED;
         }
-        //解析推理输出
         ret = SR.postprocess(imageFile, inferenceOutput);
         if (ret != SUCCESS) {
             ERROR_LOG("Process model inference output data failed");
