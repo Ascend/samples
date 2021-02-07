@@ -40,7 +40,7 @@ const std::string kPathSeparator = "/";
 const std::string kOutputFilePrefix = "out_";
 }
 
-bool Utils::IsDirectory(const string &path) {
+bool Utils::is_directory(const string &path) {
     // get path stat
     struct stat buf;
     if (stat(path.c_str(), &buf) != kStatSuccess) {
@@ -55,7 +55,7 @@ bool Utils::IsDirectory(const string &path) {
     }
 }
 
-bool Utils::IsPathExist(const string &path) {
+bool Utils::is_path_exist(const string &path) {
     ifstream file(path);
     if (!file) {
         return false;
@@ -63,7 +63,7 @@ bool Utils::IsPathExist(const string &path) {
     return true;
 }
 
-void Utils::SplitPath(const string &path, vector<string> &path_vec) {
+void Utils::split_path(const string &path, vector<string> &path_vec) {
     char *char_path = const_cast<char*>(path.c_str());
     const char *char_split = kImagePathSeparator.c_str();
     char *tmp_path = strtok(char_path, char_split);
@@ -73,27 +73,27 @@ void Utils::SplitPath(const string &path, vector<string> &path_vec) {
     }
 }
 
-void Utils::GetAllFiles(const string &path, vector<string> &file_vec) {
+void Utils::get_all_files(const string &path, vector<string> &file_vec) {
     // split file path
     vector<string> path_vector;
     SplitPath(path, path_vector);
 
     for (string every_path : path_vector) {
         // check path exist or not
-        if (!IsPathExist(path)) {
+        if (!is_path_exist(path)) {
         ERROR_LOG("Failed to deal path=%s. Reason: not exist or can not access.",
                 every_path.c_str());
         continue;
         }
         // get files in path and sub-path
-        GetPathFiles(every_path, file_vec);
+        get_path_files(every_path, file_vec);
     }
 }
 
-void Utils::GetPathFiles(const string &path, vector<string> &file_vec) {
+void Utils::get_path_files(const string &path, vector<string> &file_vec) {
     struct dirent *dirent_ptr = nullptr;
     DIR *dir = nullptr;
-    if (IsDirectory(path)) {
+    if (is_directory(path)) {
         dir = opendir(path.c_str());
         while ((dirent_ptr = readdir(dir)) != nullptr) {
             // skip . and ..
@@ -104,8 +104,8 @@ void Utils::GetPathFiles(const string &path, vector<string> &file_vec) {
             // file path
             string full_path = path + kPathSeparator + dirent_ptr->d_name;
             // directory need recursion
-            if (IsDirectory(full_path)) {
-                GetPathFiles(full_path, file_vec);
+            if (is_directory(full_path)) {
+                get_path_files(full_path, file_vec);
             } else {
                 // put file
                 file_vec.emplace_back(full_path);
@@ -117,7 +117,7 @@ void Utils::GetPathFiles(const string &path, vector<string> &file_vec) {
     }
 }
 
-void* Utils::CopyDataDeviceToLocal(void* deviceData, uint32_t dataSize) {
+void* Utils::copy_data_device_to_local(void* deviceData, uint32_t dataSize) {
     void* hostPtr = new uint8_t[dataSize];
     if (hostPtr == nullptr) {
         ERROR_LOG("malloc host data buffer failed");
