@@ -41,23 +41,23 @@ public:
     * @param [in] modelPath: model path
     * @return result
     */
-    Result LoadModelFromFileWithMem(const char *modelPath);
+    Result load_model_from_file_with_mem(const char *modelPath);
 
     /**
     * @brief unload model
     */
-    void Unload();
+    void unload();
 
     /**
     * @brief create model desc
     * @return result
     */
-    Result CreateDesc();
+    Result create_desc();
 
     /**
     * @brief destroy desc
     */
-    void DestroyDesc();
+    void destroy_desc();
 
     /**
     * @brief create model input
@@ -65,35 +65,35 @@ public:
     * @param [in] bufferSize: input buffer size
     * @return result
     */
-    Result CreateInput(void *inputDataBuffer, size_t bufferSize);
+    Result create_input(void *inputDataBuffer, size_t bufferSize);
 
     /**
     * @brief destroy input resource
     */
-    void DestroyInput();
+    void destroy_input();
 
     /**
     * @brief create output buffer
     * @return result
     */
-    Result CreateOutput();
+    Result create_output();
 
     /**
     * @brief destroy output resource
     */
-    void DestroyOutput();
+    void destroy_output();
 
     /**
     * @brief model execute
     * @return result
     */
-    Result Execute();
+    Result execute();
 
     /**
     * @brief get model output data
     * @return output dataset
     */
-    aclmdlDataset *GetModelOutputData();
+    aclmdlDataset *get_model_output_data();
 
 private:
     bool loadFlag_;  // model load flag
