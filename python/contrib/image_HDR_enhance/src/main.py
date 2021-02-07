@@ -64,7 +64,7 @@ def main():
         result_list = model.execute([RGB_image, ])  # inferring
         end_time = time.time()
         print('pic:{}'.format(pic))
-        print('pic_size:{}×{}'.format(o_h, o_w))
+        print('pic_size:{}x{}'.format(o_h, o_w))
         print('time:{}ms'.format(int((end_time-start_time)*1000)))
         print('\n')
         post_process(result_list, pic, o_h, o_w)  # postprocess
