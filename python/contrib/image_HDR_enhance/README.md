@@ -107,7 +107,7 @@
      export LD_LIBRARY_PATH=
      source ~/.bashrc
      cd $HOME/samples/python/contrib/image_HDR_enhance/src
-     python3.6 hdr_main.py
+     python3.6 main.py
 	```
    - 如果是开发环境与运行环境分离部署，执行以下命令切换目录。
 	```
@@ -116,7 +116,7 @@
      切换目录后，执行以下命令运行样例。
    
 	```
-     python3.6 hdr_main.py
+     python3.6 main.py
 	```
 
 
