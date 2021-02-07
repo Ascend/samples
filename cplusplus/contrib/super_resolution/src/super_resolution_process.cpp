@@ -127,7 +127,6 @@ Result SuperResolutionProcess::init() {
     return SUCCESS;
 }
 
-
 Result SuperResolutionProcess::preprocess(const string& imageFile) {
     // read image using OPENCV
     cv::Mat mat = cv::imread(imageFile, CV_LOAD_IMAGE_GRAYSCALE);
@@ -197,7 +196,9 @@ Result SuperResolutionProcess::postprocess(const string& imageFile, aclmdlDatase
 {
     uint32_t dataSize = 0;
     void* data = get_inference_output_item(dataSize, modelOutput);
-    if (data == nullptr) return FAILED;
+    if (data == nullptr){
+        return FAILED;
+    }
 
     // get result data
     cv::Mat mat_y(outputHeight_, outputWidth_, CV_32FC1, const_cast<float*>((float*)data));
@@ -287,9 +288,9 @@ void* SuperResolutionProcess::get_inference_output_item(uint32_t& itemDataSize,
 
 void SuperResolutionProcess::destroy_resource()
 {
-	aclrtFree(inputBuf_);
+    aclrtFree(inputBuf_);
     inputBuf_ = nullptr;
-	
+
     aclError ret;
     if (stream_ != nullptr) {
         ret = aclrtDestroyStream(stream_);
