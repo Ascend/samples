@@ -57,7 +57,9 @@ link_directories(
 )
 
 add_executable(main
+        utils.cpp
         super_resolution_process.cpp
+        model_process.cpp
         main.cpp)
 
 target_link_libraries(main

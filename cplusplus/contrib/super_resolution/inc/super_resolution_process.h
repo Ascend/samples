@@ -19,7 +19,7 @@
 #pragma once
 #include "utils.h"
 #include "acl/acl.h"
-#include "atlas_model.h"
+#include "model_process.h"
 #include <memory>
 
 using namespace std;
@@ -51,7 +51,7 @@ private:
     int32_t deviceId_;
     aclrtContext context_;
     aclrtStream stream_;
-    AtlasModel model_;
+    ModelProcess model_;
 
     const char* modelPath_;
     uint32_t modelWidth_;

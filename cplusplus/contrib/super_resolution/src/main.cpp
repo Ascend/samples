@@ -22,7 +22,7 @@
 #include <dirent.h>
 
 #include "super_resolution_process.h"
-#include "atlas_utils.h"
+#include "utils.h"
 using namespace std;
 
 namespace {
@@ -55,7 +55,7 @@ int main(int argc, char *argv[]) {
     //获取图片目录下所有的图片文件名
     string inputImageDir = string(argv[1]);
     vector<string> fileVec;
-    GetAllFiles(inputImageDir, fileVec);
+    Utils::GetAllFiles(inputImageDir, fileVec);
     if (fileVec.empty()) {
         ERROR_LOG("Failed to deal all empty path=%s.", inputImageDir.c_str());
         return FAILED;
