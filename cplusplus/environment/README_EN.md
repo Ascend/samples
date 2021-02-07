@@ -17,6 +17,10 @@ Please perform the following three steps in sequence, please click the correspon
 - [for_atlas200dk](./opencv_install/README_200DK_EN.md)  
 - [for_atlas300](./opencv_install/README_300_EN.md)
 
-3.Install Presenter Agent
+3.Install atlasutil 
+- [for_atlas200dk](./atlasutil_install/README_200DK_EN.md)  
+- [for_atlas300](./atlasutil_install/README_300_EN.md) 
+
+4.Install Presenter Agent
 - [for_atlas200dk](./presenteragent_install/README_200DK_EN.md)  
 - [for_atlas300](./presenteragent_install/README_300_EN.md)

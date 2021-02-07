@@ -17,7 +17,11 @@
 - [for_atlas200dk](./opencv_install/README_200DK_CN.md)  
 - [for_atlas300](./opencv_install/README_300_CN.md)
 
-3.安装Presenter Agent
+3.安装atlasutil库
+- [for_atlas200dk](./atlasutil_install/README_200DK_CN.md)  
+- [for_atlas300](./atlasutil_install/README_300_CN.md)
+
+4.安装Presenter Agent
 - [for_atlas200dk](./presenteragent_install/README_200DK_CN.md)  
 - [for_atlas300](./presenteragent_install/README_300_CN.md)
 
