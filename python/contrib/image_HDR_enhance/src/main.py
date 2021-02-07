@@ -1,3 +1,9 @@
+"""
+Copyright (R) @huawei.com, all rights reserved
+-*- coding:utf-8 -*-
+CREATED:  2021-02-02 09:44:13
+MODIFIED: 2021-02-22 09:44:13
+"""
 import sys
 import cv2
 import numpy as np
@@ -74,7 +80,7 @@ def main():
         end_time = time.time()
         print('pic:{}'.format(pic))
         print('pic_size:{}x{}'.format(o_h, o_w))
-        print('time:{}ms'.format(int((end_time-start_time) * 1000)))
+        print('time:{}ms'.format(int((end_time - start_time) * 1000)))
         print('\n')
         post_process(result_list, pic, o_h, o_w)  # postprocess
     print('task over')
