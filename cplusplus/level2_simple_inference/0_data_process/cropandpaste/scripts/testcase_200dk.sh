@@ -44,6 +44,9 @@ function setBuildEnv() {
     elif [[ ${version} = "c75" ]] || [[ ${version} = "C75" ]];then
         export DDK_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/arm64-linux
         export NPU_HOST_LIB=${DDK_PATH}/acllib/lib64/stub
+    elif [[ ${version} = "c76" ]] || [[ ${version} = "C76" ]];then
+        export DDK_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/arm64-linux
+        export NPU_HOST_LIB=${DDK_PATH}/acllib/lib64/stub
     fi
 
     return 0
