@@ -30,21 +30,6 @@
 #define ERROR_LOG(fmt, args...) fprintf(stdout, "[ERROR]  " fmt "\n", ##args)
 #define RGBF32_CHAN_SIZE(width, height) ((width) * (height) * 4)
 
-template<class Type>
-std::shared_ptr<Type> MakeSharedNoThrow() {
-    try {
-        return std::make_shared<Type>();
-    }
-    catch (...) {
-        return nullptr;
-    }
-}
-
-#define MAKE_SHARED_NO_THROW(memory, memory_type) \
-    do { \
-            memory = MakeSharedNoThrow<memory_type>(); \
-    }while(0);    
-
 typedef enum Result {
     SUCCESS = 0,
     FAILED = 1
