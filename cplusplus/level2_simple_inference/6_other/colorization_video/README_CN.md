@@ -81,18 +81,18 @@
 
 1. 修改present相关配置文件。
 
-    将样例目录下**scripts/param.conf**中的 presenter_server_ip、presenter_view_ip 修改为开发环境中可以ping通运行环境的ip地址，使用以下两种情况举例说明。
+    将样例目录下**scripts/colorization.conf**中的 presenter_server_ip、presenter_view_ip 修改为开发环境中可以ping通运行环境的ip地址，使用以下两种情况举例说明。
 
      - 使用产品为200DK开发者板。   
         1. 开发环境中使用ifconfig查看可用ip。   
-        2. 在开发环境中将**scripts/param.conf**中的 presenter_server_ip、presenter_view_ip 修改为该ip地址。   
+        2. 在开发环境中将**scripts/colorization.conf**中的 presenter_server_ip、presenter_view_ip 修改为该ip地址。   
         ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
         > - 1.开发环境和运行环境分离部署，一般使用配置的虚拟网卡ip，例如192.168.1.223。
         > - 2.开发环境和运行环境合一部署，一般使用200dk固定ip，例如192.168.1.2。
 
     - 使用产品为300加速卡（ai1s云端推理环境）。   
         1. ECS弹性云服务器控制台中查看ai1s云端环境可用内网ip，例如192.168.0.198。   
-        2. 在开发环境中将**scripts/param.conf**中的 presenter_server_ip、presenter_view_ip 修改为该ip地址。   
+        2. 在开发环境中将**scripts/colorization.conf**中的 presenter_server_ip、presenter_view_ip 修改为该ip地址。   
         ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
         > - 也可以在ai1s云端环境中使用ifconfig查看内网ip。
         > - 登录ai1s云端环境时的ip地址为此环境的公网ip，ai1s云端环境中ifconfig查看到的ip为此环境的内网ip。
@@ -153,8 +153,8 @@
 
     - 使用产品为200DK开发者板。   
         1. 开发环境中执行以下命令启动presentserver。   
-            **cd $HOME/samples/cplusplus/level2_simple_inference/6_other/colorization_video**   
-            **bash scripts/run_presenter_server.sh**   
+            **cd $HOME/samples/common/**
+            **bash run_presenter_server.sh $HOME/samples/cplusplus/level2_simple_inference/6_other/colorization_video/colorization.conf**   
         2. 执行以下命令登录运行环境。   
             **开发环境与运行环境合一部署，请跳过此步骤！**   
             **ssh HwHiAiUser@xxx.xxx.xxx.xxx** 
@@ -164,8 +164,8 @@
            **开发环境与运行环境合一部署，请跳过此步骤！**   
            **ssh HwHiAiUser@xxx.xxx.xxx.xxx**    
         2.运行环境中启动presenterserver。   
-进入工程所在目录（如$HOME/colorization_video），执行以下命令
-            **bash scripts/run_presenter_server.sh**   
+进入presenterserver所在目录（如$HOME/samples/common/），执行以下命令
+            **bash run_presenter_server.sh $HOME/samples/cplusplus/level2_simple_inference/6_other/colorization_video/colorization.conf**   
 
 3. <a name="step_2"></a>运行可执行文件。
 
