@@ -7,6 +7,11 @@
 
 **./**   
 ├── [cartoonGAN_picture](./cartoonGAN_picture)： **卡通图像生成。**    
-└── [garbage_picture](./garbage_picture)： **垃圾分类。** 
+└── [garbage_picture](./garbage_picture)： **垃圾分类。**   
+└── [ModelZoo_Yuefu_TF](./ModelZoo_Yuefu_TF)： **乐府作诗。**   
+└── [crowd_count_picture](./crowd_count_picture)： **密集人群统计。**   
+└── [dehaze_picture](./dehaze_picture)： **图像去雾。** 
+└── [edge_detection_picture](./edge_detection_picture)： **图像边缘检测。** 
+└── [portrait_picture](./portrait_picture)： **背景替换。** 
 
   
