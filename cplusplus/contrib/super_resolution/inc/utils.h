@@ -69,16 +69,16 @@ public:
     * @param [in] PicBufferSize: aligned pic size
     * @return device buffer of pic
     */
-    static bool IsDirectory(const std::string &path);
+    static bool is_directory(const std::string &path);
 
-    static bool IsPathExist(const std::string &path);
+    static bool is_path_exist(const std::string &path);
 
-    static void SplitPath(const std::string &path, std::vector<std::string> &path_vec);
+    static void split_path(const std::string &path, std::vector<std::string> &path_vec);
 
-    static void GetAllFiles(const std::string &path, std::vector<std::string> &file_vec);
+    static void get_all_files(const std::string &path, std::vector<std::string> &file_vec);
 
-    static void GetPathFiles(const std::string &path, std::vector<std::string> &file_vec);
+    static void get_path_files(const std::string &path, std::vector<std::string> &file_vec);
 
-    static void* CopyDataDeviceToLocal(void* deviceData, uint32_t dataSize);
+    static void* copy_data_device_to_local(void* deviceData, uint32_t dataSize);
 };
 
