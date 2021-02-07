@@ -44,7 +44,7 @@
      
       ```
      cd $HOME
-     unzip ascend-samples-master.zipt
+     unzip ascend-samples-master.zip
       ```
 #### 2. 获取此应用中所需要的模型
 
@@ -104,7 +104,7 @@
      export LD_LIBRARY_PATH=
      source ~/.bashrc
      cd $HOME/samples/python/contrib/edge_detection_picture/src
-     python3 main.py ../data/
+     python3 main.py
 	```
    - 如果是开发环境与运行环境分离部署，执行以下命令切换目录。
 	```
@@ -113,7 +113,7 @@
      切换目录后，执行以下命令运行样例。
    
 	```
-     python3.6 main.py ../data/
+     python3.6 main.py
 	```
 
 

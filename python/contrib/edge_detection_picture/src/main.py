@@ -11,16 +11,23 @@ import cv2
 from PIL import Image
 import struct
 
-sys.path.append("../../../common/")
-sys.path.append("../")
+path = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.join(path, ".."))
+sys.path.append(os.path.join(path, "../../../common/"))
+
 import acl
 import atlas_utils.utils as utils
-import atlas_utils.constants as constants
+import atlas_utils.constants as const
 from atlas_utils.acl_dvpp import Dvpp
 from atlas_utils.acl_model import Model
 from atlas_utils.acl_image import AclImage
 from acl_resource import AclResource
 
+currentPath = os.path.join(path, "..")
+OUTPUT_DIR = os.path.join(currentPath, 'outputs/')
+MODEL_PATH = os.path.join(currentPath, "model/rcf.om")
+MODEL_WIDTH = 512
+MODEL_HEIGHT = 512
 
 class EdgeDetection(object):
     """
@@ -41,8 +48,9 @@ class EdgeDetection(object):
         # Load model
         self._model = Model(self._model_path)
 
-        return constants.SUCCESS
+        return const.SUCCESS
 
+    @utils.display_time
     def pre_process(self, im):
         """
         image preprocess
@@ -58,6 +66,7 @@ class EdgeDetection(object):
         result = img.transpose([2, 0, 1]).copy()
         return result 
 
+    @utils.display_time
     def inference(self, input_data):
         """
         model inference
@@ -70,6 +79,7 @@ class EdgeDetection(object):
         """
         return 1. / (1 + np.exp(-x))
 
+    @utils.display_time
     def post_process(self, infer_output, image_name):
         """
         Post-processing, analysis of inference results
@@ -99,15 +109,11 @@ def main():
     """
     main
     """
-    SRC_PATH = os.path.realpath(__file__).rsplit("/", 1)[0]
-    MODEL_PATH = "../model/rcf.om"
-    MODEL_WIDTH = 512
-    MODEL_HEIGHT = 512
+    image_dir = os.path.join(currentPath, "data")
 
-    # With picture directory parameters during program execution
-    if (len(sys.argv) != 2):
-        print("The App arg is invalid")
-        exit(1)
+    images_list = [os.path.join(image_dir, img)
+                   for img in os.listdir(image_dir)
+                   if os.path.splitext(img)[1] in const.IMG_EXT]
 
     acl_resource = AclResource()
     acl_resource.init()
@@ -116,17 +122,13 @@ def main():
     ret = edge_detection.init()
     utils.check_ret("edge_detection init ", ret)
 
-    image_dir = sys.argv[1]
-    images_list = [os.path.join(image_dir, img)
-                   for img in os.listdir(image_dir)
-                   if os.path.splitext(img)[1] in constants.IMG_EXT]
-
     # Create a directory to save inference results
-    if not os.path.isdir(os.path.join(SRC_PATH, "../outputs")):
-        os.mkdir(os.path.join(SRC_PATH, "../outputs"))
+    if not os.path.exists(OUTPUT_DIR):
+        os.mkdir(OUTPUT_DIR)
 
     for image_file in images_list:
-        image_name = image_file.split('/')[-1]
+        image_name = os.path.basename(image_file)
+        print('====' + image_name + '====')
 
         # read image
         im = Image.open(image_file)
