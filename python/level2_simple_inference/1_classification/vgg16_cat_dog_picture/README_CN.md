@@ -52,7 +52,7 @@
 
 | **模型名称** | **模型说明**                                | **模型下载路径**                                             |
 | ------------ | ------------------------------------------- | ------------------------------------------------------------ |
-| vgg16        | 基于TensorFlow的VGG16模型，用于识别猫和狗。 | 请参考https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/中README.md原始模型章节，下载**原始模型**及**对应的cfg文件**。 |
+| vgg16        | 基于TensorFlow的VGG16模型，用于识别猫和狗。 | 请参考https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/ 中README.md原始模型章节，下载**原始模型**及**对应的cfg文件**。 |
 
 #### 3. 将原始模型转换为Davinci模型
 
