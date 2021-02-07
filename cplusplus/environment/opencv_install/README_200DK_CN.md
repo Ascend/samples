@@ -17,7 +17,7 @@ $\color{red}{以下操作在运行环境(Atlas200DK)上操作}$
 2.  安装ffmpeg  
   
     创建文件夹，用于存放编译后的文件  
-    **mkdir -p /home/HwHiAiUser/ascend_ddk/arm**
+    **mkdir -p /home/HwHiAiUser/ascend_ddk/arm --no-check-certificate**
 
     下载ffmpeg  
     **cd $HOME**  
