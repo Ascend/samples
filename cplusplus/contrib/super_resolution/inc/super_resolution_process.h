@@ -22,8 +22,6 @@
 #include "model_process.h"
 #include <memory>
 
-using namespace std;
-
 /**
 * SuperResolutionProcess
 */
@@ -33,9 +31,9 @@ public:
     ~SuperResolutionProcess();
 
     Result init();
-    Result preprocess(const string& imageFile);
+    Result preprocess(const std::string& imageFile);
     Result inference(aclmdlDataset*& inferenceOutput);
-    Result postprocess(const string& origImageFile,
+    Result postprocess(const std::string& origImageFile,
                        aclmdlDataset* modelOutput);
     Result init_model(const char* omModelPath);
     void destroy_model();
@@ -44,7 +42,7 @@ private:
     Result init_resource();
     void* get_inference_output_item(uint32_t& itemDataSize,
                                  aclmdlDataset* inferenceOutput);
-    void save_image(const string& origImageFile, cv::Mat& imageBicubic, cv::Mat& imageSR);
+    void save_image(const std::string& origImageFile, cv::Mat& imageBicubic, cv::Mat& imageSR);
     void destroy_resource();
 
 private:
