@@ -42,7 +42,7 @@
      
       ```
      cd $HOME
-     unzip ascend-samples-master.zipt
+     unzip ascend-samples-master.zip
       ```
 #### 2. 获取此应用中所需要的模型
 
