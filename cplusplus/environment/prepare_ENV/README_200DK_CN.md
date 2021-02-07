@@ -142,7 +142,7 @@ $\color{red}{以下操作在运行环境(Atlas200DK)上操作}$
     - ubuntu18.04-arm华为源  
  
         执行以下换源操作  
-        **sudo wget -O /etc/apt/sources.list https://repo.huaweicloud.com/repository/conf/Ubuntu-Ports-bionic.list**   
+        **sudo wget -O /etc/apt/sources.list https://repo.huaweicloud.com/repository/conf/Ubuntu-Ports-bionic.list --no-check-certificate**   
 
         更新源  
         **sudo apt-get update** 

@@ -139,7 +139,7 @@ This readme file describes how to configure the basic environment, including the
 - Huawei Ubuntu 18.04 (ARM) source  
 
   Run the following command to change the source.  
-  **sudo wget -O /etc/apt/sources.list https://repo.huaweicloud.com/repository/conf/Ubuntu-Ports-bionic.list**   
+  **sudo wget -O /etc/apt/sources.list https://repo.huaweicloud.com/repository/conf/Ubuntu-Ports-bionic.list --no-check-certificate**   
 
   Update the sources.  
   **sudo apt-get update** 

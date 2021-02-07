@@ -19,7 +19,7 @@ FFmpeg and OpenCV are installed to implement diversified data preprocessings and
 
     2. Download FFmpeg.  
         **cd $HOME**  
-        **wget http://www.ffmpeg.org/releases/ffmpeg-4.1.3.tar.gz**  
+        **wget http://www.ffmpeg.org/releases/ffmpeg-4.1.3.tar.gz --no-check-certificate**  
         **tar -zxvf ffmpeg-4.1.3.tar.gz**  
         **cd ffmpeg-4.1.3**
 
