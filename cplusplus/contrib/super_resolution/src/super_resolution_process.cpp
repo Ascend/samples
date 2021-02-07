@@ -40,10 +40,10 @@ isInited_(false){
 }
 
 SuperResolutionProcess::~SuperResolutionProcess() {
-    DestroyResource();
+    destroy_resource();
 }
 
-Result SuperResolutionProcess::InitResource() {
+Result SuperResolutionProcess::init_resource() {
     // ACL init
     const char *aclConfigPath = "../src/acl.json";
     aclError ret = aclInit(aclConfigPath);
@@ -70,20 +70,20 @@ Result SuperResolutionProcess::InitResource() {
     return SUCCESS;
 }
 
-Result SuperResolutionProcess::InitModel(const char* omModelPath) {
-    Result ret = model_.LoadModelFromFileWithMem(omModelPath);
+Result SuperResolutionProcess::init_model(const char* omModelPath) {
+    Result ret = model_.load_model_from_file_with_mem(omModelPath);
     if (ret != SUCCESS) {
         ERROR_LOG("execute LoadModelFromFileWithMem failed");
         return FAILED;
     }
 
-    ret = model_.CreateDesc();
+    ret = model_.create_desc();
     if (ret != SUCCESS) {
         ERROR_LOG("execute CreateDesc failed");
         return FAILED;
     }
 
-    ret = model_.CreateOutput();
+    ret = model_.create_output();
     if (ret != SUCCESS) {
         ERROR_LOG("execute CreateOutput failed");
         return FAILED;
@@ -95,7 +95,7 @@ Result SuperResolutionProcess::InitModel(const char* omModelPath) {
         return FAILED;
     }
 
-    ret = model_.CreateInput(inputBuf_, inputDataSize_);
+    ret = model_.create_input(inputBuf_, inputDataSize_);
     if (ret != SUCCESS) {
         ERROR_LOG("Create mode input dataset failed");
         return FAILED;
@@ -104,20 +104,20 @@ Result SuperResolutionProcess::InitModel(const char* omModelPath) {
     return SUCCESS;
 }
 
-void SuperResolutionProcess::DestroyModel() {
-    model_.Unload();
-    model_.DestroyDesc();
-    model_.DestroyInput();
-    model_.DestroyOutput();
+void SuperResolutionProcess::destroy_model() {
+    model_.unload();
+    model_.destroy_desc();
+    model_.destroy_input();
+    model_.destroy_output();
 }
 
-Result SuperResolutionProcess::Init() {
+Result SuperResolutionProcess::init() {
     if (isInited_) {
         INFO_LOG("Classify instance is initied already!");
         return SUCCESS;
     }
 
-    Result ret = InitResource();
+    Result ret = init_resource();
     if (ret != SUCCESS) {
         ERROR_LOG("Init acl resource failed");
         return FAILED;
@@ -128,7 +128,7 @@ Result SuperResolutionProcess::Init() {
 }
 
 
-Result SuperResolutionProcess::Preprocess(const string& imageFile) {
+Result SuperResolutionProcess::preprocess(const string& imageFile) {
     // read image using OPENCV
     cv::Mat mat = cv::imread(imageFile, CV_LOAD_IMAGE_GRAYSCALE);
 
@@ -157,7 +157,7 @@ Result SuperResolutionProcess::Preprocess(const string& imageFile) {
     string modelPath = "../model/" + MODEL_LIST[modelType_] + "_" +
                         to_string(modelWidth_) +"_" + to_string(modelHeight_) + ".om";
     modelPath_ = modelPath.c_str();
-    Result ret = InitModel(modelPath_);
+    Result ret = init_model(modelPath_);
     if (ret != SUCCESS) {
         ERROR_LOG("Init model failed");
         return FAILED;
@@ -181,23 +181,22 @@ Result SuperResolutionProcess::Preprocess(const string& imageFile) {
     return SUCCESS;
 }
 
-
-Result SuperResolutionProcess::Inference(aclmdlDataset*& inferenceOutput) {
-    Result ret = model_.Execute();
+Result SuperResolutionProcess::inference(aclmdlDataset*& inferenceOutput) {
+    Result ret = model_.execute();
     if (ret != SUCCESS) {
         ERROR_LOG("Execute model inference failed");
         return FAILED;
     }
 
-    inferenceOutput = model_.GetModelOutputData();
+    inferenceOutput = model_.get_model_output_data();
 
     return SUCCESS;
 }
 
-Result SuperResolutionProcess::Postprocess(const string& imageFile, aclmdlDataset* modelOutput)
+Result SuperResolutionProcess::postprocess(const string& imageFile, aclmdlDataset* modelOutput)
 {
     uint32_t dataSize = 0;
-    void* data = GetInferenceOutputItem(dataSize, modelOutput);
+    void* data = get_inference_output_item(dataSize, modelOutput);
     if (data == nullptr) return FAILED;
 
     // get result data
@@ -225,7 +224,7 @@ Result SuperResolutionProcess::Postprocess(const string& imageFile, aclmdlDatase
     // YCrCb2BGR
     cv::cvtColor(resultImage, resultImage, cv::COLOR_YCrCb2BGR);
 
-    SaveImage(imageFile, mat_bicubic, resultImage);
+    save_image(imageFile, mat_bicubic, resultImage);
 
     if (runMode_ == ACL_HOST) {
         delete[]((uint8_t *)data);
@@ -235,7 +234,7 @@ Result SuperResolutionProcess::Postprocess(const string& imageFile, aclmdlDatase
     return SUCCESS;
 }
 
-void SuperResolutionProcess::SaveImage(const string& origImageFile,
+void SuperResolutionProcess::save_image(const string& origImageFile,
                                        cv::Mat& imageBicubic, cv::Mat& imageSR) {
     int pos1 = origImageFile.find_last_of("/");
     int pos2 = origImageFile.find_last_of(".");
@@ -248,7 +247,7 @@ void SuperResolutionProcess::SaveImage(const string& origImageFile,
     cv::imwrite(SRName, imageSR);
 }
 
-void* SuperResolutionProcess::GetInferenceOutputItem(uint32_t& itemDataSize,
+void* SuperResolutionProcess::get_inference_output_item(uint32_t& itemDataSize,
                                               aclmdlDataset* inferenceOutput) {
     aclDataBuffer* dataBuffer = aclmdlGetDatasetBuffer(inferenceOutput, 0);
     if (dataBuffer == nullptr) {
@@ -273,7 +272,7 @@ void* SuperResolutionProcess::GetInferenceOutputItem(uint32_t& itemDataSize,
 
     void* data = nullptr;
     if (runMode_ == ACL_HOST) {
-        data = Utils::CopyDataDeviceToLocal(dataBufferDev, bufferSize);
+        data = Utils::copy_data_device_to_local(dataBufferDev, bufferSize);
         if (data == nullptr) {
             ERROR_LOG("Copy inference output to host failed");
             return nullptr;
@@ -286,7 +285,7 @@ void* SuperResolutionProcess::GetInferenceOutputItem(uint32_t& itemDataSize,
     return data;
 }
 
-void SuperResolutionProcess::DestroyResource()
+void SuperResolutionProcess::destroy_resource()
 {
 	aclrtFree(inputBuf_);
     inputBuf_ = nullptr;
