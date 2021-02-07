@@ -24,6 +24,9 @@ model_path = os.path.join(SRC_PATH, "../model/image_HDR_enhance.om")
 
 
 def pre_process(dir_name):
+    """
+    Pre Process
+    """
     BGR = cv2.imread(dir_name).astype(np.float32)
     h = BGR.shape[0]
     w = BGR.shape[1]
@@ -35,6 +38,9 @@ def pre_process(dir_name):
 
 
 def post_process(result_list, pic, o_h, o_w):
+    """
+    Post Process
+    """
     data = result_list[0].reshape(out_h, out_w, 3)
     output = (cv2.resize(data, (o_w, o_h)) * 255.0).astype(np.uint8)
 
@@ -44,6 +50,9 @@ def post_process(result_list, pic, o_h, o_w):
 
 
 def main():
+    """
+    Program execution
+    """
     if not os.path.exists(OUTPUT_DIR):
         os.mkdir(OUTPUT_DIR)
 
@@ -65,7 +74,7 @@ def main():
         end_time = time.time()
         print('pic:{}'.format(pic))
         print('pic_size:{}x{}'.format(o_h, o_w))
-        print('time:{}ms'.format(int((end_time-start_time)*1000)))
+        print('time:{}ms'.format(int((end_time-start_time) * 1000)))
         print('\n')
         post_process(result_list, pic, o_h, o_w)  # postprocess
     print('task over')
