@@ -1,11 +1,11 @@
-*该案例仅仅用于学习，打通流程，不对效果负责，不支持商用。**
+**该案例仅仅用于学习，打通流程，不对效果负责，不支持商用。**
 
-# ModelArts- jupyter +Ascend310 从modelarts到线下部署，开发口罩识别AI应用（图片输入+图片输出）
+# ModelArts- jupyter +Ascend310 从ModelArts到线下部署，开发猫狗识别AI应用（图片输入+图片输出）
 
 ## 案例内容
 此案例将带领开发者体验端云协同开发，首先使用ModelArts训练猫狗分类模型，然后，使用Atlas200 DK/Atlas300(ai1s)部署模型并进行猫狗识别，端到端掌握AI业务全流程开发实践技能。开发技能的流程如图所示：
 
-![1](C:\Users\83395\Desktop\1.png)
+![输入图片说明](https://images.gitee.com/uploads/images/2021/0207/151245_103873e0_8113712.png "1.png")
 
 ## 案例目标
 - 掌握使用ModelArts-训练猫狗分类模型。
@@ -24,6 +24,7 @@
 2. **Atlas推理准备工作**
 
     - Atlas200 DK 
+
       （1）参考[制卡文档](https://support.huaweicloud.com/dedg-A200dk_3000_c75/atlased_04_0013.html)进行SD卡制作，制卡成功后等待开发者板四个灯常亮即可。
     
       （2）参考[连接文档](https://support.huaweicloud.com/dedg-A200dk_3000_c75/atlased_04_0015.html)中的**使用网线通过路由器连接Ubuntu服务器**步骤，完成开发者板和本地机器的连接及开发者板上网配置。
@@ -31,6 +32,7 @@
       （3）配置完成后，参考[环境准备和依赖安装](https://gitee.com/ascend/samples/blob/master/python/environment)准备好环境。
 
     - Atlas300（ai1s）
+
       （1）参考[购买并登录Linux弹性云服务器指南](https://support.huaweicloud.com/qs-ecs/zh-cn_topic_0132727313.html)购买AI加速型（ai1s）ECS弹性云服务器，并参考[卸载驱动固件和CANN软件文档](https://support.huaweicloud.com/instg-cli-cann/atlascli_03_0100.html)卸载预安装的老版本。
 
       （2）参考[CANN安装指南](https://support.huaweicloud.com/instg-cli-cann/atlascli_03_0017.html)配置ai1s的推理开发和运行环境。
@@ -38,21 +40,21 @@
       （3）配置完成后，参考[环境准备和依赖安装](https://gitee.com/ascend/samples/blob/master/python/environment)准备好环境。
 
 ## 模型训练
-我们在ModelArts中训练模型，模型训练完成后转换成Atlas200 DK中可用的om模型。
+使用ModelArts-Notebook完成模型训练。
 
-### 1 数据集
+### 数据集
 
 猫狗大战数据集包含共计12500张猫和狗的图片，图片名称中含有类别名称（cat和dog），数据集已经存放到obs桶中，后期运行教程中的代码，即可下载到自己的notebook环境中。
 
-### 2 进入ModelArts
+### 进入ModelArts
 
    首先登录[ModelArts管理控制台](https://console.huaweicloud.com/modelarts/?region=cn-north-4#/manage/trainingjobs)，进入ModelArts控制台。
 
-### 3  创建ModelArts Notebook
+### 创建ModelArts Notebook
 
    ModelArts的Notebook提供网页版的Python开发环境，可以方便编写、运行代码，并查看运行结果。
 
-   首先点击左侧“**开发环境**”-->“**Notebook**”，进入开发环境，然后单击“ **创建** ”按钮，进入“ **创建Notebook **“页面。
+   首先点击左侧“**开发环境**”-->“**Notebook**”，进入开发环境，然后单击“**创建**”按钮，进入“**创建Notebook**”页面。
 
    在“创建Notebook”页面，按照如下指导填写训练作业相关参数。
 
@@ -61,7 +63,7 @@
    - 名称：自定义。
    - 描述：描述信息，可选。
 
-   ![1612422711569](C:\Users\83395\AppData\Roaming\Typora\typora-user-images\1612422711569.png)
+   ![输入图片说明](https://images.gitee.com/uploads/images/2021/0207/151628_da8e1a1d_8113712.png "1612422711569.png")
 
    - 工作环境：选择“ **Multi-Engine 1.0(Python3, Recommended)** ”环境    
    - 资源池：选择”**公共资源池**“
@@ -69,10 +71,12 @@
    - 规格：选择”**1*100NV32 CPU 8核 64GB**“，注意若没有选择限时免费注意设置停止时间
    - 存储配置：选择”**云硬盘（EVS）**“
    - 磁盘规格：磁盘规格按需选择，改应用”**5GB**“即可
-      ![1612423079050](C:\Users\83395\AppData\Roaming\Typora\typora-user-images\1612423079050.png)
+
+   ![输入图片说明](https://images.gitee.com/uploads/images/2021/0207/151724_f81e5102_8113712.png "1612423079050.png")
+
    - 自动停止：设置自动停止时间，选择”**2小时后**“
 
-   ![1612423764481](C:\Users\83395\AppData\Roaming\Typora\typora-user-images\1612423764481.png)
+   ![输入图片说明](https://images.gitee.com/uploads/images/2021/0207/151831_2fef4526_8113712.png "1612423764481.png")
 
    然后点击”**下一步**“，确认无误后点击"**提交**"，至此，ModelArts-Notebook创建完成。
 
@@ -81,12 +85,16 @@
    在开发环境主界面，待Notebook创建完毕后，创建一个实际的开发环境。
 
    ① 单击 **“打开”** ，进入刚刚创建的CatVSDog Notebook
-![1612489770216](C:\Users\83395\AppData\Roaming\Typora\typora-user-images\1612489770216.png)
+   
+   ![输入图片说明](https://images.gitee.com/uploads/images/2021/0207/151923_b9555c09_8113712.png "1612489770216.png")
 
    ② 创建一个Python-TensorFlow-1.13.1的Notebook环境
    点击右上角”**New**“-->"**TensorFlow-1.13.1**"，创建并进入开发环境
-   ![1612490108785](C:\Users\83395\AppData\Roaming\Typora\typora-user-images\1612490108785.png)
-   ![1612490476631](C:\Users\83395\AppData\Roaming\Typora\typora-user-images\1612490476631.png)
+
+  ![输入图片说明](https://images.gitee.com/uploads/images/2021/0207/151955_57e82c01_8113712.png "1612490108785.png")
+  ![输入图片说明](https://images.gitee.com/uploads/images/2021/0207/152018_1b3b75da_8113712.png "1612490476631.png")
+  ![输入图片说明](https://images.gitee.com/uploads/images/2021/0207/152036_2efb21f6_8113712.png "1612490540208.png")
+  
    ③ 点击左上方”**Untitled**“，修改文件名称。
    ![1612490540208](C:\Users\83395\AppData\Roaming\Typora\typora-user-images\1612490540208.png)
 
@@ -192,13 +200,13 @@ In [6]  :
 
 * [下载VGG-16模型](https://github.com/fchollet/deep-learning-models/releases/download/v0.1/vgg16_weights_tf_dim_ordering_tf_kernels_notop.h5)，下载完成后，点击”**Upload**“将上传到jupty当前工作目录。
 
-  <img src="C:\Users\83395\AppData\Roaming\Typora\typora-user-images\1612510992463.png" alt="1612510992463" style="zoom:200%;" />
+  ![输入图片说明](https://images.gitee.com/uploads/images/2021/0207/152150_6dd13d16_8113712.png "1612510992463.png")
 
-   ![1612511009244](C:\Users\83395\AppData\Roaming\Typora\typora-user-images\1612511009244.png)
+  ![输入图片说明](https://images.gitee.com/uploads/images/2021/0207/152216_e68904f4_8113712.png "1612511009244.png")
 
 * 点击”**New**“-->"**Terminal**"进入到终端界面，TensorFlow-1.13.1环境中。
 
-  ![1612511092785](C:\Users\83395\AppData\Roaming\Typora\typora-user-images\1612511092785.png) 
+  ![输入图片说明](https://images.gitee.com/uploads/images/2021/0207/152248_6ec0c322_8113712.png "1612511092785.png")
 
 * 将预训练模型移动到指定位置
 
@@ -213,7 +221,7 @@ In [6]  :
 
   执行完可在 $HOME/.keras/models目录下看到预训练模型
 
-![1612511505029](C:\Users\83395\AppData\Roaming\Typora\typora-user-images\1612511505029.png)
+  ![输入图片说明](https://images.gitee.com/uploads/images/2021/0207/152316_18bb0f0d_8113712.png "1612511505029.png")
 
 **⑥  网络构建**
 
@@ -311,7 +319,8 @@ tf.train.write_graph(min_graph, "model", "vgg16_cat_dog.pb", as_text=False)
 ```
 
 点击”**Download**“将训练好的模型下载到本地，以便后续进行模型转换使用
-![1612513761976](C:\Users\83395\AppData\Roaming\Typora\typora-user-images\1612513761976.png)
+
+![输入图片说明](https://images.gitee.com/uploads/images/2021/0207/152349_3aeec550_8113712.png "1612513761976.png")
 
 ## 模型推理
 
@@ -376,15 +385,14 @@ tf.train.write_graph(min_graph, "model", "vgg16_cat_dog.pb", as_text=False)
 **注：开发环境与运行环境合一部署，请跳过步骤1，直接执行[步骤2](#step_2)即可。**   
 
 1. 执行以下命令,将开发环境的 **vgg16_cat_dog_picture** 目录上传到运行环境中，例如 **/home/HwHiAiUser**，并以HwHiAiUser（运行用户）登录运行环境（Host）。
-      ```
+  ```
 scp -r $HOME/samples/python/level2_simple_inference/1_classification/vgg16_cat_dog_picture/  HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser
 scp -r $HOME/samples/python/common/atlas_utils/   HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser
 ssh HwHiAiUser@xxx.xxx.xxx.xxx
-      ```
+  ```
 
-    ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
-
-    > - **xxx.xxx.xxx.xxx**为运行环境ip，200DK在USB连接时一般为192.168.1.2，300（ai1s）为对应的公网ip。
+![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
+> - **xxx.xxx.xxx.xxx**为运行环境ip，200DK在USB连接时一般为192.168.1.2，300（ai1s）为对应的公网ip。
 
 2. 运行可执行文件。
 
@@ -392,7 +400,7 @@ ssh HwHiAiUser@xxx.xxx.xxx.xxx
 
       ```
       export LD_LIBRARY_PATH=
-source ~/.bashrc
+      source ~/.bashrc
       cd $HOME/samples/python/level2_simple_inference/1_classification/vgg16_cat_dog_picture/src     
       python3 main.py 
       ```
@@ -405,9 +413,8 @@ source ~/.bashrc
       切换目录后，执行以下命令运行样例。
       ```
       python3.6 main.py
-      ```
-      
-### 查看结果
+      ```    
+
+ ### 查看结果
 
 运行完成后，会在out目录下生成带推理结果的jpg图片。
-​       
