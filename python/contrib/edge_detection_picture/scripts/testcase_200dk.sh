@@ -158,7 +158,7 @@ function main() {
 
     # run
     cd ${project_path}/src/
-    python3.6 main.py ${project_path}/data
+    python3.6 main.py 
     if [ $? -ne 0 ];then
         echo "ERROR: run failed. please check your project"
         return ${inferenceError}
