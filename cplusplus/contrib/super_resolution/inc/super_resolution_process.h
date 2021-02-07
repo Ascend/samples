@@ -22,6 +22,8 @@
 #include "model_process.h"
 #include <memory>
 
+using namespace std;
+
 /**
 * SuperResolutionProcess
 */
