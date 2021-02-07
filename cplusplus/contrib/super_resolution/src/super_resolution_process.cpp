@@ -162,8 +162,7 @@ Result SuperResolutionProcess::preprocess(const string& imageFile) {
         return FAILED;
     }
     
-    if (runMode_ == ACL_HOST) {
-        //AI1上运行时,需要将图片数据拷贝到device侧   
+    if (runMode_ == ACL_HOST) { 
         aclError ret = aclrtMemcpy(inputBuf_, inputDataSize_,
                                    mat.ptr<uint8_t>(), inputDataSize_,
                                    ACL_MEMCPY_HOST_TO_DEVICE);
@@ -172,8 +171,6 @@ Result SuperResolutionProcess::preprocess(const string& imageFile) {
             return FAILED;
         }
     } else {
-        //Atals200DK上运行时,数据拷贝到本地即可.
-        //mat是局部变量,数据无法传出函数,需要拷贝一份
         memcpy(inputBuf_, mat.ptr<uint8_t>(), inputDataSize_);
     }
 
