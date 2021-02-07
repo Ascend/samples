@@ -85,9 +85,7 @@
 执行以下命令，进入样例的data文件夹中，下载对应的测试图片。
 
     cd $HOME/samples/python/contrib/portrait_picture/model
-    
     wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/Portrait/background.jpg
-    
     wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/Portrait/ori.jpg
 
 
@@ -114,7 +112,7 @@
      export LD_LIBRARY_PATH=
      source ~/.bashrc
      cd $HOME/samples/python/contrib/portrait_picture/src
-     python3 main.py ../data/
+     python3 main.py 
 	```
    - 如果是开发环境与运行环境分离部署，执行以下命令切换目录。
 	```
@@ -123,7 +121,7 @@
      切换目录后，执行以下命令运行样例。
    
 	```
-     python3.6 main.py ../data/
+     python3.6 main.py 
 	```
 
 
