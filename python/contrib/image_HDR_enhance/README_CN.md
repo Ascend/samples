@@ -80,7 +80,7 @@
 
 执行以下命令，进入样例的data文件夹中，下载对应的测试图片。
 
-    cd $HOME/samples/python/contrib/edge_detection_picture/data
+    cd $HOME/samples/python/contrib/image_HDR_enhance/data
     wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/image_HDR_enhance/data1.png
 
 
