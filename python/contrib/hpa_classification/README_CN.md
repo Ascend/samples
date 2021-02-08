@@ -4,21 +4,21 @@
 
 **本README只提供命令行方式运行样例的指导，如需在Mindstudio下运行样例，请参考[Mindstudio运行图片样例wiki](https://gitee.com/ascend/samples/wikis/Mindstudio运行图片样例?sort_id=3164874)。**
 
-**本案例由南开大学贡献**
+**本案例由上海交通大学提供**
 
-## edge_detection_picture样例
+## hpa_classification样例
 
-功能：使用RCF模型对输入图片进行边缘检测。
+功能：对蛋白质图像进行自动化分类评估。     
 
-样例输入：jpg图像
+样例输入：未标注的蛋白质荧光显微图片    
 
-样例输出：边缘图像。
+样例输出：已经标注分类的蛋白质图谱     
 
 ### 前提条件
 
 部署此Sample前，需要准备好以下环境：
 
-- 请确认已按照[环境准备和依赖安装](https://gitee.com/ascend/samples/blob/master/python/environment)准备好环境。
+- 请确认已按照[环境准备和依赖安装](../environment)准备好环境。
 - 已完成对应产品的开发环境和运行环境安装。
 
 ### 软件准备
@@ -29,7 +29,8 @@
 
    - 命令行方式下载（下载时间较长，但步骤简单）。
 
-     开发环境，非root用户命令行中执行以下命令下载源码仓。
+     开发环境，非root用户命令行中执行以下命令下载源码仓。   
+
         ```
      cd $HOME
      git clone https://gitee.com/ascend/samples.git
@@ -44,21 +45,21 @@
      
       ```
      cd $HOME
-     unzip ascend-samples-master.zipt
+     unzip ascend-samples-master.zip
       ```
 #### 2. 获取此应用中所需要的模型
 
    参考下表获取此应用中所用到的模型，并将其存放到开发环境普通用户下的工程目录：
 
-	cd $HOME/samples/python/contrib/edge_detection_picture/model
+	cd $HOME/samples/python/contrib/hpa_classification/model
 
 | **模型名称** | **模型说明**          | **模型下载路径**                                             |
 | ------------ | --------------------- | ------------------------------------------------------------ |
-| RCF          | 基于Caffe的边缘检测。 | 请参考https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/edge_detection/ATC_RCF_Caffe_AE 中README.md原始模型章节，下载**原始模型网络**及**模型权重文件**。 |
+| deploy_vel          | 基于Caffe的蛋白质亚细胞定位预测 | 请参考https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/hpa/ATC_hpa_caffe_AE 中README.md原始模型章节，下载**原始模型网络**及**模型权重文件**。 |
 
 #### 3. 将原始模型转换为Davinci模型
 
-   **注：请确认环境变量已经在[环境准备和依赖安装](https://gitee.com/ascend/samples/blob/master/python/environment)中配置完成**
+   **注：请确认环境变量已经在[环境准备和依赖安装](../environment)中配置完成**
 
    1. 设置LD_LIBRARY_PATH环境变量。
 
@@ -70,15 +71,15 @@
 	
    2. 执行以下命令使用atc命令进行模型转换。
          ```
-      atc --model=rcf.prototxt --weight=./rcf_bsds.caffemodel --framework=0 --output=rcf --soc_version=Ascend310 --input_fp16_nodes=data --input_format=NCHW --output_type=FP32  
+      atc --model=./hpa.prototxt --weight=./hpa.caffemodel --framework=0 --output=./deploy_vel  --soc_version=Ascend310 --input_format=NCHW --input_fp16_nodes=data --output_type=FP32 --out_nodes="score:0"  
       ```
 
 #### 4. 获取样例需要的测试图片
 
 执行以下命令，进入样例的data文件夹中，下载对应的测试图片。
 
-    cd $HOME/samples/python/contrib/edge_detection_picture/data
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/rcf_edge_detection/ori.jpg
+    cd $HOME/samples/python/contrib/hpa_classification/data
+    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/hpa_classification/test_image/test.jpeg
 
 
 ### 样例运行
@@ -87,7 +88,7 @@
 
 1. 执行以下命令,将开发环境的**edge_detection_picture**目录上传到运行环境中，例如 **/home/HwHiAiUser**，并以HwHiAiUser（运行用户）登录运行环境（Host）。
       ```
-   scp -r $HOME/samples/python/contrib/edge_detection_picture/  HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser
+   scp -r $HOME/samples/python/contrib/hpa_classification/  HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser
    scp -r $HOME/samples/python/common/atlas_utils/   HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser
    ssh HwHiAiUser@xxx.xxx.xxx.xxx
    ```
@@ -103,12 +104,12 @@
 	```
      export LD_LIBRARY_PATH=
      source ~/.bashrc
-     cd $HOME/samples/python/contrib/edge_detection_picture/src
-     python3 main.py ../data/
+     cd $HOME/samples/python/contrib/hpa_classification/src
+     python3.6 main.py ../data/
 	```
    - 如果是开发环境与运行环境分离部署，执行以下命令切换目录。
 	```
-     cd $HOME/python/edge_detection_picture/src
+     cd $HOME/python/hpa_classification/src
 	```
      切换目录后，执行以下命令运行样例。
    
