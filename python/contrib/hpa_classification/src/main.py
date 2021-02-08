@@ -8,7 +8,7 @@ import sys
 import os
 import numpy as np
 import cv2
-from PIL import Image,ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont
 import struct
 
 path = os.path.dirname(os.path.abspath(__file__))
@@ -112,13 +112,15 @@ class Hpa(object):
         draw.text(xy = (20, 80), text = label, font=setFont, fill=fillColor)
  
     # 图片保存
-        im.save("../outputs/out_" + os.path.basename(file_name))
-    def post_process(self, result, image_name ):
+        im.save("../outputs/out_" + os.path.basename(file_name))  
+
+    def post_process(self, result, image_name):
         score = np.array(result[0])
         pred = self.sigmoid(score)
 
         # 可视化它
         self.visualize(image_name, pred)
+
 
 def main():
     """
