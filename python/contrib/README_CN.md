@@ -13,6 +13,6 @@
 └── [dehaze_picture](./dehaze_picture)： **图像去雾**     
 └── [edge_detection_picture](./edge_detection_picture)： **图像边缘检测**     
 └── [portrait_picture](./portrait_picture)： **背景替换**
-└── [gesture_recognition_picture](./gesture_recognition_picture)： **手势识别** 
+ └── [gesture_recognition_picture](./gesture_recognition_picture)： **手势识别** 
 
   
