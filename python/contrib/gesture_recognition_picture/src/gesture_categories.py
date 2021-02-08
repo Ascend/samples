@@ -26,12 +26,12 @@ gesture_categories = [
 ]
 
 
-def get_gesture_categories(id):
+def get_gesture_categories(gesture_id):
     """
 	get_gesture_categories
     """
-    if id >= len(gesture_categories):
+    if gesture_id >= len(gesture_categories):
         return "unknown"
     else:
-        return gesture_categories[id]
+        return gesture_categories[gesture_id]
 
