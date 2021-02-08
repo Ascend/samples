@@ -50,9 +50,9 @@ class Gesture(object):
         return const.SUCCESS
 
     def pre_process(self, image):
-	    """
-	    pre_precess
-	    """
+        """
+        pre_precess
+        """
         image_dvpp = image.copy_to_dvpp()
         yuv_image = self._dvpp.jpegd(image_dvpp)
         print("decode jpeg end")
