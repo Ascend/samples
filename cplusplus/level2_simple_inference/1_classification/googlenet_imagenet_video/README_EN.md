@@ -167,8 +167,8 @@ In the development environment, run the following commands as a non-root user to
    - Atlas 200 DK
      
      1. Run the following commands in the development environment to start the Presenter Server:   
-**cd $HOME/samples/cplusplus/level2\_simple\_inference/1\_classification/googlenet\_imagenet\_video**  
-**bash scripts/run\_presenter\_server.sh**
+**cd $HOME/samples/common/presenterserver**   
+**bash run_presenter_server.sh $HOME/samples/cplusplus/level2_simple_inference/1_classification/googlenet_imagenet_video/scripts/param.conf host_version.conf**
      2. Run the following command to log in to the operating environment:   
 **If the development environment and operating environment are deployed on the same server, skip this step.**   
 **ssh HwHiAiUser@*xxx.xxx.xxx.xxx***
@@ -179,8 +179,8 @@ In the development environment, run the following commands as a non-root user to
 **If the development environment and operating environment are deployed on the same server, skip this step.**   
 **ssh HwHiAiUser@*xxx.xxx.xxx.xxx***
      2. Start the Presenter Server in the operating environment.   
-Go to the directory where the project is located (for example, **$HOME/googlenet\_imagenet\_video**) and run the following command:  
-**bash scripts/run\_presenter\_server.sh**
+Go to the directory where the project is located (for example, **$HOME/samples/common/presenterserver**) and run the following command:  
+**bash run_presenter_server.sh $HOME/samples/cplusplus/level2_simple_inference/1_classification/googlenet_imagenet_video/scripts/param.conf host_version.conf**
 
 3. <a name="step_2"></a>Run the executable file.
    
