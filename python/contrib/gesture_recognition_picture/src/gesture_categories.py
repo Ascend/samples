@@ -21,9 +21,16 @@ gesture_categories = [
         'bow',
         'No gesture'
 ]
+"""
+gesture_categories
+"""
 
 def get_gesture_categories(id):
+    """
+	get_gesture_categories
+    """
     if id >= len(gesture_categories):
         return "unknown"
     else:
         return gesture_categories[id]
+
