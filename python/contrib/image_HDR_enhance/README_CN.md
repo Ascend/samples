@@ -1,3 +1,4 @@
+中文|[English](README_EN.md)
 
 图像HDR增强系统在华为200dk平台的部署代码说明
 
