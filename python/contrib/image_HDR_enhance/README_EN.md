@@ -76,7 +76,7 @@ Before deploying this sample, ensure that:
 
     **cd $HOME/samples/python/contrib/image_HDR_enhance/data**
 
-    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/image_HDR_enhance/data1.png
+    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/image_HDR_enhance/data1.png**
 
 
 
