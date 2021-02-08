@@ -28,7 +28,7 @@ function downloadDataWithVerifySource() {
 
     mkdir -p ${project_path}/verify_image/
 
-    wget -O ${project_path}/verify_image/verify_test.jpeg ${verify_source}"verify.test.jpeg" --no-check-certificate
+    wget -O ${project_path}/verify_image/verify_test.jpeg ${verify_source}"verify.jpeg" --no-check-certificate
     if [ $? -ne 0 ];then
         echo "download verify_test.jpg failed, please check Network."
         return 1
