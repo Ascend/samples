@@ -17,7 +17,7 @@ sys.path.append(os.path.join(path, "../../../common/"))
 
 import acl
 import atlas_utils.utils as utils
-import atlas_utils.constants as constants, const
+import atlas_utils.constants as constants
 from atlas_utils.acl_model import Model
 from atlas_utils.acl_image import AclImage
 from acl_resource import AclResource
@@ -77,7 +77,10 @@ class Hpa(object):
         """
         return 1. / (1 + np.exp(-x))
 
-    def visualize(self, file_name, pred):
+    def visualize(self, file_name, pred):    
+        """
+        visualize
+        """
 
     # 1, ID and name corresponding
         id_2_label = [
@@ -113,7 +116,11 @@ class Hpa(object):
     # save photo
         im.save("../outputs/out_" + os.path.basename(file_name))  
 
-    def post_process(self, result, image_name):
+    def post_process(self, result, image_name):  
+        """
+        post_process
+        """   
+        
         score = np.array(result[0])
         pred = self.sigmoid(score)
 
@@ -129,7 +136,7 @@ def main():
 
     images_list = [os.path.join(image_dir, img)
                    for img in os.listdir(image_dir)
-                   if os.path.splitext(img)[1] in const.IMG_EXT]
+                   if os.path.splitext(img)[1] in constants.IMG_EXT]
 
     acl_resource = AclResource()
     acl_resource.init()
