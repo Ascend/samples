@@ -50,16 +50,16 @@ Before deploying this sample, ensure that:
 
 2. Obtain the source model required by the application。      
     
-        1. Refer to the link below for the original network model used in this application。
+   Refer to the link below for the original network model used in this application。
         
             **cd $HOME/samples/python/contrib/image_HDR_enhance/model** 。   
             **wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/image_HDR_enhance/image_HDR_enhance.pb**  
 
-        2. Set the ***LD_LIBRARY_PATH*** environment variable.
-        The ***LD_LIBRARY_PATH*** environment variable conflicts with the sample when the ATC tool is used. Therefore, you need to set this environment variable separately in the CLI to facilitate modification.
+  Set the ***LD_LIBRARY_PATH*** environment variable.
+  The ***LD_LIBRARY_PATH*** environment variable conflicts with the sample when the ATC tool is used. Therefore, you need to set this environment variable separately in the CLI to facilitate modification.
             **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64**  
 
-        3. Run the following commands to convert the model:     
+   Run the following commands to convert the model:     
             
             **atc --model=./image_HDR_enhance.pb --framework=3 --output=image_HDR_enhance --soc_version=Ascend310  --input_shape="input:1,512,512,3" --input_format=NHWC --output_type=FP32**
 3. Obtain the test image required by the sample.
