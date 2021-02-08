@@ -62,7 +62,7 @@ class Gesture(object):
 
     def inference(self, resized_image):
 
-        """"
+        """
 	    inference
 	    """
         return self._model.execute(resized_image)
