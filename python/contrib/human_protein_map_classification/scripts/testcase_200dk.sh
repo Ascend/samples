@@ -7,7 +7,7 @@ version=$1
 
 data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/hpa_classification/test_image/"
 verify_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/hpa_classification/verify_image/"
-project_name="hpa_classification"
+project_name="human_protein_map_classification"
 
 script_path="$( cd "$(dirname $BASH_SOURCE)" ; pwd -P)"
 project_path=${script_path}/..
