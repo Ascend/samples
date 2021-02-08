@@ -9,16 +9,16 @@ def process(input_path):
     img = np.array(im)
     height = img.shape[0]
     width = img.shape[1]
-    h_off = int((height-224)/2)
-    w_off = int((width-224)/2)
+    h_off = int((height - 224) / 2)
+    w_off = int((width - 224) / 2)
     crop_img = img[h_off:height-h_off, w_off:width-w_off, :]
     # rgb to bgr
-    img = crop_img[:,:,::-1]
+    img = crop_img[: , : , : : -1]
     shape = img.shape
     img = img.astype("float16")
-    img[:,:,0] -= 104
-    img[:,:,1] -= 117
-    img[:,:,2] -= 123
+    img[: , : , 0] -= 104
+    img[: , : , 1] -= 117
+    img[: , : , 2] -= 123
     img = img.reshape([1] + list(shape))
     result = img.transpose([0, 3, 1, 2])
 
