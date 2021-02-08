@@ -133,7 +133,7 @@ def main():
             # Post-processing
             mask = seg.post_process(result, image_name)
             # Fusion of segmented portrait and background image
-            result = background_replace(os.path.join(image_dir, 'background.jpg'), \
+            background_replace(os.path.join(image_dir, 'background.jpg'), \
                                         image_file, os.path.join(MASK_DIR, image_name))
 
 
