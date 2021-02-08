@@ -26,7 +26,6 @@ class Gesture(object):
     """
 	define gesture class
     """
-
     def __init__(self, model_path, model_width, model_height):
         self.device_id = 0
         self.context = None
@@ -51,9 +50,9 @@ class Gesture(object):
         return const.SUCCESS
 
     def pre_process(self, image):
-	"""
-	pre_precess
-	"""
+	    """
+	    pre_precess
+	    """
         image_dvpp = image.copy_to_dvpp()
         yuv_image = self._dvpp.jpegd(image_dvpp)
         print("decode jpeg end")
@@ -63,15 +62,15 @@ class Gesture(object):
 
     def inference(self, resized_image):
 
-	""""
-	inference
-	"""
+        """"
+	    inference
+	    """
         return self._model.execute(resized_image)
 
     def post_process(self, infer_output, image_file):
-	"""
-	post_process
-	"""
+	    """
+	    post_process
+	    """
         print("post process")
         data = infer_output[0]
         vals = data.flatten()
