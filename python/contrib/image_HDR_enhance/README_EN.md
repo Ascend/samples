@@ -6,7 +6,7 @@ English|[中文](README_CN.md)
 
 **This readme file provides only guidance for running the sample in command line (CLI) mode. For details about how to run the sample in MindStudio, see [Running Image Samples in MindStudio](https://gitee.com/ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E5%9B%BE%E7%89%87%E6%A0%B7%E4%BE%8B?sort_id=3164874).**
 
-## Sample of Image Cartoonization with CartoonGAN
+## Sample of image_HDR_enhance
 
 Function: realize HDR enhance for image.
 
