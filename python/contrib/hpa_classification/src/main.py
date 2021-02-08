@@ -17,8 +17,7 @@ sys.path.append(os.path.join(path, "../../../common/"))
 
 import acl
 import atlas_utils.utils as utils
-import atlas_utils.constants as constants
-import atlas_utils.constants as const
+import atlas_utils.constants as constants, const
 from atlas_utils.acl_model import Model
 from atlas_utils.acl_image import AclImage
 from acl_resource import AclResource
@@ -80,14 +79,14 @@ class Hpa(object):
 
     def visualize(self, file_name, pred):
 
-    # 1,id与名字的对应
+    # 1, ID and name corresponding
         id_2_label = [
         "Mitochondria", "Nucleus", "Endoplasmic reticulum", "Nuclear speckles", 
         "Plasma membrane", "Nucleoplasm", "Cytosol", "Nucleoli",
         "Vesicles", "Golgi apparatus"
     ]
  
-    # 2,读取图片
+    # 2. Read pictures
         setFont = ImageFont.truetype('./font.ttf', 20)
         fillColor = "#fff"
         im = Image.open(file_name)
@@ -111,14 +110,14 @@ class Hpa(object):
         pred[top3] = 0
         draw.text(xy = (20, 80), text = label, font=setFont, fill=fillColor)
  
-    # 图片保存
+    # save photo
         im.save("../outputs/out_" + os.path.basename(file_name))  
 
     def post_process(self, result, image_name):
         score = np.array(result[0])
         pred = self.sigmoid(score)
 
-        # 可视化它
+        # visualize
         self.visualize(image_name, pred)
 
 
