@@ -1,3 +1,6 @@
+"""
+gesture_categories
+"""
 gesture_categories = [
         '0',
         '1',
@@ -21,9 +24,7 @@ gesture_categories = [
         'bow',
         'No gesture'
 ]
-"""
-gesture_categories
-"""
+
 
 def get_gesture_categories(id):
     """
