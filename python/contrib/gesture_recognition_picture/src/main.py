@@ -61,16 +61,15 @@ class Gesture(object):
         return resized_image
 
     def inference(self, resized_image):
-
         """
 	    inference
-	    """
+        """
         return self._model.execute(resized_image)
 
     def post_process(self, infer_output, image_file):
-	    """
+        """
 	    post_process
-	    """
+        """
         print("post process")
         data = infer_output[0]
         vals = data.flatten()
