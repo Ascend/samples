@@ -66,7 +66,7 @@ Before deploying this sample, ensure that:
 
     Run the following commands to go to the **data** folder of the sample and download the corresponding test image:
 
-    **cd $HOME/samples/python/contrib/edge_detection_picture/data**
+    **cd $HOME/samples/python/contrib/image_HDR_enhance/data**
 
     **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/image_HDR_enhance/data1.png**
 
