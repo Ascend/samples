@@ -111,17 +111,18 @@ double ClassifyProcess::getPSNR(const cv::Mat &I1, const cv::Mat&I2){
     s1 = s1.mul(s1);
     cv::Scalar s = sum(s1);
     double sse = s.val[0] + s.val[1] + s.val[2];
-    if(sse <= 1e-10)
+    if(sse <= 1e-10){
         return 0;
+    }
     else{
-        double mse = sse/(double)(I1.channels()*I1.total());
-        double psnr = 10.0*log10(255*255/mse);
+        double mse = sse / (double)(I1.channels() * I1.total());
+        double psnr = 10.0 * log10(255 * 255 / mse);
         return psnr;
     }
 }
 
 double ClassifyProcess::getSSIM(const cv::Mat& i1, const cv::Mat& i2){
-    const double C1=6.5025, C2 = 58.5225;
+    const double C1 = 6.5025, C2 = 58.5225;
     int d = CV_32F;
 
     cv::Mat I1, I2;
@@ -162,10 +163,9 @@ double ClassifyProcess::getSSIM(const cv::Mat& i1, const cv::Mat& i2){
     cv::Mat ssim_map;
     cv::divide(t3, t1, ssim_map);
     cv::Scalar mssim = mean(ssim_map);
-    double ssim = (mssim.val[0] + mssim.val[1] + mssim.val[2]) /I1.channels();
+    double ssim = (mssim.val[0] + mssim.val[1] + mssim.val[2]) / I1.channels();
     return ssim;
 }
-
 
 Result ClassifyProcess::Init() {
     if (isInited_) {
@@ -248,8 +248,9 @@ aclmdlDataset* modelOutput){
 
     uint32_t dataSize = 0;
     void* data = GetInferenceOutputItem(dataSize, modelOutput);
-    if (data == nullptr) return FAILED;
-
+    if (data == nullptr) {
+        return FAILED;
+    }
     INFO_LOG("InferenceOutput dataSize: %d BYTE", dataSize); //output size 262144 BYTE(1*256*256*1*4Byte)
 
     float* outData = NULL;
@@ -307,7 +308,7 @@ aclmdlDataset* modelOutput){
     cv::Mat outputImage;
     //cv::cvtColor(yuvImgOut,outputImage,cv::COLOR_YUV2BGR_YV12 );
     //cv::cvtColor(yuvImgOut,outputImage, cv::COLOR_YUV2BGR_I420 );
-    cv::cvtColor(yuvImgOut,outputImage, cv::COLOR_YCrCb2BGR );
+    cv::cvtColor(yuvImgOut,outputImage, cv::COLOR_YCrCb2BGR);
     cv::imwrite(outputPath, outputImage);
 
 #ifdef CalcuPSNR
@@ -317,7 +318,7 @@ aclmdlDataset* modelOutput){
 
     stringstream sstream1;
     sstream1.str("");
-    sstream1 <<"../data/"<< testPicNum <<"_GT.png";
+    sstream1<<"../data/"<<testPicNum<<"_GT.png";
     string GTPicPath = sstream1.str();
 
     cv::Mat GTImage = cv::imread(GTPicPath, CV_LOAD_IMAGE_COLOR);
@@ -354,8 +355,8 @@ aclmdlDataset* modelOutput){
 }
 
 void ClassifyProcess::PrintMeanPSNR(){
-    double MeanPSNR = accumulate(begin(dPSNRs),end(dPSNRs),0.0)/dPSNRs.size();
-    double MeanSSIM = accumulate(begin(dSSIMs),end(dSSIMs),0.0)/dSSIMs.size();
+    double MeanPSNR = accumulate(begin(dPSNRs),end(dPSNRs),0.0) / dPSNRs.size();
+    double MeanSSIM = accumulate(begin(dSSIMs),end(dSSIMs),0.0) / dSSIMs.size();
     INFO_LOG("MeanPSNR: %.2lf , MeanSSIM: %.2lf. ",MeanPSNR, MeanSSIM);
 }
 
