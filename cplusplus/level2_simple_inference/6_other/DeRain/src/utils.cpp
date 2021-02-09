@@ -40,7 +40,7 @@ const std::string kPathSeparator = "/";
 const std::string kOutputFilePrefix = "out_";
 }
 
-bool Utils::IsDirectory(const string &path) {
+bool utils::isdirectory(const string &path) {
     // get path stat
     struct stat buf;
     if (stat(path.c_str(), &buf) != kStatSuccess) {
@@ -55,7 +55,7 @@ bool Utils::IsDirectory(const string &path) {
     }
 }
 
-bool Utils::IsPathExist(const string &path) {
+bool utils::ispathexist(const string &path) {
     ifstream file(path);
     if (!file) {
         return false;
@@ -63,7 +63,7 @@ bool Utils::IsPathExist(const string &path) {
     return true;
 }
 
-void Utils::SplitPath(const string &path, vector<string> &path_vec) {
+void utils::splitpath(const string &path, vector<string> &path_vec) {
     char *char_path = const_cast<char*>(path.c_str());
     const char *char_split = kImagePathSeparator.c_str();
     char *tmp_path = strtok(char_path, char_split);
@@ -73,7 +73,7 @@ void Utils::SplitPath(const string &path, vector<string> &path_vec) {
     }
 }
 
-void Utils::GetAllFiles(const string &path, vector<string> &file_vec) {
+void utils::getallfiles(const string &path, vector<string> &file_vec) {
     // split file path
     vector<string> path_vector;
     SplitPath(path, path_vector);
@@ -90,7 +90,7 @@ void Utils::GetAllFiles(const string &path, vector<string> &file_vec) {
     }
 }
 
-void Utils::GetPathFiles(const string &path, vector<string> &file_vec) {
+void utils::getpathfiles(const string &path, vector<string> &file_vec) {
     struct dirent *dirent_ptr = nullptr;
     DIR *dir = nullptr;
     if (IsDirectory(path)) {
@@ -117,7 +117,7 @@ void Utils::GetPathFiles(const string &path, vector<string> &file_vec) {
     }
 }
 
-void* Utils::CopyDataDeviceToLocal(void* deviceData, uint32_t dataSize) {
+void* utils::copydatadevicetolocal(void* deviceData, uint32_t dataSize) {
     uint8_t* hostPtr = new uint8_t[dataSize];
     if (hostPtr == nullptr) {
         ERROR_LOG("malloc host data buffer failed");
