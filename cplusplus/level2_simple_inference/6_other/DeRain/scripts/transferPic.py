@@ -5,14 +5,16 @@ from PIL import Image
 def process(input_path):
     im = Image.open(input_path)
     im = im.resize((256, 256))
-    # hwc
+    """ hwc
+    """
     img = np.array(im)
     height = img.shape[0]
     width = img.shape[1]
     h_off = int((height - 224) / 2)
     w_off = int((width - 224) / 2)
     crop_img = img[h_off:height - h_off, w_off:width - w_off, :]
-    # rgb to bgr
+    """ rgb to bgr
+    """
     img = crop_img[:, :, ::-1]
     shape = img.shape
     img = img.astype("float16")
