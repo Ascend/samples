@@ -318,7 +318,7 @@ aclmdlDataset* modelOutput){
 
     stringstream sstream1;
     sstream1.str("");
-    sstream1<<"../data/"<<testPicNum<<"_GT.png";
+    sstream1 << "../data/" << testPicNum << "_GT.png";
     string GTPicPath = sstream1.str();
 
     cv::Mat GTImage = cv::imread(GTPicPath, CV_LOAD_IMAGE_COLOR);
