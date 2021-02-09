@@ -65,8 +65,9 @@ int main(int argc, char *argv[]) {
         if(posofPoint-posofUnderline-1>0){
             string PicType(imageFile.substr(posofUnderline + 1,posofPoint-posofUnderline-1));
             //cout << "PicType:" << PicType << endl;
-            if(PicType=="GT")
+            if(PicType == "GT"){
                 continue;
+            }
         }
 
         clock_t Begin,End;
