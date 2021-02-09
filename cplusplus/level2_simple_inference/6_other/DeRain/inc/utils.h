@@ -31,7 +31,7 @@
 #define RGBU8_IMAGE_SIZE(width, height) ((width) * (height) * 3)
 
 template<class Type>
-std::shared_ptr<Type> MakeSharedNoThrow() {
+std::shared_ptr<Type> makesharednothrow() {
     try {
         return std::make_shared<Type>();
     }
@@ -69,16 +69,16 @@ public:
     * @param [in] PicBufferSize: aligned pic size
     * @return device buffer of pic
     */
-    static bool IsDirectory(const std::string &path);
+    static bool isdirectory(const std::string &path);
 
-    static bool IsPathExist(const std::string &path);
+    static bool ispathexist(const std::string &path);
 
-    static void SplitPath(const std::string &path, std::vector<std::string> &path_vec);
+    static void splitpath(const std::string &path, std::vector<std::string> &path_vec);
 
-    static void GetAllFiles(const std::string &path, std::vector<std::string> &file_vec);
+    static void getallfiles(const std::string &path, std::vector<std::string> &file_vec);
 
-    static void GetPathFiles(const std::string &path, std::vector<std::string> &file_vec);
+    static void getpathfiles(const std::string &path, std::vector<std::string> &file_vec);
 
-    static void* CopyDataDeviceToLocal(void* deviceData, uint32_t dataSize);
+    static void* copydatadevicetolocal(void* deviceData, uint32_t dataSize);
 };
 
