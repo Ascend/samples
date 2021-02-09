@@ -69,7 +69,7 @@ Result ClassifyProcess::InitResource() {
     return SUCCESS;
 }
 
-Result ClassifyProcess::InitModel(const char* omModelPath) {
+Result classifyprocess::initmodel(const char* omModelPath) {
     Result ret = model_.LoadModelFromFileWithMem(omModelPath);
     if (ret != SUCCESS) {
         ERROR_LOG("execute LoadModelFromFileWithMem failed");
@@ -104,7 +104,7 @@ Result ClassifyProcess::InitModel(const char* omModelPath) {
 }
 
 //add by cz,20200925
-double ClassifyProcess::getPSNR(const cv::Mat &I1, const cv::Mat&I2){
+double classifyprocess::getpsnr(const cv::Mat &I1, const cv::Mat&I2){
     cv::Mat s1;
     cv::absdiff(I1, I2, s1);
     s1.convertTo(s1, CV_32F);
@@ -167,7 +167,7 @@ double ClassifyProcess::getSSIM(const cv::Mat& i1, const cv::Mat& i2){
     return ssim;
 }
 
-Result ClassifyProcess::Init() {
+Result classifyprocess::init() {
     if (isInited_) {
         INFO_LOG("Classify instance is initied already!");
         return SUCCESS;
@@ -354,13 +354,13 @@ aclmdlDataset* modelOutput){
     return SUCCESS;
 }
 
-void ClassifyProcess::PrintMeanPSNR(){
+void classifyprocess::printmeanpsnr(){
     double MeanPSNR = accumulate(begin(dPSNRs),end(dPSNRs),0.0) / dPSNRs.size();
     double MeanSSIM = accumulate(begin(dSSIMs),end(dSSIMs),0.0) / dSSIMs.size();
     INFO_LOG("MeanPSNR: %.2lf , MeanSSIM: %.2lf. ",MeanPSNR, MeanSSIM);
 }
 
-void* ClassifyProcess::GetInferenceOutputItem(uint32_t& itemDataSize,
+void* classifyprocess::getinferenceoutputitem(uint32_t& itemDataSize,
 aclmdlDataset* inferenceOutput) {
     aclDataBuffer* dataBuffer = aclmdlGetDatasetBuffer(inferenceOutput, 0);
     if (dataBuffer == nullptr) {
@@ -399,7 +399,7 @@ aclmdlDataset* inferenceOutput) {
     return data;
 }
 
-void ClassifyProcess::LabelClassToImage(int classIdx, const string& origImagePath) {
+void classifyprocess::labelclasstoimage(int classIdx, const string& origImagePath) {
     cv::Mat resultImage = cv::imread(origImagePath, CV_LOAD_IMAGE_COLOR);
 
     // generate colorized image
