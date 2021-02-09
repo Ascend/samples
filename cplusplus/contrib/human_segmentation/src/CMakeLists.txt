@@ -67,7 +67,7 @@ add_executable(main
 if(target STREQUAL "Simulator_Function")
     target_link_libraries(main funcsim)
 else()
-    target_link_libraries(main ascendcl atlasutil acl_dvpp stdc++ opencv_highgui  opencv_core opencv_imgproc opencv_imgcodecs opencv_calib3d opencv_features2d opencv_videoio protobuf presenteragent)
+    target_link_libraries(main ascendcl atlasutil acl_dvpp stdc++ opencv_highgui  opencv_core opencv_imgproc opencv_imgcodecs opencv_calib3d opencv_features2d opencv_videoio protobuf presenteragent avcodec swresample)
 endif()
 
 install(TARGETS main DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
