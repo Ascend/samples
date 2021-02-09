@@ -314,7 +314,7 @@ aclmdlDataset* modelOutput){
 #ifdef CalcuPSNR
     int posofSlash = origImageFile.find_last_of("/");
     int posofUnderline = origImageFile.find_last_of("_");
-    string testPicNum(origImageFile.substr(posofSlash + 1,posofUnderline-posofSlash-1));
+    string testPicNum(origImageFile.substr(posofSlash + 1,posofUnderline - posofSlash - 1));
 
     stringstream sstream1;
     sstream1.str("");
