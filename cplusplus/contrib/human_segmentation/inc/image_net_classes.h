@@ -4,7 +4,7 @@
 #define INVALID_IMAGE_NET_CLASS_ID (-1)
 #define IMAGE_NET_CLASSES_NUM 1000
 
-const string kStrImageNetClasses[] = {
+const std::string kStrImageNetClasses[] = {
 "tench, Tinca tinca",
 "goldfish, Carassius auratus",
 "great white shark, white shark, man-eater, man-eating shark, Carcharodon carcharias",
@@ -324,7 +324,8 @@ const string kStrImageNetClasses[] = {
 "cicada, cicala",
 "leafhopper",
 "lacewing, lacewing fly",
-"dragonfly, darning needle, devil's darning needle, sewing needle, snake feeder, snake doctor, mosquito hawk, skeeter hawk",
+"dragonfly, darning needle, devil's darning needle, sewing needle, \
+snake feeder, snake doctor, mosquito hawk, skeeter hawk",
 "damselfly",
 "admiral",
 "ringlet, ringlet butterfly",
@@ -485,7 +486,8 @@ const string kStrImageNetClasses[] = {
 "carpenter's kit, tool kit",
 "carton",
 "car wheel",
-"cash machine, cash dispenser, automated teller machine, automatic teller machine, automated teller, automatic teller, ATM",
+"cash machine, cash dispenser, automated teller machine, automatic teller machine, \
+automated teller, automatic teller, ATM",
 "cassette",
 "cassette player",
 "castle",

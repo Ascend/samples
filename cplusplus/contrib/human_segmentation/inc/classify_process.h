@@ -17,54 +17,48 @@
 * Description: handle acl resource
 */
 #pragma once
-#include "utils.h"
 #include "acl/acl.h"
-#include "model_process.h"
+#include "atlasutil/atlas_utils.h"
+#include "atlasutil/atlas_model.h"
 #include <memory>
+#include <opencv2/opencv.hpp>
 #include "ascenddk/presenter/agent/presenter_channel.h"
-
-using namespace std;
-using namespace ascend::presenter;
 
 /**
 * ClassifyProcess
 */
 class ClassifyProcess {
 public:
-    ClassifyProcess(const char* modelPath, uint32_t modelWidth, uint32_t modelHeight);
+    ClassifyProcess(const std::string& modelPath, uint32_t modelWidth, uint32_t modelHeight);
     ~ClassifyProcess();
     //推理初始化
-    Result Init();
+    AtlasError Init();
     //推理帧图片预处理
-    Result Preprocess(cv::Mat& frame);
+    AtlasError Preprocess(cv::Mat& frame);
     //推理帧图片
-    Result Inference(aclmdlDataset*& inferenceOutput);
+    AtlasError Inference(std::vector<InferenceOutput>& inferOutputs);
     //推理输出后处理
-    Result Postprocess(cv::Mat& frame, aclmdlDataset* modelOutput);
+    AtlasError Postprocess(cv::Mat& frame, std::vector<InferenceOutput>& modelOutput);
     
 private:
-    //初始化acl资源
-    Result InitResource();
     //加载推理模型
-    Result InitModel(const char* omModelPath);
+    AtlasError InitModel();
     //与presenter server建立连接
-    Result OpenPresenterChannel();
-    //从模型推理输出aclmdlDataset中获取数据到本地
-    void* GetInferenceOutputItem(uint32_t& itemDataSize,
-                                 aclmdlDataset* inferenceOutput);
+    AtlasError OpenPresenterChannel();
+
     //使用解析后的推理数据,构造发送给presenter server的推理结果数据结构
-    void ConstructClassifyResult(vector<DetectionResult>& result,
+    void ConstructClassifyResult(std::vector<ascend::presenter::DetectionResult>& result,
                                  int classIdx, float score);
     //将帧图像序列化为数据流
-    void EncodeImage(vector<uint8_t>& encodeImg, cv::Mat& origImg);
-    Result SendImage(std::vector<DetectionResult>& detectionResults,
+    void EncodeImage(std::vector<uint8_t>& encodeImg, cv::Mat& origImg);
+    AtlasError SendImage(std::vector<ascend::presenter::DetectionResult>& detectionResults,
                      cv::Mat& frame);
     //释放申请的资源
     void DestroyResource();
 
 private:
     int32_t deviceId_;  //设备id,默认为0
-    ModelProcess model_; //推理模型实例
+    AtlasModel model_; //推理模型实例
 
     const char* modelPath_; //离线模型文件路径
     uint32_t modelWidth_;   //模型要求的输入宽
@@ -73,7 +67,8 @@ private:
     void*    inputBuf_;      //模型输入数据缓存
     aclrtRunMode runMode_;   //运行模式,即当前应用运行在atlas200dk还是AI1
 
-    Channel* channel_;  //连接presenter server的通道
+    ascend::presenter::Channel* channel_;  //连接presenter server的通道
     bool isInited_;     //初始化标记,防止推理实例多次初始化
+    bool isReleased_;
 };
 

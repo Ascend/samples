@@ -22,35 +22,45 @@
 #include <dirent.h>
 
 #include "classify_process.h"
-#include "utils.h"
+#include "atlasutil/atlas_error.h"
+#include "atlasutil/acl_device.h"
+
 using namespace std;
 
 namespace {
 const uint32_t kModelWidth = 512;
 const uint32_t kModelHeight = 512;
-const char* kModelPath = "../model/human_segmentation.om";
+const std::string kModelPath = "../model/human_segmentation.om";
 }
 
 int main(int argc, char *argv[]) {
     //检查应用程序执行时的输入,程序执行的参数为输入视频文件路径
     if((argc < 2) || (argv[1] == nullptr)){
-        ERROR_LOG("Please input: ./main <image_dir>");
-        return FAILED;
+        ATLAS_LOG_ERROR("Please input: ./main <image_dir>");
+        return ATLAS_ERROR;
+    }
+
+    //init acl resource
+    AclDevice aclDev;
+    AtlasError ret = aclDev.Init();
+    if (ret) {
+        ATLAS_LOG_ERROR("Init resource failed, error %d", ret);
+        return ATLAS_ERROR;
     }
     //实例化分类推理对象,参数为分类模型路径,模型输入要求的宽和高
     ClassifyProcess classify(kModelPath, kModelWidth, kModelHeight);
     //初始化分类推理的acl资源, 加载模型和申请推理输入使用的内存
-    Result ret = classify.Init();
-    if (ret != SUCCESS) {
-        ERROR_LOG("Classification Init resource failed");
-        return FAILED;
+    ret = classify.Init();
+    if (ret != ATLAS_OK) {
+        ATLAS_LOG_ERROR("Classification Init resource failed");
+        return ATLAS_ERROR;
     }
     //使用opencv打开视频文件
     string videoFile = string(argv[1]);
     cv::VideoCapture capture(videoFile);
     if (!capture.isOpened()) {
         cout << "Movie open Error" << endl;
-        return FAILED;
+        return ATLAS_ERROR;
     }
     //逐帧推理
     while(1) {
@@ -58,31 +68,32 @@ int main(int argc, char *argv[]) {
         cv::Mat frame;
         if (!capture.read(frame))
         {
-            INFO_LOG("Video capture return false");
+            ATLAS_LOG_INFO("Video capture return false");
             break;
         }
         //对帧图片进行预处理
-        Result ret = classify.Preprocess(frame);
-        if (ret != SUCCESS) {
-            ERROR_LOG("Read file %s failed, continue to read next",
+        AtlasError ret = classify.Preprocess(frame);
+        if (ret != ATLAS_OK) {
+            ATLAS_LOG_ERROR("Read file %s failed, continue to read next",
                       videoFile.c_str());
             continue;
         }
         //将预处理的图片送入模型推理,并获取推理结果
-        aclmdlDataset* inferenceOutput = nullptr;
-        ret = classify.Inference(inferenceOutput);
-        if ((ret != SUCCESS) || (inferenceOutput == nullptr)) {
-            ERROR_LOG("Inference model inference output data failed");
-            return FAILED;
+        std::vector<InferenceOutput> inferOutputs;
+        ret = classify.Inference(inferOutputs);
+        if (ret != ATLAS_OK) {
+            ATLAS_LOG_ERROR("Inference model inference output data failed");
+            return ATLAS_ERROR;
         }
+
         //解析推理输出,并将推理得到的物体类别,置信度和图片送到presenter server显示
-        ret = classify.Postprocess(frame, inferenceOutput);
-        if (ret != SUCCESS) {
-            ERROR_LOG("Process model inference output data failed");
-            return FAILED;
+        ret = classify.Postprocess(frame, inferOutputs);
+        if (ret != ATLAS_OK) {
+            ATLAS_LOG_ERROR("Process model inference output data failed");
+            return ATLAS_ERROR;
         }
     }
 
-    INFO_LOG("Execute video classification success");
-    return SUCCESS;
+    ATLAS_LOG_INFO("Execute video classification success");
+    return ATLAS_OK;
 }

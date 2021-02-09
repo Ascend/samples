@@ -65,7 +65,7 @@
 
         **cd $HOME/samples/cplusplus/contrib/human_segmentation/model**  
 
-        **atc --input_shape="input_rgb:1,512,512,3" --input_format=NHWC --output=human512_3c_binary_512x512 --soc_version=Ascend310 --insert_op_conf=./insert_op.cfg --framework=3 --model=./human512_3c_binary_512x512.pb"**
+        **atc --input_shape="input_rgb:1,512,512,3" --input_format=NHWC --output=human_segmentation --soc_version=Ascend310 --insert_op_conf=./insert_op.cfg --framework=3 --model=./human_segmentation.pb"**
 
 
 4. 获取样例需要的测试文件。
@@ -115,7 +115,7 @@
      ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
         > - 如果是20.0版本，此处 **DDK_PATH** 环境变量中的 **arm64-linux** 应修改为 **arm64-linux_gcc7.3.0**。
 
-3. 切换到colorization_video目录，创建目录用于存放编译文件，例如，本文中，创建的目录为 **build/intermediates/host**。
+3. 切换到human_segmentation目录，创建目录用于存放编译文件，例如，本文中，创建的目录为 **build/intermediates/host**。
 
     **cd $HOME/samples/cplusplus/contrib/human_segmentation**
 
@@ -153,8 +153,8 @@
 
     - 使用产品为200DK开发者板。   
         1. 开发环境中执行以下命令启动presentserver。   
-            **cd $HOME/samples/cplusplus/contrib/human_segmentation**   
-            **bash scripts/run_presenter_server.sh**   
+            **cd $HOME/samples/common**
+            **bash run_presenter_server.sh ../cplusplus/contrib/human_segmentation/script/human_segmentation.conf**
         2. 执行以下命令登录运行环境。   
             **开发环境与运行环境合一部署，请跳过此步骤！**   
             **ssh HwHiAiUser@xxx.xxx.xxx.xxx** 
@@ -164,12 +164,13 @@
            **开发环境与运行环境合一部署，请跳过此步骤！**   
            **ssh HwHiAiUser@xxx.xxx.xxx.xxx**    
         2.运行环境中启动presenterserver。   
-进入工程所在目录（如$HOME/human_segmentation），执行以下命令
-            **bash scripts/run_presenter_server.sh**   
+进入工程所在目录（如$HOME/samples/common），执行以下命令
+            **bash run_presenter_server.sh ../cplusplus/contrib/human_segmentation/script/human_segmentation.conf**
 
 3. <a name="step_2"></a>运行可执行文件。
 
-    - 如果是开发环境与运行环境合一部署，执行以下命令，设置运行环境变量，并切换目录。   
+    - 如果是开发环境与运行环境合一部署，执行以下命令，设置运行环境变量，并切换目录。
+      **export LD_LIBRARY_PATH=$HOME/ascend_ddk/x86/lib/:$LD_LIBRARY_PATH**
       **export LD_LIBRARY_PATH=**   
       **source ~/.bashrc**     
       **cd $HOME/samples/cplusplus/contrib/human_segmentation/out**

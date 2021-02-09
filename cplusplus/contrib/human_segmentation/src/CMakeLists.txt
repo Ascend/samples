@@ -13,6 +13,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY  "../../../out")
 set(CMAKE_CXX_FLAGS_DEBUG "-fPIC -O0 -g -Wall")
 set(CMAKE_CXX_FLAGS_RELEASE "-fPIC -O2 -Wall")
 
+add_definitions(-DENABLE_DVPP_INTERFACE)
 set(INC_PATH $ENV{DDK_PATH})
 
 if (NOT DEFINED ENV{DDK_PATH})
@@ -39,6 +40,7 @@ endif()
 
 # Header path
 include_directories(
+    $ENV{HOME}/ascend_ddk/${ARCH}/include/ascenddk
     $ENV{HOME}/ascend_ddk/${ARCH}/include/
     $ENV{HOME}/ascend_ddk/${ARCH}/include/opencv4
     ${INC_PATH}/acllib/include/
@@ -59,15 +61,13 @@ link_directories(
 )
 
 add_executable(main
-        utils.cpp
-        model_process.cpp
         classify_process.cpp
         main.cpp)
 
 if(target STREQUAL "Simulator_Function")
     target_link_libraries(main funcsim)
 else()
-    target_link_libraries(main ascendcl acl_dvpp stdc++ opencv_highgui  opencv_core opencv_imgproc opencv_imgcodecs opencv_calib3d opencv_features2d opencv_videoio protobuf presenteragent)
+    target_link_libraries(main ascendcl atlasutil acl_dvpp stdc++ opencv_highgui  opencv_core opencv_imgproc opencv_imgcodecs opencv_calib3d opencv_features2d opencv_videoio protobuf presenteragent)
 endif()
 
 install(TARGETS main DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
