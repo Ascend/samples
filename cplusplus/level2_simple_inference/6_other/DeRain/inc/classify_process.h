@@ -38,24 +38,24 @@ public:
     ClassifyProcess(const char* modelPath, uint32_t modelWidth, uint32_t modelHeight);
     ~ClassifyProcess();
 
-    Result Init();
-    Result Preprocess(const string& imageFile);
-    Result Inference(aclmdlDataset*& inferenceOutput);
-    Result Postprocess(const string& origImageFile,
+    Result init();
+    Result preprocess(const string& imageFile);
+    Result inference(aclmdlDataset*& inferenceOutput);
+    Result postprocess(const string& origImageFile,
                        aclmdlDataset* modelOutput);
-    void PrintMeanPSNR();
+    void printmeanpsnr();
 private:
-    Result InitResource();
-    Result InitModel(const char* omModelPath);
+    Result initresource();
+    Result initmodel(const char* omModelPath);
 
-    void* GetInferenceOutputItem(uint32_t& itemDataSize,
+    void* getinferenceoutputitem(uint32_t& itemDataSize,
                                  aclmdlDataset* inferenceOutput);
-    void LabelClassToImage(int classIdx, const string& imagePath);
-    void DestroyResource();
+    void labelclasstoimage(int classIdx, const string& imagePath);
+    void destroyresource();
 
     //add by cz,20200925
-    double getPSNR(const cv::Mat& I1, const cv::Mat& I2);
-    double getSSIM(const cv::Mat& i1, const cv::Mat& i2);
+    double getpsnr(const cv::Mat& I1, const cv::Mat& I2);
+    double getssim(const cv::Mat& i1, const cv::Mat& i2);
 
 private:
     int32_t deviceId_;
