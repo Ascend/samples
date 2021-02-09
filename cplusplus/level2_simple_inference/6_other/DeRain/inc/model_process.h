@@ -41,7 +41,7 @@ public:
     * @param [in] modelPath: model path
     * @return result
     */
-    Result LoadModelFromFileWithMem(const char *modelPath);
+    Result loadmodelfromfilewithmem(const char *modelPath);
 
     /**
     * @brief unload model
@@ -65,7 +65,7 @@ public:
     * @param [in] bufferSize: input buffer size
     * @return result
     */
-    Result CreateInput(void *inputDataBuffer, size_t bufferSize);
+    Result createinput(void *inputDataBuffer, size_t bufferSize);
 
     /**
     * @brief destroy input resource
@@ -76,7 +76,7 @@ public:
     * @brief create output buffer
     * @return result
     */
-    Result CreateOutput();
+    Result createoutput();
 
     /**
     * @brief destroy output resource
@@ -87,13 +87,13 @@ public:
     * @brief model execute
     * @return result
     */
-    Result Execute();
+    Result execute();
 
     /**
     * @brief get model output data
     * @return output dataset
     */
-    aclmdlDataset *GetModelOutputData();
+    aclmdlDataset *getmodeloutputdata();
 
 private:
     bool loadFlag_;  // model load flag
