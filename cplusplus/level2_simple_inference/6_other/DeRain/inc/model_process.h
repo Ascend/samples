@@ -46,18 +46,18 @@ public:
     /**
     * @brief unload model
     */
-    void Unload();
+    void unload();
 
     /**
     * @brief create model desc
     * @return result
     */
-    Result CreateDesc();
+    Result createdesc();
 
     /**
     * @brief destroy desc
     */
-    void DestroyDesc();
+    void destroydesc();
 
     /**
     * @brief create model input
@@ -70,7 +70,7 @@ public:
     /**
     * @brief destroy input resource
     */
-    void DestroyInput();
+    void destroyinput();
 
     /**
     * @brief create output buffer
@@ -81,7 +81,7 @@ public:
     /**
     * @brief destroy output resource
     */
-    void DestroyOutput();
+    void destroyoutput();
 
     /**
     * @brief model execute
