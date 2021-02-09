@@ -95,7 +95,7 @@ int main(int argc, char *argv[]) {
             return FAILED;
         }
         End = clock();
-        double duration = (End-Begin)*1000.0/CLOCKS_PER_SEC;
+        double duration = (End-Begin) * 1000.0 / CLOCKS_PER_SEC;
         cout<<"tick:"<<End-Begin<<endl;
         cout<<CLOCKS_PER_SEC<<endl;
         cout<<"duration:"<<duration<<"(ms)"<<endl;
