@@ -42,7 +42,7 @@ ClassifyProcess::~ClassifyProcess() {
     DestroyResource();
 }
 
-Result ClassifyProcess::InitResource() {
+Result classifyprocess::initresource() {
     // ACL init
     const char *aclConfigPath = "../src/acl.json";
     aclError ret = aclInit(aclConfigPath);
@@ -121,7 +121,7 @@ double classifyprocess::getpsnr(const cv::Mat &I1, const cv::Mat&I2){
     }
 }
 
-double ClassifyProcess::getSSIM(const cv::Mat& i1, const cv::Mat& i2){
+double classifyprocess::getssim(const cv::Mat& i1, const cv::Mat& i2){
     const double C1 = 6.5025, C2 = 58.5225;
     int d = CV_32F;
 
@@ -189,7 +189,7 @@ Result classifyprocess::init() {
     return SUCCESS;
 }
 
-Result ClassifyProcess::Preprocess(const string& imageFile) {
+Result classifyprocess::preprocess(const string& imageFile) {
     // read image using OPENCV
     INFO_LOG("Read image %s", imageFile.c_str());
     cv::Mat origMat = cv::imread(imageFile, CV_LOAD_IMAGE_COLOR);   //BGR
@@ -228,7 +228,7 @@ Result ClassifyProcess::Preprocess(const string& imageFile) {
     return SUCCESS;
 }
 
-Result ClassifyProcess::Inference(aclmdlDataset*& inferenceOutput) {
+Result classifyprocess::inference(aclmdlDataset*& inferenceOutput) {
     Result ret = model_.Execute();
     if (ret != SUCCESS) {
         ERROR_LOG("Execute model inference failed");
@@ -242,7 +242,7 @@ Result ClassifyProcess::Inference(aclmdlDataset*& inferenceOutput) {
     return SUCCESS;
 }
 
-Result ClassifyProcess::Postprocess(const string& origImageFile,
+Result classifyprocess::postprocess(const string& origImageFile,
 aclmdlDataset* modelOutput){
     //INFO_LOG("Postprocess image");
 
@@ -429,7 +429,7 @@ void classifyprocess::labelclasstoimage(int classIdx, const string& origImagePat
     cv::imwrite(outputPath, resultImage);
 }
 
-void ClassifyProcess::DestroyResource()
+void classifyprocess::destroyresource()
 {   aclrtFree(inputBuf_);
     inputBuf_ = nullptr;
     aclError ret;
