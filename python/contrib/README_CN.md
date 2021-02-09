@@ -14,5 +14,8 @@
 └── [edge_detection_picture](./edge_detection_picture)： **图像边缘检测**     
 └── [portrait_picture](./portrait_picture)： **背景替换**  
 └── [gesture_recognition_picture](./gesture_recognition_picture)： **手势识别** 
+└── [portrait_picture](./portrait_picture)： **背景替换**    
+└── [human_protein_map_classification](./human_protein_map_classification)： **基于输入图像开发自动化预测蛋白所属亚细胞位置**
 
-  
+
+ 

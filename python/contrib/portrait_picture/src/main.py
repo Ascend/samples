@@ -19,7 +19,7 @@ import atlas_utils.constants as const
 from atlas_utils.acl_dvpp import Dvpp
 from atlas_utils.acl_model import Model
 from atlas_utils.acl_image import AclImage
-from acl_resource import AclResource
+from atlas_utils.acl_resource import AclResource
 
 currentPath = os.path.join(path, "..")
 OUTPUT_DIR = os.path.join(currentPath, 'outputs/result')
@@ -133,7 +133,7 @@ def main():
             # Post-processing
             mask = seg.post_process(result, image_name)
             # Fusion of segmented portrait and background image
-            result = background_replace(os.path.join(image_dir, 'background.jpg'), \
+            background_replace(os.path.join(image_dir, 'background.jpg'), \
                                         image_file, os.path.join(MASK_DIR, image_name))
 
 
