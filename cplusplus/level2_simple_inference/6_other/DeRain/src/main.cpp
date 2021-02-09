@@ -59,13 +59,12 @@ int main(int argc, char *argv[]) {
     }
     //逐张图片推理
     for (string imageFile : fileVec) {
-
         //add by cz,20200928
         int posofPoint = imageFile.find_last_of(".");
         int posofUnderline = imageFile.find_last_of("_");
         if(posofPoint-posofUnderline-1>0){
             string PicType(imageFile.substr(posofUnderline + 1,posofPoint-posofUnderline-1));
-            //cout<<"PicType:"<<PicType<<endl;
+            //cout << "PicType:" << PicType << endl;
             if(PicType=="GT")
                 continue;
         }
@@ -96,9 +95,9 @@ int main(int argc, char *argv[]) {
         }
         End = clock();
         double duration = (End-Begin) * 1000.0 / CLOCKS_PER_SEC;
-        cout<<"tick:"<<End-Begin<<endl;
-        cout<<CLOCKS_PER_SEC<<endl;
-        cout<<"duration:"<<duration<<"(ms)"<<endl;
+        cout << "tick:" << End-Begin << endl;
+        cout << CLOCKS_PER_SEC << endl;
+        cout << "duration:" << duration << "(ms)" << endl;
     }
     classify.PrintMeanPSNR();
     INFO_LOG("Execute sample success");
