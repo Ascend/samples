@@ -71,3 +71,5 @@ else()
 endif()
 
 install(TARGETS main DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+
+execute_process(COMMAND ${CMAKE_COMMAND} -E copy ../../../scripts/human_segmentation.conf ../../../out/human_segmentation.conf)
