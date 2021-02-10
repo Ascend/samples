@@ -122,14 +122,13 @@ function main() {
             return ${inferenceError}
         fi
 
-        rm -rf ${project_path}/model/${model_name}".om"
         ln -s ${HOME}/models/${project_name}/${model_name}".om" ${project_path}/model/${model_name}".om"
         if [ $? -ne 0 ];then
             echo "ERROR: failed to set model soft connection"
             return ${inferenceError}
         fi
     else 
-        rm -rf ${project_path}/model/${model_name}".om"
+
         ln -s ${HOME}/models/${project_name}/${model_name}".om" ${project_path}/model/${model_name}".om"
         if [ $? -ne 0 ];then
             echo "ERROR: failed to set model soft connection"
