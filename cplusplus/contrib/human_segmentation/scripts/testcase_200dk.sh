@@ -114,7 +114,8 @@ function main() {
 
         # 转模型
         cd ${project_path}/model/
-	
+        rm -rf ${model_name}.om
+        
         atc --input_shape="input_rgb:1,512,512,3" --output=${HOME}/models/${project_name}/${model_name} --insert_op_conf=${project_path}/model/insert_op.cfg --framework=3 --model=${project_path}/model/${tf_model##*/} --soc_version=Ascend310  --input_format=NHWC
 	
         if [ $? -ne 0 ];then
