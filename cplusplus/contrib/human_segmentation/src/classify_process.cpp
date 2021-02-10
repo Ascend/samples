@@ -84,7 +84,7 @@ AtlasError ClassifyProcess::InitModel() {
 }
 
 AtlasError ClassifyProcess::OpenPresenterChannel() {
-    PresenterErrorCode openChannelret = OpenChannelByConfig(channel_, "../script/human_segmentation.conf");
+    PresenterErrorCode openChannelret = OpenChannelByConfig(channel_, "./human_segmentation.conf");
     if (openChannelret != PresenterErrorCode::kNone) {
         ATLAS_LOG_ERROR("Open channel failed, error %d\n", (int)openChannelret);
     }
