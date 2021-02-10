@@ -121,7 +121,7 @@ Caffe与TensorFlow共存的自定义算子样例工程的目录结构如下所�
       optional string type = 2;  // 模型解析所需要定义，保持默认，用户无需修改。
     
       // 在LayerParameter中添加自定义算子层的定义，ID需要保持唯一，取值原则为：不与内置caffe.proto中编号重复，且小于5000。
-      // 内置的caffe.proto存储路径为ATC或FwkACLlib安装路径下的“include/proto/caffe.proto”。
+      // 内置的caffe.proto存储路径为ATC安装路径下的“include/proto/caffe.proto”。
       optional CustomTest1Parameter custom_test1_param = 1000;  
       optional CustomTest2Parameter custom_test2_param = 1001; 
     }
@@ -138,7 +138,7 @@ Caffe与TensorFlow共存的自定义算子样例工程的目录结构如下所�
 
     ```
     须知：
-    Parameter的类型（粗斜体部分）建议保持唯一，不与内置caffe.proto（“atc/include/proto/caffe.proto”或者“fwkacllib/include/proto/caffe.proto”）定义重复。
+    Parameter的类型（粗斜体部分）建议保持唯一，不与内置caffe.proto（“atc/include/proto/caffe.proto”）定义重复。
     样例代码的custom.proto文件中已包含样例中样例中的自定义Caffe算子的定义，若有其他自定义算子，请基于此文件追加。
     ```
 
@@ -165,7 +165,7 @@ Caffe与TensorFlow共存的自定义算子样例工程的目录结构如下所�
 
     -   ASCEND\_TENSOR\_COMPLIER\_INCLUDE：ATC组件的头文件所在路径。
         -   若不配置此环境变量，默认使用路径：“/usr/local/Ascend/atc/include”。
-        -   若实际ATC或FwkACLlib安装路径不为默认路径，请取消此环境变量的注释，并修改为实际的ATC或FwkACLlib组件的头文件所在路径，例如：
+        -   若实际ATC安装路径不为默认路径，请取消此环境变量的注释，并修改为实际的ATC组件的头文件所在路径，例如：
 
             ```
             export ASCEND_TENSOR_COMPLIER_INCLUDE=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/atc/include
@@ -281,7 +281,7 @@ Caffe与TensorFlow共存的自定义算子样例工程的目录结构如下所�
 
 训练场景下，可以执行包含自定义算子的模型训练，也可以通过TensorFlow前端构造只包含自定义算子的单算子网络并运行验证。
 
-本样例中提供了训练场景下如下单算子网络验证样例：
+本样例中提供了训练场景下如下单算子网络验证样例，以下样例需要在运行环境中执行：
 
 TBE算子：Add、ScatterNdAdd，单算子网络验证文件可参见“tbe/testcases/tf\_test/_<OpType\>_”目录下的xx.py文件。
 
