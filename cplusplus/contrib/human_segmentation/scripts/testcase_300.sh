@@ -114,7 +114,6 @@ function main() {
 
         # 转模型
         cd ${project_path}/model/
-	    rm -rf ${model_name}.om
         
         atc --input_shape="input_rgb:1,512,512,3" --output=${HOME}/models/${project_name}/${model_name} --insert_op_conf=${project_path}/model/insert_op.cfg --framework=3 --model=${project_path}/model/${tf_model##*/} --soc_version=Ascend310  --input_format=NHWC
 	
@@ -122,13 +121,15 @@ function main() {
             echo "ERROR: convert model failed"
             return ${inferenceError}
         fi
-
+        
+        rm -rf ${project_path}/model/${model_name}".om"
         ln -s ${HOME}/models/${project_name}/${model_name}".om" ${project_path}/model/${model_name}".om"
         if [ $? -ne 0 ];then
             echo "ERROR: failed to set model soft connection"
             return ${inferenceError}
         fi
     else 
+        rm -rf ${project_path}/model/${model_name}".om"
         ln -s ${HOME}/models/${project_name}/${model_name}".om" ${project_path}/model/${model_name}".om"
         if [ $? -ne 0 ];then
             echo "ERROR: failed to set model soft connection"
