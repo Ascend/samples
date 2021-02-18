@@ -40,9 +40,27 @@ Ascend Samples，欢迎各位开发者！
 
  **二、License规则**
 
-所有源码文件(cpp、py、hpp文件)需要支持Apache 2.0 License，并在源码文件头部增加声明，如下所示。
+## 如果您是华为员工：
+#### 所有的新建源码文件(cpp、py、hpp文件)需要支持Apache 2.0 License，并在源码文件头部增加声明，如下所示。
 ```
-# Copyright 2020 Huawei Technologies Co., Ltd
+# Copyright 2021 Huawei Technologies Co., Ltd
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+```
+#### 所有从其他源码修改而来的代码，不要改变源代码中的LICENSE类型，如果源码中已有其它公司的Copyright，原有的copyright声明保持不变，在上面增加一行华为的Copyright，如下所示。
+```
+# Copyright 2021 Huawei Technologies Co., Ltd
+# Copyright 2018 hisillion Technologies Co., Ltd
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -56,9 +74,31 @@ Ascend Samples，欢迎各位开发者！
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ```
-如果源码中已有其它公司的Copyright，请在上面增加一行华为的Copyriht，如下所示。
+
+## 如果您非华为员工：
+#### 需要根据您签署的CLA类型进行声明：
+#### CLA签署网站：https://clasign.osinfra.cn/sign/Z2l0ZWUlMkZhc2NlbmQ=
+#### CLA包括企业签署、员工签署、个人签署三类，非华为员工签署个人，并根据自己签署的类型声明对应的copyright
+#### 所有的新建源码文件(cpp、py、h等文件)需要支持Apache 2.0 License，并在源码文件头部增加如下声明，将[yyyy]替换为代码创建的4位数年份，将[name of the copyright owner]替换为所在组织的名字（所有个人签署CLA一律声明Huawei Technologies Co., Ltd），注意删除方括号：
 ```
-# Copyright 2020 Huawei Technologies Co., Ltd
+# Copyright [yyyy] [name of copyright owner]
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License. 
+```
+
+#### 所有从其他源码修改而来的代码，不要改变源代码中的LICENSE类型，如果源码中已有其它公司的Copyright，原有的copyright声明保持不变，在上面增加一行Copyright，将[yyyy]替换为修改代码的4位数年份，将[name of the copyright owner]替换为本人所在组织的名字（所有个人签署CLA一律声明Huawei Technologies Co., Ltd），注意删除方括号。
+```
+# Copyright [yyyy] [name of copyright owner]
 # Copyright 2018 hisillion Technologies Co., Ltd
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
