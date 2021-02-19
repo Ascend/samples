@@ -19,7 +19,7 @@
 
 部署此Sample前，需要准备好以下环境：
 
-- 请确认已按照[环境准备和依赖安装](../../../environment)准备好环境。
+- 请确认已按照[环境准备和依赖安装](../../../../environment)准备好环境。
 
 - 已完成对应产品的开发环境和运行环境安装。
 
@@ -27,7 +27,7 @@
 
   1.本样例只支持20.1及以上版本
 
-  2.本样例依赖libatlasutil.so库，编译和运行环境都必须安装该库，具体参见[atlasutils库使用方法](../../../common/atlasutil/README.md)
+  2.本样例依赖libatlasutil.so库，编译和运行环境都必须安装该库，具体参见[atlasutils库使用方法](../../../../common/atlasutil/README.md)
 
   
 
@@ -51,7 +51,7 @@
 
 2. 获取此应用中所需要的原始网络模型。
 
-    参考下表获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到开发环境普通用户下的任意目录，例如：$HOME/models/face_detection_camera。
+    参考下表获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到开发环境普通用户下的任意目录，例如：$HOME/models/multi_channels_rtsp
 
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
@@ -73,7 +73,7 @@
 
     2. 执行以下命令下载aipp配置文件并使用atc命令进行模型转换。
 
-        **cd $HOME/models/face_detection_rtsp**  
+        **cd $HOME/models/multi_channels_rtsp**  
 
         **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/face_detection_camera/insert_op.cfg**
 
@@ -81,27 +81,27 @@
 
     3. 执行以下命令将转换好的模型复制到样例中model文件夹中。
 
-        **cp ./face_detection.om $HOME/samples/cplusplus/level2_simple_inference/2_object_detection/face_detection_rtsp/model/**
+        **cp ./face_detection.om $HOME/samples/cplusplus/level2_simple_inference/n_performance/1_multi_process_thread/multi_channels_rtsp/model/**
 
 
 ### 样例部署
 
 1. 修改样例运行配置文件。
 
-    样例运行配置文件为**scripts/face_detection.conf**。
+    样例运行配置文件为$HOME/samples/cplusplus/level2_simple_inference/n_performance/1_multi_process_thread/multi_channels_rtsp/scripts/multi_channels_rtsp.conf。
 	
 	将文件中 presenter_server_ip、presenter_view_ip 修改为开发环境中可以ping通运行环境的ip地址，使用以下两种情况举例说明。
 
      - 使用产品为200DK开发者板。   
         1. 开发环境中使用ifconfig查看可用ip。   
-        2. 在开发环境中将**scripts/face_detection.conf**中的 presenter_server_ip、presenter_view_ip 修改为该ip地址。   
+        2. 在开发环境中将multi_channels_rtsp.conf中的 presenter_server_ip、presenter_view_ip 修改为该ip地址。   
         ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
         > - 1.开发环境和运行环境分离部署，一般使用配置的虚拟网卡ip，例如192.168.1.223。
         > - 2.开发环境和运行环境合一部署，一般使用200dk固定ip，例如192.168.1.2。
 
      - 使用产品为300加速卡（ai1s云端推理环境）。   
         1. ECS弹性云服务器控制台中查看ai1s云端环境可用内网ip，例如192.168.0.198。   
-        2. 在开发环境中将**scripts/face_detection.conf**中的 presenter_server_ip、presenter_view_ip 修改为该ip地址。   
+        2. 在开发环境中将multi_channels_rtsp.conf中的 presenter_server_ip、presenter_view_ip 修改为该ip地址。   
         ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
         > - 也可以在ai1s云端环境中使用ifconfig查看内网ip。
         > - 登录ai1s云端环境时的ip地址为此环境的公网ip，ai1s云端环境中ifconfig查看到的ip为此环境的内网ip。
@@ -132,7 +132,7 @@
    
 3. 切换到face_detection_rtsp目录，创建目录用于存放编译文件，例如，本文中，创建的目录为 **build/intermediates/host**。
 
-    **cd $HOME/samples/cplusplus/level2_simple_inference/2_object_detection/face_detection_rtsp**
+    **cd $HOME/samples/cplusplus/level2_simple_inference/n_performance/1_multi_process_thread/multi_channels_rtsp/**
 
     **mkdir -p build/intermediates/host**
 
@@ -147,7 +147,7 @@
       **make clean**   
       **cmake \.\./\.\./\.\./src -DCMAKE_CXX_COMPILER=aarch64-linux-gnu-g++ -DCMAKE_SKIP_RPATH=TRUE**
     
-5. 执行make命令，生成的可执行文件main在 **face_detection_rtsp/out** 目录下。
+5. 执行make命令，生成的可执行文件main在 **multi_channels_rtsp/out** 目录下。
 
     **make **
     
@@ -158,18 +158,18 @@
 ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
 > - 以下出现的**xxx.xxx.xxx.xxx**为运行环境ip，200DK在USB连接时一般为192.168.1.2。
 
-1. 执行以下命令,将开发环境的 **face_detection_rtsp 目录上传到运行环境中，例如 **/home/HwHiAiUser**。   
+1. 执行以下命令,将开发环境的 **multi_channels_rtsp** 目录上传到运行环境中，例如 **/home/HwHiAiUser**。   
 
     **开发环境与运行环境合一部署，请跳过此步骤！**   
 
-    **scp -r $HOME/samples/cplusplus/level2_simple_inference/2_object_detection/face_detection_rtsp HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
+    **scp -r $HOME/samples/cplusplus/level2_simple_inference/n_performance/1_multi_process_thread/multi_channels_rtsp HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
 
 2. 启动presenterserver并登录运行环境。
 
     - 使用产品为200DK开发者板。   
         1. 开发环境中执行以下命令启动presentserver。   
-            **cd $HOME/samples/cplusplus/level2_simple_inference/2_object_detection/face_detection_rtsp**   
-            **bash scripts/run_presenter_server.sh**   
+            **cd $HOME/samples/common**   
+            **bash run_presenter_server.sh ../cplusplus/level2_simple_inference/n_performance/1_multi_process_thread/multi_channels_rtsp/scripts/multi_channels_rtsp.conf**   
         2. 执行以下命令登录运行环境。   
             **开发环境与运行环境合一部署，请跳过此步骤！**   
             **ssh HwHiAiUser@xxx.xxx.xxx.xxx** 
@@ -180,19 +180,19 @@
            **ssh HwHiAiUser@xxx.xxx.xxx.xxx**    
         2. 运行环境中启动presenterserver。   
 
-3. <a name="step_2"></a>运行可执行文件。
+3. 运行可执行文件。
 
     - 如果是开发环境与运行环境合一部署，执行以下命令，设置运行环境变量，并切换目录。   
       **export LD_LIBRARY_PATH=**   
       **source ~/.bashrc**     
-      **cd $HOME/samples/cplusplus/level2_simple_inference/2_object_detection/face_detection_rtsp/out**
+      **cd $HOME/samples/cplusplus/level2_simple_inference/n_performance/1_multi_process_thread/multi_channels_rtsp/out**
 
     - 如果是开发环境与运行环境分离部署，执行以下命令切换目录。   
-      **cd $HOME/face_detection_rtsp/out**
+      **cd $HOME/multi_channels_rtsp/out**
 
     切换目录后，执行以下命令运行样例。
 
-    **./main 
+    **./main **
     
       
     
