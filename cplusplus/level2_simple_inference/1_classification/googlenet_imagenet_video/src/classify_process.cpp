@@ -128,7 +128,7 @@ Result ClassifyProcess::Init() {
         return FAILED;
     }
     //初始化ACL资源
-    Result ret = InitResource();
+    ret = InitResource();
     if (ret != SUCCESS) {
         ERROR_LOG("Init acl resource failed");
         return FAILED;
