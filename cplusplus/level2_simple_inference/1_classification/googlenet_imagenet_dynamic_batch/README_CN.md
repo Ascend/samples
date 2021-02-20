@@ -67,6 +67,7 @@
 
         由于LD_LIBRARY_PATH环境变量在转使用atc工具和运行样例时会产生冲突，所以需要在命令行单独设置此环境变量，方便修改。
 
+        **export install_path=$HOME/Ascend/ascend-toolkit/latest**
         **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64**  
 
     2. 执行以下命令下载aipp配置文件并使用atc命令进行模型转换。
