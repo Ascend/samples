@@ -52,11 +52,11 @@ $\color{red}{以下操作在开发环境上操作，以普通用户为HwHiAiUser
     >  **如果sudo apt-get update失败，可以试用其他的国内源 https://www.cnblogs.com/dream4567/p/9690850.html** 
 
 
-1. 在开发环境安装编译工具 
+3. 在开发环境安装编译工具 
 
      **sudo apt-get install -y g++\-aarch64-linux-gnu g++\-5-aarch64-linux-gnu**   
 
-2. 在开发环境中添加以下环境变量，用于atc模型转换 
+4. 在开发环境中添加以下环境变量，用于atc模型转换 
     
     1.  打开.bashrc文件  
         **vim ~/.bashrc** 
@@ -88,6 +88,13 @@ $\color{red}{以下操作在开发环境上操作，以普通用户为HwHiAiUser
 
     2.  执行如下命令使环境变量生效   
         **source ~/.bashrc**  
+
+5.  在开发环境部署Media模块  
+    1.  将[A200dk-npu-driver-{software version}-ubuntu18.04-aarch64-minirc.tar.gz](https://www.huaweicloud.com/ascend/resource/Software)以开发环境安装用户上传到\$HOME/Ascend目录下。  
+    2.  解压driver包   
+         **cd \$HOME/Ascend**    
+         **tar zxvf A200dk-npu-driver-{software version}-ubuntu18.04-aarch64-minirc.tar.gz** 
+
   
 $\color{red}{以下操作在运行环境(Atlas200DK)上操作}$  
 1.  登录运行环境  
@@ -186,10 +193,5 @@ $\color{red}{以下操作在运行环境(Atlas200DK)上操作}$
      2.  执行如下命令使环境变量生效。  
         **source ~/.bashrc**
 
-6.  在开发环境部署Media模块  
-    1.  将[A200dk-npu-driver-{software version}-ubuntu18.04-aarch64-minirc.tar.gz](https://www.huaweicloud.com/ascend/resource/Software)以开发环境安装用户上传到\$HOME/Ascend目录下。  
-    2.  解压driver包   
-         **cd \$HOME/Ascend**    
-         **tar zxvf A200dk-npu-driver-{software version}-ubuntu18.04-aarch64-minirc.tar.gz** 
 
  
