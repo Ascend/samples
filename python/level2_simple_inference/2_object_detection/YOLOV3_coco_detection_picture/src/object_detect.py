@@ -4,7 +4,7 @@ sys.path.append("../")
 import os
 import numpy as np
 import acl
-
+import atlas_utils.utils as utils
 from PIL import Image, ImageDraw, ImageFont
 from atlas_utils.acl_dvpp import Dvpp
 import atlas_utils.constants as const
@@ -65,19 +65,19 @@ class ObjectDetect(object):
     def _init_resource(self):
         print("[Sample] init resource stage:")
         ret = acl.init()
-        check_ret("acl.rt.set_device", ret)
+        utils.check_ret("acl.rt.set_device", ret)
 
         ret = acl.rt.set_device(self.device_id)
-        check_ret("acl.rt.set_device", ret)
+        utils.check_ret("acl.rt.set_device", ret)
 
         self.context, ret = acl.rt.create_context(self.device_id)
-        check_ret("acl.rt.create_context", ret)
+        utils.check_ret("acl.rt.create_context", ret)
 
         self.stream, ret = acl.rt.create_stream()
-        check_ret("acl.rt.create_stream", ret)
+        utils.check_ret("acl.rt.create_stream", ret)
 
         self.run_mode, ret = acl.rt.get_run_mode()
-        check_ret("acl.rt.get_run_mode", ret)
+        utils.check_ret("acl.rt.get_run_mode", ret)
 
         print("Init resource stage success") 
 
@@ -178,7 +178,7 @@ def main():
     detect = ObjectDetect(MODEL_PATH, MODEL_WIDTH, MODEL_HEIGHT)
     #Inference initialization
     ret = detect.init()
-    check_ret("ObjectDetect.init ", ret)
+    utils.check_ret("ObjectDetect.init ", ret)
     
     #From the parameters of the picture storage directory, reasoning by a picture
     image_dir = sys.argv[1]
