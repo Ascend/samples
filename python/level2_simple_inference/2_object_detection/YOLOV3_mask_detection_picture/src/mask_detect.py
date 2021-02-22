@@ -5,11 +5,8 @@ import acl
 import cv2 as cv
 from PIL import Image
 
-from constants import *
-from acl_resource import AclResource
-from utils import *
-from acl_model import Model
-from acl_image import AclImage
+from atlas_utils.acl_model import Model
+from atlas_utils.acl_resource import AclResource
 
 labels = ["face", "person", "mask"]
 
@@ -183,7 +180,7 @@ def main():
     acl_resource = AclResource()
     acl_resource.init()
     #load model
-    model = Model(acl_resource, MODEL_PATH)
+    model = Model(MODEL_PATH)
     images_list = [os.path.join(INPUT_DIR, img)
                    for img in os.listdir(INPUT_DIR)
                    if os.path.splitext(img)[1] in IMG_EXT]
