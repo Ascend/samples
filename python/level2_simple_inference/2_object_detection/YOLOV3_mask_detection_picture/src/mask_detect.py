@@ -6,7 +6,7 @@ import numpy as np
 import acl
 import cv2 as cv
 from PIL import Image
-
+from atlas_utils.constants as const
 from atlas_utils.acl_model import Model
 from atlas_utils.acl_resource import AclResource
 
@@ -185,7 +185,7 @@ def main():
     model = Model(MODEL_PATH)
     images_list = [os.path.join(INPUT_DIR, img)
                    for img in os.listdir(INPUT_DIR)
-                   if os.path.splitext(img)[1] in IMG_EXT]
+                   if os.path.splitext(img)[1] in const.IMG_EXT]
     #Read images from the data directory one by one for reasoning
     for pic in images_list:
         #read image
