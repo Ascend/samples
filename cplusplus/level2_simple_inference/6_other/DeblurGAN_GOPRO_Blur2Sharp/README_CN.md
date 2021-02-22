@@ -84,7 +84,7 @@
 
     **cd $HOME/samples/cplusplus/level2_simple_inference/6_other/DeblurGAN_GOPRO_Blur2Sharp/data**
 
-    **wget https://c7xcode.obs.myhuaweicloud.com/models/DeblurGAN_GOPRO_Blur2Sharp/data.png --no-check-certificate**
+    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/DeblurGAN_GOPRO_Blur2Sharp/test_image/data.jpg --no-check-certificate**
 
 
 ### 样例部署
