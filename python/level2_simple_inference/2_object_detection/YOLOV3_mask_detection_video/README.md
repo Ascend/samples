@@ -69,13 +69,13 @@
 
     3. 执行以下命令将转换好的模型复制到样例中model文件夹中。
 
-        **cp ./yolo3_resnet18_yuv.om /home/ascend/samples/python/level2_simple_inference/2_object_detection/YOLOV3_mask_detection_video/model/**
+        **cp ./yolo3_resnet18_yuv.om $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV3_mask_detection_video/model/**
 
 4. 获取样例需要的测试文件。
 
     执行以下命令，进入样例的data文件夹中，下载对应的测试文件，完成后返回样例文件夹。
 
-    **cd /home/ascend/samples/python/level2_simple_inference/2_object_detection/YOLOV3_mask_detection_video/data**
+    **cd $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV3_mask_detection_video/data**
 
     **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/mask_detection_video/mask-true.mp4**
 
