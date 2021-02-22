@@ -6,7 +6,8 @@ import numpy as np
 import acl
 import cv2 as cv
 from PIL import Image
-from atlas_utils.constants as const
+
+import atlas_utils.constants as const
 from atlas_utils.acl_model import Model
 from atlas_utils.acl_resource import AclResource
 
