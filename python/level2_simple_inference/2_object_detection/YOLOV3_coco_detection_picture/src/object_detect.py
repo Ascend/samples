@@ -1,13 +1,16 @@
 import sys
+sys.path.append("../../../../common")
+sys.path.append("../")
 import os
 import numpy as np
 import acl
 
-from utils import *
-from acl_dvpp import Dvpp
-from acl_model import Model
-from acl_image import AclImage
 from PIL import Image, ImageDraw, ImageFont
+from atlas_utils.acl_dvpp import Dvpp
+import atlas_utils.constants as const
+from atlas_utils.acl_model import Model
+from atlas_utils.acl_image import AclImage
+from atlas_utils.acl_resource import AclResource
 
 labels = ["person",
         "bicycle", "car", "motorbike", "aeroplane",
@@ -88,20 +91,20 @@ class ObjectDetect(object):
 
         #Initialize DVPP
         ret = self._dvpp.init_resource()
-        if ret != SUCCESS:
+        if ret != const.SUCCESS:
             print("Init dvpp failed")
-            return FAILED
+            return const.FAILED
         
         #load model
-        self._model = Model(self.run_mode, self._model_path)
+        self._model = Model(self._model_path)
         ret = self._model.init_resource()
-        if ret != SUCCESS:
+        if ret != const.SUCCESS:
             print("Init model failed")
-            return FAILED
+            return const.FAILED
 
         self._init_image_info()
 
-        return SUCCESS
+        return const.SUCCESS
 
     def _init_image_info(self):
         image_info = np.array([self._model_width, self._model_height, 
@@ -181,7 +184,7 @@ def main():
     image_dir = sys.argv[1]
     images_list = [os.path.join(image_dir, img)
                    for img in os.listdir(image_dir)
-                   if os.path.splitext(img)[1] in IMG_EXT]
+                   if os.path.splitext(img)[1] in const.IMG_EXT]
     #Create a directory to store the inference results
     if not os.path.isdir('../outputs'):
         os.mkdir('../outputs')
