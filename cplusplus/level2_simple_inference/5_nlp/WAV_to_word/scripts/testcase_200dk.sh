@@ -184,11 +184,6 @@ function main() {
         return ${inferenceError}
     fi  
 
-
-    cd ${project_path}/out/output
-    mv output1_0.bin ../
-    mv output2_0.bin ../
-
     cd ${project_path}/scripts
     python3 postprocess.py > result.txt
     temp=`cat result.txt | grep "文本"|awk -F'[: ]+' '{print $2}'`

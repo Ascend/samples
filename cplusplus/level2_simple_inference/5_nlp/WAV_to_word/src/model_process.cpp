@@ -186,7 +186,7 @@ void ModelProcess::DumpModelOutputResult()
     size_t outputNum = aclmdlGetDatasetNumBuffers(output_);
     static int executeNum = 0;
     for (size_t i = 0; i < outputNum; ++i) {
-        ss <<"./output/"<< "output" << ++executeNum << "_" << i << ".bin";
+        ss << "./" << "output" << ++executeNum << "_" << i << ".bin";
         string outputFileName = ss.str();
         FILE *outputFile = fopen(outputFileName.c_str(), "wb");
         if (outputFile) {

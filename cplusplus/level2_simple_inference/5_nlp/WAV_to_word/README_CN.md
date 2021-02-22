@@ -173,13 +173,6 @@
 
     **./main**
 
-    在output目录下生成.bin文件，将该目录下的bin文件移动到out目录下：
-
-    **cd /home/HwHiAiUser/WAV_to_word/out/output**
-
-    **mv output1_0.bin ../**
-
-    **mv output2_0.bin ../**
     
     在/home/HwHiAiUser/WAV_to_word/scripts目录下执行如下命令：
     

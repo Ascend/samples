@@ -154,7 +154,7 @@
     - 使用产品为200DK开发者板。   
         1. 开发环境中执行以下命令启动presentserver。   
             **cd $HOME/samples/common/**
-            **bash run_presenter_server.sh $HOME/samples/cplusplus/level2_simple_inference/6_other/colorization_video/colorization.conf**   
+            **bash run_presenter_server.sh $HOME/samples/cplusplus/level2_simple_inference/6_other/colorization_video/scripts/colorization.conf**   
         2. 执行以下命令登录运行环境。   
             **开发环境与运行环境合一部署，请跳过此步骤！**   
             **ssh HwHiAiUser@xxx.xxx.xxx.xxx** 
@@ -165,7 +165,7 @@
            **ssh HwHiAiUser@xxx.xxx.xxx.xxx**    
         2.运行环境中启动presenterserver。   
 进入presenterserver所在目录（如$HOME/samples/common/），执行以下命令
-            **bash run_presenter_server.sh $HOME/samples/cplusplus/level2_simple_inference/6_other/colorization_video/colorization.conf**   
+            **bash run_presenter_server.sh $HOME/samples/cplusplus/level2_simple_inference/6_other/colorization_video/scripts/colorization.conf**   
 
 3. <a name="step_2"></a>运行可执行文件。
 
