@@ -87,7 +87,7 @@ class ObjectDetect(object):
         """
         
         self._init_resource() 
-        self._dvpp = Dvpp(self.stream, self.run_mode)
+        self._dvpp = Dvpp(self.stream)
 
         #Initialize DVPP
         ret = self._dvpp.init_resource()
