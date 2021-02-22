@@ -185,4 +185,11 @@ $\color{red}{以下操作在运行环境(Atlas200DK)上操作}$
 
      2.  执行如下命令使环境变量生效。  
         **source ~/.bashrc**
+
+6.  在开发环境部署Media模块  
+    1.  将[A200dk-npu-driver-{software version}-ubuntu18.04-aarch64-minirc.tar.gz](https://www.huaweicloud.com/ascend/resource/Software)以开发环境安装用户上传到\$HOME/Ascend目录下。  
+    2.  解压driver包   
+         **cd \$HOME/Ascend**    
+         **tar zxvf A200dk-npu-driver-{software version}-ubuntu18.04-aarch64-minirc.tar.gz** 
+
  
