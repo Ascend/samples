@@ -19,6 +19,7 @@
 ├── [edge_detection_rcf](./edge_detection_rcf)：**图像边缘检测**    
 ├── [gesture_recognition_3D](./gesture_recognition_3D)：**3D手势识别**    
 ├── [human_protein_map_classification](./human_protein_map_classification)：**人体蛋白质分类**    
+├── [human_segmentation](./human_segmentation)：**人体语义分割**    
 ├── [image_hdr_enhance](./image_hdr_enhance)：**图像HDR增强**    
 ├── [portrait](./portrait)：**人像背景替换**    
 ├── [recontruction](./recontruction)：**语义三维重建**    
