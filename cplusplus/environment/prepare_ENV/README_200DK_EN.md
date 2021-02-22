@@ -87,6 +87,13 @@ This readme file describes how to configure the basic environment, including the
     2. Make the configuration take effect.   
         **source ~/.bashrc**  
 
+5. Deploying the Media Module.  
+    1.  Upload [A200dk-npu-driver-{software version}-ubuntu18.04-aarch64-minirc.tar.gz](https://ascend.huawei.com/en/#/hardware/firmware-drivers) to the \$HOME/Ascend directory.    
+    2.  Go to the directory where the Driver package is stored and run the following command as the installation user to extract the Driver package:  
+         **cd \$HOME/Ascend**   
+         **tar zxvf A200dk-npu-driver-{software version}-ubuntu18.04-aarch64-minirc.tar.gz** 
+
+
  **Perform the following operations in the operating environment (Atlas 200 DK).**  
 1. Log in to the operating environment.  
     ssh HwHiAiUser@X.X.X.X  
@@ -179,4 +186,5 @@ This readme file describes how to configure the basic environment, including the
         **wq!**   
 
      2. Make the configuration take effect.  
-        **source ~/.bashrc**
+        **source ~/.bashrc**  
+  
