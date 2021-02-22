@@ -1,4 +1,6 @@
 import sys
+sys.path.append("../../../../common")
+sys.path.append("../")
 import os
 import numpy as np
 import acl
