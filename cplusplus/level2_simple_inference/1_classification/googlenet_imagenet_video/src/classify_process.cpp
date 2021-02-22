@@ -33,18 +33,24 @@ namespace {
 ClassifyProcess::ClassifyProcess(const char* modelPath, 
                                  uint32_t modelWidth, uint32_t modelHeight)
 :deviceId_(0), inputBuf_(nullptr), modelWidth_(modelWidth),
-modelHeight_(modelHeight), isInited_(false){
-    modelPath_ = modelPath;
-    inputDataSize_ = RGBU8_IMAGE_SIZE(modelWidth_, modelHeight_);
-    channel_ = nullptr;
-    PresenterErrorCode openChannelret = OpenChannelByConfig(channel_, "./param.conf");
-    if (openChannelret != PresenterErrorCode::kNone) {
-        ERROR_LOG("Open channel failed, error %d\n", (int)openChannelret);
-    }
+modelHeight_(modelHeight), modelPath_(modelPath), 
+inputDataSize_(RGBU8_IMAGE_SIZE(modelWidth_, modelHeight_)), 
+isInited_(false){
 }
 
 ClassifyProcess::~ClassifyProcess() {
     DestroyResource();
+}
+
+Result ClassifyProcess::OpenPresentAgentChannel(){
+    channel_ = nullptr;
+    PresenterErrorCode openChannelret = OpenChannelByConfig(channel_, "./param.conf");
+    if (openChannelret != PresenterErrorCode::kNone) {
+        ERROR_LOG("Open channel failed, error %d\n", (int)openChannelret);
+        return FAILED;
+    }
+    INFO_LOG("Open channel success");
+    return SUCCESS;
 }
 
 Result ClassifyProcess::InitResource() {
@@ -115,8 +121,14 @@ Result ClassifyProcess::Init() {
         INFO_LOG("Classify instance is initied already!");
         return SUCCESS;
     }
+    //打开presentagent channel
+    Result ret = OpenPresentAgentChannel();
+    if (ret != SUCCESS) {
+        ERROR_LOG("Open present agent channel failed");
+        return FAILED;
+    }
     //初始化ACL资源
-    Result ret = InitResource();
+    ret = InitResource();
     if (ret != SUCCESS) {
         ERROR_LOG("Init acl resource failed");
         return FAILED;

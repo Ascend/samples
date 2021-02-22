@@ -43,6 +43,8 @@ public:
     Result Postprocess(cv::Mat& frame, aclmdlDataset* modelOutput);
     
 private:
+    //初始化presentagent channnel
+    Result OpenPresentAgentChannel();
     //初始化acl资源
     Result InitResource();
     //加载推理模型
