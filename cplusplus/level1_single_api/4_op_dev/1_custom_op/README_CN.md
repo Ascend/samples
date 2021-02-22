@@ -121,7 +121,7 @@ Caffe与TensorFlow共存的自定义算子样例工程的目录结构如下所�
       optional string type = 2;  // 模型解析所需要定义，保持默认，用户无需修改。
     
       // 在LayerParameter中添加自定义算子层的定义，ID需要保持唯一，取值原则为：不与内置caffe.proto中编号重复，且小于5000。
-      // 内置的caffe.proto存储路径为ATC或FwkACLlib安装路径下的“include/proto/caffe.proto”。
+      // 内置的caffe.proto存储路径为ATC安装路径下的“include/proto/caffe.proto”。
       optional CustomTest1Parameter custom_test1_param = 1000;  
       optional CustomTest2Parameter custom_test2_param = 1001; 
     }
@@ -138,7 +138,7 @@ Caffe与TensorFlow共存的自定义算子样例工程的目录结构如下所�
 
     ```
     须知：
-    Parameter的类型（粗斜体部分）建议保持唯一，不与内置caffe.proto（“atc/include/proto/caffe.proto”或者“fwkacllib/include/proto/caffe.proto”）定义重复。
+    Parameter的类型（粗斜体部分）建议保持唯一，不与内置caffe.proto（“atc/include/proto/caffe.proto”）定义重复。
     样例代码的custom.proto文件中已包含样例中样例中的自定义Caffe算子的定义，若有其他自定义算子，请基于此文件追加。
     ```
 
@@ -163,18 +163,12 @@ Caffe与TensorFlow共存的自定义算子样例工程的目录结构如下所�
 
         ```
 
-    -   ASCEND\_TENSOR\_COMPLIER\_INCLUDE：ATC组件或者FwkACLlib组件的头文件所在路径。
+    -   ASCEND\_TENSOR\_COMPLIER\_INCLUDE：ATC组件的头文件所在路径。
         -   若不配置此环境变量，默认使用路径：“/usr/local/Ascend/atc/include”。
-        -   若实际ATC或FwkACLlib安装路径不为默认路径，请取消此环境变量的注释，并修改为实际的ATC或FwkACLlib组件的头文件所在路径，例如：
+        -   若实际ATC安装路径不为默认路径，请取消此环境变量的注释，并修改为实际的ATC组件的头文件所在路径，例如：
 
             ```
             export ASCEND_TENSOR_COMPLIER_INCLUDE=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/atc/include
-            ```
-
-            或者
-
-            ```
-            export ASCEND_TENSOR_COMPLIER_INCLUDE=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/fwkacllib/include
             ```
 
     -   TOOLCHAIN\_DIR：Toolkit组件中HCC编译器所在路径，无默认值，此编译器用于对样例中的AI CPU算子进行编译。
@@ -287,7 +281,7 @@ Caffe与TensorFlow共存的自定义算子样例工程的目录结构如下所�
 
 训练场景下，可以执行包含自定义算子的模型训练，也可以通过TensorFlow前端构造只包含自定义算子的单算子网络并运行验证。
 
-本样例中提供了训练场景下如下单算子网络验证样例：
+本样例中提供了训练场景下如下单算子网络验证样例，以下样例需要在运行环境中执行：
 
 TBE算子：Add、ScatterNdAdd，单算子网络验证文件可参见“tbe/testcases/tf\_test/_<OpType\>_”目录下的xx.py文件。
 
@@ -406,9 +400,8 @@ TBE算子：Add、ScatterNdAdd，单算子网络验证文件可参见“tbe/test
 
         ```
         export install_path=/home/HwHiAiUser/Ascend/ascend-toolkit/latest   # 开发套件包Ascend-cann-toolkit的安装路径  
-        # PATH请根据实际安装包选择ATC或者FwkACLlib的安装路径
+        # PATH请配置为ATC组件的安装路径
         export PATH=${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
-        # export PATH=${install_path}/fwkacllib/ccec_compiler/bin:${install_path}/fwkacllib/bin:$PATH
         export ASCEND_OPP_PATH=${install_path}/opp
         export DUMP_GE_GRAPH=3     # 控制dump图的内容多少，配置为3表示仅dump显示节点关系的精简版图文件
         export DUMP_GRAPH_LEVEL=3  # 控制dump图的个数，配置为3表示仅dump最后的生成的build图
@@ -420,12 +413,7 @@ TBE算子：Add、ScatterNdAdd，单算子网络验证文件可参见“tbe/test
 
         其中，soc\_version：昇腾AI处理器的型号，请根据实际情况替换。
 
-        可从ATC安装路径下的“atc/data/platform\_config”目录或FwkACLlib安装路径下的“fwkacllib/data/platform\_config”目录下查看支持的昇腾AI处理器的类型，对应“\*.ini”文件的名字即为{soc\_version\}。如果用户根据上述方法仍旧无法确定具体使用的$\{soc\_version\}，则：
-
-        1.  单击如下手册中的链接并进入该手册，[CANN Ascend-DMI工具用户指南](https://support.huawei.com/enterprise/zh/ascend-computing/atlas-data-center-solution-pid-251167910?category=operation-maintenance)。
-        2.  完成“使用工具\>使用前准备“，然后进入“使用工具\>设备实时状态查询“章节。
-        3.  使用相关命令查看芯片的详细信息，例如使用**ascend-dmi -i -dt**命令查看芯片的详细信息，返回信息中“Chip Name“对应取值即为具体使用的 _$\{soc\_version\}_。
-
+        可从ATC安装路径下的“atc/data/platform\_config”目录下查看支持的昇腾AI处理器的类型，对应“\*.ini”文件的名字即为{soc\_version\}。
 
 3.  结果验证。
     1.  在INFO日志中可以看到pass的设置情况：

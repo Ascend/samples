@@ -118,7 +118,7 @@ The directory of a Caffe or TensorFlow custom operator sample project is organiz
       optional string type = 2;  // Definition for model parsing. Retain the default definition.
     
       // Add the definition of the custom layer to LayerParameter. The ID must be unique in the built-in caffe.proto file and must be less than 5000.
-      // The built-in caffe.proto file is stored in include/proto/caffe.proto in the ATC or FwkACLlib installation path.
+      // The built-in caffe.proto file is stored in include/proto/caffe.proto in the ATC installation path.
       optional CustomTest1Parameter custom_test1_param = 1000;  
       optional CustomTest2Parameter custom_test2_param = 1001; 
     }
@@ -135,7 +135,7 @@ The directory of a Caffe or TensorFlow custom operator sample project is organiz
 
     ```
     Before You Start
-    You are advised to keep the parameter type (in bold and italic) unique and not the same as that defined in the built-in caffe.proto file in the atc/include/proto/caffe.proto or fwkacllib/include/proto/caffe.proto directory.
+    You are advised to keep the parameter type (in bold and italic) unique and not the same as that defined in the built-in caffe.proto file in the atc/include/proto/caffe.proto directory.
     The custom.proto file in the sample code contains the definition of the Caffe custom operator. If there are other custom operators, add their definitions to this file.
     ```
 
@@ -161,16 +161,10 @@ The directory of a Caffe or TensorFlow custom operator sample project is organiz
 
     -   **ASCEND\_TENSOR\_COMPLIER\_INCLUDE**  specifies the path of the ATC header files.
         -   If it is not set, the default path  **/usr/local/Ascend/atc/include**  is used.
-        -   If the actual ATC or FwkACLlib installation path is not the default path, uncomment this environment variable and change it to the actual path of the ATC or FwkACLlib header files. For example:
+        -   If the actual ATC installation path is not the default path, uncomment this environment variable and change it to the actual path of the ATC  header files. For example:
 
             ```
             export ASCEND_TENSOR_COMPLIER_INCLUDE=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/atc/include
-            ```
-
-            or
-
-            ```
-            export ASCEND_TENSOR_COMPLIER_INCLUDE=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/fwkacllib/include
             ```
 
 
@@ -427,9 +421,8 @@ In the inference scenario, you can use the command parameter  **enable\_scope\_f
 
         ```
         export install_path=/home/HwHiAiUser/Ascend/ascend-toolkit/latest   # Installation path of the Ascend-cann-toolkit toolkit
-        # PATH: Select the ATC or FwkACLlib installation path based on the site requirements.
+        # PATH: Select the ATC installation path based on the site requirements.
         export PATH=${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
-        # export PATH=${install_path}/fwkacllib/ccec_compiler/bin:${install_path}/fwkacllib/bin:$PATH
         export ASCEND_OPP_PATH=${install_path}/opp
         export DUMP_GE_GRAPH=3     # Set the graph dump mode. In this case, only the node relationships are dumped.
         export DUMP_GRAPH_LEVEL=3  # Set the graph to dump. Only the generated built graph is dumped.
@@ -441,12 +434,7 @@ In the inference scenario, you can use the command parameter  **enable\_scope\_f
 
         In the preceding command,  **soc\_version**  specifies the model of the Ascend AI Processor. Replace it with the actual version.
 
-        It is the exact name of the .ini file in  **atc/data/platform\_config**  in the ATC installation path or  **fwkacllib/data/platform\_config**  in the FwkACLlib installation path. If you still cannot determine the  **_$\{sos\_version\}_**  using the preceding method, perform the following operations:
-
-        1.  Click  [here](https://support.huawei.com/enterprise/en/ascend-computing/atlas-data-center-solution-pid-251167910?category=operation-maintenance)  to download  _CANN Ascend-DMI Tool User Guide_.
-        2.  Complete the operations described in  **Tool Usage Guide**  \>  **Before You Start**, and then proceed to  **Tool Usage Guide**  \>  **Querying Device Real-Time Status**.
-        3.  Run the related command to view the chip details. For example, in the output of the  **ascend-dmi -i -dt**  command,  **Chip Name**  field corresponds to  **_$\{sos\_version\}_**.
-
+        It is the exact name of the .ini file in  **atc/data/platform\_config**  in the ATC installation path. 
 
 3.  Verify the result.
     1.  You can view the pattern setting in the INFO log.
