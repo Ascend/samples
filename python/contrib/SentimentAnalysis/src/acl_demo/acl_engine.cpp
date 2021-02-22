@@ -829,7 +829,7 @@ void AclEngine::PreProcess(const std::string &fileName, void *&p_imgBuf,
     fcin.close();
 
     string wordVocabFileName =
-        "../tf_total_sentiment/snapshots/word_vocab.json";
+        "../../models/snapshots/word_vocab.json";
     Vocab<string, int> vocab(wordVocabFileName);
 
     const int batchSize = 16;

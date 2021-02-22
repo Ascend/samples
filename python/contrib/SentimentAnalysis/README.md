@@ -13,18 +13,13 @@
 
 1.  <a name="zh-cn"></a>获取源码包。
 
-    <!-- ```shell
+    ```shell
     cd $HOME/AscendProjects
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/SentimentAnalysis.zip
+    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/200dk/SentimentAnalysis.zip
     unzip SentimentAnalysis.zip
     ```
     
-    **说明：**   
-    如果使用wget下载失败，可使用以下命令下载代码。
-    ```shell
-    curl -OL https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/SentimentAnalysis.zip
-    ```
-    如果curl也下载失败，可复制下载链接到浏览器。 -->
+    如果wget下载失败，可复制下载链接到浏览器。
     
 2. <a name="zh-cn_topic_0219108795_li2074865610364"></a>获取此应用中所需要的原始网络模型和训练好的参数值。
 
@@ -47,7 +42,7 @@
   
   **sudo apt-get install -y g++\-aarch64-linux-gnu g++\-5-aarch64-linux-gnu**
   
-- 下载jsoncpp源码 
+- 下载jsoncpp源码
 
     ```shell
     cd ./models
@@ -61,7 +56,6 @@
     ```
 
     
-
 
 ## 编译<a name="zh-cn_topic_0219108795_section3723145213347"></a>
 

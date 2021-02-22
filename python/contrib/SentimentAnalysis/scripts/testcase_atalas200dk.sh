@@ -1,4 +1,4 @@
-data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/code_Ascend/SentimentAnalysis.zip"
+data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/200dk/SentimentAnalysis.zip"
 project_name="SentimentAnalysis"
 script_path="$( cd "$(dirname $BASH_SOURCE)" ; pwd -P)"
 project_path=${script_path}/..
@@ -33,12 +33,11 @@ function setAtcEnv() {
     return 0
 }
 
-
 function main() {
     downloadDataWithVerifySource
     unzip ${project_path}/data/${project_name}.zip
     mv ${project_path}/data/${project_name}/* ${project_path}/data/
-    // cp -r ${project_path}/data/coarse-big-corpus ${project_path}/data/
+    # cp -r ${project_path}/data/coarse-big-corpus ${project_path}/data/
     cp -r ${project_path}/data/snapshots/* ${project_path}/models/snapshots/
     cp -r ${project_path}/data/chinese_L-12_H-768_A-12/* ${project_path}/models/chinese_L-12_H-768_A-12/
     cp -r ${project_path}/data/jsoncpp ${project_path}/models/
@@ -53,11 +52,12 @@ function main() {
     echo "finished compile acl/c++ code"
 
     echo "finished npu inference"
+    mkdir -p ../../output
     ./build/inference -m ../../models/snapshots/models.om -i ../../models/hotel.decode.txt -o ../../output/
     echo "finished npu inference"
 
     echo "output test result="
-    cd ../models
+    cd ../../models
     python check_output.py
     
     ## GPU/CPU TEST

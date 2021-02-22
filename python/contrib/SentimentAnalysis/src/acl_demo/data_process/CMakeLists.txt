@@ -2,15 +2,14 @@
 cmake_minimum_required(VERSION 3.5.0)
 
 # Header path
-include_directories(../../tf_total_sentiment/jsoncpp/dist)
+include_directories(../../../models/jsoncpp/dist)
+set(JSON ../../../models/jsoncpp/dist)
 
 set(DATA_PROCESS_FILES
-	data_process.h
-	data_process.cpp
-	../tf_total_sentiment/jsoncpp/dist/json/json.h
-	../tf_total_sentiment/jsoncpp/dist/jsoncpp.cpp
-	)
+    data_process.h
+    data_process.cpp
+    ${JSON}/json/json.h
+    ${JSON}/jsoncpp.cpp
+    )
 
-add_library(dataprocess 
-			${DATA_PROCESS_FILES}
-			)
+add_library(dataprocess ${DATA_PROCESS_FILES})

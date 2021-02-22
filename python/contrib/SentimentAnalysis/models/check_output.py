@@ -43,7 +43,7 @@ def read_bin(config):
 
 def read_output_bin(config):
     try:
-        file_name = "output/fromtxt/" + config.decode_path + "_output_0" + ".bin"
+        file_name = "../output/" + config.decode_path + "_output_0" + ".bin"
         print(file_name)
         logits_arr = np.fromfile(file_name, dtype=np.float32).reshape(
             config.batch_size, -1)

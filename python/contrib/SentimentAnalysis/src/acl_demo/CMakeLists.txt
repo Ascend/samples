@@ -18,7 +18,7 @@ message(STATUS "ASCEND_HOME=${ASCEND_HOME}")
 # Header path
 include_directories(
     ${ASCEND_HOME}/acllib/include/ 
-    ../tf_total_sentiment/jsoncpp/dist 
+    ../../models/jsoncpp/dist 
     ./data_process
                     )
 
