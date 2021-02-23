@@ -44,7 +44,6 @@ def pre_process(image, dvpp):
 
 def post_process(infer_output, origin_img, image_file):
     """postprocess"""
-    image = image.copy_to_dvpp()
     print("post process")
     print(infer_output[1])
     box_num = infer_output[1][0, 0]
