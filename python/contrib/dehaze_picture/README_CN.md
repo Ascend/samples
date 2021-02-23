@@ -53,7 +53,7 @@
 
 | **模型名称** | **模型说明**          | **模型下载路径**                                             |
 | ------------ | --------------------- | ------------------------------------------------------------ |
-| deploy_vel          | 基于tensorflow的去雾处理。 | 请参考https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/dehaze/ATC_deploy_vel_tf_AE中README.md原始模型章节，下载**原始模型网络**及**模型权重文件**。 |
+| deploy_vel          | 基于tensorflow的去雾处理。 | 请参考(https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/dehaze/ATC_deploy_vel_tf_AE)中README.md原始模型章节，下载原始模型网络及模型权重文件。 |
 
 #### 3. 将原始模型转换为Davinci模型
 
