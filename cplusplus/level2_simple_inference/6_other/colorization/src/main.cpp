@@ -40,7 +40,7 @@ int main(int argc, char *argv[]) {
     //实例化分类推理对象,参数为分类模型路径,模型输入要求的宽和高
     ColorizeProcess colorize(kModelPath, kModelWidth, kModelHeight);
     //初始化分类推理的acl资源, 模型和内存
-    AtlasError ret = colorize.Init();
+    AtlasError ret = colorize.init();
     if (ret != ATLAS_OK) {
         ATLAS_LOG_ERROR("Classification Init resource failed");
         return 1;
@@ -56,7 +56,7 @@ int main(int argc, char *argv[]) {
     //逐张图片推理
     for (string imageFile : fileVec) {
         //预处理图片:读取图片,讲图片缩放到模型输入要求的尺寸
-        ret = colorize.Preprocess(imageFile);
+        ret = colorize.preprocess(imageFile);
         if (ret != ATLAS_OK) {
             ATLAS_LOG_ERROR("Read file %s failed, continue to read next",
                       imageFile.c_str());                
@@ -64,13 +64,13 @@ int main(int argc, char *argv[]) {
         }
         //将预处理的图片送入模型推理,并获取推理结果
         std::vector<InferenceOutput> inferenceOutput;
-        ret = colorize.Inference(inferenceOutput);
+        ret = colorize.inference(inferenceOutput);
         if (ret != ATLAS_OK) {
             ATLAS_LOG_ERROR("Inference model inference output data failed");
             return 1;
         }
         //解析推理输出,并将推理得到的物体类别标记到图片上
-        ret = colorize.Postprocess(imageFile, inferenceOutput);
+        ret = colorize.postprocess(imageFile, inferenceOutput);
         if (ret != ATLAS_OK) {
             ATLAS_LOG_ERROR("Process model inference output data failed");
             return 1;

@@ -26,8 +26,6 @@
 #include "atlasutil/atlas_model.h"
 #include <memory>
 
-using namespace std;
-
 /**
 * ColorizeProcess
 */
@@ -37,14 +35,14 @@ public:
                     uint32_t modelWidth, uint32_t modelHeight);
     ~ColorizeProcess();
 
-    AtlasError Init();
-    AtlasError Preprocess(const string& imageFile);
-    AtlasError Inference(std::vector<InferenceOutput>& inferOutputs);
-    AtlasError Postprocess(const string& imageFile, vector<InferenceOutput>& modelOutput);
+    AtlasError init();
+    AtlasError preprocess(const std::string& imageFile);
+    AtlasError inference(std::vector<InferenceOutput>& inferOutputs);
+    AtlasError postprocess(const std::string& imageFile, std::vector<InferenceOutput>& modelOutput);
 private:
     AtlasError init_resource();
     AtlasError create_input();
-    void save_image(const string& origImageFile, cv::Mat& image);
+    void save_image(const std::string& origImageFile, cv::Mat& image);
     void destroy_resource();
 
 private:

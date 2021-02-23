@@ -82,7 +82,7 @@ AtlasError ColorizeProcess::create_input() {
     return ATLAS_OK;
 }
 
-AtlasError ColorizeProcess::Init() {
+AtlasError ColorizeProcess::init() {
     if (isInited_) {
         ATLAS_LOG_INFO("Classify instance is initied already!");
         return ATLAS_OK;
@@ -110,7 +110,7 @@ AtlasError ColorizeProcess::Init() {
     return ATLAS_OK;
 }
 
-AtlasError ColorizeProcess::Preprocess(const string& imageFile) {
+AtlasError ColorizeProcess::preprocess(const string& imageFile) {
     // read image using OPENCV
     cv::Mat mat = cv::imread(imageFile, CV_LOAD_IMAGE_COLOR);
     //resize
@@ -132,7 +132,6 @@ AtlasError ColorizeProcess::Preprocess(const string& imageFile) {
     }
 
     if (runMode_ == ACL_HOST) {
-        //AI1上运行时,需要将图片数据拷贝到device侧   
         aclError ret = aclrtMemcpy(inputBuf_, inputDataSize_,
                                    reiszeMatL.ptr<uint8_t>(), inputDataSize_,
                                    ACL_MEMCPY_HOST_TO_DEVICE);
@@ -141,27 +140,23 @@ AtlasError ColorizeProcess::Preprocess(const string& imageFile) {
             return ATLAS_ERROR;
         }
     } else {
-        //Atals200DK上运行时,数据拷贝到本地即可.
-        //reiszeMat是局部变量,数据无法传出函数,需要拷贝一份
         memcpy(inputBuf_, reiszeMatL.ptr<uint8_t>(), inputDataSize_);
     }
 
     return ATLAS_OK;
 }
 
-AtlasError ColorizeProcess::Inference(std::vector<InferenceOutput>& inferOutputs) {
+AtlasError ColorizeProcess::inference(std::vector<InferenceOutput>& inferOutputs) {
     AtlasError ret = model_.Execute(inferOutputs);
     if (ret != ATLAS_OK) {
         ATLAS_LOG_ERROR("Execute model inference failed");
         return ATLAS_ERROR;
     }
 
-//    inferenceOutput = model_.GetModelOutputData();
-
     return ATLAS_OK;
 }
 
-AtlasError ColorizeProcess::Postprocess(const string& imageFile, vector<InferenceOutput>& modelOutput)
+AtlasError ColorizeProcess::postprocess(const string& imageFile, vector<InferenceOutput>& modelOutput)
 {
     uint32_t dataSize = 0;
     void* data = modelOutput[0].data.get();
@@ -216,45 +211,7 @@ void ColorizeProcess::save_image(const string& origImageFile, cv::Mat& image) {
     string outputPath = sstream.str();    
     cv::imwrite(outputPath, image);
 }
-/*
-void* ColorizeProcess::get_inference_output_item(uint32_t& itemDataSize,
-                                              aclmdlDataset* inferenceOutput) {
-    aclDataBuffer* dataBuffer = aclmdlGetDatasetBuffer(inferenceOutput, 0);
-    if (dataBuffer == nullptr) {
-        ERROR_LOG("Get the dataset buffer from model "
-            "inference output failed");
-        return nullptr;
-    }
 
-    void* dataBufferDev = aclGetDataBufferAddr(dataBuffer);
-    if (dataBufferDev == nullptr) {
-        ERROR_LOG("Get the dataset buffer address "
-            "from model inference output failed");
-        return nullptr;
-    }
-
-    size_t bufferSize = aclGetDataBufferSize(dataBuffer);
-    if (bufferSize == 0) {
-        ERROR_LOG("The dataset buffer size of "
-                  "model inference output is 0 ");
-        return nullptr;
-    }
-
-    void* data = nullptr;
-    if (runMode_ == ACL_HOST) {
-        data = Utils::CopyDataDeviceToLocal(dataBufferDev, bufferSize);
-        if (data == nullptr) {
-            ERROR_LOG("Copy inference output to host failed");
-            return nullptr;
-        }
-    } else {
-        data = dataBufferDev;
-    }
-
-    itemDataSize = bufferSize;
-    return data;
-}
-*/
 void ColorizeProcess::destroy_resource()
 {
     model_.DestroyInput();
