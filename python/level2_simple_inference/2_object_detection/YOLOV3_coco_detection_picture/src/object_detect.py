@@ -32,6 +32,7 @@ MODEL_WIDTH = 416
 MODEL_HEIGHT = 416
 
 def pre_process(image, dvpp):
+    """preprocess"""
     image = image.copy_to_dvpp()
     yuv_image = dvpp.jpegd(image)
     print("decode jpeg end")
@@ -40,14 +41,17 @@ def pre_process(image, dvpp):
     print("resize yuv end")
     return resized_image
 
+
 def post_process(infer_output, origin_img, image_file):
+    """postprocess"""
+    image = image.copy_to_dvpp()
     print("post process")
     print(infer_output[1])
     box_num = infer_output[1][0, 0]
     print("box num ", box_num)
     box_info = infer_output[0].flatten()
     print ("\n")
-    print(box_info[0:6*box_num].reshape(6, box_num))
+    print(box_info[0:6 * box_num].reshape(6, box_num))
     scalex = origin_img.width / MODEL_WIDTH
     scaley = origin_img.height / MODEL_HEIGHT
     output_path = os.path.join("../outputs", os.path.basename(image_file))
@@ -72,11 +76,14 @@ def post_process(infer_output, origin_img, image_file):
         draw.text((top_left_x, top_left_y), label, font=font, fill=255)
     origin_image.save(output_path)
 
+
 def construct_image_info():
+    """construct image info"""
     image_info = np.array([MODEL_WIDTH, MODEL_HEIGHT, 
                            MODEL_WIDTH, MODEL_HEIGHT], 
                            dtype = np.float32) 
     return image_info
+
 
 def main():
     """
