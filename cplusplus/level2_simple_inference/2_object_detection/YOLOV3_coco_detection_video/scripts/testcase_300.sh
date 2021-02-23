@@ -175,7 +175,8 @@ function main() {
     export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/nnrt/latest/acllib/lib64:/home/HwHiAiUser/ascend_ddk/x86/lib:${LD_LIBRARY_PATH}
 
     # 开启presenter server
-    bash ${script_path}/run_presenter_server.sh 
+    cd ${script_path}/../../../../../common/
+    bash run_presenter_server.sh ${script_path}/param.conf 
     if [ $? -ne 0 ];then
         echo "ERROR: run presenter server failed. please check your project"
         return ${inferenceError}
@@ -183,7 +184,8 @@ function main() {
 
     sleep 2
     # 运行程序
-    mv ${project_path}/out/main ${project_path}/out/${project_name}
+    mv ${project_path}/out/main ${project_path}/out/${project_name}   
+    cd ${project_path}/out/
 
     ./${project_name} ${project_path}/data/cat.mp4 &
 
