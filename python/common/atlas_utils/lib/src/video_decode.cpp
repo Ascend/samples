@@ -381,13 +381,11 @@ AtlasError VideoDecode::FrameDecodeCallback(void* decoder, void* frameData,
     //使用dvpp vdec解码h26x帧数据 
     AtlasError ret = videoDecoder->dvppVdec_->Process(videoFrame, decoder);
     if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Dvpp vdec process %dth frame failed, error:%d", 
+        ATLAS_LOG_ERROR("Dvpp vdec process %dth frame failed, error:%u", 
                         videoDecoder->frameId_, ret);
         return ret;
     }
 
-    //根据视频帧率等待下一帧
-    videoDecoder->SleepToNextFrameTime();
     return ATLAS_OK;
 }
 
@@ -516,7 +514,7 @@ AtlasError VideoDecode::SetRtspTransType(uint32_t transCode) {
         ffmpegDecoder_->SetTransport(RTSP_TRANSPORT_TCP);
     else {
         ret = ATLAS_ERROR_INVALID_PROPERTY_VALUE;
-        ATLAS_LOG_ERROR("Unsurport rtsp transport property value %d", 
+        ATLAS_LOG_ERROR("Unsurport rtsp transport property value %u", 
                         transCode);
     }
 
