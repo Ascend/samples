@@ -91,6 +91,21 @@ function downloadOriginalModel() {
     return 0
 }
 
+function buildLibAtlasUtil() {
+	cd ${project_path}/../../../../common/atlasutil/
+	make
+	if [ $? -ne 0 ];then
+        echo "ERROR: make atlasutil failed."
+        return ${inferenceError}
+    fi
+
+	make install
+	if [ $? -ne 0 ];then
+        echo "ERROR: make install atlasutil failed."
+        return ${inferenceError}
+    fi
+}
+
 function main() {
 
     if [[ ${version}"x" = "x" ]];then
@@ -140,6 +155,12 @@ function main() {
             echo "ERROR: failed to set model soft connection"
             return ${inferenceError}
         fi
+    fi
+    
+    buildLibAtlasUtil
+	if [ $? -ne 0 ];then
+        echo "ERROR: build libatlasutil.so failed"
+        return ${inferenceError}
     fi
 
     # 创建目录用于存放编译文件
