@@ -1,12 +1,14 @@
 import sys
+sys.path.append("../../../../common")
+sys.path.append("../")
 project_path = sys.path[0] + "/../"
 sys.path.append(project_path)
 import datetime
 
 from atlas_utils.camera import Camera
 from atlas_utils import presenteragent
-from acl_model import Model
-from acl_resource import AclResource
+from atlas_utils.acl_model import Model
+from atlas_utils.acl_resource import AclResource
 from vgg_ssd import VggSsd
 
 MODEL_PATH = project_path + "/model/face_detection.om"
@@ -23,7 +25,7 @@ def main():
     #创建一个检测网络实例,当前使用vgg_ssd网络.当更换检测网络时,在此实例化新的网络
     detect = VggSsd(acl_resource, MODEL_WIDTH, MODEL_HEIGHT)
     #加载离线模型
-    model = Model(acl_resource, MODEL_PATH)
+    model = Model(MODEL_PATH)
     #根据配置连接presenter server,连接失败则结束应用的执行
     chan = presenteragent.presenter_channel.open_channel(FACE_DETEC_CONF)
     if chan == None:

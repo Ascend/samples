@@ -1,6 +1,8 @@
 import numpy as np
-
-from acl_dvpp import Dvpp
+import sys
+sys.path.append("../../../../common")
+sys.path.append("../")
+from atlas_utils.acl_dvpp import Dvpp
 from atlas_utils.presenteragent import presenter_datatype
 
 LABEL = 1
