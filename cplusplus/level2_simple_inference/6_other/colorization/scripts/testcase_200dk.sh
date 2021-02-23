@@ -92,7 +92,7 @@ function downloadOriginalModel() {
 }
 
 function buildLibAtlasUtil() {
-	cd ${project_path}/../../../../common/atlasutil/
+	cd ${project_path}/../../../common/atlasutil/
 	make
 	if [ $? -ne 0 ];then
         echo "ERROR: make atlasutil failed."
