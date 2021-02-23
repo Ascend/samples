@@ -33,8 +33,8 @@ MODEL_HEIGHT = 416
 
 def pre_process(image, dvpp):
     """preprocess"""
-    image = image.copy_to_dvpp()
-    yuv_image = dvpp.jpegd(image)
+    image_input = image.copy_to_dvpp()
+    yuv_image = dvpp.jpegd(image_input)
     print("decode jpeg end")
     resized_image = dvpp.resize(yuv_image, 
                     MODEL_WIDTH, MODEL_HEIGHT)
