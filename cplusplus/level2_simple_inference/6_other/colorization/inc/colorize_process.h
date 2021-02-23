@@ -17,9 +17,13 @@
 * Description: handle acl resource
 */
 #pragma once
-#include "utils.h"
+#include <iostream>
+#include <vector>
+#include "opencv2/opencv.hpp"
+#include "opencv2/imgcodecs/legacy/constants_c.h"
+#include "opencv2/imgproc/types_c.h"
 #include "acl/acl.h"
-#include "model_process.h"
+#include "atlasutil/atlas_model.h"
 #include <memory>
 
 using namespace std;
@@ -29,20 +33,17 @@ using namespace std;
 */
 class ColorizeProcess {
 public:
-    ColorizeProcess(const char* modelPath, uint32_t modelWidth, uint32_t modelHeight);
+    ColorizeProcess(const char* modelPath, 
+                    uint32_t modelWidth, uint32_t modelHeight);
     ~ColorizeProcess();
 
-    Result Init();
-    Result Preprocess(const string& imageFile);
-    Result Inference(aclmdlDataset*& inferenceOutput);
-    Result Postprocess(const string& origImageFile,
-                       aclmdlDataset* modelOutput);
+    AtlasError Init();
+    AtlasError Preprocess(const string& imageFile);
+    AtlasError Inference(std::vector<InferenceOutput>& inferOutputs);
+    AtlasError Postprocess(const string& imageFile, vector<InferenceOutput>& modelOutput);
 private:
-    Result init_resource();
-    Result init_model(const char* omModelPath);
-
-    void* get_inference_output_item(uint32_t& itemDataSize,
-                                 aclmdlDataset* inferenceOutput);
+    AtlasError init_resource();
+    AtlasError create_input();
     void save_image(const string& origImageFile, cv::Mat& image);
     void destroy_resource();
 
@@ -50,7 +51,7 @@ private:
     int32_t deviceId_;
     aclrtContext context_;
     aclrtStream stream_;
-    ModelProcess model_;
+    AtlasModel model_;
 
     const char* modelPath_;
     uint32_t modelWidth_;
