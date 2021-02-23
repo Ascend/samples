@@ -53,15 +53,24 @@
 
 | **模型名称** | **模型说明**          | **模型下载路径**                                             |
 | ------------ | --------------------- | ------------------------------------------------------------ |
-| count_person.caffe          | 基于caffe的密集人群计数处理。 | |
+| count_person.caffe          | 基于caffe的密集人群计数处理。 | 请参考https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/crowdCount/ATC_count_person_caffe_AE 原始模型章节，下载**原始模型**及**对应的cfg文件**。 |
 
-#### 3. 获得Davinci模型
+
+#### 3. 将原始模型转换为Davinci模型
 
    **注：请确认环境变量已经在[环境准备和依赖安装](https://gitee.com/ascend/samples/blob/master/python/environment)中配置完成**
-	
-   1. 执行以下命令获得om文件。
+
+   1. 设置LD_LIBRARY_PATH环境变量。
+
+      由于LD_LIBRARY_PATH环境变量在使用atc工具和运行样例时会产生冲突，所以需要在命令行单独设置此环境变量，方便修改。
+
+         ```	
+      export LD_LIBRARY_PATH=${install_path}/atc/lib64
          ```
-         wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/crowdCount/count_person.caffe.om
+	
+   2. 执行以下命令使用atc命令进行模型转换。
+         ```
+      atc --input_shape="blob1:1,3,800,1408" --weight="count_person.caffe.caffemodel" --input_format=NCHW --output="count_person.caffe" --soc_version=Ascend310 --insert_op_conf=insert_op.cfg --framework=0 --model="count_person.caffe.prototxt" 
       ```
 
 #### 4. 获取样例需要的测试图片
