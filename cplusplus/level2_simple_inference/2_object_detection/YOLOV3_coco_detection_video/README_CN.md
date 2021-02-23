@@ -163,7 +163,7 @@
 
     - 使用产品为200DK开发者板。   
         1. 开发环境中执行以下命令启动presentserver。   
-           **cd $HOME/samples/common/**
+           **cd $HOME/samples/common/**     
            **bash run_presenter_server.sh $HOME/samples/cplusplus/level2_simple_inference/2_object_detection/YOLOV3_coco_detection_video/scripts/param.conf**  
         2. 执行以下命令登录运行环境。   
             **开发环境与运行环境合一部署，请跳过此步骤！**   
