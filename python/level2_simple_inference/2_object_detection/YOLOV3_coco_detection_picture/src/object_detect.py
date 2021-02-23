@@ -31,8 +31,8 @@ MODEL_PATH = "../model/yolov3_yuv.om"
 MODEL_WIDTH = 416
 MODEL_HEIGHT = 416
 
-def pre_process(image):
-    yuv_image = Dvpp.jpegd(image)
+def pre_process(image, dvpp):
+    yuv_image = dvpp.jpegd(image)
     print("decode jpeg end")
     resized_image = Dvpp.resize(yuv_image, 
                     MODEL_WIDTH, MODEL_HEIGHT)
@@ -84,6 +84,7 @@ def main():
     acl_resource = AclResource()
     acl_resource.init()
     model = Model(MODEL_PATH)
+    dvpp = Dvpp(acl_resource)
     
     #From the parameters of the picture storage directory, reasoning by a picture
     image_dir = sys.argv[1]
@@ -98,7 +99,7 @@ def main():
         #read picture
         image = AclImage(image_file)
         #preprocess image
-        resized_image = pre_process(image)
+        resized_image = pre_process(image, dvpp)
         print("pre process end")
         #reason pictures
         result = model.execute([resized_image,])    
