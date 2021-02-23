@@ -170,8 +170,8 @@ In the development environment, run the following commands as a non-root user to
    - Atlas 200 DK
      
      1. Run the following commands in the development environment to start the Presenter Server:   
-**cd $HOME/samples/cplusplus/level2\_simple\_inference/2\_object\_detection/YOLOV3\_coco\_detection\_video**  
-**bash scripts/run\_presenter\_server.sh**
+  **cd $HOME/samples/common/**
+  **bash run_presenter_server.sh $HOME/samples/cplusplus/level2_simple_inference/2_object_detection/YOLOV3_coco_detection_video/scripts/param.conf**
      2. Run the following command to log in to the operating environment:   
 **If the development environment and operating environment are deployed on the same server, skip this step.**   
 **ssh HwHiAiUser@*xxx.xxx.xxx.xxx***
@@ -182,8 +182,8 @@ In the development environment, run the following commands as a non-root user to
 **If the development environment and operating environment are deployed on the same server, skip this step.**   
 **ssh HwHiAiUser@*xxx.xxx.xxx.xxx***
      2. Start the Presenter Server in the operating environment.   
-Go to the directory where the project is located (for example, **$HOME/YOLOV3\_coco\_detection\_video**)     
-and run the **bash scripts/run\_presenter\_server.sh** command.
+Go to the directory where the project is located (for example, **$HOME/samples/common/**)     
+and run the **bash run_presenter_server.sh $HOME/samples/cplusplus/level2_simple_inference/2_object_detection/YOLOV3_coco_detection_video/scripts/param.conf** command.
 
 3. Run the executable file.
    
