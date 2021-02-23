@@ -6,6 +6,7 @@ app_name="display"
 
 presenter_connect_ip=""
 presenter_view_ip=""
+presenter_server_port=""
 
 function check_config_file()
 {
@@ -45,6 +46,7 @@ function check_ip_addr()
    done
    return 0
 }
+
 
 function check_python3_lib()
 {
@@ -125,16 +127,43 @@ function check_ip()
 
     presenter_view_ip=$(cat ${config_file} | grep "presenter_view_ip" | awk -F'[ =]+' '{print $2}')
     presenter_view_ip=$(echo $presenter_view_ip | sed -e 's/\r//' | sed -e 's/\n//' | sed -e 's/ //')
-       if [[ "$presenter_view_ip" = "" ]];then
-           echo "please check your param.conf to make sure that each parameter has a value"
-           return 1
-       fi
+    if [[ "$presenter_view_ip" = "" ]];then
+        echo "please check your param.conf to make sure that each parameter has a value"
+        return 1
+    fi
     check_ip_addr $presenter_view_ip
     if [ $? -ne 0 ];then
        echo "ERROR: invalid presenter_view_ip ip, please check your settings in configuration file"
        return 1
     fi
 
+}
+
+function check_port()
+{
+    presenter_server_port=$(cat ${config_file} | grep "presenter_server_port" | awk -F'[ =]+' '{print $2}')
+    presenter_server_port=$(echo $presenter_server_port | sed -e 's/\r//' | sed -e 's/\n//' | sed -e 's/ //')
+    if [[ "$presenter_server_port" = "" ]];then
+        echo "please check your param.conf to make sure that each parameter has a value"
+        return 1
+    fi 
+    check_port_legal $presenter_server_port
+    if [ $? -ne 0 ];then
+       echo "ERROR: invalid presenter_server_port port, please check your settings in configuration file"
+       return 1
+    fi
+
+    
+
+}
+
+function check_port_legal()
+{
+    if grep '^[[:digit:]]*$' <<< "$1";then 
+        return 0 
+    else 
+        return 1
+    fi 
 }
 
 function main()
@@ -157,9 +186,11 @@ function main()
     fi
 
     check_ip
+    check_port
 
-    echo "Use ${presenter_connect_ip} to connect to Atlas..."
+    echo "Use ${presenter_connect_ip}:${presenter_server_port} to connect to Atlas..."
     sed -i "s/presenter_server_ip=[0-9.]*/presenter_server_ip=${presenter_connect_ip}/g" ${cur_path}/presenterserver/${app_name}/config/config.conf
+    sed -i "s/presenter_server_port=[0-9]*/presenter_server_port=${presenter_server_port}/g" ${cur_path}/presenterserver/${app_name}/config/config.conf
 
     echo "Use ${presenter_view_ip} to show information in browser..."
     sed -i "s/web_server_ip=[0-9.]*/web_server_ip=${presenter_view_ip}/g" ${cur_path}/presenterserver/${app_name}/config/config.conf
