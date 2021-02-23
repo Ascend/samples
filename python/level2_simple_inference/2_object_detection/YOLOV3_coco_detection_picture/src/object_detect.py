@@ -32,9 +32,10 @@ MODEL_WIDTH = 416
 MODEL_HEIGHT = 416
 
 def pre_process(image, dvpp):
+    image = image.copy_to_dvpp()
     yuv_image = dvpp.jpegd(image)
     print("decode jpeg end")
-    resized_image = Dvpp.resize(yuv_image, 
+    resized_image = dvpp.resize(yuv_image, 
                     MODEL_WIDTH, MODEL_HEIGHT)
     print("resize yuv end")
     return resized_image
@@ -47,8 +48,8 @@ def post_process(infer_output, origin_img, image_file):
     box_info = infer_output[0].flatten()
     print ("\n")
     print(box_info[0:6*box_num].reshape(6, box_num))
-    scalex = origin_img.width / self._model_width
-    scaley = origin_img.height / self._model_height
+    scalex = origin_img.width / MODEL_WIDTH
+    scaley = origin_img.height / MODEL_HEIGHT
     output_path = os.path.join("../outputs", os.path.basename(image_file))
     origin_image = Image.open(image_file)
     draw = ImageDraw.Draw(origin_image)
@@ -71,6 +72,11 @@ def post_process(infer_output, origin_img, image_file):
         draw.text((top_left_x, top_left_y), label, font=font, fill=255)
     origin_image.save(output_path)
 
+def construct_image_info():
+    image_info = np.array([MODEL_WIDTH, MODEL_HEIGHT, 
+                           MODEL_WIDTH, MODEL_HEIGHT], 
+                           dtype = np.float32) 
+    return image_info
 
 def main():
     """
@@ -95,6 +101,8 @@ def main():
     if not os.path.isdir('../outputs'):
         os.mkdir('../outputs')
 
+    image_info = construct_image_info()
+
     for image_file in images_list:
         #read picture
         image = AclImage(image_file)
@@ -102,7 +110,7 @@ def main():
         resized_image = pre_process(image, dvpp)
         print("pre process end")
         #reason pictures
-        result = model.execute([resized_image,])    
+        result = model.execute([resized_image, image_info])    
         #process resresults
         post_process(result, image, image_file)
 
