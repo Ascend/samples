@@ -40,7 +40,7 @@ namespace {
 uint32_t kModelWidth = 304;
 uint32_t kModelHeight = 300;
 const char* kModelPath = "../model/face_detection.om";
-const char* kConfigFile = "../scripts/face_detection.conf";
+const char* kConfigFile = "../scripts/multi_channels_rtsp.conf";
 const string kRegexRtsp = "^rtsp_[0-9]+$";
 }
 
