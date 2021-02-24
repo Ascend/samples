@@ -50,7 +50,7 @@ class Classify(object):
             object_class = get_image_net_class(n)
             print("label:%d  confidence: %f, class: %s" % (n, vals[n], object_class))
         
-        #using pillow，the category with the highest confidence is written on the image and saved locally
+        #using pillow, the category with the highest confidence is written on the image and saved locally
         if len(top_k):
             object_class = get_image_net_class(top_k[0])
             output_path = os.path.join(os.path.join(SRC_PATH, "../outputs"), os.path.basename(image_file))
