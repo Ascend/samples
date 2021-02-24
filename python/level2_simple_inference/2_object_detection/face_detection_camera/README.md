@@ -67,12 +67,13 @@
 
 1. 修改present相关配置文件。
 
-    将样例目录下**scripts/param.conf**中的 presenter_server_ip、presenter_view_ip 修改为开发板的ip地址。
+    将样例目录下**scripts/face_detection.conf**中的 presenter_server_ip、presenter_view_ip 修改为开发板的ip地址。
 
      使用产品为200DK开发者板。     
-        1. 在开发环境中将**scripts/param.conf**中的 presenter_server_ip、presenter_view_ip 修改为该ip地址。   
+        1. 在开发环境中将**scripts/face_detection.conf**中的 presenter_server_ip、presenter_view_ip 修改为该ip地址。   
         ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
-        > - 1.一般使用200dk固定ip，例如192.168.1.2。
+        > - 1.开发环境和运行环境分离部署，一般使用配置的虚拟网卡ip，例如192.168.1.223。
+        > - 2.开发环境和运行环境合一部署，一般使用200dk固定ip，例如192.168.1.2
 ### 样例运行
 
 ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
