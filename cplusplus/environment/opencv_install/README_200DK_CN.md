@@ -17,11 +17,11 @@ $\color{red}{以下操作在运行环境(Atlas200DK)上操作}$
 2.  安装ffmpeg  
   
     创建文件夹，用于存放编译后的文件  
-    **mkdir -p /home/HwHiAiUser/ascend_ddk/arm --no-check-certificate**
+    **mkdir -p /home/HwHiAiUser/ascend_ddk/arm**
 
     下载ffmpeg  
     **cd $HOME**  
-    **wget http://www.ffmpeg.org/releases/ffmpeg-4.1.3.tar.gz**  
+    **wget http://www.ffmpeg.org/releases/ffmpeg-4.1.3.tar.gz --no-check-certificate**  
     **tar -zxvf ffmpeg-4.1.3.tar.gz**  
     **cd ffmpeg-4.1.3**
 
@@ -73,6 +73,6 @@ $\color{red}{以下操作在运行环境(Atlas200DK)上操作}$
     使用普通用户执行   
     **mkdir $HOME/ascend_ddk**  
     **scp -r HwHiAiUser@192.168.1.2:/home/HwHiAiUser/ascend_ddk/arm $HOME/ascend_ddk**  
-    **sudo cd /usr/lib/aarch64-linux-gnu**  
+    **cd /usr/lib/aarch64-linux-gnu**  
     **sudo scp -r HwHiAiUser@192.168.1.2:/lib/aarch64-linux-gnu/\* ./**  
     **sudo scp -r HwHiAiUser@192.168.1.2:/usr/lib/aarch64-linux-gnu/\* ./**
