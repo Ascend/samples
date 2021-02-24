@@ -81,6 +81,21 @@ function downloadOriginalModel() {
     return 0
 }
 
+function buildLibAtlasUtil() {
+    cd ${project_path}/../../../common/atlasutil/
+    make
+    if [ $? -ne 0 ];then
+        echo "ERROR: make atlasutil failed."
+        return ${inferenceError}
+    fi
+
+    make install
+    if [ $? -ne 0 ];then
+        echo "ERROR: make install atlasutil failed."
+        return ${inferenceError}
+    fi
+}
+
 function main() {
 
     if [[ ${version}"x" = "x" ]];then
@@ -113,13 +128,13 @@ function main() {
 
         # 转模型
         cd ${project_path}/model/
-		if [[ ${version} = "c73" ]] || [[ ${version} = "C73" ]];then
-		    atc --input_shape="blur:1,720,1280,3" --input_format=NHWC --output=${HOME}/models/${project_name}/${model_name} --soc_version=Ascend310 --framework=3 --model=${project_path}/model/${tf_model##*/} --log=info
+        if [[ ${version} = "c73" ]] || [[ ${version} = "C73" ]];then
+            atc --input_shape="blur:1,720,1280,3" --input_format=NHWC --output=${HOME}/models/${project_name}/${model_name} --soc_version=Ascend310 --framework=3 --model=${project_path}/model/${tf_model##*/} --log=info
             if [ $? -ne 0 ];then
                 echo "ERROR: convert model failed"
                 return ${inferenceError}
             fi
-		elif [[ ${version} = "c75" ]] || [[ ${version} = "C75" ]];then
+        elif [[ ${version} = "c75" ]] || [[ ${version} = "C75" ]];then
             cd  ${HOME}/models/${project_name}/
             wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/DeblurGAN/blurtosharp_pad_1280_720.om --no-check-certificate
         fi
@@ -137,6 +152,18 @@ function main() {
         fi
     fi
 
+    setBuildEnv
+    if [ $? -ne 0 ];then
+        echo "ERROR: set build environment failed"
+        return ${inferenceError}
+    fi
+
+    buildLibAtlasUtil
+    if [ $? -ne 0 ];then
+        echo "ERROR: build libatlasutil.so failed"
+        return ${inferenceError}
+    fi
+
     # 创建目录用于存放编译文件
     mkdir -p ${project_path}/build/intermediates/host
     if [ $? -ne 0 ];then
@@ -144,12 +171,6 @@ function main() {
         return ${inferenceError}
     fi
     cd ${project_path}/build/intermediates/host
-
-    setBuildEnv
-    if [ $? -ne 0 ];then
-        echo "ERROR: set build environment failed"
-        return ${inferenceError}
-    fi
 
     # 产生Makefile
     cmake ${project_path}/src -DCMAKE_CXX_COMPILER=aarch64-linux-gnu-g++ -DCMAKE_SKIP_RPATH=TRUE

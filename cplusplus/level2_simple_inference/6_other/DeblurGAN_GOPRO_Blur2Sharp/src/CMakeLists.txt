@@ -32,6 +32,7 @@ else ()
     message(STATUS "env LIB_PATH: ${LIB_PATH}")
 endif()
 
+list(APPEND COMMON_DEPEND_LIB atlasutil avcodec avformat avdevice avutil swresample avfilter swscale)
 if (${CMAKE_CXX_COMPILER} MATCHES "aarch")
     set(ARCH "arm")
 else ()
@@ -59,12 +60,10 @@ link_directories(
 
 
 add_executable(main
-        utils.cpp
         business_imp.cpp
-        model_process.cpp
         main.cpp)
 
 target_link_libraries(main
-        ascendcl acl_dvpp stdc++ opencv_highgui opencv_core opencv_imgproc opencv_imgcodecs opencv_calib3d opencv_features2d opencv_videoio)
+        ascendcl acl_dvpp stdc++ ${COMMON_DEPEND_LIB} opencv_highgui opencv_core opencv_imgproc opencv_imgcodecs opencv_calib3d opencv_features2d opencv_videoio)
 
 install(TARGETS main DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})

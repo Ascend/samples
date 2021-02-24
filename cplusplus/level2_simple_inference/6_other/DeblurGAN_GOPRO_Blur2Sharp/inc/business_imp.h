@@ -17,40 +17,42 @@
 * Description: handle acl resource
 */
 #pragma once
-#include "utils.h"
-#include "acl/acl.h"
-#include "model_process.h"
 #include <memory>
+#include "acl/acl.h"
+#include "atlasutil/atlas_model.h"
+#include "opencv2/opencv.hpp"
+#include "opencv2/imgcodecs/legacy/constants_c.h"
+#include "opencv2/imgproc/types_c.h"
 
-using namespace std;
+typedef enum Result {
+    SUCCESS = 0,
+    FAILED = 1
+}Result;
 
 /**
 * BusinessImp
 */
 class BusinessImp {
 public:
-    BusinessImp(const char* modelPath, uint32_t modelWidth, uint32_t modelHeight, string workPath);
+    BusinessImp(const char* modelPath, uint32_t modelWidth, uint32_t modelHeight, std::string workPath);
     ~BusinessImp();
 
-    Result Init();
-    Result Preprocess(const string& imageFile);
-    Result Inference(aclmdlDataset*& inferenceOutput);
-    Result Postprocess(const string& origImageFile,
-                       aclmdlDataset* modelOutput);
+    AtlasError init();
+    AtlasError preprocess(const std::string& imageFile);
+    AtlasError inference(std::vector<InferenceOutput>& inferOutputs);
+    AtlasError postprocess(const std::string& imageFile, 
+                            std::vector<InferenceOutput>& modelOutput);
 private:
-    Result InitResource();
-    Result InitModel(const char* omModelPath);
-
-    void* GetInferenceOutputItem(uint32_t& itemDataSize,
-                                 aclmdlDataset* inferenceOutput);
-    void SaveImage(const string& origImageFile, cv::Mat& image);
-    void DestroyResource();
+    AtlasError init_resource();
+    AtlasError create_input();
+    void save_image(const std::string& origImageFile, cv::Mat& image);
+    void destroy_resource();
 
 private:
     int32_t deviceId_;
     aclrtContext context_;
     aclrtStream stream_;
-    ModelProcess model_;
+    AtlasModel  model_;
 
     const char* modelPath_;
     uint32_t modelWidth_;
@@ -61,6 +63,6 @@ private:
 
     bool isInited_;
 
-    string workPath_;
+    std::string workPath_;
 };
 
