@@ -251,7 +251,7 @@ def main():
     image_dir = sys.argv[1] 
     images_list = [os.path.join(image_dir, img)
                    for img in os.listdir(image_dir)
-                   if os.path.splitext(img)[1] in IMG_EXT]
+                   if os.path.splitext(img)[1] in const.IMG_EXT]
 
     # Create a directory to save inference results
     if not os.path.isdir('./outputs'):
@@ -303,7 +303,7 @@ def main():
             crop_picture(image_file, crop_target)
             cropimg_list = [os.path.join(crop_target, imgs)
                    for imgs in os.listdir(crop_target)
-                   if os.path.splitext(imgs)[1] in IMG_EXT] 
+                   if os.path.splitext(imgs)[1] in const.IMG_EXT] 
 
             # After the execution of the crop function is over, 
             # the small picture after the big picture crop should be saved in a folder crop_target
