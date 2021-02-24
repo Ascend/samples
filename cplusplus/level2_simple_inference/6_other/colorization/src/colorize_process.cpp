@@ -16,12 +16,10 @@
 * File sample_process.cpp
 * Description: handle acl resource
 */
-#include "colorize_process.h"
 #include <iostream>
-
 #include "acl/acl.h"
-#include "model_process.h"
-#include "utils.h"
+#include "atlasutil/atlas_model.h"
+#include "colorize_process.h"
 
 using namespace std;
 
@@ -34,102 +32,90 @@ ColorizeProcess::ColorizeProcess(const char* modelPath,
 :deviceId_(0), context_(nullptr), stream_(nullptr), inputBuf_(nullptr), 
 modelWidth_(modelWidth), modelHeight_(modelHeight), isInited_(false){
     modelPath_ = modelPath;
+    inputDataSize_ = modelWidth_ * modelHeight_ * 4;
 }
 
 ColorizeProcess::~ColorizeProcess() {
     destroy_resource();
 }
 
-Result ColorizeProcess::init_resource() {
+AtlasError ColorizeProcess::init_resource() {
     // ACL init
     const char *aclConfigPath = "../src/acl.json";
-    aclError ret = aclInit(aclConfigPath);
+    AtlasError ret = aclInit(aclConfigPath);
     if (ret != ACL_ERROR_NONE) {
-        ERROR_LOG("Acl init failed");
-        return FAILED;
+        ATLAS_LOG_ERROR("Acl init failed");
+        return ATLAS_ERROR;
     }
-    INFO_LOG("Acl init success");
+    ATLAS_LOG_INFO("Acl init success");
 
     // open device
     ret = aclrtSetDevice(deviceId_);
     if (ret != ACL_ERROR_NONE) {
-        ERROR_LOG("Acl open device %d failed", deviceId_);
-        return FAILED;
+        ATLAS_LOG_ERROR("Acl open device %d failed", deviceId_);
+        return ATLAS_ERROR;
     }
-    INFO_LOG("Open device %d success", deviceId_);
+    ATLAS_LOG_INFO("Open device %d success", deviceId_);
 
     ret = aclrtGetRunMode(&runMode_);
     if (ret != ACL_ERROR_NONE) {
-        ERROR_LOG("acl get run mode failed");
-        return FAILED;
+        ATLAS_LOG_ERROR("acl get run mode failed");
+        return ATLAS_ERROR;
     }
 
-    return SUCCESS;
+    return ATLAS_OK;
 }
 
-Result ColorizeProcess::init_model(const char* omModelPath) {
-    Result ret = model_.load_model_from_file_with_mem(omModelPath);
-    if (ret != SUCCESS) {
-        ERROR_LOG("execute LoadModelFromFileWithMem failed");
-        return FAILED;
-    }
-
-    ret = model_.CreateDesc();
-    if (ret != SUCCESS) {
-        ERROR_LOG("execute CreateDesc failed");
-        return FAILED;
-    }
-
-    ret = model_.CreateOutput();
-    if (ret != SUCCESS) {
-        ERROR_LOG("execute CreateOutput failed");
-        return FAILED;
-    }
-    inputDataSize_ = model_.get_model_size();
+AtlasError ColorizeProcess::create_input() {
     aclrtMalloc(&inputBuf_, (size_t)(inputDataSize_), ACL_MEM_MALLOC_HUGE_FIRST);
     if (inputBuf_ == nullptr) {
-        ERROR_LOG("Acl malloc image buffer failed.");
-        return FAILED;
+        ATLAS_LOG_ERROR("Acl malloc image buffer failed.");
+        return ATLAS_ERROR;
     }
 
-    ret = model_.CreateInput(inputBuf_, inputDataSize_);
-    if (ret != SUCCESS) {
-        ERROR_LOG("Create mode input dataset failed");
-        return FAILED;
+    AtlasError ret = model_.CreateInput(inputBuf_, inputDataSize_);
+    if (ret != ATLAS_OK) {
+        ATLAS_LOG_ERROR("Create mode input dataset failed");
+        return ATLAS_ERROR;
     }
 
-    return SUCCESS;
+    return ATLAS_OK;
 }
 
-Result ColorizeProcess::Init() {
+AtlasError ColorizeProcess::init() {
     if (isInited_) {
-        INFO_LOG("Classify instance is initied already!");
-        return SUCCESS;
+        ATLAS_LOG_INFO("Classify instance is initied already!");
+        return ATLAS_OK;
     }
 
-    Result ret = init_resource();
-    if (ret != SUCCESS) {
-        ERROR_LOG("Init acl resource failed");
-        return FAILED;
+    AtlasError ret = init_resource();
+    if (ret != ATLAS_OK) {
+        ATLAS_LOG_ERROR("Init acl resource failed");
+        return ATLAS_ERROR;
     }
 
-    ret = init_model(modelPath_);
-    if (ret != SUCCESS) {
-        ERROR_LOG("Init model failed");
-        return FAILED;
+    ret = model_.Init(modelPath_);
+    if (ret != ATLAS_OK) {
+        ATLAS_LOG_ERROR("Init model failed");
+        return ATLAS_ERROR;
+    }
+
+    ret = create_input();
+    if (ret != ATLAS_OK) {
+        ATLAS_LOG_ERROR("Create model input failed");
+        return ATLAS_ERROR;
     }
 
     isInited_ = true;
-    return SUCCESS;
+    return ATLAS_OK;
 }
 
-
-Result ColorizeProcess::Preprocess(const string& imageFile) {
+AtlasError ColorizeProcess::preprocess(const string& imageFile) {
     // read image using OPENCV
     cv::Mat mat = cv::imread(imageFile, CV_LOAD_IMAGE_COLOR);
     //resize
     cv::Mat reiszeMat;
-    cv::resize(mat, reiszeMat, cv::Size(224, 224));
+    cv::resize(mat, reiszeMat, cv::Size(modelWidth_, modelHeight_));
 
     // deal image
     reiszeMat.convertTo(reiszeMat, CV_32FC3);
@@ -142,47 +128,42 @@ Result ColorizeProcess::Preprocess(const string& imageFile) {
     cv::Mat reiszeMatL = channels[0] - 50;
 
     if (mat.empty()) {
-        return FAILED;
+        return ATLAS_ERROR;
     }
 
     if (runMode_ == ACL_HOST) {
-        //AI1上运行时,需要将图片数据拷贝到device侧   
         aclError ret = aclrtMemcpy(inputBuf_, inputDataSize_,
                                    reiszeMatL.ptr<uint8_t>(), inputDataSize_,
                                    ACL_MEMCPY_HOST_TO_DEVICE);
         if (ret != ACL_ERROR_NONE) {
-            ERROR_LOG("Copy resized image data to device failed.");
-            return FAILED;
+            ATLAS_LOG_ERROR("Copy resized image data to device failed.");
+            return ATLAS_ERROR;
         }
     } else {
-        //Atals200DK上运行时,数据拷贝到本地即可.
-        //reiszeMat是局部变量,数据无法传出函数,需要拷贝一份
         memcpy(inputBuf_, reiszeMatL.ptr<uint8_t>(), inputDataSize_);
     }
 
-    return SUCCESS;
+    return ATLAS_OK;
 }
 
-
-Result ColorizeProcess::Inference(aclmdlDataset*& inferenceOutput) {
-    Result ret = model_.Execute();
-    if (ret != SUCCESS) {
-        ERROR_LOG("Execute model inference failed");
-        return FAILED;
+AtlasError ColorizeProcess::inference(std::vector<InferenceOutput>& inferOutputs) {
+    AtlasError ret = model_.Execute(inferOutputs);
+    if (ret != ATLAS_OK) {
+        ATLAS_LOG_ERROR("Execute model inference failed");
+        return ATLAS_ERROR;
     }
 
-    inferenceOutput = model_.GetModelOutputData();
-
-    return SUCCESS;
+    return ATLAS_OK;
 }
 
-Result ColorizeProcess::Postprocess(const string& imageFile, aclmdlDataset* modelOutput)
+AtlasError ColorizeProcess::postprocess(const string& imageFile, vector<InferenceOutput>& modelOutput)
 {
     uint32_t dataSize = 0;
-    void* data = get_inference_output_item(dataSize, modelOutput);
+    void* data = modelOutput[0].data.get();
+    
     if (data == nullptr) 
     {
-        return FAILED;
+        return ATLAS_ERROR;
     }
 
     uint32_t size = static_cast<uint32_t>(dataSize) / sizeof(float);
@@ -216,12 +197,7 @@ Result ColorizeProcess::Postprocess(const string& imageFile, aclmdlDataset* mode
     resultImage = resultImage * 255;
     save_image(imageFile, resultImage);
 
-    if (runMode_ == ACL_HOST) {
-        delete[]((uint8_t *)data);
-        data = nullptr;
-    }
-
-    return SUCCESS;
+    return ATLAS_OK;
 }
 
 void ColorizeProcess::save_image(const string& origImageFile, cv::Mat& image) {
@@ -236,76 +212,41 @@ void ColorizeProcess::save_image(const string& origImageFile, cv::Mat& image) {
     cv::imwrite(outputPath, image);
 }
 
-void* ColorizeProcess::get_inference_output_item(uint32_t& itemDataSize,
-                                              aclmdlDataset* inferenceOutput) {
-    aclDataBuffer* dataBuffer = aclmdlGetDatasetBuffer(inferenceOutput, 0);
-    if (dataBuffer == nullptr) {
-        ERROR_LOG("Get the dataset buffer from model "
-            "inference output failed");
-        return nullptr;
-    }
-
-    void* dataBufferDev = aclGetDataBufferAddr(dataBuffer);
-    if (dataBufferDev == nullptr) {
-        ERROR_LOG("Get the dataset buffer address "
-            "from model inference output failed");
-        return nullptr;
-    }
-
-    size_t bufferSize = aclGetDataBufferSize(dataBuffer);
-    if (bufferSize == 0) {
-        ERROR_LOG("The dataset buffer size of "
-                  "model inference output is 0 ");
-        return nullptr;
-    }
-
-    void* data = nullptr;
-    if (runMode_ == ACL_HOST) {
-        data = Utils::CopyDataDeviceToLocal(dataBufferDev, bufferSize);
-        if (data == nullptr) {
-            ERROR_LOG("Copy inference output to host failed");
-            return nullptr;
-        }
-    } else {
-        data = dataBufferDev;
-    }
-
-    itemDataSize = bufferSize;
-    return data;
-}
-
 void ColorizeProcess::destroy_resource()
 {
+    model_.DestroyInput();
+    model_.DestroyResource();
+
     aclrtFree(inputBuf_);
-    inputBuf_ = nullptr;   
-    aclError ret;
+    inputBuf_ = nullptr;
+    AtlasError ret;
     if (stream_ != nullptr) {
         ret = aclrtDestroyStream(stream_);
         if (ret != ACL_ERROR_NONE) {
-            ERROR_LOG("destroy stream failed");
+            ATLAS_LOG_ERROR("destroy stream failed");
         }
         stream_ = nullptr;
     }
-    INFO_LOG("end to destroy stream");
+    ATLAS_LOG_INFO("end to destroy stream");
 
     if (context_ != nullptr) {
         ret = aclrtDestroyContext(context_);
         if (ret != ACL_ERROR_NONE) {
-            ERROR_LOG("destroy context failed");
+            ATLAS_LOG_ERROR("destroy context failed");
         }
         context_ = nullptr;
     }
-    INFO_LOG("end to destroy context");
+    ATLAS_LOG_INFO("end to destroy context");
 
     ret = aclrtResetDevice(deviceId_);
     if (ret != ACL_ERROR_NONE) {
-        ERROR_LOG("reset device failed");
+        ATLAS_LOG_ERROR("reset device failed");
     }
-    INFO_LOG("end to reset device is %d", deviceId_);
+    ATLAS_LOG_INFO("end to reset device is %d", deviceId_);
 
     ret = aclFinalize();
     if (ret != ACL_ERROR_NONE) {
-        ERROR_LOG("finalize acl failed");
+        ATLAS_LOG_ERROR("finalize acl failed");
     }
-    INFO_LOG("end to finalize acl");
+    ATLAS_LOG_INFO("end to finalize acl");
 }
