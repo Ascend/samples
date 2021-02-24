@@ -19,6 +19,7 @@ CAMERA_FRAME_WIDTH = 1280
 CAMERA_FRAME_HEIGHT = 720
 
 def main():
+    """main"""
     #Initialize acl
     acl_resource = AclResource()
     acl_resource.init()
