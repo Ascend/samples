@@ -257,10 +257,6 @@ def main():
     if not os.path.isdir('./outputs'):
         os.mkdir('./outputs')
     
-    # Create a directory, save the image inference json result
-    if not os.path.isdir('./outputjson'):
-        os.mkdir('./outputjson')
-    
     # Create a directory to save the intermediate results of the large image detection
     if not os.path.isdir('./bigpic'):
         os.mkdir('./bigpic')
@@ -280,7 +276,6 @@ def main():
     for image_file in images_list: 
         imagename = get_file_name(image_file)          
         tempfile = os.path.splitext(imagename)[0]
-        jsonname = tempfile + '.json'
 
         imgdic = {}
         imgdic['name'] = imagename
@@ -330,12 +325,6 @@ def main():
             resdic = post_process(result, image, image_file)
             obj_res.extend(resdic)
             imgdic['object_result'] = obj_res
-
-        jsonFilepath = os.path.join("./outputjson", jsonname)
-        print(jsonFilepath)
-
-        with open(jsonFilepath, 'w') as f:
-            json.dump(imgdic, f, indent=3)
 
 
 if __name__ == '__main__':
