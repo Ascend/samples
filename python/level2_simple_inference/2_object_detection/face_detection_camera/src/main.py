@@ -30,7 +30,7 @@ def main():
     #Connect to the presenter server according to the configuration, 
     # and end the execution of the application if the connection fails
     chan = presenteragent.presenter_channel.open_channel(FACE_DETEC_CONF)
-    if chan == None:
+    if chan is None:
         print("Open presenter channel failed")
         return
     #Open the CARAMER0 camera on the development board
@@ -44,14 +44,14 @@ def main():
         
         #The detection network processes images into model input data
         model_input = detect.pre_process(image)
-        if model_input == None:
+        if model_input is None:
             print("Pre process image failed")
             break
         #Send data to offline model inference
         result = model.execute(model_input)
         #Detecting network analysis inference output
         jpeg_image, detection_list = detect.post_process(result, image)
-        if jpeg_image == None:
+        if jpeg_image is None:
             print("The jpeg image for present is None")
             break
         

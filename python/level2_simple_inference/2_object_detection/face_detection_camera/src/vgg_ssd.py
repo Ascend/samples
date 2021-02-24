@@ -1,3 +1,4 @@
+"""vgg_ssd"""
 import numpy as np
 import sys
 sys.path.append("../../../../common")
@@ -14,6 +15,7 @@ BOTTOM_RIGHT_Y = 6
 
 
 class VggSsd(object):
+    """vggssd"""
     def __init__(self, acl_resource, model_width, model_height):
         self._acl_resource = acl_resource
         self._model_width = model_width
@@ -27,19 +29,18 @@ class VggSsd(object):
             del self._dvpp
         print("Release yolov3 resource finished")
 
-
     def pre_process(self, image):
-        #Use dvpp to scale the image to the required size of the model
+        """Use dvpp to scale the image to the required size of the model"""
         resized_image = self._dvpp.resize(image, self._model_width,
                                           self._model_height)
-        if resized_image == None:
+        if resized_image is None:
             print("Resize image failed")
             return None
         #Output the scaled image and image information as inference input data
         return [resized_image,]
 
     def post_process(self, infer_output, origin_img):
-        #Analyze inference output data
+        """Analyze inference output data"""
         detection_result_list = self._analyze_inference_output(infer_output, 
                                                                origin_img)
         #Convert yuv image to jpeg image
