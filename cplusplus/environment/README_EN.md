@@ -7,7 +7,7 @@ Introduction
 
 
 ### Step
-Please perform the following three steps in sequence, please click the corresponding link to install according to the device type.
+Please perform the following four steps in sequence, please click the corresponding link to install according to the device type.
 
 1.Basic environment configuration
 - [for_atlas200dk](./prepare_ENV/README_200DK_EN.md)  

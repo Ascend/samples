@@ -72,6 +72,6 @@ FFmpeg and OpenCV are installed to implement diversified data preprocessings and
     Run the following commands as a common user:   
     **mkdir $HOME/ascend_ddk**  
     **scp -r HwHiAiUser@192.168.1.2:/home/HwHiAiUser/ascend_ddk/arm \$HOME/ascend_ddk**  
-    **sudo cd /usr/lib/aarch64-linux-gnu**  
+    **cd /usr/lib/aarch64-linux-gnu**  
     **sudo scp -r HwHiAiUser@192.168.1.2:/lib/aarch64-linux-gnu/\* ./**  
     **sudo scp -r HwHiAiUser@192.168.1.2:/usr/lib/aarch64-linux-gnu/\* ./**
