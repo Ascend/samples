@@ -10,8 +10,7 @@ sys.path.append(os.path.join(path, ".."))
 sys.path.append(os.path.join(path, "../../../../common/"))
 sys.path.append(os.path.join(path, "../../../../common/atlas_utils"))
 
-from utils import *
-from constants import *
+from constants import IMG_EXT
 from acl_model import Model
 from acl_image import AclImage
 from acl_resource import AclResource
