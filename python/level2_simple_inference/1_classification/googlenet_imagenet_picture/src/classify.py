@@ -1,87 +1,43 @@
 import sys
 import os
-
 import acl
 
-from utils import *
+path = os.path.dirname(os.path.abspath(__file__))
+
+sys.path.append(os.path.join(path, ".."))
+sys.path.append(os.path.join(path, "../../../../common/"))
+sys.path.append(os.path.join(path, "../../../../common/atlas_utils"))
+
+from constants import ACL_MEM_MALLOC_HUGE_FIRST, ACL_MEMCPY_DEVICE_TO_DEVICE, IMG_EXT
 from acl_dvpp import Dvpp
 from acl_model import Model
 from acl_image import AclImage
+from acl_resource import AclResource
 from image_net_classes import get_image_net_class
 from PIL import Image, ImageDraw, ImageFont
 
 class Classify(object):
-    def __init__(self, model_path, model_width, model_height):
-        self.device_id = 0
-        self.context = None
-        self.stream = None
+    def __init__(self, acl_resource, model_path, model_width, model_height):
         self._model_path = model_path
         self._model_width = model_width
         self._model_height = model_height
-        self._dvpp = None
+        self._dvpp = Dvpp(acl_resource)
+        self._model = Model(model_path)
 
     def __del__(self):
-        if self._model:
-            del self._model
         if self._dvpp:
             del self._dvpp
-        if self.stream:
-            acl.rt.destroy_stream(self.stream)
-        if self.context:
-            acl.rt.destroy_context(self.context)
-        acl.rt.reset_device(self.device_id)
-        acl.finalize()
         print("[Sample] class Samle release source success")
-
-    def _init_resource(self):
-        print("[Sample] init resource stage:")
-        ret = acl.init()
-        check_ret("acl.rt.set_device", ret)
-
-        ret = acl.rt.set_device(self.device_id)
-        check_ret("acl.rt.set_device", ret)
-
-        self.context, ret = acl.rt.create_context(self.device_id)
-        check_ret("acl.rt.create_context", ret)
-
-        self.stream, ret = acl.rt.create_stream()
-        check_ret("acl.rt.create_stream", ret)
-
-        self.run_mode, ret = acl.rt.get_run_mode()
-        check_ret("acl.rt.get_run_mode", ret)
-
-        print("Init resource stage success") 
-
-    def init(self):
-        #初始化 acl 资源
-        self._init_resource() 
-        self._dvpp = Dvpp(self.stream, self.run_mode)
-
-        #初始化dvpp
-        ret = self._dvpp.init_resource()
-        if ret != SUCCESS:
-            print("Init dvpp failed")
-            return FAILED
-        
-        #加载模型
-        self._model = Model(self.run_mode, self._model_path)
-        ret = self._model.init_resource()
-        if ret != SUCCESS:
-            print("Init model failed")
-            return FAILED
-
-        return SUCCESS
 
     def pre_process(self, image):
         yuv_image = self._dvpp.jpegd(image)
-        print("decode jpeg end")
         resized_image = self._dvpp.resize(yuv_image, 
                         self._model_width, self._model_height)
         print("resize yuv end")
         return resized_image
 
     def inference(self, resized_image):
-        return self._model.execute(resized_image.data(), resized_image.size)
+        return self._model.execute([resized_image, ])
 
     def post_process(self, infer_output, image_file):
         print("post process")
@@ -94,7 +50,7 @@ class Classify(object):
             object_class = get_image_net_class(n)
             print("label:%d  confidence: %f, class: %s" % (n, vals[n], object_class))
         
-        #使用pillow，将置信度最高的类别写在图片上，并保存到本地
+        #using pillow, the category with the highest confidence is written on the image and saved locally
         if len(top_k):
             object_class = get_image_net_class(top_k[0])
             output_path = os.path.join(os.path.join(SRC_PATH, "../outputs"), os.path.basename(image_file))
@@ -104,7 +60,6 @@ class Classify(object):
             draw.text((10, 50), object_class, font=font, fill=255)
             origin_img.save(output_path)
 
-
 SRC_PATH = os.path.realpath(__file__).rsplit("/", 1)[0]
 MODEL_PATH = os.path.join(SRC_PATH, "../model/googlenet_yuv.om")
 MODEL_WIDTH = 224
@@ -112,36 +67,38 @@ MODEL_HEIGHT = 224
 
 
 def main():
-    #程序执行时带图片目录参数
+
+    """
+    Program execution with picture directory parameters
+    """
     if (len(sys.argv) != 2):
         print("The App arg is invalid")
         exit(1)
+    acl_resource = AclResource()
+    acl_resource.init()
+    #Instantiation classification detection, incoming om model path, model input width and height parameters
+    classify = Classify(acl_resource, MODEL_PATH, MODEL_WIDTH, MODEL_HEIGHT)
     
-    #实例化分类检测,传入om模型存放路径,模型输入宽高参数
-    classify = Classify(MODEL_PATH, MODEL_WIDTH, MODEL_HEIGHT)
-    #推理初始化
-    ret = classify.init()
-    check_ret("Classify.init ", ret)
-    
-    #从参数获取图片存放目录,逐张图片推理
+    #Get the picture storage directory from the parameters, and infer picture by picture
     image_dir = sys.argv[1]
     images_list = [os.path.join(image_dir, img)
                    for img in os.listdir(image_dir)
                    if os.path.splitext(img)[1] in IMG_EXT]
     
-    #创建目录，保存推理结果
+    #Create a directory and save the infer results
     if not os.path.isdir(os.path.join(SRC_PATH, "../outputs")):
         os.mkdir(os.path.join(SRC_PATH, "../outputs"))
 
     for image_file in images_list:
-        #读入图片
+        #read the picture
         image = AclImage(image_file)
-        #对图片预处理
-        resized_image = classify.pre_process(image)
+        image_dvpp = image.copy_to_dvpp()
+        #preprocess image
+        resized_image = classify.pre_process(image_dvpp)
         print("pre process end")
-        #推理图片
+        #inference
         result = classify.inference(resized_image)
-        #对推理结果进行处理
+        #post process
         classify.post_process(result, image_file)
 
 if __name__ == '__main__':

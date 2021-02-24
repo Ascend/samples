@@ -8,22 +8,21 @@ import numpy as np
 import os
 import re
 import time
-sys.path.append("..")
-sys.path.append("../atlas_utils/")
+path = os.path.dirname(os.path.abspath(__file__))
 
-from atlas_utils import presenteragent
-from constants import *
+sys.path.append(os.path.join(path, ".."))
+sys.path.append(os.path.join(path, "../../../../common/"))
+sys.path.append(os.path.join(path, "../../../../common/atlas_utils"))
+
 from acl_model import Model
+from acl_image import AclImage
 from acl_resource import AclResource
-
+from atlas_utils import presenteragent
 
 MODEL_WIDTH = 224
 MODEL_HEIGHT = 224
-
 model_path = '../model/colorization.om'
-
 COLORIZATION_CONF ="../scripts/param.conf"
-
 
 def preprocess(frame):
     """
@@ -87,9 +86,8 @@ def main():
     acl_resource.init()
 
     #load model
-    model = Model(acl_resource, model_path)
+    model = Model(model_path)
     chan = presenteragent.presenter_channel.open_channel(COLORIZATION_CONF)
-
     if chan is None:
         print("Open presenter channel failed")
         return
@@ -138,4 +136,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-

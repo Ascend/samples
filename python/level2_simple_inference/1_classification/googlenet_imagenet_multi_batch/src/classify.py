@@ -3,82 +3,38 @@ import os
 import numpy
 import acl
 
-from utils import *
+path = os.path.dirname(os.path.abspath(__file__))
+
+sys.path.append(os.path.join(path, ".."))
+sys.path.append(os.path.join(path, "../../../../common/"))
+sys.path.append(os.path.join(path, "../../../../common/atlas_utils"))
+
+from utils import check_ret
+from constants import ACL_MEM_MALLOC_HUGE_FIRST, ACL_MEMCPY_DEVICE_TO_DEVICE, IMG_EXT
 from acl_dvpp import Dvpp
 from acl_model import Model
 from acl_image import AclImage
+from acl_resource import AclResource
 from image_net_classes import get_image_net_class
 from PIL import Image, ImageDraw, ImageFont
 
 class Classify(object):
-    def __init__(self, model_path, model_width, model_height):
-        self.device_id = 0
-        self.context = None
-        self.stream = None
-        self.run_mode = None
-        self._model = None
+    def __init__(self, acl_resource, model_path, model_width, model_height):
+        self.total_buffer = None
         self._model_path = model_path
         self._model_width = model_width
         self._model_height = model_height
-        self._dvpp = None
-        self.total_buffer = None
+
+        self._model = Model(model_path)
+        self._dvpp = Dvpp(acl_resource)
+        print("The App arg is __init__")
 
     def __del__(self):
         if self.total_buffer:
             acl.rt.free(self.total_buffer)  
-        if self._model:
-            del self._model
         if self._dvpp:
             del self._dvpp
-        if self.stream:
-            acl.rt.destroy_stream(self.stream)
-        if self.context:
-            acl.rt.destroy_context(self.context)
-        acl.rt.reset_device(self.device_id)
-        acl.finalize()
         print("[Sample] class Samle release source success")
-
-    def _init_resource(self):
-        print("[Sample] init resource stage:")
-        ret = acl.init()
-        check_ret("acl.rt.set_device", ret)
-
-        ret = acl.rt.set_device(self.device_id)
-        check_ret("acl.rt.set_device", ret)
-
-        self.context, ret = acl.rt.create_context(self.device_id)
-        check_ret("acl.rt.create_context", ret)
-
-        self.stream, ret = acl.rt.create_stream()
-        check_ret("acl.rt.create_stream", ret)
-
-        self.run_mode, ret = acl.rt.get_run_mode()
-        check_ret("acl.rt.get_run_mode", ret)
-
-        print("Init resource stage success") 
-
-    def init(self):   
-        """
-        Initialize ACL resource
-        """
-        
-        self._init_resource() 
-        self._dvpp = Dvpp(self.stream, self.run_mode)
-
-        #Initialize DVPP
-        ret = self._dvpp.init_resource()
-        if ret != SUCCESS:
-            print("Init dvpp failed")
-            return FAILED
-        
-        #Load model
-        self._model = Model(self.run_mode, self._model_path)
-        ret = self._model.init_resource()
-        if ret != SUCCESS:
-            print("Init model failed")
-            return FAILED
-
-        return SUCCESS
 
     def pre_process(self, image):
         yuv_image = self._dvpp.jpegd(image)
@@ -107,7 +63,8 @@ class Classify(object):
     
     def inference(self, resized_image_list, batch):
         total_size = self.batch_process(resized_image_list, batch)
-        return self._model.execute(self.total_buffer, total_size)
+        batch_buffer = {'data': self.total_buffer, 'size':total_size}
+        return self._model.execute([batch_buffer, ])
     
     def post_process(self, infer_output, batch_image_files, number_of_images):
         print("post process") 
@@ -138,20 +95,20 @@ MODEL_WIDTH = 224
 MODEL_HEIGHT = 224
 #Batch number to 10
 BATCH = 10
+
+
 def main():
     """
     Program execution with picture directory parameters
     """
-    
     if (len(sys.argv) != 2):
         print("The App arg is invalid")
         exit(1)
-    
+
+    acl_resource = AclResource()
+    acl_resource.init()
     #Instance classification detection, pass into the OM model storage path, model input width and height parameters
-    classify = Classify(MODEL_PATH, MODEL_WIDTH, MODEL_HEIGHT)
-    #Inference initialization
-    ret = classify.init()
-    check_ret("Classify.init ", ret)
+    classify = Classify(acl_resource, MODEL_PATH, MODEL_WIDTH, MODEL_HEIGHT)
     
     #From the parameters of the picture storage directory, reasoning by a picture
     image_dir = sys.argv[1]
@@ -162,7 +119,7 @@ def main():
     #Create a directory to store the inference results
     if not os.path.isdir('../outputs'):
         os.mkdir('../outputs')
-    
+
     resized_image_list = []
     batch_image_files = []
     num = 0
@@ -173,10 +130,11 @@ def main():
         num += 1
         #Read the pictures
         image = AclImage(image_file)
+        image_dvpp = image.copy_to_dvpp()
         #preprocess image
-        resized_image = classify.pre_process(image)
+        resized_image = classify.pre_process(image_dvpp)
         print("pre process end")
-        
+
         batch_image_files.append(image_file) 
         resized_image_list.append(resized_image)
         if batch_amount > 0:
@@ -197,7 +155,7 @@ def main():
                 result = classify.inference(resized_image_list, BATCH)
                 #The inference results are processed
                 classify.post_process(result, batch_image_files, left)
-            
+
 if __name__ == '__main__':
     main()
  

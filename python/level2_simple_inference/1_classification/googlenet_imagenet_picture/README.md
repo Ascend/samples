@@ -87,10 +87,10 @@
 
     **cd $HOME/samples/python/level2_simple_inference/1_classification/googlenet_imagenet_picture/data**
 
-    **https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_imagenet_picture-python/dog1_1024_683.jpg**
+    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_imagenet_picture-python/dog1_1024_683.jpg**
 
-    **https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_imagenet_picture-python/dog2_1024_683.jpg**       
-       **https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_imagenet_picture-python/rabit.jpg** 
+    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_imagenet_picture-python/dog2_1024_683.jpg**
+       **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_imagenet_picture-python/rabit.jpg**
 
 
 
@@ -123,7 +123,7 @@
 
     切换目录后，执行以下命令运行样例。
 
-    **python3.6 classify.py ./data/**
+    **python3.6 classify.py ../data/**
 ### 查看结果
 
 运行完成后，会在outputs目录下生成带推理结果的jpg图片。

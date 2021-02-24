@@ -118,7 +118,6 @@
       **source ~/.bashrc**
         
       **cd $HOME/samples/python/level2_simple_inference/1_classification/googlenet_imagenet_multi_batch/src**
-         **python3.6 classify.py ../data/** 
 
     - 如果是开发环境与运行环境分离部署，执行以下命令切换目录。
     

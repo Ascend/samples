@@ -1,11 +1,18 @@
 import cv2 as cv
 import numpy as np
 import os
-
+import sys
 import time
 
-from constants import *
+path = os.path.dirname(os.path.abspath(__file__))
+
+sys.path.append(os.path.join(path, ".."))
+sys.path.append(os.path.join(path, "../../../../common/"))
+sys.path.append(os.path.join(path, "../../../../common/atlas_utils"))
+
+from constants import IMG_EXT
 from acl_model import Model
+from acl_image import AclImage
 from acl_resource import AclResource
 
 
@@ -69,20 +76,15 @@ def main():
     acl_resource = AclResource()
     acl_resource.init()
     
-    model = Model(acl_resource, model_path)
+    model = Model(model_path)
     images_list = [os.path.join(INPUT_DIR, img)
                    for img in os.listdir(INPUT_DIR)
                    if os.path.splitext(img)[1] in IMG_EXT]
 
-    
     for pic in images_list:
-        
-        
                
         orig_shape, orig_l, l_data = preprocess(pic)
-        
-        result_list = model.execute([l_data,])    
-       
+        result_list = model.execute([l_data,])
         postprocess(result_list, pic, orig_shape, orig_l)
         break
     print("Execute end")
