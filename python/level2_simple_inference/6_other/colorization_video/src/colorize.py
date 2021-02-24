@@ -14,8 +14,6 @@ sys.path.append(os.path.join(path, ".."))
 sys.path.append(os.path.join(path, "../../../../common/"))
 sys.path.append(os.path.join(path, "../../../../common/atlas_utils"))
 
-from utils import *
-from constants import *
 from acl_model import Model
 from acl_image import AclImage
 from acl_resource import AclResource
@@ -60,6 +58,7 @@ def preprocess(frame):
 
     return orig_shape, orig_l, l_data
 
+
 def postprocess(result_list, orig_shape, orig_l):
     """
     Post process the images after model reasoning
@@ -77,6 +76,7 @@ def postprocess(result_list, orig_shape, orig_l):
     result_bgr = (255 * np.clip(cv.cvtColor(result_lab, cv.COLOR_Lab2BGR), 0, 1)).astype('uint8')
 
     return cv.imencode('.jpg', result_bgr)[1]
+
 
 def main():
     """

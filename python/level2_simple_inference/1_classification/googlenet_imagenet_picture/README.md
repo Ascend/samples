@@ -75,11 +75,11 @@
 
         **https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_imagenet_picture-python/insert_op.cfg**
 
-        **atc --model=./googlenet.prototxt --weight=./googlenet.caffemodel --framework=0 --output=googlenet --soc_version=Ascend310 --insert_op_conf=./insert_op.cfg --input_shape="data:1,3,224,224" --input_format=NCHW**
+        **atc --model=./googlenet.prototxt --weight=./googlenet.caffemodel --framework=0 --output=googlenet_yuv --soc_version=Ascend310 --insert_op_conf=./insert_op.cfg --input_shape="data:1,3,224,224" --input_format=NCHW**
 
     3. 执行以下命令将转换好的模型复制到样例中model文件夹中。
 
-        **cp ./googlenet.om $HOME/samples/python/level2_simple_inference/1_classification/googlenet_imagenet_picture/model/**
+        **cp ./googlenet_yuv.om $HOME/samples/python/level2_simple_inference/1_classification/googlenet_imagenet_picture/model/**
 
 4. 获取样例需要的测试图片。
 

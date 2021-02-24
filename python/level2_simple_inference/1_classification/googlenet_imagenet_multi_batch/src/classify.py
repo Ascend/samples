@@ -9,8 +9,8 @@ sys.path.append(os.path.join(path, ".."))
 sys.path.append(os.path.join(path, "../../../../common/"))
 sys.path.append(os.path.join(path, "../../../../common/atlas_utils"))
 
-from utils import *
-from constants import *
+from utils import check_ret
+from constants import ACL_MEM_MALLOC_HUGE_FIRST, ACL_MEMCPY_DEVICE_TO_DEVICE, IMG_EXT
 from acl_dvpp import Dvpp
 from acl_model import Model
 from acl_image import AclImage
@@ -95,6 +95,8 @@ MODEL_WIDTH = 224
 MODEL_HEIGHT = 224
 #Batch number to 10
 BATCH = 10
+
+
 def main():
     """
     Program execution with picture directory parameters
