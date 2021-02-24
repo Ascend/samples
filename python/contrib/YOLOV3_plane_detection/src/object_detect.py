@@ -36,7 +36,7 @@ def construct_image_info():
 def pre_process(image, dvpp):
     """preprocess"""
     image_input = image.copy_to_dvpp()
-    yuv_image = dvpp.convert_jpeg_to_yuv(image_input)
+    yuv_image = dvpp.jpegd(image_input)
     print("decode jpeg end")
     resized_image = dvpp.resize(yuv_image, 
                     MODEL_WIDTH, MODEL_HEIGHT)
