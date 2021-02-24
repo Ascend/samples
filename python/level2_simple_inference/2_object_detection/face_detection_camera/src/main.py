@@ -19,35 +19,37 @@ CAMERA_FRAME_WIDTH = 1280
 CAMERA_FRAME_HEIGHT = 720
 
 def main():
-    #初始化acl
+    #Initialize acl
     acl_resource = AclResource()
     acl_resource.init()
-    #创建一个检测网络实例,当前使用vgg_ssd网络.当更换检测网络时,在此实例化新的网络
+    #Create a detection network instance, currently using the vgg_ssd network. 
+    # When the detection network is replaced, instantiate a new network here
     detect = VggSsd(acl_resource, MODEL_WIDTH, MODEL_HEIGHT)
-    #加载离线模型
+    #Load offline model
     model = Model(MODEL_PATH)
-    #根据配置连接presenter server,连接失败则结束应用的执行
+    #Connect to the presenter server according to the configuration, 
+    # and end the execution of the application if the connection fails
     chan = presenteragent.presenter_channel.open_channel(FACE_DETEC_CONF)
     if chan == None:
         print("Open presenter channel failed")
         return
-    #打开开发板上CARAMER0摄像头
+    #Open the CARAMER0 camera on the development board
     cap = Camera(0)
     while True:
-        #从摄像头读入一帧图片
+        #Read a picture from the camera
         image = cap.read()
         if image is None:
             print("Get memory from camera failed")
             break
         
-        #检测网络将图片处理为模型输入数据
+        #The detection network processes images into model input data
         model_input = detect.pre_process(image)
         if model_input == None:
             print("Pre process image failed")
             break
-        #将数据送入离线模型推理
+        #Send data to offline model inference
         result = model.execute(model_input)
-        #检测网络解析推理输出
+        #Detecting network analysis inference output
         jpeg_image, detection_list = detect.post_process(result, image)
         if jpeg_image == None:
             print("The jpeg image for present is None")
