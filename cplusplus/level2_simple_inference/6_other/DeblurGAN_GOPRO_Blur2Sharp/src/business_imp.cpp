@@ -38,7 +38,7 @@ modelWidth_(modelWidth), modelHeight_(modelHeight), isInited_(false){
 }
 
 BusinessImp::~BusinessImp() {
-    destroy_resource ();
+    destroy_resource();
 }
 
 AtlasError BusinessImp::init_resource() {
@@ -137,7 +137,6 @@ AtlasError BusinessImp::preprocess(const string& imageFile) {
         ATLAS_LOG_INFO("inputDataSize_ = %u", inputDataSize_);
         ATLAS_LOG_INFO("inputBuf size = %d", (int)sizeof(inputBuf_));
 
-
         if (ret != ATLAS_OK) {
             ATLAS_LOG_ERROR("Copy resized image data to device failed.");
             return ATLAS_ERROR;
@@ -162,7 +161,9 @@ AtlasError BusinessImp::postprocess(const string& imageFile, vector<InferenceOut
 {
     uint32_t dataSize = 0;
     void* data = modelOutput[0].data.get();
-    if (data == nullptr) return ATLAS_ERROR;
+    if (data == nullptr){
+         return ATLAS_ERROR;
+    }
 
     // we know that the model's output data type is float.
     uint32_t size = static_cast<uint32_t>(dataSize) / sizeof(float);
