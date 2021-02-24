@@ -162,7 +162,7 @@ AtlasError BusinessImp::postprocess(const string& imageFile, vector<InferenceOut
     uint32_t dataSize = 0;
     void* data = modelOutput[0].data.get();
     if (data == nullptr){
-         return ATLAS_ERROR;
+        return ATLAS_ERROR;
     }
 
     // we know that the model's output data type is float.
