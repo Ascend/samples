@@ -149,9 +149,8 @@ function main() {
         return ${inferenceError}
     fi
 
-    echo "127.0.0.1
-    
-    " | bash ${script_path}/run_presenter_server.sh 
+    cd ${script_path}/../../../../../common/
+    bash run_presenter_server.sh ${script_path}/param.conf 
     if [ $? -ne 0 ];then
         echo "ERROR: run presenter server failed. please check your project"
         return ${inferenceError}
