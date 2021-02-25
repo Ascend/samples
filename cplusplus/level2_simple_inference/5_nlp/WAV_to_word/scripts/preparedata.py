@@ -149,51 +149,6 @@ def GetDataSet2(speech_voice_path):
     writer.write(features)
     return  in_len
 
-def SpeechPostProcess(resultList, in_len): 
-
-    # 将三维矩阵转为二维
-    dets = np.reshape(resultList, (200,1424))
-
-    # 将识别结果转为拼音序列
-    rr, ret1 = greedy_decode(dets)
-
-    # 去除拼音序列中的blank
-    for i in range(len(ret1)):
-        if i % 2 == 0:
-            try:
-                ret1.remove(1423)
-            except:
-                pass
-
-    list_symbol_dic = GetSymbolList()
-
-    r_str = []
-    for i in ret1:
-        r_str.append(list_symbol_dic[i])
-
-    #print "拼音序列识别结果：" + str(r_str)
-    string_pinyin = str(r_str)
-
-    ml = ModelLanguage('language_model')
-
-    ml.LoadModel()
-
-    str_pinyin = r_str
-
-    r = ml.SpeechToText(str_pinyin)
-
-    #print(r)
-
-    # 保存语音识别的结果
-    with open('results/asr_results.txt','a+b') as f:
-        data = string_pinyin[1:-1] + '-' + r + '\n'
-        #print(data)
-        data=data.encode()
-        f.write(data)
-        f.close()
-
-    return r, str_pinyin
-
 if __name__ == "__main__":
     current_path = os.path.abspath(__file__)    # 获取当前文件的父目录
     voicefiles = os.listdir(r'../data/') # 获取wav
