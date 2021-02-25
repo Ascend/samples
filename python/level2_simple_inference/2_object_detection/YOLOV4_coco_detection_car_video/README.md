@@ -53,9 +53,34 @@
 
 2. 获取此应用中所需要的原始网络模型。
 
-    **wget https://nkxiaolei88.obs.cn-north-1.myhuaweicloud.com/ATC%20Model/YoloV4/yolov4_no_postprocess.om** 
+    参考下表获取此应用中所用到的模型，并将其存放到开发环境普通用户下的工程目录：   
+ **cd $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV4_coco_detection_car_picture/model** 
 
-3. 获取样例需要的测试视频。
+    
+    |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
+    |---|---|---|
+    |  yolov4| 基于Caffe-YOLOV4的目标检测模型。  |  https://nkxiaolei88.obs.cn-north-1.myhuaweicloud.com/ATC%20Model/YoloV4/yolov4_no_postprocess.pb |
+
+    ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
+    > - modelzoo中提供了转换好的om模型，但此模型不匹配当前样例，所以需要下载原始模型和权重文件后重新进行模型转换。    
+  将下载的模型名字更改为工程需要的名字
+
+
+3. 将原始模型转换为Davinci模型。
+    
+    **注：请确认环境变量已经在[环境准备和依赖安装](../../../environment)中配置完成**
+
+    1. 设置LD_LIBRARY_PATH环境变量。
+
+        由于LD_LIBRARY_PATH环境变量在转使用atc工具和运行样例时会产生冲突，所以需要在命令行单独设置此环境变量，方便修改。
+
+        **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64**  
+
+    2. 执行以下atc命令进行模型转换。
+
+        **atc --model=./yolov4_no_postprocess.pb --framework=3 --output=./yolov4_no_postprocess --soc_version=Ascend310 --input_shape="Input:1,416,416,3"**
+
+4. 获取样例需要的测试视频。
 
     执行以下命令，进入样例的data文件夹中，下载对应的测试视频。
 

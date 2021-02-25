@@ -95,9 +95,9 @@ def calculate_position(bbox, transform_matrix, warped_size, pix_per_meter, x_sca
         top_y= int((bbox[1] - bbox[3] / 2) * y_scale)
         bottom_x= int((bbox[0] + bbox[2] / 2) * x_scale)
         bottom_y= int((bbox[1] + bbox[3] / 2) * y_scale)
-        pos = np.array((top_x / 2 + bottom_x / 2, bottom_y)).reshape(1, 1, -1)
-        dst = cv2.perspectiveTransform(pos, transform_matrix).reshape(-1, 1)
-        return np.array((warped_size[1] - dst[1]) / pix_per_meter[1])
+        point = np.array((top_x / 2 + bottom_x / 2, bottom_y)).reshape(1, 1, -1)
+        pos = cv2.perspectiveTransform(point, transform_matrix).reshape(-1, 1)
+        return np.array((warped_size[1] - pos[1]) / pix_per_meter[1])
 
 
 def preprocess_frame(frame):

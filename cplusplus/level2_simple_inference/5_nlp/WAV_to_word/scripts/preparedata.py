@@ -76,7 +76,7 @@ def GetFrequencyFeature3(wavsignal, fs):
     # wav_length = len(wavsignal[0])
     wav_length = wav_arr.shape[1]
     range0_end = int(float(len(wavsignal[0])) / fs * 1000 - time_window) // 10  # 计算循环终止的位置，也就是最终生成的窗数 978
-    data_input = np.zeros((range0_end, 200), dtype=np.float)  # 用于存放最终的频率特征数据
+    data_input = np.zeros((range0_end, 200), dtype=np.float64)  # 用于存放最终的频率特征数据
     data_line = np.zeros((1, 400), dtype=np.float)
     for i in range(0, range0_end):
         p_start = i * 160
@@ -148,51 +148,6 @@ def GetDataSet2(speech_voice_path):
     writer = open("features1.bin","wb")
     writer.write(features)
     return  in_len
-
-def SpeechPostProcess(resultList, in_len): 
-
-    # 将三维矩阵转为二维
-    dets = np.reshape(resultList, (200,1424))
-
-    # 将识别结果转为拼音序列
-    rr, ret1 = greedy_decode(dets)
-
-    # 去除拼音序列中的blank
-    for i in range(len(ret1)):
-        if i % 2 == 0:
-            try:
-                ret1.remove(1423)
-            except:
-                pass
-
-    list_symbol_dic = GetSymbolList()
-
-    r_str = []
-    for i in ret1:
-        r_str.append(list_symbol_dic[i])
-
-    #print "拼音序列识别结果：" + str(r_str)
-    string_pinyin = str(r_str)
-
-    ml = ModelLanguage('language_model')
-
-    ml.LoadModel()
-
-    str_pinyin = r_str
-
-    r = ml.SpeechToText(str_pinyin)
-
-    #print(r)
-
-    # 保存语音识别的结果
-    with open('results/asr_results.txt','a+b') as f:
-        data = string_pinyin[1:-1] + '-' + r + '\n'
-        #print(data)
-        data=data.encode()
-        f.write(data)
-        f.close()
-
-    return r, str_pinyin
 
 if __name__ == "__main__":
     current_path = os.path.abspath(__file__)    # 获取当前文件的父目录
