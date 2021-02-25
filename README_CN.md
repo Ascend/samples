@@ -14,6 +14,7 @@ CANN AscendCL（Ascend Computing Language）提供Device管理、Context管理�
 | CANN版本 | cann-samples仓是否维护 | cann-samples获取方式 |
 |---|---|---|
 | [20.0-20.1](https://ascend.huawei.com/#/software/cann/download) | 是 | Release 0.1.0发行版，[点击跳转](https://gitee.com/ascend/samples/releases/v0.1.0) |
+| [20.2](https://ascend.huawei.com/#/software/cann/download) | 是 | Release 0.2.0发行版，[点击跳转](https://gitee.com/ascend/samples/releases/v0.2.0) |
 
 ## 目录结构与说明
 
