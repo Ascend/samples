@@ -122,7 +122,8 @@
            **ssh HwHiAiUser@xxx.xxx.xxx.xxx**    
         2. 运行环境中启动presenterserver。   
 进入工程所在目录（如$HOME/samples/common），执行以下命令
-            **bash run_presenter_server.sh /home/HwHiAiUser/samples/python/level2_simple_inference/6_other/colorization_video/scripts/param.conf host_version.conf**
+
+            **bash run_presenter_server.sh /home/HwHiAiUser/samples/python/level2_simple_inference/6_other/colorization_video/scripts/param.conf**
 
 
     - 使用产品为300加速卡（ai1s云端推理环境）。   
@@ -131,7 +132,8 @@
            **ssh HwHiAiUser@xxx.xxx.xxx.xxx**    
       2. 运行环境中启动presenterserver。   
 进入工程所在目录（如$HOME/samples/common），执行以下命令
-            **bash run_presenter_server.sh /home/HwHiAiUser/samples/python/level2_simple_inference/6_other/colorization_video/scripts/param.conf host_version.conf**
+
+            **bash run_presenter_server.sh /home/HwHiAiUser/samples/python/level2_simple_inference/6_other/colorization_video/scripts/param.conf**
 
 3. <a name="step_2"></a>运行可执行文件。
 
