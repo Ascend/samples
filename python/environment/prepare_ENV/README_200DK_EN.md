@@ -75,7 +75,9 @@ This readme file describes how to configure the basic environment, including the
     ![](https://images.gitee.com/uploads/images/2020/1128/121157_37d3b82d_7401379.png "Screenshot.png")  
     Run the following commands to remove the write permission on the **`/etc/sudoers`** file and switch to the common user:  
      **chmod u-w /etc/sudoers**  
-     **exit**
+     **exit**  
+    >![](https://images.gitee.com/uploads/images/2020/1130/162342_1d7d35d7_7401379.png "screenshot.png") **NOTE**  
+    >**After the dependency installation, you can cancel the sudo permission by yourself.**
 
 3. Connect the Atlas 200 DK to the Internet.
 
