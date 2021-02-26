@@ -171,7 +171,7 @@
 
     - 如果是开发环境与运行环境合一部署，执行以下命令，设置运行环境变量，并切换目录。      
       **export LD_LIBRARY_PATH=$HOME/ascend_ddk/x86/lib/:$LD_LIBRARY_PATH**
-      **export LD_LIBRARY_PATH=**   
+      **export LD_LIBRARY_PATH=**       
       **source ~/.bashrc**     
       **cd $HOME/samples/cplusplus/contrib/human_segmentation/out**
 
