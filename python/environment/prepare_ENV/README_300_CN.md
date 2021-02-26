@@ -78,7 +78,9 @@ $\color{red}{以下命令在运作环境上执行，以普通用户为HwHiAiUser
     完成后，执行以下命令取消`/etc/sudoers`文件的写权限  
      **chmod u-w /etc/sudoers**    
     切换回普通用户  
-     **exit**  
+     **exit** 
+    >![输入图片说明](https://images.gitee.com/uploads/images/2020/1130/162342_1d7d35d7_7401379.png "屏幕截图.png") **说明：**    
+    >**用户在完成环境依赖安装后，可自行取消sudo权限。** 
 
 2.  apt源配置  
 
