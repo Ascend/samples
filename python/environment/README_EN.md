@@ -6,14 +6,18 @@ Before running the Python samples in the samples warehouse, please install third
 
 
 ### Step
-Please perform the following three steps in sequence, please click the corresponding link to install according to the device type.
+Please perform the following two steps in sequence, please click the corresponding link to install according to the device type.
 
-1.Basic environment configuration
-- [for_atlas200dk](./prepare_ENV/README_200DK_EN.md)  
-- [for_atlas300](./prepare_ENV/README_300_EN.md)
+- for_atlas200dk
 
-2.Python library installation
-- [for_atlas200dk](./python_ENV/README_200DK_EN.md)  
-- [for_atlas300](./python_ENV/README_300_EN.md)
+    [1.Basic environment configuration](./prepare_ENV/README_200DK_EN.md) 
+ 
+    [2.Python library installation](./python_ENV/README_200DK_EN.md)  
+
+- for_atlas300   
+ 
+    [1.Basic environment configuration](./prepare_ENV/README_300_EN.md) 
+ 
+    [2.Python library installation](./python_ENV/README_300_EN.md) 
 
 

@@ -11,29 +11,45 @@ This readme file describes how to configure the basic environment, including the
         **vim ~/.bashrc** 
 
         Add the following environment variables to the file.  
-        **export install_path=\$HOME/Ascend/ascend-toolkit/latest**
+        - For CANN 20.0 
 
-        **export PATH=/usr/local/python3.7.5/bin:\\${install_path}/atc/ccec_compiler/bin:\\${install_path}/atc/bin:\\$PATH**  
+            **export install_path=\\$HOME/Ascend/ascend-toolkit/latest**
+    
+            **export PATH=/usr/local/python3.7.5/bin:\\${install_path}/atc/ccec_compiler/bin:\\${install_path}/atc/bin:\\$PATH**  
+    
+            **export ASCEND_OPP_PATH=\\${install_path}/opp**  
+   
+            **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64**  
 
-        **export ASCEND_OPP_PATH=\${install_path}/opp**  
+            **export PYTHONPATH=\\${install_path}/atc/python/site-packages/te:\\${install_path}/atc/python/site-packages/topi:\\$PYTHONPATH**   
+            
+    
+        - For CANN 20.1 
 
-        **export LD_LIBRARY_PATH=\${install_path}/atc/lib64** 
+            **export install_path=\\$HOME/Ascend/ascend-toolkit/latest**
+    
+            **export PATH=/usr/local/python3.7.5/bin:\\${install_path}/atc/ccec_compiler/bin:\\${install_path}/atc/bin:\\$PATH**  
+    
+            **export ASCEND_OPP_PATH=\\${install_path}/opp**  
+   
+            **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64**  
+          
+            **export PYTHONPATH=\\${install_path}/atc/python/site-packages:\\${install_path}/atc/python/site-packages/auto_tune.egg/auto_tune:\\${install_path}/atc/python/site-packages/schedule_search.egg:$PYTHONPATH**  
+        >![](https://images.gitee.com/uploads/images/2020/1130/162342_1d7d35d7_7401379.png "screenshot.png") **NOTE**  
+        >**- If the development environment and operating environment are set up on the same server, do not configure LD_LIBRARY_PATH, avoiding the conflict with LD_LIBRARY_PATH in the operating environment when running the sample.** 
 
-        The environment variable **PYTHONPATH** is incompatible with CANN 20.0 and 20.1. Run the corresponding command to add **PYTHONPATH** based on the CANN version.
+        - For CANN 20.2  
 
-        - For CANN 20.0
+            **export install_path=\\$HOME/Ascend/ascend-toolkit/latest** 
 
-            **export PYTHONPATH=\\${install_path}/atc/python/site-packages/te:\\${install_path}/atc/python/site-packages/topi:\\$PYTHONPATH**  
+            **export PATH=\\${install_path}/atc/ccec_compiler/bin:\\${install_path}/atc/bin:\\$PATH**  
 
-        - For CANN 20.1
+            **export ASCEND_OPP_PATH=\${install_path}/opp**  
 
-            **export PYTHONPATH=\\${install_path}/atc/python/site-packages:\\${install_path}/atc/python/site-packages/auto_tune.egg/auto_tune:\\${install_path}/atc/python/site-packages/schedule_search.egg:\\$PYTHONPATH**  
+            **export ASCEND_AICPU_PATH=\${install_path}** 
 
-        Save the configuration and exit.  
-        **wq!**
         >![](https://images.gitee.com/uploads/images/2020/1130/162342_1d7d35d7_7401379.png "screenshot.png") **NOTE**  
         >**- Replace install_path with the actual installation path.**  
-        >**- If the development environment and operating environment are set up on the same server, do not configure LD_LIBRARY_PATH, avoiding the conflict with LD_LIBRARY_PATH in the operating environment when running the sample.**
 
     2. Make the configuration take effect.   
         **source ~/.bashrc**  
