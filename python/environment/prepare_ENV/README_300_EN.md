@@ -78,6 +78,8 @@ This readme file describes how to configure the basic environment, including the
      **chmod u-w /etc/sudoers**    
     Switch to the common user.  
      **exit**  
+    >![](https://images.gitee.com/uploads/images/2020/1130/162342_1d7d35d7_7401379.png "screenshot.png") **NOTE**  
+    >**After the dependency installation, you can cancel the sudo permission by yourself.**
 
 2. Configure the apt sources.  
 
