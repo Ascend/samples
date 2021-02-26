@@ -50,7 +50,7 @@
     
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
-    |  mask_detection.pb | 基于TensorFlow-YOLOV3的口罩检测模型。  |  请参考[https://gitee.com/HuaweiAscend/models/tree/master/computer_vision/object_detect/mask_detection](https://gitee.com/HuaweiAscend/models/tree/master/computer_vision/object_detect/mask_detection)目录中README.md下载原始模型章节下载模型和权重文件。 |    
+    |  mask_detection.pb | 基于TensorFlow-YOLOV3的口罩检测模型。  |  请参考[https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/yolov3_resnet18/ATC_yolo3_resnet18_tf_AE](https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/yolov3_resnet18/ATC_yolo3_resnet18_tf_AE)目录中README.md下载原始模型章节下载模型和权重文件。 |    
 
 3. 将原始模型转换为Davinci模型。
     
