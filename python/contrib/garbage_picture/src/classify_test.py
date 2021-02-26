@@ -53,7 +53,7 @@ def post_process(infer_output, image_file):
     vals = data.flatten()
     top_k = vals.argsort()[-1:-6:-1]
     object_class = get_image_net_class(top_k[0])
-    output_path = os.path.join("../outputs/", os.path.basename(image_file))    
+    output_path = os.path.join(os.path.join(SRC_PATH, "../outputs"), os.path.basename(image_file))
     origin_image = Image.open(image_file)
     draw = ImageDraw.Draw(origin_image)
     font = ImageFont.load_default()
@@ -86,8 +86,8 @@ def main():
                    if os.path.splitext(img)[1] in const.IMG_EXT]
 
     #Create a directory to store the inference results
-    if not os.path.isdir('../outputs'):
-        os.mkdir('../outputs')
+    if not os.path.isdir(os.path.join(SRC_PATH, "../outputs")):
+        os.mkdir(os.path.join(SRC_PATH, "../outputs"))
 
     image_info = construct_image_info()
     for image_file in images_list:        
