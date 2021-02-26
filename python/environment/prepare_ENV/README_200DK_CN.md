@@ -49,7 +49,8 @@ $\color{red}{以下操作在开发环境上操作}$
             **export ASCEND_OPP_PATH=\${install_path}/opp**  
 
             **export ASCEND_AICPU_PATH=\${install_path}**  
-
+        >![输入图片说明](https://images.gitee.com/uploads/images/2020/1130/162342_1d7d35d7_7401379.png "屏幕截图.png") **说明：**    
+        >**install_path 请根据实际情况修改。**
 
     2.  执行如下命令使环境变量生效   
         **source ~/.bashrc**  
