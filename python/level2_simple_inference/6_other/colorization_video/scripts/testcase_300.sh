@@ -33,7 +33,7 @@ function downloadData() {
 
 
 function setAtcEnv() {
-    # ÉèÖÃÄ£ĞÍ×ª»»Ê±ĞèÒªµÄ»·¾³±äÁ¿
+    # è®¾ç½®æ¨¡å‹è½¬æ¢æ—¶éœ€è¦çš„ç¯å¢ƒå˜é‡
     if [[ ${version} = "c73" ]] || [[ ${version} = "C73" ]];then
         export install_path=/home/HwHiAiUser/Ascend/ascend-toolkit/latest
         export PATH=/usr/local/python3.7.5/bin:${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
@@ -80,7 +80,7 @@ function main() {
         return ${inferenceError}
     fi
 
-    # ä¸‹è½½æµ‹è¯•é›?    
+    # ä¸‹è½½æµ‹è¯•é›†
     downloadData
     if [ $? -ne 0 ];then
         echo "ERROR: download test images failed"
@@ -96,14 +96,14 @@ function main() {
             return ${inferenceError}
         fi
 
-        # è®¾ç½®æ¨¡å‹è½¬æ¢çš„ç¯å¢ƒå˜é‡?        
+        # è®¾ç½®æ¨¡å‹è½¬æ¢çš„ç¯å¢ƒå˜é‡
         setAtcEnv
         if [ $? -ne 0 ];then
             echo "ERROR: set atc environment failed"
             return ${inferenceError}
         fi
 
-        # è½¬æ¨¡å?        
+        # è½¬æ¨¡å‹       
         cd ${project_path}/model/
         
         atc --model=${project_path}/model/${caffe_prototxt##*/} --weight=${project_path}/model/${caffe_model##*/} --framework=0 --output=${HOME}/models/${project_name}/${model_name} --soc_version=Ascend310 --input_shape="data_l:1,1,224,224" --input_format=NCHW
@@ -126,14 +126,15 @@ function main() {
     fi
     
     cd ${project_path}
-    # ÖØĞÂÅäÖÃ³ÌĞòÔËĞĞËùĞèµÄ»·¾³±äÁ¿
+    # é‡æ–°é…ç½®ç¨‹åºè¿è¡Œæ‰€éœ€çš„ç¯å¢ƒå˜é‡
     export LD_LIBRARY_PATH=
     export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/nnrt/latest/acllib/lib64:/home/HwHiAiUser/ascend_ddk/x86/lib:${LD_LIBRARY_PATH}
     export PYTHONPATH=/home/HwHiAiUser/Ascend/nnrt/latest/pyACL/python/site-packages/acl:${PYTHONPATH}
 
 
-    # å¼€å¯presenter server
-    bash ${script_path}/run_presenter_server.sh 
+    # å¼€å¯resenter server
+    cd ${script_path}/../../../../../common/
+    bash run_presenter_server.sh ${script_path}/param.conf 
     if [ $? -ne 0 ];then
         echo "ERROR: run presenter server failed. please check your project"
         return ${inferenceError}
