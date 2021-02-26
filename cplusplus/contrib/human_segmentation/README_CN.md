@@ -162,7 +162,7 @@
     - 使用产品为300加速卡（ai1s云端推理环境）。   
         1. 执行以下命令登录运行环境。   
            **开发环境与运行环境合一部署，请跳过此步骤！**   
-           **ssh HwHiAiUser@xxx.xxx.xxx.xxx**    
+           **ssh HwHiAiUser@xxx.xxx.xxx.xxx**      
         2.运行环境中启动presenterserver。   
 进入工程所在目录（如$HOME/samples/common），执行以下命令      
             **bash run_presenter_server.sh ../cplusplus/contrib/human_segmentation/scripts/human_segmentation.conf**
