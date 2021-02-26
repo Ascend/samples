@@ -122,12 +122,12 @@ def postprocess(result_list, orig_shape, frame, pic):
     real_box = func_nms(np.array(all_boxes), NMS_THRESHOLD_CONST)
 
     for i, detect_result in enumerate(real_box):
-            top_x= int((detect_result[0] - detect_result[2] / 2) * x_scale)
-            top_y= int((detect_result[1] - detect_result[3] / 2) * y_scale)
-            bottom_x= int((detect_result[0] + detect_result[2] / 2) * x_scale)
-            bottom_y= int((detect_result[1] + detect_result[3] / 2) * y_scale)
-            cv2.rectangle(frame, (top_x, top_y), (bottom_x, bottom_y), (0, 255, 0), 1)
-            cv2.putText(frame, labels[int(detect_result[4])], (top_x + 5, top_y + 10), 
+        top_x= int((detect_result[0] - detect_result[2] / 2) * x_scale)
+        top_y= int((detect_result[1] - detect_result[3] / 2) * y_scale)
+        bottom_x= int((detect_result[0] + detect_result[2] / 2) * x_scale)
+        bottom_y= int((detect_result[1] + detect_result[3] / 2) * y_scale)
+        cv2.rectangle(frame, (top_x, top_y), (bottom_x, bottom_y), (0, 255, 0), 1)
+        cv2.putText(frame, labels[int(detect_result[4])], (top_x + 5, top_y + 10), 
             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1)
 
     output_pic = os.path.join(OUTPUT_DIR, "out_" + pic)
