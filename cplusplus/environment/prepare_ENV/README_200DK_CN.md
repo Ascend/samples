@@ -62,29 +62,46 @@ $\color{red}{以下操作在开发环境上操作，以普通用户为HwHiAiUser
         **vim ~/.bashrc** 
       
         在文件中添加以下环境变量  
-        **export install_path=\\$HOME/Ascend/ascend-toolkit/latest**
+        - 20.0版本  
+
+            **export install_path=\\$HOME/Ascend/ascend-toolkit/latest**
     
-        **export PATH=/usr/local/python3.7.5/bin:\\${install_path}/atc/ccec_compiler/bin:\\${install_path}/atc/bin:\\$PATH**  
+            **export PATH=/usr/local/python3.7.5/bin:\\${install_path}/atc/ccec_compiler/bin:\\${install_path}/atc/bin:\\$PATH**  
     
-        **export ASCEND_OPP_PATH=\\${install_path}/opp**  
+            **export ASCEND_OPP_PATH=\\${install_path}/opp**  
    
-        **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64** 
+            **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64**  
+
+            **export PYTHONPATH=\\${install_path}/atc/python/site-packages/te:\\${install_path}/atc/python/site-packages/topi:\\$PYTHONPATH**   
+            
     
-        其中，PYTHONPATH环境变量在20.0和20.1版本不兼容。请按照CANN版本选择对应方式执行命令添加PYTHONPATH环境变量。
+        - 20.1版本  
+
+            **export install_path=\\$HOME/Ascend/ascend-toolkit/latest**
     
-        - 20.0版本
-          
-            **export PYTHONPATH=\\${install_path}/atc/python/site-packages/te:\\${install_path}/atc/python/site-packages/topi:\\$PYTHONPATH**  
+            **export PATH=/usr/local/python3.7.5/bin:\\${install_path}/atc/ccec_compiler/bin:\\${install_path}/atc/bin:\\$PATH**  
     
-        - 20.1版本
+            **export ASCEND_OPP_PATH=\\${install_path}/opp**  
+   
+            **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64**  
           
             **export PYTHONPATH=\\${install_path}/atc/python/site-packages:\\${install_path}/atc/python/site-packages/auto_tune.egg/auto_tune:\\${install_path}/atc/python/site-packages/schedule_search.egg:$PYTHONPATH**  
  
-        保存退出  
-        **wq!**
-        >![输入图片说明](https://images.gitee.com/uploads/images/2020/1130/162342_1d7d35d7_7401379.png "屏幕截图.png") **说明：**  
-        >**- install_path 请根据实际情况修改。**  
-        >**- 若开发环境与运行环境部署在一台服务器上时，请勿配置LD_LIBRARY_PATH，在运行样例时，会跟运行环境的LD_LIBRARY_PATH有冲突。**
+
+        >![输入图片说明](https://images.gitee.com/uploads/images/2020/1130/162342_1d7d35d7_7401379.png "屏幕截图.png") **说明：**    
+        >**若开发环境与运行环境部署在一台服务器上时，请勿配置LD_LIBRARY_PATH，在运行样例时，会跟运行环境的LD_LIBRARY_PATH有冲突。**
+
+        - 20.2版本 
+
+            **export install_path=\\$HOME/Ascend/ascend-toolkit/latest** 
+
+            **export PATH=\\${install_path}/atc/ccec_compiler/bin:\\${install_path}/atc/bin:\\$PATH**  
+
+            **export ASCEND_OPP_PATH=\${install_path}/opp**  
+
+            **export ASCEND_AICPU_PATH=\${install_path}**  
+        >![输入图片说明](https://images.gitee.com/uploads/images/2020/1130/162342_1d7d35d7_7401379.png "屏幕截图.png") **说明：**    
+        >**install_path 请根据实际情况修改。**
 
     2.  执行如下命令使环境变量生效   
         **source ~/.bashrc**  
