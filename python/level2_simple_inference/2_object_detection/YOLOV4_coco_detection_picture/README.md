@@ -4,7 +4,7 @@
 
 **本README只提供命令行方式运行样例的指导，如需在Mindstudio下运行样例，请参考[Mindstudio运行图片样例wiki](https://gitee.com/ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E5%9B%BE%E7%89%87%E6%A0%B7%E4%BE%8B?sort_id=3164874)。**
 
-## YOLOV4_coco_detection_car_picture样例
+## YOLOV4_coco_detection_picture样例
 
 
 功能：使用yolov4
@@ -53,12 +53,12 @@
 2. 获取此应用中所需要的原始网络模型。
 
     参考下表获取此应用中所用到的模型，并将其存放到开发环境普通用户下的工程目录：   
- **cd $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV4_coco_detection_car_picture/model** 
+ **cd $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV4_coco_detection_picture/model** 
 
     
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
-    |  yolov4| 基于Caffe-YOLOV4的目标检测模型。  |  https://nkxiaolei88.obs.cn-north-1.myhuaweicloud.com/ATC%20Model/YoloV4/yolov4_no_postprocess.pb |
+    |  yolov4| 基于tensorflow-YOLOV4的目标检测模型。  |  https://nkxiaolei88.obs.cn-north-1.myhuaweicloud.com/ATC%20Model/YoloV4/yolov4_no_postprocess.pb |
 
     ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
     > - modelzoo中提供了转换好的om模型，但此模型不匹配当前样例，所以需要下载原始模型和权重文件后重新进行模型转换。    
@@ -83,9 +83,9 @@
 
     执行以下命令，进入样例的data文件夹中，下载对应的测试图片。
 
-    **cd $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV4_coco_detection_car_picture/data**
+    **cd $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV4_coco_detection_picture/data**
 
-    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/YOLOV4_coco_detection_car_picture/test_image/test.jpg**
+    **wget https://c7xcode.obs.myhuaweicloud.com/models/YOLOV4_coco_detection_picture-python/test.jpg**
 
 
 
@@ -93,9 +93,9 @@
 
 **注：开发环境与运行环境合一部署，请跳过步骤1，直接执行[步骤2](#step_2)即可。**   
 
-1. 执行以下命令,将开发环境的 **YOLOV4_coco_detection_car_picture** 目录上传到运行环境中，例如 **/home/HwHiAiUser**，并以HwHiAiUser（运行用户）登录运行环境（Host）。
+1. 执行以下命令,将开发环境的 **YOLOV4_coco_detection_picture** 目录上传到运行环境中，例如 **/home/HwHiAiUser**，并以HwHiAiUser（运行用户）登录运行环境（Host）。
 
-    **scp -r $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV4_coco_detection_car_picture HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
+    **scp -r $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV4_coco_detection_picture HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
 
     **ssh HwHiAiUser@xxx.xxx.xxx.xxx**    
 
@@ -110,11 +110,11 @@
 
       **source ~/.bashrc**
         
-      **cd $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV4_coco_detection_car_picture/src**    
+      **cd $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV4_coco_detection_picture/src**    
 
     - 如果是开发环境与运行环境分离部署，执行以下命令切换目录。
     
-      **cd $HOME/YOLOV4_coco_detection_car_picture/src**
+      **cd $HOME/YOLOV4_coco_detection_picture/src**
 
     切换目录后，执行以下命令运行样例。
 
