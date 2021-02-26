@@ -72,6 +72,7 @@ $\color{red}{以下操作在运行环境(Atlas200DK)上操作}$
     在该文件 `# User privilege specification` 下面增加如下内容：  
      **HwHiAiUser    ALL=(ALL:ALL) ALL** 
 
+    ![输入图片说明](https://images.gitee.com/uploads/images/2020/1128/121157_37d3b82d_7401379.png "屏幕截图.png") 
       
     完成后，执行以下命令取消`/etc/sudoers`文件的写权限，并切换回普通用户  
      **chmod u-w /etc/sudoers**  
