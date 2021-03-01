@@ -17,7 +17,7 @@
 
     [3.安装atlasutil库](./atlasutil_install/README_200DK_CN.md): 编译安装atlasutil库，atlasutil库对acl部分接口进行了进一步的封装
  
-    [4.安装Presenter Agent](./presenteragent_install/README_200DK_CN.md): 编译安装Presenter Agent，Presenter Agent提供一系列API，用户可以调用这些API向Presenter Server推送媒体消息，并在浏览器中查看
+    [4.安装Presenter Agent](./presenteragent_install/README_200DK_CN.md): 编译安装Presenter Agent，Presenter Agent提供一系列API，用户可以调用这些API向Presenter Server推送媒体消息
 
 - for_atlas300  
 
@@ -27,7 +27,7 @@
 
     [3.安装atlasutil库](./atlasutil_install/README_300_CN.md): 编译安装atlasutil库，atlasutil库对acl部分接口进行了进一步的封装 
  
-    [4.安装Presenter Agent](./presenteragent_install/README_300_CN.md): 编译安装Presenter Agent，Presenter Agent提供一系列API，用户可以调用这些API向Presenter Server推送媒体消息，并在浏览器中查看
+    [4.安装Presenter Agent](./presenteragent_install/README_300_CN.md): 编译安装Presenter Agent，Presenter Agent提供一系列API，用户可以调用这些API向Presenter Server推送媒体消息
 
 
 
