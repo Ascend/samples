@@ -63,6 +63,7 @@ int main(int argc, char *argv[]) {
     int totalFrames = capture.get(7);
     int currentFrames = 0;
 
+    INFO_LOG("The sample starts to run");
 
     while(1) {
         //preprocess
