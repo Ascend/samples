@@ -16,7 +16,7 @@ Please perform the following two steps in sequence, please click the correspondi
 
 - for_atlas300   
  
-    [1.Basic environment configuration](./prepare_ENV/README_300_EN.md)： configure the basic environment, including the sudo permission, apt source, environment variables and deploying the Media Module   
+    [1.Basic environment configuration](./prepare_ENV/README_300_EN.md)： configure the basic environment, including the sudo permission, apt source and environment variables   
  
     [2.Python library installation](./python_ENV/README_300_EN.md)： install Python library and ffmpeg  
 
