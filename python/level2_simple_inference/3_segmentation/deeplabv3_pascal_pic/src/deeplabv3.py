@@ -2,25 +2,36 @@
 Copyright (R) @huawei.com, all rights reserved
 -*- coding:utf-8 -*-
 """
+import sys
+import os
+path = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.join(path, ".."))
+sys.path.append(os.path.join(path, "../../../../common/"))
+sys.path.append(os.path.join(path, "../../../../common/atlas_utils"))
+
 import cv2 as cv
 import numpy as np
-import os
-import time
-import constants
-import acl_resource
-import acl_model
+import acl
+import base64
+import atlas_utils.utils as utils
+from atlas_utils.acl_dvpp import Dvpp
+import atlas_utils.constants as const
+from atlas_utils.acl_model import Model
+from atlas_utils.acl_image import AclImage
+from atlas_utils.acl_resource import AclResource
 
 MODEL_WIDTH = 513
 MODEL_HEIGHT = 513
+
+SRC_PATH = os.path.realpath(__file__).rsplit("/", 1)[0]
+MODEL_PATH = os.path.join(SRC_PATH, "../model/deeplabv3_plus.om")
 INPUT_DIR = './data/'
 OUTPUT_DIR = './outputs/'
-MODEL_PATH = './model/deeplabv3_plus.om'
 
 def preprocess(picPath):
     """preprocess"""
     #read img
     bgr_img = cv.imread(picPath)
-    print(bgr_img.shape)
 
     #get img shape
     orig_shape = bgr_img.shape[:2]
@@ -42,37 +53,42 @@ def postprocess(result_list, pic, orig_shape, pic_path):
     img = cv.merge((result_img, result_img, result_img))
     bgr_img = cv.resize(img, (orig_shape[1], orig_shape[0]))
     bgr_img = (bgr_img + 255)
-    output_pic = os.path.join(OUTPUT_DIR, "out_" + pic)
+    
+    output_pic = os.path.join(os.path.join(SRC_PATH, "../outputs"), os.path.basename(pic))
+    print(output_pic)
     cv.imwrite(output_pic, bgr_img)
 
 
 def main():
     """main"""
-    #create output directory
-    if not os.path.exists(OUTPUT_DIR):
-        os.mkdir(OUTPUT_DIR)
-
     #acl init
-    aclresource = acl_resource.AclResource()
-    aclresource.init()
+    if (len(sys.argv) != 2):
+        print("The App arg is invalid")
+        exit(1)
+    acl_resource = AclResource()
+    acl_resource.init()
+    model = Model(MODEL_PATH)
+    dvpp = Dvpp(acl_resource)
 
-    #load model
-    model = acl_model.Model(aclresource, MODEL_PATH)
-    src_dir = os.listdir(INPUT_DIR)
+    #From the parameters of the picture storage directory, reasoning by a picture
+    image_dir = sys.argv[1]
+    images_list = [os.path.join(image_dir, img)
+                   for img in os.listdir(image_dir)
+                   if os.path.splitext(img)[1] in const.IMG_EXT]
+
+    if not os.path.isdir(os.path.join(SRC_PATH, "../outputs")):
+        os.mkdir(os.path.join(SRC_PATH, "../outputs"))
 
     #infer picture
-    for pic in src_dir:
-        #read picture
-        pic_path = os.path.join(INPUT_DIR, pic)
-
+    for pic in images_list:
         #get pic data
-        orig_shape, l_data = preprocess(pic_path)
+        orig_shape, l_data = preprocess(pic)
 
         #inference
         result_list = model.execute([l_data])    
 
         #postprocess
-        postprocess(result_list, pic, orig_shape, pic_path)
+        postprocess(result_list, pic, orig_shape, pic)
     print("Execute end")
 
 if __name__ == '__main__':
