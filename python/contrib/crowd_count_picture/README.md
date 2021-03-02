@@ -78,7 +78,8 @@
 执行以下命令，进入样例的data文件夹中，下载对应的测试图片。
 
     cd $HOME/samples/python/contrib/crowdCount/data
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/crowdCount/
+    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/crowdCount/crowd.jpg
+   
 
 
 ### 样例运行
