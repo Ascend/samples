@@ -16,7 +16,7 @@ function downloadTestData() {
 
     mkdir -p ${project_path}/data/
 
-    wget -O ${project_path}/data/"test.jpg"  ${test_image}"test.jpg"  --no-check-certificate
+    wget -O ${project_path}/data/"test.jpg"  ${test_image}  --no-check-certificate
     if [ $? -ne 0 ];then
         echo "download test.jpg failed, please check Network."
         return 1
