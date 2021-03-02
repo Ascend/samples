@@ -1,4 +1,4 @@
-中文|[English](README_EN.md)
+中文|[English](README.md)
 # Python环境准备和依赖安装
 
 ### 介绍
