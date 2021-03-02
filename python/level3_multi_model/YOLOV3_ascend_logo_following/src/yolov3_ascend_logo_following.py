@@ -11,7 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import sys, getopt
+import sys
 import asyncore
 import numpy as np
 import pickle
@@ -51,15 +51,32 @@ PI = 180  # math pi=PI
 
 
 class DevNullHandler(asyncore.dispatcher_with_send):
+    """
+    Handle null receive
+    """
 
     def handle_read(self):
+        """
+        Read data and print
+        :return: null
+        """
+
         print(self.recv(1024))
 
     def handle_close(self):
+        """
+        Close connection
+        :return: null
+        """
+
         self.close()
 
 
 class EtherSenseServer(asyncore.dispatcher):
+    """
+    UDP client for each camera
+    """
+
     def __init__(self, address):
         asyncore.dispatcher.__init__(self)
         print("Launching Realsense Camera Server")
@@ -95,12 +112,27 @@ class EtherSenseServer(asyncore.dispatcher):
         self.boxes = boxes
 
     def handle_connect(self):
+        """
+        Print UDP connection messages
+        :return: null
+        """
+
         print("connection received")
 
     def writable(self):
+        """
+        Want write notifies
+        :return: True
+        """
+
         return True
 
     def update_frame(self):
+        """
+        Read image data from RealSense
+        :return: null
+        """
+
         # get image from RealSense
         color_mat, depth_mat, timestamp, aligned_depth_frame = get_image_and_timestamp(self.pipeline)
         if color_mat is not None:
@@ -120,6 +152,11 @@ class EtherSenseServer(asyncore.dispatcher):
             self.depth_intrinsics = rs.video_stream_profile(aligned_depth_frame.profile).get_intrinsics()
 
     def handle_write(self):
+        """
+        Send image data to 200DK
+        :return: null
+        """
+
         # first time the handle_write is called
         if not hasattr(self, 'frame_data'):
             self.update_frame()
@@ -132,6 +169,11 @@ class EtherSenseServer(asyncore.dispatcher):
             self.frame_data = self.frame_data[remaining_size:]
 
     def handle_read(self):
+        """
+        Read inference result from 200DK
+        :return: null
+        """
+
         if self.remaining_bytes == 0:
             # get the expected frame size
             self.frame_length = struct.unpack('<I', self.recv(4))[0]
@@ -167,10 +209,21 @@ class EtherSenseServer(asyncore.dispatcher):
             key = cv2.waitKey(1)
 
     def handle_close(self):
+        """
+        Close connection
+        :return: null
+        """
+
         self.close()
 
 
 def get_image_and_timestamp(pipeline):
+    """
+    Read image data and timestamp from RealSense
+    :param pipeline: RealSense pipeline
+    :return: color and depth image and timestamp
+    """
+
     frames = pipeline.wait_for_frames()
     # take owner ship of the frame for further processing
     frames.keep()
@@ -195,6 +248,11 @@ def get_image_and_timestamp(pipeline):
 
 
 def open_pipeline():
+    """
+    Start RealSense pipeline
+    :return: realSense pipeline and depth_sensor
+    """
+
     # RealSense start
     frame_width = 640
     frame_height = 480
@@ -493,6 +551,11 @@ def move_robot(depth_intrinsics, depth_scale, depth_image, boxes):
 
 
 def main(argv):
+    """
+    Main loop function
+    :param argv: none
+    :return: null
+    """
     # initalise the EtherSenseServer
     server = EtherSenseServer(MC_IP_ADDRESS)
     asyncore.loop()

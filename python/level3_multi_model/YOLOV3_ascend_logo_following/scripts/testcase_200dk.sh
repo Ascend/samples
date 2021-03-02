@@ -141,7 +141,7 @@ function main() {
     fi
 
     # 运行程序
-    python3.6 yolov3_ascend_detect_200DK.py ../data
+    python3.6 yolov3_ascend_detect_200dk.py ../data
     if [ $? -ne 0 ];then
         echo "ERROR: run failed. please check your project"
         return ${inferenceError}

@@ -19,16 +19,12 @@ import numpy as np
 import acl
 import cv2 as cv
 import time
-import sys, getopt
 import asyncore
 import pickle
 import socket
 import struct
 
-from PIL import Image
-from atlas_utils.constants import *
 from atlas_utils.acl_resource import AclResource
-from atlas_utils.utils import *
 from atlas_utils.acl_model import Model
 from atlas_utils.acl_image import AclImage
 
@@ -60,8 +56,11 @@ PORT = 1024
 CHUNK_SIZE = 4096
 
 
-# UDP client for each camera server
 class ImageClient(asyncore.dispatcher):
+    """
+    UDP client for each camera server
+    """
+
     def __init__(self, server, source):
         asyncore.dispatcher.__init__(self, server)
         self._address = server.getsockname()[0]
@@ -76,6 +75,11 @@ class ImageClient(asyncore.dispatcher):
         self._timestamp = 0
 
     def handle_read(self):
+        """
+        Read data
+        :return: null
+        """
+
         if self._remaining_bytes == 0:
             # get the expected frame size
             self._frame_length = struct.unpack('<I', self.recv(4))[0]
@@ -94,6 +98,11 @@ class ImageClient(asyncore.dispatcher):
             self.handle_frame()
 
     def handle_frame(self):
+        """
+        Execute model and send result
+        :return: null
+        """
+
         # convert the frame from string to numerical data
         self._image_data = pickle.loads(self._buffer)
         # print(self._image_data.shape)
@@ -114,13 +123,27 @@ class ImageClient(asyncore.dispatcher):
         self.send(self._frame_data)
 
     def get_img(self):
+        """
+        Get image data
+        :return: self._image_data
+        """
+
         return self._image_data
 
     def readable(self):
+        """
+        Readable or not
+        :return: True
+        """
+
         return True
 
 
 class EtherSenseClient(asyncore.dispatcher):
+    """
+    UDP server
+    """
+
     def __init__(self):
         asyncore.dispatcher.__init__(self)
         self._server_address = (LOCAL_IP_ADDRESS, PORT)
@@ -135,15 +158,35 @@ class EtherSenseClient(asyncore.dispatcher):
         self.handler = 0
 
     def writable(self):
-        return False  # don't want write notifies
+        """
+        Don't want write notifies
+        :return: False
+        """
+
+        return False
 
     def readable(self):
+        """
+        Readable or not
+        :return: True
+        """
+
         return True
 
     def handle_connect(self):
+        """
+        Print UDP connection messages
+        :return: null
+        """
+
         print("connection recvied")
 
     def handle_accept(self):
+        """
+        Print UDP connection messages and receive data
+        :return: null
+        """
+
         pair = self.accept()
         if pair is not None:
             sock, addr = pair
@@ -182,6 +225,15 @@ def preprocess_cv2(bgr_img):
 
 
 def overlap(x1, x2, x3, x4):
+    """
+    Calculate the width/height of overlap area between bbox1 and bbox2
+    :param x1: x_min or y_min of bbox1
+    :param x2: x_max or y_max of bbox1
+    :param x3: x_min or y_min of bbox2
+    :param x4: x_max or y_max of bbox2
+    :return:
+    """
+
     left = max(x1, x3)
     right = min(x2, x4)
 
@@ -189,6 +241,13 @@ def overlap(x1, x2, x3, x4):
 
 
 def cal_iou(box, truth):
+    """
+    Calculate IOU between box and truth
+    :param box: bounding box: [x_min, y_min, x_max, y_max]
+    :param truth: bounding box: [x_min, y_min, x_max, y_max]
+    :return: IOU between box and truth
+    """
+
     w = overlap(box[0], box[2], truth[0], truth[2])
     h = overlap(box[1], box[3], truth[1], truth[3])
 
@@ -274,7 +333,12 @@ def decode(conv_output, img_w, img_h):
 
 
 def convert_labels(label_list):
-    # convert label index to class name
+    """
+    Convert label index to class name
+    :param label_list: index number of label
+    :return: class name of label
+    """
+
     label_names = []
     if isinstance(label_list, np.ndarray):
         label_list = label_list.tolist()
