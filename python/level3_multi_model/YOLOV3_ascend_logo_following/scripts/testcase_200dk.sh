@@ -112,7 +112,7 @@ function main() {
 
         # 转模型
         cd ${project_path}/model/
-        atc --model=${project_path}/model/${pb_model##*/} --weight=${project_path}/model/${pb_model##*/} --framework=3 --output=${HOME}/models/${project_name}/${model_name} --soc_version=Ascend310 --insert_op_conf=${project_path}/model/${aipp_cfg##*/}
+        atc --input_shape="input/input_data:1,416,416,3" --input_format=NHWC --model=${project_path}/model/${pb_model##*/} --framework=3 --output=${HOME}/models/${project_name}/${model_name} --soc_version=Ascend310 --insert_op_conf=${project_path}/model/${aipp_cfg##*/}
         if [ $? -ne 0 ];then
             echo "ERROR: convert model failed"
             return ${inferenceError}
