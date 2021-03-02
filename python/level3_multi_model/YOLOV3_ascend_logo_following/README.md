@@ -131,7 +131,7 @@
     
     切换目录后，执行以下命令运行样例。
     
-    **python3.7.5 demo.py**
+    **python3.7.5 yolov3_ascend_logo_following.py**
 
 
 ### 查看结果
