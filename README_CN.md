@@ -1,4 +1,4 @@
-中文|[English](README_EN.md)
+中文|[English](README.md)
 
 ## 昇腾CANN样例仓介绍
    

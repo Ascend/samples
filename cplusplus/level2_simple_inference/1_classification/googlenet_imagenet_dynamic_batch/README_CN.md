@@ -1,4 +1,4 @@
-中文|[English](README_EN.md)
+中文|[English](README.md)
 
 **本样例为大家学习昇腾软件栈提供参考，非商业目的！**
 

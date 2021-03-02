@@ -1,4 +1,4 @@
-中文|[English](README_EN.md)
+中文|[English](README.md)
 
 # c++环境准备和依赖安装
 
