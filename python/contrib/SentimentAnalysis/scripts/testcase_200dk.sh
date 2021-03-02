@@ -6,8 +6,8 @@ success=1
 
 function downloadDataWithVerifySource() {
     mkdir -p ${project_path}/data/
-    if [ ! -f "${project_path}/data/${project_name}.zip" ]; then
-	wget -O ${project_path}/data/${project_name}.zip  ${data_source}  --no-check-certificate
+    if [ ! -f "${project_path}/data/${project_name}.zip" ];then
+        wget -O ${project_path}/data/${project_name}.zip  ${data_source}  --no-check-certificate
 
     if [ $? -ne 0 ];then
         echo "download .zip failed, please check Network."
