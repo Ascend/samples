@@ -2,7 +2,12 @@ data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/200dk/SentimentAna
 project_name="SentimentAnalysis"
 script_path="$( cd "$(dirname $BASH_SOURCE)" ; pwd -P)"
 project_path=${script_path}/..
-success=1
+
+version=$1
+declare -i success=0
+declare -i inferenceError=1
+declare -i verifyResError=2
+
 
 function downloadDataWithVerifySource() {
     mkdir -p ${project_path}/data/
