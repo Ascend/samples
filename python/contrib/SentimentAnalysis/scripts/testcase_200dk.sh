@@ -6,7 +6,9 @@ success=1
 
 function downloadDataWithVerifySource() {
     mkdir -p ${project_path}/data/
-    wget -O ${project_path}/data/${project_name}.zip  ${data_source}  --no-check-certificate
+    if [ ! -f "${project_path}/data/${project_name}.zip" ]; then
+	wget -O ${project_path}/data/${project_name}.zip  ${data_source}  --no-check-certificate
+
     if [ $? -ne 0 ];then
         echo "download .zip failed, please check Network."
         return 1
@@ -35,7 +37,7 @@ function setAtcEnv() {
 
 function main() {
     downloadDataWithVerifySource
-    unzip ${project_path}/data/${project_name}.zip
+    unzip -o ${project_path}/data/${project_name}.zip -d ${project_path}/data/
     mv ${project_path}/data/${project_name}/* ${project_path}/data/
     # cp -r ${project_path}/data/coarse-big-corpus ${project_path}/data/
     cp -r ${project_path}/data/snapshots/* ${project_path}/models/snapshots/
