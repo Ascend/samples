@@ -6,7 +6,7 @@ success=1
 
 function downloadDataWithVerifySource() {
     mkdir -p ${project_path}/data/
-    if [ [! -f "${project_path}/data/${project_name}.zip"] || [! -d "${project_path}/data/${project_name}"] ];then
+    if [[! -f "${project_path}/data/${project_name}.zip"]] || [[! -d "${project_path}/data/${project_name}"]];then
         wget -O ${project_path}/data/${project_name}.zip  ${data_source}  --no-check-certificate
         unzip -o ${project_path}/data/${project_name}.zip -d ${project_path}/data/
         mv ${project_path}/data/${project_name}/* ${project_path}/data/
