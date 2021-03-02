@@ -9,7 +9,7 @@
 ### 前提条件
 部署此Sample前，需要准备好双目相机[IntelRealsense D435](https://www.intelrealsense.com/depth-camera-d435/ )以及机械臂[Dobot-Magician](https://cn.dobot.cc/dobot-magician/product-overview.html )：
 
-- 请确认已按照[环境准备和依赖安装](../../../environment)准备好环境。
+- 请确认已按照[环境准备和依赖安装](../../environment)准备好环境。
 
 - 已完成200DK的开发环境和运行环境安装，并配置200DK开发板联网。
   
