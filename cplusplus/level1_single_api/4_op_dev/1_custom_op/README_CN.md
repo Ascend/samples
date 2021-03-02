@@ -97,7 +97,7 @@ Caffe与TensorFlow共存的自定义算子样例工程的目录结构如下所�
 ## 环境要求
 
 -   操作系统及架构：CentOS x86_64、CentOS aarch64、Ubuntu 18.04 x86_64、EulerOS x86、EulerOS aarch64
--   版本：20.2
+-   版本：20.3
 -   python及依赖的库：python3.7.5
 -   已完成昇腾AI软件栈的部署。
 
@@ -201,6 +201,8 @@ Caffe与TensorFlow共存的自定义算子样例工程的目录结构如下所�
     
         则编译生成的算子包名称为custom\_opp\__centos\_aarch64_.run。
 
+    -   SOC\_VERSION：昇腾AI处理器的类型，请配置为AI CPU组件安装路径中“opp/op_impl/built-in/aicpu/aicpu_kernel/lib”路径下的文件夹名称，即“libcpu_kernels_context.a”与“libcpu_kernels_v1.0.1.so”所在文件夹的名称。
+    
 
 3.  执行算子工程编译。
 
