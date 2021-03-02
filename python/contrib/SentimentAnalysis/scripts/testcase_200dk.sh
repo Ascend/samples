@@ -6,9 +6,16 @@ success=1
 
 function downloadDataWithVerifySource() {
     mkdir -p ${project_path}/data/
-    if [ ! -f "${project_path}/data/${project_name}.zip" ];then
+    if [ [! -f "${project_path}/data/${project_name}.zip"] || [! -d "${project_path}/data/${project_name}"] ];then
         wget -O ${project_path}/data/${project_name}.zip  ${data_source}  --no-check-certificate
+        unzip -o ${project_path}/data/${project_name}.zip -d ${project_path}/data/
+        mv ${project_path}/data/${project_name}/* ${project_path}/data/
+        # cp -r ${project_path}/data/coarse-big-corpus ${project_path}/data/
+        cp -r ${project_path}/data/snapshots/* ${project_path}/models/snapshots/
+        cp -r ${project_path}/data/chinese_L-12_H-768_A-12/* ${project_path}/models/chinese_L-12_H-768_A-12/
+        cp -r ${project_path}/data/jsoncpp ${project_path}/models/
     fi
+
     if [ $? -ne 0 ];then
         echo "download .zip failed, please check Network."
         return 1
@@ -35,20 +42,31 @@ function setAtcEnv() {
     return 0
 }
 
+function setBuildEnv() {
+    # 设置代码编译时需要的环境变量
+    if [[ ${version} = "c73" ]] || [[ ${version} = "C73" ]];then
+        export DDK_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/arm64-linux_gcc7.3.0
+        export NPU_HOST_LIB=${DDK_PATH}/acllib/lib64/stub
+    elif [[ ${version} = "c75" ]] || [[ ${version} = "C75" ]];then
+        export DDK_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/arm64-linux
+        export NPU_HOST_LIB=${DDK_PATH}/acllib/lib64/stub
+    fi
+
+    return 0
+}
+
+
+
 function main() {
     downloadDataWithVerifySource
-    unzip -o ${project_path}/data/${project_name}.zip -d ${project_path}/data/
-    mv ${project_path}/data/${project_name}/* ${project_path}/data/
-    # cp -r ${project_path}/data/coarse-big-corpus ${project_path}/data/
-    cp -r ${project_path}/data/snapshots/* ${project_path}/models/snapshots/
-    cp -r ${project_path}/data/chinese_L-12_H-768_A-12/* ${project_path}/models/chinese_L-12_H-768_A-12/
-    cp -r ${project_path}/data/jsoncpp ${project_path}/models/
     
+    setAtcEnv
     echo "begin model convert"
     cd ${project_path}/src/acl_demo
     ./model_convert.sh
     echo "finished model convert"
-
+    
+    setBuildEnv
     echo "begin compile acl/c++ code"
     ./build.sh
     echo "finished compile acl/c++ code"
