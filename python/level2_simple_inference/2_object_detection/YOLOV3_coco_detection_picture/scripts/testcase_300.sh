@@ -143,7 +143,9 @@ function main() {
     cd ${project_path}/src
 
     if [[ ${version} = "c76" ]] || [[ ${version} = "C76" ]];then
-        echo "no need set env"
+        export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/nnrt/latest/acllib/lib64:/home/HwHiAiUser/Ascend/ascend-toolkit/latest/atc/lib64:/usr/local/lib/:/usr/lib/:/usr/local/Ascend/ascend-toolkit/latest/acllib/lib64:/usr/local/Ascend/ascend-toolkit/latest/atc/lib64:/usr/local/Ascend/ascend-toolkit/latest/fwkacllib/lib64:/usr/local/Ascend/driver/lib64:/usr/local/Ascend/add-ons:$LD_LIBRARY_PATH
+        export PYTHONPATH=/home/HwHiAiUser/Ascend/nnrt/latest/pyACL/python/site-packages/acl:/home/HwHiAiUser/Ascend/ascend-toolkit/latest/atc/python/site-packages:/home/HwHiAiUser/Ascend/ascend-toolkit/latest/atc/python/site-packages/auto_tune.egg/auto_tune:/home/HwHiAiUser/Ascend/ascend-toolkit/latest/atc/python/site-packages/schedule_search.egg:/usr/local/Ascend/ascend-toolkit/latest/pyACL/python/site-packages:/usr/local/Ascend/ascend-toolkit/latest/fwkacllib/python/site-packages:/usr/local/Ascend/ascend-toolkit/latest/fwkacllib/python/site-packages/auto_tune.egg:/usr/local/Ascend/ascend-toolkit/latest/fwkacllib/python/site-packages/schedule_search.egg:/usr/local/Ascend/ascend-toolkit/latest/toolkit/python/site-packages:/usr/local/Ascend/ascend-toolkit/latest/atc/python/site-packages:/usr/local/Ascend/ascend-toolkit/latest/atc/python/site-packages/auto_tune.egg/auto_tune:/usr/local/Ascend/ascend-toolkit/latest/atc/python/site-packages/schedule_search.egg:/usr/local/Ascend/ascend-toolkit/latest/opp/op_impl/built-in/ai_core/tbe:/usr/local/Ascend/ascend-toolkit/latest/toolkit/latest/acllib/lib64:$PYTHONPATH
+        echo "set env"
     else
         # 重新配置程序运行所需的环境变量
         export LD_LIBRARY_PATH=
