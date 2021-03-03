@@ -105,7 +105,7 @@ function main() {
 
              
         cd ${project_path}/model/
-        atc --model=${project_path}/model/${caffe_prototxt##*/} --weight=${project_path}/model/${caffe_model##*/} --framework=0 --output=${HOME}/models/${project_name}/${model_name} --soc_version=Ascend310 --input_shape="data_l:1,1,224,224" --input_format=NCHW
+        atc --model=${project_path}/model/${tf_model##*/} --framework=3 --output=${HOME}/models/${project_name}/${model_name} --soc_version=Ascend310 --input_shape="input_1:1,300;input_2:1,300" --input_format=ND --out_nodes=dense_1/Softmax:0 --soc_version=Ascend310 --op_select_implmode="high_precision"
         if [ $? -ne 0 ];then
             echo "ERROR: convert model failed"
             return ${inferenceError}
@@ -140,7 +140,7 @@ function main() {
     fi   
     
     dataline=$(cat ${project_path}/out/prediction_label.txt)
-    if [[ ${dataline} != "ÌåÓý" ]];then
+    if [[ ${dataline} != "" ]];then
             echo "ERROR: Prediction results Error!"
             return ${verifyResError}
     fi
