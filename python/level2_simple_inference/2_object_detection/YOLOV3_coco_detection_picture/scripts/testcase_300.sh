@@ -143,8 +143,12 @@ function main() {
     cd ${project_path}/src
 
     if [[ ${version} = "c76" ]] || [[ ${version} = "C76" ]];then
-        export PYTHONPATH=/home/HwHiAiUser/Ascend/nnrt/latest/pyACL/python/site-packages/acl:${PYTHONPATH}
-        echo "set python env"
+        export install_path=$HOME/Ascend/ascend-toolkit/latest
+        export PATH=/usr/local/python3.7.5/bin:${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
+        export ASCEND_OPP_PATH=${install_path}/opp
+        export PYTHONPATH=${install_path}/atc/python/site-packages:${install_path}/atc/python/site-packages/auto_tune.egg/auto_tune:${install_path}/atc/python/site-packages/schedule_search.egg:$PYTHONPATH
+        export LD_LIBRARY_PATH=${install_path}/atc/lib64:${LD_LIBRARY_PATH}
+        echo "set env"
     else
         # 重新配置程序运行所需的环境变量
         export LD_LIBRARY_PATH=
