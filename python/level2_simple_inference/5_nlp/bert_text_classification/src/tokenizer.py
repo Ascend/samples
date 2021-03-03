@@ -7,7 +7,9 @@ TOKEN_SEP = '[SEP]'  # Token for separation
 TOKEN_MASK = '[MASK]'  # Token for masking
 
 class Tokenizer(object):
-
+"""
+Split text to tokens.
+"""
     def __init__(self,
                  token_dict,
                  token_cls=TOKEN_CLS,
@@ -74,6 +76,9 @@ class Tokenizer(object):
         return tokens
 
     def encode(self, first, second=None, max_len=None):
+        """
+        Split text to dictionary ID.
+        """
         first_tokens = self._tokenize(first)
         second_tokens = self._tokenize(second) if second is not None else None
         self._truncate(first_tokens, second_tokens, max_len)
