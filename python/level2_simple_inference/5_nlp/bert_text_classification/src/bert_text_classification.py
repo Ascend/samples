@@ -1,4 +1,3 @@
-# coding=utf-8
 import numpy as np
 import os
 import codecs
@@ -27,7 +26,7 @@ maxlen = 300
 token_dict = {}
 with codecs.open(dict_path, 'r', 'utf-8') as reader:
     """
-    reader dictionary
+    read dictionary
     """
     for line in reader:
         token = line.strip()
