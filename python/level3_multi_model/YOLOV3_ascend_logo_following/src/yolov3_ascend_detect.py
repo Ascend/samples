@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import sys
-
 sys.path.append("../../../common")
 import os
 import numpy as np
@@ -30,7 +29,7 @@ from atlas_utils.acl_image import AclImage
 
 # config for ascend detection
 LABELS = ["ascend"]
-MODEL_PATH = "yolov3_ascend_logo.om"
+MODEL_PATH = "../model/yolov3_ascend_logo.om"
 
 # yolov3 input image size
 MODEL_WIDTH = 416
@@ -428,7 +427,7 @@ if __name__ == "__main__":
     acl_resource.init()
 
     # load om model
-    model = Model(acl_resource, MODEL_PATH)
+    model = Model(MODEL_PATH)
 
     # send the multicast message
     multicast_group = (LOCAL_IP_ADDRESS, PORT)

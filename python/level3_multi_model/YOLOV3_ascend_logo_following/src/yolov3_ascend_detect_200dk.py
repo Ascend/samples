@@ -12,23 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import sys
-
 sys.path.append("../../../common")
 import os
 import numpy as np
 import acl
 import cv2 as cv
 import time
-import sys, getopt
 import asyncore
 import pickle
 import socket
 import struct
 
-from PIL import Image
-from atlas_utils.constants import *
 from atlas_utils.acl_resource import AclResource
-from atlas_utils.utils import *
 from atlas_utils.acl_model import Model
 from atlas_utils.acl_image import AclImage
 
