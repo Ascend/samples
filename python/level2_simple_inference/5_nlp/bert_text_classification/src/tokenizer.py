@@ -8,9 +8,9 @@ TOKEN_SEP = '[SEP]'  # Token for separation
 TOKEN_MASK = '[MASK]'  # Token for masking
 
 class Tokenizer(object):
-"""
-Split text to tokens.
-"""
+    """
+    Split text to tokens.
+    """
     def __init__(self,
                  token_dict,
                  token_cls=TOKEN_CLS,
