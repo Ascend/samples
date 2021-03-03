@@ -140,7 +140,7 @@ function main() {
     fi   
     
     dataline=$(cat ${project_path}/out/prediction_label.txt)
-    if [[ ${dataline} != "" ]];then
+    if [[ ${dataline} != "体育" ]];then
             echo "ERROR: Prediction results Error!"
             return ${verifyResError}
     fi
