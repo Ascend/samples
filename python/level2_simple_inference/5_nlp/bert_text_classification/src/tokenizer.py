@@ -1,3 +1,6 @@
+"""
+Tokenizer
+"""
 # coding=utf-8
 import unicodedata
 
@@ -96,6 +99,9 @@ class Tokenizer(object):
         return token_ids, segment_ids
 
     def decode(self, ids):
+        """
+        return tokens from dictionary IDs.
+        """
         sep = ids.index(self._token_dict[self._token_sep])
         try:
             stop = ids.index(self._pad_index)
