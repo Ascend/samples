@@ -438,7 +438,7 @@ if __name__ == "__main__":
     acl_resource.init()
 
     # load om model
-    model = Model(acl_resource, MODEL_PATH)
+    model = Model(MODEL_PATH)
 
     # model inference
     input_dir = os.listdir(INPUT_DIR)
