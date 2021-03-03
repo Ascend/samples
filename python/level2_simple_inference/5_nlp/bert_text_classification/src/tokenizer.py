@@ -1,3 +1,4 @@
+# coding=utf-8
 import unicodedata
 
 TOKEN_PAD = ''  # Token for padding
