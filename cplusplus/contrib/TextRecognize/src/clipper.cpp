@@ -179,7 +179,7 @@ int PolyTree::Total() const
 // PolyNode methods ...
 //------------------------------------------------------------------------------
 
-PolyNode::PolyNode(): Parent(0), Index(0), m_IsOpen(false)
+PolyNode::PolyNode(): Parent(0), Index(0), m_IsOpen(false), m_endtype(), m_jointype()
 {
 }
 //------------------------------------------------------------------------------
@@ -260,6 +260,11 @@ class Int128
       if (_lo < 0)  hi = -1; else hi = 0; 
     }
 
+    Int128(const long64& _lo)
+    {
+      lo = (ulong64)_lo;
+      if (_lo < 0)  hi = -1; else hi = 0;
+    }
 
     Int128(const Int128 &val): lo(val.lo), hi(val.hi){}
 
@@ -551,8 +556,8 @@ bool SlopesEqual(const TEdge &e1, const TEdge &e2, bool UseFullInt64Range)
 }
 //------------------------------------------------------------------------------
 
-bool SlopesEqual(const IntPoint pt1, const IntPoint pt2,
-  const IntPoint pt3, bool UseFullInt64Range)
+bool SlopesEqual( IntPoint pt1, IntPoint pt2,
+IntPoint pt3, bool UseFullInt64Range)
 {
 #ifndef use_int32
   if (UseFullInt64Range)
@@ -563,8 +568,8 @@ bool SlopesEqual(const IntPoint pt1, const IntPoint pt2,
 }
 //------------------------------------------------------------------------------
 
-bool SlopesEqual(const IntPoint pt1, const IntPoint pt2,
-  const IntPoint pt3, const IntPoint pt4, bool UseFullInt64Range)
+bool SlopesEqual( IntPoint pt1, IntPoint pt2,
+  IntPoint pt3, IntPoint pt4, bool UseFullInt64Range)
 {
 #ifndef use_int32
   if (UseFullInt64Range)
@@ -581,7 +586,7 @@ inline bool IsHorizontal(TEdge &e)
 }
 //------------------------------------------------------------------------------
 
-inline double GetDx(const IntPoint pt1, const IntPoint pt2)
+inline double GetDx(IntPoint pt1, IntPoint pt2)
 {
   return (pt1.Y == pt2.Y) ?
     HORIZONTAL : (double)(pt2.X - pt1.X) / (pt2.Y - pt1.Y);
@@ -774,7 +779,7 @@ void SwapPoints(IntPoint &pt1, IntPoint &pt2)
 //------------------------------------------------------------------------------
 
 bool GetOverlapSegment(IntPoint pt1a, IntPoint pt1b, IntPoint pt2a,
-  IntPoint pt2b, IntPoint &pt1, IntPoint &pt2)
+  IntPoint pt2b, IntPoint pt1, IntPoint pt2)
 {
   //precondition: segments are Collinear.
   if (Abs(pt1a.X - pt1b.X) > Abs(pt1a.Y - pt1b.Y))
@@ -857,8 +862,8 @@ OutPt* GetBottomPt(OutPt *pp)
 }
 //------------------------------------------------------------------------------
 
-bool Pt2IsBetweenPt1AndPt3(const IntPoint pt1,
-  const IntPoint pt2, const IntPoint pt3)
+bool Pt2IsBetweenPt1AndPt3( IntPoint pt1,
+  IntPoint pt2,  IntPoint pt3)
 {
   if ((pt1 == pt3) || (pt1 == pt2) || (pt3 == pt2))
     return false;
@@ -880,7 +885,7 @@ bool HorzSegmentsOverlap(cInt seg1a, cInt seg1b, cInt seg2a, cInt seg2b)
 // ClipperBase class methods ...
 //------------------------------------------------------------------------------
 
-ClipperBase::ClipperBase() //constructor
+ClipperBase::ClipperBase(): m_HasOpenPaths(false), m_PreserveCollinear(false), m_ActiveEdges() //constructor
 {
   m_CurrentLM = m_MinimaList.begin(); //begin() == end() here
   m_UseFullRange = false;
@@ -1471,7 +1476,7 @@ bool ClipperBase::LocalMinimaPending()
 // TClipper methods ...
 //------------------------------------------------------------------------------
 
-Clipper::Clipper(int initOptions) : ClipperBase() //constructor
+Clipper::Clipper(int initOptions) : ClipperBase(), m_SortedEdges(0), m_ClipType(), m_UsingPolyTree(false), m_ClipFillType(), m_SubjFillType()//constructor
 {
   m_ExecuteLocked = false;
   m_UseFullRange = false;
@@ -1939,7 +1944,7 @@ void Clipper::CopyAELToSEL()
 }
 //------------------------------------------------------------------------------
 
-void Clipper::AddJoin(OutPt *op1, OutPt *op2, const IntPoint OffPt)
+void Clipper::AddJoin(OutPt *op1, OutPt *op2, IntPoint OffPt)
 {
   Join* j = new Join;
   j->OutPt1 = op1;
@@ -1965,7 +1970,7 @@ void Clipper::ClearGhostJoins()
 }
 //------------------------------------------------------------------------------
 
-void Clipper::AddGhostJoin(OutPt *op, const IntPoint OffPt)
+void Clipper::AddGhostJoin(OutPt *op, IntPoint OffPt)
 {
   Join* j = new Join;
   j->OutPt1 = op;
@@ -2655,14 +2660,15 @@ void Clipper::ProcessHorizontal(TEdge *horzEdge)
       if (dir == dLeftToRight)
       {
           maxIt = m_Maxima.begin();
-          while (maxIt != m_Maxima.end() && *maxIt <= horzEdge->Bot.X) maxIt++;
+          while (maxIt != m_Maxima.end() && *maxIt <= horzEdge->Bot.X)
+            ++maxIt;
           if (maxIt != m_Maxima.end() && *maxIt >= eLastHorz->Top.X)
               maxIt = m_Maxima.end();
       }
       else
       {
           maxRit = m_Maxima.rbegin();
-          while (maxRit != m_Maxima.rend() && *maxRit > horzEdge->Bot.X) maxRit++;
+          while (maxRit != m_Maxima.rend() && *maxRit > horzEdge->Bot.X) ++maxRit;
           if (maxRit != m_Maxima.rend() && *maxRit <= eLastHorz->Top.X)
               maxRit = m_Maxima.rend();
       }
@@ -2689,7 +2695,7 @@ void Clipper::ProcessHorizontal(TEdge *horzEdge)
                 {
                   if (horzEdge->OutIdx >= 0 && !IsOpen)
                     AddOutPt(horzEdge, IntPoint(*maxIt, horzEdge->Bot.Y));
-                  maxIt++;
+                    ++maxIt;
                 }
             }
             else
@@ -2698,7 +2704,7 @@ void Clipper::ProcessHorizontal(TEdge *horzEdge)
                 {
                   if (horzEdge->OutIdx >= 0 && !IsOpen)
                     AddOutPt(horzEdge, IntPoint(*maxRit, horzEdge->Bot.Y));
-                  maxRit++;
+                  ++maxRit;
                 }
             }
         };
@@ -3369,7 +3375,7 @@ OutPt* DupOutPt(OutPt* outPt, bool InsertAfter)
 //------------------------------------------------------------------------------
 
 bool JoinHorz(OutPt* op1, OutPt* op1b, OutPt* op2, OutPt* op2b,
-  const IntPoint Pt, bool DiscardLeft)
+   IntPoint Pt, bool DiscardLeft)
 {
   Direction Dir1 = (op1->Pt.X > op1b->Pt.X ? dRightToLeft : dLeftToRight);
   Direction Dir2 = (op2->Pt.X > op2b->Pt.X ? dRightToLeft : dLeftToRight);
@@ -3783,7 +3789,7 @@ DoublePoint GetUnitNormal(const IntPoint &pt1, const IntPoint &pt2)
 // ClipperOffset class
 //------------------------------------------------------------------------------
 
-ClipperOffset::ClipperOffset(double miterLimit, double arcTolerance)
+ClipperOffset::ClipperOffset(double miterLimit, double arcTolerance): m_StepsPerRad(0), m_delta(0), m_sinA(0), m_sin(0), m_cos(0), m_miterLim(0)
 {
   this->MiterLimit = miterLimit;
   this->ArcTolerance = arcTolerance;
@@ -4520,7 +4526,7 @@ void MinkowskiSum(const Path& pattern, const Path& path, Paths& solution, bool p
 }
 //------------------------------------------------------------------------------
 
-void TranslatePath(const Path& input, Path& output, const IntPoint delta)
+void TranslatePath(const Path& input, Path& output, IntPoint delta)
 {
   //precondition: input != output
   output.resize(input.size());
