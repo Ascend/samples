@@ -26,11 +26,18 @@ maxlen = 300
 
 token_dict = {}
 with codecs.open(dict_path, 'r', 'utf-8') as reader:
+    """
+    reader dictionary
+    """
     for line in reader:
         token = line.strip()
         token_dict[token] = len(token_dict)
 
+
 class OurTokenizer(Tokenizer):
+    """
+    tokenizer text to ID
+    """
     def _tokenize(self, text):
         R = []
         for c in text:
@@ -40,25 +47,35 @@ class OurTokenizer(Tokenizer):
                 R.append('[UNK]')   # The remaining characters are [UNK]
         return R
 
+
 def save_to_file(file_name, contents):
+    """
+    save prediction label to file
+    """
     fh = open(file_name, 'w')
     fh.write(contents)
     fh.close()
 
+
 def preprocess(text):
-    
+    """
+    tokenizer text to ID. Fill with 0 if the text  is not long than maxlen
+    """
     tokenizer = OurTokenizer(token_dict)
 
     # tokenize
     text = text[:maxlen]
     x1, x2 = tokenizer.encode(first=text)
 
-    X1 = x1 + [0] * (maxlen-len(x1)) if len(x1) < maxlen else x1
-    X2 = x2 + [0] * (maxlen-len(x2)) if len(x2) < maxlen else x2
+    X1 = x1 + [0] * (maxlen - len(x1)) if len(x1) < maxlen else x1
+    X2 = x2 + [0] * (maxlen - len(x2)) if len(x2) < maxlen else x2
     return X1, X2
 
+
 def postprocess(result_list):
-    
+    """
+    get the category with max confidence
+    """
     print(result_list[0]) 
     y = np.argmax(result_list[0])
     return y
@@ -95,12 +112,13 @@ def main():
 
     if not os.path.exists(output_dir):
         os.mkdir(output_dir)
-    save_to_file(output_dir+'prediction_label.txt', label_dict[str(y)])
+    save_to_file(output_dir + 'prediction_label.txt', label_dict[str(y)])
     print("Original text: %s" % text)
     print("Prediction label: %s" % label_dict[str(y)])
     
-    print("Cost time:", e_time-s_time)
+    print("Cost time:", e_time - s_time)
     print("Execute end")
-    
+
+  
 if __name__ == '__main__':
     main()
