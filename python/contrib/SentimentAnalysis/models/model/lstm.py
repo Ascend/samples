@@ -47,7 +47,6 @@ class lstm(object):
         self.embedding = model.get_sequence_output()
 
         with tf.name_scope("bilstm"):
-            # 改变之后的
             rnn_unit = bert_config.hidden_size
             basicLstm = tf.nn.rnn_cell.BasicLSTMCell(
                 rnn_unit)  #  set rnn hidden parameters

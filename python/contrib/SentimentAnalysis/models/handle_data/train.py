@@ -102,7 +102,7 @@ def decode(model, sess, dev_data, src_vocab, tgt_vocab, config):
     with open(config.save_dirs + '/' + config.save_model_path, 'rb') as f:
         graph_def.ParseFromString(f.read())
         sess.graph.as_default()
-        tf.import_graph_def(graph_def, name='')  # 导入计算
+        tf.import_graph_def(graph_def, name='')
     sess.run(tf.global_variables_initializer())
     _w = sess.graph.get_tensor_by_name('w:0')
     _gold = sess.graph.get_tensor_by_name('gold:0')
@@ -164,11 +164,12 @@ def evaluate(model, epoch, sess, dev_data, src_vocab, tgt_vocab, config):
     accuracy = total_acc / gold_num * 100
     print('acc={:.2f}%'.format(accuracy))
     _best_acc = best_acc 
+    _best_epoch = best_epoch
     if accuracy > _best_acc:
         _best_acc = accuracy
-        best_epoch = epoch
+        _best_epoch = epoch
         print('##Update! best_acc={:.2f}% in epoch {}'.format(
-            _best_acc, best_epoch))
+            _best_acc, _best_epoch))
         output_graph_def = convert_variables_to_constants(
             sess, sess.graph_def, output_node_names=['s/logits'])
         with tf.gfile.GFile(config.save_dirs + '/' + config.save_model_path,
@@ -178,4 +179,4 @@ def evaluate(model, epoch, sess, dev_data, src_vocab, tgt_vocab, config):
               config.save_model_path)
     else:
         print('not update, best_acc={:.2f}% in epoch {}'.format(
-            _best_acc, best_epoch))
+            _best_acc, _best_epoch))
