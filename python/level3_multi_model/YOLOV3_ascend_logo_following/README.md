@@ -37,11 +37,7 @@
 
     **说明：**  
     > - 由于机械臂Dobot-Magician的官方Python API没有提供角度控制模式，所以需要手动添加move_by_angle模式。
-
-- 将双目相机IntelRealsense固定在机械臂的末端中心，如下图：
-
-![IntelRealsense](IntelRealsense.png)
-
+  
 ### 软件准备
 
 1. 获取源码包。
@@ -86,14 +82,114 @@
    
    机械臂跟随ascend_logo样例的整个框架如下图，200DK运行环境与Ubuntu服务器开发环境通过路由器进行交互，200DK负责yolov3目标检测模型的推理，Ubuntu服务器通过路由器向200DK发送IntelRealsense的RGB数据，同时接收200DK的推理结果，利用推理结果对机械臂进行控制。
 
-![Architecture](architecture.png)
+    ![Architecture](doc/architecture.png)
 
 
 2. 机械臂的控制逻辑。
-   
-   Ubuntu服务器根据推理结果中ascend_logo在RGB图像中的位置，计算机械臂j1、j2、j3轴的移动角度，计算过程如下：
 
-    - 待补充
+    1. 问题分析：
+        * 前提：相机安装在机械臂末端中心，机械臂末端中心的移动就是相机的移动，如图所示：
+
+          ![IntelRealsense](doc/IntelRealsense.png)
+
+        * 任务：机械臂随Target在空间内移动的任务可以表述为两个子任务：
+            1. 机械臂的运动总是尽量使得相机对准Target，即机械臂的运动目标之一是使得Target位于相机的视场（图像）中心。
+            2. Target离相机的距离大于标准距离时，机械臂要控制相机向前运动，反之亦然。即机械臂的运动目标之二是使得相机与Target总是保持一定的距离。
+
+        * 目的：机械臂的运动控制最终形式是三个轴的运动角度，也即在拿到Target在图像坐标系中的位置后，J1、J2、J3三个轴要分别运动多少度，使得运动后Target位于相机的视场中心且距离合适。
+        
+    2. 建立数学模型
+        * 几个关键问题和事实：
+        在建模之前，先明确几个问题，包括机械臂的运动方式、机械臂运动过程中相机的位置和姿态、相机的内参。
+            1. 机械臂的运动方式：
+                J1轴的运动与J2 & J3轴之间独立，J1轴的运动不会影响相机的Z轴坐标，会影响X轴坐标但运动角度较小时可简化忽略。
+J2轴和J3轴主要影响相机X Z轴，略微影响Y轴坐标但简化忽略。
+            2. 相机的位置和姿态以及内参：
+                相机的位置和姿态即构成了相机的外参，一共通过6个量即可表示相机的位置和姿态，其中三个轴的旋转参数分别为（ω、δ、 θ），中心点的平移参数分别为（Tx、Ty、Tz）。相机安装在机械臂的末端中心，所以末端中心的坐标即为相机的位置。运动过程中相机不存在绕X, Y轴旋转，所以ω=δ=0。绕Z轴选择的角度 θ可以认为即J1的旋转角度。
+
+                至此可以计算出相机的外参矩阵为：
+
+                相机的内参可以通过Realsense的API接口获取。
+
+        * 坐标系转换——图像坐标系->相机坐标系->世界坐标系
+            1. 相机的内参：
+               
+                相机的内参矩阵可以通过Realsense的API直接获得，详见其API参考文档。在不考虑相机镜头畸变的情况下，内参矩阵$K$可以表示成如下形式：
+               
+                <div align = center>
+               
+                ![K](doc/K.png)
+                </div>
+            
+            2. 相机的外参
+               
+                根据上述相机位置的计算，可以得到其平移向量$T$：
+                
+                <div align = center>
+               
+                ![T](doc/T.png)
+                </div>
+                
+                根据上述相机姿态的计算，可以得到其旋转矩阵$R$：
+               
+                <div align = center>
+               
+                ![R](doc/R.png)
+                </div>
+               
+                所以从相机坐标系到世界坐标系的转换为:
+               
+                <div align = center>
+               
+                ![camera2world](doc/camera2world.png)
+                </div>
+               
+            3. 图像坐标系到世界坐标系的转换
+               
+                完整地从图像坐标系向世界坐标系的转换过程为：
+               
+                <div align = center>
+               
+                ![picture2world](doc/picture2world.png)
+                </div>
+    
+        * J1轴的运动逻辑
+            
+            根据之前的假设，J1轴的运动问题可以在世界坐标系的XOY投影平面内分析。
+            ![J1](doc/J1.png)
+          
+            如图所示，A(x~A, x~B)为Target的实际位置，B(x~A, x~B)为当前相机视场中心位置（图像中心）。运动目标为机械臂移动之后Target位于视场中心。J1轴的移动角度$\theta_1$可表示为：
+            
+            $$
+            \theta_1 = \arccos[\frac{\overrightarrow {OA} \cdot \overrightarrow {OB}}
+                                                            {\mid\overrightarrow {OA}\mid \cdot \mid\overrightarrow {OB}\mid}]
+            $$
+            
+            即：
+          
+            $$
+            \theta_1 = \arccos(\frac {x_A x_B + y_A y_B} {\sqrt{x_A^2 + y_A^2}\sqrt{x_B^2 + y_B^2}})
+            $$
+        * J2 & J3轴的运动逻辑
+            
+            ![J2J3](doc/J2J3.png)
+          
+            建立关于$\theta_2$和$\theta_3$的方程组：
+            
+            $$l_2\cos(\alpha_2 + \theta_2) + l_3\cos(\alpha_3 + \theta_3) = \Delta x + l_2\cos(\alpha_2) + l_3\cos(\alpha_3)$$
+            
+            $$l_2\sin(\alpha_2 + \theta_2) + l_3\sin(\alpha_3 + \theta_3) = \Delta z + l_2\sin(\alpha_2) + l_3\sin(\alpha_3)$$
+    
+            求解该方程组，得到:
+          
+            $$\theta_3 = \arctan(\frac {R_z} {R_x}) - \arccos(\frac {l_3^2 - l_2^2 + R_x^2 + R_z^2} {2l_3\sqrt{R_x^2 + R_z^2}}) - \alpha_3$$
+            $$\theta_2 = \arccos[\frac{\Delta x + l_2\cos\alpha_2 +l_3\cos\alpha_3 - l_3cos(\alpha_3 + \theta_3)}{l_2}] - \alpha_2$$
+            
+            其中：
+            
+            $$R_x = \Delta x + l_2\cos(\alpha_2) + l_3\cos(\alpha_3)$$
+            
+            $$R_z = \Delta z + l_2\sin(\alpha_2) + l_3\sin(\alpha_3)$$
 
 
 ### 样例运行
@@ -137,8 +233,11 @@
 ### 查看结果
 运行成功后，可以用Ascend_logo来控制机械臂的移动，效果如下：
 
-![demo](demo.gif) 
+<div align = center>
 
+![demo](doc/demo.gif) 
+
+</div>
 
 
 
