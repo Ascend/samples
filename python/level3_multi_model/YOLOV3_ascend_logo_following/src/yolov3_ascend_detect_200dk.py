@@ -460,7 +460,7 @@ if __name__ == "__main__":
             box = result_return['detection_boxes'][i]
             class_name = result_return['detection_classes'][i]
             confidence = result_return['detection_scores'][i]
-            cv.rectangle(bgr_img, (int(box[1]), int(box[0])), (int(box[3]), int(box[2])), colors[i % 6], 2)
+            cv.rectangle(bgr_img, (int(box[1]), int(box[0])), (int(box[3]), int(box[2])), COLORS[i % 6], 2)
             p3 = (max(int(box[1]), 15), max(int(box[0]), 15))
             out_label = class_name
             cv.putText(bgr_img, out_label, p3, cv.FONT_ITALIC, 0.6, COLORS[i % 6], 1)
