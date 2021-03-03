@@ -274,8 +274,12 @@ class Int128
     {
       lo = (ulong64)val;
       if (val < 0) hi = -1; else hi = 0;
+      Int128 result(*this);
+      result = val;
       return *this;
     }
+
+
 
     bool operator == (const Int128 &val) const
       {return (hi == val.hi && lo == val.lo);}
@@ -723,7 +727,7 @@ void DisposeOutPts(OutPt*& pp)
 
 inline void InitEdge(TEdge* e, TEdge* eNext, TEdge* ePrev, const IntPoint& Pt)
 {
-  std::memset(e, 0, sizeof(TEdge));
+  std::memset(e, int(0), sizeof(TEdge));
   e->Next = eNext;
   e->Prev = ePrev;
   e->Curr = Pt;
