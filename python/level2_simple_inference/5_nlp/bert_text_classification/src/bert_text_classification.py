@@ -1,3 +1,6 @@
+"""
+bert text classification
+"""
 import numpy as np
 import os
 import codecs
@@ -24,13 +27,6 @@ output_dir = '../out/'
 maxlen = 300
 
 token_dict = {}
-with codecs.open(dict_path, 'r', 'utf-8') as reader:
-    """
-    read dictionary
-    """
-    for line in reader:
-        token = line.strip()
-        token_dict[token] = len(token_dict)
 
 
 class OurTokenizer(Tokenizer):
@@ -89,6 +85,12 @@ def main():
     acl_resource.init()
     
     model = Model(model_path)
+
+    with codecs.open(dict_path, 'r', 'utf-8') as reader:
+        for line in reader:
+            token = line.strip()
+            token_dict[token] = len(token_dict) 
+
     with open(sample_path, "r") as f:
         text = f.read() 
 
