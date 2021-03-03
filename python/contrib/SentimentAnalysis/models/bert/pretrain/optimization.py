@@ -1,5 +1,5 @@
-"""
-coding=utf-8
+"""coding=utf-8
+Functions and classes related to optimization (weight updates).
 
 Copyright (c) 2019 NVIDIA CORPORATION. All rights reserved.
 Copyright 2018 The Google AI Language Team Authors.
@@ -14,9 +14,7 @@ Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
-limitations under the License.
-"""
-"""Functions and classes related to optimization (weight updates)."""
+limitations under the License."""
 
 from __future__ import absolute_import
 from __future__ import division
@@ -123,14 +121,14 @@ def create_optimizer(loss,
                                        dtype=tf.bool,
                                        trainable=False,
                                        initializer=tf.ones_initializer)
-        accum_vars = [
-            tf.get_variable(name=tvar.name.split(":")[0] + "/accum",
-                            shape=tvar.shape.as_list(),
-                            dtype=tf.float32,
-                            trainable=False,
-                            initializer=tf.zeros_initializer())
-            for tvar in tf.trainable_variables()
-        ]
+        accum_vars = []
+        for tvar in tf.trainable_variables():
+            _name = tvar.name.split(":")[0] + "/accum"
+            accum_vars.append(tf.get_variable(name=_name,
+                                            shape=tvar.shape.as_list(),
+                                            dtype=tf.float32,
+                                            trainable=False,
+                                            initializer=tf.zeros_initializer()))
 
         reset_step = tf.cast(tf.math.equal(local_step % num_accumulation_steps,
                                            0),

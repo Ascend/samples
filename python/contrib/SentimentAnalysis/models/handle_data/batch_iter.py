@@ -27,7 +27,7 @@ def create_batch_iter(data, batch_size, shuffle=True):
     if shuffle:
         np.random.shuffle(data)
 
-    # 排序
+    # ordering
     # src_ids = sorted(range(data_size), key=lambda src_id: len(data[src_id][0]), reverse=True)
     # data = [data[src_id] for src_id in src_ids]
 
@@ -53,13 +53,12 @@ def pair_data_variable(batch, vocab_srcs, vocab_tgts, config):
     batch_size = config.batch_size
 
     src_lengths = [len(batch[i][0]) for i in range(len(batch))]
-    # 因为之前排序了，是递减的顺序
-
+    # in decreasing order
     if len(src_lengths) != config.batch_size:
         update_length = config.batch_size - len(src_lengths)
         for i in range(update_length):
             src_lengths.append(
-                0)  # 固定填充 [4,3,..,0,0]  batchsize 个数，每个数代表这句话的长度
+                0)  # fix padding [4,3,..,0,0]  batchsize 
 
     max_src_length = config.sentence_max_length  #max(src_lengths)
 
@@ -82,7 +81,7 @@ def pair_data_variable(batch, vocab_srcs, vocab_tgts, config):
             src_words[idj][idx] = value
         tgt_words.append(vocab_tgts.word2id(instance[1]))
 
-    if len(batch) != config.batch_size:  # 固定填充补0
+    if len(batch) != config.batch_size:  # fix padding 0
         for idx in range(len(batch), config.batch_size):
             word_list.append(0)
             tgt_words.append(0)

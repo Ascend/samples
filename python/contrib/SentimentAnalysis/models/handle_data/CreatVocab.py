@@ -28,9 +28,8 @@ PAD_S, UNK_S = '<pad>', '<unk>'
 
 def create_vocabularies(vocab_size, src_word_counter, tgt_word_counter):
     """
-    create vocabularies.
+    create vocabularies, from high to low frequency.
     """
-    # 这个是按照出现频率由高到低的顺序的
     src_most_common = [
         ite for ite, it in src_word_counter.most_common(vocab_size)
     ]

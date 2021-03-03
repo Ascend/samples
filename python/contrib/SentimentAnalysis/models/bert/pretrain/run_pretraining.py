@@ -555,11 +555,12 @@ def input_fn_builder(input_files,
                      max_seq_length,
                      max_predictions_per_seq,
                      is_training,
-                     num_cpu_threads=4):
+                     num_cpu_threads=4,
+                     hvd=None):
     """Creates an `input_fn` closure to be passed to Estimator."""
     def input_fn():
         """The actual input function."""
-
+        
         name_to_features = {
             "input_ids":
             tf.FixedLenFeature([max_seq_length], tf.int64),
@@ -725,16 +726,9 @@ def main(_):
                                 num_warmup_steps=FLAGS.num_warmup_steps,
                                 use_one_hot_embeddings=False,
                                 hvd=None if not FLAGS.horovod else hvd)
-
+    
     training_hooks = []
-    """
-  if FLAGS.report_loss and (not FLAGS.horovod or hvd.rank() == 0):
-    global_batch_size = FLAGS.train_batch_size * FLAGS.num_accumulation_steps \
-        if not FLAGS.horovod else FLAGS.train_batch_size * FLAGS.num_accumulation_steps * hvd.size()
-    training_hooks.append(_LogSessionRunHook(global_batch_size, FLAGS.num_accumulation_steps, FLAGS.display_loss_steps))
-  if FLAGS.horovod and hvd.size() > 1:
-    training_hooks.append(hvd.BroadcastGlobalVariablesHook(0))
-  """
+    
     if FLAGS.report_loss:
         global_batch_size = FLAGS.train_batch_size * FLAGS.num_accumulation_steps \
             if not FLAGS.distributed else FLAGS.train_batch_size * FLAGS.num_accumulation_steps * rank_size

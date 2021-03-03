@@ -163,11 +163,12 @@ def evaluate(model, epoch, sess, dev_data, src_vocab, tgt_vocab, config):
         total_acc += acc
     accuracy = total_acc / gold_num * 100
     print('acc={:.2f}%'.format(accuracy))
-    if accuracy > best_acc:
-        best_acc = accuracy
+    _best_acc = best_acc 
+    if accuracy > _best_acc:
+        _best_acc = accuracy
         best_epoch = epoch
         print('##Update! best_acc={:.2f}% in epoch {}'.format(
-            best_acc, best_epoch))
+            _best_acc, best_epoch))
         output_graph_def = convert_variables_to_constants(
             sess, sess.graph_def, output_node_names=['s/logits'])
         with tf.gfile.GFile(config.save_dirs + '/' + config.save_model_path,
@@ -177,4 +178,4 @@ def evaluate(model, epoch, sess, dev_data, src_vocab, tgt_vocab, config):
               config.save_model_path)
     else:
         print('not update, best_acc={:.2f}% in epoch {}'.format(
-            best_acc, best_epoch))
+            _best_acc, best_epoch))

@@ -25,7 +25,7 @@ def clean_str(string):
     Original taken from https://github.com/yoonkim/CNN_sentence/blob/master/process_data.py
     """
     string = string.lower()
-    string = re.sub(r"，", ",", string)
+    string = re.sub(r"，", r",", string)
     string = re.sub(r"\'s", r" \'s", string)
     string = re.sub(r"\'ve", r" \'ve", string)
     string = re.sub(r"n\'t", r" n\'t", string)
@@ -37,7 +37,7 @@ def clean_str(string):
     string = re.sub(r"^-url-$", "<url>", string)
     string = re.sub(r"^-lqt-$", r"\'", string)
     string = re.sub(r"^-rqt-$", r"\'", string)
-    # 或者
+    # or
     # string = re.sub(r"^-lqt-$", "\"", string)
     # string = re.sub(r"^-rqt-$", "\"", string)
     string = re.sub(r"^-lrb-$", r"\(", string)
