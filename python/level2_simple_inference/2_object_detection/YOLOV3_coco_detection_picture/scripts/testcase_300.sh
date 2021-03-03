@@ -55,7 +55,7 @@ function setAtcEnv() {
         export LD_LIBRARY_PATH=${install_path}/atc/lib64:${LD_LIBRARY_PATH}
     elif [[ ${version} = "c76" ]] || [[ ${version} = "C76" ]];then
         export install_path=$HOME/Ascend  
-        export LD_LIBRARY_PATH=${install_path}/nnrt/latest/acllib/lib64:$LD_LIBRARY_PATH
+	export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/nnrt/latest/acllib/lib64:/home/HwHiAiUser/Ascend/ascend-toolkit/latest/atc/lib64:/usr/local/lib/:/usr/lib/:/usr/local/Ascend/ascend-toolkit/latest/acllib/lib64:/usr/local/Ascend/ascend-toolkit/latest/atc/lib64:/usr/local/Ascend/ascend-toolkit/latest/fwkacllib/lib64:/usr/local/Ascend/driver/lib64:/usr/local/Ascend/add-ons:$LD_LIBRARY_PATH
         export PYTHONPATH=${install_path}/nnrt/latest/pyACL/python/site-packages/acl:$PYTHONPATH
         export ASCEND_OPP_PATH=${install_path}/nnrt/latest/opp
         export ASCEND_AICPU_PATH=${install_path}/nnrt/latest/x86_64-linux  
