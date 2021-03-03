@@ -168,12 +168,27 @@ def write_instance_to_example_files(instances, tokenizer, max_seq_length,
 
 
 def create_int_feature(values):
+    """
+    create initial feature.
+    Args:
+        values (list or tuple): list/tuple of folats.
+    Returns:
+        feature (tf.Tensor): feature data
+    """
     feature = tf.train.Feature(int64_list=tf.train.Int64List(
         value=list(values)))
     return feature
 
 
 def create_float_feature(values):
+    """
+    create float feature.
+    Args:
+        values (list or tuple): list/tuple of folats.
+    Returns:
+        feature (tf.Tensor): feature data
+        
+    """
     feature = tf.train.Feature(float_list=tf.train.FloatList(
         value=list(values)))
     return feature
@@ -421,6 +436,11 @@ def truncate_seq_pair(tokens_a, tokens_b, max_num_tokens, rng):
 
 
 def main(_):
+    """
+    main function of creatint pretraining data.
+    Args:
+        
+    """
     tf.logging.set_verbosity(tf.logging.INFO)
 
     tokenizer = tokenization.FullTokenizer(vocab_file=FLAGS.vocab_file,

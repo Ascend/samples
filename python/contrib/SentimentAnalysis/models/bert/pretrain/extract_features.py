@@ -79,6 +79,13 @@ flags.DEFINE_bool(
 
 
 class InputExample(object):
+    """
+    INPUT EXAMPLE
+    Args:
+        unique_id (int): .
+        text_a (string): .
+        text_b (string): .
+    """
     def __init__(self, unique_id, text_a, text_b):
         self.unique_id = unique_id
         self.text_a = text_a
@@ -172,6 +179,9 @@ def model_fn_builder(bert_config, init_checkpoint, layer_indexes, use_tpu,
         if use_tpu:
 
             def tpu_scaffold():
+                """
+                TPU SCAFFOLD.
+                """
                 tf.train.init_from_checkpoint(init_checkpoint, assignment_map)
                 return tf.train.Scaffold()
 
@@ -341,6 +351,10 @@ def read_examples(input_file):
 
 
 def main(_):
+    """
+    main fun of extract features.
+    
+    """
     tf.logging.set_verbosity(tf.logging.INFO)
 
     layer_indexes = [int(x) for x in FLAGS.layers.split(",")]

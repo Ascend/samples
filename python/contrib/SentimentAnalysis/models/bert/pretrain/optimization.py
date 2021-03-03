@@ -1,18 +1,21 @@
-# coding=utf-8
-# Copyright (c) 2019 NVIDIA CORPORATION. All rights reserved.
-# Copyright 2018 The Google AI Language Team Authors.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+"""
+coding=utf-8
+
+Copyright (c) 2019 NVIDIA CORPORATION. All rights reserved.
+Copyright 2018 The Google AI Language Team Authors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+"""
 """Functions and classes related to optimization (weight updates)."""
 
 from __future__ import absolute_import
@@ -365,8 +368,8 @@ class LAMBOptimizer(tf.train.Optimizer):
                           tf.multiply(1.0 - self.beta_2, tf.square(grad)))
 
                 self.steps += 1
-                beta1_correction = (1 - self.beta_1**self.steps)
-                beta2_correction = (1 - self.beta_2**self.steps)
+                beta1_correction = (1 - self.beta_1 ** self.steps)
+                beta2_correction = (1 - self.beta_2 ** self.steps)
 
                 next_m_unbiased = next_m / beta1_correction
                 next_v_unbiased = next_v / beta2_correction

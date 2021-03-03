@@ -168,7 +168,7 @@ flags.DEFINE_bool(
 
 flags.DEFINE_bool('hcom_parallel', True, 'Whether to use parallel allreduce')
 
-flags.DEFINE_integer('init_loss_scale_value', 2**32,
+flags.DEFINE_integer('init_loss_scale_value', 2 ** 32,
                      'Initial loss scale value for loss scale optimizer')
 
 
@@ -191,12 +191,18 @@ class _LogSessionRunHook(tf.train.SessionRunHook):
         self.avg_loss = 0.0
 
     def after_create_session(self):
+        """
+        after create session, reset env.
+        """
         self.elapsed_secs = 0.
         self.count = 0
         self.all_count = 0
         self.avg_loss = 0.0
 
     def before_run(self):
+        """
+        before run, set env.
+        """
         self.t0 = time.time()
         if self.num_accumulation_steps <= 1:
             if (tf.flags.FLAGS.npu_bert_loss_scale
@@ -226,6 +232,11 @@ class _LogSessionRunHook(tf.train.SessionRunHook):
                 ])
 
     def after_run(self, run_values):
+        """
+        after run, do same upate.
+        Args:
+            run_values (list): values of outputs
+        """
         self.elapsed_secs += time.time() - self.t0
         if self.num_accumulation_steps <= 1:
             if (tf.flags.FLAGS.npu_bert_loss_scale
@@ -639,6 +650,9 @@ def _decode_record(record, name_to_features):
 
 
 def main(_):
+    """
+    main function
+    """
     for name, value in FLAGS.__flags.items():
         print("name:", name, "      ", FLAGS[name].value)
 
@@ -715,13 +729,15 @@ def main(_):
     training_hooks = []
     """
   if FLAGS.report_loss and (not FLAGS.horovod or hvd.rank() == 0):
-    global_batch_size = FLAGS.train_batch_size * FLAGS.num_accumulation_steps if not FLAGS.horovod else FLAGS.train_batch_size * FLAGS.num_accumulation_steps * hvd.size()
+    global_batch_size = FLAGS.train_batch_size * FLAGS.num_accumulation_steps \
+        if not FLAGS.horovod else FLAGS.train_batch_size * FLAGS.num_accumulation_steps * hvd.size()
     training_hooks.append(_LogSessionRunHook(global_batch_size, FLAGS.num_accumulation_steps, FLAGS.display_loss_steps))
   if FLAGS.horovod and hvd.size() > 1:
     training_hooks.append(hvd.BroadcastGlobalVariablesHook(0))
   """
     if FLAGS.report_loss:
-        global_batch_size = FLAGS.train_batch_size * FLAGS.num_accumulation_steps if not FLAGS.distributed else FLAGS.train_batch_size * FLAGS.num_accumulation_steps * rank_size
+        global_batch_size = FLAGS.train_batch_size * FLAGS.num_accumulation_steps \
+            if not FLAGS.distributed else FLAGS.train_batch_size * FLAGS.num_accumulation_steps * rank_size
         training_hooks.append(
             _LogSessionRunHook(global_batch_size, FLAGS.num_accumulation_steps,
                                FLAGS.display_loss_steps))

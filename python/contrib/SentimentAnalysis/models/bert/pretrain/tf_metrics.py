@@ -98,6 +98,18 @@ def f1(labels,
        pos_indices=None,
        weights=None,
        average='micro'):
+    """
+    metric 1
+    Args:
+        labels (tf.Tensor): label of data.
+        predictions (tf.Tensor): prediction of data.
+        num_classes (int): num of classes.
+        pos_indices (list): None.
+        weights (list): None.
+        average (string): 'micro'.
+    Returns:
+        fbeta (function): a metric function.
+    """
     return fbeta(labels, predictions, num_classes, pos_indices, weights,
                  average)
 
@@ -177,7 +189,7 @@ def pr_re_fbeta(cm, pos_indices, beta=1):
 
     pr = safe_div(diag_sum, tot_pred)
     re = safe_div(diag_sum, tot_gold)
-    fbeta_ = safe_div((1. + beta**2) * pr * re, beta**2 * pr + re)
+    fbeta_ = safe_div((1. + beta ** 2) * pr * re, beta ** 2 * pr + re)
 
     return pr, re, fbeta_
 

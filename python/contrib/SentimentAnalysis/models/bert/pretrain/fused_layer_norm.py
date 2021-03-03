@@ -1,18 +1,18 @@
-# coding=utf-8
-# Copyright 2018 The Google AI Language Team Authors.
-# Copyright (c) 2018, NVIDIA CORPORATION.  All rights reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+"""coding=utf-8
+Copyright 2018 The Google AI Language Team Authors.
+Copyright (c) 2018, NVIDIA CORPORATION.  All rights reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License."""
 
 import collections
 import copy
@@ -31,7 +31,6 @@ from tensorflow.python.ops import array_ops
 from tensorflow.python.framework import dtypes
 from tensorflow.python.ops import nn
 
-
 def fused_layer_norm(inputs,
                      center=True,
                      scale=True,
@@ -44,6 +43,26 @@ def fused_layer_norm(inputs,
                      begin_params_axis=-1,
                      scope=None,
                      use_fused_batch_norm=False):
+    
+    """
+    fuse norm of layers.
+
+    Args:
+        inputs (List), list of input tensors.
+        center (bool): True.
+        scale (bool): True.
+        activation_fn (tf.nn): None.
+        reuse: (List): None.
+        variables_collections (List): None.
+        outputs_collections (List): None.
+        trainable (bool): True.
+        begin_norm_axis (Interge): 1.
+        begin_params_axis (Integer): -1.
+        scope (string): scope name.
+        use_fused_batch_norm (bool): False.
+    Returns:
+        outputs (List): nameed tensors.
+    """
     with tf.variable_scope(scope, 'LayerNorm', [inputs], reuse=reuse) as sc:
         inputs = ops.convert_to_tensor(inputs)
         inputs_shape = inputs.shape

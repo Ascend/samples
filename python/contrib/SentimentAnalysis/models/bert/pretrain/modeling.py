@@ -1,17 +1,17 @@
-# coding=utf-8
-# Copyright 2018 The Google AI Language Team Authors.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+"""coding=utf-8
+Copyright 2018 The Google AI Language Team Authors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License."""
 """The main BERT model and related functions."""
 
 from __future__ import absolute_import
@@ -130,7 +130,7 @@ class BertModel(object):
                  token_type_ids=None,
                  use_one_hot_embeddings=False,
                  scope=None,
-                 compute_type=tf.float32):
+                 compute_type=None):
         """Constructor for BertModel.
     Args:
       config: `BertConfig` instance.
@@ -165,7 +165,8 @@ class BertModel(object):
         if token_type_ids is None:
             token_type_ids = tf.zeros(shape=[batch_size, seq_length],
                                       dtype=tf.int32)
-
+        if compute_type is None:
+            compute_type = tf.float32
         with tf.variable_scope(scope,
                                default_name="bert",
                                custom_getter=get_custom_getter(compute_type)):
@@ -242,6 +243,13 @@ class BertModel(object):
                         config.initializer_range))
 
     def get_pooled_output(self):
+        """
+        get pooled output.
+        Args:
+
+        Returns:
+            self.pooled_output (tf.Tensor): outputs.
+        """
         return self.pooled_output
 
     def get_sequence_output(self):
@@ -253,6 +261,10 @@ class BertModel(object):
         return self.sequence_output
 
     def get_all_encoder_layers(self):
+        """
+        get encoder layers.
+
+        """
         return self.all_encoder_layers
 
     def get_embedding_output(self):
@@ -266,6 +278,9 @@ class BertModel(object):
         return self.embedding_output
 
     def get_embedding_table(self):
+        """
+        get embedding table.
+        """
         return self.embedding_table
 
 
@@ -627,6 +642,17 @@ def attention_layer(from_tensor,
   """
     def transpose_for_scores(input_tensor, batch_size, num_attention_heads,
                              seq_length, width):
+        """
+        transpose outputs.
+        Args:
+            input_tensor (tf.Tensor): input.
+            batch_size (int): .
+            num_attention_heads (int): .
+            seq_length (int): .
+            width (int): .
+        Returns:
+            output_tensor (tf.Tensor): output score.
+        """
         output_tensor = tf.reshape(
             input_tensor, [batch_size, seq_length, num_attention_heads, width])
 
@@ -759,7 +785,7 @@ def transformer_model(input_tensor,
                       num_hidden_layers=12,
                       num_attention_heads=12,
                       intermediate_size=3072,
-                      intermediate_act_fn=gelu,
+                      intermediate_act_fn=None,
                       hidden_dropout_prob=0.1,
                       attention_probs_dropout_prob=0.1,
                       initializer_range=0.02,
@@ -864,6 +890,8 @@ def transformer_model(input_tensor,
                                                   layer_input)
 
             # The activation is only applied to the "intermediate" hidden layer.
+            if intermediate_act_fn is None:
+                intermediate_act_fn = gelu
             with tf.variable_scope("intermediate"):
                 intermediate_output = tf.layers.dense(
                     attention_output,

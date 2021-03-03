@@ -1,9 +1,10 @@
 import tensorflow as tf
 import time
 
-
-# report latency and throughput during eval
 class LogEvalRunHook(tf.train.SessionRunHook):
+    """
+    report latency and throughput during eval.
+    """
     def __init__(self, global_batch_size, hvd_rank=-1):
         self.global_batch_size = global_batch_size
         self.hvd_rank = hvd_rank
@@ -13,9 +14,15 @@ class LogEvalRunHook(tf.train.SessionRunHook):
         self.time_list = []
 
     def before_run(self):
+        """
+        before run, set time.
+        """
         self.t0 = time.time()
 
     def after_run(self):
+        """
+        after run, update time.
+        """
         elapsed_secs = time.time() - self.t0
         self.count += 1
 
@@ -28,8 +35,10 @@ class LogEvalRunHook(tf.train.SessionRunHook):
             self.total_time += elapsed_secs
 
 
-# report throughput during training
 class LogTrainRunHook(tf.train.SessionRunHook):
+    """
+    report throughput during training.
+    """
     def __init__(self,
                  global_batch_size,
                  hvd_rank=-1,
@@ -46,13 +55,22 @@ class LogTrainRunHook(tf.train.SessionRunHook):
         self.t0 = time.time()
 
     def after_create_session(self, session):
+        """
+        init step.
+        """
         self.init_global_step = session.run(tf.train.get_global_step())
 
     def before_run(self):
+        """
+        before run, reset time.
+        """
         self.t0 = time.time()
         return tf.train.SessionRunArgs(fetches=['step_update:0'])
 
     def after_run(self, run_values):
+        """
+        after run, update env.
+        """
         elapsed_secs = time.time() - self.t0
         self.global_step = run_values.results[0]
         self.count += 1
@@ -66,6 +84,9 @@ class LogTrainRunHook(tf.train.SessionRunHook):
             self.total_time += elapsed_secs
 
     def end(self):
+        """
+        end of run, update step.
+        """
         num_global_steps = self.global_step - self.init_global_step
 
         self.skipped = (num_global_steps // self.save_checkpoints_steps) * 2 + \

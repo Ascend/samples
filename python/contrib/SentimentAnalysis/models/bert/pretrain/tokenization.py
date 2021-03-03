@@ -161,6 +161,11 @@ class FullTokenizer(object):
         self.wordpiece_tokenizer = WordpieceTokenizer(vocab=self.vocab)
 
     def tokenize(self, text):
+        """
+        convert text to tokens.
+        Args:
+            text ():
+        """
         split_tokens = []
         for token in self.basic_tokenizer.tokenize(text):
             for sub_token in self.wordpiece_tokenizer.tokenize(token):
@@ -169,9 +174,19 @@ class FullTokenizer(object):
         return split_tokens
 
     def convert_tokens_to_ids(self, tokens):
+        """
+        convert tokens to ids
+        Args:
+            tokens ():
+        """
         return convert_by_vocab(self.vocab, tokens)
 
     def convert_ids_to_tokens(self, ids):
+        """
+        convert ids to tokens.
+        Args:
+            ids ():
+        """
         return convert_by_vocab(self.inv_vocab, ids)
 
 
@@ -191,6 +206,13 @@ class BertTokenizer(object):
         self.wordpiece_tokenizer = WordpieceTokenizer(vocab=self.vocab)
 
     def tokenize(self, text):
+        """
+        convert text to tokens.
+        Args:
+            text (list): .
+        Returns:
+            split_tokens (list): .
+        """
         split_tokens = []
         for token in self.basic_tokenizer.tokenize(text):
             for sub_token in self.wordpiece_tokenizer.tokenize(token):
