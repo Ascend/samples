@@ -21,7 +21,7 @@ from tensorflow.contrib import rnn
 from bert.pretrain import modeling
 
 
-class lstm(object):
+class Lstm(object):
     """
     LSTM model.
     """

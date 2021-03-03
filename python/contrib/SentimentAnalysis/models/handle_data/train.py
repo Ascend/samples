@@ -25,7 +25,7 @@ import tensorflow as tf
 import tensorflow.contrib.rnn as rnn
 from tensorflow.python.framework.graph_util import convert_variables_to_constants
 
-from model.lstm import *
+from model.lstm import Lstm
 from handle_data.batch_iter import pair_data_variable, create_batch_iter
 
 best_acc = 0
@@ -38,7 +38,7 @@ def train(train_data, dev_data, src_vocab, tgt_vocab, tgt_size, config,
     train api
     """
     print('init model')
-    model = lstm(tgt_size, config, bert_config, tokenizer)
+    model = Lstm(tgt_size, config, bert_config, tokenizer)
     model.dropout = config.dropout
 
     init = tf.global_variables_initializer()

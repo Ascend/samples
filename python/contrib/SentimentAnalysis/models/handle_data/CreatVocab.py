@@ -16,7 +16,6 @@ limitations under the License.
 ============================================================================
 """
 import numpy as np
-from collections import Counter
 import random
 
 random.seed(233)
