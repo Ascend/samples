@@ -158,7 +158,7 @@ J2轴和J3轴主要影响相机X Z轴，略微影响Y轴坐标但简化忽略。
             根据之前的假设，J1轴的运动问题可以在世界坐标系的XOY投影平面内分析。
             ![J1](doc/J1.png)
           
-            如图所示，A(x~A, x~B)为Target的实际位置，B(x~A, x~B)为当前相机视场中心位置（图像中心）。运动目标为机械臂移动之后Target位于视场中心。J1轴的移动角度$\theta_1$可表示为：
+            如图所示，A($x_A$, $y_A$)为Target的实际位置，B($x_B$, $y_B$)为当前相机视场中心位置（图像中心）。运动目标为机械臂移动之后Target位于视场中心。J1轴的移动角度$\theta_1$可表示为：
             
             $$
             \theta_1 = \arccos[\frac{\overrightarrow {OA} \cdot \overrightarrow {OB}}
