@@ -16,7 +16,7 @@ limitations under the License.
 ============================================================================
 """
 import re
-from collections import Counter
+import collections
 
 
 def clean_str(string):
@@ -63,9 +63,9 @@ def read_sentence(path, is_train):
     read sentence.
     """
     data = []
-    sentence_length = Counter()
-    feature_dict = Counter()
-    label_dict = Counter()
+    sentence_length = collections.Counter()
+    feature_dict = collections.Counter()
+    label_dict = collections.Counter()
     with open(path, "r", encoding="utf-8") as f:
         sentence = []
         for s in f:
@@ -83,7 +83,8 @@ def read_sentence(path, is_train):
             sentence = []
 
     if is_train:
-        return (data, sentence_length, feature_dict, label_dict)
+        res = [sentence_length, feature_dict, label_dict]
+        return data, res
 
     return data, sentence_length
 
@@ -93,7 +94,7 @@ def decoder_sentence(path):
     decode sentence.
     """
     data = []
-    sentence_length = Counter()
+    sentence_length = collections.Counter()
     with open(path, "r", encoding="utf-8") as f:
         sentence = []
         for s in f:

@@ -555,7 +555,7 @@ def input_fn_builder(input_files,
                      max_seq_length,
                      max_predictions_per_seq,
                      is_training,
-                     num_cpu_threads=4)
+                     num_cpu_threads=4):
     """Creates an `input_fn` closure to be passed to Estimator."""
     def input_fn():
         """The actual input function."""

@@ -86,11 +86,12 @@ if __name__ == '__main__':
             src_vocab = pickle.load(f)
         with open(config.save_dirs + '/' + config.label_path, 'rb') as f:
             tgt_vocab = pickle.load(f)
-        train("", dev_data, src_vocab, tgt_vocab, tgt_vocab.size, config,
+        train("", dev_data, (src_vocab, tgt_vocab), tgt_vocab.size, config,
               bert_config, tokenizer)
     else:
-        train_data, sentence_length, src_dic, tgt_dic = dataLoader.read_sentence(
+        train_data, res = dataLoader.read_sentence(
             "./data/train_hotel.txt", True)
+        sentence_length, src_dic, tgt_dic = res
         dev_data, sentence_length = dataLoader.read_sentence(
             "./data/dev_hotel.txt", False)
         src_vocab, tgt_vocab = CreatVocab.create_vocabularies(
