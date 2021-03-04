@@ -727,7 +727,7 @@ void DisposeOutPts(OutPt*& pp)
 
 inline void InitEdge(TEdge* e, TEdge* eNext, TEdge* ePrev, const IntPoint& Pt)
 {
-  std::memset(e, int(0), sizeof(TEdge));
+  std::memset((void*) e, int(0), sizeof(TEdge));
   e->Next = eNext;
   e->Prev = ePrev;
   e->Curr = Pt;
@@ -1948,7 +1948,7 @@ void Clipper::CopyAELToSEL()
 }
 //------------------------------------------------------------------------------
 
-void Clipper::AddJoin(OutPt *op1, OutPt *op2, IntPoint OffPt)
+void Clipper::AddJoin(OutPt *op1, OutPt *op2,const IntPoint &OffPt)
 {
   Join* j = new Join;
   j->OutPt1 = op1;
@@ -1974,7 +1974,7 @@ void Clipper::ClearGhostJoins()
 }
 //------------------------------------------------------------------------------
 
-void Clipper::AddGhostJoin(OutPt *op, IntPoint OffPt)
+void Clipper::AddGhostJoin(OutPt *op, const IntPoint &OffPt)
 {
   Join* j = new Join;
   j->OutPt1 = op;
