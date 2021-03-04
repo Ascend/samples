@@ -41,7 +41,7 @@ public:
     * @param [in] modelPath: model path
     * @return result
     */
-    Result load_model_from_file_with_mem(const char *modelPath);
+    Result LoadModelFromFileWithMem(const char *modelPath);
 
     /**
     * @brief unload model
@@ -65,12 +65,12 @@ public:
     * @param [in] bufferSize: input buffer size
     * @return result
     */
-    Result create_input(void *inputDataBuffer, size_t bufferSize);
+    Result CreateInput(void *inputDataBuffer, size_t bufferSize);
 
     /**
     * @brief destroy input resource
     */
-    void destroy_input();
+    void DestroyInput();
 
     /**
     * @brief create output buffer
@@ -81,13 +81,13 @@ public:
     /**
     * @brief destroy output resource
     */
-    void destroy_output();
+    void DestroyOutput();
 
     /**
     * @brief model execute
     * @return result
     */
-    Result execute();
+    Result Execute();
 
     /**
     * @brief get model output data
