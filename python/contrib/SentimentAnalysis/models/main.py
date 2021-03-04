@@ -105,5 +105,5 @@ if __name__ == '__main__':
             pickle.dump(tgt_vocab, f)
         print("save tgt_vocab successfully in " + config.save_dirs + '/' +
               config.label_path)
-        train(train_data, dev_data, src_vocab, tgt_vocab, tgt_vocab.size,
+        train(train_data, dev_data, (src_vocab, tgt_vocab), tgt_vocab.size,
               config, bert_config, tokenizer)

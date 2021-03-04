@@ -555,12 +555,10 @@ def input_fn_builder(input_files,
                      max_seq_length,
                      max_predictions_per_seq,
                      is_training,
-                     num_cpu_threads=4,
-                     hvd=None):
+                     num_cpu_threads=4)
     """Creates an `input_fn` closure to be passed to Estimator."""
     def input_fn():
         """The actual input function."""
-        
         name_to_features = {
             "input_ids":
             tf.FixedLenFeature([max_seq_length], tf.int64),
@@ -654,8 +652,8 @@ def main(_):
     """
     main function
     """
-    for name, value in FLAGS.__flags.items():
-        print("name:", name, "      ", FLAGS[name].value)
+    # for name, value in FLAGS.__flags.items():
+    #     print("name:", name, "      ", FLAGS[name].value)
 
     tf.logging.set_verbosity(tf.logging.INFO)
 
@@ -707,8 +705,8 @@ def main(_):
         config.gpu_options.visible_device_list = str(hvd.local_rank())
         if hvd.rank() == 0:
             tf.logging.info("***** Configuaration *****")
-            for key in FLAGS.__flags.keys():
-                tf.logging.info('  {}: {}'.format(key, getattr(FLAGS, key)))
+            # for key in FLAGS.__flags.keys():
+            #     tf.logging.info('  {}: {}'.format(key, getattr(FLAGS, key)))
             tf.logging.info("**************************")
 
 
@@ -744,8 +742,8 @@ def main(_):
             batch_size=FLAGS.train_batch_size,
             max_seq_length=FLAGS.max_seq_length,
             max_predictions_per_seq=FLAGS.max_predictions_per_seq,
-            is_training=True,
-            hvd=None if not FLAGS.horovod else hvd)
+            is_training=True) # ,
+            # hvd=None if not FLAGS.horovod else hvd)
 
         #estimator.train(input_fn=train_input_fn, hooks=training_hooks, max_steps=FLAGS.num_train_steps)
 
@@ -762,8 +760,8 @@ def main(_):
             batch_size=FLAGS.eval_batch_size,
             max_seq_length=FLAGS.max_seq_length,
             max_predictions_per_seq=FLAGS.max_predictions_per_seq,
-            is_training=False,
-            hvd=None if not FLAGS.horovod else hvd)
+            is_training=False) # ,
+            # hvd=None if not FLAGS.horovod else hvd)
 
         eval_hooks = [LogEvalRunHook(FLAGS.eval_batch_size)]
         eval_start_time = time.time()

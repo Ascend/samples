@@ -26,15 +26,17 @@ import tensorflow as tf
 from tensorflow.python.platform import gfile
 
 from handle_data import dataLoader, CreatVocab
-from handle_data.CreatVocab import *
+# from handle_data.CreatVocab import *
+from handle_data.CreatVocab import graph_util
 from handle_data.batch_iter import create_batch_iter, pair_data_variable
 from model.lstm import Lstm
 from driver.Config import Configurable
 from bert.pretrain import modeling, tokenization
 
 
-def train(train_data, dev_data, src_vocab, tgt_vocab, config,
-          bert_config, tokenizer):
+def train(train_data, dev_data, vocab, config,
+          bert_config_):
+    src_vocab, tgt_vocab = vocab
     print('init model')
     model = None
     print('start training...')
@@ -50,14 +52,13 @@ def train(train_data, dev_data, src_vocab, tgt_vocab, config,
             sess.run(tf.global_variables_initializer())
 
         # if config.decode:
-        if True:
-            decode(model, sess, dev_data, src_vocab, tgt_vocab, config,
-                   bert_config, tokenizer)
-            print('decode successful!')
-            return 0
+        decode(model, sess, dev_data, vocab, config,
+                bert_config_)
+        print('decode successful!')
+        return 0
 
         writer = tf.summary.FileWriter("logs1/", sess.graph)
-        evaluate(model, -1, sess, dev_data, src_vocab, tgt_vocab, config)
+        evaluate(model, -1, sess, dev_data, vocab, config)
         for i in range(config.epochs):
             step = 1
             train_batch_iter = create_batch_iter(train_data,
@@ -84,11 +85,11 @@ def train(train_data, dev_data, src_vocab, tgt_vocab, config,
                     print('epoch:{} step:{}|{} acc={:.2f}% loss={:.5f}'.format(
                         i, step, time_str, accuracy, loss))
                 step += 1
-            evaluate(model, i, sess, dev_data, src_vocab, tgt_vocab, config)
+            evaluate(model, i, sess, dev_data, vocab, config)
 
 
-def decode(model, sess, dev_data, src_vocab, tgt_vocab, config, tokenizer):
-
+def decode(model, sess, dev_data, vocab, config):
+    src_vocab, tgt_vocab = vocab
     # load model
     print('existed model path is :    ' + config.save_dirs + '/' +
           config.save_model_path)
@@ -96,7 +97,7 @@ def decode(model, sess, dev_data, src_vocab, tgt_vocab, config, tokenizer):
     with open(config.save_dirs + '/' + config.save_model_path, 'rb') as f:
         graph_def.ParseFromString(f.read())
         sess.graph.as_default()
-        tf.import_graph_def(graph_def, name='')  # 导入计算
+        tf.import_graph_def(graph_def, name='')
 
     sess = tf.Session()
     sess.run(tf.global_variables_initializer())
@@ -104,8 +105,7 @@ def decode(model, sess, dev_data, src_vocab, tgt_vocab, config, tokenizer):
     _w = sess.graph.get_tensor_by_name('w:0')
     # _gold = sess.graph.get_tensor_by_name('gold:0')
     logits = sess.graph.get_tensor_by_name('s/logits:0')
-
-    # model.dropout = 0
+    model.dropout = 0
     w = []
     pre = []
     print('start decode...')
@@ -146,7 +146,8 @@ def decode(model, sess, dev_data, src_vocab, tgt_vocab, config, tokenizer):
         #     s_input = ''
 
 
-def evaluate(model, epoch, sess, dev_data, src_vocab, tgt_vocab, config):
+def evaluate(model, epoch, sess, dev_data, vocab, config):
+    src_vocab, tgt_vocab = vocab
     print('start evaluate...')
     total_acc = 0
     gold_num = 0
@@ -166,12 +167,13 @@ def evaluate(model, epoch, sess, dev_data, src_vocab, tgt_vocab, config):
                              })
         total_acc += acc
     accuracy = total_acc / gold_num * 100
+    _best_acc = best_acc
     print('acc={:.2f}%'.format(accuracy))
-    if accuracy > best_acc:
-        best_acc = accuracy
-        best_epoch = epoch
+    if accuracy > _best_acc:
+        _best_acc = accuracy
+        _best_epoch = epoch
         print('##Update! best_acc={:.2f}% in epoch {}'.format(
-            best_acc, best_epoch))
+            _best_acc, _best_epoch))
         output_graph_def = graph_util.convert_variables_to_constants(
             sess, sess.graph_def, output_node_names=['s/logits'])
         with tf.gfile.GFile(config.save_dirs + '/' + config.save_model_path,
@@ -181,7 +183,7 @@ def evaluate(model, epoch, sess, dev_data, src_vocab, tgt_vocab, config):
               config.save_model_path)
     else:
         print('not update, best_acc={:.2f}% in epoch {}'.format(
-            best_acc, best_epoch))
+            _best_acc, _best_epoch))
 
 
 if __name__ == '__main__':
@@ -247,5 +249,5 @@ if __name__ == '__main__':
 
     best_acc = 0
     best_epoch = 0
-    train("", dev_data_, src_vocab_, tgt_vocab_, tgt_vocab_.size, config_,
-          bert_config, tokenizer)
+    train("", dev_data_, (src_vocab_, tgt_vocab_), tgt_vocab_.size, config_,
+          bert_config)

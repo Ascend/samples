@@ -25,7 +25,7 @@ def clean_str(string):
     Original taken from https://github.com/yoonkim/CNN_sentence/blob/master/process_data.py
     """
     string = string.lower()
-    string = re.sub(r"，", r",", string)
+    string = re.sub(r",", r",", string)
     string = re.sub(r"\'s", r" \'s", string)
     string = re.sub(r"\'ve", r" \'ve", string)
     string = re.sub(r"n\'t", r" n\'t", string)

@@ -32,11 +32,12 @@ best_acc = 0
 best_epoch = 0
 
 
-def train(train_data, dev_data, src_vocab, tgt_vocab, tgt_size, config,
+def train(train_data, dev_data, vocab, tgt_size, config,
           bert_config, tokenizer):
     """
     train api
     """
+    src_vocab, tgt_vocab = vocab
     print('init model')
     model = Lstm(tgt_size, config, bert_config, tokenizer)
     model.dropout = config.dropout
@@ -55,13 +56,13 @@ def train(train_data, dev_data, src_vocab, tgt_vocab, tgt_size, config,
             sess.run(init)
 
         if config.decode:  # false
-            decode(model, sess, dev_data, src_vocab, tgt_vocab, config,
+            decode(model, sess, dev_data, vocab, config,
                    bert_config, tokenizer)
             print('decode successful!')
             return 0
 
         writer = tf.summary.FileWriter("logs1/", sess.graph)
-        evaluate(model, -1, sess, dev_data, src_vocab, tgt_vocab, config)
+        evaluate(model, -1, sess, dev_data, vocab, config)
         for i in range(config.epochs):
             print("begin the {}/{} of epochs.............".format(
                 i, config.epochs))
@@ -90,13 +91,14 @@ def train(train_data, dev_data, src_vocab, tgt_vocab, tgt_size, config,
                     print('epoch:{} step:{}|{} acc={:.2f}% loss={:.5f}'.format(
                         i, step, time_str, accuracy, loss))
                 step += 1
-            evaluate(model, i, sess, dev_data, src_vocab, tgt_vocab, config)
+            evaluate(model, i, sess, dev_data, vocab, config)
 
 
-def decode(model, sess, dev_data, src_vocab, tgt_vocab, config):
+def decode(model, sess, dev_data, vocab, config):
     """
     decode data
     """
+    src_vocab, tgt_vocab = vocab
     # load model
     graph_def = tf.GraphDef()
     with open(config.save_dirs + '/' + config.save_model_path, 'rb') as f:
@@ -139,10 +141,11 @@ def decode(model, sess, dev_data, src_vocab, tgt_vocab, config):
             s_input = ''
 
 
-def evaluate(model, epoch, sess, dev_data, src_vocab, tgt_vocab, config):
+def evaluate(model, epoch, sess, dev_data, vocab, config):
     """
     evaluate model.
     """
+    src_vocab, tgt_vocab = vocab
     print('start evaluate...')
     total_acc = 0
     gold_num = 0
