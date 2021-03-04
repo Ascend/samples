@@ -255,8 +255,12 @@ class Int128 {
   Int128 &operator=(const long64 &val) {
     lo = (ulong64) val;
     if (val < 0) hi = -1; else hi = 0;
-    Int128 result(*this);
-    result = val;
+    return *this;
+  }
+
+  Int128 &operator=(const Int128 &val) {
+    lo = val.lo;
+    hi = val.hi;
     return *this;
   }
 
@@ -2878,7 +2882,8 @@ bool GetOverlap(const cInt a1, const cInt a2, const cInt b1, const cInt b2,
     if (b1 < b2) {
       Left = std::max(a1, b1);
       Right = std::min(a2, b2);
-    } else {
+    }
+    else {
       Left = std::max(a1, b2);
       Right = std::min(a2, b1);
     }
@@ -2886,7 +2891,8 @@ bool GetOverlap(const cInt a1, const cInt a2, const cInt b1, const cInt b2,
     if (b1 < b2) {
       Left = std::max(a2, b1);
       Right = std::min(a1, b2);
-    } else {
+    }
+    else {
       Left = std::max(a2, b2);
       Right = std::min(a1, b1);
     }
