@@ -270,7 +270,7 @@ class Int128
 
     Int128(const long64& _hi, const ulong64& _lo): lo(_lo), hi(_hi){}
     
-    Int128& operator = (const long64 &val)
+    Int128& operator=(const long64 &val)
     {
       lo = (ulong64)val;
       if (val < 0) hi = -1; else hi = 0;
