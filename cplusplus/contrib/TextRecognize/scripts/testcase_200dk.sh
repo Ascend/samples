@@ -1,11 +1,9 @@
-caffe_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/handwrite/resnet.caffemodel"
-caffe_prototxt="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/handwrite/resnet.prototxt"
-aipp_cfg="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/handwrite/insert_op.cfg"
-model_name="resnet"
-presenter_server_name="hand_write"
-
-
-project_name="cplusplus_hand_write"
+fisrt_pb_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/painting/AIPainting_v1.pb"
+second_pb_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/painting/AIPainting_v2.pb"
+first_model_name="dbnet"
+second_model_name="crnn"
+presenter_server_name="text_recognize"
+project_name="TextRecognize"
 
 version=$1
 
@@ -16,6 +14,18 @@ declare -i success=0
 declare -i inferenceError=1
 declare -i verifyResError=2
 
+
+
+function downloadData() {
+
+    mkdir -p ${project_path}/data/
+    if [ $? -ne 0 ];then
+        echo "download test1.jpg failed, please check Network."
+        return 1
+    fi
+
+    return 0
+}
 
 
 function setAtcEnv() {
@@ -51,27 +61,14 @@ function setBuildEnv() {
 }
 
 function downloadOriginalModel() {
-    
     mkdir -p ${project_path}/model/
-
-    wget -O ${project_path}/model/${caffe_prototxt##*/} ${caffe_prototxt} --no-check-certificate
+    echo ${pb_model}
+    wget -O ${project_path}/model/${pb_model##*/} ${first_pb_model} --no-check-certificate
+    wget -O ${project_path}/model/${pb_model##*/} ${second_pb_model} --no-check-certificate
     if [ $? -ne 0 ];then
-        echo "install caffe_prototxt failed, please check Network."
+        echo "install pb_model failed, please check Network."
         return 1
     fi
-
-    wget -O ${project_path}/model/${caffe_model##*/} ${caffe_model} --no-check-certificate
-    if [ $? -ne 0 ];then
-        echo "install caffe_model failed, please check Network."
-        return 1
-    fi
-
-    wget -O ${project_path}/model/${aipp_cfg##*/}  ${aipp_cfg} --no-check-certificate
-    if [ $? -ne 0 ];then
-        echo "install caffe_model failed, please check Network."
-        return 1
-    fi
-
     return 0
 }
 
@@ -82,8 +79,15 @@ function main() {
         return ${inferenceError}
     fi
 
-    mkdir -p ${HOME}/models/${project_name}     
-    if [[ $(find ${HOME}/models/${project_name} -name ${model_name}".om")"x" = "x" ]];then 
+    # 下载测试集
+    downloadData
+    if [ $? -ne 0 ];then
+        echo "ERROR: download test images failed"
+        return ${inferenceError}
+    fi
+
+    mkdir -p ${HOME}/models/${project_name}
+    if [[ $(find ${HOME}/models/${project_name} -name ${fist_model_name}".om")"x" = "x" ] || [ $(find ${HOME}/models/${project_name} -name ${second_model_name}".om")"x" = "x" ] ];then
         # 下载原始模型文件[aipp_cfg文件]
         downloadOriginalModel
         if [ $? -ne 0 ];then
@@ -100,19 +104,23 @@ function main() {
 
         # 转模型
         cd ${project_path}/model/
-        atc --model=${project_path}/model/${caffe_prototxt##*/} --weight=${project_path}/model/${caffe_model##*/} --framework=0 --output=${HOME}/models/${project_name}/${model_name} --soc_version=Ascend310 --insert_op_conf=${project_path}/model/${aipp_cfg##*/} --input_shape="data:1,3,112,112" --input_format=NCHW
+	echo ${project_path} ${pb_model##*/} ${model_name}
+        atc --model=${project_path}/model/${pb_model##*/} --framework=3 --output=${HOME}/models/${project_name}/${first_model_name} --soc_version=Ascend310 --output_type=FP32 --input_shape="input_images:1,736,1312,3" --input_format=NHWC
+        atc --model=${project_path}/model/${pb_model##*/} --framework=3 --output=${HOME}/models/${project_name}/${first_model_name} --soc_version=Ascend310 --output_type=FP32 --input_shape="new_input:1,32,100,3" --input_format=NHWC
         if [ $? -ne 0 ];then
             echo "ERROR: convert model failed"
             return ${inferenceError}
         fi
 
-        ln -s ${HOME}/models/${project_name}/${model_name}".om" ${project_path}/model/${model_name}".om"
+        ln -s ${HOME}/models/${project_name}/${fisrt_model_name}".om" ${project_path}/model/${first_model_name}".om"
+        ln -s ${HOME}/models/${project_name}/${second_model_name}".om" ${project_path}/model/${second_model_name}".om"
         if [ $? -ne 0 ];then
             echo "ERROR: failed to set model soft connection"
             return ${inferenceError}
         fi
-    else 
-        ln -s ${HOME}/models/${project_name}/${model_name}".om" ${project_path}/model/${model_name}".om"
+    else
+        ln -s ${HOME}/models/${project_name}/${fist_model_name}".om" ${project_path}/model/${first_model_name}".om"
+        ln -s ${HOME}/models/${project_name}/${second_model_name}".om" ${project_path}/model/${second_model_name}".om"
         if [ $? -ne 0 ];then
             echo "ERROR: failed to set model soft connection"
             return ${inferenceError}
@@ -140,7 +148,7 @@ function main() {
         return ${inferenceError}
     fi
 
-    make 
+    make
     if [ $? -ne 0 ];then
         echo "ERROR: make failed. please check your project"
         return ${inferenceError}
@@ -153,7 +161,7 @@ function main() {
     export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/acllib/lib64:/home/HwHiAiUser/ascend_ddk/arm/lib:${LD_LIBRARY_PATH}
 
     # 开启presenter server
-    bash ${script_path}/run_presenter_server.sh 
+    bash ${script_path}/run_presenter_server.sh
     if [ $? -ne 0 ];then
         echo "ERROR: run presenter server failed. please check your project"
         return ${inferenceError}
@@ -163,11 +171,11 @@ function main() {
     # 运行程序
     mv ${project_path}/out/main ${project_path}/out/${project_name}
 
-    ./${project_name} Channel-0 &
+    ./${project_name} &
 
     sleep 8
 
-    project_pid=`ps -ef | grep "${project_name}" | grep "Channel-0" | awk -F ' ' '{print $2}'`
+    project_pid=`ps -ef | grep "${project_name}" | awk -F ' ' '{print $2}'`
     if [[ ${project_pid}"X" != "X" ]];then
         echo -e "\033[33m kill existing project process: kill -9 ${project_pid}.\033[0m"
         kill -9 ${project_pid}
@@ -185,7 +193,7 @@ function main() {
                 return ${inferenceError}
             fi
         fi
-    else 
+    else
         echo "ERROR: run failed. please check your project"
         return ${inferenceError}
     fi
