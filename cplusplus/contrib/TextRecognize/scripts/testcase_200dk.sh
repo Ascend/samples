@@ -5,7 +5,7 @@ second_model_name="crnn"
 presenter_server_name="text_recognize"
 project_name="TextRecognize"
 
-version="75"
+version=$1
 
 script_path="$( cd "$(dirname $BASH_SOURCE)" ; pwd -P)"
 project_path=${script_path}/..
@@ -30,34 +30,35 @@ function downloadData() {
 
 function setAtcEnv() {
     # 设置模型转换时需要的环境变量
-    if [[ ${version} = "c73" ]] || [[ ${version} = "C73" ]];then
-        export install_path=/home/HwHiAiUser/Ascend/ascend-toolkit/latest
-        export PATH=/usr/local/python3.7.5/bin:${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
-        export PYTHONPATH=${install_path}/atc/python/site-packages/te:${install_path}/atc/python/site-packages/topi:$PYTHONPATH
-        export ASCEND_OPP_PATH=${install_path}/opp
-        export LD_LIBRARY_PATH=${install_path}/atc/lib64:${LD_LIBRARY_PATH}
-    elif [[ ${version} = "c75" ]] || [[ ${version} = "C75" ]];then
-        export install_path=$HOME/Ascend/ascend-toolkit/latest
-        export PATH=/usr/local/python3.7.5/bin:${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
-        export ASCEND_OPP_PATH=${install_path}/opp
-        export PYTHONPATH=${install_path}/atc/python/site-packages:${install_path}/atc/python/site-packages/auto_tune.egg/auto_tune:${install_path}/atc/python/site-packages/schedule_search.egg:$PYTHONPATH
-        export LD_LIBRARY_PATH=${install_path}/atc/lib64:${LD_LIBRARY_PATH}
-    fi
+        if [[ ${version} = "c73" ]] || [[ ${version} = "C73" ]];then
+            export install_path=/home/HwHiAiUser/Ascend/ascend-toolkit/latest
+            export PATH=/usr/local/python3.7.5/bin:${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
+            export PYTHONPATH=${install_path}/atc/python/site-packages/te:${install_path}/atc/python/site-packages/topi:$PYTHONPATH
+            export ASCEND_OPP_PATH=${install_path}/opp
+            export LD_LIBRARY_PATH=${install_path}/atc/lib64:${LD_LIBRARY_PATH}
+        elif [[ ${version} = "c75" ]] || [[ ${version} = "C75" ]];then
+            export install_path=$HOME/Ascend/ascend-toolkit/latest
+            export PATH=/usr/local/python3.7.5/bin:${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
+            export ASCEND_OPP_PATH=${install_path}/opp
+            export PYTHONPATH=${install_path}/atc/python/site-packages:${install_path}/atc/python/site-packages/auto_tune.egg/auto_tune:${install_path}/atc/python/site-packages/schedule_search.egg:$PYTHONPATH
+            export LD_LIBRARY_PATH=${install_path}/atc/lib64:${LD_LIBRARY_PATH}
+        fi
 
     return 0
 }
 
 function setBuildEnv() {
     # 设置代码编译时需要的环境变量
-    if [[ ${version} = "c73" ]] || [[ ${version} = "C73" ]];then
-        export DDK_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/arm64-linux_gcc7.3.0
-        export NPU_HOST_LIB=${DDK_PATH}/acllib/lib64/stub
-    elif [[ ${version} = "c75" ]] || [[ ${version} = "C75" ]];then
-        export DDK_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/arm64-linux
-        export NPU_HOST_LIB=${DDK_PATH}/acllib/lib64/stub
-    fi
+        if [[ ${version} = "c73" ]] || [[ ${version} = "C73" ]];then
+            export DDK_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/arm64-linux_gcc7.3.0
+            export NPU_HOST_LIB=${DDK_PATH}/acllib/lib64/stub
+        elif [[ ${version} = "c75" ]] || [[ ${version} = "C75" ]];then
+            export DDK_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/arm64-linux
+            export NPU_HOST_LIB=${DDK_PATH}/acllib/lib64/stub
+        fi
 
     return 0
+
 }
 
 function downloadOriginalModel() {
