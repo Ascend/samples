@@ -54,7 +54,7 @@
     
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
-    |  googlenet | 图片分类推理模型。是基于Caffe的GoogLeNet模型。  |  请参考[https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/googlenet/ATC_googlenet_caffe_AE](https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/googlenet/ATC_googlenet_caffe_AE)目录中README.md下载原始模型章节下载模型和权重文件。 |
+    |  googlenet | 图片分类推理模型。是基于Caffe的GoogLeNet模型。  |  请参考[https://gitee.com/ascend/modelzoo/tree/master/contrib/PyTorch/Research/cv/image_classification/googlenet/ATC_googlenet_pth_AE](https://gitee.com/ascend/modelzoo/tree/master/contrib/PyTorch/Research/cv/image_classification/googlenet/ATC_googlenet_pth_AE)目录中README.md下载原始模型章节下载模型和权重文件。 |
 
     ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
     > - modelzoo中提供了转换好的om模型，但此模型不匹配当前样例，所以需要下载原始模型和权重文件后重新进行模型转换。
@@ -73,19 +73,19 @@
 
         **cd $HOME/models/googlenet_imagenet_picture**  
 
-        **https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_imagenet_picture-python/insert_op.cfg**
+        **https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_onnx_picture/insert_op.cfg**
 
-        **atc --model=./googlenet.prototxt --weight=./googlenet.caffemodel --framework=0 --output=googlenet_yuv --soc_version=Ascend310 --insert_op_conf=./insert_op.cfg --input_shape="data:1,3,224,224" --input_format=NCHW**
+        **atc --model=./googlenet.onnx --framework=5 --output=googlenet_yuv --soc_version=Ascend310 --insert_op_conf=./insert_op.cfg --input_shape="data:1,3,224,224" --input_format=NCHW**
 
     3. 执行以下命令将转换好的模型复制到样例中model文件夹中。
 
-        **cp ./googlenet_yuv.om $HOME/samples/python/level2_simple_inference/1_classification/googlenet_imagenet_picture/model/**
+        **cp ./googlenet_yuv.om $HOME/samples/python/contrib/googlenet_onnx_picture/model/**
 
 4. 获取样例需要的测试图片。
 
     执行以下命令，进入样例的data文件夹中，下载对应的测试图片。
 
-    **cd $HOME/samples/python/level2_simple_inference/1_classification/googlenet_imagenet_picture/data**
+    **cd $HOME/samples/python/contrib/googlenet_onnx_picture/data**
 
     **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_imagenet_picture-python/dog1_1024_683.jpg**
 
@@ -100,7 +100,7 @@
 
 1. 执行以下命令,将开发环境的 **googlenet_imagenet_picture** 目录上传到运行环境中，例如 **/home/HwHiAiUser**，并以HwHiAiUser（运行用户）登录运行环境（Host）。
 
-    **scp -r $HOME/samples/python/level2_simple_inference/1_classification/googlenet_imagenet_picture HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
+    **scp -r $HOME/samples/python/contrib/googlenet_onnx_picture HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
 
     **ssh HwHiAiUser@xxx.xxx.xxx.xxx**    
 
@@ -115,7 +115,7 @@
 
       **source ~/.bashrc**
         
-      **cd $HOME/samples/python/level2_simple_inference/1_classification/googlenet_imagenet_picture/src**
+      **cd $HOME/samples/python/contrib/googlenet_onnx_picture/src**
 
     - 如果是开发环境与运行环境分离部署，执行以下命令切换目录。
     
