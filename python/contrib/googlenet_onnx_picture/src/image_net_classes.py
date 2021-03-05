@@ -318,7 +318,7 @@ image_net_classes = [
 "cicada, cicala",
 "leafhopper",
 "lacewing, lacewing fly",
-"dragonfly, darning needle, devil's darning needle, sewing needle, snake feeder, snake doctor, mosquito hawk, skeeter hawk",
+"dragonfly, darning needle, devil's darning needle, sewing needle, skeeter hawk",
 "damselfly",
 "admiral",
 "ringlet, ringlet butterfly",
