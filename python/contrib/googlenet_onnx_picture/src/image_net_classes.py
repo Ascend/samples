@@ -1005,6 +1005,9 @@ image_net_classes = [
 ]
 
 def get_image_net_class(id):
+    """
+	get_gesture_categories
+    """
     if id >= len(image_net_classes):
         return "unknown"
     else:
