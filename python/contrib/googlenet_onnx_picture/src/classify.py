@@ -1,3 +1,10 @@
+"""
+Copyright (R) @huawei.com, all rights reserved
+-*- coding:utf-8 -*-
+CREATED:  2021-01-20 20:12:13
+MODIFIED: 2021-01-29 14:04:45
+"""
+
 import sys
 import os
 import acl
@@ -17,6 +24,9 @@ from image_net_classes import get_image_net_class
 from PIL import Image, ImageDraw, ImageFont
 
 class Classify(object):
+    """
+	define gesture class
+    """
     def __init__(self, acl_resource, model_path, model_width, model_height):
         self._model_path = model_path
         self._model_width = model_width
