@@ -43,7 +43,7 @@ include_directories(
         $ENV{HOME}/Ascend/driver/
         $ENV{HOME}/Ascend/
 
-        #$ENV{HOME}/ascend_ddk/arm/ros/melodic/include     #ROS include
+        //$ENV{HOME}/ascend_ddk/arm/ros/melodic/include     #ROS include
         $ENV{HOME}/ascend_ddk/arm/usr/include             #opencv 3.2.0 include
 )
 
@@ -60,7 +60,7 @@ link_directories(
         $ENV{HOME}/Ascend/
         $ENV{HOME}/presenteragent/include/ascenddk
 
-        #$ENV{HOME}/ascend_ddk/arm/ros/melodic/lib   #ROS lib
+        //$ENV{HOME}/ascend_ddk/arm/ros/melodic/lib   #ROS lib
         /usr/lib/aarch64-linux-gnu                  #OpenCV lib etc.
 )
 
