@@ -94,19 +94,83 @@
 
 ## 环境要求<a name="section3833348101215"></a>
 
--   操作系统及架构：CentOS 7.6 x86\_64、CentOS aarch64、Ubuntu 18.04 x86\_64
--   版本：20.2
+-   操作系统及架构：CentOS 7.6 x86\_64、CentOS aarch64、Ubuntu 18.04 x86\_64、EulerOS x86、EulerOS aarch64
+-   版本：20.3
 -   编译器：
-    -   Ascend310 EP/Ascend710形态编译器：g++
+    -   Ascend 310 EP/Ascend 710/Ascend 910形态编译器：
+        -   运行环境操作系统架构为x86时，编译器为g++
+        -   运行环境操作系统架构为Arm时，编译器为aarch64-linux-gnu-g++
+
     -   Atlas 200 DK编译器：aarch64-linux-gnu-g++
 
--   芯片：Ascend310、Ascend710
+-   芯片：Ascend 310、Ascend 710、Ascend 910
+
 -   python及依赖的库：python3.7.5
--   已完成昇腾AI软件栈在开发环境、运行环境上的部署。
+-   已在环境上部署昇腾AI软件栈。
 
 ## 配置环境变量<a name="section19360144319911"></a>
 
--   **Ascend310 EP/Ascend710：**
+-   **Ascend 310 EP/Ascend 910：**
+    1.  开发环境上，设置模型转换依赖的环境变量。
+
+        $\{install\_path\}表示开发套件包Ascend-cann-toolkit所在的路径。
+
+        ```
+        export PATH=${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
+        export ASCEND_OPP_PATH=${install_path}/opp
+        ```
+
+    2.  开发环境上，设置环境变量，编译脚本src/CMakeLists.txt通过环境变量所设置的头文件、库文件的路径来编译代码。
+
+        如下为设置环境变量的示例，请将$HOME/Ascend/ascend-toolkit/latest/_\{os\_arch\}_替换为开发套件包Ascend-cann-toolkit下对应架构的FwkACLlib的路径。
+
+        -   当运行环境操作系统架构为x86时，执行以下命令：
+
+            ```
+            export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux
+            export NPU_HOST_LIB=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux/fwkacllib/lib64/stub
+            ```
+
+        -   当运行环境操作系统架构为Arm时，执行以下命令：
+
+            ```
+            export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux
+            export NPU_HOST_LIB=$HOME/Ascend/ascend-toolkit/latest/arm64-linux/fwkacllib/lib64/stub
+            ```
+
+
+        使用“$HOME/Ascend/ascend-toolkit/latest/_\{os\_arch\}_/fwkacllib/lib64/stub”目录下的\*.so库，是为了编译基于AscendCL接口的代码逻辑时，不依赖其它组件（例如Driver）的任何\*.so库。编译通过后，在Host上运行应用时，会根据环境变量LD\_LIBRARY\_PATH链接到“fwkacllib/lib64“或“acllib/lib64“目录下的\*.so库，并自动链接到依赖其它组件的\*.so库。
+
+        设置环境变量后，还需修改src/CMakeLists.txt文件中的如下配置段，将“**acllib**”修改为“**fwkacllib**”。
+
+        ```
+        # Header path
+        include_directories(
+            ${INC_PATH}/acllib/include/
+            ../inc/
+        )
+        ```
+
+    3.  运行环境上，设置环境变量，运行应用时需要根据环境变量找到对应的库文件。
+        -   若运行环境上安装的是开发套件包Ascend-cann-toolkit，环境变量设置如下：
+
+            如下为设置环境变量的示例，请将$HOME/Ascend/ascend-toolkit/latest替换为FwkACLlib的路径。
+
+            ```
+            export LD_LIBRARY_PATH=$HOME/Ascend/ascend-toolkit/latest/fwkacllib/lib64
+            ```
+
+        -   若运行环境上安装的是Ascend-cann-nnrt包，环境变量设置如下：
+
+            如下为设置环境变量的示例，请将$HOME/Ascend/nnrt/latest替换为ACLlib的路径。
+
+            ```
+            export LD_LIBRARY_PATH=$HOME/Ascend/nnrt/latest/acllib/lib64
+            ```
+
+
+
+-   **Ascend 710：**
     1.  开发环境上，设置模型转换依赖的环境变量。
 
         $\{install\_path\}表示开发套件包Ascend-cann-toolkit所在的路径。
@@ -135,7 +199,7 @@
             ```
 
 
-        使用“$HOME/Ascend/ascend-toolkit/latest/_\{os\_arch\}_/acllib/lib64/stub”目录下的\*.so库，是为了编译基于AscendCL接口的代码逻辑时，不依赖其它组件（例如Driver）的任何\*.so库。编译通过后，在Host上运行应用时，通过配置环境变量，应用会链接到Host上“$HOME/Ascend/nnrt/latest/acllib/lib64”目录下的\*.so库，运行时会自动链接到依赖其它组件的\*.so库。
+        使用“$HOME/Ascend/ascend-toolkit/latest/_\{os\_arch\}_/acllib/lib64/stub”目录下的\*.so库，是为了编译基于AscendCL接口的代码逻辑时，不依赖其它组件（例如Driver）的任何\*.so库。编译通过后，在Host上运行应用时，会根据环境变量LD\_LIBRARY\_PATH链接到“$HOME/Ascend/nnrt/latest/acllib/lib64”目录下的\*.so库，并自动链接到依赖其它组件的\*.so库。
 
     3.  运行环境上，设置环境变量，运行应用时需要根据环境变量找到对应的库文件。
 
@@ -168,11 +232,11 @@
         export NPU_HOST_LIB=$HOME/Ascend/ascend-toolkit/latest/arm64-linux/acllib/lib64/stub
         ```
 
-        使用“$HOME/Ascend/ascend-toolkit/latest/arm64-linux/acllib/lib64/stub”目录下的\*.so库，是为了编译基于AscendCL接口的代码逻辑时，不依赖其它组件（例如Driver）的任何\*.so库。编译通过后，在板端环境上运行应用时，通过配置环境变量，应用会链接到板端环境上“$HOME/Ascend/acllib/lib64”目录下的\*.so库，运行时会自动链接到依赖其它组件的\*.so库。
+        使用“$HOME/Ascend/ascend-toolkit/latest/arm64-linux/acllib/lib64/stub”目录下的\*.so库，是为了编译基于AscendCL接口的代码逻辑时，不依赖其它组件（例如Driver）的任何\*.so库。编译通过后，在板端环境上运行应用时，会根据环境变量LD\_LIBRARY\_PATH链接到“$HOME/Ascend/acllib/lib64”目录下的\*.so库，并自动链接到依赖其它组件的\*.so库。
 
 
 
-## 编译运行（Ascend310 EP/Ascend710）<a name="section6441858122516"></a>
+## 编译运行（Ascend 310 EP/Ascend 710/Ascend 910）<a name="section6441858122516"></a>
 
 1.  模型转换。
     1.  以运行用户登录开发环境。
@@ -203,7 +267,11 @@
         -   --model：原始模型文件路径。
         -   --weight：权重文件路径。
         -   --framework：原始框架类型。0：表示Caffe；1：表示MindSpore；3：表示TensorFlow；5：表示ONNX。
-        -   --soc\_version：Ascend310芯片，此处配置为Ascend310；Ascend710芯片，此处配置为Ascend710。
+        -   --soc\_version：
+            -   Ascend 310芯片，此处配置为Ascend310。
+            -   Ascend 710芯片，此处配置为Ascend710。
+            -   Ascend 910芯片，此处配置为Ascend910A或Ascend910B或Ascend910ProA或Ascend910ProB或Ascend910PremiumA，其中，Pro或Premium表示芯片性能提升等级、A或B表示PartialGood等级，请根据实际情况选择。
+
         -   --insert\_op\_conf：插入AIPP（AI Preprocessing）算子的配置文件路径，用于在AI Core上完成图像预处理，包括改变图像尺寸、色域转换（转换图像格式）、减均值/乘系数（改变图像像素），数据处理之后再进行真正的模型推理。
         -   --output：生成的resnet50\_aipp.om文件存放在“样例目录/model“目录下。建议使用命令中的默认设置，否则在编译代码前，您还需要修改sample\_process.cpp中的omModelPath参数值。
 
@@ -225,14 +293,14 @@
 
         “../../../src“表示CMakeLists.txt文件所在的目录，请根据实际目录层级修改。
 
-        -   当开发环境与运行环境操作系统架构相同时，执行如下命令编译。
+        -   当运行环境操作系统架构为x86时，执行如下命令编译。
 
             ```
             cd build/intermediates/host
             cmake ../../../src -DCMAKE_CXX_COMPILER=g++ -DCMAKE_SKIP_RPATH=TRUE
             ```
 
-        -   当开发环境与运行环境操作系统架构不同时，执行以下命令进行交叉编译。
+        -   当运行环境操作系统架构为Arm时，执行以下命令进行交叉编译。
 
             ```
             cd build/intermediates/host
@@ -251,7 +319,7 @@
 
     从以下链接获取输入视频码流文件，并以运行用户上传至开发环境的“样例目录/data“目录下。如果目录不存在，需自行创建。
 
-    [https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/vdec_h265_1frame_rabbit_1280x720.h265](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/vdec_h265_1frame_rabbit_1280x720.h265)
+    [https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/vdec\_h265\_1frame\_rabbit\_1280x720.h265](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/vdec_h265_1frame_rabbit_1280x720.h265)
 
 4.  运行应用。
     1.  以运行用户将开发环境的样例目录及目录下的文件上传到运行环境（Host），例如“$HOME/acl\_vdec\_resnet50”。
@@ -404,7 +472,11 @@
         -   --model：原始模型文件路径。
         -   --weight：权重文件路径。
         -   --framework：原始框架类型。0：表示Caffe；1：表示MindSpore；3：表示TensorFlow；5：表示ONNX。
-        -   --soc\_version：Ascend310芯片，此处配置为Ascend310；Ascend710芯片，此处配置为Ascend710。
+        -   --soc\_version：
+            -   Ascend 310芯片，此处配置为Ascend310。
+            -   Ascend 710芯片，此处配置为Ascend710。
+            -   Ascend 910芯片，此处配置为Ascend910A或Ascend910B或Ascend910ProA或Ascend910ProB或Ascend910PremiumA，其中，Pro或Premium表示芯片性能提升等级、A或B表示PartialGood等级，请根据实际情况选择。
+
         -   --insert\_op\_conf：插入AIPP（AI Preprocessing）算子的配置文件路径，用于在AI Core上完成图像预处理，包括改变图像尺寸、色域转换（转换图像格式）、减均值/乘系数（改变图像像素），数据处理之后再进行真正的模型推理。
         -   --output：生成的resnet50\_aipp.om文件存放在“样例目录/model“目录下。建议使用命令中的默认设置，否则在编译代码前，您还需要修改sample\_process.cpp中的omModelPath参数值。
 
@@ -442,7 +514,7 @@
 
     从以下链接获取输入视频码流文件，并以运行用户上传至开发环境的“样例目录/data“目录下。如果目录不存在，需自行创建。
 
-    [https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/vdec_h265_1frame_rabbit_1280x720.h265](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/vdec_h265_1frame_rabbit_1280x720.h265)
+    [https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/vdec\_h265\_1frame\_rabbit\_1280x720.h265](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/vdec_h265_1frame_rabbit_1280x720.h265)
 
 4.  运行应用。
     1.  以运行用户将开发环境的样例目录及目录下的文件上传到板端环境，例如“$HOME/acl\_vdec\_resnet50”。
