@@ -415,7 +415,7 @@ void ClassifyProcess::LabelClassToImage(int classIdx, const string& origImagePat
     if (classIdx < 0 || classIdx >= IMAGE_NET_CLASSES_NUM) {
         text = "none";
     } else {
-        text = kStrImageNetClasses[classIdx];
+        text = g_k_strlmag_net_classes[classIdx];
     }
 
     int fontFace = 0;
