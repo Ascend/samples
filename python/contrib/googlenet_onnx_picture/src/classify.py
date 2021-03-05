@@ -20,7 +20,7 @@ from acl_dvpp import Dvpp
 from acl_model import Model
 from acl_image import AclImage
 from acl_resource import AclResource
-from image_net_classes import get_images_net_class
+from image_net_classes import get_image_net_class
 from PIL import Image, ImageDraw, ImageFont
 
 class Classify(object):
@@ -66,12 +66,12 @@ class Classify(object):
         print("images:{}".format(image_file))
         print("======== top5 inference results: =============")
         for n in top_k:
-            object_class = get_images_net_class(n)
+            object_class = get_image_net_class(n)
             print("label:%d  confidence: %f, class: %s" % (n, vals[n], object_class))
         
         #using pillow, the category with the highest confidence is written on the image and saved locally
         if len(top_k):
-            object_class = get_images_net_class(top_k[0])
+            object_class = get_image_net_class(top_k[0])
             output_path = os.path.join(os.path.join(SRC_PATH, "../outputs"), os.path.basename(image_file))
             origin_img = Image.open(image_file)
             draw = ImageDraw.Draw(origin_img)
