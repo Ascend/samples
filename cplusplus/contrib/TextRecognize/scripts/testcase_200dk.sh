@@ -5,7 +5,7 @@ second_model_name="crnn"
 presenter_server_name="text_recognize"
 project_name="TextRecognize"
 
-version="c75"
+version=$1
 
 script_path="$( cd "$(dirname $BASH_SOURCE)" ; pwd -P)"
 project_path=${script_path}/..
@@ -179,6 +179,7 @@ function main() {
     sleep 8
 
     project_pid=`ps -ef | grep "${project_name}" | awk -F ' ' '{print $2}'`
+    echo {project_pid}
     if [[ ${project_pid}"X" != "X" ]];then
         echo -e "\033[33m kill existing project process: kill -9 ${project_pid}.\033[0m"
         kill -9 ${project_pid}
