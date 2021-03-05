@@ -5,7 +5,7 @@ second_model_name="crnn"
 presenter_server_name="text_recognize"
 project_name="TextRecognize"
 
-version=$1
+version="75"
 
 script_path="$( cd "$(dirname $BASH_SOURCE)" ; pwd -P)"
 project_path=${script_path}/..
@@ -87,7 +87,9 @@ function main() {
     fi
 
     mkdir -p ${HOME}/models/${project_name}
-    if [[ $(find ${HOME}/models/${project_name} -name ${fist_model_name}".om")"x" = "x" ] || [ $(find ${HOME}/models/${project_name} -name ${second_model_name}".om")"x" = "x" ] ];then
+    if [$(find ${HOME}/models/${project_name} -name ${first_model_name}".om")"x" == "x" || $(find ${HOME}/models/${project_name} -name ${second_model_name}".om")"x"=="x" ]
+    then
+        echo "-----weizhaodao-----------"
         # 下载原始模型文件[aipp_cfg文件]
         downloadOriginalModel
         if [ $? -ne 0 ];then
