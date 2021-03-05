@@ -1,3 +1,6 @@
+"""
+gesture_categories
+"""
 image_net_classes = [
 "tench, Tinca tinca",
 "goldfish, Carassius auratus",
