@@ -30,6 +30,9 @@ class Classify(object):
         print("[Sample] class Samle release source success")
 
     def pre_process(self, image):
+        """
+        pre_precess
+        """
         yuv_image = self._dvpp.jpegd(image)
         resized_image = self._dvpp.resize(yuv_image, 
                         self._model_width, self._model_height)
@@ -37,9 +40,15 @@ class Classify(object):
         return resized_image
 
     def inference(self, resized_image):
+        """
+	    inference
+        """
         return self._model.execute([resized_image, ])
 
     def post_process(self, infer_output, image_file):
+        """
+	    post_process
+        """
         print("post process")
         data = infer_output[0]
         vals = data.flatten()
