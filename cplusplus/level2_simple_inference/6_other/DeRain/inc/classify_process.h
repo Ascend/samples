@@ -25,7 +25,7 @@
 #include <numeric>
 #include <algorithm>
 
-//using namespace std;
+using namespace std;
 
 //Whether to calculate psnr
 //#define CalcuPSNR
