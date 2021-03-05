@@ -71,7 +71,7 @@
 
     2. 执行以下命令下载aipp配置文件并使用atc命令进行模型转换。
 
-        **cd $HOME/models/googlenet_imagenet_picture**  
+        **cd $HOME/models/googlenet_onnx_picture**  
 
         **https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_onnx_picture/insert_op.cfg**
 
@@ -98,7 +98,7 @@
 
 **注：开发环境与运行环境合一部署，请跳过步骤1，直接执行[步骤2](#step_2)即可。**   
 
-1. 执行以下命令,将开发环境的 **googlenet_imagenet_picture** 目录上传到运行环境中，例如 **/home/HwHiAiUser**，并以HwHiAiUser（运行用户）登录运行环境（Host）。
+1. 执行以下命令,将开发环境的 **googlenet_onnx_picture** 目录上传到运行环境中，例如 **/home/HwHiAiUser**，并以HwHiAiUser（运行用户）登录运行环境（Host）。
 
     **scp -r $HOME/samples/python/contrib/googlenet_onnx_picture HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
 
@@ -119,7 +119,7 @@
 
     - 如果是开发环境与运行环境分离部署，执行以下命令切换目录。
     
-      **cd $HOME/googlenet_imagenet_picture/**      
+      **cd $HOME/googlenet_onnx_picture/**      
 
     切换目录后，执行以下命令运行样例。
 
