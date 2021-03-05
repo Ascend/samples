@@ -52,8 +52,8 @@ def post_process(infer_output, origin_img, image_file):
     print(box_info[0:6 * box_num].reshape(6, box_num))
     scalex = origin_img.width / MODEL_WIDTH
     scaley = origin_img.height / MODEL_HEIGHT
-    if scalex > scaley :
-      scaley =  scalex
+    if scalex > scaley:
+        scaley =  scalex
     output_path = os.path.join("../outputs", os.path.basename(image_file))
     origin_image = Image.open(image_file)
     draw = ImageDraw.Draw(origin_image)
