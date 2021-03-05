@@ -4,7 +4,7 @@
 #define INVALID_IMAGE_NET_CLASS_ID (-1)
 #define IMAGE_NET_CLASSES_NUM 1000
 
-string kStrImageNetClasses[] = {
+string g_k_strlmag_net_classes[] = {
 "tench, Tinca tinca",
 "goldfish, Carassius auratus",
 "great white shark, white shark, man-eater, man-eating shark, Carcharodon carcharias",
