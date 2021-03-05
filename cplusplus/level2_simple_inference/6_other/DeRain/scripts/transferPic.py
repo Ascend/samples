@@ -1,8 +1,10 @@
+"""transferPic"""
 import numpy as np
 import os
 from PIL import Image
 
 def process(input_path):
+    """process"""
     im = Image.open(input_path)
     im = im.resize((256, 256))
     # hwc
