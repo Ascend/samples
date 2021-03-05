@@ -421,7 +421,7 @@ void ClassifyProcess::LabelClassToImage(int classIdx, const string& origImagePat
     int fontFace = 0;
     double fontScale = 1;
     int thickness = 2;
-    int baseline = 0;
+  //  int baseline = 0;
     cv::Point origin;
     origin.x = 10;
     origin.y = 50;
