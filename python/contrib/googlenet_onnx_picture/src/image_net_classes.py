@@ -482,7 +482,7 @@ image_net_classes = [
 "carpenter's kit, tool kit",
 "carton",
 "car wheel",
-"cash machine, cash dispenser, automated teller machine, automatic teller machine, automated teller, automatic teller, ATM",
+"cash machine, cash dispenser, automated teller machine",
 "cassette",
 "cassette player",
 "castle",
