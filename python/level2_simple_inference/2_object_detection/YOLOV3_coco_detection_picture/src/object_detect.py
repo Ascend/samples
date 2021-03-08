@@ -36,8 +36,7 @@ def pre_process(image, dvpp):
     image_input = image.copy_to_dvpp()
     yuv_image = dvpp.jpegd(image_input)
     print("decode jpeg end")
-    resized_image = dvpp.resize(yuv_image, 
-                    MODEL_WIDTH, MODEL_HEIGHT)
+    resized_image = dvpp.crop_and_paste(yuv_image, image.width, image.height, MODEL_WIDTH, MODEL_HEIGHT)
     print("resize yuv end")
     return resized_image
 
@@ -53,6 +52,8 @@ def post_process(infer_output, origin_img, image_file):
     print(box_info[0:6 * box_num].reshape(6, box_num))
     scalex = origin_img.width / MODEL_WIDTH
     scaley = origin_img.height / MODEL_HEIGHT
+    if scalex > scaley:
+        scaley =  scalex
     output_path = os.path.join("../outputs", os.path.basename(image_file))
     origin_image = Image.open(image_file)
     draw = ImageDraw.Draw(origin_image)
@@ -63,9 +64,9 @@ def post_process(infer_output, origin_img, image_file):
         ids = int(box_info[5 * int(box_num) + n])
         label = labels[ids]
         score = box_info[4 * int(box_num)+n]
-        top_left_x = box_info[0 * int(box_num)+n] * scalex
+        top_left_x = box_info[0 * int(box_num)+n] * scaley
         top_left_y = box_info[1 * int(box_num)+n] * scaley
-        bottom_right_x = box_info[2 * int(box_num) + n] * scalex
+        bottom_right_x = box_info[2 * int(box_num) + n] * scaley
         bottom_right_y = box_info[3 * int(box_num) + n] * scaley
         print(" % s: class % d, box % d % d % d % d, score % f" % (
             label, ids, top_left_x, top_left_y, 
