@@ -1,3 +1,9 @@
+"""
+Copyright (R) @huawei.com, all rights reserved
+-*- coding:utf-8 -*-
+CREATED:  2021-02-02 09:44:13
+MODIFIED: 2021-02-22 09:44:13
+"""
 import sys
 import os
 import acl
@@ -17,6 +23,9 @@ from image_net_classes import get_image_net_class
 from PIL import Image, ImageDraw, ImageFont
 
 class Classify(object):
+    """
+    Classify
+    """
     def __init__(self, acl_resource, model_path, model_width, model_height):
         self._model_path = model_path
         self._model_width = model_width
@@ -30,6 +39,9 @@ class Classify(object):
         print("[Sample] class Samle release source success")
 
     def pre_process(self, image):
+        """
+        pre_process
+        """    
         yuv_image = self._dvpp.jpegd(image)
         resized_image = self._dvpp.resize(yuv_image, 
                         self._model_width, self._model_height)
@@ -37,9 +49,15 @@ class Classify(object):
         return resized_image
 
     def inference(self, resized_image):
+        """
+        inference
+        """
         return self._model.execute([resized_image, ])
 
     def post_process(self, infer_output, image_file):
+        """
+        post_process
+        """    
         print("post process")
         data = infer_output[0]
         vals = data.flatten()
