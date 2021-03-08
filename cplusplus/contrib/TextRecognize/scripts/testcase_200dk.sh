@@ -85,6 +85,8 @@ function main() {
         echo "ERROR: download test images failed"
         return ${inferenceError}
     fi
+    
+    sudo apt-get install libeigen3-dev
 
     mkdir -p ${HOME}/models/${project_name}
     if [$(find ${HOME}/models/${project_name} -name ${first_model_name}".om")"x" = "x" || $(find ${HOME}/models/${project_name} -name ${second_model_name}".om")"x"="x" ]
