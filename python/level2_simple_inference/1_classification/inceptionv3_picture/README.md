@@ -87,6 +87,7 @@
     **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_imagenet_picture-python/dog1_1024_683.jpg**
 
     **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_imagenet_picture-python/dog2_1024_683.jpg**
+    
     **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_imagenet_picture-python/rabit.jpg**
 
 
