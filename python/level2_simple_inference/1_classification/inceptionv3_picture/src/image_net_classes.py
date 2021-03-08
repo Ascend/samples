@@ -1007,9 +1007,9 @@ image_net_classes = [
 ]
 
 def get_image_net_class(id):
-"""
-get_image_net_class
-"""
+    """
+    get_image_net_class
+    """
     if id >= len(image_net_classes):
         return "unknown"
     else:
