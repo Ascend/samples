@@ -5,7 +5,7 @@ second_model_name="crnn"
 presenter_server_name="text_recognize"
 project_name="TextRecognize"
 
-version="73"
+version=$1
 
 script_path="$( cd "$(dirname $BASH_SOURCE)" ; pwd -P)"
 project_path=${script_path}/..
