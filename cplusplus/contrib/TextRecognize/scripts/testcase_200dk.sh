@@ -186,20 +186,16 @@ function main() {
     ./${project_name} &
 
     sleep 8
-    return ${success}
     project_pid=`ps -ef | grep "${project_name}" | awk -F ' ' '{print $2}'`
-    echo `ps -ef | grep "${project_name}" | awk -F ' ' '{print $2}'`
     if [[ ${project_pid}"X" != "X" ]];then
-        echo ${project_pid}"X"
         echo -e "\033[33m kill existing project process: kill -9 ${project_pid}.\033[0m"
         kill -9 ${project_pid}
-        echo $? -ne 0
         if [ $? -ne 0 ];then
             echo "ERROR: kill project process failed."
             return ${inferenceError}
         fi
 
-        presenter_server_pid=`ps -ef | grep "presenter_server\.py" | grep "${presenter_server_name}" | awk -F ' ' '{print $2}'`
+        presenter_server_pid=`ps -ef | grep "presenter_server\.py" | awk -F ' ' '{print $2}'`
         if [[ ${presenter_server_pid}"X" != "X" ]];then
             echo -e "\033[33mNow do presenter server configuration, kill existing presenter process: kill -9 ${presenter_server_pid}.\033[0m"
             kill -9 ${presenter_server_pid}
@@ -208,14 +204,13 @@ function main() {
                 return ${inferenceError}
             fi
         fi
-    else
+    else 
         echo "ERROR: run failed. please check your project"
         return ${inferenceError}
     fi
 
-
     echo "run success"
-    return ${success}
 
+    return ${success}
 }
 main
