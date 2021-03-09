@@ -37,7 +37,6 @@ function setAtcEnv() {
         export ASCEND_OPP_PATH=${install_path}/opp
         export LD_LIBRARY_PATH=${install_path}/atc/lib64:${LD_LIBRARY_PATH}
     elif [[ ${version} = "c75" ]] || [[ ${version} = "C75" ]];then
-
         export HOME=/home/HwHiAiUser
         export install_path=$HOME/Ascend/ascend-toolkit/latest
         export PATH=/usr/local/python3.7.5/bin:${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
@@ -131,7 +130,7 @@ function main() {
             echo "ERROR: set atc environment failed"
             return ${inferenceError}
         fi
-        atc --model=./crnn_static.pb --framework=3 --output=./crnn_static. --soc_version=Ascend310 --output_type=FP32 --input_shape="new_input:1,32,100,3" --input_format=NHWC
+        atc --model=./crnn_static.pb --framework=3 --output=./crnn_static --soc_version=Ascend310 --output_type=FP32 --input_shape="new_input:1,32,100,3" --input_format=NHWC
         if [ $? -ne 0 ];then
             echo "ERROR: convert model crnn failed"
             return ${inferenceError}
