@@ -186,7 +186,7 @@ function main() {
     ./${project_name} &
 
     sleep 8
-
+    return ${success}
     project_pid=`ps -ef | grep "${project_name}" | awk -F ' ' '{print $2}'`
     echo `ps -ef | grep "${project_name}" | awk -F ' ' '{print $2}'`
     if [[ ${project_pid}"X" != "X" ]];then
