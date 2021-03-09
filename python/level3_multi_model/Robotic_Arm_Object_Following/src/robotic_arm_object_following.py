@@ -21,7 +21,7 @@ import cv2
 import time
 import pyrealsense2 as rs
 import pydobot
-from math import cos, sin, fabs, atan, pi, sqrt, acos
+import math
 from serial.tools import list_ports
 
 # Dobot config
@@ -131,7 +131,13 @@ class EtherSenseServer(asyncore.dispatcher):
         """
 
         # get image from RealSense
-        color_mat, depth_mat, timestamp, aligned_depth_frame, color_frame = get_image_and_timestamp(self.pipeline)
+        realsense_data = get_image_and_timestamp(self.pipeline)
+        color_mat = realsense_data["color_mat"]
+        depth_mat = realsense_data["depth_mat"]
+        timestamp = realsense_data["ts"]
+        aligned_depth_frame = realsense_data["depth_frame"]
+        color_frame = realsense_data["color_frame"]
+
         if color_mat is not None:
             # convert the depth image to a string for broadcast
             data = pickle.dumps(color_mat)
@@ -218,9 +224,10 @@ def get_image_and_timestamp(pipeline):
     """
     Read image data and timestamp from RealSense
     :param pipeline: RealSense pipeline
-    :return: color and depth image and timestamp
+    :return: color and depth image and timestamp, depth_frame, color_frame
     """
 
+    realsense_data = dict()
     frames = pipeline.wait_for_frames()
     # take owner ship of the frame for further processing
     frames.keep()
@@ -238,10 +245,23 @@ def get_image_and_timestamp(pipeline):
         depth_mat = np.asanyarray(depth_frame.get_data())
 
         ts = frames.get_timestamp()
-        return color_mat, depth_mat, ts, depth_frame, color_frame
+
+        realsense_data["color_mat"] = color_mat
+        realsense_data["depth_mat"] = depth_mat
+        realsense_data["ts"] = ts
+        realsense_data["depth_frame"] = depth_frame
+        realsense_data["color_frame"] = color_frame
+
+        return realsense_data
 
     else:
-        return None, None, None, None, None
+        realsense_data["color_mat"] = None
+        realsense_data["depth_mat"] = None
+        realsense_data["ts"] = None
+        realsense_data["depth_frame"] = None
+        realsense_data["color_frame"] = None
+
+        return realsense_data
 
 
 def open_pipeline():
@@ -339,13 +359,13 @@ def get_extrinsic(translation_x, translation_y, translation_z, roll, pitch, yaw)
 
     extrinsic = {}
     rotation_x = np.array([[1, 0, 0],
-                           [0, cos(roll), -sin(roll)],
-                           [0, sin(roll), cos(roll)]])
-    rotation_y = np.array([[cos(pitch), 0, sin(pitch)],
+                           [0, math.cos(roll), -math.sin(roll)],
+                           [0, math.sin(roll), math.cos(roll)]])
+    rotation_y = np.array([[math.cos(pitch), 0, math.sin(pitch)],
                            [0, 1, 0],
-                           [-sin(pitch), 0, cos(pitch)]])
-    rotation_z = np.array([[cos(yaw), -sin(yaw), 0],
-                           [sin(yaw), cos(yaw), 0],
+                           [-math.sin(pitch), 0, math.cos(pitch)]])
+    rotation_z = np.array([[math.cos(yaw), -math.sin(yaw), 0],
+                           [math.sin(yaw), math.cos(yaw), 0],
                            [0, 0, 1]])
 
     rotation = np.matmul(np.matmul(rotation_x, rotation_y), rotation_z)
@@ -376,7 +396,7 @@ def calculate_robot_action(cur_world_coordinate, dest_world_coordinate, dest_cam
     cur_pos = np.array(cur_world_coordinate[:2])
     dest_pos = np.array(dest_world_coordinate[:2])
     robot_action[0] = np.arccos(
-        cur_pos.dot(dest_pos) / (sqrt(cur_pos.dot(cur_pos)) * sqrt(dest_pos.dot(dest_pos)))) * PI / pi
+        cur_pos.dot(dest_pos) / (math.sqrt(cur_pos.dot(cur_pos)) * math.sqrt(dest_pos.dot(dest_pos)))) * PI / math.pi
     if dest_pos[1] > cur_pos[1]:
         robot_action[0] = -robot_action[0]
 
@@ -389,23 +409,23 @@ def calculate_robot_action(cur_world_coordinate, dest_world_coordinate, dest_cam
     deta_z = dest_world_coordinate[2] - cur_world_coordinate[2]
 
     # calculate j3 angle increment theta3 first
-    alpha_2 = pi / 2 - cur_j2 * pi / PI
-    alpha_3 = -cur_j3 * pi / PI
-    r_x = deta_x + j2_len * cos(alpha_2) + j3_len * cos(alpha_3)
-    r_z = deta_z + j2_len * sin(alpha_2) + j3_len * sin(alpha_3)
+    alpha_2 = math.pi / 2 - cur_j2 * math.pi / PI
+    alpha_3 = -cur_j3 * math.pi / PI
+    r_x = deta_x + j2_len * math.cos(alpha_2) + j3_len * math.cos(alpha_3)
+    r_z = deta_z + j2_len * math.sin(alpha_2) + j3_len * math.sin(alpha_3)
 
     # clip cos result to [-1, 1]
-    cos_tmp = (j3_len ** 2 - j2_len ** 2 + r_x ** 2 + r_z ** 2) / (2 * j3_len * sqrt(r_x ** 2 + r_z ** 2))
+    cos_tmp = (j3_len ** 2 - j2_len ** 2 + r_x ** 2 + r_z ** 2) / (2 * j3_len * math.sqrt(r_x ** 2 + r_z ** 2))
     cos_tmp = np.clip(cos_tmp, -1, 1)
-    robot_action[2] = atan(r_z / r_x) - acos(cos_tmp) - alpha_3
-    theta3 = robot_action[2] * PI / pi
+    robot_action[2] = math.atan(r_z / r_x) - math.acos(cos_tmp) - alpha_3
+    theta3 = robot_action[2] * PI / math.pi
 
     # calculate j2 angle increment theta2
     # clip cos result to [-1, 1]
-    cos_tmp = (r_x - j3_len * cos(alpha_3 + robot_action[2])) / j2_len
+    cos_tmp = (r_x - j3_len * math.cos(alpha_3 + robot_action[2])) / j2_len
     cos_tmp = np.clip(cos_tmp, -1, 1)
-    robot_action[1] = acos(cos_tmp) - alpha_2
-    theta2 = robot_action[1] * PI / pi
+    robot_action[1] = math.acos(cos_tmp) - alpha_2
+    theta2 = robot_action[1] * PI / math.pi
 
     robot_action[1] = -theta2
     robot_action[2] = theta3
@@ -435,14 +455,14 @@ def move_robot(camera_intrinsics, depth_scale, depth_image, boxes):
     # print(f'x:{x} y:{y} z:{z} j1:{j1} j2:{j2} j3:{j3} j4:{j4}')
 
     # calculate ascend_logo's camera and world 3D coordinate
-    roi_width = 10  # calculate distance using a (2 * roi_width) *　(2 * roi_width)　area
+    roi_width = 10  # calculate distance using a (2 * roi_width) * (2 * roi_width) area
     ascend_distance = np.mean(depth_image[int((top + bottom) / 2) - roi_width:int((top + bottom) / 2) + roi_width,
                               int((left + right) / 2) - roi_width:int((left + right) / 2) + roi_width]) * depth_scale
     ascend_center_point = [(top + bottom) / 2, (left + right) / 2]
     print("ascend_center_point:pixel", ascend_center_point, "  ascend_distance/m:", ascend_distance)
     ascend_camera_3d_point = pixel_to_point(camera_intrinsics, ascend_center_point, ascend_distance)
     print("ascend_camera_3D_point xyz/mm:", ascend_camera_3d_point)
-    camera_extrinsic = get_extrinsic(x, y, z, 0, 0, j1 / PI * pi)
+    camera_extrinsic = get_extrinsic(x, y, z, 0, 0, j1 / PI * math.pi)
     ascend_world_3d_point = point_to_point(camera_extrinsic, from_point=[ascend_camera_3d_point[2],
                                                                          -ascend_camera_3d_point[1],
                                                                          -ascend_camera_3d_point[0]])

@@ -270,8 +270,8 @@ def apply_nms(original_boxes, thresh):
 
     nms_result = []
 
-    for class_id in range(CLASS_NUM):
-        one_class_boxes = original_boxes[class_id]
+    for class_num in range(CLASS_NUM):
+        one_class_boxes = original_boxes[class_num]
         sorted_boxes = sorted(one_class_boxes, key=lambda d: d[5])[::-1]
 
         result_box_id = dict()
@@ -322,7 +322,7 @@ def decode(conv_output, img_w, img_h):
     feature_map = feature_map[feature_map[:, 4] >= CONF_THRESHOLD]
     feature_map[:, 5] = np.argmax(feature_map[:, 5:], axis=-1)
 
-    all_boxes = [[] for ix in range(CLASS_NUM)]
+    all_boxes = [[]]
     for box_index in range(feature_map.shape[0]):
         each_box = [int(feature_map[box_index, iy]) for iy in range(4)]
         each_box.append(int(feature_map[box_index, 5]))
@@ -357,7 +357,7 @@ def post_process(infer_output, img_w, img_h):
     """
 
     result_dict = dict()
-    all_boxes = [[] for class_id in range(CLASS_NUM)]
+    all_boxes = [[]]
     for feature_map_id in range(3):
         feature_map = infer_output[feature_map_id].reshape(
             (MODEL_HEIGHT // STRIDE_LIST[feature_map_id], MODEL_WIDTH // STRIDE_LIST[feature_map_id], NUM_CHANNEL))
