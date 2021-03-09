@@ -386,13 +386,13 @@ def calculate_robot_action(cur_world_coordinate, dest_world_coordinate, dest_cam
     :return: robot's j1 j2 j3 move angle increment
     """
 
-    robot_action = [0, 0, 0]  # [J1 angle increment, J2 angle increment, J3 angle increment]
+    robot_action = [0, 0, 0]  # [j1 angle increment, j2 angle increment, j3 angle increment]
 
     # robot arm length
     j3_len = 147
     j2_len = 135
 
-    # J1 move
+    # j1 move
     cur_pos = np.array(cur_world_coordinate[:2])
     dest_pos = np.array(dest_world_coordinate[:2])
     robot_action[0] = np.arccos(
@@ -400,7 +400,7 @@ def calculate_robot_action(cur_world_coordinate, dest_world_coordinate, dest_cam
     if dest_pos[1] > cur_pos[1]:
         robot_action[0] = -robot_action[0]
 
-    # J2 J3 move
+    # j2 j3 move
     target_distance = 300  # mm, ideal distance between RealSense camera and ascend logo
     x_range = 70  # mm, robot's move range of x-axis
 
@@ -480,7 +480,7 @@ def move_robot(camera_intrinsics, depth_scale, depth_image, boxes):
                                                                          -target_camera_3d_point[0]])
     print("target_world_3D_point xyz/mm:", target_world_3d_point)
 
-    # calculate j1 j2 J3 move angle increment
+    # calculate j1 j2 j3 move angle increment
     robot_action = calculate_robot_action(cur_world_coordinate=ascend_world_3d_point,
                                           dest_world_coordinate=target_world_3d_point,
                                           dest_camera_coordinate=target_camera_3d_point,
@@ -488,12 +488,12 @@ def move_robot(camera_intrinsics, depth_scale, depth_image, boxes):
                                           cur_j3=j3)
     print("robot's j1 j2 j3 move angle increment:", robot_action)
 
-    # j1 j2 J3 move when increment > thresh
+    # j1 j2 j3 move when increment > thresh
     j1_thresh = 3
     j2_thresh = 3
     j3_thresh = 3
 
-    # limit angle of j1 j2 J3
+    # limit angle of j1 j2 j3
     j1_limit_min = -80
     j1_limit_max = 80
     j2_limit_min = 5
