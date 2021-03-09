@@ -202,7 +202,7 @@ class EtherSenseServer(asyncore.dispatcher):
             if len(self.boxes['detection_boxes']) > 0:
                 result_image = show_result(result_image, self.boxes)
 
-                # robot move: move robot every FRAME_COUNT frames
+                # robot move: move robot every ROBOT_MOVE_FREQUENCY frames
                 global FRAME_COUNT
                 FRAME_COUNT = FRAME_COUNT + 1
                 if FRAME_COUNT % ROBOT_MOVE_FREQUENCY == 0:
