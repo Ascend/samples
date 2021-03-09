@@ -1,7 +1,7 @@
-fisrt_pb_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/dbnet/dbnet.pb"
-second_pb_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/crnn_static/crnn_static.pb"
-first_model_name="dbnet"
-second_model_name="crnn"
+crnn_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/crnn_static/crnn_static.pb"
+dbnet_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/dbnet/dbnet.pb"
+dbnet_model_name="dbnet"
+crnn_model_name="crnn_static"
 presenter_server_name="text_recognize"
 project_name="TextRecognize"
 
@@ -29,7 +29,7 @@ function downloadData() {
 
 
 function setAtcEnv() {
-    # 设置模型转换时需要的环境变量
+    # set enviroment param
     if [[ ${version} = "c73" ]] || [[ ${version} = "C73" ]];then
         export install_path=/home/HwHiAiUser/Ascend/ascend-toolkit/latest
         export PATH=/usr/local/python3.7.5/bin:${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
@@ -37,11 +37,14 @@ function setAtcEnv() {
         export ASCEND_OPP_PATH=${install_path}/opp
         export LD_LIBRARY_PATH=${install_path}/atc/lib64:${LD_LIBRARY_PATH}
     elif [[ ${version} = "c75" ]] || [[ ${version} = "C75" ]];then
+
+        export HOME=/home/HwHiAiUser
         export install_path=$HOME/Ascend/ascend-toolkit/latest
         export PATH=/usr/local/python3.7.5/bin:${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
         export ASCEND_OPP_PATH=${install_path}/opp
         export PYTHONPATH=${install_path}/atc/python/site-packages:${install_path}/atc/python/site-packages/auto_tune.egg/auto_tune:${install_path}/atc/python/site-packages/schedule_search.egg:$PYTHONPATH
-        export LD_LIBRARY_PATH=${install_path}/atc/lib64:${LD_LIBRARY_PATH}
+        export LD_LIBRARY_PATH=${install_path}/atc/lib64:${LD_LIBRARY_PATH}      
+        echo "setAtcEnv success."
     fi
 
     return 0
@@ -62,11 +65,15 @@ function setBuildEnv() {
 
 function downloadOriginalModel() {
     mkdir -p ${project_path}/model/
-    echo ${pb_model}
-    wget -O ${project_path}/model/${pb_model##*/} ${first_pb_model} --no-check-certificate
-    wget -O ${project_path}/model/${pb_model##*/} ${second_pb_model} --no-check-certificate
+    wget -O ${project_path}/model/${crnn_model##*/} ${crnn_model} --no-check-certificate
+
     if [ $? -ne 0 ];then
-        echo "install pb_model failed, please check Network."
+        echo "download crnn_model failed, please check Network."
+        return 1
+    fi
+    wget -O ${project_path}/model/${dbnet_model##*/} ${dbnet_model} --no-check-certificate
+    if [ $? -ne 0 ];then
+        echo "download dbnet_model failed, please check Network."
         return 1
     fi
     return 0
@@ -86,20 +93,24 @@ function main() {
         return ${inferenceError}
     fi
 
-    sudo apt-get install libeigen3-dev
-
+    # reconfigure enviroment param
+    export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/nnrt/latest/acllib/lib64:/home/HwHiAiUser/ascend_ddk/x86/lib:${LD_LIBRARY_PATH}
+    export ASCEND_HOME=/home/HwHiAiUser/Ascend     
+    export LD_LIBRARY_PATH=$ASCEND_HOME/ascend-toolkit/latest/acllib/lib64:$LD_LIBRARY_PATH
+    export LD_LIBRARY_PATH=/usr/local/opencv/lib64:$LD_LIBRARY_PATH
+    export LD_LIBRARY_PATH=/usr/local/opencv/lib:$LD_LIBRARY_PATH
     mkdir -p ${HOME}/models/${project_name}
-    if [$(find ${HOME}/models/${project_name} -name ${first_model_name}".om")"x" = "x" || $(find ${HOME}/models/${project_name} -name ${second_model_name}".om")"x"="x" ]
-    then
-        echo "-----weizhaodao-----------"
-        # 下载原始模型文件[aipp_cfg文件]
+ 
+    if [[ $(find ${HOME}/models/${project_name} -name ${model_name}".om")"x" = "x" ]];then 
+        # downloadmodel
         downloadOriginalModel
         if [ $? -ne 0 ];then
             echo "ERROR: download original model failed"
             return ${inferenceError}
         fi
 
-        # 设置模型转换的环境变量
+        # set model convert param 
+
         setAtcEnv
         if [ $? -ne 0 ];then
             echo "ERROR: set atc environment failed"
@@ -108,25 +119,21 @@ function main() {
 
         # 转模型
         cd ${project_path}/model/
-	echo ${project_path} ${pb_model##*/} ${model_name}
-        atc --model=${project_path}/model/${pb_model##*/} --framework=3 --output=${HOME}/models/${project_name}/${first_model_name} --soc_version=Ascend310 --output_type=FP32 --input_shape="input_images:1,736,1312,3" --input_format=NHWC
-        atc --model=${project_path}/model/${pb_model##*/} --framework=3 --output=${HOME}/models/${project_name}/${first_model_name} --soc_version=Ascend310 --output_type=FP32 --input_shape="new_input:1,32,100,3" --input_format=NHWC
+        atc --model=./dbnet.pb --framework=3 --output=./dbnet --soc_version=Ascend310 --output_type=FP32 --input_shape="input_images:1,736,1312,3" --input_format=NHWC
+	 
         if [ $? -ne 0 ];then
-            echo "ERROR: convert model failed"
+            echo "ERROR: convert model dbnet failed"
             return ${inferenceError}
         fi
-
-        ln -s ${HOME}/models/${project_name}/${fisrt_model_name}".om" ${project_path}/model/${first_model_name}".om"
-        ln -s ${HOME}/models/${project_name}/${second_model_name}".om" ${project_path}/model/${second_model_name}".om"
+        
+        setAtcEnv
         if [ $? -ne 0 ];then
-            echo "ERROR: failed to set model soft connection"
+            echo "ERROR: set atc environment failed"
             return ${inferenceError}
         fi
-    else
-        ln -s ${HOME}/models/${project_name}/${fist_model_name}".om" ${project_path}/model/${first_model_name}".om"
-        ln -s ${HOME}/models/${project_name}/${second_model_name}".om" ${project_path}/model/${second_model_name}".om"
+        atc --model=./crnn_static.pb --framework=3 --output=./crnn_static. --soc_version=Ascend310 --output_type=FP32 --input_shape="new_input:1,32,100,3" --input_format=NHWC
         if [ $? -ne 0 ];then
-            echo "ERROR: failed to set model soft connection"
+            echo "ERROR: convert model crnn failed"
             return ${inferenceError}
         fi
     fi
@@ -164,15 +171,17 @@ function main() {
     export LD_LIBRARY_PATH=
     export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/acllib/lib64:/home/HwHiAiUser/ascend_ddk/arm/lib:${LD_LIBRARY_PATH}
 
-    # 开启presenter server
-    bash ${script_path}/run_presenter_server.sh
+    # presenter server
+
+    bash ${script_path}/run_presenter_server.sh ${script_path}/param.conf 
     if [ $? -ne 0 ];then
         echo "ERROR: run presenter server failed. please check your project"
         return ${inferenceError}
     fi
 
     sleep 2
-    # 运行程序
+    # run program
+    cd ${project_path}/out
     mv ${project_path}/out/main ${project_path}/out/${project_name}
 
     ./${project_name} &

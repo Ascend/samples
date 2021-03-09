@@ -19,6 +19,7 @@
 #include "text_recognize.h"
 #include <cstddef>
 #include <iostream>
+#include <fstream>
 #include <cstdint>
 #include <sys/types.h>
 #include "acl/acl.h"
@@ -26,7 +27,7 @@
 #include "utils.h"
 #include <cmath>
 #include "clipper.hpp"
-#include "opencv2/imgproc.hpp"
+#include "opencv2/imgproc/imgproc_c.h"
 #include<string.h>
 #include<sstream>
 #include <string>
@@ -450,12 +451,12 @@ Result TextRecongnize::SecondModelPostprocess(aclmdlDataset *modelOutput, string
             // load json dict
             Json::Value ord_map, char_dict;
             Json::Reader reader;
-            ifstream ifs_ord("../data/ord_map_en.json");
+            std::ifstream ifs_ord ("../data/ord_map_en.json");
 
             if (!reader.parse(ifs_ord, ord_map)) {
                 std::cout << "Read ord_map failed..." << std::endl;
             }
-            ifstream ifs_char("../data/char_dict_en.json");
+            std::ifstream ifs_char ("../data/char_dict_en.json");
             if (!reader.parse(ifs_char, char_dict)) {
                 std::cout << "Read char_dict failed..." << std::endl;
             }

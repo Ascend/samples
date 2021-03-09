@@ -38,7 +38,7 @@ include_directories(
         $ENV{HOME}/ascend_ddk/arm/include/opencv4
         ${INC_PATH}/acllib/include/
         ../inc/
-        $ENV{HOME}/presenteragent/include/ascenddk
+	$ENV{HOME}/ascend_ddk/arm/include/ascenddk
 
         $ENV{HOME}/Ascend/driver/
         $ENV{HOME}/Ascend/
@@ -58,7 +58,7 @@ link_directories(
         ${INC_PATH}/atc/lib64
         $ENV{HOME}/Ascend/driver/
         $ENV{HOME}/Ascend/
-        $ENV{HOME}/presenteragent/include/ascenddk
+	      $ENV{HOME}/ascend_ddk/arm/include/ascenddk
 
         //$ENV{HOME}/ascend_ddk/arm/ros/melodic/lib   #ROS lib
         /usr/lib/aarch64-linux-gnu                  #OpenCV lib etc.
