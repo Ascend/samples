@@ -4,7 +4,7 @@ model_name="yolov3_ascend_logo"
 test_image="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOV3_ascend_logo_following/test_image.jpg"
 
 version=$1
-project_name="python_YOLOV3_ascend_logo_following-python"
+project_name="python_Robotic_Arm_Object_Following-python"
 
 script_path="$( cd "$(dirname $BASH_SOURCE)" ; pwd -P)"
 project_path=${script_path}/..
@@ -141,7 +141,7 @@ function main() {
     fi
 
     # 运行程序
-    python3.6 yolov3_ascend_detect_200dk.py
+    python3.6 test_200dk.py
     if [ $? -ne 0 ];then
         echo "ERROR: run failed. please check your project"
         return ${inferenceError}

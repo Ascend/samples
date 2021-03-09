@@ -12,17 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import sys
-sys.path.append("../../../common")
 import os
 import numpy as np
 import acl
-import cv2 as cv
+import cv2
 import time
 import asyncore
 import pickle
 import socket
 import struct
 
+sys.path.append("../../../common")
 from atlas_utils.acl_resource import AclResource
 from atlas_utils.acl_model import Model
 from atlas_utils.acl_image import AclImage
@@ -49,16 +49,10 @@ COLORS = [(255, 0, 0), (0, 255, 0), (0, 0, 255), (0, 255, 255), (255, 0, 255), (
 # RealSense D435 Ethernet config
 print('Number of arguments:', len(sys.argv), 'arguments.')
 print('Argument List:', str(sys.argv))
-LOCAL_IP_ADDRESS = '192.168.8.134'  # 200DK ip
+LOCAL_IP_ADDRESS = '192.168.8.136'  # 200DK ip
 MC_IP_ADDRESS = '192.168.8.102'  # PC ip
 PORT = 1024
 CHUNK_SIZE = 4096
-
-INPUT_DIR = '../data/'
-OUTPUT_DIR = '../outputs/'
-# Create a directory to store the inference results
-if not os.path.isdir(OUTPUT_DIR):
-    os.mkdir(OUTPUT_DIR)
 
 
 class ImageClient(asyncore.dispatcher):
@@ -94,9 +88,9 @@ class ImageClient(asyncore.dispatcher):
             self._remaining_bytes = self._frame_length
 
         # request the frame data until the frame is completely in buffer
-        data = self.recv(self._remaining_bytes)
-        self._buffer += data
-        self._remaining_bytes -= len(data)
+        receive_frame_data = self.recv(self._remaining_bytes)
+        self._buffer += receive_frame_data
+        self._remaining_bytes -= len(receive_frame_data)
 
         # once the frame is fully received, process/display it
         if len(self._buffer) == self._frame_length:
@@ -114,17 +108,17 @@ class ImageClient(asyncore.dispatcher):
         self._buffer = bytearray()
         self._frame_id += 1
 
-        # yolov3 model inference with imageData
-        result = inference(model, self._image_data)
+        # yolov3 model inference with image data
+        yolov3_inference_result = inference(yolov3_model, self._image_data)
 
         # send inference result from 200DK to PC
-        data = pickle.dumps(result)
+        send_result_data = pickle.dumps(yolov3_inference_result)
 
         # capture the length of the data portion of the message
-        length = struct.pack('<I', len(data))
+        data_length = struct.pack('<I', len(send_result_data))
 
         # for the message transmission
-        self._frame_data = b''.join([length, data])
+        self._frame_data = b''.join([data_length, send_result_data])
         self.send(self._frame_data)
 
     def get_img(self):
@@ -194,22 +188,22 @@ class EtherSenseClient(asyncore.dispatcher):
 
         pair = self.accept()
         if pair is not None:
-            sock, addr = pair
-            print('Incoming connection from %s' % repr(addr))
+            sock_, addr_ = pair
+            print('Incoming connection from %s' % repr(addr_))
 
             # when a connection is attempted, delegate image receival to the ImageClient
-            self.handler = ImageClient(sock, addr)
+            self.handler = ImageClient(sock_, addr_)
             self._image_data = self.handler.get_img()
 
 
-def preprocess_cv2(bgr_img):
+def preprocess_cv2(original_bgr_img):
     """
     Preprocess cv2 bgr image for yolov3 input
-    :param bgr_img: image with BGR format
+    :param original_bgr_img: original image with BGR format
     :return: processed image, MODEL_WIDTH, MODEL_HEIGHT
     """
 
-    shape = bgr_img.shape[:2]  # [height, width]
+    shape = original_bgr_img.shape[:2]  # [height, width]
 
     net_h = MODEL_HEIGHT
     net_w = MODEL_WIDTH
@@ -221,83 +215,84 @@ def preprocess_cv2(bgr_img):
     dh = (net_h - new_h) / 2
 
     # yolov3 isobi scaling
-    img = cv.resize(bgr_img, (new_w, new_h), interpolation=cv.INTER_LINEAR)
+    img = cv2.resize(original_bgr_img, (new_w, new_h), interpolation=cv2.INTER_LINEAR)
     top, bottom = int(round(dh - 0.1)), int(round(dh + 0.1))
     left, right = int(round(dw - 0.1)), int(round(dw + 0.1))
-    img = cv.copyMakeBorder(img, top, bottom, left, right, cv.BORDER_CONSTANT, value=(0, 0, 0))
+    img = cv2.copyMakeBorder(img, top, bottom, left, right, cv2.BORDER_CONSTANT, value=(0, 0, 0))
 
     return img, shape[1], shape[0]
 
 
-def overlap(x1, x2, x3, x4):
+def overlap(xy_min1, xy_max1, xy_min2, xy_max2):
     """
     Calculate the width/height of overlap area between bbox1 and bbox2
-    :param x1: x_min or y_min of bbox1
-    :param x2: x_max or y_max of bbox1
-    :param x3: x_min or y_min of bbox2
-    :param x4: x_max or y_max of bbox2
+    :param xy_min1: x_min or y_min of bbox1
+    :param xy_max1: x_max or y_max of bbox1
+    :param xy_min2: x_min or y_min of bbox2
+    :param xy_max2: x_max or y_max of bbox2
     :return:
     """
 
-    left = max(x1, x3)
-    right = min(x2, x4)
+    left = max(xy_min1, xy_min2)
+    right = min(xy_max1, xy_max2)
 
     return right - left
 
 
-def cal_iou(box, truth):
+def cal_iou(prediction_box, ground_truth_box):
     """
     Calculate IOU between box and truth
-    :param box: bounding box: [x_min, y_min, x_max, y_max]
-    :param truth: bounding box: [x_min, y_min, x_max, y_max]
-    :return: IOU between box and truth
+    :param prediction_box: model prediction bounding box: [x_min, y_min, x_max, y_max]
+    :param ground_truth_box: ground truth bounding box: [x_min, y_min, x_max, y_max]
+    :return: IOU between prediction_box and ground_truth_box
     """
 
-    w = overlap(box[0], box[2], truth[0], truth[2])
-    h = overlap(box[1], box[3], truth[1], truth[3])
+    overlap_w = overlap(prediction_box[0], prediction_box[2], ground_truth_box[0], ground_truth_box[2])
+    overlap_h = overlap(prediction_box[1], prediction_box[3], ground_truth_box[1], ground_truth_box[3])
 
-    if w <= 0 or h <= 0:
+    if overlap_w <= 0 or overlap_h <= 0:
         return 0
 
-    inter_area = w * h
-    union_area = (box[2] - box[0]) * (box[3] - box[1]) + (truth[2] - truth[0]) * (truth[3] - truth[1]) - inter_area
+    inter_area = overlap_w * overlap_h
+    union_area = (prediction_box[2] - prediction_box[0]) * (prediction_box[3] - prediction_box[1]) + \
+                 (ground_truth_box[2] - ground_truth_box[0]) * (ground_truth_box[3] - ground_truth_box[1]) - inter_area
 
     return inter_area * 1.0 / union_area
 
 
-def apply_nms(all_boxes, thres):
+def apply_nms(original_boxes, thresh):
     """
     Hard nms for yolov3 output boxes's postprocess
-    :param all_boxes: yolov3 output boxes
-    :param thres: nms threshhold
-    :return: nms result
+    :param original_boxes: yolov3 output boxes
+    :param thresh: nms thresh hold
+    :return: nms result list
     """
 
-    res = []
+    nms_result = []
 
-    for cls in range(CLASS_NUM):
-        cls_bboxes = all_boxes[cls]
-        sorted_boxes = sorted(cls_bboxes, key=lambda d: d[5])[::-1]
+    for class_id in range(CLASS_NUM):
+        one_class_boxes = original_boxes[class_id]
+        sorted_boxes = sorted(one_class_boxes, key=lambda d: d[5])[::-1]
 
-        p = dict()
-        for i in range(len(sorted_boxes)):
-            if i in p:
+        result_box_id = dict()
+        for box_id in range(len(sorted_boxes)):
+            if box_id in result_box_id:
                 continue
 
-            truth = sorted_boxes[i]
-            for j in range(i + 1, len(sorted_boxes)):
-                if j in p:
+            truth = sorted_boxes[box_id]
+            for box_id_else in range(box_id + 1, len(sorted_boxes)):
+                if box_id_else in result_box_id:
                     continue
-                box = sorted_boxes[j]
-                iou = cal_iou(box, truth)
-                if iou >= thres:
-                    p[j] = 1
+                box_else = sorted_boxes[box_id_else]
+                iou = cal_iou(box_else, truth)
+                if iou >= thresh:
+                    result_box_id[box_id_else] = 1
 
-        for i in range(len(sorted_boxes)):
-            if i not in p:
-                res.append(sorted_boxes[i])
+        for box_id in range(len(sorted_boxes)):
+            if box_id not in result_box_id:
+                nms_result.append(sorted_boxes[box_id])
 
-    return res
+    return nms_result
 
 
 def decode(conv_output, img_w, img_h):
@@ -309,30 +304,30 @@ def decode(conv_output, img_w, img_h):
     :return: object detection result
     """
 
-    h, w, _ = conv_output.shape
-    pred = conv_output.reshape((h * w, 3, 5 + CLASS_NUM))
+    conv_output_h, conv_output_w, _ = conv_output.shape
+    feature_map = conv_output.reshape((conv_output_h * conv_output_w, 3, 5 + CLASS_NUM))
     resize_ratio = min(MODEL_WIDTH / img_w, MODEL_HEIGHT / img_h)
     dw = (MODEL_WIDTH - resize_ratio * img_w) / 2
     dh = (MODEL_HEIGHT - resize_ratio * img_h) / 2
 
-    bbox = np.zeros((h * w, 3, 4))
-    bbox[..., 0] = np.maximum((pred[..., 0] - pred[..., 2] / 2.0 - dw) / resize_ratio, 0)  # x_min
-    bbox[..., 1] = np.maximum((pred[..., 1] - pred[..., 3] / 2.0 - dh) / resize_ratio, 0)  # y_min
-    bbox[..., 2] = np.minimum((pred[..., 0] + pred[..., 2] / 2.0 - dw) / resize_ratio, img_w)  # x_max
-    bbox[..., 3] = np.minimum((pred[..., 1] + pred[..., 3] / 2.0 - dh) / resize_ratio, img_h)  # y_max
+    bbox = np.zeros((conv_output_h * conv_output_w, 3, 4))
+    bbox[..., 0] = np.maximum((feature_map[..., 0] - feature_map[..., 2] / 2.0 - dw) / resize_ratio, 0)  # x_min
+    bbox[..., 1] = np.maximum((feature_map[..., 1] - feature_map[..., 3] / 2.0 - dh) / resize_ratio, 0)  # y_min
+    bbox[..., 2] = np.minimum((feature_map[..., 0] + feature_map[..., 2] / 2.0 - dw) / resize_ratio, img_w)  # x_max
+    bbox[..., 3] = np.minimum((feature_map[..., 1] + feature_map[..., 3] / 2.0 - dh) / resize_ratio, img_h)  # y_max
 
-    pred[..., :4] = bbox
-    pred = pred.reshape((-1, 5 + CLASS_NUM))
-    pred[:, 4] = pred[:, 4] * pred[:, 5:].max(1)
-    pred = pred[pred[:, 4] >= CONF_THRESHOLD]
-    pred[:, 5] = np.argmax(pred[:, 5:], axis=-1)
+    feature_map[..., :4] = bbox
+    feature_map = feature_map.reshape((-1, 5 + CLASS_NUM))
+    feature_map[:, 4] = feature_map[:, 4] * feature_map[:, 5:].max(1)
+    feature_map = feature_map[feature_map[:, 4] >= CONF_THRESHOLD]
+    feature_map[:, 5] = np.argmax(feature_map[:, 5:], axis=-1)
 
     all_boxes = [[] for ix in range(CLASS_NUM)]
-    for ix in range(pred.shape[0]):
-        box = [int(pred[ix, iy]) for iy in range(4)]
-        box.append(int(pred[ix, 5]))
-        box.append(pred[ix, 4])
-        all_boxes[box[4] - 1].append(box)
+    for box_index in range(feature_map.shape[0]):
+        each_box = [int(feature_map[box_index, iy]) for iy in range(4)]
+        each_box.append(int(feature_map[box_index, 5]))
+        each_box.append(feature_map[box_index, 4])
+        all_boxes[each_box[4] - 1].append(each_box)
 
     return all_boxes
 
@@ -361,28 +356,29 @@ def post_process(infer_output, img_w, img_h):
     :return: object detetion result with detection_classes, detection_boxes, detection_scores
     """
 
-    result_return = dict()
-    all_boxes = [[] for ix in range(CLASS_NUM)]
-    for ix in range(3):
-        pred = infer_output[ix].reshape((MODEL_HEIGHT // STRIDE_LIST[ix], MODEL_WIDTH // STRIDE_LIST[ix], NUM_CHANNEL))
-        boxes = decode(pred, img_w, img_h)
+    result_dict = dict()
+    all_boxes = [[] for class_id in range(CLASS_NUM)]
+    for feature_map_id in range(3):
+        feature_map = infer_output[feature_map_id].reshape(
+            (MODEL_HEIGHT // STRIDE_LIST[feature_map_id], MODEL_WIDTH // STRIDE_LIST[feature_map_id], NUM_CHANNEL))
+        boxes = decode(feature_map, img_w, img_h)
         all_boxes = [all_boxes[iy] + boxes[iy] for iy in range(CLASS_NUM)]
-    res = apply_nms(all_boxes, IOU_THRESHOLD)
-    if not res:
-        result_return['detection_classes'] = []
-        result_return['detection_boxes'] = []
-        result_return['detection_scores'] = []
+    nms_result = apply_nms(all_boxes, IOU_THRESHOLD)
+    if not nms_result:
+        result_dict['detection_classes'] = []
+        result_dict['detection_boxes'] = []
+        result_dict['detection_scores'] = []
     else:
-        new_res = np.array(res)
-        picked_boxes = new_res[:, 0:4]
+        nms_result_array = np.array(nms_result)
+        picked_boxes = nms_result_array[:, 0:4]
         picked_boxes = picked_boxes[:, [1, 0, 3, 2]]
-        picked_classes = convert_labels(new_res[:, 4])
-        picked_score = new_res[:, 5]
-        result_return['detection_classes'] = picked_classes
-        result_return['detection_boxes'] = picked_boxes.tolist()
-        result_return['detection_scores'] = picked_score.tolist()
+        picked_classes = convert_labels(nms_result_array[:, 4])
+        picked_score = nms_result_array[:, 5]
+        result_dict['detection_classes'] = picked_classes
+        result_dict['detection_boxes'] = picked_boxes.tolist()
+        result_dict['detection_scores'] = picked_score.tolist()
 
-    return result_return
+    return result_dict
 
 
 def inference(model, bgr_img):
@@ -394,35 +390,35 @@ def inference(model, bgr_img):
     """
 
     if bgr_img.shape[0] > 0:
-        t_pre = 0
-        t_for = 0
-        t_post = 0
+        t_preprocess = 0
+        t_inference = 0
+        t_post_process = 0
 
         # preprocess image
         t1 = time.time()
-        data, w, h = preprocess_cv2(bgr_img)
+        processed_bgr_img, img_w, img_h = preprocess_cv2(bgr_img)
         t2 = time.time()
-        t_pre += (t2 - t1)
+        t_preprocess += (t2 - t1)
 
         # model inference
-        result_list = model.execute([data, ])
+        inference_result_list = model.execute([processed_bgr_img, ])
         t3 = time.time()
-        t_for += (t3 - t2)
+        t_inference += (t3 - t2)
 
         # post process
-        result_return = post_process(result_list, w, h)
+        inference_result = post_process(inference_result_list, img_w, img_h)
         t4 = time.time()
-        t_post += (t4 - t3)
+        t_post_process += (t4 - t3)
 
         print("*" * 40)
-        print("result = ", result_return)
-        print("preprocess cost：", t2 - t1)
-        print("forward cost：", t3 - t2)
-        print("proprocess cost：", t4 - t3)
+        print("result = ", inference_result)
+        print("preprocess cost:", t2 - t1)
+        print("forward cost:", t3 - t2)
+        print("post process cost:", t4 - t3)
         print("FPS:", 1 / (t4 - t1))
         print("*" * 40)
 
-        return result_return
+        return inference_result
     else:
         return dict()
 
@@ -433,34 +429,25 @@ if __name__ == "__main__":
     acl_resource.init()
 
     # load om model
-    model = Model(MODEL_PATH)
+    yolov3_model = Model(MODEL_PATH)
 
-    # model inference
-    input_dir = os.listdir(INPUT_DIR)
-    print("input_dir = ", input_dir)
+    # send the multicast message
+    multicast_group = (LOCAL_IP_ADDRESS, PORT)
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    connections = {}
 
-    for pic in input_dir:
-        # read image
-        image_path = os.path.join(INPUT_DIR, pic)
-        bgr_img = cv.imread(image_path)
-        # preprocess image
-        data, w, h = preprocess_cv2(bgr_img)
-        # model inference
-        result_list = model.execute([data, ])
-        # post process
-        result_return = post_process(result_list, w, h)
+    try:
+        # Send data to the multicast group
+        print('sending "%s"' % 'EtherSensePing' + str(multicast_group))
+        sent = sock.sendto('EtherSensePing'.encode(), multicast_group)
 
-        print("result = ", result_return)
-        for i in range(len(result_return['detection_classes'])):
-            box = result_return['detection_boxes'][i]
-            class_name = result_return['detection_classes'][i]
-            confidence = result_return['detection_scores'][i]
-            cv.rectangle(bgr_img, (int(box[1]), int(box[0])), (int(box[3]), int(box[2])), COLORS[i % 6], 2)
-            p3 = (max(int(box[1]), 15), max(int(box[0]), 15))
-            out_label = class_name
-            cv.putText(bgr_img, out_label, p3, cv.FONT_ITALIC, 0.6, COLORS[i % 6], 1)
-        output_file = os.path.join(OUTPUT_DIR, pic)
-        print("output:%s" % output_file)
-        cv.imwrite(output_file, bgr_img)
+        # defer waiting for a response using Asyncore
+        client = EtherSenseClient()
+        # print("data shape:", client._image_data.shape)
+        asyncore.loop()
 
-    print("Execute end")
+    except socket.timeout:
+        print('timed out, no more responses')
+    finally:
+        print(sys.stderr, 'closing socket')
+        sock.close()
