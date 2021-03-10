@@ -13,7 +13,7 @@
 |机械臂|[Dobot-Magician](https://cn.dobot.cc/dobot-magician/product-overview.html)|
 |主控平台|Ubuntu18.04 LTS-x64-Huawei Matebook X Pro|
 |路由器|Huawei 4G无线路由器B311|
-|检测目标|[Ascend图标](doc/ascend_logo.png)|
+|检测目标|[Ascend图标](https://images.gitee.com/uploads/images/2021/0310/112721_0db30e79_5537256.png)|
 
 ## 环境准备
 ### Ubuntu主控平台准备
@@ -48,11 +48,11 @@
    
 - 机械臂目标跟随样例的整个数据流图如下，Atlas200DK推理平台（运行环境）与Ubuntu主控平台（开发环境）通过路由器进行交互，Atlas200DK负责Yolov3目标检测模型的推理，Ubuntu主控平台通过路由器向Atlas200DK发送IntelRealsense的RGB数据，同时接收Atlas200DK的推理结果，利用推理结果对机械臂进行控制。
 
-<div align=center><img width="750" height="190" src="doc/architecture.png"/></div>
+<div align=center><img width="750" height="190" src="https://images.gitee.com/uploads/images/2021/0310/112856_f44ecafd_5537256.png"/></div>
 
 ### 机械臂控制逻辑
 
-<div align=center><img width="640" height="360" src="doc/IntelRealsense.png"/></div>
+<div align=center><img width="640" height="360" src="https://images.gitee.com/uploads/images/2021/0310/142505_86a67472_5537256.png"/></div>
 
 - 问题分析
     * 分析一：机械臂的运动方式
@@ -117,8 +117,8 @@
         
         根据之前的假设，J1轴的运动问题可以在世界坐标系的XOY投影平面内进行分析:
     
-        <div align=center><img width="450" height="450" src="doc/J1.png"/></div>
-    
+        <div align=center><img width="450" height="450" src="https://images.gitee.com/uploads/images/2021/0310/113212_56e70e40_5537256.png"/></div>
+
         如图所示，A($x_A$, $y_A$)为目标的实际位置，B($x_B$, $y_B$)为当前相机视场中心位置（图像中心）。为使机械臂移动之后目标位于视场中心，J1轴的移动角度$\theta_1$可表示为：
         
         $$
@@ -134,8 +134,8 @@
       
     * J2 & J3轴的运动逻辑
         
-        <div align=center><img width="450" height="450" src="doc/J2J3.png"/></div>
-      
+        <div align=center><img width="450" height="450" src="https://images.gitee.com/uploads/images/2021/0310/113332_061a0a79_5537256.png"/></div>
+
         建立关于$\theta_2$和$\theta_3$的方程组：
         
         $$l_2\cos(\alpha_2 + \theta_2) + l_3\cos(\alpha_3 + \theta_3) = \Delta x + l_2\cos(\alpha_2) + l_3\cos(\alpha_3)$$
@@ -203,7 +203,7 @@
     ```
 
 ### 预期结果
-运行成功后，可以用[Ascend图标](doc/ascend_logo.png )来控制机械臂的移动，预期效果如下：
+运行成功后，可以用[Ascend图标](https://images.gitee.com/uploads/images/2021/0310/112721_0db30e79_5537256.png )来控制机械臂的移动，预期效果如下：
 
 <div align=center><img width="640" height="480" src="doc/demo.gif"/></div>
 
