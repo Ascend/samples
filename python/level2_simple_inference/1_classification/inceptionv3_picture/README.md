@@ -82,7 +82,7 @@
 
     执行以下命令，进入样例的data文件夹中，下载对应的测试图片。
 
-    **cd $HOME/samples/python/level2_simple_inference/1_classification/googlenet_imagenet_picture/data**
+    **cd $HOME/samples/python/level2_simple_inference/1_classification/inceptionv3_picture/data**
 
     **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_imagenet_picture-python/dog1_1024_683.jpg**
 
@@ -96,7 +96,7 @@
 
 **注：开发环境与运行环境合一部署，请跳过步骤1，直接执行[步骤2](#step_2)即可。**   
 
-1. 执行以下命令,将开发环境的 **googlenet_imagenet_picture** 目录上传到运行环境中，例如 **/home/HwHiAiUser**，并以HwHiAiUser（运行用户）登录运行环境（Host）。
+1. 执行以下命令,将开发环境的 **inceptionv3_picture** 目录上传到运行环境中，例如 **/home/HwHiAiUser**，并以HwHiAiUser（运行用户）登录运行环境（Host）。
 
     **scp -r $HOME/samples/python/level2_simple_inference/1_classification/inceptionv3_picture HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
 
@@ -113,7 +113,7 @@
 
       **source ~/.bashrc**
         
-      **cd $HOME/samples/python/level2_simple_inference/1_classification/googlenet_imagenet_picture/src**
+      **cd $HOME/samples/python/level2_simple_inference/1_classification/inceptionv3_picture/src**
 
     - 如果是开发环境与运行环境分离部署，执行以下命令切换目录。
     
