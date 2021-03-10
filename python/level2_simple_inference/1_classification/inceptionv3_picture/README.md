@@ -84,11 +84,11 @@
 
     **cd $HOME/samples/python/level2_simple_inference/1_classification/inceptionv3_picture/data**
 
-    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_imagenet_picture-python/dog1_1024_683.jpg**
+    **wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/InceptionV3/pic/dog1_1024_683.jpg**
 
-    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_imagenet_picture-python/dog2_1024_683.jpg**
+    **wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/InceptionV3/pic/dog2_1024_683.jpg**
     
-    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_imagenet_picture-python/rabit.jpg**
+    **wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/InceptionV3/pic/rabit.jpg**
 
 
 
