@@ -172,7 +172,7 @@
     
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
-    |  yolov3_ascend_logo| 基于Tensorflow-YOLOV3的[Ascend图标](doc/ascend_logo.png )检测模型。  |  请参考[https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/yolov3_darknet53/ATC_yolov3_darknet53_tf_xdzhangtongxue](https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/yolov3_darknet53/ATC_yolov3_darknet53_tf_xdzhangtongxue )目录中README.md下载原始模型章节下载模型和权重文件。 |
+    |  yolov3_ascend_logo| 基于Tensorflow-YOLOV3的[Ascend图标](https://images.gitee.com/uploads/images/2021/0310/112721_0db30e79_5537256.png )检测模型。  |  请参考[https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/yolov3_darknet53/ATC_yolov3_darknet53_tf_xdzhangtongxue](https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/yolov3_darknet53/ATC_yolov3_darknet53_tf_xdzhangtongxue )目录中README.md下载原始模型章节下载模型和权重文件。 |
 
     ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
     > - modelzoo中已经提供了转换好的om模型，可以直接使用。
