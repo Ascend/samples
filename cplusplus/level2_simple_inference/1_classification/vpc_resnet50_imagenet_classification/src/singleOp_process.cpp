@@ -185,7 +185,7 @@ Result SingleOpProcess::RunSigleOpArgMaxD()
 
     aclDataBuffer *inputBufferArgMaxD[inputNumArgMaxD];
     inputBufferArgMaxD[0] = outputBufferCast_[0];
-    ret = aclopExecute(opTypeArgMaxD.c_str(), inputNumArgMaxD, inputDescArgMaxD, inputBufferArgMaxD,
+    ret = aclopExecuteV2(opTypeArgMaxD.c_str(), inputNumArgMaxD, inputDescArgMaxD, inputBufferArgMaxD,
         outputNumArgMaxD, outputDescArgMaxD, outputBufferArgMaxD_, opAttr, stream_);
     if (ret != ACL_ERROR_NONE) {
         ERROR_LOG("execute singleOp argMaxD failed, errorCode is %d", static_cast<int32_t>(ret));

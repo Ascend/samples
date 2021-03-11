@@ -226,7 +226,7 @@ void ModelProcess::DumpModelOutputResult()
             // get model output data
             aclDataBuffer *dataBuffer = aclmdlGetDatasetBuffer(output_, i);
             void *data = aclGetDataBufferAddr(dataBuffer);
-            uint32_t len = aclGetDataBufferSize(dataBuffer);
+            uint32_t len = aclGetDataBufferSizeV2(dataBuffer);
 
             void *outHostData = nullptr;
             aclError ret = ACL_ERROR_NONE;
@@ -277,7 +277,7 @@ void ModelProcess::OutputModelResult()
         // get model output data
         aclDataBuffer* dataBuffer = aclmdlGetDatasetBuffer(output_, i);
         void* data = aclGetDataBufferAddr(dataBuffer);
-        uint32_t len = aclGetDataBufferSize(dataBuffer);
+        uint32_t len = aclGetDataBufferSizeV2(dataBuffer);
 
         void *outHostData = nullptr;
         aclError ret = ACL_ERROR_NONE;

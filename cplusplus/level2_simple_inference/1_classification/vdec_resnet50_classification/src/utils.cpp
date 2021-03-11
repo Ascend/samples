@@ -172,7 +172,7 @@ Result Utils::PullModelOutputData(aclmdlDataset *modelOutput, const char *fileNa
             ERROR_LOG("aclGetDataBufferAddr from dataBuffer failed.");
             continue;
         }
-        uint32_t bufferSize = aclGetDataBufferSize(dataBuffer);
+        uint32_t bufferSize = aclGetDataBufferSizeV2(dataBuffer);
         INFO_LOG("output[%zu] DataBuffer, buffer addr = %p, buffer size = %u",
                 i, data, bufferSize);
 
@@ -290,12 +290,12 @@ Result Utils::SaveModelOutputData(const char *srcfileName, const char *dstfileNa
     float max = ite->first;
     int classType = ite->second;
     for (i = 0 ; i < 5; i++) {
-        sum+=ite->first;
-        ite++;
+        sum += ite->first;
+        ++ite;
     }
     fprintf(model_output_txt, "classType[%d], top1[%f], top5[%f]", classType, max, sum);
     fclose(model_output_txt);
-    INFO_LOG( "result:classType[%d], top1[%f], top5[%f]", classType,max,sum);
+    INFO_LOG("result:classType[%d], top1[%f], top5[%f]", classType,max,sum);
     return SUCCESS;
 }
 

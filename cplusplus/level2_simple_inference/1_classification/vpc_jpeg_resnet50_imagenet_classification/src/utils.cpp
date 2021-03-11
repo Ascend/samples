@@ -79,7 +79,9 @@ Result Utils::GetPicDevBuffer4JpegD(PicDesc &picDesc, char *&picDevBuffer, uint3
         ERROR_LOG("read bin file failed, file name is %s", picDesc.picName.c_str());
         return FAILED;
     }
-    aclError aclRet = acldvppJpegGetImageInfo(inputBuff, inputBuffSize, &picDesc.width, &picDesc.height, nullptr);
+
+    aclError aclRet = acldvppJpegGetImageInfoV2(inputBuff, inputBuffSize, &picDesc.width, &picDesc.height, 
+                                                nullptr, nullptr);
     if (aclRet != ACL_ERROR_NONE) {
         ERROR_LOG("get jpeg image info failed, errorCode = %d", static_cast<int32_t>(aclRet));
         if (!(RunStatus::GetDeviceStatus())) {
@@ -226,7 +228,7 @@ Result Utils::PullModelOutputData(aclmdlDataset *modelOutput, const char *fileNa
             return FAILED;
         }
 
-        uint32_t bufferSize = aclGetDataBufferSize(dataBuffer);
+        uint32_t bufferSize = aclGetDataBufferSizeV2(dataBuffer);
         void *dataPtr = nullptr;
         aclError aclRet;
         if (!(RunStatus::GetDeviceStatus())) {
@@ -370,8 +372,8 @@ Result Utils::SaveModelOutputData(const char *srcfileName, const char *dstfileNa
     float max = ite->first;
     int classType = ite->second;
     for (i = 0 ; i < 5; i++) {
-        sum+=ite->first;
-        ite++;
+        sum += ite->first;
+        ++ite;
     }
     fprintf(model_output_txt, "classType[%d], top1[%f], top5[%f]", classType, max, sum);
     fclose(model_output_txt);
