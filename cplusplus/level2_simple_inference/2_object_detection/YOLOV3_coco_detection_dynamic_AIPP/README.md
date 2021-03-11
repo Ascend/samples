@@ -66,7 +66,8 @@ Before deploying this sample, ensure that:
    
    1. Set the **LD\_LIBRARY\_PATH** environment variable.
       
-      The **LD\_LIBRARY\_PATH** environment variable conflicts with the sample when the ATC tool is used. Therefore, you need to set this environment variable separately in the command line to facilitate modification.
+      The **LD\_LIBRARY\_PATH** environment variable conflicts with the sample when the ATC tool is used. Therefore, you need to set this environment variable separately in the command line to facilitate modification.        
+      **export install\_path=$HOME/Ascend/ascend-toolkit/latest**      
       
       **export LD\_LIBRARY\_PATH=\\${install\_path}/atc/lib64**
    
