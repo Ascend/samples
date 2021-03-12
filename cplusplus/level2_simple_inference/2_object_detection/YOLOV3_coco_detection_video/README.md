@@ -59,7 +59,8 @@ In the development environment, run the following commands as a non-root user to
    
    1. Set the **LD\_LIBRARY\_PATH** environment variable.
       
-      The **LD\_LIBRARY\_PATH** environment variable conflicts with the sample when the ATC tool is used. Therefore, you need to separately set this environment variable in the CLI to facilitate modification.
+      The **LD\_LIBRARY\_PATH** environment variable conflicts with the sample when the ATC tool is used. Therefore, you need to separately set this environment variable in the CLI to facilitate modification.        
+      **export install\_path=$HOME/Ascend/ascend-toolkit/latest**     
       
       **export LD\_LIBRARY\_PATH=\\${install\_path}/atc/lib64**
    
