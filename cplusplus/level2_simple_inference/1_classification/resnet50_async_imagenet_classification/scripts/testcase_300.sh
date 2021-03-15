@@ -52,6 +52,12 @@ function setAtcEnv() {
         export ASCEND_OPP_PATH=${install_path}/opp
         export PYTHONPATH=${install_path}/atc/python/site-packages:${install_path}/atc/python/site-packages/auto_tune.egg/auto_tune:${install_path}/atc/python/site-packages/schedule_search.egg:$PYTHONPATH
         export LD_LIBRARY_PATH=${install_path}/atc/lib64:${LD_LIBRARY_PATH}
+    elif [[ ${version} = "c76" ]] || [[ ${version} = "C76" ]];then
+        export install_path=$HOME/Ascend/ascend-toolkit/latest
+        export PATH=/usr/local/python3.7.5/bin:${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
+        export ASCEND_OPP_PATH=${install_path}/opp
+        export PYTHONPATH=${install_path}/atc/python/site-packages:${install_path}/atc/python/site-packages/auto_tune.egg/auto_tune:${install_path}/atc/python/site-packages/schedule_search.egg:$PYTHONPATH
+        export LD_LIBRARY_PATH=${install_path}/atc/lib64:${LD_LIBRARY_PATH}
     fi
 
     return 0
@@ -80,6 +86,9 @@ function setBuildEnv() {
         export DDK_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/x86_64-linux_gcc7.3.0
         export NPU_HOST_LIB=${DDK_PATH}/acllib/lib64/stub
     elif [[ ${version} = "c75" ]] || [[ ${version} = "C75" ]];then
+        export DDK_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/x86_64-linux
+        export NPU_HOST_LIB=${DDK_PATH}/acllib/lib64/stub
+    elif [[ ${version} = "c76" ]] || [[ ${version} = "c76" ]];then
         export DDK_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/x86_64-linux
         export NPU_HOST_LIB=${DDK_PATH}/acllib/lib64/stub
     fi
@@ -177,7 +186,7 @@ function main() {
 
     # 重新配置程序运行所需的环境变量
     export LD_LIBRARY_PATH=
-    export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/nnrt/latest/acllib/lib64:$LD_LIBRARY_PATH
+    export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/nnrt/latest/acllib/lib64:/home/HwHiAiUser/Ascend/ascend-toolkit/latest/atc/lib64:/home/HwHiAiUser/ascend_ddk/x86/lib:${LD_LIBRARY_PATH}
 
     # 运行程序
     ./main > result.txt

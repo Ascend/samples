@@ -274,7 +274,7 @@ Result ModelProcess::GetModelInputWH(int &width, int &height)
     // om used in this app has only one input
     aclError ret = aclmdlGetInputDims(modelDesc_, 0, &dims);
     if (ret != ACL_ERROR_NONE) {
-        ERROR_LOG("get model input dims failed, errorCode is %d", modelId_, static_cast<int32_t>(ret));
+        ERROR_LOG("get model input dims failed, errorCode is %d", static_cast<int32_t>(ret));
         return FAILED;
     }
     if (dims.dimCount != 4) {
