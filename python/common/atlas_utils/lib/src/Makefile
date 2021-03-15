@@ -22,7 +22,7 @@ else ifeq ($(mode), ASIC)
     else
         arch := x86
     endif    
-    OUT_DIR = ../asic/
+    OUT_DIR = ../asic/$(arch)
 else
     $(error "Unsupported mode: "$(mode)", please input: AtlasDK or ASIC.")
 endif

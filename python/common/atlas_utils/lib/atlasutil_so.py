@@ -1,6 +1,7 @@
 import threading
 import ctypes
 import os
+import platform
 
 import acl
 
@@ -8,15 +9,22 @@ from atlas_utils.constants import ACL_HOST, ACL_DEVICE
 
 g_run_mode, ret = acl.rt.get_run_mode()
 
+
 def _lib_relative_path():
     global g_run_mode
     so_path = ""    
     if g_run_mode == ACL_HOST:
-        so_path = '/asic/libatlasutil.so'
+        arch = platform.machine()
+        if arch == 'x86_64':
+            so_path = '/asic/x86/libatlasutil.so'
+        elif arch == 'aarch64':
+            so_path = '/asic/arm/libatlasutil.so'
+        else:
+            raise("Invalid arch ")
     elif g_run_mode == ACL_DEVICE:
         so_path = '/atlas200dk/libatlasutil.so'
     else:
-        raise("Invalid run mode value ", g_run_mode)
+        raise("Invalid run mode value ")
 
     return so_path
 
