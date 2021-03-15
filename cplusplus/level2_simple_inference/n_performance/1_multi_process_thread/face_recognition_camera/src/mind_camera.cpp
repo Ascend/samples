@@ -62,7 +62,7 @@ MindCamera::MindCamera() {
     config_ = nullptr;
     frame_id_ = kInitFrameId;
     exit_flag_ = CAMERADATASETS_INIT;
-    InitConfigParams();
+    //InitConfigParams();
 }
 
 MindCamera::~MindCamera() {
@@ -80,6 +80,7 @@ string MindCamera::CameraDatasetsConfig::ToString() const {
 
 bool MindCamera::Init() {
     INFO_LOG("[CameraDatasets] start init!");
+    InitConfigParams();
     if (config_ == nullptr) {
         config_ = make_shared<CameraDatasetsConfig>();
     }
