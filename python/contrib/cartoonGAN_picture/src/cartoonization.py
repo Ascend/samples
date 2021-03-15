@@ -17,6 +17,9 @@ from atlas_utils.acl_resource import AclResource
 
 
 class Cartoonization(object):
+    """
+    class for Cartoonization
+    """
     def __init__(self, model_path, model_width, model_height):
         self._model_path = model_path
         self._model_width = model_width
@@ -56,6 +59,9 @@ class Cartoonization(object):
 
     @utils.display_time
     def post_process(self, infer_output, image_file, origin_image):
+        """
+        post process
+        """
         data = ((np.squeeze(infer_output[0]) + 1) * 127.5)
         img = cv2.cvtColor(data, cv2.COLOR_RGB2BGR)
         img = cv2.resize(img, (origin_image.width, origin_image.height))
