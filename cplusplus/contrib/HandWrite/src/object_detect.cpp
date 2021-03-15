@@ -42,16 +42,16 @@ ObjectDetect::ObjectDetect(const char* modelPath,
     imageInfoSize_ = 0;
     imageInfoBuf_ = nullptr;
     modelPath_ = modelPath;
+    Channel* chan = nullptr;
 }
 
 Result ObjectDetect::OpenPresentAgentChannel(){
-    channel_ = nullptr;
-    PresenterErrorCode openChannelret = OpenChannelByConfig(channel_, "./param.conf");
+    PresenterErrorCode openChannelret = OpenChannelByConfig(chan, "./param.conf");
     if (openChannelret != PresenterErrorCode::kNone) {
         ERROR_LOG("Open channel failed, error %d\n", (int)openChannelret);
         return FAILED;
     }
-    INFO_LOG("Open channel success");
+    chan_.reset(chan);
     return SUCCESS;
 }
 
