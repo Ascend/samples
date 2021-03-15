@@ -147,6 +147,13 @@ Result ObjectDetect::Init() {
         return SUCCESS;
     }
 
+    //open presentagent channel
+    Result ret = OpenPresentAgentChannel();
+    if (ret != SUCCESS) {
+        ERROR_LOG("Open present agent channel failed");
+        return FAILED;
+    }
+
     Result ret = InitResource();
     if (ret != SUCCESS) {
         ERROR_LOG("Init acl resource failed\n");
