@@ -154,7 +154,7 @@ Result ObjectDetect::Init() {
         return FAILED;
     }
 
-    Result ret = InitResource();
+    ret = InitResource();
     if (ret != SUCCESS) {
         ERROR_LOG("Init acl resource failed\n");
         return FAILED;
