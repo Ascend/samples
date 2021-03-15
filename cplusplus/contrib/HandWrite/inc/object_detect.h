@@ -84,7 +84,6 @@ private:
     aclrtRunMode runMode_;
 
     bool isInited_;
-    Channel* channel_;  //连接presenter server的通道
     std::shared_ptr<Channel> chan_;
   //  std::shared_ptr<Channel> chan_;
 };
