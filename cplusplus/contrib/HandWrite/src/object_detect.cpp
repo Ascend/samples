@@ -44,7 +44,7 @@ ObjectDetect::ObjectDetect(const char* modelPath,
     modelPath_ = modelPath;
 }
 
-Result object_detect::OpenPresentAgentChannel(){
+Result ObjectDetect::OpenPresentAgentChannel(){
     channel_ = nullptr;
     PresenterErrorCode openChannelret = OpenChannelByConfig(channel_, "./param.conf");
     if (openChannelret != PresenterErrorCode::kNone) {
