@@ -42,13 +42,17 @@ ObjectDetect::ObjectDetect(const char* modelPath,
     imageInfoSize_ = 0;
     imageInfoBuf_ = nullptr;
     modelPath_ = modelPath;
-    Channel* chan = nullptr;
+    chan = nullptr;
+}
+
+Result ObjectDetect::OpenPresentAgentChannel(){
     PresenterErrorCode openChannelret = OpenChannelByConfig(chan, "./param.conf");
     if (openChannelret != PresenterErrorCode::kNone) {
         ERROR_LOG("Open channel failed, error %d\n", (int)openChannelret);
+        return FAILED;
     }
     chan_.reset(chan);
-
+    return SUCCESS;
 }
 
 ObjectDetect::~ObjectDetect() {
@@ -143,7 +147,14 @@ Result ObjectDetect::Init() {
         return SUCCESS;
     }
 
-    Result ret = InitResource();
+    //open presentagent channel
+    Result ret = OpenPresentAgentChannel();
+    if (ret != SUCCESS) {
+        ERROR_LOG("Open present agent channel failed");
+        return FAILED;
+    }
+
+    ret = InitResource();
     if (ret != SUCCESS) {
         ERROR_LOG("Init acl resource failed\n");
         return FAILED;

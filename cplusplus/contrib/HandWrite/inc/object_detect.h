@@ -57,6 +57,8 @@ public:
 
     Result SendImage(Channel* channel, cv::Mat& jpegImage, vector<DetectionResult>& detRes);
 private:
+    //init presentagent channnel
+    Result OpenPresentAgentChannel();
     Result InitResource();
     Result InitModel(const char* omModelPath);
     Result CreateImageInfoBuffer();
@@ -82,6 +84,7 @@ private:
     aclrtRunMode runMode_;
 
     bool isInited_;
+    Channel* chan;
     std::shared_ptr<Channel> chan_;
   //  std::shared_ptr<Channel> chan_;
 };

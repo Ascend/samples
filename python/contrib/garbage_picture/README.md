@@ -71,6 +71,8 @@ Before deploying this sample, ensure that:
 
         The ***LD_LIBRARY_PATH*** environment variable conflicts with the sample when the ATC tool is used. Therefore, you need to set this environment variable separately in the CLI to facilitate modification.
 
+        **export install_path=$HOME/Ascend/ascend-toolkit/latest**
+
         **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64**  
 
     2. Run the following commands to download the AIPP configuration file and convert the model:
