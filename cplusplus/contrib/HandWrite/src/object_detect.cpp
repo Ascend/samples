@@ -42,7 +42,7 @@ ObjectDetect::ObjectDetect(const char* modelPath,
     imageInfoSize_ = 0;
     imageInfoBuf_ = nullptr;
     modelPath_ = modelPath;
-    Channel* chan = nullptr;
+    chan = nullptr;
 }
 
 Result ObjectDetect::OpenPresentAgentChannel(){
