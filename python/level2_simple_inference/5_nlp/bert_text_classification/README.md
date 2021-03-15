@@ -52,7 +52,7 @@
     
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
-    |  bert_text_classification| 文本分类推理模型。  |  请参考[https://gitee.com/ascend/modelzoo/tree/master/contrib/Research/nlp/bert_text_classification/ATC_bert_classification_tf_AE](https://gitee.com/ascend/modelzoo/tree/master/contrib/Research/nlp/bert_text_classification/ATC_bert_classification_tf_AE)目录中README.md下载原始模型章节下载模型和权重文件。 |
+    |  bert_text_classification| 文本分类推理模型。  |  请参考[https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/nlp/bert_text_classification/ATC_bert_classification_tf_AE](https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/nlp/bert_text_classification/ATC_bert_classification_tf_AE)目录中README.md下载原始模型章节下载模型和权重文件。 |
 
     ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
     > - modelzoo中提供了转换好的om模型，但此模型不匹配当前样例，所以需要下载原始模型和权重文件后重新进行模型转换。
@@ -65,6 +65,7 @@
 
         由于LD_LIBRARY_PATH环境变量在转使用atc工具和运行样例时会产生冲突，所以需要在命令行单独设置此环境变量，方便修改。
 
+        **export install_path=$HOME/Ascend/ascend-toolkit/latest**       
         **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64**  
 
     2. 执行以下命令使用atc命令进行模型转换。
