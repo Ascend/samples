@@ -1,3 +1,4 @@
+"""
 # Copyright 2020 Huawei Technologies Co., Ltd
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -11,6 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+"""
 
 image_net_classes = [
 "indoor after decoration parallel",
@@ -21,8 +23,11 @@ image_net_classes = [
 "outdoor before decoration unparallel"
 ]
 
-def get_image_net_class(id):
-    if id >= len(image_net_classes):
+def get_image_net_class(identifier):
+    """
+    get_image_net_class
+    """
+    if identifier >= len(image_net_classes):
         return "unknown"
     else:
-        return image_net_classes[id]
+        return image_net_classes[identifier]

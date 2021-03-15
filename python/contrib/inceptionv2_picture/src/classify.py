@@ -26,7 +26,7 @@ class Classify(object):
     """
     Classify
     """
-    def __init__(self, acl_resource, model_path, model_width, model_height):
+    def __init__(self, model_path, model_width, model_height):
         self._model_path = model_path
         self._model_width = model_width
         self._model_height = model_height
@@ -38,8 +38,7 @@ class Classify(object):
         """    
         bgr_img = cv2.imread(image).astype(np.float32)
         bgr_img = bgr_img / 255.0
-        resized_image = cv2.resize(bgr_img,(299,299))
-        print("resize yuv end")
+        resized_image = cv2.resize(bgr_img, (299, 299))
         return resized_image
 
     def inference(self, resized_image):
@@ -94,7 +93,7 @@ def main():
     acl_resource = AclResource()
     acl_resource.init()
     #Instantiation classification detection, incoming om model path, model input width and height parameters
-    classify = Classify(acl_resource, MODEL_PATH, MODEL_WIDTH, MODEL_HEIGHT)
+    classify = Classify(MODEL_PATH, MODEL_WIDTH, MODEL_HEIGHT)
     
     #Get the picture storage directory from the parameters, and infer picture by picture
     image_dir = sys.argv[1]
