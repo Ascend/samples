@@ -57,6 +57,8 @@ public:
 
     Result SendImage(Channel* channel, cv::Mat& jpegImage, vector<DetectionResult>& detRes);
 private:
+    //init presentagent channnel
+    Result OpenPresentAgentChannel();
     Result InitResource();
     Result InitModel(const char* omModelPath);
     Result CreateImageInfoBuffer();
