@@ -4,9 +4,9 @@
 
 **本README只提供命令行方式运行样例的指导，如需在Mindstudio下运行样例，请参考[Mindstudio运行图片样例wiki](https://gitee.com/ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E5%9B%BE%E7%89%87%E6%A0%B7%E4%BE%8B?sort_id=3164874)。**
 
-## 图片InceptionV3分类样例
+## 图片InceptionV2分类样例
 
-功能：使用InceptionV3模型对输入图片进行分类推理。
+功能：使用InceptionV2模型对输入图片进行分类推理。
 
 样例输入：待推理的jpg图片。
 
@@ -48,11 +48,11 @@
 
 2. 获取此应用中所需要的原始网络模型。
 
-    参考下表获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到开发环境普通用户下的任意目录，例如：$HOME/models/inceptionv3_picture。
+    参考下表获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到开发环境普通用户下的任意目录，例如：$HOME/models/inceptionv2_picture。
     
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
-    |  InceptionV3| 图片分类推理模型。是Pytorch框架模型。  |  请参考[https://gitee.com/ascend/modelzoo/tree/master/built-in/ACL_PyTorch/Official/cv/InceptionV3_for_Pytorch](https://gitee.com/ascend/modelzoo/tree/master/built-in/ACL_PyTorch/Official/cv/InceptionV3_for_Pytorch)目录中README.md下载原始模型。 |
+    |  InceptionV2| 图片分类推理模型。是tensorflow框架模型。  |  请参考[https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/InceptionV2/frozen_graph.pb](https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/InceptionV2/frozen_graph.pb)目录中README.md下载原始模型。 |
 
 3. 将原始模型转换为Davinci模型。
     
@@ -68,27 +68,25 @@
 
     2. 执行以下命令下载aipp配置文件并使用atc命令进行模型转换。
 
-        **cd $HOME/models/inceptionv3_picture**  
+        **cd $HOME/models/inceptionv2_picture**  
 
-        **wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/InceptionV3/aipp_inceptionv3_pth.config**
-
-        **atc --model=./inceptionv3.onnx --framework=5 --output=InceptionV3 --soc_version=Ascend310 --insert_op_conf=./aipp_inceptionv3_pth --input_shape="actual_input_1:1,3,300,300" --input_format=NCHW**
+        **atc --input_shape="input:1,299,299,3" --input_format=NHWC --output="frozen_graph-inception-resnet-test1" --soc_version=Ascend310 --framework=3 --model="./frozen_graph.pb"**
 
     3. 执行以下命令将转换好的模型复制到样例中model文件夹中。
 
-        **cp ./InceptionV3.om $HOME/samples/python/level2_simple_inference/1_classification/inceptionv3_picture/model/**
+        **cp ./frozen_graph-inception-resnet-test1.om $HOME/samples/python/contrib/inceptionv2_picture/model/**
 
 4. 获取样例需要的测试图片。
 
     执行以下命令，进入样例的data文件夹中，下载对应的测试图片。
 
-    **cd $HOME/samples/python/level2_simple_inference/1_classification/inceptionv3_picture/data**
+    **cd $HOME/samples/python/contrib/inceptionv2_picture/data**
 
-    **wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/InceptionV3/pic/dog1_1024_683.jpg**
+    **wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/InceptionV2/pic/1101.jpg**
 
-    **wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/InceptionV3/pic/dog2_1024_683.jpg**
+    **wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/InceptionV2/pic/1108.jpg**
     
-    **wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/InceptionV3/pic/rabit.jpg**
+    **wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/InceptionV2/pic/1309.jpg**
 
 
 
@@ -96,9 +94,9 @@
 
 **注：开发环境与运行环境合一部署，请跳过步骤1，直接执行[步骤2](#step_2)即可。**   
 
-1. 执行以下命令,将开发环境的 **inceptionv3_picture** 目录上传到运行环境中，例如 **/home/HwHiAiUser**，并以HwHiAiUser（运行用户）登录运行环境（Host）。
+1. 执行以下命令,将开发环境的 **inceptionv2_picture** 目录上传到运行环境中，例如 **/home/HwHiAiUser**，并以HwHiAiUser（运行用户）登录运行环境（Host）。
 
-    **scp -r $HOME/samples/python/level2_simple_inference/1_classification/inceptionv3_picture HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
+    **scp -r $HOME/samples/python/contrib/inceptionv2_picture HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
 
     **ssh HwHiAiUser@xxx.xxx.xxx.xxx**    
 
@@ -113,11 +111,11 @@
 
       **source ~/.bashrc**
         
-      **cd $HOME/samples/python/level2_simple_inference/1_classification/inceptionv3_picture/src**
+      **cd $HOME/samples/python/contrib/inceptionv2_picture/src**
 
     - 如果是开发环境与运行环境分离部署，执行以下命令切换目录。
     
-      **cd $HOME/inceptionv3_picture/**      
+      **cd $HOME/inceptionv2_picture/**      
 
     切换目录后，执行以下命令运行样例。
 
