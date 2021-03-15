@@ -64,7 +64,10 @@ Before deploying this sample, ensure that:
 
         2. Set the ***LD_LIBRARY_PATH*** environment variable.
         The ***LD_LIBRARY_PATH*** environment variable conflicts with the sample when the ATC tool is used. Therefore, you need to set this environment variable separately in the CLI to facilitate modification.
-            **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64**  
+           
+             **export install_path=$HOME/Ascend/ascend-toolkit/latest**
+
+             **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64**  
 
         3. Run the following commands to convert the model:     
             
