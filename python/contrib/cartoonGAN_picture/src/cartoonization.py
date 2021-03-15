@@ -47,7 +47,8 @@ class Cartoonization(object):
         """
         image_dvpp = image.copy_to_dvpp()
         yuv_image = self._dvpp.jpegd(image_dvpp)
-        crop_and_paste_image = self._dvpp.crop_and_paste_get_roi(yuv_image, image.width, image.height, self._model_width, self._model_height)
+        crop_and_paste_image = self._dvpp.crop_and_paste_get_roi(yuv_image, image.width, image.height, \
+                                self._model_width, self._model_height)
         return crop_and_paste_image
 
     @utils.display_time
