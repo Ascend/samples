@@ -248,14 +248,14 @@ class Dvpp(object):
                         stride_height, out_buffer_size, constants.MEMORY_DVPP)
 
     def crop_and_paste_get_roi(self, image, width, height, crop_and_paste_width, crop_and_paste_height):
-        '''
+        """
         :image: input image
         :width: input image width 
         :height: input image height 
         :crop_and_paste_width: crop_and_paste_width
         :crop_and_paste_height: crop_and_paste_height
         :return: return AclImage
-        '''
+        """
         print('[Dvpp] vpc crop and paste stage:')
         input_desc = self._gen_input_pic_desc(image)
         stride_width = utils.align_up16(crop_and_paste_width)
