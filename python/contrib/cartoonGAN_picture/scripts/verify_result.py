@@ -11,7 +11,6 @@ import functools
 from PIL import Image
 
 
-
 def image_contrast(image1, image2):
     """
     Verify that the pictures are the same
@@ -24,12 +23,10 @@ def image_contrast(image1, image2):
     return ret
 
 
-
 if __name__ == '__main__':
     img1 = sys.argv[1]
     img2 = sys.argv[2]
     result = image_contrast(img1, img2)
-
     if (result > 30 or result < 0):
         sys.exit(1)
     else:
