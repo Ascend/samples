@@ -247,6 +247,40 @@ class Dvpp(object):
         return AclImage(out_buffer, stride_width,
                         stride_height, out_buffer_size, constants.MEMORY_DVPP)
 
+    def crop_and_paste_get_roi(self, image, width, height, crop_and_paste_width, crop_and_paste_height):
+        '''
+        :image: input image
+        :width: input image width 
+        :height: input image height 
+        :crop_and_paste_width: crop_and_paste_width
+        :crop_and_paste_height: crop_and_paste_height
+        :return: return AclImage
+        '''
+        print('[Dvpp] vpc crop and paste stage:')
+        input_desc = self._gen_input_pic_desc(image)
+        stride_width = utils.align_up16(crop_and_paste_width)
+        stride_height = utils.align_up2(crop_and_paste_height)
+        out_buffer_size = utils.yuv420sp_size(stride_width, stride_height)
+        out_buffer, ret = acl.media.dvpp_malloc(out_buffer_size)
+        output_desc = \
+            self._gen_output_pic_desc(crop_and_paste_width, crop_and_paste_height, out_buffer, out_buffer_size)
+        self._crop_config = acl.media.dvpp_create_roi_config(0, (width >> 1 << 1) - 1, 0, (height >> 1 << 1) - 1)
+        self._paste_config = acl.media.dvpp_create_roi_config(0, crop_and_paste_width - 1, 0, crop_and_paste_height - 1)
+        ret = acl.media.dvpp_vpc_crop_and_paste_async(self._dvpp_channel_desc,
+                                                      input_desc,
+                                                      output_desc,
+                                                      self._crop_config,
+                                                      self._paste_config,
+                                                      self._stream)
+        utils.check_ret("acl.media.dvpp_vpc_crop_and_paste_async", ret)
+        ret = acl.rt.synchronize_stream(self._stream)
+        utils.check_ret("acl.rt.synchronize_stream", ret)
+        print('[Dvpp] vpc crop and paste stage success')
+        stride_width = utils.align_up16(crop_and_paste_width)
+        stride_height = utils.align_up2(crop_and_paste_height)
+        return AclImage(out_buffer, stride_width,
+                        stride_height, out_buffer_size, constants.MEMORY_DVPP)
+
     def jpege(self, image):
         """
         Convert yuv420sp pictures to jpeg pictures
