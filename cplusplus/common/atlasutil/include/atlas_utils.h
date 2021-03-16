@@ -212,6 +212,7 @@ void SaveBinFile(const std::string& filename, void* data, uint32_t size);
 AtlasError ReadBinFile(const std::string& filename, void*& data, uint32_t& size);
 AtlasError CopyImageToLocal(ImageData& destImage,
                             ImageData& srcImage, aclrtRunMode curRunMode);
+AtlasError ReadJpeg(ImageData& image, std::string& fileName);
 bool IsIpAddrWithPort(const std::string& addrStr);
 void ParseIpAddr(std::string& ip, std::string& port, const std::string& addr);
 bool IsVideoFile(const std::string& str);
