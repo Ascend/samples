@@ -89,6 +89,14 @@ Result DvppProcess::InitResource()
         ERROR_LOG("acldvppCreateChannel failed, errorCode = %d", static_cast<int32_t>(aclRet));
         return FAILED;
     }
+
+    // create dvpp resize config
+    resizeConfig_ = acldvppCreateResizeConfig();
+    if (resizeConfig_ == nullptr) {
+        ERROR_LOG("acldvppCreateResizeConfig failed");
+        return FAILED;
+    }
+
     INFO_LOG("dvpp init resource success");
     return SUCCESS;
 }
@@ -334,9 +342,10 @@ Result DvppProcess::ProcessBatchCrop()
         roiNums[inputBatchSize_ - 1] = (outputBatchSize_ - totalNum) + roiNums[inputBatchSize_ - 1];
     }
 
-    aclError aclRet = acldvppVpcBatchCropAsync(dvppChannelDesc_, inputBatchPicDesc_,
+    aclError aclRet = acldvppSetResizeConfigInterpolation(resizeConfig_, 0);
+    aclRet = acldvppVpcBatchCropResizeAsync(dvppChannelDesc_, inputBatchPicDesc_,
                                                roiNums.get(), inputBatchSize_,
-                                               outputBatchPicDesc_, cropArea.get(), stream_);
+                                               outputBatchPicDesc_, cropArea.get(), resizeConfig_, stream_);
     if (aclRet != ACL_ERROR_NONE) {
         ERROR_LOG("acldvppVpcBatchCropAsync failed, errorCode = %d", static_cast<int32_t>(aclRet));
         return FAILED;
@@ -392,6 +401,12 @@ void DvppProcess::DestroyBatchCropResource()
         (void)acldvppDestroyChannelDesc(dvppChannelDesc_);
         dvppChannelDesc_ = nullptr;
     }
+
+    if (resizeConfig_ != nullptr) {
+        (void)acldvppDestroyResizeConfig(resizeConfig_);
+        resizeConfig_ = nullptr;
+    }
+
     INFO_LOG("DestroyBatchCropResource end.");
     return;
 }

@@ -205,7 +205,8 @@ Result DvppProcess::InitResizeOutputDesc()
 Result DvppProcess::ProcessResize()
 {
     // resize pic size
-    aclError ret = acldvppVpcResizeAsync(dvppChannelDesc_, resizeInputDesc_,
+    aclError ret = acldvppSetResizeConfigInterpolation(resizeConfig_, 0);
+    ret = acldvppVpcResizeAsync(dvppChannelDesc_, resizeInputDesc_,
         resizeOutputDesc_, resizeConfig_, stream_);
     if (ret != ACL_ERROR_NONE) {
         ERROR_LOG("acldvppVpcResizeAsync failed, errorCode = %d", static_cast<int32_t>(ret));
@@ -243,7 +244,7 @@ void DvppProcess::DestroyResource()
 {
     // resizeConfig_ is created in initResource
     if (resizeConfig_ != nullptr) {
-        acldvppDestroyResizeConfig(resizeConfig_);
+        (void)acldvppDestroyResizeConfig(resizeConfig_);
         resizeConfig_ = nullptr;
     }
 

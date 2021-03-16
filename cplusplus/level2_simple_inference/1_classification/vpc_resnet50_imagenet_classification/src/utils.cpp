@@ -82,7 +82,8 @@ Result Utils::GetDeviceBufferOfPicture(PicDesc &picDesc, void *&picDevBuffer, ui
         ERROR_LOG("read bin file failed, file name is %s", picDesc.picName.c_str());
         return FAILED;
     }
-    aclError aclRet = acldvppJpegGetImageInfo(inputBuff, inputBuffSize, &picDesc.width, &picDesc.height, nullptr);
+    aclError aclRet = acldvppJpegGetImageInfoV2(inputBuff, inputBuffSize, &picDesc.width, &picDesc.height,
+                                                nullptr, nullptr);
     if (aclRet != ACL_ERROR_NONE) {
         ERROR_LOG("get jpeg image info failed, errorCode is %d", static_cast<int32_t>(aclRet));
         if (!(RunStatus::GetDeviceStatus())) {

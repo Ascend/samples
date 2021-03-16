@@ -95,6 +95,7 @@ private:
 
     aclrtStream stream_;
     acldvppChannelDesc *dvppChannelDesc_;
+    acldvppResizeConfig *resizeConfig_;
 
     std::vector<void *> vecOutPtr_;
     std::vector<void *> vecInPtr_;
