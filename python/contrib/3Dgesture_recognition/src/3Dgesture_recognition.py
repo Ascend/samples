@@ -8,7 +8,6 @@ MODIFIED: 2021-02-22 09:44:13
 # encoding: utf-8
 import sys
 import os
-import numpy as np
 import struct
 path = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.join(path, ".."))

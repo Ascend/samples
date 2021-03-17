@@ -7,13 +7,13 @@ MODIFIED: 2020-12-11 14:04:45
 import sys
 import numpy as np
 
-def txt_contrast(txt1, txt2):
+def txt_contrast(txtname1, txtname2):
     """
     Verify that the txt are the same
     """
-    with open(txt1, "r", encoding="utf-8") as fp:
+    with open(txtname1, "r", encoding="utf-8") as fp:
         file1 = fp.read()        
-    with open(txt2, "r", encoding="utf-8") as fp:
+    with open(txtname2, "r", encoding="utf-8") as fp:
         file2 = fp.read()
 
     if(file1 == file2):
