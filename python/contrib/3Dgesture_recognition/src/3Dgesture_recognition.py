@@ -21,7 +21,7 @@ from atlas_utils.acl_image import AclImage
 from atlas_utils.acl_resource import AclResource
 
 SRC_PATH = os.path.realpath(__file__).rsplit("/", 1)[0]
-MODEL_PATH = os.path.join(SRC_PATH, "../model/frozen_model.om")
+MODEL_PATH = os.path.join(SRC_PATH, "../model/3d_gesture_recognition.om")
 MODEL_WIDTH = 112
 MODEL_HEIGHT = 112
 image_net_classes = [
@@ -35,7 +35,7 @@ def get_image_net_class(class_id):
         return image_net_classes[class_id]
 
 
-def post_process(infer_output):
+def post_process(infer_output,data_file):
     print("post process")
     data = infer_output[0]
     vals = data.flatten()
@@ -44,6 +44,13 @@ def post_process(infer_output):
     for n in top_k:
         object_class = get_image_net_class(n)
         print("label:%d  confidence: %f, class: %s" % (n, vals[n], object_class))
+    
+    (filepath,tempfilename) = os.path.split(data_file)
+    (filename,extension) = os.path.splitext(tempfilename)
+    object_class = get_image_net_class(top_k[0])
+    output_path = os.path.join(os.path.join(SRC_PATH, "../outputs"), filename+".txt")
+    with open(output_path, "w", encoding="utf-8") as fp:
+        fp.write(object_class)
        
     return 
 
@@ -54,12 +61,22 @@ def main():
 
     acl_resource = AclResource()
     acl_resource.init()
-    model = Model(MODEL_PATH)            
-               
-    data_raw = np.fromfile("./data/test_float32_actiontype7.bin",dtype =np.float32)
-    input_data =  data_raw.reshape(16,MODEL_WIDTH,MODEL_HEIGHT,3).copy()
-    result = model.execute([input_data,])  
-    post_process(result)    
+    model = Model(MODEL_PATH)             
+
+    data_dir = sys.argv[1]  
+    data_list = [os.path.join(data_dir, testdata)
+                   for testdata in os.listdir(data_dir)
+                   if os.path.splitext(testdata)[1] in '.bin']
+
+    #Create a directory to store the inference results
+    if not os.path.isdir(os.path.join(SRC_PATH, "../outputs")):
+        os.mkdir(os.path.join(SRC_PATH, "../outputs"))
+
+    for data_file in data_list:     
+        data_raw = np.fromfile(data_file,dtype =np.float32)
+        input_data =  data_raw.reshape(16,MODEL_WIDTH,MODEL_HEIGHT,3).copy()
+        result = model.execute([input_data,])  
+        post_process(result, data_file)    
 
     print("process  end")
 if __name__ == '__main__':
