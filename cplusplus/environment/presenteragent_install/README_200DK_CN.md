@@ -43,7 +43,7 @@ $\color{red}{以下命令在开发环境上用安装开发套件包的用户执�
     export DDK_PATH=\$HOME/Ascend/ascend-toolkit/latest/**_ARCH_**   
     >![输入图片说明](https://images.gitee.com/uploads/images/2020/1130/162342_1d7d35d7_7401379.png "屏幕截图.png") **说明：**  
     >- 请将\$HOME/Ascend/ascend-toolkit/latest替换为ACLlib安装包的实际安装路径。   
-    >- 若版本为20.0，请将 **ARCH** 替换为arm64-linux_gcc7.3.0；若版本为20.1，请将 **ARCH** 替换为arm64-linux。  
+    >- 若版本为3.0.0，请将 **ARCH** 替换为arm64-linux_gcc7.3.0；若版本为3.1.0，请将 **ARCH** 替换为arm64-linux。  
 
     下载Presenter Agent源码   
      **cd \$HOME**   

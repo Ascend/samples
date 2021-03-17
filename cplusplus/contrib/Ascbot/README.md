@@ -2,7 +2,7 @@ English|[中文](README_CN.md)
 
 **This sample provides reference for you to learn the Ascend AI Software Stack and cannot be used for commercial purposes.**
 
-**This sample applies to CANN 20.0 and later versions. The supported product is AscendBot.**
+**This sample applies to CANN 3.0.0 and later versions. The supported product is AscendBot.**
 
 # Introduction to AscendBot
 AscendBot is an open-source smart robotic car designed for AI and robot enthusiasts. It is also an open AI and robot development platform with the following features:
@@ -111,7 +111,7 @@ Before deploying this sample, ensure that:
      **export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub**
 
      ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **NOTE**  
-        > - If the CANN version is 20.0, change **arm64-linux** in the ***DDK_PATH*** environment variable to **arm64-linux_gcc7.3.0**.    
+        > - If the CANN version is 3.0.0, change **arm64-linux** in the ***DDK_PATH*** environment variable to **arm64-linux_gcc7.3.0**.    
         > - You can run the **uname -a** command on the command line to view the CPU architecture of the development environment and operating environment. If **x86_64** is displayed in the command output, the x86 architecture is used. If **arm64** is displayed in the command output, the ARM architecture is used.
 
 2. Switch to the **ascbot_c75** directory and create a directory for storing build outputs, for example, **build/intermediates/host** in this sample.

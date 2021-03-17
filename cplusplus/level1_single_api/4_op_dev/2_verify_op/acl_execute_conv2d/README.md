@@ -33,7 +33,7 @@ Note: The generation of a single-operator model file depends only on the operato
 ## Environment Requirements<a name="en-us_topic_0230709958_section1256019267915"></a>
 
 -   OS and architecture: CentOS x86\_64, CentOS AArch64, Ubuntu 18.04 x86\_64
--   Version: 20.2
+-   Version: 3.2.0
 -   Compiler:
     -   Ascend 310 EP/Ascend 710: g++
     -   Atlas 200 DK: AArch64-linux-gnu-g++

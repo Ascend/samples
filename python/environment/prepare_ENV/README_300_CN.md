@@ -10,7 +10,7 @@ $\color{red}{以下命令在开发环境上执行}$
         **vim ~/.bashrc** 
       
         在文件中添加以下环境变量  
-        - 20.0版本  
+        - 3.0.0版本  
 
             **export install_path=\\$HOME/Ascend/ascend-toolkit/latest**
     
@@ -23,7 +23,7 @@ $\color{red}{以下命令在开发环境上执行}$
             **export PYTHONPATH=\\${install_path}/atc/python/site-packages/te:\\${install_path}/atc/python/site-packages/topi:\\$PYTHONPATH**   
             
     
-        - 20.1版本  
+        - 3.1.0版本  
 
             **export install_path=\\$HOME/Ascend/ascend-toolkit/latest**
     
@@ -39,7 +39,7 @@ $\color{red}{以下命令在开发环境上执行}$
         >![输入图片说明](https://images.gitee.com/uploads/images/2020/1130/162342_1d7d35d7_7401379.png "屏幕截图.png") **说明：**    
         >**若开发环境与运行环境部署在一台服务器上时，请勿配置LD_LIBRARY_PATH，在运行样例时，会跟运行环境的LD_LIBRARY_PATH有冲突。**
 
-        - 20.2版本 
+        - 3.2.0版本 
 
             **export install_path=\\$HOME/Ascend/ascend-toolkit/latest** 
 
@@ -115,12 +115,12 @@ $\color{red}{以下命令在运作环境上执行，以普通用户为HwHiAiUser
 
         **export PYTHONPATH=\\$HOME/Ascend/nnrt/latest/pyACL/python/site-packages/acl:$PYTHONPATH**  
  
-        其中，LD_LIBRARY_PATH环境变量在20.0和20.1版本不兼容。请按照CANN版本选择对应方式执行命令添加LD_LIBRARY_PATH环境变量。
-        - 20.0版本
+        其中，LD_LIBRARY_PATH环境变量在3.0.0和3.1.0版本不兼容。请按照CANN版本选择对应方式执行命令添加LD_LIBRARY_PATH环境变量。
+        - 3.0.0版本
           
             **export LD_LIBRARY_PATH=\\$HOME/ascend_ddk/x86/lib:\\$HOME/Ascend/nnrt/latest/acllib_linux.x86_64/lib64:$LD_LIBRARY_PATH**
     
-        - 20.1版本
+        - 3.1.0版本
           
             **export LD_LIBRARY_PATH=\\$HOME/ascend_ddk/x86/lib:\\$HOME/Ascend/nnrt/latest/acllib/lib64:$LD_LIBRARY_PATH**
         

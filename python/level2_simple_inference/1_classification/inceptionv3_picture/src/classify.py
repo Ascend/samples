@@ -74,7 +74,7 @@ class Classify(object):
             output_path = os.path.join(os.path.join(SRC_PATH, "../outputs"), os.path.basename(image_file))
             origin_img = Image.open(image_file)
             draw = ImageDraw.Draw(origin_img)
-            font = ImageFont.truetype(os.path.join(SRC_PATH, "SourceHanSansCN-Normal.ttf"), size=30)
+            font = ImageFont.load_default()
             draw.text((10, 50), object_class, font=font, fill=255)
             origin_img.save(output_path)
 

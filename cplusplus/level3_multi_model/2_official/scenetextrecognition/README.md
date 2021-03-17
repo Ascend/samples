@@ -26,7 +26,7 @@ Atlas 800 (Model 3000), Atlas 800 (Model 3010), Atlas 300 (Model 3010)
 
 ### Supported ACL Version
 
-1.75.T11.0.B116, 1.75.T15.0.B150, 20.1.0
+1.75.T11.0.B116, 1.75.T15.0.B150, 3.1.0
 
 To query the ACL version, run the following command in the environment where Atlas products are installed:
 ```bash

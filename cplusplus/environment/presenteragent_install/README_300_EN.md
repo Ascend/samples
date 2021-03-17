@@ -25,7 +25,7 @@ English|[中文](README_300_CN.md)
     **export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/_ARCH_**   
     >![](https://images.gitee.com/uploads/images/2020/1130/162342_1d7d35d7_7401379.png "screenshot.png") **NOTE**   
     >- Replace ***$HOME/Ascend/ascend-toolkit/latest*** with the actual ACLlib installation path.   
-    >- For CANN 20.0, replace ***ARCH*** with **x86_64-linux_gcc7.3.0**. For CANN 20.1, replace ***ARCH*** with **x86_64-linux**.
+    >- For CANN 3.0.0, replace ***ARCH*** with **x86_64-linux_gcc7.3.0**. For CANN 3.1.0, replace ***ARCH*** with **x86_64-linux**.
     Download the Presenter Agent source code.  
      
      **cd $HOME**   

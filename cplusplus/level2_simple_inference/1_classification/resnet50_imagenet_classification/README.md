@@ -92,7 +92,7 @@ The sample directory is organized as follows:
 ## Environment Requirements<a name="section3833348101215"></a>
 
 -   OS and architecture: CentOS 7.6 x86\_64, CentOS AArch64, or Ubuntu 18.04 x86\_64
--   Version: 20.2
+-   Version: 3.2.0
 -   Compiler:
     -   Ascend 310 EP/Ascend 710: g++
     -   Atlas 200 DK: aarch64-linux-gnu-g++

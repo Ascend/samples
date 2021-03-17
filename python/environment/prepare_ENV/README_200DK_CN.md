@@ -11,7 +11,7 @@ $\color{red}{以下操作在开发环境上操作}$
         **vim ~/.bashrc** 
       
         在文件中添加以下环境变量  
-        - 20.0版本  
+        - 3.0.0版本  
 
             **export install_path=\\$HOME/Ascend/ascend-toolkit/latest**
     
@@ -24,7 +24,7 @@ $\color{red}{以下操作在开发环境上操作}$
             **export PYTHONPATH=\\${install_path}/atc/python/site-packages/te:\\${install_path}/atc/python/site-packages/topi:\\$PYTHONPATH**   
             
     
-        - 20.1版本  
+        - 3.1.0版本  
 
             **export install_path=\\$HOME/Ascend/ascend-toolkit/latest**
     
@@ -40,7 +40,7 @@ $\color{red}{以下操作在开发环境上操作}$
         >![输入图片说明](https://images.gitee.com/uploads/images/2020/1130/162342_1d7d35d7_7401379.png "屏幕截图.png") **说明：**    
         >**若开发环境与运行环境部署在一台服务器上时，请勿配置LD_LIBRARY_PATH，在运行样例时，会跟运行环境的LD_LIBRARY_PATH有冲突。**
 
-        - 20.2版本 
+        - 3.2.0版本 
 
             **export install_path=\\$HOME/Ascend/ascend-toolkit/latest** 
 
@@ -139,9 +139,9 @@ $\color{red}{以下操作在运行环境(Atlas200DK)上操作}$
         更新源。  
         **sudo apt-get update** 
 5.  部署PyACL。  
-    - 20.0版本  
+    - 3.0.0版本  
     在开发环境执行 `find / -name pyACL` 命令,将arm64-linux_gcc7.3.0路径下的 **pyACL** 目录拷贝到运行环境的/home/HwHiAiUser/Ascend/路径下。
-    - 20.1版本  
+    - 3.1.0版本  
     参考链接部署  https://support.huaweicloud.com/dedg-A200dk_3000_c75/atlased_04_0017.html
 
 6.  在运行环境添加环境变量，用于运行工程。

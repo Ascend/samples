@@ -25,7 +25,7 @@ $\color{red}{以下命令在开发环境上用安装开发套件包的用户执�
     export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/**_ARCH_**   
     >![](public_sys-resources/icon-note.gif) **说明：**  
          请将$HOME/Ascend/ascend-toolkit/latest替换为ACLlib安装包的实际安装路径。   
-         若版本为20.0，请将 **ARCH** 替换为x86_64-linux_gcc7.3.0；若版本为20.1，请将 **ARCH** 替换为x86_64-linux。
+         若版本为3.0.0，请将 **ARCH** 替换为x86_64-linux_gcc7.3.0；若版本为3.1.0，请将 **ARCH** 替换为x86_64-linux。
   
     下载Presenter Agent源码  
      **cd \$HOME**   

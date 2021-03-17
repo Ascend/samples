@@ -2,7 +2,7 @@ English|[中文](README_CN.md)
 
 **This sample provides reference for you to learn the Ascend AI Software Stack and cannot be used for commercial purposes.**
 
-**This sample applies to CANN 20.0 and later versions, and supports Atlas 200 DK and Atlas 300 ([AI1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366)).**
+**This sample applies to CANN 3.0.0 and later versions, and supports Atlas 200 DK and Atlas 300 ([AI1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366)).**
 
 **This readme file provides only guidance for running the sample in command line (CLI) mode. For details about how to run the sample in MindStudio, see [Running Image Samples in MindStudio](https://gitee.com/ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E5%9B%BE%E7%89%87%E6%A0%B7%E4%BE%8B?sort_id=3164874).**
 
@@ -49,13 +49,13 @@ Before deploying this sample, ensure that:
             **unzip ascend-samples-master.zip**
 
 2. Obtain the source model required by the application。  
-    - For CANN 20.1   
-    Due to versioning issues, this model was not converted correctly in version 20.1.So version 20.1 gets the OM model directly.      
+    - For CANN 3.1.0   
+    Due to versioning issues, this model was not converted correctly in version 3.1.0.So version 3.1.0 gets the OM model directly.      
      
         **cd $HOME/samples/cplusplus/contrib/cartoonGAN_picture/model**    
         **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/cartoonGAN_picture/cplus/cartoonization.om** 
     
-    - For CANN 20.0    
+    - For CANN 3.0.0    
 
         1. Refer to the link below for the original network model used in this application。
         

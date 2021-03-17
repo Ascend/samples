@@ -2,7 +2,7 @@ English|[中文](README_CN.md)
 
 **The following sample provides reference for you to learn the Ascend AI Software Stack and cannot be used for commercial purposes.**
 
-**The sample applies to CANN 20.1 and later versions and supports Atlas 200 DK.**
+**The sample applies to CANN 3.1.0 and later versions and supports Atlas 200 DK.**
 
 **This README provides only guidance for running samples in command line mode. For details about how to run samples in MindStudio, see [Running Video Samples in MindStudio](https://gitee.com/ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E8%A7%86%E9%A2%91%E6%A0%B7%E4%BE%8B?sort_id=3170138).**
 

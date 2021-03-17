@@ -2,7 +2,7 @@
 
 **本样例为大家学习昇腾软件栈提供参考，非商业目的！**
 
-**本样例适配20.1及以上版本，支持产品为Atlas200DK。**
+**本样例适配3.1.0及以上版本，支持产品为Atlas200DK。**
 
 **本README只提供命令行方式运行样例的指导，如需在Mindstudio下运行样例，请参考[Mindstudio运行视频样例wiki](https://gitee.com/ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E8%A7%86%E9%A2%91%E6%A0%B7%E4%BE%8B?sort_id=3170138)。**
 

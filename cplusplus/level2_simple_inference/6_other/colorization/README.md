@@ -2,7 +2,7 @@ English|[中文](README_CN.md)
 
 **The following sample provides reference for you to learn the Ascend AI Software Stack and cannot be used for commercial purposes.**
 
-**The sample applies to CANN 20.0 and later versions and supports Atlas 200 DK and Atlas 300 ([AI1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366)).**
+**The sample applies to CANN 3.0.0 and later versions and supports Atlas 200 DK and Atlas 300 ([AI1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366)).**
 
 **This README provides only guidance for running samples in command line mode. For details about how to run samples in MindStudio, see [Running Image Samples in MindStudio](https://gitee.com/ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E5%9B%BE%E7%89%87%E6%A0%B7%E4%BE%8B?sort_id=3164874).**
 
@@ -107,7 +107,7 @@ Before deploying this sample, ensure that:
 
      ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **Note**
 
-        > - If the version is 20.0, change **arm64-linux** in the **DDK_PATH** environment variable to **arm64-linux_gcc7.3.0**.
+        > - If the version is 3.0.0, change **arm64-linux** in the **DDK_PATH** environment variable to **arm64-linux_gcc7.3.0**.
         > - You can run the **uname -a** command in the command line to view the CPU architecture of the development environment and operating environment. If x86_64 is displayed in the command output, the architecture is x86. If arm64 is displayed in the command output, the architecture is ARM.
 
 2. Go to the **colorization** directory and create a directory for storing build outputs. For example, the directory created in this sample is **build/intermediates/host**.

@@ -94,7 +94,7 @@ The directory of a Caffe or TensorFlow custom operator sample project is organiz
 ## Environment Requirements
 
 -   OS and architecture: CentOS x86\_64, CentOS AArch64, Ubuntu 18.04 x86\_64, EulerOS x86, EulerOS AArch64
--   Version: 20.2
+-   Version: 3.2.0
 -   Python version and dependency library: Python 3.7.5
 -   Ascend AI Software Stack deployed
 

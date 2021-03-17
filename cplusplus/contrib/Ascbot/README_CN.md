@@ -2,7 +2,7 @@
 
 **本样例为大家学习昇腾软件栈提供参考，非商业目的！**
 
-**本样例适配20.0及以上版本，支持产品为AscendBot**
+**本样例适配3.0.0及以上版本，支持产品为AscendBot**
 
 ** **
 
@@ -113,7 +113,7 @@ AscendBot是一款面向人工智能及机器人爱好者的开源智能机器�
      **export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub**
 
      ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
-        > - 如果是20.0版本，此处 **DDK_PATH** 环境变量中的 **arm64-liunx** 应修改为 **arm64-linux_gcc7.3.0**。    
+        > - 如果是3.0.0版本，此处 **DDK_PATH** 环境变量中的 **arm64-liunx** 应修改为 **arm64-linux_gcc7.3.0**。    
         > - 可以在命令行中执行 **uname -a**，查看开发环境和运行环境的cpu架构。如果回显为x86_64，则为x86架构。如果回显为arm64，则为Arm架构。
 
 2. 切换到ascbot_c75目录，创建目录用于存放编译文件，例如，本文中，创建的目录为 **build/intermediates/host**。
