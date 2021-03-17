@@ -422,6 +422,12 @@ Result DvppProcess::InitCropOutputDesc()
 
 Result DvppProcess::ProcessCrop()
 {
+    resizeConfig_ = acldvppCreateResizeConfig();
+    if (resizeConfig_ == nullptr) {
+        ERROR_LOG("acldvppCreateResizeConfig failed");
+        return FAILED;
+    }
+
     uint32_t midNum = 2;
     uint32_t oddNum = 1;
     uint32_t cropSizeWidth = 200;
@@ -450,8 +456,9 @@ Result DvppProcess::ProcessCrop()
     }
 
     // crop pic
-    aclError aclRet = acldvppVpcCropAsync(dvppChannelDesc_, vpcInputDesc_,
-        vpcOutputDesc_, cropArea_, stream_);
+    aclError aclRet = acldvppSetResizeConfigInterpolation(resizeConfig_, 0);
+    aclRet = acldvppVpcCropResizeAsync(dvppChannelDesc_, vpcInputDesc_,
+        vpcOutputDesc_, cropArea_, resizeConfig_, stream_);
     if (aclRet != ACL_ERROR_NONE) {
         ERROR_LOG("acldvppVpcCropAsync failed, errorCode = %d", static_cast<int32_t>(aclRet));
         return FAILED;
@@ -471,6 +478,11 @@ void DvppProcess::DestroyCropResource()
     if (cropArea_ != nullptr) {
         (void)acldvppDestroyRoiConfig(cropArea_);
         cropArea_ = nullptr;
+    }
+
+    if (resizeConfig_ != nullptr) {
+        (void)acldvppDestroyResizeConfig(resizeConfig_);
+        resizeConfig_ = nullptr;
     }
 
     DestroyDecodeOutBuff();
@@ -548,6 +560,12 @@ Result DvppProcess::InitCropAndPasteOutputDesc()
 
 Result DvppProcess::ProcessCropAndPaste()
 {
+    resizeConfig_ = acldvppCreateResizeConfig();
+    if (resizeConfig_ == nullptr) {
+        ERROR_LOG("acldvppCreateResizeConfig failed");
+        return FAILED;
+    }
+
     uint32_t midNum = 2;
     uint32_t oddNum = 1;
     uint32_t cropSizeWidth = 200;
@@ -587,8 +605,11 @@ Result DvppProcess::ProcessCropAndPaste()
     }
 
     // crop and patse pic
-    aclError aclRet = acldvppVpcCropAndPasteAsync(dvppChannelDesc_, vpcInputDesc_,
-        vpcOutputDesc_, cropArea_, pasteArea_, stream_);
+    aclError aclRet = acldvppSetResizeConfigInterpolation(resizeConfig_, 0);
+    aclRet = acldvppVpcCropResizePasteAsync(dvppChannelDesc_, vpcInputDesc_,
+                                            vpcOutputDesc_, cropArea_, pasteArea_,
+                                            resizeConfig_, stream_);
+
     if (aclRet != ACL_ERROR_NONE) {
         ERROR_LOG("acldvppVpcCropAndPasteAsync failed, errorCode = %d", static_cast<int32_t>(aclRet));
         return FAILED;
@@ -613,6 +634,11 @@ void DvppProcess::DestroyCropAndPasteResource()
     if (pasteArea_ != nullptr) {
         (void)acldvppDestroyRoiConfig(pasteArea_);
         pasteArea_ = nullptr;
+    }
+
+    if (resizeConfig_ != nullptr) {
+        (void)acldvppDestroyResizeConfig(resizeConfig_);
+        resizeConfig_ = nullptr;
     }
 
     DestroyDecodeOutBuff();
