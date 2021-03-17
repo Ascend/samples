@@ -2,7 +2,7 @@ English|[中文](README_CN.md)
 
 **The following sample provides reference for you to learn the Ascend AI Software Stack and cannot be used for commercial purposes.**
 
-**The sample applies to CANN 20.0 and later versions and supports Atlas 200 DK.**
+**The sample applies to CANN 3.0.0 and later versions and supports Atlas 200 DK.**
 
 **This README provides only guidance for running samples in command line mode. For details about how to run samples in MindStudio, see [Running Video Samples in MindStudio_wiki](https://gitee.com/ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E8%A7%86%E9%A2%91%E6%A0%B7%E4%BE%8B?sort_id=3170138).**
 
@@ -94,7 +94,7 @@ Before deploying this sample, ensure that:
 
      ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **Note**
 
-     > - If the version is 20.0, change **arm64-linux** in the **DDK_PATH** environment variable to **arm64-linux_gcc7.3.0**.
+     > - If the version is 3.0.0, change **arm64-linux** in the **DDK_PATH** environment variable to **arm64-linux_gcc7.3.0**.
 
 3. Go to the **face_detection_camera** directory and create a directory for storing build outputs. For example, the directory created in this sample is **build/intermediates/host**.
 

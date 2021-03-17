@@ -1,6 +1,6 @@
 **本样例为大家学习昇腾软件栈提供参考，非商业目的！**
 
-**本样例适配20.0及以上版本，支持产品为Atlas200DK、Atlas300([ai1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366))。**
+**本样例适配3.0.0及以上版本，支持产品为Atlas200DK、Atlas300([ai1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366))。**
 
 **本README只提供命令行方式运行样例的指导，如需在Mindstudio下运行样例，请参考[Mindstudio运行图片样例wiki](https://gitee.com/ascend/samples/wikis/Mindstudio运行图片样例?sort_id=3164874)。**
 
@@ -46,7 +46,7 @@
      cd $HOME
      unzip ascend-samples-master.zipt
       ```
-#### 2. 获取此应用中所需要的模型（20.0版本）
+#### 2. 获取此应用中所需要的模型（3.0.0版本）
 
    参考下表获取此应用中所用到的模型，并将其存放到开发环境普通用户下的工程目录：
 
@@ -56,7 +56,7 @@
 | ------------ | ------------------------------ | ------------------------------------------------------------ |
 | Portrait     | 基于TensorFlow的人像分割模型。 | 请参考https://gitee.com/ascend/modelzoo/tree/master/contrib/Research/cv/portraitnet/ATC_PortraitNet_tf_AE 中README.md原始模型章节，下载**原始模型**及**对应的cfg文件**。 |
 
-#### 3. 将原始模型转换为Davinci模型（20.0 版本）
+#### 3. 将原始模型转换为Davinci模型（3.0.0 版本）
 
    **注：请确认环境变量已经在[环境准备和依赖安装](https://gitee.com/ascend/samples/blob/master/python/environment)中配置完成**
 
@@ -73,9 +73,9 @@
       cd $HOME/samples/python/contrib/portrait_picture/model
       atc --model=./portrait.pb  --insert_op_conf=./insert_op.cfg  --output="./portrait" --output_type=FP32 --input_shape="Inputs/x_input:1,224,224,3" --framework=3 --soc_version=Ascend310
          ```
-#### 4. 直接获取Davinci模型（20.1 版本）
+#### 4. 直接获取Davinci模型（3.1.0 版本）
 
-​	由于版本问题，此模型在20.1版本不能正确转换。因此20.1版本直接获取om模型。
+​	由于版本问题，此模型在3.1.0版本不能正确转换。因此3.1.0版本直接获取om模型。
 
     cd  $HOME/samples/python/contrib/portrait_picture/model
     wget  https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/PortraitNet%20/portrait.om

@@ -2,7 +2,7 @@ English|[中文](README_CN.md)
 
 **This sample provides reference for you to learn the Ascend AI Software Stack and cannot be used for commercial purposes.**
 
-**This sample applies to CANN 20.0 and later versions. The supported product is Atlas 200 DK.**
+**This sample applies to CANN 3.0.0 and later versions. The supported product is Atlas 200 DK.**
 
 **This document provides only guidance for running the sample in command line (CLI) mode. For details about how to run the sample in MindStudio, see [Running Video Samples in MindStudio](https://gitee.com/ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E8%A7%86%E9%A2%91%E6%A0%B7%E4%BE%8B?sort_id=3170138).**
 
@@ -96,7 +96,7 @@ Before deploying this sample, ensure that:
  
      **export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub**   
      ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **NOTE**  
-        > - If the CANN version is 20.0, change **arm64-linux** in the ***DDK_PATH*** environment variable to **arm64-linux_gcc7.3.0**.
+        > - If the CANN version is 3.0.0, change **arm64-linux** in the ***DDK_PATH*** environment variable to **arm64-linux_gcc7.3.0**.
 
 3. Switch to the **HandWrite** directory and create a directory for storing build outputs, for example, **build/intermediates/host** in this sample.
 

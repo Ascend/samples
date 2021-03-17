@@ -57,7 +57,7 @@ def post_process(infer_output, origin_img, image_file):
     output_path = os.path.join("../outputs", os.path.basename(image_file))
     origin_image = Image.open(image_file)
     draw = ImageDraw.Draw(origin_image)
-    font = ImageFont.truetype("../SourceHanSansCN-Normal.ttf", size=30)
+    font = ImageFont.load_default()
     print("images:{}".format(image_file))
     print("======== inference results: =============")
     for n in range(int(box_num)):

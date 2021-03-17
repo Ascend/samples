@@ -198,7 +198,7 @@ function main() {
             return ${verifyResError}
         fi
         for test_file in `find ${project_path}/outputs -name "*${tmp#*_}"`;do
-            python3 ${script_path}/verify_result.py ${test_file} ${outimage}
+            python3.6 ${script_path}/verify_result.py ${test_file} ${outimage}
             if [ $? -ne 0 ];then
                 echo "ERROR: The result of reasoning is wrong!"
                 return ${verifyResError}

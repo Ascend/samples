@@ -62,7 +62,7 @@ This readme file describes how to configure the basic environment, including the
         **vim ~/.bashrc** 
 
         Add the following environment variables to the file.  
-        - For CANN 20.0 
+        - For CANN 3.0.0 
 
             **export install_path=\\$HOME/Ascend/ascend-toolkit/latest**
     
@@ -75,7 +75,7 @@ This readme file describes how to configure the basic environment, including the
             **export PYTHONPATH=\\${install_path}/atc/python/site-packages/te:\\${install_path}/atc/python/site-packages/topi:\\$PYTHONPATH**   
             
     
-        - For CANN 20.1 
+        - For CANN 3.1.0 
 
             **export install_path=\\$HOME/Ascend/ascend-toolkit/latest**
     
@@ -89,7 +89,7 @@ This readme file describes how to configure the basic environment, including the
         >![](https://images.gitee.com/uploads/images/2020/1130/162342_1d7d35d7_7401379.png "screenshot.png") **NOTE**  
         >**- If the development environment and operating environment are set up on the same server, do not configure LD_LIBRARY_PATH, avoiding the conflict with LD_LIBRARY_PATH in the operating environment when running the sample.** 
 
-        - For CANN 20.2  
+        - For CANN 3.2.0  
 
             **export install_path=\\$HOME/Ascend/ascend-toolkit/latest** 
 

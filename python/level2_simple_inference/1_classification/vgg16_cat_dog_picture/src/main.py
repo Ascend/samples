@@ -78,7 +78,7 @@ class Classify(object):
         
         origin_img = Image.open(image_file)
         draw = ImageDraw.Draw(origin_img)
-        font = ImageFont.truetype("./SourceHanSansCN-Normal.ttf", size=50)
+        font = ImageFont.load_default()
         draw.text((10, 50), CLS[pre_index], font=font, fill=255)
         origin_img.save(output_path)
                 

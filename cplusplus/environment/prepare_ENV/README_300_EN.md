@@ -59,7 +59,7 @@ This readme file describes how to configure the basic environment, including the
         **vim ~/.bashrc** 
 
         Add the following environment variables to the file.  
-        - For CANN 20.0 
+        - For CANN 3.0.0 
 
             **export install_path=\\$HOME/Ascend/ascend-toolkit/latest**
     
@@ -72,7 +72,7 @@ This readme file describes how to configure the basic environment, including the
             **export PYTHONPATH=\\${install_path}/atc/python/site-packages/te:\\${install_path}/atc/python/site-packages/topi:\\$PYTHONPATH**   
             
     
-        - For CANN 20.1 
+        - For CANN 3.1.0 
 
             **export install_path=\\$HOME/Ascend/ascend-toolkit/latest**
     
@@ -86,7 +86,7 @@ This readme file describes how to configure the basic environment, including the
         >![](https://images.gitee.com/uploads/images/2020/1130/162342_1d7d35d7_7401379.png "screenshot.png") **NOTE**  
         >**- If the development environment and operating environment are set up on the same server, do not configure LD_LIBRARY_PATH, avoiding the conflict with LD_LIBRARY_PATH in the operating environment when running the sample.** 
 
-        - For CANN 20.2  
+        - For CANN 3.2.0  
 
             **export install_path=\\$HOME/Ascend/ascend-toolkit/latest** 
 
@@ -113,12 +113,12 @@ Run the following commands in the operating environment.
 
         **export PYTHONPATH=\\$HOME/Ascend/nnrt/latest/pyACL/python/site-packages/acl:\\$PYTHONPATH**  
 
-        The environment variable ***LD_LIBRARY_PATH*** is incompatible with CANN 20.0 and 20.1. Run the corresponding command to add the ***LD_LIBRARY_PATH*** environment variable based on the CANN version.
-        - For CANN 20.0
+        The environment variable ***LD_LIBRARY_PATH*** is incompatible with CANN 3.0.0 and 3.1.0. Run the corresponding command to add the ***LD_LIBRARY_PATH*** environment variable based on the CANN version.
+        - For CANN 3.0.0
 
             **export LD_LIBRARY_PATH=\\$HOME/ascend_ddk/x86/lib:\\$HOME/Ascend/nnrt/latest/acllib_linux.x86_64/lib64:\\$LD_LIBRARY_PATH**
 
-        - For CANN 20.1
+        - For CANN 3.1.0
 
             **export LD_LIBRARY_PATH=\\$HOME/ascend_ddk/x86/lib:\\$HOME/Ascend/nnrt/latest/acllib/lib64:\\$LD_LIBRARY_PATH**
 

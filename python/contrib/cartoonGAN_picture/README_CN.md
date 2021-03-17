@@ -2,7 +2,7 @@
 
 **本样例为大家学习昇腾软件栈提供参考，非商业目的！**
 
-**本样例适配20.0及以上版本，支持产品为Atlas200DK、Atlas300([ai1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366))。**
+**本样例适配3.0.0及以上版本，支持产品为Atlas200DK、Atlas300([ai1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366))。**
 
 **本README只提供命令行方式运行样例的指导，如需在Mindstudio下运行样例，请参考[Mindstudio运行图片样例wiki](https://gitee.com/ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E5%9B%BE%E7%89%87%E6%A0%B7%E4%BE%8B?sort_id=3164874)。**
 
@@ -49,13 +49,13 @@
             **unzip ascend-samples-master.zip**
 
 2. 获取此应用中所需要Davinci模型。
-    - 20.1版本
-    由于版本问题，此模型在20.1版本不能正确转换。因此20.1版本直接获取om模型。
+    - 3.1.0版本
+    由于版本问题，此模型在3.1.0版本不能正确转换。因此3.1.0版本直接获取om模型。
      
         **cd $HOME/samples/python/contrib/cartoonGAN_picture/model**    
         **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/cartoonGAN_picture/cplus/cartoonization.om** 
     
-    - 20.0版本  
+    - 3.0.0版本  
 
         1. 参考下方链接获取此应用中所用到的原始网络模型。
         
