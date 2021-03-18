@@ -99,7 +99,7 @@
 
 1. 执行以下命令,将开发环境的 **inceptionv2_picture** 目录上传到运行环境中，例如 **/home/HwHiAiUser**，并以HwHiAiUser（运行用户）登录运行环境（Host）。
 
-    **scp -r $HOME/samples/python/contrib/inceptionv2_picture HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
+    **scp -r $HOME/samples/ HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
 
     **ssh HwHiAiUser@xxx.xxx.xxx.xxx**    
 
@@ -118,7 +118,7 @@
 
     - 如果是开发环境与运行环境分离部署，执行以下命令切换目录。
     
-      **cd $HOME/inceptionv2_picture/src**      
+      **cd $HOME/samples/python/inceptionv2_picture/src**      
 
     切换目录后，执行以下命令运行样例。
 
