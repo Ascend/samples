@@ -6,15 +6,13 @@ English|[中文](README_CN.md)
 
 **This readme file provides only guidance for running the sample in command line (CLI) mode.**
 
-## Garbage Sorting Sample
+## 3D Action Sorting Sample
 
-Function: classifies input images by using the MobileNetV2 model.
+Function: classifies action by using the 3DCNN model.
 
-Input: JPG images to be inferred
+Input: video data to be inferred
 
-Output: JPG images after inference
-
-For details about the training, see [Waste Sorting with MobileNetV2](https://gitee.com/ascend/samples/wikis/MobileNetV2%E5%9E%83%E5%9C%BE%E5%88%86%E7%B1%BB?sort_id=3404387).
+Output: 10 action confidence after inference
 
 
 ### Prerequisites
@@ -53,11 +51,11 @@ Before deploying this sample, ensure that:
 
 2. Obtain the source model required by the application.
 
-    Obtain the original model and its weight files used in the application by referring to the following table and save them to any directory of a common user in the development environment, for example, **$HOME/models/garbage_picture**.
+    Obtain the original model and its weight files used in the application by referring to the following table and save them to any directory of a common user in the development environment, for example, **$HOME/models/3Dgesture_recognition**.
 
     | **Model Name** | **Description**                          | **How to Obtain**                        |
     | -------------- | ---------------------------------------- | ---------------------------------------- |
-    | mobilenetV2    | Image classification inference model. It is a MobileNetV2 model based on MindSpore. | Download the model and weight files by referring to the **README.md** file in [https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/garbage_classification/ATC_mobilenetv2_mindspore_AE](https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/garbage_classification/ATC_mobilenetv2_mindspore_AE). |
+    | 3DCNN    | 3D action inference model. It is a 3DCNN model based on tensorflow. | Download the model and weight files by referring to the **README.md** file in [https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/3dcnn/ATC_3DCNN_tensorflow_AE](https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/3dcnn/ATC_3DCNN_tensorflow_AE). |
 
     ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **NOTE**  
 
@@ -75,27 +73,22 @@ Before deploying this sample, ensure that:
 
     2. Run the following commands to download the AIPP configuration file and convert the model:
 
-        **cd $HOME/models/googlenet_imagenet_picture**  
+        **cd $HOME/models/3Dgesture_recognition**  
 
-        **https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/garbage_picture/insert_op_yuv.cfg**
-
-        **atc --model=./mobilenetv2.air --framework=1 --output=garbage_yuv --soc_version=Ascend310 --insert_op_conf=./insert_op_yuv.cfg --input_shape="data:1,3,224,224" --input_format=NCHW**
+        **atc --model=3d_gesture_recognition.pb  --framework=3 --output=3d_gesture_recognition --soc_version=Ascend310 --input_shape="X:1,16,112,112,3" --input_format=NDHWC**
 
     3. Run the following command to copy the converted model to the **model** folder of the sample:
 
-        **cp ./garbage_yuv.om $HOME/samples/python/contrib/garbage_picture/model/**
+     **cp ./3d_gesture_recognition.om $HOME/samples/python/contrib/3Dgesture_recognition/model/**
 
 4. Obtain the test images required by the sample.
 
     Run the following commands to go to the **data** folder of the sample and download the corresponding test images:
 
-    **cd $HOME/samples/python/contrib/garbage_picture/data**
+    
+    **cd $HOME/samples/python/contrib/3Dgesture_recognition/data**
 
-    **https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/garbage_picture/newspaper.jpg**
-
-    **https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/garbage_picture/bottle.jpg**    
-
-    **https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/garbage_picture/dirtycloth.jpg**    
+    **wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/3D_gesture_recognition/testdata/test_float32_actiontype7.bin**    
 
 
 
@@ -103,9 +96,9 @@ Before deploying this sample, ensure that:
 
 **Note: If the development environment and operating environment are set up on the same server, skip step 1 and go to [step 2](#step_2) directly.**   
 
-1. Run the following commands to upload the **garbage_picture** directory in the development environment to any directory in the operating environment, for example, **/home/HwHiAiUser**, and log in to the operating environment (host) as the **HwHiAiUser** user:
+1. Run the following commands to upload the **3Dgesture_recognition** directory in the development environment to any directory in the operating environment, for example, **/home/HwHiAiUser**, and log in to the operating environment (host) as the **HwHiAiUser** user:
 
-    **scp -r $HOME/samples/python/contrib/garbage_picture  HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
+    **scp -r $HOME/samples/python/contrib/3Dgesture_recognition HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
 
     **ssh HwHiAiUser@xxx.xxx.xxx.xxx**    
 
@@ -121,15 +114,15 @@ Before deploying this sample, ensure that:
 
       **source ~/.bashrc**
 
-      **cd $HOME/samples/python/contrib/garbage_picture/**     
+      **cd $HOME/samples/python/contrib/3Dgesture_recognition/**     
 
     - If the development environment and operating environment are set up on separate servers, run the following command to switch the directory:
 
-      **cd $HOME/garbage_picture/**      
+      **cd $HOME/3Dgesture_recognition/**      
 
     Run the following command to run the sample:
 
-    **python3.6 src/classify_test.py ./data/**
+    **python3.6 src/3Dgesture_recognition.py ./data/**
 ### Result Checking
 
 After the execution is complete, find the JPG images with inference results in the **outputs** directory.
