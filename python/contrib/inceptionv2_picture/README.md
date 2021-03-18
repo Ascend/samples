@@ -1,22 +1,27 @@
+
 **本样例为大家学习昇腾软件栈提供参考，非商业目的！**
 
-**本样例适配3.2.0及以上版本，支持产品为Atlas300([ai1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366))。**
+**本样例适配20.2及以上版本，支持产品为Atlas300([ai1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366))。**
 
 **本README只提供命令行方式运行样例的指导，如需在Mindstudio下运行样例，请参考[Mindstudio运行图片样例wiki](https://gitee.com/ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E5%9B%BE%E7%89%87%E6%A0%B7%E4%BE%8B?sort_id=3164874)。**
 
-## 图片InceptionV2分类样例
 
-功能：使用InceptionV2模型对输入图片进行分类推理。
+## InceptionV2踢脚线分类样例（本样例由南京尚艺贡献 ）
 
-样例输入：待推理的jpg图片。
 
-样例输出：推理后的jpg图片。
+功能：使用InceptionV2模型对输入的踢脚线图片进行分类推理。
+
+
+
+样例输入：待推理的踢脚线图片。
+
+样例输出：推理后的踢脚线图片。
 
 ### 前提条件
 
 部署此Sample前，需要准备好以下环境：
 
-- 请确认已按照[环境准备和依赖安装](../../../environment)准备好环境。
+- 请确认已按照[环境准备和依赖安装](https://gitee.com/ascend/samples/blob/master/python/environment)准备好环境。
 
 - 已完成对应产品的开发环境和运行环境安装。
 
@@ -48,11 +53,11 @@
 
 2. 获取此应用中所需要的原始网络模型。
 
-    参考下表获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到开发环境普通用户下的任意目录，例如：$HOME/models/inceptionv2_picture。
+    参考下表获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到目录$HOME/samples/python/contrib/inceptionv2_picture/model/
     
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
-    |  InceptionV2| 图片分类推理模型。是tensorflow框架模型。  |  请参考[https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/InceptionV2/frozen_graph.pb](https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/InceptionV2/frozen_graph.pb)目录中README.md下载原始模型。 |
+    |  InceptionV2| 图片分类推理模型。是tensorflow框架模型。  |  请从此链接[https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/InceptionV2/frozen_graph.pb](https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/InceptionV2/frozen_graph.pb)下载原始模型。 |
 
 3. 将原始模型转换为Davinci模型。
     
@@ -66,15 +71,13 @@
 
         **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64**  
 
-    2. 执行以下命令下载aipp配置文件并使用atc命令进行模型转换。
+    2. 执行以下atc命令进行模型转换。
 
-        **cd $HOME/models/inceptionv2_picture**  
+        **cd $HOME/samples/python/contrib/inceptionv2_picture/model/**  
 
         **atc --input_shape="input:1,299,299,3" --input_format=NHWC --output="frozen_graph-inception-resnet-test1" --soc_version=Ascend310 --framework=3 --model="./frozen_graph.pb"**
 
-    3. 执行以下命令将转换好的模型复制到样例中model文件夹中。
-
-        **cp ./frozen_graph-inception-resnet-test1.om $HOME/samples/python/contrib/inceptionv2_picture/model/**
+   
 
 4. 获取样例需要的测试图片。
 
