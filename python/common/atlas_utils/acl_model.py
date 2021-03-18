@@ -228,15 +228,20 @@ class Model(object):
 
             if datatype == const.ACL_FLOAT:
                 np_type = np.float32            
+                output_tensor = np.zeros(size // 4, dtype=np_type).reshape(shape)
             elif datatype == const.ACL_INT32:
                 np_type = np.int32
+                output_tensor = np.zeros(size // 4, dtype=np_type).reshape(shape)
             elif datatype == const.ACL_UINT32:
-                np_type = np.uint32
+                np_type = np.uint32             
+                output_tensor = np.zeros(size // 4, dtype=np_type).reshape(shape)   
+            elif datatype == const.ACL_FLOAT16:
+                np_type = np.float16
+                output_tensor = np.zeros(size // 2, dtype=np_type).reshape(shape)
             else:
                 print("Unspport model output datatype ", datatype)
                 return None
       
-            output_tensor = np.zeros(size // 4, dtype=np_type).reshape(shape)
 
             if not output_tensor.flags['C_CONTIGUOUS']:
                 output_tensor = np.ascontiguousarray(output_tensor)

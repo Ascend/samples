@@ -81,7 +81,7 @@ def main():
     data_dir = sys.argv[1]  
     data_list = [os.path.join(data_dir, testdata)
                    for testdata in os.listdir(data_dir)
-                   if os.path.splitext(testdata)[1] in '.bin']
+                   if os.path.splitext(testdata)[1] in ['.bin']]
 
     #Create a directory to store the inference results
     if not os.path.isdir(os.path.join(SRC_PATH, "../outputs")):
