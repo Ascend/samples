@@ -44,7 +44,7 @@ $\color{red}{以下操作在开发环境上操作}$
 
             **export install_path=\\$HOME/Ascend/ascend-toolkit/latest** 
 
-            **export PATH=\\${install_path}/atc/ccec_compiler/bin:\\${install_path}/atc/bin:\\$PATH**  
+            **export PATH=/usr/local/python3.7.5/bin:\\${install_path}/atc/ccec_compiler/bin:\\${install_path}/atc/bin:\\$PATH**  
 
             **export ASCEND_OPP_PATH=\${install_path}/opp**  
 
