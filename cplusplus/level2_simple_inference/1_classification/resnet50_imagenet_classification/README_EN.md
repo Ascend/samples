@@ -186,9 +186,7 @@ The sample directory is organized as follows:
 
         Download the .prototxt model file and .caffemodel pre-trained model file of the ResNet-50 network and upload the files to  **/caffe\_model**  under the sample directory in the  development environment  as the running user. If the directory does not exist, create it.
 
-        [https://github.com/Ascend-Huawei/models/tree/master/computer\_vision/classification/resnet50](https://github.com/Ascend-Huawei/models/tree/master/computer_vision/classification/resnet50) 
-
-        Find the download links in the  **README\_en.md**  file.
+        Click [link](https://github.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/resnet50/ATC_resnet50_caffe_AE), find the download links in the  **README.md**  file.
 
     4.  Convert the ResNet-50 network to an .om  offline model adapted to Ascend AI ProcessorHiSilicon SoC.
 
@@ -330,9 +328,7 @@ The sample directory is organized as follows:
 
         Download the .prototxt model file and .caffemodel pre-trained model file of the ResNet-50 network and upload the files to  **/caffe\_model**  under the sample directory in the  development environment  as the running user. If the directory does not exist, create it.
 
-        [https://github.com/Ascend-Huawei/models/tree/master/computer\_vision/classification/resnet50](https://github.com/Ascend-Huawei/models/tree/master/computer_vision/classification/resnet50) 
-
-        Find the download links in the  **README\_en.md**  file.
+        Click [link](https://github.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/resnet50/ATC_resnet50_caffe_AE), find the download links in the  **README.md**  file.
 
     4.  Convert the ResNet-50 network to an .om  offline model adapted to Ascend AI ProcessorHiSilicon SoC.
 
