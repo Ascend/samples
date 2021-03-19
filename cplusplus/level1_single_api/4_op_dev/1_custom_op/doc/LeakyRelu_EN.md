@@ -82,7 +82,7 @@ The mathematical expression of the LeakyRelu operator is as follows:
 
     The key point of prototype definition is to infer the shape and dtype of the output tensor. The LeakyReLUDemo operator directly assigns the shape and dtype of the input tensor to the output tensor.
 
-    For details about the complete code implementation, see  [leaky\_relu\_demo.h](../op_proto/leaky_relu_demo.h)  and  [leaky\_relu\_demo.cpp](../op_proto/leaky_relu_demo.cpp).
+    For details about the complete code implementation, see  [leaky\_relu\_demo.h](../op_proto/leaky_relu_demo.h)  and  [leaky\_relu\_demo.cc](../op_proto/leaky_relu_demo.cc).
 
 -   Operator Information Library
 
@@ -90,7 +90,7 @@ The mathematical expression of the LeakyRelu operator is as follows:
 
 -   Operator Plug-in
 
-    You need to customize the  **ParseParamsLeakyRelu**  function to implement the attribute mapping from the Caffe LeakyReLUDemo operator to the LeakyReluDemo operator adapted to the Ascend AI Processor. For details about the complete code, see  [caffe\_leaky\_relu\_plugin.cpp](../framework/caffe_plugin/caffe_leaky_relu_plugin.cpp).
+    You need to customize the  **ParseParamsLeakyRelu**  function to implement the attribute mapping from the Caffe LeakyReLUDemo operator to the LeakyReluDemo operator adapted to the Ascend AI Processor. For details about the complete code, see  [caffe\_leaky\_relu\_plugin.cc](../framework/caffe_plugin/caffe_leaky_relu_plugin.cc).
 
 
 ## Supported SoCs<a name="section13382182116471"></a>
