@@ -29,17 +29,17 @@ The directory of a Caffe or TensorFlow custom operator sample project is organiz
 │   ├── CMakeLists.txt
 │   ├── caffe_plugin    // Directory of the Caffe operator plug-in implementation code and the CMakeList file
 │       ├── CMakeLists.txt 
-│       ├── xx_plugin.cpp 
+│       ├── xx_plugin.cc 
 │   ├── tf_plugin    // Directory of the TensorFlow operator plug-in implementation code and the CMakeList file
 │       ├── CMakeLists.txt 
-│       ├── xx_plugin.cpp 
+│       ├── xx_plugin.cc 
 │   ├── tf_scope_fusion_pass    // Directory of the scope fusion pattern implementation code and the CMakeList file
 │       └── xx_pass.h      // Fusion pattern header file
-│       └── xx_pass.cpp    // Fusion pattern implementation
+│       └── xx_pass.cc    // Fusion pattern implementation
 │       └── CMakeLists.txt
 ├── op_proto     // Directory of the operator prototype definition file and the CMakeList file
 │   ├── xx.h
-│   ├── xx.cpp
+│   ├── xx.cc
 │   ├── CMakeLists.txt   // CMakeList.txt of the operator IR definition file, called by CMakeList.txt of the operator project
 ├── tbe 
 │   ├── CMakeLists.txt   
@@ -94,7 +94,7 @@ The directory of a Caffe or TensorFlow custom operator sample project is organiz
 ## Environment Requirements
 
 -   OS and architecture: CentOS x86\_64, CentOS AArch64, Ubuntu 18.04 x86\_64, EulerOS x86, EulerOS AArch64
--   Version: 3.2.0
+-   Version: 3.3.0
 -   Python version and dependency library: Python 3.7.5
 -   Ascend AI Software Stack deployed
 
