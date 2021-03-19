@@ -280,8 +280,8 @@ In the training scenario, you can train a model that contains the custom operato
 
 This sample provides the following single-operator network verification samples in the training scenario:
 
--   TBE operators: Add and ScatterNdAdd. For details about the network verification file of a single-operator, see the  **xx.py**  file in the  **tbe/testcases/tf\_test/<OpType\>**  directory.
--   AI CPU operator: UniqueCust. For details about the network verification file of a single-operator, see the  **cpukernel/testcases/tf\_test/unique/tf\_unique.py**  file.
+TBE operators: Add and ScatterNdAdd. For details about the network verification file of a single-operator, see the  **xx.py**  file in the  **tbe/testcases/tf\_test/<OpType\>**  directory.
+
 
 To execute a single-operator network test file, perform the following operations:
 
