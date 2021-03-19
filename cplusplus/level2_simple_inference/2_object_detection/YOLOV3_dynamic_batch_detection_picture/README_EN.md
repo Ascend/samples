@@ -164,9 +164,7 @@ The sample directory is organized as follows:
 
         Download the .prototxt model file and .caffemodel pre-trained model file of the YOLOv3 network and upload the files to  **/caffe\_model**  under the sample directory in the  development environment  as the running user. If the directory does not exist, create it.
 
-        [https://github.com/Ascend-Huawei/models/tree/master/computer\_vision/object\_detect/yolov3](https://github.com/Ascend-Huawei/models/tree/master/computer_vision/object_detect/yolov3)
-
-        Find the download link in the  **README\_en.md**  file.
+        Click [link](https://github.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/yolov3/ATC_yolov3_caffe_AE), find the download link in the  **README.md**  file.
 
     4.  Go to the sample directory and convert the YOLOv3 network into an .om offline model that adapts to the Ascend AI Processor.
 
@@ -376,10 +374,7 @@ The sample directory is organized as follows:
 
         Download the .prototxt model file and .caffemodel pre-trained model file of the YOLOv3 network and upload the files to  **/caffe\_model**  under the sample directory in the  development environment  as the running user. If the directory does not exist, create it.
 
-        [https://github.com/Ascend-Huawei/models/tree/master/computer\_vision/object\_detect/yolov3](https://github.com/Ascend-Huawei/models/tree/master/computer_vision/object_detect/yolov3)
-
-        Find the download link in the  **README\_en.md**  file.
-
+        Click [link](https://github.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/yolov3/ATC_yolov3_caffe_AE), find the download link in the  **README.md**  file.
     4.  Go to the sample directory and convert the YOLOv3 network into an .om offline model that adapts to the Ascend AI Processor.
 
         If the input for model inference allows a dynamic batch size, run the following command to convert the model:
