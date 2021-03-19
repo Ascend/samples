@@ -168,7 +168,7 @@ ScatterNdAdd算子通过对输入数据中的单个值或切片应用稀疏算�
 
     ScatterNdAdd算子的输入tensor var与updates的数据类型要求相同，所以需要对齐进行校验。然后将输入tensor var的shape与数据类型更新到输出tensor。
 
-    完整的代码实现请参见[scatter\_nd\_add.h](../op_proto/scatter_nd_add.h)与[scatter\_nd\_add.cpp](../op_proto/scatter_nd_add.cpp)。
+    完整的代码实现请参见[scatter\_nd\_add.h](../op_proto/scatter_nd_add.h)与[scatter\_nd\_add.cc](../op_proto/scatter_nd_add.cc)。
 
 -   算子信息库
 
@@ -176,7 +176,7 @@ ScatterNdAdd算子通过对输入数据中的单个值或切片应用稀疏算�
 
 -   算子适配插件
 
-    将原始TensorFlow的ScatterNdAdd算子或者ResourceScatterNdAdd算子解析并映射为适配昇腾AI处理器的ScatterNdAdd算子，算子属性的映射可直接调用AutoMappingFn\( \)接口进行实现。完整代码请参见[scatter\_nd\_add\_plugin.cpp](../framework/tf_plugin/scatter_nd_add_plugin.cpp)。
+    将原始TensorFlow的ScatterNdAdd算子或者ResourceScatterNdAdd算子解析并映射为适配昇腾AI处理器的ScatterNdAdd算子，算子属性的映射可直接调用AutoMappingFn\( \)接口进行实现。完整代码请参见[scatter\_nd\_add\_plugin.cc](../framework/tf_plugin/scatter_nd_add_plugin.cc)。
 
 
 ## 支持的芯片类型<a name="section13382182116471"></a>
