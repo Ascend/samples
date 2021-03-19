@@ -92,7 +92,7 @@ Implemented by using TIK, the Permute operator is used to permute the dimension 
 
 -   Operator Prototype Definition
 
-    For the definition of the PermuteTik prototype, see  [permute\_tik.h](../op_proto/permute_tik.h)  and  [permute\_tik.cpp](../op_proto/permute_tik.cpp).
+    For the definition of the PermuteTik prototype, see  [permute\_tik.h](../op_proto/permute_tik.h)  and  [permute\_tik.cc](../op_proto/permute_tik.cc).
 
 -   Operator Information Library
 
@@ -100,7 +100,7 @@ Implemented by using TIK, the Permute operator is used to permute the dimension 
 
 -   Operator Plug-in
 
-    Parse and map the operator whose type is Permute in the original Caffe model to the PermuteTik operator that adapts to the Ascend AI Processor. For details about the complete code, see  [caffe\_permute\_tik\_plugin.cpp](../framework/caffe_plugin/caffe_permute_tik_plugin.cpp).
+    Parse and map the operator whose type is Permute in the original Caffe model to the PermuteTik operator that adapts to the Ascend AI Processor. For details about the complete code, see  [caffe\_permute\_tik\_plugin.cc](../framework/caffe_plugin/caffe_permute_tik_plugin.cc).
 
 
 ## Supported SoCs<a name="section13382182116471"></a>
