@@ -82,7 +82,7 @@ LeakyRelu算子的数学表达式如下所示：
 
     原型定义的关键点是推理输出Tensor的shape及dtype，LeakyReluDemo算子直接将输入tensor的shape与dtype赋给输出tensor。
 
-    完整的代码实现请参见[leaky\_relu\_demo.h](../op_proto/leaky_relu_demo.h)与[leaky\_relu\_demo.cpp](../op_proto/leaky_relu_demo.cpp)。
+    完整的代码实现请参见[leaky\_relu\_demo.h](../op_proto/leaky_relu_demo.h)与[leaky\_relu\_demo.cc](../op_proto/leaky_relu_demo.cc)。
 
 -   算子信息库
 
@@ -90,7 +90,7 @@ LeakyRelu算子的数学表达式如下所示：
 
 -   算子适配插件
 
-    自定义实现ParseParamsLeakyRelu函数，实现原始Caffe中Type为LeakyReLUDemo的算子到适配昇腾AI处理器的LeakyReluDemo算子的属性映射。完整代码请参见[caffe\_leaky\_relu\_plugin.cpp](../framework/caffe_plugin/caffe_leaky_relu_plugin.cpp)。
+    自定义实现ParseParamsLeakyRelu函数，实现原始Caffe中Type为LeakyReLUDemo的算子到适配昇腾AI处理器的LeakyReluDemo算子的属性映射。完整代码请参见[caffe\_leaky\_relu\_plugin.cc](../framework/caffe_plugin/caffe_leaky_relu_plugin.cc)。
 
 
 ## 支持的芯片类型<a name="section13382182116471"></a>
