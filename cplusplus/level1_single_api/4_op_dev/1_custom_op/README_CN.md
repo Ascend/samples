@@ -29,17 +29,17 @@ Caffe与TensorFlow共存的自定义算子样例工程的目录结构如下所�
 │   ├── CMakeLists.txt
 │   ├── caffe_plugin    //Caffe算子适配插件实现代码及CMakeList文件所在目录
 │       ├── CMakeLists.txt 
-│       ├── xx_plugin.cpp 
+│       ├── xx_plugin.cc 
 │   ├── tf_plugin    //TensorFlow算子适配插件实现代码及CMakeList文件所在目录
 │       ├── CMakeLists.txt 
-│       ├── xx_plugin.cpp 
+│       ├── xx_plugin.cc 
 │   ├── tf_scope_fusion_pass    //Scope融合规则实现代码及CMakeList文件所在目录
 │       └── xx_pass.h      //融合规则头文件
-│       └── xx_pass.cpp    //融合规则实现
+│       └── xx_pass.cc    //融合规则实现
 │       └── CMakeLists.txt
 ├── op_proto     //算子原型定义文件及CMakeList文件所在目录   
 │   ├── xx.h
-│   ├── xx.cpp
+│   ├── xx.cc
 │   ├── CMakeLists.txt   //算子IR定义文件的CMakeList.txt，会被算子工程的CMakeList.txt调用
 ├── tbe 
 │   ├── CmakeLists.txt   
@@ -97,7 +97,7 @@ Caffe与TensorFlow共存的自定义算子样例工程的目录结构如下所�
 ## 环境要求
 
 -   操作系统及架构：CentOS x86_64、CentOS aarch64、Ubuntu 18.04 x86_64、EulerOS x86、EulerOS aarch64
--   版本：20.3
+-   版本：3.3.0
 -   python及依赖的库：python3.7.5
 -   已完成昇腾AI软件栈的部署。
 
