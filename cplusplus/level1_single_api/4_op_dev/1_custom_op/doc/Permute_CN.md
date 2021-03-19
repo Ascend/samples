@@ -92,7 +92,7 @@
 
 -   算子原型定义
 
-    PermuteTik的原型定义请参见[permute\_tik.h](../op_proto/permute_tik.h)与[permute\_tik.cpp](../op_proto/permute_tik.cpp)。
+    PermuteTik的原型定义请参见[permute\_tik.h](../op_proto/permute_tik.h)与[permute\_tik.cc](../op_proto/permute_tik.cc)。
 
 -   算子信息库
 
@@ -100,7 +100,7 @@
 
 -   算子适配插件
 
-    将原始Caffe中Type为Permute的算子解析并映射为适配昇腾AI处理器的PermuteTik算子，完整代码请参见[caffe\_permute\_tik\_plugin.cpp](../framework/caffe_plugin/caffe_permute_tik_plugin.cpp)。
+    将原始Caffe中Type为Permute的算子解析并映射为适配昇腾AI处理器的PermuteTik算子，完整代码请参见[caffe\_permute\_tik\_plugin.cc](../framework/caffe_plugin/caffe_permute_tik_plugin.cc)。
 
 
 ## 支持的芯片类型<a name="section13382182116471"></a>
