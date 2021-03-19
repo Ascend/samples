@@ -66,7 +66,7 @@ Unique算子的功能是：在输入的一维张量x中找到唯一的元素，�
 
     原型定义的关键点是推理输出Tensor的shape。
 
-    UniqueCust算子推理输出shape的原理为：根据功能描述可知，输出idx与输入x的shape相同，输出y与输入x的元素内容重复度相关，为未知shape。UniqueCust算子原型定义的代码实现请参见[unique\_cust.h](../op_proto/unique_cust.h)与[unique\_cust.cpp](../op_proto/unique_cust.cpp)。
+    UniqueCust算子推理输出shape的原理为：根据功能描述可知，输出idx与输入x的shape相同，输出y与输入x的元素内容重复度相关，为未知shape。UniqueCust算子原型定义的代码实现请参见[unique\_cust.h](../op_proto/unique_cust.h)与[unique\_cust.cc](../op_proto/unique_cust.cc)。
 
 -   算子信息库
 
@@ -74,7 +74,7 @@ Unique算子的功能是：在输入的一维张量x中找到唯一的元素，�
 
 -   算子适配插件
 
-    本样例提供了TensorFlow算子适配插件，实现原始TensorFlow算子到适配昇腾AI处理器的算子的映射，完整代码请参见[unique\_cust\_plugin.cpp](../framework/tf_plugin/unique_cust_plugin.cpp)。
+    本样例提供了TensorFlow算子适配插件，实现原始TensorFlow算子到适配昇腾AI处理器的算子的映射，完整代码请参见[unique\_cust\_plugin.cc](../framework/tf_plugin/unique_cust_plugin.cc)。
 
 
 ## 支持的芯片类型<a name="section13382182116471"></a>
