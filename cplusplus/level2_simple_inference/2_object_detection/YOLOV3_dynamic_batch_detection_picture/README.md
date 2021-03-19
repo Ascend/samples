@@ -78,7 +78,7 @@ The sample directory is organized as follows:
 ## Environment Requirements<a name="section3833348101215"></a>
 
 -   OS and architecture: CentOS 7.6 x86\_64, CentOS AArch64, or Ubuntu 18.04 x86\_64
--   Version: 3.2.0
+-   Version: 3.3.0
 -   Compiler:
     -   Ascend 310 EP/Ascend 710: g++
     -   Atlas 200 DK: aarch64-linux-gnu-g++
@@ -164,9 +164,7 @@ The sample directory is organized as follows:
 
         Download the .prototxt model file and .caffemodel pre-trained model file of the YOLOv3 network and upload the files to  **/caffe\_model**  under the sample directory in the  development environment  as the running user. If the directory does not exist, create it.
 
-        [https://github.com/Ascend-Huawei/models/tree/master/computer\_vision/object\_detect/yolov3](https://github.com/Ascend-Huawei/models/tree/master/computer_vision/object_detect/yolov3)
-
-        Find the download link in the  **README\_en.md**  file.
+        Click [link](https://github.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/yolov3/ATC_yolov3_caffe_AE), find the download link in the  **README.md**  file. 
 
     4.  Go to the sample directory and convert the YOLOv3 network into an .om offline model that adapts to the Ascend AI Processor.
 
@@ -376,9 +374,7 @@ The sample directory is organized as follows:
 
         Download the .prototxt model file and .caffemodel pre-trained model file of the YOLOv3 network and upload the files to  **/caffe\_model**  under the sample directory in the  development environment  as the running user. If the directory does not exist, create it.
 
-        [https://github.com/Ascend-Huawei/models/tree/master/computer\_vision/object\_detect/yolov3](https://github.com/Ascend-Huawei/models/tree/master/computer_vision/object_detect/yolov3)
-
-        Find the download link in the  **README\_en.md**  file.
+        Click [link](https://github.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/yolov3/ATC_yolov3_caffe_AE), find the download link in the  **README.md**  file. 
 
     4.  Go to the sample directory and convert the YOLOv3 network into an .om offline model that adapts to the Ascend AI Processor.
 

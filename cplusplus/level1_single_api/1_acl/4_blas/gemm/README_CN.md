@@ -64,7 +64,7 @@
 ## 环境要求<a name="section3833348101215"></a>
 
 -   操作系统及架构：CentOS 7.6 x86\_64、CentOS aarch64、Ubuntu 18.04 x86\_64、EulerOS x86、EulerOS aarch64
--   版本：20.3
+-   版本：3.3.0
 -   编译器：
     -   Ascend 310 EP/Ascend 710/Ascend 910形态编译器：
         -   运行环境操作系统架构为x86时，编译器为g++
