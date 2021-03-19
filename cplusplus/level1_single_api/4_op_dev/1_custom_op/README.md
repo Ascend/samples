@@ -316,7 +316,7 @@ To execute a single-operator network test file, perform the following operations
 
         **python3.7.5  _xx.py_**
 
-        -   TBE operators: Add and ScatterNdAdd
+        TBE operators: Add and ScatterNdAdd
 
             After the network test script is executed, if the result is  **True**, indicating that the execution result on the Ascend AI Processor and the execution result on the CPU are consistent and correct.
 
@@ -326,32 +326,6 @@ To execute a single-operator network test file, perform the following operations
             True
             ====================================
             ```
-
-        -   AI CPU operator: UniqueCust
-
-            If the following information is displayed, the operator is successfully executed.
-
-            ```
-            2020-11-22 03:15:36.998210: I tf_adapter/optimizers/add_input_pass.cc:96] job is localhost Skip the optimizer : AddInputPass.
-            y: [1 2 4 7 8]
-            ...
-            2020-11-22 03:15:37.001986: I tf_adapter/optimizers/add_input_pass.cc:96] job is localhost Skip the optimizer : AddInputPass.
-            idx: [0 0 1 2 2 2 3 4 4]
-            ```
-
-            Check the device OS log and determine that the custom AI CPU operator is invoked. The log path is  **/var/log/npu/slog/device-os-0/device-os-0\_xxx.log**.
-
-            Search for the  **OpType**  of the operator:  **UniqueCust**. If information similar to the following is displayed, AI CPU custom operator is successfully executed.
-
-            ```
-            [INFO] AICPU(49034,aicpu_custom_scheduler):2020-11-22-08:29:45.301.762 [../../../../../../../../../cann/ops/built-in/aicpu/context/common/cpu_kernel_register.cc:74][AICPU][RunCpuKernel:74][tid:49046]:RunCpuKernel:UniqueCust begin.
-            [INFO] CCECPU(49034,aicpu_custom_scheduler):2020-11-22-08:29:45.302.414 [../../../../../../../aicpu/aicpu_device/aicpu_cust_schedule/core/aicpusd_op_executor.cpp:126][ExecuteKernel][tid:49046][AICPU_SCHEDULE] Call custom api RunCpuKernel in /home/HwHiAiUser/cust_aicpu/176041/libcust_cpu_kernels.so success.
-            [INFO] AICPU(49034,aicpu_custom_scheduler):2020-11-22-08:29:45.302.436 [../../../../../../../../aicpu/aicpu_device/utils/aicpu_sharder/aicpu_context.cc:70][SetOpname][tid:49046][AICPU_SHARDER] "set op name to null for thread[6]"
-            [INFO] CCECPU(49034,aicpu_custom_scheduler):2020-11-22-08:29:45.302.448 [../../../../../../../aicpu/aicpu_device/aicpu_cust_schedule/core/aicpusd_event_process.cpp:91][ExecuteTsKernelTask][tid:49046][AICPU_SCHEDULE] Execute aicpu custom kernel success.
-            ```
-
-
-
 
 ## Fusion Pattern Verification
 
