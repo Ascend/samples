@@ -8,8 +8,8 @@ CANN AscendCL（Ascend Computing Language）提供Device管理、Context管理�
 
 ## 版本说明
 
-**master分支样例版本适配情况请参见[样例表单及适配说明](#Version-of-samples)     
-历史版本请参考[表 版本说明](#Version-Description)下载对应发行版**
+**master分支样例版本适配情况请参见[样例表单及适配说明](#Version-of-samples)。     
+历史版本请参考[表 版本说明](#Version-Description)下载对应发行版**。
 
 **表1** 版本说明<a name="Version-Description"></a>
 | CANN版本 | cann-samples仓是否维护 | cann-samples获取方式 |
