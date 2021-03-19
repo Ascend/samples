@@ -60,7 +60,7 @@ The Add operator returns the sum of its operands, as shown in the following figu
 
     The key point of prototype definition is to infer the shape of the output tensor and verify the internal association of the operator inputs.
 
-    The principle of inferring the output shape is as follows: Obtain the two input shapes, broadcast them to the same shape, and assign the larger value of each dimension of the two inputs to form the output shape. For details about the code implementation of the  **InferShapeAndTypeAdd**  function, see  [add.cpp](../op_proto/add.cpp).
+    The principle of inferring the output shape is as follows: Obtain the two input shapes, broadcast them to the same shape, and assign the larger value of each dimension of the two inputs to form the output shape. For details about the code implementation of the  **InferShapeAndTypeAdd**  function, see  [add.cc](../op_proto/add.cc).
 
 -   Operator Information Library
 
@@ -68,7 +68,7 @@ The Add operator returns the sum of its operands, as shown in the following figu
 
 -   Operator Plug-in
 
-    Parse and map the Add operator developed under the TensorFlow framework to the Add operator supported by the Ascend AI Processor. You can implement the operator attribute mapping by calling  **AutoMappingFn\(\)**. For details about the complete code, see  [add\_plugin.cpp](../framework/tf_plugin/add_plugin.cpp).
+    Parse and map the Add operator developed under the TensorFlow framework to the Add operator supported by the Ascend AI Processor. You can implement the operator attribute mapping by calling  **AutoMappingFn\(\)**. For details about the complete code, see  [add\_plugin.cc](../framework/tf_plugin/add_plugin.cc).
 
 
 ## Supported SoCs<a name="section13382182116471"></a>
