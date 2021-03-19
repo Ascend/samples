@@ -110,7 +110,7 @@ Before developing an LSTM operator by using TIK, you need to determine the opera
 
 -   Operator Prototype Definition
 
-    For the definition of the LSTMTik prototype, see  [lstm\_tik.h](../op_proto/lstm_tik.h)  and  [lstm\_tik.cpp](../op_proto/lstm_tik.cpp).
+    For the definition of the LSTMTik prototype, see  [lstm\_tik.h](../op_proto/lstm_tik.h)  and  [lstm\_tik.cc](../op_proto/lstm_tik.cc).
 
 -   Operator Information Library
 
@@ -118,7 +118,7 @@ Before developing an LSTM operator by using TIK, you need to determine the opera
 
 -   Operator Plug-in
 
-    Parse and map the operator whose type is LSTMTik in the original TensorFlow model to the LSTMTik operator that adapts to the Ascend AI Processor. For details about the complete code, see  [lstm\_tik\_plugin.cpp](../framework/tf_plugin/lstm_tik_plugin.cpp).
+    Parse and map the operator whose type is LSTMTik in the original TensorFlow model to the LSTMTik operator that adapts to the Ascend AI Processor. For details about the complete code, see  [lstm\_tik\_plugin.cc](../framework/tf_plugin/lstm_tik_plugin.cc).
 
 
 ## Supported SoCs<a name="section13382182116471"></a>
