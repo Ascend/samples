@@ -54,7 +54,7 @@ Implemented by using TIK, the Upsample operator is used to scale up the feature 
 
 -   Operator Prototype Definition
 
-    For details about the prototype definition of UpsampleTik, see  [upsample\_tik.h](../op_proto/upsample_tik.h)  and  [upsample\_tik.cpp](../op_proto/upsample_tik.cpp).
+    For details about the prototype definition of UpsampleTik, see  [upsample\_tik.h](../op_proto/upsample_tik.h)  and  [upsample\_tik.cc](../op_proto/upsample_tik.cc).
 
 -   Operator Information Library
 
@@ -62,7 +62,7 @@ Implemented by using TIK, the Upsample operator is used to scale up the feature 
 
 -   Operator Plug-in
 
-    Parse and map the operator whose type is UpsampleTik in the original Caffe model to the UpsampleTik operator that adapts to the Ascend AI Processor. For details about the complete code, see  [upsample\_plugin.cpp](../framework/caffe_plugin/upsample_plugin.cpp).
+    Parse and map the operator whose type is UpsampleTik in the original Caffe model to the UpsampleTik operator that adapts to the Ascend AI Processor. For details about the complete code, see  [upsample\_plugin.cc](../framework/caffe_plugin/upsample_plugin.cc).
 
 
 ## Supported SoCs<a name="section13382182116471"></a>
