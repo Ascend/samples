@@ -66,7 +66,7 @@ Implemented by using TIK, the Conv2d operator performs the convolution 2-D opera
 
 -   Operator Prototype Definition
 
-    For details about the definition of the Conv2DTik prototype, see  [conv2d\_tik.h](../op_proto/conv2d_tik.h)  and  [conv2d\_tik.cpp](../op_proto/conv2d_tik.cc).
+    For details about the definition of the Conv2DTik prototype, see  [conv2d\_tik.h](../op_proto/conv2d_tik.h)  and  [conv2d\_tik.cc](../op_proto/conv2d_tik.cc).
 
 -   Operator Information Library
 
@@ -74,7 +74,7 @@ Implemented by using TIK, the Conv2d operator performs the convolution 2-D opera
 
 -   Operator Plug-in
 
-    Parse the operator whose type is ConvolutionTik in the original Caffe and map it to the Conv2DTik operator that adapts to the Ascend AI Processor. For details about the complete code, see  [caffe\_conv2d\_tik\_plugin.cpp](../framework/caffe_plugin/caffe_conv2d_tik_plugin.cc).
+    Parse the operator whose type is ConvolutionTik in the original Caffe and map it to the Conv2DTik operator that adapts to the Ascend AI Processor. For details about the complete code, see  [caffe\_conv2d\_tik\_plugin.cc](../framework/caffe_plugin/caffe_conv2d_tik_plugin.cc).
 
 
 ## Supported SoCs<a name="section13382182116471"></a>
