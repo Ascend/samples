@@ -60,7 +60,7 @@ Add算子实现了两个数据相加，返回相加结果的功能，如下所�
 
     原型定义的关键点是推理输出Tensor的shape以及对算子输入的内在关联关系进行校验。
 
-    Add算子推理输出shape的原理为：首先获取两个输入的shape，然后将两个输入shape广播为相同的shape，输出shape取两个输入中每个维度的大值。InferShapeAndTypeAdd函数的代码实现请参见[add.cpp](../op_proto/add.cpp)。
+    Add算子推理输出shape的原理为：首先获取两个输入的shape，然后将两个输入shape广播为相同的shape，输出shape取两个输入中每个维度的大值。InferShapeAndTypeAdd函数的代码实现请参见[add.cc](../op_proto/add.cc)。
 
 -   算子信息库
 
@@ -68,7 +68,7 @@ Add算子实现了两个数据相加，返回相加结果的功能，如下所�
 
 -   算子适配插件
 
-    将原始TensorFlow的Add算子解析并映射为适配昇腾AI处理器的Add算子，算子属性的映射可直接调用AutoMappingFn\( \)接口进行实现，完整代码请参见[add\_plugin.cpp](../framework/tf_plugin/add_plugin.cpp)。
+    将原始TensorFlow的Add算子解析并映射为适配昇腾AI处理器的Add算子，算子属性的映射可直接调用AutoMappingFn\( \)接口进行实现，完整代码请参见[add\_plugin.cc](../framework/tf_plugin/add_plugin.cc)。
 
 
 ## 支持的芯片类型<a name="section13382182116471"></a>
