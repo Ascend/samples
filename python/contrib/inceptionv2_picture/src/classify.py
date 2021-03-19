@@ -9,6 +9,7 @@ import os
 import acl
 import cv2
 import numpy as np
+import time
 path = os.path.dirname(os.path.abspath(__file__))
 
 sys.path.append(os.path.join(path, ".."))
@@ -21,6 +22,7 @@ from acl_image import AclImage
 from acl_resource import AclResource
 from image_net_classes import get_image_net_class
 from PIL import Image, ImageDraw, ImageFont
+from utils import display_time 
 
 class Classify(object):
     """
@@ -32,6 +34,7 @@ class Classify(object):
         self._model_height = model_height
         self._model = Model(model_path)
 
+    @display_time
     def pre_process(self, image):
         """
         pre_process
@@ -40,13 +43,15 @@ class Classify(object):
         bgr_img = bgr_img / 255.0
         resized_image = cv2.resize(bgr_img, (299, 299))
         return resized_image
-
+    
+    @display_time
     def inference(self, resized_image):
         """
         inference
         """
         return self._model.execute([resized_image, ])
 
+    @display_time
     def post_process(self, infer_output, image_file):
         """
         post_process
@@ -66,12 +71,11 @@ class Classify(object):
             object_class = get_image_net_class(top_k[0])
             object_value = vals[top_k[0]]
             output_path = os.path.join(os.path.join(SRC_PATH, "../outputs"), os.path.basename(image_file))
-            origin_img = Image.open(image_file)
-            draw = ImageDraw.Draw(origin_img)
-            font = ImageFont.load_default()
-            draw.text((10, 50), object_class, font=font, fill=255)
-            draw.text((10, 100), str(object_value), font=font, fill=255)
-            origin_img.save(output_path)
+            origin_img = cv2.imread(image_file)
+            font = cv2.FONT_HERSHEY_SIMPLEX
+            origin_img = cv2.putText(origin_img, object_class, (10, 100), font, 3, (255, 255, 255), 3)
+            origin_img = cv2.putText(origin_img, str(object_value), (10, 200), font, 2, (255, 255, 255), 3)
+            cv2.imwrite(output_path, origin_img)
     
 
 
@@ -81,7 +85,7 @@ MODEL_PATH = os.path.join(SRC_PATH, "../model/frozen_graph-inception-resnet-test
 MODEL_WIDTH = 299
 MODEL_HEIGHT = 299
 
-
+@display_time
 def main():
 
     """

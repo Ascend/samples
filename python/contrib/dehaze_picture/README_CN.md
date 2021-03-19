@@ -108,7 +108,7 @@
 	```
    - 如果是开发环境与运行环境分离部署，执行以下命令切换目录。
 	```
-     cd $HOME/python/SingleImageDehaze/src
+     cd $HOME/python/contrib/SingleImageDehaze/src
 	```
      切换目录后，执行以下命令运行样例。
    
