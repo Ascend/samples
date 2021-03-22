@@ -56,7 +56,7 @@
 
 -   算子原型定义
 
-    MatmulTik的原型定义请参见[matmul\_tik.h](../op_proto/matmul_tik.h)与[matmul\_tik.cpp](../op_proto/matmul_tik.cc)。
+    MatmulTik的原型定义请参见[matmul\_tik.h](../op_proto/matmul_tik.h)与[matmul\_tik.cc](../op_proto/matmul_tik.cc)。
 
 -   算子信息库
 

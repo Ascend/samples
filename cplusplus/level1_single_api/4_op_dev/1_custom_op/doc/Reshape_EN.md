@@ -57,7 +57,7 @@ For example:
 
     The principle of output shape inference of the ReshapeCust operator is as follows: Obtain the input tensor and the target shape, check whether the element count of the input tensor is the same as that of the target shape. If yes, the output shape is set to the target shape.
 
-    For details about the code implementation of the ReshapeCust operator prototype definition, see  [reshape\_cust.h](../op_proto/reshape_cust.h)  and  [reshape\_cust.cpp](../op_proto/reshape_cust.cpp).
+    For details about the code implementation of the ReshapeCust operator prototype definition, see  [reshape\_cust.h](../op_proto/reshape_cust.h)  and  [reshape\_cust.cc](../op_proto/reshape_cust.cc).
 
 -   Operator Information Library
 
@@ -65,7 +65,7 @@ For example:
 
 -   Operator Plug-in
 
-    This sample provides the ReshapeCust operator adaptation plug-in for TensorFlow and Caffe to map the original TensorFlow/Caffe operators to the operators that adapt to the Ascend AI Processor. For details about the complete code, see the  [reshape\_cust\_plugin.cpp](../framework/tf_plugin/reshape_cust_plugin.cpp)  and  [caffe\_reshape\_cust\_plugin.cpp](../framework/caffe_plugin/caffe_reshape_cust_plugin.cpp)  files.
+    This sample provides the ReshapeCust operator adaptation plug-in for TensorFlow and Caffe to map the original TensorFlow/Caffe operators to the operators that adapt to the Ascend AI Processor. For details about the complete code, see the  [reshape\_cust\_plugin.cc](../framework/tf_plugin/reshape_cust_plugin.cc)  and  [caffe\_reshape\_cust\_plugin.cc](../framework/caffe_plugin/caffe_reshape_cust_plugin.cc)  files.
 
 
 ## Supported SoCs<a name="section13382182116471"></a>

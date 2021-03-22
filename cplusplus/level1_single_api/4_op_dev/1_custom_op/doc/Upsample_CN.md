@@ -54,7 +54,7 @@
 
 -   算子原型定义
 
-    UpsampleTik的原型定义请参见[upsample\_tik.h](../op_proto/upsample_tik.h)与[upsample\_tik.cpp](../op_proto/upsample_tik.cpp)。
+    UpsampleTik的原型定义请参见[upsample\_tik.h](../op_proto/upsample_tik.h)与[upsample\_tik.cc](../op_proto/upsample_tik.cc)。
 
 -   算子信息库
 
@@ -62,7 +62,7 @@
 
 -   算子适配插件
 
-    将原始Caffe中Type为UpsampleTik的算子解析并映射为适配昇腾AI处理器的UpsampleTik算子，完整代码请参见[upsample\_plugin.cpp](../framework/caffe_plugin/upsample_plugin.cpp)。
+    将原始Caffe中Type为UpsampleTik的算子解析并映射为适配昇腾AI处理器的UpsampleTik算子，完整代码请参见[upsample\_plugin.cc](../framework/caffe_plugin/upsample_plugin.cc)。
 
 
 ## 支持的芯片类型<a name="section13382182116471"></a>

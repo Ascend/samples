@@ -110,7 +110,7 @@ LSTM算子在神经网络，常用于处理带有时间序列的数据，计算�
 
 -   算子原型定义
 
-    LSTMTik的原型定义请参见[lstm\_tik.h](../op_proto/lstm_tik.h)与[lstm\_tik.cpp](../op_proto/lstm_tik.cpp)。
+    LSTMTik的原型定义请参见[lstm\_tik.h](../op_proto/lstm_tik.h)与[lstm\_tik.cc](../op_proto/lstm_tik.cc)。
 
 -   算子信息库
 
@@ -118,7 +118,7 @@ LSTM算子在神经网络，常用于处理带有时间序列的数据，计算�
 
 -   算子适配插件
 
-    将原始TensorFlow中Type为LSTMTik的算子解析并映射为适配昇腾AI处理器的LSTMTik算子，完整代码请参见[lstm\_tik\_plugin.cpp](../framework/tf_plugin/lstm_tik_plugin.cpp)。
+    将原始TensorFlow中Type为LSTMTik的算子解析并映射为适配昇腾AI处理器的LSTMTik算子，完整代码请参见[lstm\_tik\_plugin.cc](../framework/tf_plugin/lstm_tik_plugin.cc)。
 
 
 ## 支持的芯片类型<a name="section13382182116471"></a>

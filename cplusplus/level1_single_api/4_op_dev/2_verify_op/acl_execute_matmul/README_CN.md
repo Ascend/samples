@@ -33,7 +33,7 @@
 ## 环境要求<a name="zh-cn_topic_0230709958_section1256019267915"></a>
 
 -   操作系统及架构：CentOS x86\_64、CentOS aarch64、Ubuntu 18.04 x86\_64
--   版本：20.3
+-   版本：3.3.0
 -   编译器：
     -   Ascend 310 EP/Ascend 710编译器
         -   运行环境操作系统架构为x86时，编译器为g++

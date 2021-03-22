@@ -56,7 +56,7 @@ Implemented by using TIK, the Matmul operator performs matrix multiplication on 
 
 -   Operator Prototype Definition
 
-    For details about the definition of the MatmulTik prototype, see  [matmul\_tik.h](../op_proto/matmul_tik.h)  and  [matmul\_tik.cpp](../op_proto/matmul_tik.cc).
+    For details about the definition of the MatmulTik prototype, see  [matmul\_tik.h](../op_proto/matmul_tik.h)  and  [matmul\_tik.cc](../op_proto/matmul_tik.cc).
 
 -   Operator Information Library
 

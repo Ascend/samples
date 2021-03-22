@@ -57,7 +57,7 @@ Reshape算子的功能是对输入张量进行整形的操作，只改变张量�
 
     ReshapeCust算子推理输出shape的原理为：首先获取两个输入，一个是输入tensor，一个是目标的shape，校验输入tensor元素个数是否与目标shape相同，校验成功则将输出shape设置为目标shape值。
 
-    ReshapeCust算子原型定义的代码实现请参见[reshape\_cust.h](../op_proto/reshape_cust.h)与[reshape\_cust.cpp](../op_proto/reshape_cust.cpp)。
+    ReshapeCust算子原型定义的代码实现请参见[reshape\_cust.h](../op_proto/reshape_cust.h)与[reshape\_cust.cc](../op_proto/reshape_cust.cc)。
 
 -   算子信息库
 
@@ -65,7 +65,7 @@ Reshape算子的功能是对输入张量进行整形的操作，只改变张量�
 
 -   算子适配插件
 
-    本样例同时提供了TensorFlow与Caffe的ReshapeCust算子适配插件，实现原始Tensorflow/Caffe算子到适配昇腾AI处理器的算子的映射，完整代码可分别参见[reshape\_cust\_plugin.cpp](../framework/tf_plugin/reshape_cust_plugin.cpp)文件与[caffe\_reshape\_cust\_plugin.cpp](../framework/caffe_plugin/caffe_reshape_cust_plugin.cpp)文件。
+    本样例同时提供了TensorFlow与Caffe的ReshapeCust算子适配插件，实现原始Tensorflow/Caffe算子到适配昇腾AI处理器的算子的映射，完整代码可分别参见[reshape\_cust\_plugin.cc](../framework/tf_plugin/reshape_cust_plugin.cc)文件与[caffe\_reshape\_cust\_plugin.cc](../framework/caffe_plugin/caffe_reshape_cust_plugin.cc)文件。
 
 
 ## 支持的芯片类型<a name="section13382182116471"></a>

@@ -169,7 +169,7 @@ The fourth index \(1, 1\) indicates that the four values—\(1, 1, 0\) to \(1, 1
 
     The data type of the input tensors  **var**  and  **updates**  of the ScatterNdAdd operator must be the same. Therefore, their data types need to be verified. Update the shape and data type of the input tensor  **var**  to the output tensor.
 
-    For details about the complete code implementation, see  [scatter\_nd\_add.h](../op_proto/scatter_nd_add.h)  and  [scatter\_nd\_add.cpp](../op_proto/scatter_nd_add.cpp).
+    For details about the complete code implementation, see  [scatter\_nd\_add.h](../op_proto/scatter_nd_add.h)  and  [scatter\_nd\_add.cc](../op_proto/scatter_nd_add.cc).
 
 -   Operator Information Library
 
@@ -177,7 +177,7 @@ The fourth index \(1, 1\) indicates that the four values—\(1, 1, 0\) to \(1, 1
 
 -   Operator Plug-in
 
-    Parse and map the ScatterNdAdd operator or ResourceScatterNdAdd operator developed under the TensorFlow framework to the ScatterNdAdd operator supported by the Ascend AI Processor. You can implement the operator attribute mapping by directly calling  **AutoMappingFn\(\)**. For details about the complete code, see  [scatter\_nd\_add\_plugin.cpp](../framework/tf_plugin/scatter_nd_add_plugin.cpp).
+    Parse and map the ScatterNdAdd operator or ResourceScatterNdAdd operator developed under the TensorFlow framework to the ScatterNdAdd operator supported by the Ascend AI Processor. You can implement the operator attribute mapping by directly calling  **AutoMappingFn\(\)**. For details about the complete code, see  [scatter\_nd\_add\_plugin.cc](../framework/tf_plugin/scatter_nd_add_plugin.cc).
 
 
 ## Supported SoCs<a name="section13382182116471"></a>

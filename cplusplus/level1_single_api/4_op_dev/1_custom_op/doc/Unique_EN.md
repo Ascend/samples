@@ -66,7 +66,7 @@ For example:
 
     The key point of prototype definition is inferring the shape of the output tensor.
 
-    The principle of the output shape of the UniqueCust operator is as follows: Output  **idx**  has the same shape as input  **x**, and the shape of output  **y**  is unknow and is related to the element repetition degree of input  **x**. For details about the code implementation of the UniqueCust operator prototype definition, see  [unique\_cust.h](../op_proto/unique_cust.h)  and  [unique\_cust.cpp](../op_proto/unique_cust.cpp).
+    The principle of the output shape of the UniqueCust operator is as follows: Output  **idx**  has the same shape as input  **x**, and the shape of output  **y**  is unknow and is related to the element repetition degree of input  **x**. For details about the code implementation of the UniqueCust operator prototype definition, see  [unique\_cust.h](../op_proto/unique_cust.h)  and  [unique\_cust.cc](../op_proto/unique_cust.cc).
 
 -   Operator Information Library
 
@@ -74,7 +74,7 @@ For example:
 
 -   Operator Plug-in
 
-    This sample provides the TensorFlow-based operator adaptation plug-in to map the original TensorFlow operator to the operator that adapts to the Ascend AI Processor. For details about the complete code, see  [unique\_cust\_plugin.cpp](../framework/tf_plugin/unique_cust_plugin.cpp).
+    This sample provides the TensorFlow-based operator adaptation plug-in to map the original TensorFlow operator to the operator that adapts to the Ascend AI Processor. For details about the complete code, see  [unique\_cust\_plugin.cc](../framework/tf_plugin/unique_cust_plugin.cc).
 
 
 ## Supported SoCs<a name="section13382182116471"></a>
