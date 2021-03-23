@@ -28,15 +28,13 @@ make
 
 编译生成的libatalsutil.so在../atlas200dk/目录下
 
-Atlas300:
+其他昇腾AI设备:
 
 ```
 make mode=ASIC
 ```
 
 编译生成的libatalsutil.so在../asic/x86（服务器为x86_64）或者../asic/arm（服务器为arm）目录下
-
-注意：atlas300编译C码库需要在运行环境下进行
 
 
 
