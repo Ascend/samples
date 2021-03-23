@@ -4,7 +4,7 @@
 
 1.本库仅供当前社区开源样例使用，不覆盖ascend平台应用开发的所有场景，不作为用户应用开发的标准库；
 
-2.仅支持Atlas200DK和Atlas300样例。
+2.本库仅在Atlas200DK和Atlas300（x86）服务器上做了验证。
 
 ## C码库编译
 
@@ -28,15 +28,13 @@ make
 
 编译生成的libatalsutil.so在../atlas200dk/目录下
 
-Atlas300:
+其他昇腾AI设备:
 
 ```
 make mode=ASIC
 ```
 
 编译生成的libatalsutil.so在../asic/x86（服务器为x86_64）或者../asic/arm（服务器为arm）目录下
-
-注意：atlas300编译C码库需要在运行环境下进行
 
 
 
