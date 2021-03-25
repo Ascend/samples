@@ -1,6 +1,6 @@
 # ResNet-50 calibration sample
 
-this is a sample to quick start with amct-mindspore tool
+This is a sample to quick start with amct-mindspore tool
 
 ## Usage
 
@@ -8,7 +8,7 @@ this is a sample to quick start with amct-mindspore tool
 
 now you can download the pretrained ResNet-50 based on CIFAR-10 dataset from MindSpore official website;
 
-[Mindspore pretrain model download page](https://www.mindspore.cn/docs/zh-CN/r0.7/network_list.html)
+[resnet50 mindspore pretrain model download page](https://www.mindspore.cn/resources/hub/details?MindSpore/ascend/0.7/resnet50_v1.5_cifar10)
 
 ### 2. Prepare the dataset CIFAR-10
 
@@ -27,17 +27,18 @@ Dataset used: [CIFAR-10](http://www.cs.toronto.edu/~kriz/cifar.html)
 └─cifar-10-verify-bin
 ```
 
-### 3. Download the model file
+### 3. Download the model defination file
 
 run the download_files.py scripts to download the resnet50 model defination file from github;
 
 ```python
-python3 download_files.py
+cd scripts && python3 download_files.py
 ```
 
 ### 4. Run the calibration script
 
 ```python
-python3 resnet50_sample.py --dataset_path your dataset path  --checkpoint_path your resnet50 checkpoint file path
+cd src
+python3 resnet50_sample.py --dataset_path your_dataset_path  --checkpoint_path your_resnet50_checkpoint_file_path
 ```
 
