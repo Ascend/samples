@@ -7,13 +7,18 @@ mode=AtlasDK
 endif
 
 ifeq ($(mode), AtlasDK)
-CC := aarch64-linux-gnu-g++
-ARCH := arm
+    CC := aarch64-linux-gnu-g++
+    ARCH := arm
 else ifeq ($(mode), ASIC)
-CC := g++
-ARCH := x86
+    CC := g++
+    arch_local=$(shell arch)
+    ifeq ($(arch_local), aarch64)
+        ARCH := arm
+    else
+        ARCH := x86
+    endif
 else
-$(error "Unsupported mode: "$(mode)", please input: AtlasDK or ASIC.")
+    $(error "Unsupported mode: "$(mode)", please input: AtlasDK or ASIC.")
 endif
 
 
