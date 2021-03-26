@@ -37,62 +37,52 @@ CANN AscendCL（Ascend Computing Language）提供Device管理、Context管理�
 
 | 样例名称 | 语言 | 适配CANN版本 | 适配产品 | 简介 |
 |---|---|---|---|---|
-| [crop](./cplusplus/level2_simple_inference/0_data_process/crop) |  c++ | >3.0.0  | A200DK/A300 | 调用dvpp的crop接口，实现图像裁剪功能。|
-| [vdec](./cplusplus/level2_simple_inference/0_data_process/vdec) |  c++ | >3.0.0  | A200DK/A300 | 调用dvpp的vdec接口，实现图片解码的功能。|
-| [venc](./cplusplus/level2_simple_inference/0_data_process/venc) |  c++ | >3.0.0  | A200DK/A300 | 调用dvpp的venc接口，实现视频编码功能。|
-| [jpegd](./cplusplus/level2_simple_inference/0_data_process/jpegd) |  c++ | >3.0.0  | A200DK/A300 | 调用dvpp的jpegd接口，实现图片解码的功能。|
-| [jpege](./cplusplus/level2_simple_inference/0_data_process/jpege) |  c++ | >3.0.0  | A200DK/A300 | 调用dvpp的jpege接口，实现图片编码的功能。|
-| [resize](./cplusplus/level2_simple_inference/0_data_process/resize) |  c++ | >3.0.0   | A200DK/A300 | 调用dvpp的resize接口，实现图像缩放功能。|
-| [batchcrop](./cplusplus/level2_simple_inference/0_data_process/batchcrop) |  c++ | >3.0.0   | A200DK/A300 | 从一张YUV图片中按指定区域抠出八张224*224子图。|
-| [venc<br>_image](./cplusplus/level2_simple_inference/0_data_process/venc_image) |  c++ | >3.0.0   | A200DK/A300 |将一张YUV图片连续编码生成H265格式的视频码流。|
-| [vdecandvenc](./cplusplus/level2_simple_inference/0_data_process/vdecandvenc) |  c++ | >3.0.0  | A200DK/A300 | 调用dvpp的venc和vdec接口，实现视频编码功能。|
-| [cropandpaste](./cplusplus/level2_simple_inference/0_data_process/cropandpaste) |  c++ | >3.0.0   | A200DK/A300 | 调用dvpp的cropandpaste接口，将图片指定位置大小图片粘贴到输出图片指定位置。|
-| [smallResolution<br>_cropandpaste](./cplusplus/level2_simple_inference/0_data_process/smallResolution_cropandpaste) | c++ | >3.0.0  | A200DK/A300 | 对指定输入图片进行抠图（包括抠图区域小于10*6），再贴图到输出图片中。|
+| [DVPP接口样例](./cplusplus/level2_simple_inference/0_data_process) |  c++ | >3.0.0  | A200DK/A300 | 调用dvpp的相关接口，实现图像处理。包含crop/vdec/venc/jpegd/jpege/resize/batchcrop/cropandpaste等功能 |
+| [自定义算子样例](./cplusplus/level1_single_api/4_op_dev/2_verify_op) |  c++ | >3.0.0   | A200DK/A300 | 自定义算子运行验证，包含Add算子/batchnorm算子/conv2d算子/lstm算子/matmul算子/reshape算子等运行验证。|
+| [200DK外设样例](./cplusplus/level1_single_api/5_200dk_peripheral) |  c++ | >3.0.0  | A200DK| 200DK外设接口相关案例，包含 对GPIO的引脚做配置/使用i2c读写数据/使用uart1串口收发数据/使用摄像头拍摄照片或视频 等功能。|
+| [C++通用分类样例](./cplusplus/level2_simple_inference/1_classification) |  c++ | >3.0.0   | A200DK/A300 | 使用googlenet/ResNet-50模型对输入数据进行分类推理。包含 通用图片/通用视频/动态batch/多batch/视频码流/通用摄像头 等多种特性样例。|
+| [C++通用检测样例](./cplusplus/level2_simple_inference/2_object_detection) |  c++ | >3.0.0   | A200DK/A300 | 使用人脸检测/yolov3/yolov4/vgg_ssd/faster_rcnn模型对输入数据进行检测。包含 通用图片/通用视频//视频码流/通用摄像头 等多种特性样例。|
 | [gemm](./cplusplus/level1_single_api/1_acl/4_blas/gemm) |  c++ | >3.0.0   | A200DK/A300 | 实现矩阵-矩阵乘运算。|
-| [acl_execute<br>_add](./cplusplus/level1_single_api/4_op_dev/2_verify_op/acl_execute_add) |  c++ | >3.0.0   | A200DK/A300 | 自定义Add算子运行验证。|
-| [acl_execute<br>_batchnorm](./cplusplus/level1_single_api/4_op_dev/2_verify_op/acl_execute_batchnorm) |  c++ | >3.0.0   | A200DK/A300 | 自定义batchnorm算子运行验证。|
-| [acl_execute<br>_conv2d](./cplusplus/level1_single_api/4_op_dev/2_verify_op/acl_execute_conv2d) |  c++ | >3.0.0   | A200DK/A300 | 自定义conv2d算子运行验证。|
-| [acl_execute<br>_lstm](./cplusplus/level1_single_api/4_op_dev/2_verify_op/acl_execute_lstm) |  c++ | >3.0.0   | A200DK/A300 | 自定义lstm算子运行验证。|
-| [acl_execute<br>_matmul](./cplusplus/level1_single_api/4_op_dev/2_verify_op/acl_execute_matmul) |  c++ | >3.0.0   | A200DK/A300 | 自定义matmul算子运行验证。|
-| [acl_execute<br>_reshape](./cplusplus/level1_single_api/4_op_dev/2_verify_op/acl_execute_reshape) |  c++ | >3.0.0   | A200DK/A300 | 自定义reshape算子运行验证。|
-| [gpio](./cplusplus/level1_single_api/5_200dk_peripheral/gpio) |  c++ | >3.0.0  | A200DK| 对GPIO的引脚做配置。|
-| [i2c](./cplusplus/level1_single_api/5_200dk_peripheral/i2c) |  c++ | >3.0.0   | A200DK| 使用i2c读写数据。|
-| [uart](./cplusplus/level1_single_api/5_200dk_peripheral/uart) |  c++ | >3.0.0  | A200DK| 使用uart1串口收发数据。|
-| [ascendcamera](./cplusplus/level1_single_api/5_200dk_peripheral/ascendcamera) |  c++ | >3.0.0   | A200DK| 使用摄像头拍摄照片或视频。|
-| [googlenet_imagenet<br>_video](./cplusplus/level2_simple_inference/1_classification/googlenet_imagenet_video) |  c++ | >3.0.0   | A200DK/A300 | 使用googlenet模型对输入视频进行分类推理。|
-| [googlenet_imagenet<br>_picture](./cplusplus/level2_simple_inference/1_classification/googlenet_imagenet_picture) | c++ | >3.0.0   | A200DK/A300 | 使用googlenet模型对输入图片进行分类推理。|
-| [vdec_resnet50<br>_classification](./cplusplus/level2_simple_inference/1_classification/vdec_resnet50_classification) | c++ |  >3.0.0  | A200DK/A300 | 基于Caffe ResNet-50网络实现对h265视频码流图片的分类推理。|
-| [resnet50_imagenet<br>_classification](./cplusplus/level2_simple_inference/1_classification/resnet50_imagenet_classification) | c++ | >3.0.0   | A200DK/A300 | 基于Caffe ResNet-50网络实现图片分类的功能。|
-| [resnet50_async_imagenet<br>_classification](./cplusplus/level2_simple_inference/1_classification/resnet50_async_imagenet_classification) | c++ |  >3.0.0   | A200DK/A300 | 基于Caffe ResNet-50网络（单输入、单Batch）实现多图异步分类推理。|
-| [googlenet_imagenet<br>_dynamic_batch](./cplusplus/level2_simple_inference/1_classification/googlenet_imagenet_dynamic_batch) | c++ | >3.0.0   | A200DK/A300 | 使用googlenet模型对输入图片进行分类推理，本案例采用了动态batch特性。|
-| [googlenet_imagenet<br>_multi_batch](./cplusplus/level2_simple_inference/1_classification/googlenet_imagenet_multi_batch) | c++ | >3.0.0   | A200DK/A300 | 使用googlenet模型对输入图片进行分类推理，本案例采用了多batch特性。|
-| [vpc_resnet50_imagenet<br>_classification](./cplusplus/level2_simple_inference/1_classification/vpc_resnet50_imagenet_classification) | c++ |  >3.0.0   | A200DK/A300 | 基于Caffe ResNet-50网络实现图片分类（图片解码+缩放+同步推理）|
-| [vpc_jpeg_resnet50<br>_imagenet_classification](./cplusplus/level2_simple_inference/1_classification/vpc_jpeg_resnet50_imagenet_classification) | c++ |  >3.0.0   | A200DK/A300 | 基于Caffe ResNet-50网络实现图片分类（图片解码+抠图缩放+图片编码+同步推理）|
-| [face_detection<br>_camera](./cplusplus/level2_simple_inference/2_object_detection/face_detection_camera) |  c++ | >3.0.0   | A200DK| 使用人脸检测模型对树莓摄像头中的即时视频进行人脸检测。|
-| [YOLOV3_coco<br>_detection_video](./cplusplus/level2_simple_inference/2_object_detection/YOLOV3_coco_detection_video) |  c++ | >3.0.0   | A200DK/A300 | 检测视频中出现的物体，并在视频中给出预测结果。|
-| [YOLOV3_coco<br>_detection_picture](./cplusplus/level2_simple_inference/2_object_detection/YOLOV3_coco_detection_picture) |  c++ | >3.0.0  | A200DK/A300 | 使用yolov3模型对输入图片进行预测推理，并将结果打印到输出图片上。|
-| [YOLOV4_coco<br>_detection_picture](./cplusplus/level2_simple_inference/2_object_detection/YOLOV4_coco_detection_picture) |  c++ | >3.0.0  | A200DK/A300 | 使用yolov4模型对输入图片进行预测推理，并将结果打印到输出图片上。|
-| [YOLOV3_VOC<br>_detection_picture](./cplusplus/level2_simple_inference/2_object_detection/YOLOV3_VOC_detection_picture) |  c++ | >3.0.0  | A200DK/A300 | 使用yolov3模型对输入图片进行预测推理，并将结果打印到输出图片上。（针对tensorflow模型，后处理由代码完成）|
-| [YOLOV3_coco<br>_detection_VENC](./cplusplus/level2_simple_inference/2_object_detection/YOLOV3_coco_detection_VENC) |  c++ | >3.0.0  | A200DK/A300 | 检测视频中出现的物体，并在视频中给出预测结果。|
-| [VGG_SSD_coco_detection<br>_CV_with_AIPP](./cplusplus/level2_simple_inference/2_object_detection/VGG_SSD_coco_detection_CV_with_AIPP) |  c++ | >3.0.0  | A200DK/A300 | 使用vgg_ssd模型对输入图片进行预测推理，并将结果打印到输出图片上。（使用opencv和aipp处理）|
-| [VGG_SSD_coco_detection<br>_CV_without_AIPP](./cplusplus/level2_simple_inference/2_object_detection/VGG_SSD_coco_detection_CV_without_AIPP) |  c++ | >3.0.0  | A200DK/A300 | 使用vgg_ssd模型对输入图片进行预测推理，并将结果打印到输出图片上。（使用opencv处理）|
-| [VGG_SSD_coco_detection<br>_DVPP_with_AIPP](./cplusplus/level2_simple_inference/2_object_detection/VGG_SSD_coco_detection_DVPP_with_AIPP) |  c++ | >3.0.0  | A200DK/A300 | 使用vgg_ssd模型对输入图片进行预测推理，并将结果打印到输出图片上。（使用dvpp和aipp处理）|
-| [YOLOV3_coco_detection<br>_dynamic_AIPP](./cplusplus/level2_simple_inference/2_object_detection/YOLOV3_coco_detection_dynamic_AIPP) |  c++ | >3.0.0 | A200DK/A300 | 使用yolov3模型对输入图片进行预测推理，并将结果打印到输出图片上。（使用了动态aipp特性）|
-| [YOLOV3_dynamic_batch<br>_detection_picture](./cplusplus/level2_simple_inference/2_object_detection/YOLOV3_dynamic_batch_detection_picture) |  c++ | >3.0.0 | A200DK/A300 | 基于Caffe YOLOv3网络实现目标检测。（动态Batch/动态分辨率）|
-| [faste_RCNN_VOC_detection<br>_dynamic_resolution](./cplusplus/level2_simple_inference/2_object_detection/faste_RCNN_VOC_detection_dynamic_resolution) |  c++ | >3.0.0 | A200DK/A300 | 使用faster_rcnn模型对输入图片进行预测推理，并将结果打印到输出图片上。|
 | [WAV_to_word](./cplusplus/level2_simple_inference/5_nlp/WAV_to_word) |  c++ | >3.0.0 | A200DK/A300 | 使用语音转换模型对输入语音进行推理。|
 | [colorization](./cplusplus/level2_simple_inference/6_other/colorization) |  c++ | >3.0.0 | A200DK/A300 | 使用colorization模型对输入的黑白图片进行上色推理。| 
 | [colorization<br>_video](./cplusplus/level2_simple_inference/6_other/colorization_video) |  c++ | >3.0.0 | A200DK/A300 | 使用黑白图像上色模型对输入的黑白视频进行推理。|
+| [DeRain](./cplusplus/level2_simple_inference/6_other/DeRain) |  c++ | >3.0.0 | A200DK/A300 | 通过读取本地雨天退化图像数据，对场景中的雨线、雨雾进行去除，实现图像增强效果。|
+| [DeblurGAN_GOPRO<br>_Blur2Sharp](./cplusplus/level2_simple_inference/6_other/DeblurGAN_GOPRO_Blur2Sharp) |  c++ | >3.0.0 | A200DK/A300 | 输入一张模糊图片，使用DeblurGAN将其变清晰。|
 | [YOLOV3_coco_detection<br>_multi_thread_VENC](./cplusplus/level2_simple_inference/n_performance/1_multi_process_thread/YOLOV3_coco_detection_multi_thread_VENC) |  c++ | >3.0.0 | A200DK/A300 | 使用yolov3模型对输入视频进行分类推理。（多线程处理）|
 | [face_recognition<br>_camera](./cplusplus/level2_simple_inference/n_performance/1_multi_process_thread/face_recognition_camera) |  c++ |3.1.0  | A200DK| 通过摄像头对视频中的人脸信息进行预测，与已注册的人脸进行比对，预测出最可能的用户。|
-| [googlenet_imagenet<br>_multi_batch](./python/level2_simple_inference/1_classification/googlenet_imagenet_multi_batch) |  python | >3.0.0 | A200DK/A300 | 使用googlenet模型对输入图片进行分类推理。（多batch）|
-| [googlenet_imagenet<br>_picture](./python/level2_simple_inference/1_classification/googlenet_imagenet_picture) | python | >3.0.0 | A200DK/A300 | 使用googlenet模型对输入图片进行分类推理。|
-| [YOLOV3_coco_detection<br>_picture](./python/level2_simple_inference/2_object_detection/YOLOV3_coco_detection_picture) | python | >3.0.0 | A200DK/A300 | 使用yolov3模型对输入图片进行预测推理，并将结果打印到输出图片上。|
-| [YOLOV3_mask_detection<br>_picture](./python/level2_simple_inference/2_object_detection/YOLOV3_mask_detection_picture) | python | >3.0.0  | A200DK/A300 | 实现了对图片中的口罩、人脸、人信息进行预测的功能。|
-| [YOLOV3_mask_detection<br>_video](./python/level2_simple_inference/2_object_detection/YOLOV3_mask_detection_video) | python | >3.0.0 | A200DK| 实现了对视频中的口罩、人脸、人信息进行预测的功能。|
-| [face_detection<br>_camera](./python/level2_simple_inference/2_object_detection/face_detection_camera) | python | >3.0.0 | A200DK| 使用人脸检测模型对树莓摄像头中的即时视频进行人脸检测。|
+| [multi_channels<br>_rtsp](./cplusplus/level2_simple_inference/n_performance/1_multi_process_thread/multi_channels_rtsp) |  c++ |>3.0.0  | A200DK/A300| 使用人脸检测模型同时对两路视频流进行人脸检测。|
+| [AI_painting](./cplusplus/contrib/AI_painting) |  c++ | >3.0.0  | A200DK/A300 | 使用AI_painting模型根据输入的类目和布局信息生成风景图画。|
+| [AscendBot](./cplusplus/contrib/AscendBot) |  c++ | >3.0.0  | A200DK/A300 | 智能小车被手机APK遥控，实现物体跟随、车轨道循线、防跌落功能。|
+| [HandWrite](./cplusplus/contrib/HandWrite) |  c++ | >3.0.0  | A200DK| 检测摄像头中的文字，并在presenter界面中给出检测结果。|
+| [ar_shadowgan](./cplusplus/contrib/ar_shadowgan) |  c++ | >3.0.0  | A200DK/A300 | AI图片GAN阴影生成样例，使用GAN模型对输入图片进行推理。|
+| [cartoonGAN_picture](./cplusplus/contrib/cartoonGAN_picture) |  c++ | >3.0.0  | A200DK/A300 | 卡通图像生成样例，使用cartoonGAN模型对输入图片进行卡通化处理。|
+| [human_segmentation](./cplusplus/contrib/human_segmentation) |  c++ | >3.0.0  | A200DK/A300 | 视频人体语义分割样例，使用语义分割模型对输入的视频中人体进行语义分割推理。|
+| [super_resolution](./cplusplus/contrib/super_resolution) |  c++ | >3.0.0  | A200DK/A300 | 超分辨率图像处理样例，使用SRCNN、FSRCNN、VDSR和ESPCN四种模型之一对输入图片进行图像超分辨率处理。|
+| [super_resolution](./cplusplus/contrib/super_resolution) |  c++ | >3.0.0  | A200DK/A300 | 超分辨率图像处理样例，使用SRCNN、FSRCNN、VDSR和ESPCN四种模型之一对输入图片进行图像超分辨率处理。|
+| [python通用分类](./python/level2_simple_inference/1_classification) |  python | >3.0.0 | A200DK/A300 | 使用googlenet/inceptionv3/vgg16模型对输入数据进行分类推理。|
+| [python通用检测](./python/level2_simple_inference/1_classification) |  python | >3.0.0 | A200DK/A300 |使用人脸检测/yolov3/yolov4模型对输入数据进行检测。|
+| [deeplabv3_pascal<br>_pic](./python/level2_simple_inference/3_segmentation/deeplabv3_pascal_pic) | python | >3.0.0 | A200DK/A300 | 使用deeplabv3+模型对输入图片进行语义分割。|
+| [bert_text_classification](./python/level2_simple_inference/5_nlp/bert_text_classification) | python | >3.0.0 | A200DK/A300 | 使用bert模型对文本进行分类。|
 | [colorization<br>_picture](./python/level2_simple_inference/6_other/colorization_picture) | python | >3.0.0 | A200DK/A300 | 使用colorization模型对输入的黑白图片进行上色推理。|
 | [colorization<br>_video](./python/level2_simple_inference/6_other/colorization_video) | python | >3.0.0 | A200DK/A300 | 使用黑白图像上色模型对输入的黑白视频进行推理。|
+| [imageinpainting<br>_hifill](./python/level2_simple_inference/6_other/imageinpainting_hifill) | python | >3.0.0 | A200DK/A300 | 高清图像修复样例，对待修复的jpg图片以及对应的mask图片进行超高分辨率的图像修复，生成修复后的图片。|
+| [YOLOV3_mask<br>_detection_e2e](./python/level2_simple_inference/n_e2e/YOLOV3_mask_detection_e2e) | python | >3.0.0 | A200DK/A300 | ModelArts+Ascend310 从modelarts到线下部署，开发口罩识别AI应用（图片输入+图片输出）|
+| [garbage_e2e](./python/level2_simple_inference/n_e2e/garbage_e2e) | python | >3.0.0 | A200DK/A300 | MindSpore+Ascend310 从MindSpore到线下部署，开发垃圾分类AI应用（图片输入+图片输出）|
+| [vgg16_cat<br>_dog_e2e](./python/level2_simple_inference/n_e2e/vgg16_cat_dog_e2e) | python | >3.0.0 | A200DK/A300 | ModelArts- jupyter +Ascend310 从ModelArts到线下部署，开发猫狗识别AI应用（图片输入+图片输出）|
+| [Robotic_Arm_Object<br>_Following](./python/level3_multi_model/Robotic_Arm_Object_Following) | python | >3.0.0 | A200DK | 使用Atlas200DK运行Yolov3模型，对双目深度相机给出的RGB数据流进行推理，实时检测目标在图像中的位置。并结合相机的深度数据流，控制机械臂的姿态，使得机械臂跟随目标移动。|
+| [3Dgesture<br>_recognition](./python/contrib/3Dgesture_recognition) | python | >3.0.0 | A200DK/A300 | 使用3DCNN模型对数据进行分类推理。|
+| [SentimentAnalysis](./python/contrib/SentimentAnalysis) | python | >3.0.0 | A200DK | 实现了句子级情感极性分类网络的推理功能，输出每个类别的置信度。|
+| [YOLOV3_plane<br>_detection](./python/contrib/YOLOV3_plane_detection) | python | >3.0.0 | A200DK | 实现对遥感图像中飞机目标检测的功能。|
+| [cartoonGAN<br>_picture](./python/contrib/cartoonGAN_picture) | python | >3.0.0 | A200DK/A300  | 使用cartoonGAN模型对输入图片进行卡通化处理。|
+| [crowd_count<br>_picture](./python/contrib/crowd_count_picture) | python | >3.0.0 | A200DK/A300  | 使用count_person.caffe模型对密集人群进行计数。|
+| [dehaze<br>_picture](./python/contrib/crowd_count_picture) | python | >3.0.0 | A200DK/A300  | 使用deploy_vel模型对输入图片进行去雾。|
+| [edge_detection<br>_picture](./python/contrib/edge_detection_picture) | python | >3.0.0 | A200DK/A300  | 使用RCF模型对输入图片进行边缘检测。|
+| [garbage<br>_picture](./python/contrib/garbage_picture) | python | >3.0.0 | A200DK/A300  | 使用mobilenetV2模型对输入图片进行分类推理。|
+| [gesture_recognition<br>_picture](./python/contrib/garbage_picture) | python | >3.0.0 | A200DK/A300  | 使用gesture_yuv模型对输入图片进行手势识别。|
+| [human_protein_map<br>_classification](./python/contrib/human_protein_map_classification) | python | >3.0.0 | A200DK/A300  | 对蛋白质图像进行自动化分类评估，本案例由上海交通大学提供。|
+| [image_HDR<br>_enhance](./python/contrib/image_HDR_enhance) | python | >3.0.0 | A200DK/A300  | 使用模型对曝光不足的输入图片进行HDR效果增强，本案例由深圳大学贡献。|
+| [inceptionv2<br>_picture](./python/contrib/inceptionv2_picture) | python | >3.0.0 | A200DK/A300  | 使用InceptionV2模型对输入的踢脚线图片进行分类推理，本样例由尚艺良品贡献。|
+| [portrait<br>_picture](./python/contrib/inceptionv2_picture) | python | >3.0.0 | A200DK/A300  | 使用PortraitNet模型对输入图片中人像进行分割，然后与背景图像融合，实现背景替换，本样例为清华大学贡献。|
 
 ## 样例部署
 
