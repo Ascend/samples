@@ -300,7 +300,8 @@ void VideoDecode::ProcessDecodedImage(shared_ptr<ImageData> frameData) {
     if (YUV420SP_SIZE(frameData->width, frameData->height) != frameData->size) {
         ATLAS_LOG_ERROR("Invalid decoded frame parameter, "
                         "width %d, height %d, size %d, buffer %p",
-                        frameData->width, frameData->height, frameData->size, frameData->data.get());
+                        frameData->width, frameData->height, 
+                        frameData->size, frameData->data.get());
         return;
     }
 
@@ -477,6 +478,8 @@ AtlasError VideoDecode::Read(ImageData& image) {
     image.format = frame->format;
     image.width = frame->width;
     image.height = frame->height;
+    image.alignWidth = frame->alignWidth;
+    image.alignHeight = frame->alignHeight;
     image.size = frame->size;
     image.data = frame->data;
 

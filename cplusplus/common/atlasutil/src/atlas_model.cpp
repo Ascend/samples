@@ -230,6 +230,25 @@ AtlasError AtlasModel::AddDatasetBuffer(aclmdlDataset *dataset,
     return ATLAS_OK;
 }
 
+AtlasError AtlasModel::Execute(vector<InferenceOutput>& inferOutputs, 
+                               void *data, uint32_t size) {
+    AtlasError ret = CreateInput(data, size);                                        
+    if (ret != ATLAS_OK) {
+        ATLAS_LOG_ERROR("Create mode input dataset failed");
+        return ret;
+    }
+
+    ret = Execute(inferOutputs);
+    if (ret != ATLAS_OK) {
+        DestroyInput();
+        ATLAS_LOG_ERROR("Execute model inference failed");
+        return ret;
+    }
+    DestroyInput();
+
+    return ATLAS_OK;
+}
+
 AtlasError AtlasModel::Execute(vector<InferenceOutput>& inferOutputs) {
     aclError ret = aclmdlExecute(modelId_, input_, output_);
     if (ret != ACL_ERROR_NONE) {

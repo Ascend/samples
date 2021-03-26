@@ -199,14 +199,16 @@ AtlasError Camera::Read(ImageData& image) {
     }
 
     int ret = ReadFrameFromCamera(id_, buffer, &size);
-    if (ret == LIBMEDIA_STATUS_FAILED) {
-        ATLAS_LOG_ERROR("Get image from camera %d failed", id_);
+    if ((ret == LIBMEDIA_STATUS_FAILED) || (size != (int)size_)) {
+        ATLAS_LOG_ERROR("Get image from camera %d failed, size %d", id_, size);
         return ATLAS_ERROR_READ_CAMERA_FRAME;
     }
    
     image.format = PIXEL_FORMAT_YUV_SEMIPLANAR_420;
     image.width = width_;
     image.height = height_;
+    image.alignWidth = width_;
+    image.alignHeight = height_;
     image.size = (uint32_t)size_;
     image.data = SHARED_PRT_DVPP_BUF(buffer);
 

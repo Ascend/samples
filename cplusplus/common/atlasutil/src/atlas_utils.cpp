@@ -149,14 +149,14 @@ void GetPathFiles(const string &path, vector<string> &fileVec) {
     }
 }
 
-void GetAllFiles(const string &path, vector<string> &fileVec) {
+void GetAllFiles(const string &pathList, vector<string> &fileVec) {
     // split file path
     vector<string> pathVec;
-    SplitPath(path, pathVec);
+    SplitPath(pathList, pathVec);
 
     for (string everyPath : pathVec) {
         // check path exist or not
-        if (!IsPathExist(path)) {
+        if (!IsPathExist(pathList)) {
             ATLAS_LOG_ERROR("Failed to deal path=%s. Reason: not exist or can not access.",
                 everyPath.c_str());
             continue;
@@ -237,7 +237,7 @@ aclrtMemcpyKind GetCopyPolicy(aclrtRunMode srcDev,
     return policy;
 }
 
-void* CopyDataToDevice(void* data, uint32_t size, 
+void* CopyDataToDevice(const void* data, uint32_t size, 
                        aclrtRunMode curRunMode, MemoryType memType) {                        
     if ((data == nullptr) || (size == 0) || 
         ((curRunMode != ACL_HOST) && (curRunMode != ACL_DEVICE)) ||
@@ -253,7 +253,24 @@ void* CopyDataToDevice(void* data, uint32_t size,
     return CopyData(data, size, policy, memType);
 }
 
-void* CopyDataToHost(void* data, uint32_t size, 
+AtlasError CopyDataToDeviceEx(void* dest, uint32_t destSize, 
+                              const void* src, uint32_t srcSize, 
+                              aclrtRunMode runMode) {
+    aclrtMemcpyKind policy = ACL_MEMCPY_HOST_TO_DEVICE;
+    if (runMode == ACL_DEVICE) {
+        policy = ACL_MEMCPY_DEVICE_TO_DEVICE;
+    }  
+
+    aclError aclRet = aclrtMemcpy(dest, destSize, src, srcSize, policy);
+    if (aclRet != ACL_ERROR_NONE) {
+        ATLAS_LOG_ERROR("Copy data to device failed, aclRet is %d", aclRet);
+        return ATLAS_ERROR;
+    } 
+
+    return ATLAS_OK;                            
+}
+
+void* CopyDataToHost(const void* data, uint32_t size, 
                      aclrtRunMode curRunMode, MemoryType memType) {                        
     if ((data == nullptr) || (size == 0) || 
         ((curRunMode != ACL_HOST) && (curRunMode != ACL_DEVICE)) ||
@@ -269,10 +286,29 @@ void* CopyDataToHost(void* data, uint32_t size,
     return CopyData(data, size, policy, memType);
 }
 
-void* CopyData(void* data, uint32_t size, 
+AtlasError CopyDataToHostEx(void* dest, uint32_t destSize, 
+                            const void* src, uint32_t srcSize, 
+                            aclrtRunMode runMode) {
+    aclrtMemcpyKind policy = ACL_MEMCPY_DEVICE_TO_HOST;
+    if (runMode == ACL_DEVICE) {
+        policy = ACL_MEMCPY_DEVICE_TO_DEVICE;
+    }  
+
+    aclError aclRet = aclrtMemcpy(dest, destSize, src, srcSize, policy);
+    if (aclRet != ACL_ERROR_NONE) {
+        ATLAS_LOG_ERROR("Copy data to device failed, aclRet is %d", aclRet);
+        return ATLAS_ERROR;
+    } 
+
+    return ATLAS_OK;                            
+}
+
+void* CopyData(const void* data, uint32_t size, 
                aclrtMemcpyKind policy, MemoryType memType) {
     void* buffer = MallocMemory(size, memType);
-    if (buffer == nullptr) return nullptr;
+    if (buffer == nullptr) {
+        return nullptr;
+    }
 
     aclError aclRet = aclrtMemcpy(buffer, size, data, size, policy);
     if (aclRet != ACL_ERROR_NONE) {
@@ -299,6 +335,31 @@ AtlasError CopyImageToLocal(ImageData& destImage,
     destImage.alignWidth = srcImage.alignWidth;
     destImage.alignHeight = srcImage.alignHeight;
     destImage.data = SHARED_PRT_U8_BUF(data);
+
+    return ATLAS_OK;
+}
+
+AtlasError CopyImageToDevice(ImageData& destImage, ImageData& srcImage, 
+                             aclrtRunMode curRunMode, MemoryType memType) {
+    void* data = CopyDataToDevice(srcImage.data.get(), srcImage.size,
+                                  curRunMode, memType);
+    if (data == nullptr) {
+        return ATLAS_ERROR_COPY_DATA;
+    }
+
+    destImage.format = srcImage.format;
+    destImage.width = srcImage.width;
+    destImage.height = srcImage.height;
+    destImage.size = srcImage.size;
+    destImage.alignWidth = srcImage.alignWidth;
+    destImage.alignHeight = srcImage.alignHeight;
+    
+    if(memType == MEMORY_DEVICE) {
+        destImage.data = SHARED_PRT_DEV_BUF(data);
+    }
+    else {
+        destImage.data = SHARED_PRT_DVPP_BUF(data);
+    }
 
     return ATLAS_OK;
 }
@@ -361,7 +422,7 @@ AtlasError ReadJpeg(ImageData& image, std::string& fileName) {
     return ATLAS_OK;
 }
 
-void SaveBinFile(const string& filename, void* data, uint32_t size) {
+void SaveBinFile(const string& filename, const void* data, uint32_t size) {
     FILE *outFileFp = fopen(filename.c_str(), "wb+");
     if (outFileFp == nullptr) {
         ATLAS_LOG_ERROR("Save file %s failed for open error", filename.c_str());

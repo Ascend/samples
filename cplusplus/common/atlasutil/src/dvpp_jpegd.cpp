@@ -37,8 +37,8 @@ DvppJpegD::~DvppJpegD()
 
 AtlasError DvppJpegD::InitDecodeOutputDesc(ImageData& inputImage)
 {
-    uint32_t decodeOutWidthStride = ALIGN_UP16(inputImage.width);
-    uint32_t decodeOutHeightStride = ALIGN_UP2(inputImage.height);
+    uint32_t decodeOutWidthStride = ALIGN_UP128(inputImage.width);
+    uint32_t decodeOutHeightStride = ALIGN_UP16(inputImage.height);
     if (decodeOutWidthStride == 0 || decodeOutHeightStride == 0) {
         ATLAS_LOG_ERROR("Input image width %d or height %d invalid",
                         inputImage.width, inputImage.height);
@@ -92,11 +92,11 @@ AtlasError DvppJpegD::Process(ImageData& dest, ImageData& src)
         ATLAS_LOG_ERROR("Sync stream failed, error: %d", aclRet);
         return ATLAS_ERROR_SYNC_STREAM;
     }
-
-    dest.width = src.width;
-    dest.height = src.height;
-    dest.alignWidth = ALIGN_UP16(src.width);
-    dest.alignHeight = ALIGN_UP2(src.height);
+    dest.format = PIXEL_FORMAT_YUV_SEMIPLANAR_420;
+    dest.width = ALIGN_UP128(src.width);
+    dest.height = ALIGN_UP16(src.height);
+    dest.alignWidth = dest.width;
+    dest.alignHeight = dest.height;
     dest.size = YUV420SP_SIZE(dest.alignWidth, dest.alignHeight);
     dest.data = SHARED_PRT_DVPP_BUF(decodeOutBufferDev_);
 
