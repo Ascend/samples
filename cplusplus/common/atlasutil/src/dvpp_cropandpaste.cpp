@@ -31,12 +31,16 @@ DvppCropAndPaste::DvppCropAndPaste(aclrtStream& stream,
 : stream_(stream), dvppChannelDesc_(dvppChannelDesc), vpcInputDesc_(nullptr), 
 vpcOutputDesc_(nullptr), vpcOutBufferDev_(nullptr),vpcOutBufferSize_(0), 
 cropArea_(nullptr), pasteArea_(nullptr){
-    size_.width = rbHorz - ltHorz;
-    size_.height = rbVert - ltVert;
-    ltHorz_ = ltHorz;
-    rbHorz_ = rbHorz;
-    ltVert_ = ltVert;
-    rbVert_ = rbVert;
+    // Change the left top coordinate to even numver
+    ltHorz_ = (ltHorz >> 1) << 1;
+    ltVert_ = (ltVert >> 1) << 1;
+
+    // Change the left top coordinate to odd numver
+    rbHorz_ = ((rbHorz >> 1) << 1) - 1;
+    rbVert_ = ((rbVert >> 1) << 1) - 1;
+
+    size_.width = rbHorz_ - ltHorz_;
+    size_.height = rbVert_ - ltVert_;
 }
 
 DvppCropAndPaste::~DvppCropAndPaste() {
@@ -44,8 +48,8 @@ DvppCropAndPaste::~DvppCropAndPaste() {
 }
 
 AtlasError DvppCropAndPaste::InitCropAndPasteInputDesc(ImageData& inputImage) {
-    uint32_t alignWidth = ALIGN_UP128(inputImage.width);
-    uint32_t alignHeight = ALIGN_UP16(inputImage.height);
+    uint32_t alignWidth = ALIGN_UP16(inputImage.width);
+    uint32_t alignHeight = ALIGN_UP2(inputImage.height);
     if (alignWidth == 0 || alignHeight == 0) {
         ATLAS_LOG_ERROR("Invalid image parameters, width %d, height %d",
                         inputImage.width, inputImage.height);
@@ -55,12 +59,12 @@ AtlasError DvppCropAndPaste::InitCropAndPasteInputDesc(ImageData& inputImage) {
     uint32_t inputBufferSize = YUV420SP_SIZE(alignWidth, alignHeight);
     vpcInputDesc_ = acldvppCreatePicDesc();
     if (vpcInputDesc_ == nullptr) {
-        ATLAS_LOG_ERROR("acldvppCreatePicDesc vpcInputDesc_ failed");
+        ATLAS_LOG_ERROR("Dvpp crop create pic desc failed");
         return ATLAS_ERROR;
     }
 
     acldvppSetPicDescData(vpcInputDesc_, inputImage.data.get());
-    acldvppSetPicDescFormat(vpcInputDesc_, inputImage.format);
+    acldvppSetPicDescFormat(vpcInputDesc_, PIXEL_FORMAT_YUV_SEMIPLANAR_420);
     acldvppSetPicDescWidth(vpcInputDesc_, inputImage.width);
     acldvppSetPicDescHeight(vpcInputDesc_, inputImage.height);
     acldvppSetPicDescWidthStride(vpcInputDesc_, alignWidth);
@@ -72,35 +76,39 @@ AtlasError DvppCropAndPaste::InitCropAndPasteInputDesc(ImageData& inputImage) {
 
 AtlasError DvppCropAndPaste::InitCropAndPasteOutputDesc()
 {
-    int resizeOutWidth = size_.width;
-    int resizeOutHeight = size_.height;
-    int resizeOutWidthStride = ALIGN_UP16(resizeOutWidth);
-    int resizeOutHeightStride = ALIGN_UP2(resizeOutHeight);
+    int cropOutWidth = size_.width;
+    int cropOutHeight = size_.height;
+    int cropOutWidthStride = ALIGN_UP16(cropOutWidth);
+    int cropOutHeightStride = ALIGN_UP2(cropOutHeight);
 
-    if (resizeOutWidthStride == 0 || resizeOutHeightStride == 0) {
-        ATLAS_LOG_ERROR("InitResizeOutputDesc AlignmentHelper failed");
+    if (cropOutWidthStride == 0 || cropOutHeightStride == 0) {
+        ATLAS_LOG_ERROR("Crop image align widht(%d) and height(%d) failed",
+                        size_.width, size_.height);
         return ATLAS_ERROR;
     }
 
-    vpcOutBufferSize_ = YUV420SP_SIZE(resizeOutWidthStride, resizeOutHeightStride);
-
+    vpcOutBufferSize_ = YUV420SP_SIZE(cropOutWidthStride, 
+                                      cropOutHeightStride);
     aclError aclRet = acldvppMalloc(&vpcOutBufferDev_, vpcOutBufferSize_);
     if (aclRet != ACL_ERROR_NONE) {
-        ATLAS_LOG_ERROR("acldvppMalloc vpcOutBufferDev_ failed, aclRet = %d", aclRet);
+        ATLAS_LOG_ERROR("Dvpp crop malloc output memory failed, crop "
+                        "width %d, height %d size %d, error %d", 
+                        size_.width, size_.height, 
+                        vpcOutBufferSize_, aclRet);
         return ATLAS_ERROR;
     }
 
     vpcOutputDesc_ = acldvppCreatePicDesc();
     if (vpcOutputDesc_ == nullptr) {
-        ATLAS_LOG_ERROR("acldvppCreatePicDesc vpcOutputDesc_ failed");
+        ATLAS_LOG_ERROR("Dvpp crop create pic desc failed");
         return ATLAS_ERROR;
     }
     acldvppSetPicDescData(vpcOutputDesc_, vpcOutBufferDev_);
     acldvppSetPicDescFormat(vpcOutputDesc_, PIXEL_FORMAT_YUV_SEMIPLANAR_420);
-    acldvppSetPicDescWidth(vpcOutputDesc_, resizeOutWidth);
-    acldvppSetPicDescHeight(vpcOutputDesc_, resizeOutHeight);
-    acldvppSetPicDescWidthStride(vpcOutputDesc_, resizeOutWidthStride);
-    acldvppSetPicDescHeightStride(vpcOutputDesc_, resizeOutHeightStride);
+    acldvppSetPicDescWidth(vpcOutputDesc_, cropOutWidth);
+    acldvppSetPicDescHeight(vpcOutputDesc_, cropOutHeight);
+    acldvppSetPicDescWidthStride(vpcOutputDesc_, cropOutWidthStride);
+    acldvppSetPicDescHeightStride(vpcOutputDesc_, cropOutHeightStride);
     acldvppSetPicDescSize(vpcOutputDesc_, vpcOutBufferSize_);
 
     return ATLAS_OK;
@@ -108,19 +116,19 @@ AtlasError DvppCropAndPaste::InitCropAndPasteOutputDesc()
 
 AtlasError DvppCropAndPaste::InitCropAndPasteResource(ImageData& inputImage) {
     if (ATLAS_OK != InitCropAndPasteInputDesc(inputImage)) {
-        ATLAS_LOG_ERROR("InitCropAndPasteInputDesc failed");
+        ATLAS_LOG_ERROR("Dvpp crop init input failed");
         return ATLAS_ERROR;
     }
 
     if (ATLAS_OK != InitCropAndPasteOutputDesc()) {
-        ATLAS_LOG_ERROR("InitCropAndPasteOutputDesc failed");
+        ATLAS_LOG_ERROR("Dvpp crop init output failed");
         return ATLAS_ERROR;
     }
 
     return ATLAS_OK;
 }
 
-AtlasError DvppCropAndPaste::Process(ImageData& resizedImage, ImageData& srcImage)
+AtlasError DvppCropAndPaste::Process(ImageData& cropedImage, ImageData& srcImage)
 {
     if (ATLAS_OK != InitCropAndPasteResource(srcImage)) {
         ATLAS_LOG_ERROR("Dvpp cropandpaste failed for init error");
@@ -173,14 +181,13 @@ AtlasError DvppCropAndPaste::Process(ImageData& resizedImage, ImageData& srcImag
         ATLAS_LOG_ERROR("crop and paste aclrtSynchronizeStream failed, aclRet = %d", aclRet);
         return ATLAS_ERROR;
     }
-
-    resizedImage.width = size_.width;
-    resizedImage.height = size_.height;
-    resizedImage.alignWidth = ALIGN_UP16(size_.width);
-    resizedImage.alignHeight = ALIGN_UP2(size_.height);
-    resizedImage.size = vpcOutBufferSize_;
-    //resizedImage.data = SHARED_PRT_DVPP_BUF(vpcOutBufferDev_);
-    resizedImage.data = SHARED_PRT_DVPP_BUF(vpcOutBufferDev_);
+    cropedImage.format = PIXEL_FORMAT_YUV_SEMIPLANAR_420;
+    cropedImage.width = ALIGN_UP16(size_.width);
+    cropedImage.height = ALIGN_UP2(size_.height);
+    cropedImage.alignWidth = cropedImage.width;
+    cropedImage.alignHeight = cropedImage.height;
+    cropedImage.size = vpcOutBufferSize_;
+    cropedImage.data = SHARED_PRT_DVPP_BUF(vpcOutBufferDev_);
 
     DestroyCropAndPasteResource();
 

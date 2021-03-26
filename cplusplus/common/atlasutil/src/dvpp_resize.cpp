@@ -71,14 +71,16 @@ AtlasError DvppResize::InitResizeOutputDesc()
     int resizeOutWidthStride = ALIGN_UP16(resizeOutWidth);
     int resizeOutHeightStride = ALIGN_UP2(resizeOutHeight);
     if (resizeOutWidthStride == 0 || resizeOutHeightStride == 0) {
-        ATLAS_LOG_ERROR("InitResizeOutputDesc AlignmentHelper failed");
+        ATLAS_LOG_ERROR("Align resize width(%d) and height(%d) failed",
+                        size_.width, size_.height);
         return ATLAS_ERROR_INVALID_ARGS;
     }
 
     vpcOutBufferSize_ = YUV420SP_SIZE(resizeOutWidthStride, resizeOutHeightStride);
     aclError aclRet = acldvppMalloc(&vpcOutBufferDev_, vpcOutBufferSize_);
     if (aclRet != ACL_ERROR_NONE) {
-        ATLAS_LOG_ERROR("acldvppMalloc vpcOutBufferDev_ failed, aclRet = %d", aclRet);
+        ATLAS_LOG_ERROR("Dvpp resize malloc output buffer failed, "
+                        "size %d, error %d", vpcOutBufferSize_, aclRet);
         return ATLAS_ERROR_MALLOC_DVPP;
     }
 
@@ -142,7 +144,7 @@ AtlasError DvppResize::Process(ImageData& resizedImage, ImageData& srcImage)
         ATLAS_LOG_ERROR("resize aclrtSynchronizeStream failed, error: %d", aclRet);
         return ATLAS_ERROR_SYNC_STREAM;
     }
-
+    resizedImage.format = PIXEL_FORMAT_YUV_SEMIPLANAR_420;
     resizedImage.width = size_.width;
     resizedImage.height = size_.height;
     resizedImage.alignWidth = ALIGN_UP16(size_.width);

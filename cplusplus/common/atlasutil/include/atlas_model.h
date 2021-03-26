@@ -36,6 +36,8 @@ public:
     AtlasError CreateInput(void *input1, uint32_t input1size,
                        void* input2, uint32_t input2size);
     AtlasError CreateInput(std::vector<DataInfo>& inputData);
+    AtlasError Execute(std::vector<InferenceOutput>& inferOutputs, 
+                       void *data, uint32_t size);
     AtlasError Execute(std::vector<InferenceOutput>& inferOutputs);
     void DestroyInput();
 
