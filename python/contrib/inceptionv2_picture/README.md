@@ -6,7 +6,7 @@
 **本README只提供命令行方式运行样例的指导，如需在Mindstudio下运行样例，请参考[Mindstudio运行图片样例wiki](https://gitee.com/ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E5%9B%BE%E7%89%87%E6%A0%B7%E4%BE%8B?sort_id=3164874)。**
 
 
-## InceptionV2踢脚线分类样例（本样例由南京尚艺贡献 ）
+## InceptionV2踢脚线分类样例（本样例由[尚艺良品](https://www.sunywonders.com/index.html#/AboutUs)贡献 ）
 
 
 功能：使用InceptionV2模型对输入的踢脚线图片进行分类推理。
