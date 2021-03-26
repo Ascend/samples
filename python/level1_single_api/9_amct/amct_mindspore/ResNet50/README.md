@@ -1,14 +1,22 @@
-# ResNet-50 calibration sample
+# ResNet-50 calibration and quantization aware training sample
 
-This is a sample to quick start with amct-mindspore tool
+amct_mindspore 工具 sample 运行指导
+
+### 环境要求
+1. Ascend 910 host 环境；
+2. 安装 mindspore 1.2.0 Ascend 版本；
+   安装指导参考 [mindspore 官网安装指导页](https://www.mindspore.cn/install)
+3. 安装与 mindspore 1.2.0 配套的 amct_mindspore 1.0.7 版本；
 
 ## Usage
 
 ### 1. Prepare the checkpoint
 
-now you can download the pretrained ResNet-50 based on CIFAR-10 dataset from MindSpore official website;
+你可以在mindspore的官网下载 ResNet50 的预训练 checkpoint 文件，训练基于 CIFAR-10 dataset；
 
 [resnet50 mindspore pretrain model download page](https://www.mindspore.cn/resources/hub/details?MindSpore/ascend/0.7/resnet50_v1.5_cifar10)
+
+将 resnet50.ckpt 文件放到 model 目录；
 
 ### 2. Prepare the dataset CIFAR-10
 
@@ -42,3 +50,8 @@ cd src
 python3 resnet50_sample.py --dataset_path your_dataset_path  --checkpoint_path your_resnet50_checkpoint_file_path
 ```
 
+### 5. Run the quant aware training scritp
+```python
+cd src
+python3 resnet50_retrain_sample.py 
+```
