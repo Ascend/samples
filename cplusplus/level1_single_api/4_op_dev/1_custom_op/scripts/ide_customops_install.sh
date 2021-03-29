@@ -77,7 +77,13 @@ fi
 changemode()
 {
     if [ -d ${targetdir} ];then
-        chmod -R 550 ${targetdir}
+        # chmod -R 550 ${targetdir}
+        subdirs=$(ls "${targetdir}" 2> /dev/null)
+        for dir in ${subdirs}; do
+            if [[ ${dir} != "Ascend310" ]] && [[ ${dir} != "Ascend310RC" ]]&& [[ ${dir} != "Ascend910" ]] && [[ ${dir} != "Ascend710" ]]  && [[ ${dir} != "aicpu" ]]; then
+                chmod -R 550 "${targetdir}/${dir}" >/dev/null 2>&1
+            fi
+        done
     fi
 
     if [ $? -ne 0 ];then
@@ -92,7 +98,12 @@ if [ $? -ne 0 ];then
     exit 1
 fi
 
-chmod -R -w ${targetdir}
+subdirs=$(ls "${targetdir}" 2> /dev/null)
+for dir in ${subdirs}; do
+    if [[ ${dir} != "Ascend310" ]] && [[ ${dir} != "Ascend310RC" ]]&& [[ ${dir} != "Ascend910" ]] && [[ ${dir} != "Ascend710" ]]  && [[ ${dir} != "aicpu" ]]; then
+        chmod -R -w "${targetdir}/${dir}"  >/dev/null 2>&1
+    fi
+done
 if [ $? -ne 0 ];then
     exit 1
 fi
