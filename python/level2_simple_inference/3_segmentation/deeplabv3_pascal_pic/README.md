@@ -50,18 +50,18 @@
 
     参考下表获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到开发环境普通用户下的任意目录，例如：$HOME/models/deeplabv3_parscal_pic。
 
-    |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
+    |  **模型名称**  |  **模型说明**  |  **模型参考路径**  |
     |---|---|---|
-    | deeplabv3+ | 语义分割推理模型。是基于tensorflow的deeplabv3+模型。 | 请参考[https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/deeplab-v3-plus](https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/deeplab-v3-plus)下载模型。 |
+    | deeplabv3+ | 语义分割推理模型 | 请参考[https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/deeplab-v3-plus](https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/deeplab-v3-plus)下载模型。 |
 
-    ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
+    ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **模型下载说明：**  
 
     > 
      **wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com:443/003_Atc_Models/nkxiaolei/DeepLapV3_Plus/deeplabv3_plus.pb**
 
 3. 将原始模型转换为Davinci模型方法。
    
-    **注：请确认环境变量已经在[环境准备和依赖安装](https://gitee.com/ascend/samples/tree/dev/python/environment)中配置完成**
+    **注：请确认环境变量已经在[环境准备和依赖安装](../../python/environment)中配置完成**
 
     1. 设置LD_LIBRARY_PATH环境变量。
 
