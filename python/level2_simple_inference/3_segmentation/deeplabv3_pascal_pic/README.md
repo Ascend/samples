@@ -71,7 +71,8 @@
 
     2. 执行以下命令下载aipp配置文件并使用atc命令进行模型转换。
 ```
-        atc --model=./deeplabv3_plus.pb --framework=3 --output=deeplabv3_plus --soc_version=Ascend310  --input_shape="ImageTensor:1,513,513,3"
+        atc --model=./deeplabv3_plus.pb --framework=3 --output=deeplabv3_plus --soc_version=Ascend310  --input_shape="ImageTensor:1,513,513,3" --output_type="SemanticPredictions:0:FP32" --out_nodes="SemanticPredictions:0"
+
 ```
     3. 执行以下命令将转换好的模型复制到样例中model文件夹中。
 
