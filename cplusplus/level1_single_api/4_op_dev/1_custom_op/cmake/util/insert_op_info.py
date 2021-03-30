@@ -14,20 +14,20 @@ if __name__ == '__main__':
         exit(2)
 
     with open(sys.argv[1], 'r') as load_f:
-        insert_op = json.load(load_f)
+        insert_operator = json.load(load_f)
 
-    all_op = {}
+    all_operators = {}
     if os.path.exists(sys.argv[2]):
         if os.path.getsize(sys.argv[2]) != 0:
             with open(sys.argv[2], 'r') as load_f:
-                all_op = json.load(load_f)
+                all_operators = json.load(load_f)
 
-    for k in insert_op.keys():
-        if k in all_op.keys():
+    for k in insert_operator.keys():
+        if k in all_operators.keys():
             print('replace op:[', k, '] success')
         else:
             print('insert op:[', k, '] success')
-        all_op[k] = insert_op[k]
+        all_operators[k] = insert_operator[k]
 
-    with open(sys.argv[2], 'w') as f:
-        f.write(json.dumps(all_op, indent=4))
+    with open(sys.argv[2], 'w') as json_file:
+        json_file.write(json.dumps(all_operators, indent=4))
