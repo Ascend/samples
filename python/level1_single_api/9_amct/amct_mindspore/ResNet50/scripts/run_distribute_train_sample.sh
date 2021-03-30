@@ -16,7 +16,7 @@
 
 if [ $# != 6 ]
 then
-	echo "Usage: sh run_distribute_train_sample.sh [resnet50] [cifar10] [RANK_TABLE_FILE] [TRAIN_DATASET_PATH] [EVAL_DATASET_PATH] [PRETRAINED_CKPT_PATH]"
+	echo "Usage: bash run_distribute_train_sample.sh [resnet50] [cifar10] [RANK_TABLE_FILE] [TRAIN_DATASET_PATH] [EVAL_DATASET_PATH] [PRETRAINED_CKPT_PATH]"
 exit 1
 fi
 
@@ -92,7 +92,7 @@ do
     export RANK_ID=$((rank_start + i))
     rm -rf ./train_parallel$i
     mkdir ./train_parallel$i
-    cp ../*.py ./train_parallel$i
+    cp ../src/*.py ./train_parallel$i
     cp *.sh ./train_parallel$i
     cp -r ../src ./train_parallel$i
     cp -r ../amct_dump ./train_parallel$i

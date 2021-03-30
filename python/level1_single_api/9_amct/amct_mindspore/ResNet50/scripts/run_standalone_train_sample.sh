@@ -16,7 +16,7 @@
 
 if [ $# != 5 ]
 then
-	echo "Usage: sh run_standalone_train_sample.sh [resnet50] [cifar10] [TRAIN_DATASET_PATH] [EVAL_DATASET_PATH] [PRETRAINED_CKPT_PATH]"
+	echo "Usage: bash run_standalone_train_sample.sh [resnet50] [cifar10] [TRAIN_DATASET_PATH] [EVAL_DATASET_PATH] [PRETRAINED_CKPT_PATH]"
 exit 1
 fi
 
@@ -80,7 +80,7 @@ then
     rm -rf ./train
 fi
 mkdir ./train
-cp ../*.py ./train
+cp ../src/*.py ./train
 cp *.sh ./train
 cp -r ../src ./train
 cd ./train || exit

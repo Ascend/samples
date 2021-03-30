@@ -68,7 +68,7 @@ def download_file(url_path, file_name):
         return
 
     urllib.request.urlretrieve(url_path, download_file_path)
-    print("[INFO]Download file_name to '{}' success.".format(download_file_path))
+    print("[INFO]Download file to '{}' success.".format(download_file_path))
 
 
 if __name__ == '__main__':
