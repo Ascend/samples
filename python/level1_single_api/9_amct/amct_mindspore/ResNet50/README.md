@@ -144,9 +144,9 @@ python3.7.5 resnet50_retrain_sample.py [-h][--net NET][--dataset DATASET][--run_
 
 2. 量化脚本所用参数：
 
-   | 参数             | 说明                                               |
-| ---------------- | -------------------------------------------------- |
-   | -h               | 是否必填：否                                       |
+| 参数             | 说明                                             |
+| ---------------- | --------------------------------------------------|
+| -h               | 是否必填：否                                     |
 |                  | 参数解释：显示帮助信息                             |
 | --net            | 是否必填：否                                       |
 |                  | 数据类型：string                                   |
@@ -204,7 +204,7 @@ python3.7.5 resnet50_retrain_sample.py --train_dataset ../cifar-10-batches-bin -
   ```
 
   参数说明：
-  | 参数                   | 说明                                               |
+| 参数                   | 说明                                               |
 | ---------------------- | -------------------------------------------------- |
 | -h                     | 是否必填：否                                       |
 |                        | 参数解释：显示帮助信息                             |
@@ -216,14 +216,14 @@ python3.7.5 resnet50_retrain_sample.py --train_dataset ../cifar-10-batches-bin -
 |                        | 数据类型：string                                   |
 |                        | 默认值：cifar10                                    |
 |                        | 参数解释：指定数据集，目前只支持 cifar10           |
-| [EVAL_DATASET_PATH]    | 是否必填：是                                       |
+| [TRAIN_DATASET_PATH]   | 是否必填：是                                       |
 |                        | 数据类型：string                                   |
 |                        | 默认值：None                                       |
-|                        | 参数解释：测试集路径                               |
-| [TRAIN_DATASET_PATH]   | 是否必填：是                                       |
+|                        | 参数解释：训练集路径                               |
+| [EVAL_DATASET_PATH]    | 是否必填：是                                       |
 |                        | 数据类型: string                                   |
 |                        | 默认值: None                                       |
-|                        | 参数解释：训练集路径                               |
+|                        | 参数解释：测试集路径                               |
 | [PRETRAINED_CKPT_PATH] | 是否必填：是                                       |
 |                        | 数据类型：string                                   |
 |                        | 默认值：None                                       |
@@ -231,7 +231,7 @@ python3.7.5 resnet50_retrain_sample.py --train_dataset ../cifar-10-batches-bin -
 使用示例如下：
 
 ```shell
-sh run_standalone_train_sample.sh resnet50 cifar10 ../cifar-10-batches-bin --eval_dataset ../cifar-10-verify-bin --pre_trained ../resnet50.ckpt
+bash run_standalone_train_sample.sh resnet50 cifar10 ../cifar-10-batches-bin  ../cifar-10-verify-bin ../resnet50.ckpt
 ```
 
 若出现以下信息，则说明量化感知训练成功：
@@ -254,3 +254,100 @@ INFO-[AMCT]:[QuantizeTool]: Generate AIR file: xxx/resnet50_quant_geir.air succe
 
 ### 6. 多 device 量化感知训练示例
 
+1. 生成hccl 分布式配置文件。
+
+   hccl分布式配置文件依赖训练环境device侧 /etc 目录下的 hccn.conf 配置文件，所以生成 hccl 分布式配置文件之前，请确保训练环境已经搭建好，并且存在 hccn.conf 配置文件。
+
+   切换到src 目录下，执行如下命令:
+
+   ```shell
+   python3.7.5 hccl_tools.py --device_num DEVICE_NUM --visible_devices VISIBLE_DEVICES --server_ip SERVER_IP
+   ```
+
+   参数说明：
+
+   | 参数              | 说明                                                         |
+   | ----------------- | ------------------------------------------------------------ |
+   | -h                | 是否必填：否                                                 |
+   |                   | 参数解释：显示帮助信息                                       |
+   | --device_num      | 是否必填：是                                                 |
+   |                   | 数据类型：string                                             |
+   |                   | 默认值： “[0,8)”                                             |
+   |                   | 参数解释：训练场景使用device个数，取值范围是[0,8)，最多支持8个device。取值必须连续，例如[0,4)，则表示使用0，1，2，3四个device，不允许跨device使用，例如[3,6)，取值需放在双引号内 |
+   | --visible_devices | 是否必填：否                                                 |
+   |                   | 数据类型： string                                            |
+   |                   | 默认值： "0,1,2,3,4,5,6,7"                                   |
+   |                   | 参数解释：按顺序的可用设备                                   |
+   | --server_ip       | 是否必填：否                                                 |
+   |                   | 数据类型: string                                             |
+   |                   | 默认值： None                                                |
+   |                   | 参数解释：训练host服务器的ip                                 |
+
+   使用示例：
+
+   ```
+   python3.7.5 hccl_tools.py --device_num "[0,8)"
+   ```
+
+   执行上述命令后，在 src 当前目录生成 hccl_xxx.json 文件，示例，hccl_1p_0_127.0.0.1.json文件，该文件记录了device0的IP地址，以及device ID等信息，用于决定后续执行训练使用的device。
+
+2. 分布式训练场景下执行量化感知训练：
+
+   切换到 scripts 目录，执行如下命令：
+
+   ```shell
+   sh run_distribute_train_sample.sh [resnet50] [cifar10] [RANK_TABLE_FILE] [TRAIN_DATASET_PATH] [EVAL_DATASET_PATH] [PRETRAINED_CKPT_PATH]
+   ```
+
+   分布式量化感知训练脚本所使用的参数说明：
+
+| 参数                   | 说明                                                |
+| ---------------------- | --------------------------------------------------- |
+| -h                     | 是否必填：否                                        |
+|                        | 参数解释：显示帮助信息                              |
+| [resnet50]             | 是否必填：是                                        |
+|                        | 数据类型：string                                    |
+|                        | 默认值： resnet50                                   |
+|                        | 参数解释：执行训练用的网络，目前仅支持 resnet50     |
+| [cifar10]              | 是否必填：是                                        |
+|                        | 数据类型：string                                    |
+|                        | 默认值：cifar10                                     |
+|                        | 参数解释： 指定训练使用的数据集。目前仅支持cifar 10 |
+| [RANK_TABLE_FILE]      | 是否必填：是                                        |
+|                        | 数据类型：string                                    |
+|                        | 默认值：None                                        |
+|                        | 参数解释：通过hccl_tools.py生成的hccl配置文件       |
+| [TRAIN_DATASET_PATH]   | 是否必填：是                                        |
+|                        | 数据类型：string                                    |
+|                        | 默认值：None                                        |
+|                        | 参数解释：训练集路径                                |
+| [EVAL_DATASET_PATH]    | 是否必填：是                                        |
+|                        | 数据类型：string                                    |
+|                        | 默认值：None                                        |
+|                        | 参数解释：测试集路径                                |
+| [PRETRAINED_CKPT_PATH] | 是否必填：是                                        |
+|                        | 数据类型：string                                    |
+|                        | 默认值：None                                        |
+|                        | 参数解释：量化感知训练使用到的预训练 ckpt 文件路径  |
+
+使用示例如下：
+
+```
+cd scripts
+bash run_distribute_train_sample.sh resnet50 cifar10 hccl_1p_0_127.0.0.1.json ../cifar-10-batches-bin  ../cifar-10-verify-bin ../resnet50.ckpt
+```
+
+3. 分布式量化感知训练结果展示
+
+   执行量化感知训练完成后，在 scripts 目录下生成针对每个 device 的量化感知训练结果，例如train_parallel0, train_parallel1, train_parallel2....
+
+   进入train_parallel0可以查看到结果文件：
+
+   - resnet50_quant_retrain.air: 执行量化感知训练完成后可以在昇腾AI芯片部署的量化模型。
+   - retrain_quant_config.json： 量化配置文件，描述了对每一层进行量化感知训练参数的配置。如果量化感知训练脚本所在目录下已经存在量化配置文件，则再次调用 create_quant_retrain_config 接口时，如果新生成的量化配置文件和已有的文件重名会覆盖已有的量化配置文件，否则重新生成量化配置文件。如果精度不满足要求，用户可以修改 retrain_quant_config.json 中的量化参数配置，具体的量化配置项解释可以参考amct_mindspore工具使用说明书。
+   - amct_log/amct_mindspore.log: 记录量化感知训练过程的日志信息。
+   - retrain_result: 执行量化感知训练过程中产生的文件。
+   - kernel_meta: 算子编译生成的文件目录。
+   - retrain_resultckpt_0: 保存训练过程中的checkpoint 文件。
+   - log: 分布式训练的打屏信息，重定向到文件中的内容。
+   - env.log: MindSpore 相关的日志信息。
