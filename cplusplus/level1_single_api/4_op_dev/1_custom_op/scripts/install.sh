@@ -177,7 +177,7 @@ if [ $? -ne 0 ];then
 fi
 
 if [ -d ${targetdir}/op_impl/custom/cpu/aicpu_kernel/custom_impl/ ]; then
-    chmod -R 440 ${targetdir}/op_impl/custom/cpu/aicpu_kernel/custom_impl/
+    chmod -R 440 ${targetdir}/op_impl/custom/cpu/aicpu_kernel/custom_impl/* >/dev/null 2>&1
 fi
 if [ -f ${targetdir}/ascend_install.info ]; then
     chmod -R 440 ${targetdir}/ascend_install.info
