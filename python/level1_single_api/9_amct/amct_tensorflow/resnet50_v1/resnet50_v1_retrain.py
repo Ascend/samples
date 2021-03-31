@@ -1,3 +1,4 @@
+"""
 # Copyright 2021 Huawei Technologies Co., Ltd
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -11,6 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License. 
+"""
 
 
 from __future__ import absolute_import
@@ -115,7 +117,7 @@ def _parse_eval(item):
     return residual_image, label, text
 
 
-class TFRecordDataset(): # pylint: disable=R0902, R0903
+class TFRecordDataset(object): # pylint: disable=R0902, R0903
     """parser TFRecord dataset and preprocessing"""
     def __init__( # pylint: disable=R0913
         self, path, is_training=False, keywords=None, num_parallel_reads=4, is_shuffle=False, buffer_size=1000,
