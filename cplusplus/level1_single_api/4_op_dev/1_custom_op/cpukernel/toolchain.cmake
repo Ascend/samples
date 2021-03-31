@@ -13,9 +13,13 @@ endif()
 message(STATUS "TOOLCHAIN_DIR=${TOOLCHAIN_DIR}")
 
 #Specify cross compiler
-set(CMAKE_CXX_COMPILER ${TOOLCHAIN_DIR}/bin/aarch64-target-linux-gnu-g++)
-set(CMAKE_C_COMPILER   ${TOOLCHAIN_DIR}/bin/aarch64-target-linux-gnu-gcc)
-
+if (MINRC)
+    set(CMAKE_C_COMPILER /usr/bin/aarch64-linux-gnu-gcc)
+    set(CMAKE_CXX_COMPILER /usr/bin/aarch64-linux-gnu-g++)
+else()
+    set(CMAKE_CXX_COMPILER ${TOOLCHAIN_DIR}/bin/aarch64-target-linux-gnu-g++)
+    set(CMAKE_C_COMPILER   ${TOOLCHAIN_DIR}/bin/aarch64-target-linux-gnu-gcc)
+endif()
 #For FIND_PROGRAM(), there are three values, NEVER, ONLY, BOTH
 #the first means not to search under your CMAKE_FIND_ROOT_PATH
 #the second means to search only under this path

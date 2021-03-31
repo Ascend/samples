@@ -1,4 +1,4 @@
-# Copyright (c) Huawei Technologies Co., Ltd. 2019. All rights reserved.
+# Copyright (c) Huawei Technologies Co., Ltd. 2020. All rights reserved.
 set(CMAKE_CXX_COMPILER g++)
 set(CMAKE_C_COMPILER gcc)
 # add source files

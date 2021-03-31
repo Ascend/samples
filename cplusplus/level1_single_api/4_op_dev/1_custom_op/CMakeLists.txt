@@ -1,3 +1,5 @@
+# Copyright (c) Huawei Technologies Co., Ltd. 2020. All rights reserved.
+
 cmake_minimum_required(VERSION 3.5.1)
 add_definitions(-D_GLIBCXX_USE_CXX11_ABI=0)
 message(STATUS "CMAKE_CURRENT_BINARY_DIR=${CMAKE_CURRENT_BINARY_DIR}")
@@ -28,6 +30,13 @@ if(IS_DIRECTORY "${CMAKE_SOURCE_DIR}/op_proto")
 endif()
 if(EXISTS "${CMAKE_SOURCE_DIR}/tbe")
     add_subdirectory(tbe)
+endif()
+
+if (NOT "x$ENV{ADD_TESTCASE}" STREQUAL "x")
+  # add testcases subdirectory
+  if(IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/testcases")
+    add_subdirectory(testcases)
+  endif()
 endif()
 
 message(STATUS "operation system is ${CMAKE_HOST_SYSTEM_NAME}")
