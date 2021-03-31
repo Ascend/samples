@@ -1,21 +1,17 @@
-#!/usr/bin/env python3
-# -*- coding: UTF-8 -*-
-"""
-Copyright (C) 2019. Huawei Technologies Co., Ltd. All rights reserved.
+# Copyright 2021 Huawei Technologies Co., Ltd
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License. 
 
-This program is free software; you can redistribute it and/or modify it
-under the terms of the Apache License Version 2.0.You may not use this
-file except in compliance with the License.
-
-This program is distributed in the hope that it will be useful, but
-WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the Apache
-License for more details at
-    http://www.apache.org/licenses/LICENSE-2.0
-
-This is a sample script that guides users how to apply AMCT toolkit to
-classification network.
-"""
 
 from __future__ import absolute_import
 from __future__ import division
@@ -44,14 +40,10 @@ _B_MEAN = 103.94
 
 def _decode(item):
     features = {
-        'image/encoded': tf.io.FixedLenFeature(
-            (), tf.string, default_value=''),
-        'image/format': tf.io.FixedLenFeature(
-            (), tf.string, default_value='jpeg'),
-        'image/class/label': tf.io.FixedLenFeature(
-            [], dtype=tf.int64, default_value=-1),
-        'image/class/text': tf.io.FixedLenFeature(
-            [], dtype=tf.string, default_value=''),
+        'image/encoded': tf.io.FixedLenFeature((), tf.string, default_value=''),
+        'image/format': tf.io.FixedLenFeature((), tf.string, default_value='jpeg'),
+        'image/class/label': tf.io.FixedLenFeature([], dtype=tf.int64, default_value=-1),
+        'image/class/text': tf.io.FixedLenFeature([], dtype=tf.string, default_value=''),
         'image/object/bbox/xmin': tf.io.VarLenFeature(dtype=tf.float32),
         'image/object/bbox/ymin': tf.io.VarLenFeature(dtype=tf.float32),
         'image/object/bbox/xmax': tf.io.VarLenFeature(dtype=tf.float32),
@@ -62,16 +54,13 @@ def _decode(item):
     image = example['image/encoded']
     label = example['image/class/label']
     text = example['image/class/text']
-    image = tf.cond(tf.image.is_jpeg(image),
-                    lambda: tf.image.decode_jpeg(image),
-                    lambda: tf.image.decode_png(image))
+    image = tf.cond(tf.image.is_jpeg(image), lambda: tf.image.decode_jpeg(image), lambda: tf.image.decode_png(image))
     return image, label, text
 
 
 def _grayscale_to_rgb(image):
-    rgb_image = tf.cond(tf.equal(tf.shape(image)[-1], 1),
-                        true_fn=lambda: tf.image.grayscale_to_rgb(image),
-                        false_fn=lambda: image)
+    rgb_image = tf.cond(
+        tf.equal(tf.shape(image)[-1], 1), true_fn=lambda: tf.image.grayscale_to_rgb(image), false_fn=lambda: image)
     return rgb_image
 
 
@@ -79,13 +68,10 @@ def _resize(image, resize_side):
     shape = tf.shape(image)
     height = tf.cast(shape[0], tf.float32)
     width = tf.cast(shape[1], tf.float32)
-    scale = tf.cond(tf.greater(height, width),
-                    lambda: resize_side / width,
-                    lambda: resize_side / height)
+    scale = tf.cond(tf.greater(height, width), lambda: resize_side / width, lambda: resize_side / height)
     new_height = tf.cast(tf.math.rint(height * scale), tf.int32)
     new_width = tf.cast(tf.math.rint(width * scale), tf.int32)
-    resized_image = tf.compat.v1.image.resize_images(
-        image, [new_height, new_width])
+    resized_image = tf.compat.v1.image.resize_images(image, [new_height, new_width])
     return resized_image
 
 
@@ -97,17 +83,13 @@ def _crop(image, is_random=False):
     if is_random:
         max_offset_height = height - SIZE + 1
         max_offset_width = width - SIZE + 1
-        offset_height = tf.random.uniform(
-            [], maxval=max_offset_height, dtype=tf.int32)
-        offset_width = tf.random.uniform(
-            [], maxval=max_offset_width, dtype=tf.int32)
-        cropped_image = tf.image.crop_to_bounding_box(
-            image, offset_height, offset_width, SIZE, SIZE)
+        offset_height = tf.random.uniform([], maxval=max_offset_height, dtype=tf.int32)
+        offset_width = tf.random.uniform([], maxval=max_offset_width, dtype=tf.int32)
+        cropped_image = tf.image.crop_to_bounding_box(image, offset_height, offset_width, SIZE, SIZE)
     else:
         offset_height = tf.cast((height - SIZE) / 2, tf.int32)
         offset_width = tf.cast((width - SIZE) / 2, tf.int32)
-        cropped_image = tf.image.crop_to_bounding_box(
-            image, offset_height, offset_width, SIZE, SIZE)
+        cropped_image = tf.image.crop_to_bounding_box(image, offset_height, offset_width, SIZE, SIZE)
 
     return cropped_image
 
@@ -115,8 +97,7 @@ def _crop(image, is_random=False):
 def _parse_train(item):
     image, label, text = _decode(item)
     rgb_image = _grayscale_to_rgb(image)
-    resize_side = tf.random.uniform(
-        [], minval=MIN_RESIZE, maxval=MAX_RESIZE + 1, dtype=tf.int32)
+    resize_side = tf.random.uniform([], minval=MIN_RESIZE, maxval=MAX_RESIZE + 1, dtype=tf.int32)
     resize_side = tf.cast(resize_side, tf.float32)
     resized_image = _resize(rgb_image, resize_side)
     cropped_image = _crop(resized_image, True)
@@ -137,9 +118,8 @@ def _parse_eval(item):
 class TFRecordDataset(): # pylint: disable=R0902, R0903
     """parser TFRecord dataset and preprocessing"""
     def __init__( # pylint: disable=R0913
-            self, path: str, is_training=False, keywords=None,
-            num_parallel_reads=4, is_shuffle=False, buffer_size=1000,
-            is_repeat=False, repeat_count=0, batch_size=32):
+        self, path, is_training=False, keywords=None, num_parallel_reads=4, is_shuffle=False, buffer_size=1000,
+        is_repeat=False, repeat_count=0, batch_size=32):
 
         self.filenames = os.listdir(path)
         self.path = []
@@ -148,8 +128,7 @@ class TFRecordDataset(): # pylint: disable=R0902, R0903
                 self.path.append(os.path.join(path, i))
 
         self.num_parallel_reads = num_parallel_reads
-        self.dataset = tf.data.TFRecordDataset(
-            self.path, num_parallel_reads=self.num_parallel_reads)
+        self.dataset = tf.data.TFRecordDataset(self.path, num_parallel_reads=self.num_parallel_reads)
 
         self.is_training = is_training
         if self.is_training:
@@ -178,9 +157,8 @@ class TFRecordDataset(): # pylint: disable=R0902, R0903
 
     def preview(self, columns=4):
         """Visual image data."""
-        with tf.compat.v1.Session() as sess:
-            images, labels, texts = sess.run(
-                [self.images, self.labels, self.texts])
+        with tf.compat.v1.Session() as session:
+            images, labels, texts = session.run([self.images, self.labels, self.texts])
 
         means = np.array([_R_MEAN, _G_MEAN, _B_MEAN])
         plt.figure(figsize=(12, 3 * self.batch_size / columns))
@@ -291,8 +269,7 @@ def args_check(args):
     if not os.access(args.eval_model, os.F_OK):
         raise RuntimeError('Must specify a valid evaluation model path!')
 
-    if args.train_set == args.eval_set and (
-            args.train_keyword is None and args.eval_keyword is None):
+    if args.train_set == args.eval_set and (args.train_keyword is None and args.eval_keyword is None):
         LOGGER.push_warning_message(
             'Note that the training dataset has the same path as the '
             'evaluation dataset, it is recommended to use keyword '
@@ -320,8 +297,7 @@ def evaluate(session, dataset):
         top_1 = np.argmax(prediction, axis=1) + 1
         top_5 = np.argpartition(prediction, -5, axis=1, )[:, -5:] + 1
         count_1 += np.sum(labels == top_1)
-        count_5 += np.sum(
-            labels.repeat(5).reshape([labels.shape[0], 5]) == top_5)
+        count_5 += np.sum(labels.repeat(5).reshape([labels.shape[0], 5]) == top_5)
     acc_1 = count_1 / EVAL_SIZE * 100
     acc_5 = count_5 / EVAL_SIZE * 100
     return acc_1, acc_5
@@ -348,9 +324,7 @@ def main(): # pylint: disable=R0914, R0915
     graph = tf.compat.v1.get_default_graph()
 
     dataset = TFRecordDataset(
-        ARGS.eval_set,
-        keywords=ARGS.eval_keyword,
-        num_parallel_reads=ARGS.num_parallel_reads,
+        ARGS.eval_set, keywords=ARGS.eval_keyword, num_parallel_reads=ARGS.num_parallel_reads,
         batch_size=ARGS.batch_size)
 
     # Step 2: Load the evaluation model and validation it.
@@ -368,13 +342,8 @@ def main(): # pylint: disable=R0914, R0915
     graph = tf.compat.v1.get_default_graph()
 
     dataset = TFRecordDataset(
-        ARGS.train_set,
-        is_training=True,
-        keywords=ARGS.train_keyword,
-        num_parallel_reads=ARGS.num_parallel_reads,
-        is_shuffle=True,
-        is_repeat=True,
-        batch_size=ARGS.batch_size)
+        ARGS.train_set, is_training=True, keywords=ARGS.train_keyword, num_parallel_reads=ARGS.num_parallel_reads,
+        is_shuffle=True, is_repeat=True, batch_size=ARGS.batch_size)
 
     # Step 2: Load the training model.
     saver = tf.compat.v1.train.import_meta_graph(ARGS.train_model)
@@ -389,8 +358,7 @@ def main(): # pylint: disable=R0914, R0915
 
     # Step 4: Generate the retraining model in default graph and create the
     # quantization factor record_file.
-    retrain_ops = amct.create_quant_retrain_model(graph, config_file,
-                                                  record_file)
+    retrain_ops = amct.create_quant_retrain_model(graph, config_file, record_file)
 
     # Step 5: Set the variables which needed to save.
     variables_to_save = tf.compat.v1.global_variables()
@@ -398,8 +366,7 @@ def main(): # pylint: disable=R0914, R0915
 
     # Step 6: Calculate loss function and create an optimizer.
     labels = tf.one_hot(dataset.labels - 1, CATEGORY)
-    input_2 = tf.compat.v1.placeholder(
-        tf.float32, shape=[ARGS.batch_size, CATEGORY])
+    input_2 = tf.compat.v1.placeholder(tf.float32, shape=[ARGS.batch_size, CATEGORY])
 
 
     l2_variables = []
@@ -407,12 +374,10 @@ def main(): # pylint: disable=R0914, R0915
         if 'BatchNorm' not in i.name and 'ULQ' not in i.name:
             l2_variables.append(tf.nn.l2_loss(tf.cast(i, tf.float32)))
     l2_loss = 1e-4 * tf.add_n(l2_variables)
-    cross_entropy = tf.nn.softmax_cross_entropy_with_logits_v2(
-        labels=input_2, logits=logits) / ARGS.batch_size
+    cross_entropy = tf.nn.softmax_cross_entropy_with_logits_v2(labels=input_2, logits=logits) / ARGS.batch_size
     loss = cross_entropy + l2_loss
 
-    optimizer = tf.compat.v1.train.RMSPropOptimizer(
-        ARGS.learning_rate, momentum=ARGS.momentum)
+    optimizer = tf.compat.v1.train.RMSPropOptimizer(ARGS.learning_rate, momentum=ARGS.momentum)
     train_op = optimizer.minimize(loss)
 
     # Step 7: Set a summary of loss for tensorboard.
@@ -430,8 +395,7 @@ def main(): # pylint: disable=R0914, R0915
     retrain_ckpt = os.path.join(TMP, 'resnet_v1_50_retrain')
     for i in trange(ARGS.train_iter, ncols=100):
         image, label = session.run([dataset.images, labels])
-        summary_loss, _ = session.run(
-            [write_op, train_op], feed_dict={input_1: image, input_2: label})
+        summary_loss, _ = session.run([write_op, train_op], feed_dict={input_1: image, input_2: label})
         summary_writer.add_summary(summary_loss, i)
         if i % ARGS.save_interval == 0:
             saver_save.save(session, retrain_ckpt, global_step=i)
@@ -448,8 +412,7 @@ def main(): # pylint: disable=R0914, R0915
 
     # Step 2: Generate the retraining model accroding to the retraining
     # configuration file which created last phase.
-    retrain_ops = amct.create_quant_retrain_model(graph, config_file,
-                                                  record_file)
+    retrain_ops = amct.create_quant_retrain_model(graph, config_file, record_file)
 
     # Step 3: Set the variables which needed to restore.
     variables_to_restore = tf.compat.v1.global_variables()
@@ -462,12 +425,9 @@ def main(): # pylint: disable=R0914, R0915
     retrain_ckpt = retrain_ckpt + '-' + str(ARGS.train_iter)
     saver_restore.restore(session, retrain_ckpt)
     dataset = TFRecordDataset(
-        ARGS.eval_set,
-        keywords=ARGS.eval_keyword,
-        num_parallel_reads=ARGS.num_parallel_reads,
+        ARGS.eval_set, keywords=ARGS.eval_keyword, num_parallel_reads=ARGS.num_parallel_reads,
         batch_size=ARGS.batch_size)
-    evaluate_for_search_n(session, dataset, retrain_ops[-1].name[:-2],
-                          ARGS.batch_num)
+    evaluate_for_search_n(session, dataset, retrain_ops[-1].name[:-2], ARGS.batch_num)
 
     # Step 5: Convert all variables to constants and finally save as 'pb' file.
     constant_graph = tf.compat.v1.graph_util.convert_variables_to_constants(
@@ -480,8 +440,7 @@ def main(): # pylint: disable=R0914, R0915
     # Step 6: Convert origin 'pb' model file to fake quantized 'pb'
     # model, using the quantization factor record_file.
     quantized_pb_path = os.path.join(RESULTS, 'resnet_v1_50')
-    amct.save_quant_retrain_model(
-        pb_path, [PREDICTIONS], record_file, quantized_pb_path)
+    amct.save_quant_retrain_model(pb_path, [PREDICTIONS], record_file, quantized_pb_path)
 
     # Phase verification
     # Step 1: Generate validation dataset.
@@ -489,9 +448,7 @@ def main(): # pylint: disable=R0914, R0915
     graph = tf.compat.v1.get_default_graph()
 
     dataset = TFRecordDataset(
-        ARGS.eval_set,
-        keywords=ARGS.eval_keyword,
-        num_parallel_reads=ARGS.num_parallel_reads,
+        ARGS.eval_set, keywords=ARGS.eval_keyword, num_parallel_reads=ARGS.num_parallel_reads,
         batch_size=ARGS.batch_size)
 
     # Step 2: Load the fake quantized model and validation it.

@@ -80,14 +80,14 @@ def nms(bounds, classes, scores): # pylint: disable=too-many-locals, no-member
     return best_bounds, best_classes, best_scores
 
 
-def preprocessing(image_path: str, side=416) -> np.ndarray:
+def preprocessing(image_path, side=416):
     """
     This function is preprocessing for YOLOv3 input.
 
     The preprocessing including scaling(scale the longer side of the
     image to parameter 'side'), padding(pad the scaled image with
-    neutral grey to a square that side length equal to parameter 'side')
-    and normalization.
+    neutral grey to a square that side length equal to parameter
+    'side') and normalization.
 
     :param image_path: a string of image path
     :param side: the side length of YOLOv3's input
@@ -111,15 +111,22 @@ def preprocessing(image_path: str, side=416) -> np.ndarray:
     return image_norm
 
 
-def postprocessing(bbox: np.ndarray, image_path: str, side=416, threshold=0.3): # pylint: disable=R0914
+def postprocessing(bbox, image_path, side=416, threshold=0.3): # pylint: disable=R0914
     """
     This function is postprocessing for YOLOv3 output.
 
     Before calling this function, reshape the raw output of YOLOv3 to
     following form
         numpy.ndarray:
-            [x, y, width, height, confidence, probability of 80 classes]
-        shape: (85,)
+            [
+                x_min,
+                y_min,
+                x_max,
+                y_max,
+                confidence,
+                probability of 80 classes
+            ]
+        shape: (-1, 85)
     The postprocessing restore the bounding rectangles of YOLOv3 output
     to origin scale and filter with non-maximum suppression.
 
@@ -161,7 +168,7 @@ def postprocessing(bbox: np.ndarray, image_path: str, side=416, threshold=0.3): 
     return nms(bounds, classes, scores)
 
 
-def annotate(image_path: str, bounds: list, classes: list, scores: list, labels: list) -> Image.Image:
+def annotate(image_path, bounds, classes, scores, labels):
     """
     This function will draw the bounding rectangles, classes and scores
     on the image and return it.
@@ -188,17 +195,17 @@ def main(): # pylint: disable=too-many-statements, too-many-locals, not-context-
     """
     Before run this script, please check whether the following files
     exist in the same directory.
-        yolov3_coco.pb,
+        calibration.jpg
         COCO_labels.txt,
         detection.jpg,
-        calibration.jpg
+        yolov3_tensorflow_1.5.pb,
     :return: None
     """
 
     # Step one, load the trained model.
-    # This sample will use YOLOv3 which is trained with COCO dataset and
-    # save as 'yolov3_coco.pb'. Therefore, loading COCO labels and test
-    # image to do inference.
+    # This sample will use YOLOv3 which is trained with COCO dataset
+    # and save as 'yolov3_tensorflow_1.5.pb'. Therefore, loading COCO
+    # labels and test image to do inference.
     model_path = os.path.join(PATH, 'yolov3_tensorflow_1.5.pb')
     with tf.io.gfile.GFile(model_path, mode='rb') as model:
         graph_def = tf.compat.v1.GraphDef()

@@ -95,15 +95,15 @@ def main(): # pylint: disable=too-many-locals, not-context-manager
 
     # Step four, calibrate and save the quantized model.
     # The quantization parameters require one or more batch data to do
-    # inference and find the optimal values. This process is referred to
-    # calibration. For example, we use 32 pictures for calibration. Be
-    # sure to initialize the quantization parameters first. If your
+    # inference and find the optimal values. This process is referred
+    # to calibration. For example, we use 32 pictures for calibration.
+    # Be sure to initialize the quantization parameters first. If your
     # model have variables, you must reload the checkpoint before
-    # inference. After calibration, you can save the quantized model from
-    # original model and record_file. The quantized model can be used for
-    # simulating test on CPU/GPU and evaluate the accuracy of quantized
-    # model, and it can also be used for ATC to generate the model
-    # running on Ascend AI Processor.
+    # inference. After calibration, you can save the quantized model
+    # from original model and record_file. The quantized model can be
+    # used for simulating test on CPU/GPU and evaluate the accuracy of
+    # quantized model, and it can also be used for ATC to generate the
+    # model running on Ascend AI Processor.
     calibration_path = os.path.join(PATH, 'calibration')
     batch = load_image(calibration_path)
 
