@@ -407,7 +407,7 @@ AtlasError ReadBinFile(const string& fileName, void*& data, uint32_t& size) {
     return ATLAS_OK;
 }
 
-AtlasError ReadJpeg(ImageData& image, std::string& fileName) {
+AtlasError ReadJpeg(ImageData& image, const std::string& fileName) {
     uint32_t size = 0;
     void* buf = nullptr;
     
