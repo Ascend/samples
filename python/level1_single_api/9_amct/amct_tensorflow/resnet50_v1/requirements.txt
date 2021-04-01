@@ -1,0 +1,4 @@
+matplotlib
+numpy
+tensorflow == 1.15
+tqdm
