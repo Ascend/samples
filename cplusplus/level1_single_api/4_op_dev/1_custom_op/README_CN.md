@@ -201,7 +201,7 @@ Caffe与TensorFlow共存的自定义算子样例工程的目录结构如下所�
     
         则编译生成的算子包名称为custom\_opp\__centos\_aarch64_.run。
 
-    -   SOC\_VERSION：昇腾AI处理器的类型，请配置为AI CPU组件安装路径中“opp/op_impl/built-in/aicpu/aicpu_kernel/lib”路径下的文件夹名称，即“libcpu_kernels_context.a”与“libcpu_kernels_v1.0.1.so”所在文件夹的名称。
+    -   AICPU\_SOC\_VERSION：昇腾AI处理器的类型，请配置为AI CPU组件安装路径中“opp/op_impl/built-in/aicpu/aicpu_kernel/lib”路径下的文件夹名称，即“libcpu_kernels_context.a”与“libcpu_kernels_v1.0.1.so”所在文件夹的名称。
     
 
 3.  执行算子工程编译。
