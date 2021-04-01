@@ -79,6 +79,9 @@ upgrade()
     fi
 
     log "copy new ops $1 files ......"
+    if [ -d ${targetdir}/$1/custom/ ]; then
+        chmod -R +w "$targetdir/$1/custom/" >/dev/null 2>&1
+    fi
     cp -rf ${sourcedir}/$1/* $targetdir/$1/
     if [ $? -ne 0 ];then
         log "[ERROR] copy new $1 files failed"
@@ -122,6 +125,7 @@ upgrade_proto()
         fi
         log "[INFO] replace old caffe.proto files ......"
     fi
+    chmod -R +w "$targetdir/framework/custom/caffe/" >/dev/null 2>&1
     cp -rf ${sourcedir}/custom.proto ${targetdir}/framework/custom/caffe/
     if [ $? -ne 0 ];then
         log "[ERROR] copy new custom.proto failed"
