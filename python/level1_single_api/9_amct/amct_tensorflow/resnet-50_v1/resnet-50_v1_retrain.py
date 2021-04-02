@@ -174,7 +174,7 @@ class TFRecordDataset(object): # pylint: disable=R0902, R0903
 
 PATH, _ = os.path.split(os.path.realpath(__file__))
 TMP = os.path.join(PATH, 'tmp')
-RESULTS = os.path.join(PATH, 'results/retrain')
+OUTPUTS = os.path.join(PATH, 'outputs')
 TRAIN_SIZE = 1281167
 EVAL_SIZE = 50000
 CATEGORY = 1000
@@ -319,7 +319,7 @@ def main(): # pylint: disable=R0914, R0915
     """main process"""
     args_check(ARGS)
     mkdir(TMP)
-    mkdir(RESULTS)
+    mkdir(OUTPUTS)
 
     # Phase origin model accuracy
     # Step 1: Generate validation dataset.
@@ -441,7 +441,7 @@ def main(): # pylint: disable=R0914, R0915
 
     # Step 6: Convert origin 'pb' model file to fake quantized 'pb'
     # model, using the quantization factor record_file.
-    quantized_pb_path = os.path.join(RESULTS, 'resnet_v1_50')
+    quantized_pb_path = os.path.join(OUTPUTS, 'resnet_v1_50')
     amct.save_quant_retrain_model(pb_path, [PREDICTIONS], record_file, quantized_pb_path)
 
     # Phase verification

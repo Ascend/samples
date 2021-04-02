@@ -26,7 +26,9 @@
 + 简易量化配置文件 [yolo_quant.cfg](./yolo_quant.cfg)
 + 示例脚本 [yolo_v3_calibration.py](./yolo_v3_calibration.py)
 
-在当前目录执行如下命令运行示例程序。
+并根据 requirements 安装必要的环境依赖。
+
+在当前目录执行如下命令运行示例程序：
 
 ```python
 python yolo_v3_calibration.py
@@ -42,7 +44,7 @@ quantize.png save successfully!
 
 ## 量化结果
 
-量化成功后，在量化后模型的同级目录下会生成以下文件
+量化成功后，在当前目录下会生成以下文件
 
 + 量化配置文件 [config.json](./config.json)
 + 量化日志文件 [amct_tensorflow.log](./amct_log/amct_tensorflow.log)
