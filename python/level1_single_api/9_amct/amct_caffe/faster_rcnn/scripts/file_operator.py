@@ -151,6 +151,7 @@ def check_mode_insert(args, file_operator):
 
     if args.mode_single is not None:
         def check_mode_insert_single(args, file_operator):
+            """check_mode_insert_single"""
             if file_operator['point'] != 'lines':
                 raise ValueError('Only support mode single in point lines')
             if file_operator['mode'] is not None:
@@ -160,6 +161,7 @@ def check_mode_insert(args, file_operator):
         check_mode_insert_single(args, file_operator)
     if args.mode_list is not None:
         def check_mode_insert_lines(args, file_operator):
+            """check_mode_insert_lines"""
             if file_operator['point'] != 'lines':
                 raise ValueError('Only support mode list in point lines')
             if file_operator['mode'] is not None:
@@ -169,6 +171,7 @@ def check_mode_insert(args, file_operator):
         check_mode_insert_lines(args, file_operator)
     if args.mode_section is not None:
         def check_mode_insert_section(args, file_operator):
+            """check_mode_insert_section"""
             if file_operator['point'] != 'lines':
                 raise ValueError('Only support mode section in point lines')
             if file_operator['mode'] is not None:
@@ -191,6 +194,7 @@ def check_mode_replace(args, file_operator):
     """
     if args.mode_first is not None:
         def check_replace_first(args, file_operator):
+            """check_replace_first"""
             if file_operator['point'] != 'content':
                 raise ValueError('Only support mode first in point content')
             if file_operator['mode'] is not None:
@@ -200,6 +204,7 @@ def check_mode_replace(args, file_operator):
         check_replace_first(args, file_operator)
     if args.mode_last is not None:
         def check_replace_last(args, file_operator):
+            """check_replace_last"""
             if file_operator['point'] != 'content':
                 raise ValueError('Only support mode last in point content')
             if file_operator['mode'] is not None:
@@ -209,6 +214,7 @@ def check_mode_replace(args, file_operator):
         check_replace_last(args, file_operator)
     if args.mode_all is not None:
         def check_replace_all(args, file_operator):
+            """check_replace_all"""
             if file_operator['point'] != 'content':
                 raise ValueError('Only support mode all in point content')
             if file_operator['mode'] is not None:
@@ -248,6 +254,7 @@ def replace_operator(file_operator):
     if file_operator['point'] == 'lines':
 
         def replace_lines_mode(file_operator):
+            """replace_lines_mode"""
             file_operator['dest'] = '{}\n'.format(OPERATOR_ARGS.point_dest)
             file_lines = None
             with open(file_operator['file'], 'r') as file_open:
@@ -289,6 +296,7 @@ def delete_operator(file_operator):
                 raise ValueError('Specified line {} is out of range'.format(line))
 
         def do_delete_in_lines_mode(file_operator, file_lines):
+            """do_delete_in_lines_mode"""
             if file_operator['mode'] == 'single':
                 del file_lines[file_operator['mode_value'][0] - 1]
             if file_operator['mode'] == 'list':
@@ -307,6 +315,7 @@ def delete_operator(file_operator):
             file_contents = str(file_open.read())
 
         def do_delete_in_content_mode(file_operator, file_contents):
+            """do_delete_in_content_mode"""
             if file_operator['mode'] == 'first':
                 file_contents = file_contents.replace(file_operator['mode_value'], '', 1)
             if file_operator['mode'] == 'all':
@@ -328,6 +337,7 @@ def insert_operator(file_operator):
                 raise ValueError('Specified line {} is out of range'.format(line))
 
         def do_insert_in_lines_mode(file_operator, file_lines):
+            """do_insert_in_lines_mode"""
             if file_operator['mode'] == 'single':
                 file_lines.insert(file_operator['mode_value'][0] - 1, file_operator['dest'])
             if file_operator['mode'] == 'list':
@@ -350,6 +360,7 @@ def insert_operator(file_operator):
             file_contents = str(file_open.read())
 
         def do_insert_in_content_mode(file_operator, file_contents):
+            """do_insert_in_content_mode"""
             if file_operator['mode'] == 'first':
                 file_contents = file_contents.replace(file_operator['mode_value'], \
                     '{}{}'.format(file_operator['mode_value'], file_operator['dest']), 1)
@@ -372,6 +383,7 @@ def comment_operator(file_operator):
                 raise ValueError('Specified line {} is out of range'.format(line))
 
         def comment_operation(string):
+            """comment_operation"""
             for index, char in enumerate(string):
                 if char != ' ' and index < len(string) - 1 and char != '#':
                     return '{}{}{}'.format(string[0:index], '# ',
@@ -379,6 +391,7 @@ def comment_operator(file_operator):
             return string
 
         def do_comment_in_lines_mode(file_operator, file_lines):
+            """do_comment_in_lines_mode"""
             if file_operator['mode'] == 'single':
                 file_lines[file_operator['mode_value'][0] - 1] = comment_operation( \
                     file_lines[file_operator['mode_value'][0] - 1])
@@ -398,6 +411,7 @@ def comment_operator(file_operator):
             file_contents = str(file_open.read())
 
         def do_comment_in_content_mode(file_operator, file_contents):
+            """do_comment_in_content_mode"""
             if file_operator['mode'] == 'first':
                 file_contents = file_contents.replace(file_operator['mode_value'], \
                     '"""{}"""'.format(file_operator['mode_value']), 1)
@@ -420,6 +434,7 @@ def uncomment_operator(file_operator):
                 raise ValueError('Specified line {} is out of range'.format(line))
 
         def do_uncomment_operator(file_operator, file_lines):
+            """do_uncomment_operator"""
             if file_operator['mode'] == 'single':
                 file_lines[file_operator['mode_value'][0] - 1] = \
                     file_lines[file_operator['mode_value'][0] - 1].replace('# ', '', 1)
