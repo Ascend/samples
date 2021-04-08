@@ -4,7 +4,7 @@ English|[中文](README_CN.md)
 
 **This sample applies to Ascend camera 3.0.0 and later versions, and supports Atlas 200 DK and Atlas 300 ([AI1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366)).**
 
-**This document provides only guidance for running the sample in CLI mode. For details about how to run the sample in MindStudio, see [Wiki of Running Image Sample in MindStudio](https://gitee.com/ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E5%9B%BE%E7%89%87%E6%A0%B7%E4%BE%8B?sort_id=3164874).**
+**This document provides only guidance for running the sample in CLI mode. For details about how to run the sample in MindStudio, see [Wiki of Running Image Sample in MindStudio](https://github.com/Ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E5%9B%BE%E7%89%87%E6%A0%B7%E4%BE%8B?sort_id=3164874).**
 
 ## I2C Sample
 
@@ -14,7 +14,7 @@ Function: Read and write data by using I2C.
 
 Before deploying this sample, ensure that:
 
-- The environment has been prepared based on [Preparing Environment and Installing Dependencies](https://gitee.com/ascend/samples/tree/dev/cplusplus/environment).
+- The environment has been prepared based on [Preparing Environment and Installing Dependencies](https://github.com/Ascend/samples/tree/dev/cplusplus/environment).
 
 - The development environment and operating environment of the corresponding product have been installed.
 
@@ -30,7 +30,7 @@ Before deploying this sample, ensure that:
      
      **cd $HOME**
      
-     **git clone https://gitee.com/ascend/samples.git**
+     **git clone https://github.com/Ascend/samples.git**
    
    - Download the source code as a compressed package. This method takes a short time, but the procedure is complex.
      

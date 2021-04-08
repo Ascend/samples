@@ -4,7 +4,7 @@
 
 **本样例适配3.0.0及以上版本，支持产品为Atlas200DK、Atlas300([ai1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366))。**
 
-**本README只提供命令行方式运行样例的指导，如需在Mindstudio下运行样例，请参考[Mindstudio运行视频样例wiki](https://gitee.com/ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E8%A7%86%E9%A2%91%E6%A0%B7%E4%BE%8B?sort_id=3170138)。**
+**本README只提供命令行方式运行样例的指导，如需在Mindstudio下运行样例，请参考[Mindstudio运行视频样例wiki](https://github.com/Ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E8%A7%86%E9%A2%91%E6%A0%B7%E4%BE%8B?sort_id=3170138)。**
 
 ## 视频黑白图像上色样例
 
@@ -31,7 +31,7 @@
     - 命令行方式下载（下载时间较长，但步骤简单）。   
         开发环境，非root用户命令行中执行以下命令下载源码仓。   
        **cd $HOME**   
-       **git clone https://gitee.com/ascend/samples.git**
+       **git clone https://github.com/Ascend/samples.git**
 
     - 压缩包方式下载（下载时间较短，但步骤稍微复杂）。   
         1. samples仓右上角选择 **克隆/下载** 下拉框并选择 **下载ZIP**。   
@@ -46,7 +46,7 @@
     
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
-    |  colorization| 黑白视频上色推理模型。是基于Caffe的colorization模型。  |  请参考[https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/colorization/ATC_colorization_caffe_AE](https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/colorization/ATC_colorization_caffe_AE)目录中README.md下载原始模型章节下载模型和权重文件。 |
+    |  colorization| 黑白视频上色推理模型。是基于Caffe的colorization模型。  |  请参考[https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/colorization/ATC_colorization_caffe_AE](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/colorization/ATC_colorization_caffe_AE)目录中README.md下载原始模型章节下载模型和权重文件。 |
 
     ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
     > - modelzoo中提供了转换好的om模型，但此模型不匹配当前样例，所以需要下载原始模型和权重文件后重新进行模型转换。

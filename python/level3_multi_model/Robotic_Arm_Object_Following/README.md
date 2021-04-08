@@ -20,7 +20,7 @@
 - 参考[Atlas200DK说明文档]( https://support.huaweicloud.com/Atlas200DK202/ )部署开发环境
 ### Atlas200DK推理平台准备
 - 参考[Atlas200DK说明文档]( https://support.huaweicloud.com/Atlas200DK202/ )部署运行环境
-- 参考Ascend案例如[YOLOV3_coco_detection_picture](https://gitee.com/ascend/samples/tree/master/python/level2_simple_inference/2_object_detection/YOLOV3_coco_detection_picture#yolov3_coco_detection_picture%E6%A0%B7%E4%BE%8B )测试推理平台是否搭建成功
+- 参考Ascend案例如[YOLOV3_coco_detection_picture](https://github.com/Ascend/samples/tree/master/python/level2_simple_inference/2_object_detection/YOLOV3_coco_detection_picture#yolov3_coco_detection_picture%E6%A0%B7%E4%BE%8B )测试推理平台是否搭建成功
 ### Realsense双目相机准备
 - 参考[Realsense SDK 2.0安装说明]( https://dev.intelrealsense.com/docs/compiling-librealsense-for-linux-ubuntu-guide )安装SDK
 - 参考Realsense 使用示例如[opencv_viewer_example]( https://github.com/IntelRealSense/librealsense/blob/master/wrappers/python/examples/opencv_viewer_example.py )测试SDK是否安装成功
@@ -160,7 +160,7 @@
    在Ubuntu主控平台中，以非root用户在命令行中执行以下命令下载源码仓:
     ```shell
     cd $HOME
-    git clone https://gitee.com/ascend/samples.git
+    git clone https://github.com/Ascend/samples.git
     ```
 
 - 获取此案例中所需要的网络模型
@@ -172,7 +172,7 @@
     
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
-    |  yolov3_ascend_logo| 基于Tensorflow-YOLOV3的[Ascend图标](https://images.gitee.com/uploads/images/2021/0310/112721_0db30e79_5537256.png )检测模型。  |  请参考[https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/yolov3_darknet53/ATC_yolov3_darknet53_tf_xdzhangtongxue](https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/yolov3_darknet53/ATC_yolov3_darknet53_tf_xdzhangtongxue )目录中README.md下载原始模型章节下载模型和权重文件。 |
+    |  yolov3_ascend_logo| 基于Tensorflow-YOLOV3的[Ascend图标](https://images.gitee.com/uploads/images/2021/0310/112721_0db30e79_5537256.png )检测模型。  |  请参考[https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/yolov3_darknet53/ATC_yolov3_darknet53_tf_xdzhangtongxue](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/yolov3_darknet53/ATC_yolov3_darknet53_tf_xdzhangtongxue )目录中README.md下载原始模型章节下载模型和权重文件。 |
 
     ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
     > - modelzoo中已经提供了转换好的om模型，可以直接使用。

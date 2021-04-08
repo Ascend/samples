@@ -4,7 +4,7 @@ English|[中文](README_CN.md)
 
 **This sample applies to Ascend camera 3.0.0 and later versions, and supports Atlas 200 DK and Atlas 300 ([AI1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366)).**
 
-**This document provides only guidance for running the sample on the command line. For details about how to run the sample in MindStudio, see the [Wiki of Running Image Samples in MindStudio](https://gitee.com/ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E5%9B%BE%E7%89%87%E6%A0%B7%E4%BE%8B?sort_id=3164874).**
+**This document provides only guidance for running the sample on the command line. For details about how to run the sample in MindStudio, see the [Wiki of Running Image Samples in MindStudio](https://github.com/Ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E5%9B%BE%E7%89%87%E6%A0%B7%E4%BE%8B?sort_id=3164874).**
 
 ## VGG\_SSD\_coco\_detection\_CV\_with\_AIPP Sample
 
@@ -34,7 +34,7 @@ Before deploying this sample, ensure that:
      
      **cd $HOME**
      
-     **git clone https://gitee.com/ascend/samples.git**
+     **git clone https://github.com/Ascend/samples.git**
    
    - Compressed package (The download time is short, but the procedure is complex.)
      
@@ -54,7 +54,7 @@ Before deploying this sample, ensure that:
    
    | **Model Name**| **Description**| **How to Obtain**|
    |----------|----------|----------|
-   | vgg\_ssd| Object detection model. It is a vgg\_ssd model based on Caffe.| Download the model and weight file by referring to the section about downloading the original model in the **README.md** file in [https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/vgg_ssd/ATC_vgg_ssd_caffe_AE](https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/vgg_ssd/ATC_vgg_ssd_caffe_AE).|
+   | vgg\_ssd| Object detection model. It is a vgg\_ssd model based on Caffe.| Download the model and weight file by referring to the section about downloading the original model in the **README.md** file in [https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/vgg_ssd/ATC_vgg_ssd_caffe_AE](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/vgg_ssd/ATC_vgg_ssd_caffe_AE).|
 
    ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **Note:**
    

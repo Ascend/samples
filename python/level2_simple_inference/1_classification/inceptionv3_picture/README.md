@@ -2,7 +2,7 @@
 
 **本样例适配3.2.0及以上版本，支持产品为Atlas300([ai1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366))。**
 
-**本README只提供命令行方式运行样例的指导，如需在Mindstudio下运行样例，请参考[Mindstudio运行图片样例wiki](https://gitee.com/ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E5%9B%BE%E7%89%87%E6%A0%B7%E4%BE%8B?sort_id=3164874)。**
+**本README只提供命令行方式运行样例的指导，如需在Mindstudio下运行样例，请参考[Mindstudio运行图片样例wiki](https://github.com/Ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E5%9B%BE%E7%89%87%E6%A0%B7%E4%BE%8B?sort_id=3164874)。**
 
 ## 图片InceptionV3分类样例
 
@@ -32,7 +32,7 @@
 
        **cd $HOME**
 
-       **git clone https://gitee.com/ascend/samples.git**
+       **git clone https://github.com/Ascend/samples.git**
 
     - 压缩包方式下载（下载时间较短，但步骤稍微复杂）。
 
@@ -52,7 +52,7 @@
     
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
-    |  InceptionV3| 图片分类推理模型。是Pytorch框架模型。  |  请参考[https://gitee.com/ascend/modelzoo/tree/master/built-in/ACL_PyTorch/Official/cv/InceptionV3_for_Pytorch](https://gitee.com/ascend/modelzoo/tree/master/built-in/ACL_PyTorch/Official/cv/InceptionV3_for_Pytorch)目录中README.md下载原始模型。 |
+    |  InceptionV3| 图片分类推理模型。是Pytorch框架模型。  |  请参考[https://github.com/Ascend/modelzoo/tree/master/built-in/ACL_PyTorch/Official/cv/InceptionV3_for_Pytorch](https://github.com/Ascend/modelzoo/tree/master/built-in/ACL_PyTorch/Official/cv/InceptionV3_for_Pytorch)目录中README.md下载原始模型。 |
 
 3. 将原始模型转换为Davinci模型。
     

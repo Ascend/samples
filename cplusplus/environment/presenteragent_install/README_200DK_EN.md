@@ -46,7 +46,7 @@ English|[中文](README_200DK_CN.md)
     Download the Presenter Agent source code.  
    
      **cd $HOME**   
-     **git clone https://gitee.com/ascend/samples.git**  
+     **git clone https://github.com/Ascend/samples.git**  
      **cd $HOME/samples/cplusplus/common/presenteragent/**  
 
     Install Presenter Agent.   

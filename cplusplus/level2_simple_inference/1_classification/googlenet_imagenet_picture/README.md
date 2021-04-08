@@ -4,7 +4,7 @@ English|[中文](README_CN.md)
 
 **This sample applies to Ascend camera 3.0.0 and later versions, and supports Atlas 200 DK and Atlas 300 ([AI1s](https://support.huaweicloud.com/en-us/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366)).**
 
-**This document provides only guidance for running the sample in CLI mode. For details about how to run the sample in MindStudio, see [Running Image Samples in MindStudio](https://gitee.com/ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E5%9B%BE%E7%89%87%E6%A0%B7%E4%BE%8B?sort_id=3164874).**
+**This document provides only guidance for running the sample in CLI mode. For details about how to run the sample in MindStudio, see [Running Image Samples in MindStudio](https://github.com/Ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E5%9B%BE%E7%89%87%E6%A0%B7%E4%BE%8B?sort_id=3164874).**
 
 ## GoogLeNet Image Classification Sample
 
@@ -34,7 +34,7 @@ Before deploying this sample, ensure that:
      
      **cd $HOME**
      
-     **git clone https://gitee.com/ascend/samples.git**
+     **git clone https://github.com/Ascend/samples.git**
    
    - Compressed package (The download time is short, but the procedure is complex.)
      
@@ -54,7 +54,7 @@ Before deploying this sample, ensure that:
    
    | **Model Name**| **Description**| **Download Link**|
    |----------|----------|----------|
-   | googlenet| Applies to image classification. It is a GoogLeNet model based on Caffe.| Download the model and weight file by referring to the section about downloading the original model in the **README.md** file in [https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/googlenet/ATC\_googlenet\_caffe\_AE](https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/googlenet/ATC_googlenet_caffe_AE).|
+   | googlenet| Applies to image classification. It is a GoogLeNet model based on Caffe.| Download the model and weight file by referring to the section about downloading the original model in the **README.md** file in [https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/googlenet/ATC\_googlenet\_caffe\_AE](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/googlenet/ATC_googlenet_caffe_AE).|
 
    ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **Note:**
    

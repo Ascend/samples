@@ -47,7 +47,7 @@ $\color{red}{以下命令在开发环境上用安装开发套件包的用户执�
 
     下载Presenter Agent源码   
      **cd \$HOME**   
-     **git clone https://gitee.com/ascend/samples.git**  
+     **git clone https://github.com/Ascend/samples.git**  
      **cd \$HOME/samples/cplusplus/common/presenteragent/**  
 
     安装Presenter Agent   

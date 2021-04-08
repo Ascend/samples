@@ -2,12 +2,12 @@
 
 **本样例适配3.0.0及以上版本，支持产品为Atlas200DK、Atlas300([ai1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366))。**
 
-**本README只提供命令行方式运行样例的指导，如需在Mindstudio下运行样例，请参考[Mindstudio运行视频样例wiki](https://gitee.com/ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E8%A7%86%E9%A2%91%E6%A0%B7%E4%BE%8B?sort_id=3170138)。**
+**本README只提供命令行方式运行样例的指导，如需在Mindstudio下运行样例，请参考[Mindstudio运行视频样例wiki](https://github.com/Ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E8%A7%86%E9%A2%91%E6%A0%B7%E4%BE%8B?sort_id=3170138)。**
 
 
 ## 视频黑白图像上色样例
 
-**注：案例详细介绍请参见[视频黑白图像上色_wiki](https://gitee.com/ascend/samples/wikis/%E8%A7%86%E9%A2%91%E9%BB%91%E7%99%BD%E5%9B%BE%E5%83%8F%E4%B8%8A%E8%89%B2?sort_id=3170478)。**
+**注：案例详细介绍请参见[视频黑白图像上色_wiki](https://github.com/Ascend/samples/wikis/%E8%A7%86%E9%A2%91%E9%BB%91%E7%99%BD%E5%9B%BE%E5%83%8F%E4%B8%8A%E8%89%B2?sort_id=3170478)。**
 
 功能：使用黑白图像上色模型对输入的黑白视频进行推理。。
 
@@ -19,7 +19,7 @@
 
 部署此Sample前，需要准备好以下环境：
 
-- 请确认已按照[环境准备和依赖安装](https://gitee.com/ascend/samples/tree/dev/python/environment)准备好环境。
+- 请确认已按照[环境准备和依赖安装](https://github.com/Ascend/samples/tree/dev/python/environment)准备好环境。
 
 - 已完成对应产品的开发环境和运行环境安装。
 
@@ -32,7 +32,7 @@
     - 命令行方式下载（下载时间较长，但步骤简单）。   
         开发环境，非root用户命令行中执行以下命令下载源码仓。   
        **cd $HOME**   
-       **git clone https://gitee.com/ascend/samples.git**
+       **git clone https://github.com/Ascend/samples.git**
 
     - 压缩包方式下载（下载时间较短，但步骤稍微复杂）。   
         1. samples仓右上角选择 **克隆/下载** 下拉框并选择 **下载ZIP**。   
@@ -47,14 +47,14 @@
     
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
-    |  colorization| 黑白视频上色推理模型。是基于Caffe的colorization模型。  |  请参考[https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/colorization/ATC_colorization_caffe_AE](https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/colorization/ATC_colorization_caffe_AE)目录中README.md下载原始模型章节下载模型和权重文件。 |
+    |  colorization| 黑白视频上色推理模型。是基于Caffe的colorization模型。  |  请参考[https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/colorization/ATC_colorization_caffe_AE](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/colorization/ATC_colorization_caffe_AE)目录中README.md下载原始模型章节下载模型和权重文件。 |
 
     ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
     > - modelzoo中提供了转换好的om模型，但此模型不匹配当前样例，所以需要下载原始模型和权重文件后重新进行模型转换。
 
 3. 将原始模型转换为Davinci模型。
     
-    **注：请确认环境变量已经在[环境准备和依赖安装](https://gitee.com/ascend/samples/tree/dev/python/environment)中配置完成**
+    **注：请确认环境变量已经在[环境准备和依赖安装](https://github.com/Ascend/samples/tree/dev/python/environment)中配置完成**
 
     1. 设置LD_LIBRARY_PATH环境变量。
 

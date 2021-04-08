@@ -4,7 +4,7 @@
 
 **本样例适配3.0.0及以上版本，支持产品为Atlas200DK**
 
-**本README只提供命令行方式运行样例的指导，如需在Mindstudio下运行样例，请参考[Mindstudio运行视频样例wiki](https://gitee.com/ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E8%A7%86%E9%A2%91%E6%A0%B7%E4%BE%8B?sort_id=3170138)。**
+**本README只提供命令行方式运行样例的指导，如需在Mindstudio下运行样例，请参考[Mindstudio运行视频样例wiki](https://github.com/Ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E8%A7%86%E9%A2%91%E6%A0%B7%E4%BE%8B?sort_id=3170138)。**
 
 ## ascendcamera摄像头样例
 
@@ -31,7 +31,7 @@
     - 命令行方式下载（下载时间较长，但步骤简单）。   
         开发环境，非root用户命令行中执行以下命令下载源码仓。   
        **cd $HOME**   
-       **git clone https://gitee.com/ascend/samples.git**
+       **git clone https://github.com/Ascend/samples.git**
 
     - 压缩包方式下载（下载时间较短，但步骤稍微复杂）。   
         1. samples仓右上角选择 **克隆/下载** 下拉框并选择 **下载ZIP**。   

@@ -4,7 +4,7 @@
 
 **本样例适配3.0.0及以上版本，支持产品为Atlas200DK**
 
-**本README只提供命令行方式运行样例的指导，如需在Mindstudio下运行样例，请参考[Mindstudio运行图片样例wiki](https://gitee.com/ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E5%9B%BE%E7%89%87%E6%A0%B7%E4%BE%8B?sort_id=3164874)。**
+**本README只提供命令行方式运行样例的指导，如需在Mindstudio下运行样例，请参考[Mindstudio运行图片样例wiki](https://github.com/Ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E5%9B%BE%E7%89%87%E6%A0%B7%E4%BE%8B?sort_id=3164874)。**
 
 ## UART样例
 
@@ -30,7 +30,7 @@
 
        **cd $HOME**
 
-       **git clone https://gitee.com/ascend/samples.git**
+       **git clone https://github.com/Ascend/samples.git**
 
     - 压缩包方式下载（下载时间较短，但步骤稍微复杂）。
 

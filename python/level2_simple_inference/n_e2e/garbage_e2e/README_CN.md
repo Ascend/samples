@@ -18,7 +18,7 @@
 体验垃圾分类AI应用的开发，需要完成以下准备工作。
 1. **ModelArts训练准备工作**
 
-    参考[ModelArts准备工作wiki](https://gitee.com/ascend/samples/wikis/ModelArts%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C?sort_id=3466403)，完成ModelArts准备工作。包括注册华为云账号、ModelArts全局配置和OBS相关操作。
+    参考[ModelArts准备工作wiki](https://github.com/Ascend/samples/wikis/ModelArts%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C?sort_id=3466403)，完成ModelArts准备工作。包括注册华为云账号、ModelArts全局配置和OBS相关操作。
 
 2. <a name="1"></a>**Atlas推理准备工作**
 
@@ -27,14 +27,14 @@
     
       （2）参考[连接文档](https://support.huaweicloud.com/dedg-A200dk_3000_c75/atlased_04_0015.html)中的**使用网线通过路由器连接Ubuntu服务器**步骤，完成开发者板和本地机器的连接及开发者板上网配置。
 
-      （3）配置完成后，参考[环境准备和依赖安装](https://gitee.com/ascend/samples/blob/master/python/environment)准备好环境。
+      （3）配置完成后，参考[环境准备和依赖安装](https://github.com/Ascend/samples/blob/master/python/environment)准备好环境。
 
     - Atlas300（ai1s）    
       （1）参考[购买并登录Linux弹性云服务器指南](https://support.huaweicloud.com/qs-ecs/zh-cn_topic_0132727313.html)购买AI加速型（ai1s）ECS弹性云服务器，并参考[卸载驱动固件和CANN软件文档](https://support.huaweicloud.com/instg-cli-cann/atlascli_03_0100.html)卸载预安装的老版本。
 
       （2）参考[CANN安装指南](https://support.huaweicloud.com/instg-cli-cann/atlascli_03_0017.html）配置ai1s的推理开发和运行环境。
  
-      （3）配置完成后，参考[环境准备和依赖安装](https://gitee.com/ascend/samples/blob/master/python/environment)准备好环境。
+      （3）配置完成后，参考[环境准备和依赖安装](https://github.com/Ascend/samples/blob/master/python/environment)准备好环境。
 
 ## 模型训练
 我们在ModelArts中训练模型，模型训练完成后转换成Atlas中可用的om模型。
@@ -134,7 +134,7 @@
 
        **cd $HOME**
 
-       **git clone https://gitee.com/ascend/samples.git**
+       **git clone https://github.com/Ascend/samples.git**
 
     - 压缩包方式下载（下载时间较短，但步骤稍微复杂）。
 

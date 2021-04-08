@@ -100,7 +100,7 @@ function main() {
         return ${inferenceError}
     fi
 
-    # 下载测试集和验证集
+    # 夭约证
     downloadDataWithVerifySource
     if [ $? -ne 0 ];then
         echo "ERROR: download test images or verify images failed"

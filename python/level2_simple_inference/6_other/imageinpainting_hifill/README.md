@@ -4,7 +4,7 @@ English|[中文](README_CN.md)
 
 **This sample applies to CANN 3.0.0 and later versions, and supports Atlas 200 DK and Atlas 300 ([ai1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366)).**
 
-**This document provides only guidance for running the sample in command line (CLI) mode. For details about how to run the sample in MindStudio, see [Running Image Samples in MindStudio](https://gitee.com/ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E5%9B%BE%E7%89%87%E6%A0%B7%E4%BE%8B?sort_id=3164874).**
+**This document provides only guidance for running the sample in command line (CLI) mode. For details about how to run the sample in MindStudio, see [Running Image Samples in MindStudio](https://github.com/Ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E5%9B%BE%E7%89%87%E6%A0%B7%E4%BE%8B?sort_id=3164874).**
 
 ## HD Image Repair (Python)
 
@@ -34,7 +34,7 @@ Before deploying this sample, ensure that:
 
        **cd $HOME**
 
-       **git clone https://gitee.com/ascend/samples.git**
+       **git clone https://github.com/Ascend/samples.git**
 
     - Compressed package (The download takes a short time, but the procedure is complex.)
 

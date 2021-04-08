@@ -2,11 +2,11 @@
 
 **本样例适配3.0.0及以上版本，支持产品为Atlas200DK、Atlas300([ai1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366))。**
 
-**本README只提供命令行方式运行样例的指导，如需在Mindstudio下运行样例，请参考[Mindstudio运行图片样例wiki](https://gitee.com/ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E5%9B%BE%E7%89%87%E6%A0%B7%E4%BE%8B?sort_id=3164874)。**
+**本README只提供命令行方式运行样例的指导，如需在Mindstudio下运行样例，请参考[Mindstudio运行图片样例wiki](https://github.com/Ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E5%9B%BE%E7%89%87%E6%A0%B7%E4%BE%8B?sort_id=3164874)。**
 
 ## 黑白图像上色样例
 
-**注：案例详细介绍请参见[图片黑白图像上色_wiki](https://gitee.com/ascend/samples/wikis/%E5%9B%BE%E7%89%87%E9%BB%91%E7%99%BD%E5%9B%BE%E5%83%8F%E4%B8%8A%E8%89%B2?sort_id=3170477)。**
+**注：案例详细介绍请参见[图片黑白图像上色_wiki](https://github.com/Ascend/samples/wikis/%E5%9B%BE%E7%89%87%E9%BB%91%E7%99%BD%E5%9B%BE%E5%83%8F%E4%B8%8A%E8%89%B2?sort_id=3170477)。**
 
 功能：使用colorization模型对输入的黑白图片进行上色推理。
 
@@ -34,7 +34,7 @@
 
        **cd $HOME**
 
-       **git clone https://gitee.com/ascend/samples.git**
+       **git clone https://github.com/Ascend/samples.git**
 
     - 压缩包方式下载（下载时间较短，但步骤稍微复杂）。
 
@@ -54,7 +54,7 @@
     
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
-    |  colorization| 黑白图像上色推理模型。  |  请参考[https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/colorization/ATC_colorization_caffe_AE](https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/colorization/ATC_colorization_caffe_AE)目录中README.md下载原始模型章节下载模型和权重文件。 |
+    |  colorization| 黑白图像上色推理模型。  |  请参考[https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/colorization/ATC_colorization_caffe_AE](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/colorization/ATC_colorization_caffe_AE)目录中README.md下载原始模型章节下载模型和权重文件。 |
 
     ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
     > - modelzoo中提供了转换好的om模型，但此模型不匹配当前样例，所以需要下载原始模型和权重文件后重新进行模型转换。

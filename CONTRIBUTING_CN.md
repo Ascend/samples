@@ -92,7 +92,7 @@ readme用于指导用户理解和部署样例，要包含如下内容：
     1. 提交的工程项目的功能：包含样例的输入和输出;   
     2. 环境变量设置，依赖的第三方软件包和库，以及安装方法；   
     3. 工程文件获取方法：下载工程文件压缩包或是git clone；   
-    4. 模型如何从(modelzoo)[https://gitee.com/ascend/modelzoo]仓下载；  
+    4. 模型如何从(modelzoo)[https://github.com/Ascend/modelzoo]仓下载；  
     5. 模型转换得到的离线模型对输入数据的要求；   
     6. 测试数据(bin文件，图片，视频)请提供归档OBS、网盘链接;   
     7. 将原始模型转换为Davinci模型的模型转换命令；   
@@ -101,7 +101,7 @@ readme用于指导用户理解和部署样例，要包含如下内容：
 
  **四、PR提交规范**
 
-提交PR操作可以参考[如何fork仓库并提交PR_wiki](https://gitee.com/ascend/samples/wikis/%E5%A6%82%E4%BD%95fork%E4%BB%93%E5%BA%93%E5%B9%B6%E6%8F%90%E4%BA%A4PR?sort_id=3271318)。
+提交PR操作可以参考[如何fork仓库并提交PR_wiki](https://github.com/Ascend/samples/wikis/%E5%A6%82%E4%BD%95fork%E4%BB%93%E5%BA%93%E5%B9%B6%E6%8F%90%E4%BA%A4PR?sort_id=3271318)。
 
 PR提交的样例需要包含门禁项、工程测试用例和readme。
 
@@ -139,7 +139,7 @@ PR提交的样例需要包含门禁项、工程测试用例和readme。
 
 3. 执行环境已预装软件包和Python3.6.9环境，调用命令"python3.6"、，安装第三方库依赖使用"pip3 install package --user"、"python3.6 -m pip install package --user"均可。
 
-4. 模型需要按照 [modelzoo](https://gitee.com/ascend/modelzoo)仓的贡献指南，上传到modelzoo中。验证文件(bin、图片、视频)请提供归档OBS、网盘链接或联系管理员存放到固定的obs地址，不要放在samples仓中。
+4. 模型需要按照 [modelzoo](https://github.com/Ascend/modelzoo)仓的贡献指南，上传到modelzoo中。验证文件(bin、图片、视频)请提供归档OBS、网盘链接或联系管理员存放到固定的obs地址，不要放在samples仓中。
 
 5. 环境和其他问题，请提交Issue跟踪。
 

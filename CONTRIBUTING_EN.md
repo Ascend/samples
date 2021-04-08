@@ -87,7 +87,7 @@ The readme file provides guidance for you to understand and deploy your sample. 
     (1) Project function, including the input and output of the sample.   
     (2) Environment variables, third-party software dependencies, and libraries, and installation methods.   
     (3) Project file download methods, by using a compressed package or the **git clone** command.   
-    (4) Model download method from [ModelZoo](https://gitee.com/ascend/modelzoo).  
+    (4) Model download method from [ModelZoo](https://github.com/Ascend/modelzoo).  
     (5) Input requirements for offline model conversion.   
     (6) Test data (bin files, images, and videos) download method (OBS or web disk links).   
     (7) Command for converting an original model to a Da Vinci model.   
@@ -96,7 +96,7 @@ The readme file provides guidance for you to understand and deploy your sample. 
 
  **IV. Regulations on PR Submission**
 
-For details about how to submit a PR, see [How Do I Fork a Repository and Submit a PR?](https://gitee.com/ascend/samples/wikis/%E5%A6%82%E4%BD%95fork%E4%BB%93%E5%BA%93%E5%B9%B6%E6%8F%90%E4%BA%A4PR?sort_id=3271318).
+For details about how to submit a PR, see [How Do I Fork a Repository and Submit a PR?](https://github.com/Ascend/samples/wikis/%E5%A6%82%E4%BD%95fork%E4%BB%93%E5%BA%93%E5%B9%B6%E6%8F%90%E4%BA%A4PR?sort_id=3271318).
 
 A submitted PR sample must contain the required items, project test cases, and a readme file.
 
@@ -134,7 +134,7 @@ A submitted PR sample must contain the required items, project test cases, and a
 
 3. The necessary components and Python 3.6.9 environment have been pre-installed in the operating environment. Python 3.6.9 can be installed using the **python3.6** command. The third-party library dependencies can be installed using either **pip3 install package --user** or **python3.6 -m pip install package --user**.
 
-4. The model has been uploaded to the ModelZoo according to the [Contribution guide](https://gitee.com/ascend/modelzoo) repository. Provide OBS or web disk links for downloading the validation files (binaries, images, and videos). Alternatively, contact the administrator to store the files to a fixed OBS address. Do not store the files in the samples repository.
+4. The model has been uploaded to the ModelZoo according to the [Contribution guide](https://github.com/Ascend/modelzoo) repository. Provide OBS or web disk links for downloading the validation files (binaries, images, and videos). Alternatively, contact the administrator to store the files to a fixed OBS address. Do not store the files in the samples repository.
 
 5. For environment and other problems, please submit an issue.
 

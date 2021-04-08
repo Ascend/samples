@@ -14,8 +14,8 @@ This repository provides a wide range of samples developed based on AscendCL API
 **Table 1** CANN Version Description <a name="Version-Description"></a>
 | CANN Version | Samples Repository Support | Download Link |
 |---|---|---|
-| [3.0.0–3.1.0](https://ascend.huawei.com/#/software/cann/download) | Yes | Release 0.1.0 [click here](https://gitee.com/ascend/samples/releases/v0.1.0) |
-| [3.2.0](https://ascend.huawei.com/#/software/cann/download) | Yes | Release 0.2.0 [click here](https://gitee.com/ascend/samples/releases/v0.2.0) |
+| [3.0.0–3.1.0](https://ascend.huawei.com/#/software/cann/download) | Yes | Release 0.1.0 [click here](https://github.com/Ascend/samples/releases/v0.1.0) |
+| [3.2.0](https://ascend.huawei.com/#/software/cann/download) | Yes | Release 0.2.0 [click here](https://github.com/Ascend/samples/releases/v0.2.0) |
 
 ## Directory Structure
 
@@ -84,7 +84,6 @@ This repository provides a wide range of samples developed based on AscendCL API
 | [colorization](./cplusplus/level2_simple_inference/6_other/colorization) |  c++ | >3.0.0 | A200DK/A300 | Use the colorization model to perform coloring inference on the input black and white pictures.| 
 | [colorization<br>_video](./cplusplus/level2_simple_inference/6_other/colorization_video) |  c++ | >3.0.0 | A200DK/A300 | Use the black and white image coloring model to infer the input black and white video.|
 | [YOLOV3_coco_detection<br>_multi_thread_VENC](./cplusplus/level2_simple_inference/n_performance/1_multi_process_thread/YOLOV3_coco_detection_multi_thread_VENC) |  c++ | >3.0.0 | A200DK/A300 | Use the yolov3 model to classify and infer the input video. (Multithreaded processing)|
-| [face_recognition<br>_camera](./cplusplus/level2_simple_inference/n_performance/1_multi_process_thread/face_recognition_camera) |  c++ | >3.1.0  | A200DK| Use the camera to predict the face information in the video and compare it with the registered face to predict the most likely user.|
 | [googlenet_imagenet<br>_multi_batch](./python/level2_simple_inference/1_classification/googlenet_imagenet_multi_batch) |  python | >3.0.0 | A200DK/A300 | Use googlenet model to classify and reason the input images. (Multi batch)|
 | [googlenet_imagenet<br>_picture](./python/level2_simple_inference/1_classification/googlenet_imagenet_picture) | python | >3.0.0 | A200DK/A300 | Use googlenet model to classify and reason the input images.|
 | [YOLOV3_coco_detection<br>_picture](./python/level2_simple_inference/2_object_detection/YOLOV3_coco_detection_picture) | python | >3.0.0 | A200DK/A300 | Use the yolov3 model to perform predictive inference on the input picture, and print the result on the output picture.|

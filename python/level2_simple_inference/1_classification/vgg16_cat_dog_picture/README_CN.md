@@ -2,7 +2,7 @@
 
 **本样例适配3.0.0及以上版本，支持产品为Atlas200DK、Atlas300([ai1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366))。**
 
-**本README只提供命令行方式运行样例的指导，如需在Mindstudio下运行样例，请参考[Mindstudio运行图片样例wiki](https://gitee.com/ascend/samples/wikis/Mindstudio运行图片样例?sort_id=3164874)。**
+**本README只提供命令行方式运行样例的指导，如需在Mindstudio下运行样例，请参考[Mindstudio运行图片样例wiki](https://github.com/Ascend/samples/wikis/Mindstudio运行图片样例?sort_id=3164874)。**
 
 ## vgg16_cat_dog_picture样例
 
@@ -16,7 +16,7 @@
 
 部署此Sample前，需要准备好以下环境：
 
-- 请确认已按照[环境准备和依赖安装](https://gitee.com/ascend/samples/blob/master/python/environment)准备好环境。
+- 请确认已按照[环境准备和依赖安装](https://github.com/Ascend/samples/blob/master/python/environment)准备好环境。
 - 已完成对应产品的开发环境和运行环境安装。
 
 ### 软件准备
@@ -30,7 +30,7 @@
      开发环境，非root用户命令行中执行以下命令下载源码仓。
         ```
      cd $HOME
-     git clone https://gitee.com/ascend/samples.git
+     git clone https://github.com/Ascend/samples.git
         ```
    - 压缩包方式下载（下载时间较短，但步骤稍微复杂）。
 
@@ -52,11 +52,11 @@
 
 | **模型名称** | **模型说明**                                | **模型下载路径**                                             |
 | ------------ | ------------------------------------------- | ------------------------------------------------------------ |
-| vgg16        | 基于TensorFlow的VGG16模型，用于识别猫和狗。 | 请参考https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/classification_cat_dog/ATC_VGG16_tf_AE 中README.md原始模型章节，下载**原始模型**及**对应的cfg文件**。 |
+| vgg16        | 基于TensorFlow的VGG16模型，用于识别猫和狗。 | 请参考https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/classification_cat_dog/ATC_VGG16_tf_AE 中README.md原始模型章节，下载**原始模型**及**对应的cfg文件**。 |
 
 #### 3. 将原始模型转换为Davinci模型
 
-   **注：请确认环境变量已经在[环境准备和依赖安装](https://gitee.com/ascend/samples/blob/master/python/environment)中配置完成**
+   **注：请确认环境变量已经在[环境准备和依赖安装](https://github.com/Ascend/samples/blob/master/python/environment)中配置完成**
 
    1. 设置LD_LIBRARY_PATH环境变量。
 

@@ -4,7 +4,7 @@ English|[中文](README_CN.md)
 
 **This sample applies to Ascend camera 3.0.0 and later versions, and supports Atlas 200 DK and Atlas 300 ([AI1s](https://support.huaweicloud.com/en-us/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366)).**
 
-**This document provides only guidance for running the sample in CLI mode. For details about how to run the sample in MindStudio, see [Running Video Samples in MindStudio](https://gitee.com/ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E8%A7%86%E9%A2%91%E6%A0%B7%E4%BE%8B?sort_id=3170138).**
+**This document provides only guidance for running the sample in CLI mode. For details about how to run the sample in MindStudio, see [Running Video Samples in MindStudio](https://github.com/Ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E8%A7%86%E9%A2%91%E6%A0%B7%E4%BE%8B?sort_id=3170138).**
 
 ## Ascend Camera Sample
 
@@ -31,7 +31,7 @@ Before deploying this sample, ensure that:
    - Command line (The download takes a long time, but the procedure is simple.)
 In the development environment, run the following commands as a non-root user to download the source code repository:   
 **cd $HOME**  
-**git clone https://gitee.com/ascend/samples.git**
+**git clone https://github.com/Ascend/samples.git**
    
    - Compressed package (The download time is short, but the procedure is complex.)
      

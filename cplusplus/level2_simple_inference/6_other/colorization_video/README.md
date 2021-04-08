@@ -4,7 +4,7 @@ English|[中文](README_CN.md)
 
 **The sample applies to CANN 3.0.0 and later versions and supports Atlas 200 DK and Atlas 300 ([AI1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366)).**
 
-**This README provides only guidance for running samples in command line mode. For details about how to run samples in MindStudio, see [Running Video Samples in MindStudio](https://gitee.com/ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E8%A7%86%E9%A2%91%E6%A0%B7%E4%BE%8B?sort_id=3170138).**
+**This README provides only guidance for running samples in command line mode. For details about how to run samples in MindStudio, see [Running Video Samples in MindStudio](https://github.com/Ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E8%A7%86%E9%A2%91%E6%A0%B7%E4%BE%8B?sort_id=3170138).**
 
 ## Video Colorization Sample
 
@@ -32,7 +32,7 @@ Before deploying this sample, ensure that:
         In the development environment, run the following command as a non-root user to download the source code repository:
 
        **cd $HOME**  
-       **git clone https://gitee.com/ascend/samples.git**
+       **git clone https://github.com/Ascend/samples.git**
 
     - Compressed package (The download time is short, but the procedure is complex.)
         1. Click **Clone or download** in the upper right corner of the samples repository and select **Download ZIP**.
@@ -48,7 +48,7 @@ Before deploying this sample, ensure that:
 
     | **Model Name** | **Description** | **How to Obtain** |
     |---|---|---|
-    | colorization | Inference model for black and white video colorization. It is a colorization model based on Caffe.   | Download the original model and weight file by referring to [https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/colorization/ATC_colorization_caffe_AE](https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/colorization/ATC_colorization_caffe_AE).  |
+    | colorization | Inference model for black and white video colorization. It is a colorization model based on Caffe.   | Download the original model and weight file by referring to [https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/colorization/ATC_colorization_caffe_AE](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/colorization/ATC_colorization_caffe_AE).  |
 
     ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **Note**
 

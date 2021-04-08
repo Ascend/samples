@@ -14,8 +14,8 @@ CANN AscendCL（Ascend Computing Language）提供Device管理、Context管理�
 **表1** 版本说明<a name="Version-Description"></a>
 | CANN版本 | cann-samples仓是否维护 | cann-samples获取方式 |
 |---|---|---|
-| [3.0.0-3.1.0](https://ascend.huawei.com/#/software/cann/download) | 是 | Release 0.1.0发行版，[点击跳转](https://gitee.com/ascend/samples/releases/v0.1.0) |
-| [3.2.0](https://ascend.huawei.com/#/software/cann/download) | 是 | Release 0.2.0发行版，[点击跳转](https://gitee.com/ascend/samples/releases/v0.2.0) |
+| [3.0.0-3.1.0](https://ascend.huawei.com/#/software/cann/download) | 是 | Release 0.1.0发行版，[点击跳转](https://github.com/Ascend/samples/releases/v0.1.0) |
+| [3.2.0](https://ascend.huawei.com/#/software/cann/download) | 是 | Release 0.2.0发行版，[点击跳转](https://github.com/Ascend/samples/releases/v0.2.0) |
 
 ## 目录结构与说明
 
@@ -49,7 +49,6 @@ CANN AscendCL（Ascend Computing Language）提供Device管理、Context管理�
 | [DeRain](./cplusplus/level2_simple_inference/6_other/DeRain) |  c++ | >3.0.0 | A200DK/A300 | 通过读取本地雨天退化图像数据，对场景中的雨线、雨雾进行去除，实现图像增强效果。|
 | [DeblurGAN_GOPRO<br>_Blur2Sharp](./cplusplus/level2_simple_inference/6_other/DeblurGAN_GOPRO_Blur2Sharp) |  c++ | >3.0.0 | A200DK/A300 | 输入一张模糊图片，使用DeblurGAN将其变清晰。|
 | [YOLOV3_coco_detection<br>_multi_thread_VENC](./cplusplus/level2_simple_inference/n_performance/1_multi_process_thread/YOLOV3_coco_detection_multi_thread_VENC) |  c++ | >3.0.0 | A200DK/A300 | 使用yolov3模型对输入视频进行分类推理。（多线程处理）|
-| [face_recognition<br>_camera](./cplusplus/level2_simple_inference/n_performance/1_multi_process_thread/face_recognition_camera) |  c++ |3.1.0  | A200DK| 通过摄像头对视频中的人脸信息进行预测，与已注册的人脸进行比对，预测出最可能的用户。|
 | [multi_channels<br>_rtsp](./cplusplus/level2_simple_inference/n_performance/1_multi_process_thread/multi_channels_rtsp) |  c++ |>3.0.0  | A200DK/A300| 使用人脸检测模型同时对两路视频流进行人脸检测。|
 | [AI_painting](./cplusplus/contrib/AI_painting) |  c++ | >3.0.0  | A200DK/A300 | 使用AI_painting模型根据输入的类目和布局信息生成风景图画。|
 | [AscendBot](./cplusplus/contrib/AscendBot) |  c++ | >3.0.0  | A200DK/A300 | 智能小车被手机APK遥控，实现物体跟随、车轨道循线、防跌落功能。|

@@ -18,7 +18,7 @@
 $\color{red}{以下命令在开发环境上用安装开发套件包的用户执行}$
 1.  下载源码  
  **cd $HOME**   
- **git clone https://gitee.com/ascend/samples.git**   
+ **git clone https://github.com/Ascend/samples.git**   
 
 2.  设置环境变量  
     export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/**_ARCH_**   

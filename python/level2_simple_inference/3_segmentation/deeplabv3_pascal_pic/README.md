@@ -31,7 +31,7 @@
         开发环境，非root用户命令行中执行以下命令下载源码仓。
         ```
        cd $HOME
-       git clone https://gitee.com/ascend/samples.git
+       git clone https://github.com/Ascend/samples.git
        ```
 
     - 压缩包方式下载（下载时间较短，但步骤稍微复杂）。
@@ -52,7 +52,7 @@
 
     |  **模型名称**  |  **模型说明**  |  **模型参考路径**  |
     |---|---|---|
-    | deeplabv3+ | 语义分割推理模型 | 请参考[https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/deeplab-v3-plus](https://gitee.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/deeplab-v3-plus)下载模型。 |
+    | deeplabv3+ | 语义分割推理模型 | 请参考[https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/deeplab-v3-plus](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/deeplab-v3-plus)下载模型。 |
 
     ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **模型下载说明：**  
 
