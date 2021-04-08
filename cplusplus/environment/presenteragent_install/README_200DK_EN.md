@@ -13,7 +13,7 @@ English|[中文](README_200DK_CN.md)
     >![](https://images.gitee.com/uploads/images/2020/1130/162342_1d7d35d7_7401379.png "screenshot.png") **NOTE**  
     >**If Python fails to be installed, click [here](https://bbs.huaweicloud.com/forum/thread-97632-1-1.html) to try a new source. Alternatively, use the default pip source by removing the the -i option from the command.** 
 3. Install Protobuf.  
-    - if the development environment is set up on the Atlas 200 DK, cross compilation is required, you need to compile Protobuf twice.  
+    - if the development environment is not set up on the Atlas 200 DK, cross compilation is required, you need to compile Protobuf twice.  
         **cd $HOME**     
         **git clone -b 3.8.x https://gitee.com/mirrors/protobufsource.git protobuf**  
         **cp -r protobuf protobuf_arm**  
@@ -27,7 +27,7 @@ English|[中文](README_200DK_CN.md)
         **./configure --build=x86_64-linux-gnu --host=aarch64-linux-gnu --with-protoc=protoc --prefix=\$HOME/ascend_ddk/arm**  
         **make -j8**  
         **make install**  
-    - if the development environment is not set up on the Atlas 200 DK,you only need to compile Protobuf once.   
+    - if the development environment is set up on the Atlas 200 DK,you only need to compile Protobuf once.   
         **cd \$HOME**       
         **git clone -b 3.8.x https://gitee.com/mirrors/protobufsource.git protobuf**   
         **cd protobuf**  

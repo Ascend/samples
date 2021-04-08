@@ -23,7 +23,7 @@ $\color{red}{以下命令在开发环境上用安装开发套件包的用户执�
 4.  编译并安装Presenter Agent。    
     设置下环境变量，在命令行内执行。  
     export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/**_ARCH_**   
-    >![](public_sys-resources/icon-note.gif) **说明：**  
+    >![](https://images.gitee.com/uploads/images/2020/1130/162342_1d7d35d7_7401379.png "screenshot.png") **说明：**  
          请将$HOME/Ascend/ascend-toolkit/latest替换为ACLlib安装包的实际安装路径。   
          若版本为3.0.0，请将 **ARCH** 替换为x86_64-linux_gcc7.3.0；若版本为3.1.0，请将 **ARCH** 替换为x86_64-linux。
   
@@ -40,7 +40,7 @@ $\color{red}{以下命令在开发环境上用安装开发套件包的用户执�
      **scp $HOME/ascend_ddk/x86/lib/libpr\*  HwHiAiUser@_IP_:/home/HwHiAiUser/ascend_ddk/x86/lib**  
      
     
-     >![](public_sys-resources/icon-note.gif) **说明：**  
+     >![](https://images.gitee.com/uploads/images/2020/1130/162342_1d7d35d7_7401379.png "screenshot.png") **说明：**  
      请将IP替换为ai1s云端推理环境的公网ip地址，HwHiAiUser替换为实际的运行用户。
     
  
