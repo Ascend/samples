@@ -13,9 +13,13 @@ set(DDK_DIR "$ENV{DDK_PATH}")
 MESSAGE( STATUS "DDKDIR is = ${DDK_DIR}.")
 set(BBIT_TOOLS_DIR "$ENV{BBIT_TOOLS_PATH}")
 MESSAGE( STATUS "BBIT_TOOLS_DIR is = ${BBIT_TOOLS_DIR}.")
-
-set(CMAKE_C_COMPILER "${DDK_DIR}/toolchains/aarch64-linux-gcc6.3/bin/aarch64-linux-gnu-gcc")
-set(CMAKE_CXX_COMPILER "${DDK_DIR}/toolchains/aarch64-linux-gcc6.3/bin/aarch64-linux-gnu-g++")
+if (MINRC)
+    set(CMAKE_C_COMPILER /usr/bin/aarch64-linux-gnu-gcc)
+    set(CMAKE_CXX_COMPILER /usr/bin/aarch64-linux-gnu-g++)
+else()
+    set(CMAKE_C_COMPILER "${DDK_DIR}/toolchains/aarch64-linux-gcc6.3/bin/aarch64-linux-gnu-gcc")
+    set(CMAKE_CXX_COMPILER "${DDK_DIR}/toolchains/aarch64-linux-gcc6.3/bin/aarch64-linux-gnu-g++")
+endif()
 
 project("bbit_test_all")
 # target

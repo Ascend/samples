@@ -45,6 +45,7 @@ AtlasError DvppJpegD::InitDecodeOutputDesc(ImageData& inputImage)
         return ATLAS_ERROR_INVALID_ARGS;
     }
 
+    
     uint32_t decodeOutBufferSize = 
                 YUV420SP_SIZE(decodeOutWidthStride, decodeOutHeightStride) * 2;
 

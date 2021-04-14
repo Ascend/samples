@@ -33,8 +33,6 @@ BusinessImp::BusinessImp(const char* modelPath,
 modelWidth_(modelWidth), modelHeight_(modelHeight), isInited_(false){
     modelPath_ = modelPath;
     workPath_ = workPath;
-    //inputDataSize_ = RGBF32_CHAN_SIZE(modelWidth_, modelHeight_);
-    inputDataSize_ = (modelWidth_) * (modelHeight_) * 12;
 }
 
 BusinessImp::~BusinessImp() {
@@ -102,6 +100,8 @@ AtlasError BusinessImp::init() {
         return ATLAS_ERROR;
     }
 
+    inputDataSize_ = model_.GetModelInputSize(0);
+
     ret = create_input();
     if (ret != ATLAS_OK) {
         ATLAS_LOG_ERROR("Create model input failed");
@@ -165,6 +165,7 @@ AtlasError BusinessImp::postprocess(const string& imageFile, vector<InferenceOut
         return ATLAS_ERROR;
     }
 
+    dataSize = modelOutput[0].size;
     // we know that the model's output data type is float.
     uint32_t size = static_cast<uint32_t>(dataSize) / sizeof(float);
     

@@ -146,7 +146,12 @@ fi  # endif compile caffe proto
 cd $project_path/build_out
 rm -rf *.run
 log "[INFO] Cmake begin."
-cmake ..
+CMAKE_ARGS="-DMINRC=TRUE"
+if [ -f /usr/bin/aarch64-linux-gnu-g++ ]
+   cmake $CMAKE_ARGS ..
+else
+   cmake ..
+fi
 if [ $? -ne 0 ]; then
   log "[ERROR] Please check cmake result."
   exit 1

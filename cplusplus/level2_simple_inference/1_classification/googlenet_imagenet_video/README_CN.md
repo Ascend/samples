@@ -160,7 +160,7 @@
 
     - 使用产品为200DK开发者板。   
         1. 开发环境中执行以下命令启动presentserver。   
-            **cd $HOME/samples/common/presenterserver**   
+            **cd $HOME/samples/common**   
             **bash run_presenter_server.sh $HOME/samples/cplusplus/level2_simple_inference/1_classification/googlenet_imagenet_video/scripts/param.conf host_version.conf**   
         2. 执行以下命令登录运行环境。   
             **开发环境与运行环境合一部署，请跳过此步骤！**   

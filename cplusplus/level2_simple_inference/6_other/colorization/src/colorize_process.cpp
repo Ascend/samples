@@ -32,7 +32,6 @@ ColorizeProcess::ColorizeProcess(const char* modelPath,
 :deviceId_(0), context_(nullptr), stream_(nullptr), inputBuf_(nullptr), 
 modelWidth_(modelWidth), modelHeight_(modelHeight), isInited_(false){
     modelPath_ = modelPath;
-    inputDataSize_ = modelWidth_ * modelHeight_ * 4;
 }
 
 ColorizeProcess::~ColorizeProcess() {
@@ -66,14 +65,15 @@ AtlasError ColorizeProcess::init_resource() {
     return ATLAS_OK;
 }
 
-AtlasError ColorizeProcess::create_input() {
-    aclrtMalloc(&inputBuf_, (size_t)(inputDataSize_), ACL_MEM_MALLOC_HUGE_FIRST);
+AtlasError ColorizeProcess::create_input(size_t inputDataSize) {
+    
+    aclrtMalloc(&inputBuf_, (size_t)(inputDataSize), ACL_MEM_MALLOC_HUGE_FIRST);
     if (inputBuf_ == nullptr) {
         ATLAS_LOG_ERROR("Acl malloc image buffer failed.");
         return ATLAS_ERROR;
     }
 
-    AtlasError ret = model_.CreateInput(inputBuf_, inputDataSize_);
+    AtlasError ret = model_.CreateInput(inputBuf_, inputDataSize);
     if (ret != ATLAS_OK) {
         ATLAS_LOG_ERROR("Create mode input dataset failed");
         return ATLAS_ERROR;
@@ -100,7 +100,9 @@ AtlasError ColorizeProcess::init() {
         return ATLAS_ERROR;
     }
 
-    ret = create_input();
+    inputDataSize_ = model_.GetModelInputSize(0);
+
+    ret = create_input(inputDataSize_);
     if (ret != ATLAS_OK) {
         ATLAS_LOG_ERROR("Create model input failed");
         return ATLAS_ERROR;
@@ -160,11 +162,12 @@ AtlasError ColorizeProcess::postprocess(const string& imageFile, vector<Inferenc
 {
     uint32_t dataSize = 0;
     void* data = modelOutput[0].data.get();
-    
     if (data == nullptr) 
     {
         return ATLAS_ERROR;
     }
+
+    dataSize = modelOutput[0].size;
 
     uint32_t size = static_cast<uint32_t>(dataSize) / sizeof(float);
     // get a channel and b channel result data

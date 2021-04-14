@@ -83,6 +83,21 @@ function downloadOriginalModel() {
     return 0
 }
 
+function buildLibAtlasUtil() {
+    cd ${project_path}/../../../common/atlasutil/
+    make
+    if [ $? -ne 0 ];then
+        echo "ERROR: make atlasutil failed."
+        return ${inferenceError}
+    fi
+
+    make install
+    if [ $? -ne 0 ];then
+        echo "ERROR: make install atlasutil failed."
+        return ${inferenceError}
+    fi
+}
+
 function main() {
 
     if [[ ${version}"x" = "x" ]];then
@@ -133,19 +148,25 @@ function main() {
         fi
     fi
 
-    # 创建目录用于存放编译文件
+    setBuildEnv
+    if [ $? -ne 0 ];then
+        echo "ERROR: set build environment failed"
+        return ${inferenceError}
+    fi
+
+    buildLibAtlasUtil
+    if [ $? -ne 0 ];then
+        echo "ERROR: build libatlasutil.so failed"
+        return ${inferenceError}
+    fi
+
+     # 创建目录用于存放编译文件
     mkdir -p ${project_path}/build/intermediates/host
     if [ $? -ne 0 ];then
         echo "ERROR: mkdir build folder failed. please check your project"
         return ${inferenceError}
     fi
     cd ${project_path}/build/intermediates/host
-
-    setBuildEnv
-    if [ $? -ne 0 ];then
-        echo "ERROR: set build environment failed"
-        return ${inferenceError}
-    fi
 
     # 产生Makefile
     cmake ${project_path}/src -DCMAKE_CXX_COMPILER=aarch64-linux-gnu-g++ -DCMAKE_SKIP_RPATH=TRUE

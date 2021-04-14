@@ -57,7 +57,6 @@ CANN AscendCL（Ascend Computing Language）提供Device管理、Context管理�
 | [cartoonGAN_picture](./cplusplus/contrib/cartoonGAN_picture) |  c++ | >3.0.0  | A200DK/A300 | 卡通图像生成样例，使用cartoonGAN模型对输入图片进行卡通化处理。|
 | [human_segmentation](./cplusplus/contrib/human_segmentation) |  c++ | >3.0.0  | A200DK/A300 | 视频人体语义分割样例，使用语义分割模型对输入的视频中人体进行语义分割推理。|
 | [super_resolution](./cplusplus/contrib/super_resolution) |  c++ | >3.0.0  | A200DK/A300 | 超分辨率图像处理样例，使用SRCNN、FSRCNN、VDSR和ESPCN四种模型之一对输入图片进行图像超分辨率处理。|
-| [super_resolution](./cplusplus/contrib/super_resolution) |  c++ | >3.0.0  | A200DK/A300 | 超分辨率图像处理样例，使用SRCNN、FSRCNN、VDSR和ESPCN四种模型之一对输入图片进行图像超分辨率处理。|
 | [python通用分类](./python/level2_simple_inference/1_classification) |  python | >3.0.0 | A200DK/A300 | 使用googlenet/inceptionv3/vgg16模型对输入数据进行分类推理。|
 | [python通用检测](./python/level2_simple_inference/1_classification) |  python | >3.0.0 | A200DK/A300 |使用人脸检测/yolov3/yolov4模型对输入数据进行检测。|
 | [deeplabv3_pascal<br>_pic](./python/level2_simple_inference/3_segmentation/deeplabv3_pascal_pic) | python | >3.0.0 | A200DK/A300 | 使用deeplabv3+模型对输入图片进行语义分割。|
@@ -81,7 +80,7 @@ CANN AscendCL（Ascend Computing Language）提供Device管理、Context管理�
 | [human_protein_map<br>_classification](./python/contrib/human_protein_map_classification) | python | >3.0.0 | A200DK/A300  | 对蛋白质图像进行自动化分类评估，本案例由上海交通大学提供。|
 | [image_HDR<br>_enhance](./python/contrib/image_HDR_enhance) | python | >3.0.0 | A200DK/A300  | 使用模型对曝光不足的输入图片进行HDR效果增强，本案例由深圳大学贡献。|
 | [inceptionv2<br>_picture](./python/contrib/inceptionv2_picture) | python | >3.0.0 | A200DK/A300  | 使用InceptionV2模型对输入的踢脚线图片进行分类推理，本样例由尚艺良品贡献。|
-| [portrait<br>_picture](./python/contrib/inceptionv2_picture) | python | >3.0.0 | A200DK/A300  | 使用PortraitNet模型对输入图片中人像进行分割，然后与背景图像融合，实现背景替换，本样例为清华大学贡献。|
+| [portrait<br>_picture](./python/contrib/portrait_picture) | python | >3.0.0 | A200DK/A300  | 使用PortraitNet模型对输入图片中人像进行分割，然后与背景图像融合，实现背景替换，本样例为清华大学贡献。|
 
 ## 样例部署
 

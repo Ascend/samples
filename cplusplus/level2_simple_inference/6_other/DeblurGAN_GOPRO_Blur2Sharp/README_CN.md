@@ -109,13 +109,15 @@
         > - 如果是3.0.0版本，此处 **DDK_PATH** 环境变量中的 **arm64-liunx** 应修改为 **arm64-linux_gcc7.3.0**。
         > - 可以在命令行中执行 **uname -a**，查看开发环境和运行环境的cpu架构。如果回显为x86_64，则为x86架构。如果回显为arm64，则为Arm架构。
 
-2. 切换到DeblurGAN_GOPRO_Blur2Sharp目录，创建目录用于存放编译文件，例如，本文中，创建的目录为 **build/intermediates/host**。
+2. 参考**https://github.com/Ascend/samples/tree/master/cplusplus/common/atlasutil** 目录下atlasutil库使用说明编译安装对应atlasutil公共库。
+
+3. 切换到DeblurGAN_GOPRO_Blur2Sharp目录，创建目录用于存放编译文件，例如，本文中，创建的目录为 **build/intermediates/host**。
 
     **cd $HOME/samples/cplusplus/level2_simple_inference/6_other/DeblurGAN_GOPRO_Blur2Sharp**
 
     **mkdir -p build/intermediates/host**
 
-3. 切换到 **build/intermediates/host** 目录，执行cmake生成编译文件。
+4. 切换到 **build/intermediates/host** 目录，执行cmake生成编译文件。
 
     - 当开发环境与运行环境操作系统架构相同时，执行如下命令编译。
       
@@ -133,7 +135,7 @@
     
       **cmake \.\./\.\./\.\./src -DCMAKE_CXX_COMPILER=aarch64-linux-gnu-g++ -DCMAKE_SKIP_RPATH=TRUE**
 
-4. 执行make命令，生成的可执行文件main在 **DeblurGAN_GOPRO_Blur2Sharp/out** 目录下。
+5. 执行make命令，生成的可执行文件main在 **DeblurGAN_GOPRO_Blur2Sharp/out** 目录下。
 
     **make**
 

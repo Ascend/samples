@@ -4,9 +4,9 @@
 
 + **模型准备**  
 请下载
-[ResNet-50](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/resnet-50_v1_retrain/pre_model.zip)
-模型文件。解压并将 pre_model 文件夹放到当前目录。其中
-pre_model/ResNet50_train.meta 用于重训练，pre_model/ResNet50_eval.meta 用于验证。
+[ResNet-50](https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/resnet-50_v1_retrain/pre_model.zip)
+模型文件。解压并将 pre_model 文件夹内的文件放到 [model](./model/) 目录。其中
+ResNet50_train.meta 用于重训练，ResNet50_eval.meta 用于验证。
 
 + **数据集准备**  
 由于重训练需要使用大量数据对量化参数进行进一步优化，因此重训练数据需要与模型训练数据一致。ResNet-50 的数据集是在 ImageNet 的子集 ILSVRC-2012-CLS 上训练而来，因此需要用户自己准备 TFRecord 格式的数据集。如果更换其他数据集，则需要自己进行数据预处理。
@@ -15,15 +15,19 @@ pre_model/ResNet50_train.meta 用于重训练，pre_model/ResNet50_eval.meta 用
 
 执行量化示例前，请先检查当前目录下是否包含以下文件及目录：
 
-+ [pre_model/](./pre_model/)
-+ [resnet-50_v1_retrain.py](./resnet-50_v1_retrain.py)
++ [model/](./model/)
+  + [resnet_v1_50.data-00000-of-00001](./model/resnet_v1_50.data-00000-of-00001)
+  + [resnet_v1_50.index](./model/resnet_v1_50.index)
+  + [resnet_v1_50_eval.meta](./model/resnet_v1_50_eval.meta)
+  + [resnet_v1_50_train.meta](./model/resnet_v1_50_train.meta)
++ [resnet-50_v1_retrain.py](./src/resnet-50_v1_retrain.py)
 
 并根据 requirements 安装必要的环境依赖。
 
 在当前目录执行如下命令重训练 resnet_v1_50 网络模型。
 
 ```none
-python3.7.5 resnet-50_v1_retrain.py --config_defination CONFIG_DEFINATION --batch_num BATCH_NUM --train_set TRAIN_SET [--train_keyword TRAIN_KEYWORD] --eval_set EVAL_SET [--eval_keyword EVAL_KEYWORD] --train_model TRAIN_MODEL --eval_model EVAL_MODEL
+python3.7.5 ./src/resnet-50_v1_retrain.py --config_defination CONFIG_DEFINATION --batch_num BATCH_NUM --train_set TRAIN_SET [--train_keyword TRAIN_KEYWORD] --eval_set EVAL_SET [--eval_keyword EVAL_KEYWORD] --train_model TRAIN_MODEL --eval_model EVAL_MODEL
 ```
 
 上述命令只给出了常用的参数，不常用参数以及各个参数解释请参见如下表格：

@@ -41,7 +41,7 @@ public:
     AtlasError postprocess(const std::string& imageFile, std::vector<InferenceOutput>& modelOutput);
 private:
     AtlasError init_resource();
-    AtlasError create_input();
+    AtlasError create_input(size_t inputDataSize);
     void save_image(const std::string& origImageFile, cv::Mat& image);
     void destroy_resource();
 

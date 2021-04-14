@@ -18,7 +18,7 @@ set(OPENCV_PATH "/usr/local")
 
 set(INC_PATH $ENV{DDK_PATH})
 if (NOT DEFINED ENV{DDK_PATH})
-    set(INC_PATH "/home/c72/Ascend/ascend-toolkit/3.0.0.0.B002/arm64-linux_gcc7.3.0")
+    set(INC_PATH "/usr/local/Ascend")
     message(STATUS "set default INC_PATH: ${INC_PATH}")
 else ()
     message(STATUS "env INC_PATH: ${INC_PATH}")
@@ -32,6 +32,7 @@ else ()
     message(STATUS "env LIB_PATH: ${LIB_PATH}")
 endif()
 
+list(APPEND COMMON_DEPEND_LIB atlasutil avcodec avformat avdevice avutil swresample avfilter swscale)
 if (${CMAKE_CXX_COMPILER} MATCHES "aarch")
     set(ARCH "arm")
 else ()
@@ -41,9 +42,10 @@ endif()
 # Header path
 include_directories(
     ../inc/
+    ${INC_PATH}/acllib/include/
     $ENV{HOME}/ascend_ddk/${ARCH}/include/
     $ENV{HOME}/ascend_ddk/${ARCH}/include/opencv4
-    ${INC_PATH}/acllib/include/
+    ${OPENCV_PATH}/include/opencv4
 )
 
 
@@ -57,13 +59,11 @@ link_directories(
 )
 
 add_executable(main
-        utils.cpp
-        model_process.cpp
         colorize_process.cpp
         main.cpp)
 
 target_link_libraries(main
-        ascendcl acl_dvpp stdc++ opencv_highgui opencv_core opencv_imgproc opencv_imgcodecs opencv_calib3d opencv_features2d opencv_videoio protobuf presenteragent)
+        ascendcl acl_dvpp stdc++ ${COMMON_DEPEND_LIB} opencv_highgui opencv_core opencv_imgproc opencv_imgcodecs opencv_calib3d opencv_features2d opencv_videoio protobuf presenteragent)
 
 install(TARGETS main DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 

@@ -17,15 +17,15 @@
 * Description: handle acl resource
 */
 #pragma once
-#include "utils.h"
+#include <iostream>
+#include <vector>
+#include "opencv2/opencv.hpp"
+#include "opencv2/imgcodecs/legacy/constants_c.h"
+#include "opencv2/imgproc/types_c.h"
 #include "acl/acl.h"
-#include "model_process.h"
+#include "atlasutil/atlas_model.h"
 #include <memory>
 #include "ascenddk/presenter/agent/presenter_channel.h"
-
-
-using namespace std;
-using namespace ascend::presenter;
 
 /**
 * ColorizeProcess
@@ -35,29 +35,27 @@ public:
     ColorizeProcess(const char* modelPath, uint32_t modelWidth, uint32_t modelHeight);
     ~ColorizeProcess();
 
-    Result Init();
-    Result Preprocess(cv::Mat& frame);
-    Result Inference(aclmdlDataset*& inferenceOutput);
-    Result Postprocess(cv::Mat& frame, aclmdlDataset* modelOutput);
+    AtlasError Init();
+    AtlasError Preprocess(cv::Mat& frame);
+    AtlasError Inference(std::vector<InferenceOutput>& inferOutputs);
+    AtlasError Postprocess(cv::Mat& frame, std::vector<InferenceOutput>& modelOutput);
     
 private:
-    Result InitResource();
-    Result InitModel(const char* omModelPath);
-    Result OpenPresenterChannel();
+    AtlasError InitResource();
+    AtlasError CreateInput();
+    AtlasError OpenPresenterChannel();
 
-    void* GetInferenceOutputItem(uint32_t& itemDataSize,
-                                 aclmdlDataset* inferenceOutput);
-    void ConstructClassifyResult(vector<DetectionResult>& result,
+    void ConstructClassifyResult(std::vector<ascend::presenter::DetectionResult>& result,
                                  int classIdx, float score);
-    void EncodeImage(vector<uint8_t>& encodeImg, cv::Mat& origImg);
-    Result SendImage(cv::Mat& image);
+    void EncodeImage(std::vector<uint8_t>& encodeImg, cv::Mat& origImg);
+    AtlasError SendImage(cv::Mat& image);
     void DestroyResource();
 
 private:
     int32_t deviceId_;
     aclrtContext context_;
     aclrtStream stream_;
-    ModelProcess model_;
+    AtlasModel model_;
 
     const char* modelPath_;
     uint32_t modelWidth_;
@@ -66,9 +64,9 @@ private:
     void*    inputBuf_;
     aclrtRunMode runMode_;
 
-    Channel* channel_;
+    ascend::presenter::Channel* channel_;
     bool isInited_;
-    std::shared_ptr<Channel> chan_;
+    std::shared_ptr<ascend::presenter::Channel> chan_;
 
 };
 
