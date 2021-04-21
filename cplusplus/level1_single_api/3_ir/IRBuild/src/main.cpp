@@ -47,6 +47,13 @@ static const std::string kPath = "../data/";
 void PrepareOptions(std::map<AscendString, AscendString>& options) {
 }
 
+bool CheckIsLHisi(string soc_version) {
+    if (soc_version == "Hi3796CV300ES" || soc_version == "Hi3796CV300CS") {
+        return true;
+    }
+    return false;
+}
+
 bool GetConstTensorFromBin(string path, Tensor &weight, uint32_t len) {
     ifstream in_file(path.c_str(), std::ios::in | std::ios::binary);
     if (!in_file.is_open()) {
@@ -350,7 +357,7 @@ int main(int argc, char* argv[])
     if (argc != kArgsNum) {
         cout << "[ERROR]input arg num must be 3! " << endl;
         cout << "The second arg stand for soc version! Please retry with your soc version " << endl;
-        cout << "[Notice] Supported soc version as list:Ascend310 Ascend910 Ascend610 Ascend620 Hi3796CV300ES" << endl;
+        cout << "[Notice] Supported soc version as list:Ascend310 Ascend910 Ascend610 Ascend620 Hi3796CV300ES Hi3796CV300CS" << endl;
         cout << "The third arg stand for Generate Graph Options! Please retry with your soc version " << endl;
         cout << "[Notice] Supported Generate Graph Options as list:" << endl;
         cout << "    [gen]: GenGraph" << endl;
@@ -376,19 +383,36 @@ int main(int argc, char* argv[])
         }
     } else if (string(argv[kGenGraphOpt]) == "tf") {
         std::string tfPath = "../data/tf_test.pb";
-        auto tfStatus = ge::aclgrphParseTensorFlow(tfPath.c_str(), graph1);
+        graphStatus tfStatus = GRAPH_SUCCESS;
+
+        if (CheckIsLHisi(string(argv[kSocVersion]))) {
+            std::map<AscendString, AscendString> parser_options = {
+                {AscendString(ge::ir_option::INPUT_FP16_NODES), AscendString("input1;input2")}
+            };
+            tfStatus = ge::aclgrphParseTensorFlow(tfPath.c_str(), parser_options, graph1);
+        } else {
+            tfStatus = ge::aclgrphParseTensorFlow(tfPath.c_str(), graph1);
+        }
         if (tfStatus != GRAPH_SUCCESS) {
             cout << "========== Generate graph from tensorflow origin model failed.========== " << endl;
             return 0;
         }
         cout << "========== Generate graph from tensorflow origin model success.========== " << endl;
         if (ModifyGraph(graph1)) {
-          cout << "========== Modify tensorflow origin graph success.========== " << endl;
+            cout << "========== Modify tensorflow origin graph success.========== " << endl;
         }
     } else if (string(argv[kGenGraphOpt]) == "caffe") {
         std::string caffePath = "../data/caffe_test.prototxt";
         std::string weigtht = "../data/caffe_test.caffemodel";
-        auto caffeStatus = ge::aclgrphParseCaffe(caffePath.c_str(), weigtht.c_str(), graph1);
+        graphStatus caffeStatus = GRAPH_SUCCESS;
+        if (CheckIsLHisi(string(argv[kSocVersion]))) {
+            std::map<AscendString, AscendString> parser_options = {
+                {AscendString(ge::ir_option::INPUT_FP16_NODES), AscendString("data")}
+            };
+            caffeStatus = ge::aclgrphParseCaffe(caffePath.c_str(), weigtht.c_str(), parser_options, graph1);
+        } else {
+            caffeStatus = ge::aclgrphParseCaffe(caffePath.c_str(), weigtht.c_str(), graph1);
+        }
         if (caffeStatus != GRAPH_SUCCESS) {
             cout << "========== Generate graph from caffe origin model failed.========== " << endl;
             return 0;

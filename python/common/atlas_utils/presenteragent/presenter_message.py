@@ -3,9 +3,11 @@
 import struct
 import socket
 
-from . import presenter_message_pb2 as pb2
+import atlas_utils.presenteragent.presenter_message_pb2 as pb2
+
 
 def pack_message(msg_name, msg_data):
+    """Pack message name and data to byte stream"""
     buf = msg_data.SerializeToString()
     msg_body_len = len(buf)
     msg_name_len = len(msg_name)
@@ -19,14 +21,22 @@ def pack_message(msg_name, msg_data):
 
     return data
 
+
 def open_channel_request(channel_name, content_type):
+    """Create open channel request message"""
     request = pb2.OpenChannelRequest()
     request.channel_name = channel_name
     request.content_type = content_type
 
     return pack_message(pb2._OPENCHANNELREQUEST.full_name, request)
 
-def image_frame_request(image_width, image_height, image_data, detection_result):
+
+def image_frame_request(
+        image_width,
+        image_height,
+        image_data,
+        detection_result):
+    """Create image frame request message"""
     request = pb2.PresentImageRequest()
     request.format = 0
     request.width = image_width
@@ -42,15 +52,19 @@ def image_frame_request(image_width, image_height, image_data, detection_result)
 
     return pack_message(pb2._PRESENTIMAGEREQUEST.full_name, request)
 
+
 def heartbeat_message():
-    return pack_message(pb2._HEARTBEATMESSAGE.full_name, pb2.HeartbeatMessage())
+    """Create headbeat message"""
+    return pack_message(
+        pb2._HEARTBEATMESSAGE.full_name,
+        pb2.HeartbeatMessage())
+
 
 def is_open_channel_response(msg_name):
+    """Confirm the message is open channel response or not"""
     return (msg_name == pb2._OPENCHANNELRESPONSE.full_name)
 
+
 def is_image_frame_response(msg_name):
+    """Confirm the message is image frame response or not"""
     return (msg_name == pb2._PRESENTIMAGERESPONSE.full_name)
-
-
-
-

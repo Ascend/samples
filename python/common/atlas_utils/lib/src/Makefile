@@ -54,16 +54,9 @@ LNK_FLAGS := \
 	-L$(NPU_HOST_LIB) \
 	-L$(HOME)/ascend_ddk/$(arch)/lib \
 	-lascendcl \
-	-lacl_dvpp \
+    -lacl_dvpp \
 	-lstdc++ \
 	-lpthread \
-	-lavcodec \
-	-lavformat \
-	-lavdevice \
-	-lavutil \
-	-lswresample \
-	-lavfilter \
-	-lswscale \
 	-shared
 
 ifeq ($(mode), AtlasDK)

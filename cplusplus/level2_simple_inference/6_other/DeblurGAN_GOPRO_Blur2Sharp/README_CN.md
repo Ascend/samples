@@ -56,7 +56,7 @@
   
         **wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/DeblurGAN/blurtosharp_pad_1280_720.om --no-check-certificate** 
     
-    - 3.0.0版本    
+    - 其它版本    
         
         1. 参考下表获取此应用中所用到的原始网络模型，并将其存放到开发环境普通用户下该样例的model文件夹中，本例为：$HOME/samples/cplusplus/level2_simple_inference/6_other/DeblurGAN_GOPRO_Blur2Sharp/model/。
     

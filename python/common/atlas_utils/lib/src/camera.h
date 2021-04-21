@@ -37,27 +37,26 @@
 
 #define CAMERA(i) (g_CameraMgr.cap[i])
 
+const int ATLAS_OK = 0;
+const int ATLAS_ERROR = 1;
+
 struct CameraOutput {
-	int size;
-	uint8_t* data;
+    int size;
+    uint8_t* data;
 };
 
 struct Camera {
-	bool inited = false;
-	int id = 255;
-	int fps = 0;
-	int width = 0;
-	int height = 0;
-	int frameSize = 0;
-
+    bool inited = false;
+    int id = 255;
+    int fps = 0;
+    int width = 0;
+    int height = 0;
+    int frameSize = 0;
 };
 
 struct CameraManager {
-	bool hwInited = 0;
-	Camera cap[CAMERA_NUM];
+    bool hwInited = 0;
+    Camera cap[CAMERA_NUM];
 };
-
-
-
 
 #endif

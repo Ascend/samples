@@ -9,10 +9,12 @@ import acl
 import atlas_utils.utils as utils
 from atlas_utils.resource_list import resource_list
 
+
 class AclResource(object):
     """
     AclResource
     """
+
     def __init__(self, device_id=0):
         self.device_id = device_id
         self.context = None
@@ -45,11 +47,14 @@ class AclResource(object):
         print("acl resource release all resource")
         resource_list.destroy()
         if self.stream:
-            acl.rt.destroy_stream(self.stream)
             print("acl resource release stream")
+            acl.rt.destroy_stream(self.stream)
+
         if self.context:
-            acl.rt.destroy_context(self.context)
             print("acl resource release context")
+            acl.rt.destroy_context(self.context)
+
+        print("Reset acl device ", self.device_id)
         acl.rt.reset_device(self.device_id)
         acl.finalize()
         print("Release acl resource success")

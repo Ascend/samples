@@ -3,25 +3,26 @@
 import time
 from threading import Thread
 import sys
-sys.path.append("..")
 
-from acl_logger import log_error, log_info
-
-from .socket_client import AgentSocket
-from . import presenter_message as pm
-from . import presenter_datatype as datatype
+from atlas_utils.acl_logger import log_error, log_info
+from atlas_utils.presenteragent.socket_client import AgentSocket
+import atlas_utils.presenteragent.presenter_message as pm
+import atlas_utils.presenteragent.presenter_datatype as datatype
 
 
-
-class PresenterAgent():
+class PresenterAgent(object):
+    """Message proxy to presenter server"""
     def __init__(self, server_ip, port):
         self.socket = AgentSocket(server_ip, port)
         self._closed = False
+        self.heart_beat_thread = None
 
     def connect_server(self):
+        """Connect presenter server"""
         return self.socket.connect()
 
     def start_heard_beat_thread(self):
+        """Start thread that send heardbeat messages"""
         self.heart_beat_thread = Thread(target=self._keep_alive)
         self.heart_beat_thread.start()
 
@@ -37,11 +38,18 @@ class PresenterAgent():
             time.sleep(2)
 
     def exit(self):
+        """Proxy exit"""
         self.socket.close()
         self._closed = True
 
 
-def StartPresenterAgent(msg_queue, server_ip, port, open_status, data_respone_counter):
+def StartPresenterAgent(
+        msg_queue,
+        server_ip,
+        port,
+        open_status,
+        data_respone_counter):
+    """Startup presenter agent"""
     agent = PresenterAgent(server_ip, port)
     ret = agent.connect_server()
     if ret:
@@ -61,22 +69,23 @@ def StartPresenterAgent(msg_queue, server_ip, port, open_status, data_respone_co
             time.sleep(0.1)
             agent.exit()
             break
-       
+
         agent.socket.send_msg(data)
         msg_name, msg_body = agent.socket.recv_msg()
-        if (msg_name == None) or (msg_body == None):
+        if (msg_name is None) or (msg_body is None):
             log_error("Recv invalid message, message name ", msg_name)
             continue
 
         if ((open_status.value == datatype.STATUS_CONNECTED) and
-            pm.is_open_channel_response(msg_name)):
+                pm.is_open_channel_response(msg_name)):
             log_info("Received open channel respone")
             open_status.value = datatype.STATUS_OPENED
             agent.start_heard_beat_thread()
-            log_info("presenter agent change connect_status to ", open_status.value)
+            log_info(
+                "presenter agent change connect_status to ",
+                open_status.value)
 
-        if ((open_status.value == datatype.STATUS_OPENED) and 
-           pm.is_image_frame_response(msg_name)):
-           data_respone_counter.value += 1
-           #log_info("send ok ", data_respone_counter.value)
-
+        if ((open_status.value == datatype.STATUS_OPENED) and
+                pm.is_image_frame_response(msg_name)):
+            data_respone_counter.value += 1
+            #log_info("send ok ", data_respone_counter.value)

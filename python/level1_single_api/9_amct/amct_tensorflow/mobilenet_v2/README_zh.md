@@ -21,8 +21,8 @@
 执行量化示例前，请先检查当前目录下是否包含以下文件及目录，其中 calibration 文件夹内部包含有 32 张用于校准的图片：
 
 + [data](./data/)
-  + [calibration/](./calibration/)
-  + [classification.jpg](./classification.jpg)
+  + [calibration/](./data/calibration/)
+  + [classification.jpg](./data/classification.jpg)
 + [model](./model/)
   + [mobilenetv2_tf.pb](./model/mobilenetv2_tf.pb)
 + [src](./src/)

@@ -26,6 +26,7 @@ class Model(object):
     Attributes:
         model_path: om offline mode file path
     """
+
     def __init__(self, model_path):
         self._run_mode, ret = acl.rt.get_run_mode()
         utils.check_ret("acl.rt.get_run_mode", ret)
@@ -43,12 +44,14 @@ class Model(object):
         self._output_size = 0
         self._init_resource()
         self._is_destroyed = False
-        resource_list.register(self)        
+        resource_list.register(self)
 
     def _init_resource(self):
         log_info("Init model resource start...")
         if not os.path.isfile(self._model_path):
-            log_error("model_path failed, please check. model_path=%s" % self._model_path)
+            log_error(
+                "model_path failed, please check. model_path=%s" %
+                self._model_path)
             return const.FAILED
 
         self._model_id, ret = acl.mdl.load_from_file(self._model_path)
@@ -56,26 +59,27 @@ class Model(object):
         self._model_desc = acl.mdl.create_desc()
         ret = acl.mdl.get_desc(self._model_desc, self._model_id)
         utils.check_ret("acl.mdl.get_desc", ret)
-        #get outputs num of model
+        # get outputs num of model
         self._output_size = acl.mdl.get_num_outputs(self._model_desc)
-        #create output dataset
+        # create output dataset
         self._gen_output_dataset(self._output_size)
-        #recode input data address,if need malloc memory,the memory will be reuseable
+        # recode input data address,if need malloc memory,the memory will be
+        # reuseable
         self._init_input_buffer()
 
         log_info("Init model resource success")
 
-        return const.SUCCESS    
+        return const.SUCCESS
 
     def _gen_output_dataset(self, ouput_num):
         log_info("[Model] create model output dataset:")
         dataset = acl.mdl.create_dataset()
         for i in range(ouput_num):
-            #malloc device memory for output
+            # malloc device memory for output
             size = acl.mdl.get_output_size_by_index(self._model_desc, i)
             buf, ret = acl.rt.malloc(size, const.ACL_MEM_MALLOC_NORMAL_ONLY)
             utils.check_ret("acl.rt.malloc", ret)
-            #crate oputput data buffer
+            # crate oputput data buffer
             dataset_buffer = acl.create_data_buffer(buf, size)
             _, ret = acl.mdl.add_dataset_buffer(dataset, dataset_buffer)
             log_info("malloc output %d, size %d" % (i, size))
@@ -89,7 +93,7 @@ class Model(object):
     def _init_input_buffer(self):
         self._input_num = acl.mdl.get_num_inputs(self._model_desc)
         for i in range(self._input_num):
-            item = {"addr":None, "size":0}
+            item = {"addr": None, "size": 0}
             self._input_buffer.append(item)
 
     def _gen_input_dataset(self, input_list):
@@ -102,7 +106,7 @@ class Model(object):
         self._input_dataset = acl.mdl.create_dataset()
         for i in range(self._input_num):
             item = input_list[i]
-            data, size = self._parse_input_data(item, i)            
+            data, size = self._parse_input_data(item, i)
             if (data is None) or (size == 0):
                 ret = const.FAILED
                 log_error("The %d input is invalid" % (i))
@@ -135,7 +139,7 @@ class Model(object):
                 size = 0
                 log_error("Copy input to device failed")
         elif (isinstance(input_data, dict) and
-              ('data' in input_data.keys()) and ('size' in input_data.keys())):             
+              ('data' in input_data.keys()) and ('size' in input_data.keys())):
             size = input_data['size']
             data = input_data['data']
         else:
@@ -164,7 +168,7 @@ class Model(object):
             data = buffer_item['addr']
         else:
             log_error("The model %dth input size %d is change,"
-                  " before is %d" % (index, size, buffer_item['size']))
+                      " before is %d" % (index, size, buffer_item['size']))
             return None
 
         return data
@@ -173,7 +177,7 @@ class Model(object):
         """
         inference input data
         Args:
-            input_list: input data list, support AclImage, 
+            input_list: input data list, support AclImage,
             numpy array and {'data': ,'size':} dict
         returns:
             inference result data, which is a numpy array list,
@@ -183,17 +187,17 @@ class Model(object):
         if ret == const.FAILED:
             log_error("Gen model input dataset failed")
             return None
-        
+
         ret = acl.mdl.execute(self._model_id,
                               self._input_dataset,
                               self._output_dataset)
         if ret != const.ACL_ERROR_NONE:
             log_error("Execute model failed for acl.mdl.execute error ", ret)
             return None
-        
+
         self._release_dataset(self._input_dataset)
         self._input_dataset = None
-        
+
         return self._output_dataset_to_numpy()
 
     def _output_dataset_to_numpy(self):
@@ -207,8 +211,8 @@ class Model(object):
             size = int(acl.get_data_buffer_size(buf))
             output_ptr = output_tensor_list[i]["ptr"]
             output_tensor = output_tensor_list[i]["tensor"]
-            ret = acl.rt.memcpy(output_ptr, 
-                                output_tensor.size * output_tensor.itemsize,                            
+            ret = acl.rt.memcpy(output_ptr,
+                                output_tensor.size * output_tensor.itemsize,
                                 data, size, self._copy_policy)
             if ret != const.ACL_ERROR_NONE:
                 log_error("Memcpy inference output to local failed")
@@ -216,7 +220,7 @@ class Model(object):
 
             dataset.append(output_tensor)
 
-        return dataset  
+        return dataset
 
     def _gen_output_tensor(self):
         output_tensor_list = []
@@ -227,30 +231,33 @@ class Model(object):
             size = acl.mdl.get_output_size_by_index(self._model_desc, i)
 
             if datatype == const.ACL_FLOAT:
-                np_type = np.float32            
-                output_tensor = np.zeros(size // 4, dtype=np_type).reshape(shape)
+                np_type = np.float32
+                output_tensor = np.zeros(
+                    size // 4, dtype=np_type).reshape(shape)
             elif datatype == const.ACL_INT32:
                 np_type = np.int32
-                output_tensor = np.zeros(size // 4, dtype=np_type).reshape(shape)
+                output_tensor = np.zeros(
+                    size // 4, dtype=np_type).reshape(shape)
             elif datatype == const.ACL_UINT32:
-                np_type = np.uint32             
-                output_tensor = np.zeros(size // 4, dtype=np_type).reshape(shape)   
+                np_type = np.uint32
+                output_tensor = np.zeros(
+                    size // 4, dtype=np_type).reshape(shape)
             elif datatype == const.ACL_FLOAT16:
                 np_type = np.float16
-                output_tensor = np.zeros(size // 2, dtype=np_type).reshape(shape)
+                output_tensor = np.zeros(
+                    size // 2, dtype=np_type).reshape(shape)
             else:
                 print("Unspport model output datatype ", datatype)
                 return None
-      
 
             if not output_tensor.flags['C_CONTIGUOUS']:
                 output_tensor = np.ascontiguousarray(output_tensor)
 
-            tensor_ptr = acl.util.numpy_to_ptr(output_tensor)           
+            tensor_ptr = acl.util.numpy_to_ptr(output_tensor)
             output_tensor_list.append({"ptr": tensor_ptr,
-                                      "tensor": output_tensor})   
+                                       "tensor": output_tensor})
 
-        return  output_tensor_list         
+        return output_tensor_list
 
     def _release_dataset(self, dataset, free_memory=False):
         if not dataset:
@@ -297,7 +304,7 @@ class Model(object):
             ret = acl.mdl.destroy_desc(self._model_desc)
             if ret != const.ACL_ERROR_NONE:
                 log_info("acl.mdl.destroy_desc error:", ret)
-       
+
         self._is_destroyed = True
         resource_list.unregister(self)
         log_info("Model release source success")

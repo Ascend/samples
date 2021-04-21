@@ -9,6 +9,8 @@ project(MyApp1)
 # Compile options
 add_compile_options(-std=c++11)
 
+add_definitions(-DENABLE_DVPP_INTERFACE)
+# Specify target generation path
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY  "../../../out")
 set(CMAKE_CXX_FLAGS_DEBUG "-fPIC -O0 -g -Wall")
 set(CMAKE_CXX_FLAGS_RELEASE "-fPIC -O2 -Wall")
@@ -31,9 +33,16 @@ else ()
     message(STATUS "env LIB_PATH: ${LIB_PATH}")
 endif()
 
+list(APPEND COMMON_DEPEND_LIB atlasutil avcodec avformat avdevice avutil swresample avfilter swscale)
+if (${CMAKE_CXX_COMPILER} MATCHES "aarch")
+    set(ARCH "arm")
+else ()
+    set(ARCH "x86")
+endif()
 # Header path
 include_directories(
     ${INC_PATH}/acllib/include/
+    $ENV{HOME}/ascend_ddk/${ARCH}/include
     ../inc/
 )
 
@@ -43,19 +52,18 @@ endif()
 
 link_directories(
     ${LIB_PATH}
+    $ENV{HOME}/ascend_ddk/${ARCH}/lib/
+    ${INC_PATH}/atc/lib64
 )
 
 add_executable(main
-        utils.cpp
-        model_process.cpp
-# add host lib path
         sample_process.cpp
         main.cpp)
 
 if(target STREQUAL "Simulator_Function")
     target_link_libraries(main funcsim)
 else()
-    target_link_libraries(main ascendcl stdc++)
+    target_link_libraries(main ascendcl acl_dvpp stdc++ ${COMMON_DEPEND_LIB})
 endif()
 
 install(TARGETS main DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})

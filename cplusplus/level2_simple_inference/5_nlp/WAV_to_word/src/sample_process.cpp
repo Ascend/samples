@@ -9,92 +9,123 @@
 */
 #include "sample_process.h"
 #include <iostream>
-#include "model_process.h"
 #include "acl/acl.h"
-#include "utils.h"
+#include "atlasutil/atlas_model.h"
+#include <memory>
+#include <sstream>
+#include <string.h>
 using namespace std;
-extern bool g_isDevice;
 
-SampleProcess::SampleProcess() :deviceId_(0), context_(nullptr), stream_(nullptr)
-{
+SampleProcess::SampleProcess() :deviceId_(0), context_(nullptr), stream_(nullptr){
 }
 
-SampleProcess::~SampleProcess()
-{
+SampleProcess::~SampleProcess(){
     DestroyResource();
 }
 
-Result SampleProcess::InitResource()
+AtlasError SampleProcess::InitResource()
 {
     // ACL init
     const char *aclConfigPath = "../src/acl.json";
     aclError ret = aclInit(aclConfigPath);
     if (ret != ACL_ERROR_NONE) {
-        ERROR_LOG("acl init failed");
-        return FAILED;
+        ATLAS_LOG_ERROR("acl init failed");
+        return ATLAS_ERROR;
     }
-    INFO_LOG("acl init success");
+    ATLAS_LOG_INFO("acl init success");
 
     // open device
     ret = aclrtSetDevice(deviceId_);
     if (ret != ACL_ERROR_NONE) {
-        ERROR_LOG("acl open device %d failed", deviceId_);
-        return FAILED;
+        ATLAS_LOG_ERROR("acl open device %d failed", deviceId_);
+        return ATLAS_ERROR;
     }
-    INFO_LOG("open device %d success", deviceId_);
+    ATLAS_LOG_INFO("open device %d success", deviceId_);
 
     // create context (set current)
     ret = aclrtCreateContext(&context_, deviceId_);
     if (ret != ACL_ERROR_NONE) {
-        ERROR_LOG("acl create context failed");
-        return FAILED;
+        ATLAS_LOG_ERROR("acl create context failed");
+        return ATLAS_ERROR;
     }
-    INFO_LOG("create context success");
+    ATLAS_LOG_INFO("create context success");
 
     // create stream
     ret = aclrtCreateStream(&stream_);
     if (ret != ACL_ERROR_NONE) {
-        ERROR_LOG("acl create stream failed");
-        return FAILED;
+        ATLAS_LOG_ERROR("acl create stream failed");
+        return ATLAS_ERROR;
     }
-    INFO_LOG("create stream success");
+    ATLAS_LOG_INFO("create stream success");
 
     // get run mode
     aclrtRunMode runMode;
     ret = aclrtGetRunMode(&runMode);
 
     if (ret != ACL_ERROR_NONE) {
-        ERROR_LOG("acl get run mode failed");
-        return FAILED;
+        ATLAS_LOG_ERROR("acl get run mode failed");
+        return ATLAS_ERROR;
     }
 
-    g_isDevice = (runMode == ACL_DEVICE);
-
-    INFO_LOG("get run mode success");
-    return SUCCESS;
+    ATLAS_LOG_INFO("get run mode success");
+    return ATLAS_OK;
 }
 
-Result SampleProcess::Process()
+AtlasError SampleProcess::DumpModelOutputResult(vector<InferenceOutput>& modelOutput){
+    stringstream ssfile;
+    size_t outputNum = 1;
+    static int executeNum = 0;
+    for (size_t i = 0; i < outputNum; ++i) {
+        ssfile << "./" << "output" << ++executeNum << "_" << i << ".bin";
+        string outputFileName = ssfile.str();
+        FILE *outputFile = fopen(outputFileName.c_str(), "wb");
+        if (outputFile) {
+            void* data = modelOutput[i].data.get();
+            uint32_t len  = modelOutput[i].size;
+            fwrite(data, len, sizeof(char), outputFile);
+            fclose(outputFile);
+            outputFile = nullptr;
+        } else {
+            ATLAS_LOG_ERROR("create output file [%s] failed", outputFileName.c_str());
+            return ATLAS_ERROR;
+        }
+    }
+    return ATLAS_OK;
+}
+
+AtlasError SampleProcess::CreateInput() {
+    
+    aclrtMalloc(&inputBuf_, (size_t)(inputDataSize_), ACL_MEM_MALLOC_HUGE_FIRST);
+    if (inputBuf_ == nullptr) {
+        ATLAS_LOG_ERROR("Acl malloc image buffer failed.");
+        return ATLAS_ERROR;
+    }
+
+    AtlasError ret = model_.CreateInput(inputBuf_, inputDataSize_);
+    if (ret != ATLAS_OK) {
+        ATLAS_LOG_ERROR("Create mode input dataset failed");
+        return ATLAS_ERROR;
+    }
+
+    return ATLAS_OK;
+}
+
+AtlasError SampleProcess::Process()
 {
     // model init
-    ModelProcess processModel;
     const char* omModelPath = "../model/voice.om";
-    Result ret = processModel.LoadModelFromFileWithMem(omModelPath);
-    if (ret != SUCCESS) {
-        ERROR_LOG("execute LoadModelFromFileWithMem failed");
-        return FAILED;
+    AtlasError ret = model_.Init(omModelPath);//
+    if (ret != ATLAS_OK) {
+        ATLAS_LOG_ERROR("execute LoadModelFromFileWithMem failed");
+        return ATLAS_ERROR;
     }
 
-    ret = processModel.CreateDesc();
-    if (ret != SUCCESS) {
-        ERROR_LOG("execute CreateDesc failed");
-        return FAILED;
-    }
+    inputDataSize_ = model_.GetModelInputSize(0);
 
-    ret = processModel.CreateOutput();
-    if (ret != SUCCESS) {
-        ERROR_LOG("execute CreateOutput failed");
-        return FAILED;
+    ret = CreateInput();
+    if (ret != ATLAS_OK) {
+        ATLAS_LOG_ERROR("Create model input failed");
+        return ATLAS_ERROR;
     }
 
     // loop begin
@@ -104,73 +135,83 @@ Result SampleProcess::Process()
     };
 
     for (size_t index = 0; index < sizeof(testFile) / sizeof(testFile[0]); ++index) {
-        INFO_LOG("start to process file:%s", testFile[index].c_str());
+        ATLAS_LOG_INFO("start to process file:%s", testFile[index].c_str());
         // model process
-        uint32_t devBufferSize;
-        void *picDevBuffer = Utils::GetDeviceBufferOfFile(testFile[index], devBufferSize);
+        uint32_t devBufferSize = 0;
+        void* picDevBuffer = nullptr;
+        ReadBinFile(testFile[index], picDevBuffer, devBufferSize);
         if (picDevBuffer == nullptr) {
-            ERROR_LOG("get pic device buffer failed,index is %zu", index);
-            return FAILED;
-        }
-        
-        ret = processModel.CreateInput(picDevBuffer, devBufferSize);
-        if (ret != SUCCESS) {
-            ERROR_LOG("execute CreateInput failed");
-            aclrtFree(picDevBuffer);
-            return FAILED;
+            ATLAS_LOG_ERROR("get pic buffer failed,index is %zu", index);
+            return ATLAS_ERROR;
         }
 
-        ret = processModel.Execute();
-        if (ret != SUCCESS) {
-            ERROR_LOG("execute inference failed");
-            aclrtFree(picDevBuffer);
-            return FAILED;
+        if (runMode_ == ACL_HOST) {
+            aclError ret = aclrtMemcpy(inputBuf_, devBufferSize,
+                                       picDevBuffer, devBufferSize,
+                                       ACL_MEMCPY_HOST_TO_DEVICE);
+            if (ret != ACL_ERROR_NONE) {
+                ATLAS_LOG_ERROR("Copy resized image data to device failed.");
+                return ATLAS_ERROR;
+            }
+        } else {
+        aclError ret = aclrtMemcpy(inputBuf_, devBufferSize,
+                                       picDevBuffer, devBufferSize,
+                                       ACL_MEMCPY_DEVICE_TO_DEVICE);
+        if (ret != ACL_ERROR_NONE) {
+                ATLAS_LOG_ERROR("Copy resized image data to device failed.");
+                return ATLAS_ERROR;
+            }
+        }
+
+        std::vector<InferenceOutput> inferOutputs;
+        ret = model_.Execute(inferOutputs);
+        if (ret != ATLAS_OK) {
+            ATLAS_LOG_ERROR("Execute model inference failed");
+            return ATLAS_ERROR;
         }
 
         // print the top 5 confidence values with indexes.use function DumpModelOutputResult
         // if want to dump output result to file in the current directory
-        processModel.DumpModelOutputResult();
-
-        // release model input buffer
-        aclrtFree(picDevBuffer);
-        processModel.DestroyInput();
+        DumpModelOutputResult(inferOutputs);
     }
     // loop end
-
-    return SUCCESS;
+    return ATLAS_OK;
 }
 
 void SampleProcess::DestroyResource()
 {
+    model_.DestroyInput();
+    model_.DestroyResource();
+
     aclError ret;
     if (stream_ != nullptr) {
         ret = aclrtDestroyStream(stream_);
         if (ret != ACL_ERROR_NONE) {
-            ERROR_LOG("destroy stream failed");
+            ATLAS_LOG_ERROR("destroy stream failed");
         }
         stream_ = nullptr;
     }
-    INFO_LOG("end to destroy stream");
+    ATLAS_LOG_INFO("end to destroy stream");
 
     if (context_ != nullptr) {
         ret = aclrtDestroyContext(context_);
         if (ret != ACL_ERROR_NONE) {
-            ERROR_LOG("destroy context failed");
+            ATLAS_LOG_ERROR("destroy context failed");
         }
         context_ = nullptr;
     }
-    INFO_LOG("end to destroy context");
+    ATLAS_LOG_INFO("end to destroy context");
 
     ret = aclrtResetDevice(deviceId_);
     if (ret != ACL_ERROR_NONE) {
-        ERROR_LOG("reset device failed");
+        ATLAS_LOG_ERROR("reset device failed");
     }
-    INFO_LOG("end to reset device is %d", deviceId_);
+    ATLAS_LOG_INFO("end to reset device is %d", deviceId_);
 
     ret = aclFinalize();
     if (ret != ACL_ERROR_NONE) {
-        ERROR_LOG("finalize acl failed");
+        ATLAS_LOG_ERROR("finalize acl failed");
     }
-    INFO_LOG("end to finalize acl");
+    ATLAS_LOG_INFO("end to finalize acl");
 
 }

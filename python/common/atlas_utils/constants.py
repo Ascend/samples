@@ -19,7 +19,7 @@ MEMORY_CTYPES = 4
 IMAGE_DATA_NUMPY = 0
 IMAGE_DATA_BUFFER = 1
 
-READ_VIDEO_OK=0
+READ_VIDEO_OK = 0
 
 # error code
 ACL_ERROR_NONE = 0
@@ -127,7 +127,6 @@ ACL_DOUBLE = 11
 ACL_BOOL = 12
 
 
-
 # data format
 ACL_FORMAT_UNDEFINED = -1
 ACL_FORMAT_NCHW = 0
@@ -190,7 +189,7 @@ IMG_EXT = ['.jpg', '.JPG', '.png', '.PNG', '.bmp', '.BMP', '.jpeg', '.JPEG']
 
 ENCODE_FORMAT_UNKNOW = 0
 ENCODE_FORMAT_JPEG = 1
-ENCODE_FORMAT_PNG  = 2
+ENCODE_FORMAT_PNG = 2
 ENCODE_FORMAT_YUV420_SP = 3
 
 """
@@ -205,11 +204,15 @@ ENTYPE_H264_BASE = 1
 ENTYPE_H264_MAIN = 2
 ENTYPE_H264_HIGH = 3
 
-"""
-format 2
-1 YUV420 semi-planner (nv12)
-2 YVU420 semi-planner (nv21)
-"""
-VENC_FORMAT = 1
-
-VIDEO_DECODE_FINISH = 630
+# h264 stream codec id
+AV_CODEC_ID_H264 = 27
+# h265 stream codec id
+AV_CODEC_ID_HEVC = 173
+# h264 baseline level
+FF_PROFILE_H264_BASELINE = 66
+# h264 main level profile
+FF_PROFILE_H264_MAIN = 77
+# h264 high level profile
+FF_PROFILE_H264_HIGH = 100
+# h265 main level profile
+FF_PROFILE_HEVC_MAIN = 1

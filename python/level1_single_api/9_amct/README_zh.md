@@ -11,4 +11,5 @@
 ├── [amct_mindspore](./amct_mindspore)**：MindSpore 相关功能样例。（正在开发）**  
 ├── [amct_onnx](./amct_onnx)**：ONNX 相关功能样例。（正在开发）**  
 ├── [amct_pytorch](./amct_pytorch)**：PyTorch 相关功能样例。（正在开发）**  
-└── [amct_tensorflow](./amct_tensorflow/README_zh.md)**：TensorFlow 相关功能样例。（正在开发）**
+├── [amct_tensorflow](./amct_tensorflow/README_zh.md)**：TensorFlow 相关功能样例。（正在开发）**   
+└── [amct_tensorflow_ascend](./amct_tensorflow_ascend/README_zh.md)**：基于Tf_Adapter的TensorFlow 相关功能样例。（正在开发）**

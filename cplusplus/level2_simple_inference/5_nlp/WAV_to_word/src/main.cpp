@@ -9,25 +9,24 @@
 */
 #include <iostream>
 #include "sample_process.h"
-#include "utils.h"
+#include "atlasutil/atlas_utils.h"
 using namespace std;
-bool g_isDevice = false;
 
 int main()
 {
     SampleProcess processSample;
-    Result ret = processSample.InitResource();
-    if (ret != SUCCESS) {
-        ERROR_LOG("sample init resource failed");
-        return FAILED;
+    AtlasError ret = processSample.InitResource();
+    if (ret != ATLAS_OK) {
+        ATLAS_LOG_ERROR("sample init resource failed");
+        return 1;
     }
 
     ret = processSample.Process();
-    if (ret != SUCCESS) {
-        ERROR_LOG("sample process failed");
-        return FAILED;
+    if (ret != ATLAS_OK) {
+        ATLAS_LOG_ERROR("sample process failed");
+        return 1;
     }
 
-    INFO_LOG("execute sample success");
-    return SUCCESS;
+    ATLAS_LOG_INFO("execute sample success");
+    return ATLAS_OK;
 }

@@ -7,22 +7,27 @@ import threading
 import socket
 import time
 import struct
-import time
 
 from atlas_utils.acl_logger import log_error, log_info
-from .presenter_datatype import *
-
-
 
 class AgentSocket(object):
+    """Create socket between app and presenter server"""
     def __init__(self, server_ip, port):
+        """Create socket instance
+        Args:
+            server_ip: presenter server ip addr
+            port: connect port of presenter server
+        """
         self._server_address = (server_ip, port)
         self._sock_client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-
     def connect(self):
+        """Create connect with presenter server
+        Returns:
+            ret: connect error code, 0 is connect success, otherwise failed
+        """
         ret = 0
-        for i in range(0,5):
+        for i in range(0, 5):
             ret = self._sock_client.connect_ex(self._server_address)
             if ret == 0:
                 break
@@ -38,7 +43,7 @@ class AgentSocket(object):
             try:
                 read_buf = self._sock_client.recv(read_len - has_read_len)
             except socket.error:
-                log_error("ERROR:Read socket failed")
+                log_error("Read socket failed, error ", socket.error)
                 return False, None
             if read_buf == b'':
                 return False, None
@@ -50,7 +55,7 @@ class AgentSocket(object):
     def _read_msg_head(self, read_len):
         ret, msg_head = self._read_socket(read_len)
         if not ret:
-            log_error("ERROR:socket receive msg head null")
+            log_error("socket receive msg head null")
             return None, None
 
         # in Struct(), 'I' is unsigned int, 'B' is unsigned char
@@ -68,7 +73,7 @@ class AgentSocket(object):
             return False, None
         try:
             msg_name = msg_name.decode("utf-8")
-        except Exception as e:
+        except:
             log_error("Msg name decode to utf-8 error")
             return False, None
 
@@ -82,6 +87,11 @@ class AgentSocket(object):
         return True, msg_body
 
     def recv_msg(self):
+        """Receive message from presenter server
+        Returns:
+            msg_name: received message name
+            msg_body: received message data
+        """
         # Step1: read msg head
         msg_total_len, msg_name_len = self._read_msg_head(5)
         if msg_total_len is None:
@@ -104,15 +114,22 @@ class AgentSocket(object):
 
         return msg_name, msg_body
 
-
     def send_msg(self, data):
+        """Send message to presenter server
+        Args:
+            data: message data
+        Returns:
+            0 send success
+            1 send failed
+        """
         try:
             self._sock_client.sendall(data)
-        except Exception as e:
+        except:
             log_error("Send msg failed")
             return 1
         return 0
 
     def close(self):
+        """Close connect"""
         self._sock_client.shutdown(socket.SHUT_RDWR)
         self._sock_client.close()

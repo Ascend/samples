@@ -14,8 +14,9 @@ STATUS_ERROR = 1
 
 class Point(object):
     """
-    point coordinate 
+    point coordinate
     """
+
     def __init__(self, x=0, y=0):
         self.x = x
         self.y = y
@@ -23,8 +24,9 @@ class Point(object):
 
 class Box(object):
     """
-    object rectangle area 	
+    object rectangle area
     """
+
     def __init__(self, lt, rb):
         self.lt = Point(lt)
         self.rb = Point(rb)
@@ -41,8 +43,9 @@ class Box(object):
 
 class ObjectDetectionResult(object):
     """
-    object detection information, include object position, confidence and label	
+    object detection information, include object position, confidence and label
     """
+
     def __init__(self, ltx=0, lty=0, rbx=0, rby=0, text=None):
         self.object_class = 0
         self.confidence = 0
@@ -51,17 +54,17 @@ class ObjectDetectionResult(object):
 
     def check_box_vaild(self, width, height):
         """
-        verify object position is valid		
+        verify object position is valid
         """
-        return (self.box.box_valid() and 
-               (self.box.rb.x <= width) and 
-               (self.box.rb.y <= height))
+        return (self.box.box_valid() and
+                (self.box.rb.x <= width) and
+                (self.box.rb.y <= height))
 
 
 class FinishMsg(object):
     """
     the message to notify presenter agent exit
     """
+
     def __init__(self, data):
         self.data = data
-    
