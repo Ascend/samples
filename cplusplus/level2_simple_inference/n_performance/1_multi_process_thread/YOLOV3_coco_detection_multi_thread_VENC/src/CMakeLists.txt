@@ -9,11 +9,11 @@ project(classification_video)
 # Compile options
 add_compile_options(-std=c++11)
 
+add_definitions(-DENABLE_DVPP_INTERFACE)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY  "../../../out")
 set(CMAKE_CXX_FLAGS_DEBUG "-fPIC -O0 -g -Wall")
 set(CMAKE_CXX_FLAGS_RELEASE "-fPIC -O2 -Wall")
 
-add_definitions(-DENABLE_DVPP_INTERFACE)
 set(INC_PATH $ENV{DDK_PATH})
 
 if (NOT DEFINED ENV{DDK_PATH})
@@ -32,6 +32,7 @@ else ()
     message(STATUS "env LIB_PATH: ${LIB_PATH}")
 endif()
 
+list(APPEND COMMON_DEPEND_LIB atlasutil avcodec avformat avdevice avutil swresample avfilter swscale)
 if (${CMAKE_CXX_COMPILER} MATCHES "aarch")
     set(ARCH "arm")
 else ()
@@ -40,37 +41,27 @@ endif()
 
 # Header path
 include_directories(
-    $ENV{HOME}/ascend_ddk/include/ascenddk
-    $ENV{HOME}/ascend_ddk/${ARCH}/include/opencv4
-    $ENV{HOME}/ascend_ddk/include/
-    ${INC_PATH}/acllib/include/
     ../inc/
+    ${INC_PATH}/acllib/include/
+    $ENV{HOME}/ascend_ddk/${ARCH}/include
+    $ENV{HOME}/ascend_ddk/${ARCH}/include/opencv4
+    ${OPENCV_PATH}/include/opencv4
 )
 
-if(target STREQUAL "Simulator_Function")
-    add_compile_options(-DFUNC_SIM)
-endif()
 
 # add host lib path
 link_directories(
     ${LIB_PATH}
-    $ENV{HOME}/ascend_ddk/lib/
     $ENV{HOME}/ascend_ddk/${ARCH}/lib/
-    $ENV{HOME}/Ascend/
+    ${OPENCV_PATH}/lib
     ${INC_PATH}/atc/lib64
 )
 
 add_executable(main
-        utils.cpp
-        model_process.cpp
         object_detect.cpp
-        dvpp_process.cpp
         main.cpp)
 
-if(target STREQUAL "Simulator_Function")
-    target_link_libraries(main funcsim)
-else()
-    target_link_libraries(main ascendcl acl_dvpp stdc++ pthread opencv_highgui opencv_core opencv_imgproc opencv_imgcodecs opencv_calib3d opencv_features2d opencv_videoio protobuf)
-endif()
+target_link_libraries(main
+        ascendcl acl_dvpp stdc++ ${COMMON_DEPEND_LIB} opencv_highgui opencv_core opencv_imgproc opencv_imgcodecs opencv_calib3d opencv_features2d opencv_videoio protobuf pthread)
 
 install(TARGETS main DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})

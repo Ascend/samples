@@ -28,15 +28,16 @@ from ..model.resnet import resnet101 # pylint: disable=E0401, C0415
 PATH = os.path.realpath('./')
 IMG_DIR = os.path.join(PATH, 'data/images')
 LABEL_FILE = os.path.join(IMG_DIR, 'image_label.txt')
-OUTPUTS = os.path.join(PATH, 'outputs')
+OUTPUTS = os.path.join(PATH, 'outputs/nuq')
+TMP = os.path.join(OUTPUTS, 'tmp')
 
 
 def get_labels_from_txt(label_file):
     """Read all images' name and label from label_file"""
     images = []
     labels = []
-    with open(label_file, 'r') as file_open:
-        lines = file_open.readlines()
+    with open(label_file, 'r') as f:
+        lines = f.readlines()
         for line in lines:
             images.append(line.split(' ')[0])
             labels.append(int(line.split(' ')[1]))
@@ -132,7 +133,7 @@ def main():
     if torch.cuda.is_available():
         input_data = tuple([data.to('cuda') for data in input_data])
         model.to('cuda')
-    config_json_file = os.path.join(OUTPUTS, 'config.json')
+    config_json_file = os.path.join(TMP, 'config.json')
     skip_layers = []
     batch_num = 2
     print("..........start create quant config...............")
@@ -142,8 +143,8 @@ def main():
 
     # Phase1: do conv+bn fusion, weights calibration and generate
     #         calibration model
-    record_file = os.path.join(OUTPUTS, 'record.txt')
-    modified_model = os.path.join(OUTPUTS, 'modified_model.onnx')
+    record_file = os.path.join(TMP, 'record.txt')
+    modified_model = os.path.join(TMP, 'modified_model.onnx')
     calibration_model = amct.quantize_model(
         config_json_file, modified_model, record_file, model, input_data, input_names=['input'],
         output_names=['output'], dynamic_axes={'input': {0: 'batch_size'}, 'output': {0: 'batch_size'}})

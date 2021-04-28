@@ -27,6 +27,7 @@ filesizes="$filesizes"
 keep="n"
 nooverwrite="$NOOVERWRITE"
 quiet="n"
+uninstall="n"
 accept="n"
 nodiskspace="n"
 export_conf="$EXPORT_CONF"
@@ -147,6 +148,7 @@ MS_Help()
   \$0 --lsm    Print embedded lsm entry (or no LSM)
   \$0 --list   Print the list of files in the archive
   \$0 --check  Checks integrity of the archive
+  \$0 --uninstall  Uninstall product
 
  2) Running \$0 :
   \$0 [options] [--] [additional arguments to embedded script]
@@ -243,6 +245,18 @@ MS_Check()
     if test x"\$quiet" = xn; then
 		echo " All good."
     fi
+}
+
+MS_Uninstall()
+{
+    rm -rf \${ASCEND_OPP_PATH}/op_impl/custom/*
+    rm -rf \${ASCEND_OPP_PATH}/framework/custom/*
+    rm -rf \${ASCEND_OPP_PATH}/op_proto/custom/*
+    if [ "`ls -A \${ASCEND_OPP_PATH}/op_impl/custom`" = "" ] && [ "`ls -A \${ASCEND_OPP_PATH}/framework/custom`" = "" ] && [ "`ls -A \${ASCEND_OPP_PATH}/op_proto/custom`" = "" ];then
+        echo "uninstall SUCCESS."
+    else
+        echo "uninstall FAIL."
+     fi
 }
 
 UnTAR()
@@ -353,6 +367,10 @@ EOLSM
 	MS_Check "\$0" y
 	exit 0
 	;;
+    --uninstall)
+        MS_Uninstall "\$0" y
+        exit 0
+        ;;
     --confirm)
 	verbose=y
 	shift

@@ -18,9 +18,11 @@
 
 部署此Sample前，需要准备好以下环境：
 
-- 请确认已按照[环境准备和依赖安装](../../../environment)准备好环境。
+- 请确认已按照[atlasutils部署说明](../../../common/atlas_utils)准备好运行环境，并将部署路径添加到PYTHONPATH环境变量中。
 
-- 已完成对应产品的开发环境和运行环境安装。
+- 使用本地视频文件测试本样例时，要求视频文件为h264裸流文件，并且为annex-b格式。mp4转h264可以使用命令：
+
+  ffmpeg -i mask-true.mp4 -codec copy -bsf: h264_mp4toannexb -f h264 mask-true.h264
 
 ### 软件准备
 
@@ -43,16 +45,17 @@
 2. 获取此应用中所需要的原始网络模型。
 
     参考下表获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到开发环境普通用户下的任意目录，例如：$HOME/models/YOLOV3_mask_detection_video。
-    
+
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
     |  yolo3_resnet18.pb| YOLOv3  |  请参考[https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/yolov3_resnet18/ATC_yolo3_resnet18_tf_AE](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/yolov3_resnet18/ATC_yolo3_resnet18_tf_AE)目录中README.md下载原始模型章节下载模型文件和配置文件。 |
 
     ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
+
     > - modelzoo中提供了转换好的om模型，但此模型不匹配当前样例，所以需要下载原始模型和权重文件后重新进行模型转换。
 
 3. 将原始模型转换为Davinci模型。
-    
+   
     **注：请确认环境变量已经在[环境准备和依赖安装](../../../environment)中配置完成**
 
     1. 设置LD_LIBRARY_PATH环境变量。
@@ -101,7 +104,7 @@
         ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
         > - 也可以在ai1s云端环境中使用ifconfig查看内网ip。
         > - 登录ai1s云端环境时的ip地址为此环境的公网ip，ai1s云端环境中ifconfig查看到的ip为此环境的内网ip。
- 
+
 
 
 ### 样例运行
@@ -147,7 +150,7 @@
 
     切换目录后，执行以下命令运行样例。
 
-    **python3.6 main.py ../data/mask-true.mp4**
+    **python3.6 main.py ../data/mask-true.h264**
 
 ### 查看结果
 

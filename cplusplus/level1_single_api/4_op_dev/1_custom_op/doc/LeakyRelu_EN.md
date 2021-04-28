@@ -22,7 +22,7 @@ The mathematical expression of the LeakyRelu operator is as follows:
     For details about the operator function, see  [Overview](#section7526288579).
 
 2.  Specify the input and output.
-    -   The LeakyRelu operator has one input \(**x**\), one output \(**y**\), and one attribute \(![](figures/en-us_image_0302153081.png)  in the operator expression\).
+    -   The LeakyRelu operator has one input \(**x**\), one output \(**y**\), and one attribute \(![](https://images.gitee.com/uploads/images/2021/0426/102929_a40abaef_5474059.png)  in the operator expression\).
     -   The supported input data types include float16, float32, int32, and int8. The output has the same data type as the inputs.
     -   The operator input supports all shapes. The output has the same shape as the inputs.
     -   The operator input supports the following formats:  **NCHW**,  **NC1HWC0**, and  **NHWC**.
@@ -37,7 +37,7 @@ The mathematical expression of the LeakyRelu operator is as follows:
         **te.lang.cce.vmax\(\)**  is used to obtain the maximum value.
 
     2.  Some DSL APIs convert data types. Therefore, after the compute process, the result needs to be converted back to the original data type by using the  **te.lang.cce.cast\_to**  API.
-    3.  When  ![](figures/en-us_formulaimage_0000001073361456.png)  = 0, indicating the ReLU operation, its function of converting int8, int32, and float32 to float16 can be implemented by using the  **te.lang.cce.vrelu\(\)**  API. If the data type is int32 or float32, the precision loss may occur. In this case, use the  **te.lang.cce.vmax\(\)**  API to obtain the maximum value.
+    3.  When  ![](https://images.gitee.com/uploads/images/2021/0426/102929_a40abaef_5474059.png)  = 0, indicating the ReLU operation, its function of converting int8, int32, and float32 to float16 can be implemented by using the  **te.lang.cce.vrelu\(\)**  API. If the data type is int32 or float32, the precision loss may occur. In this case, use the  **te.lang.cce.vmax\(\)**  API to obtain the maximum value.
 
 4.  Specify the operator implementation file name, operator implementation function name, and  _OpType_.
 

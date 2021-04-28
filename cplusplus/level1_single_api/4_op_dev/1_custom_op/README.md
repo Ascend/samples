@@ -143,7 +143,7 @@ The directory of a Caffe or TensorFlow custom operator sample project is organiz
 
     Configure the following environment variables in the header of the  **build.sh**  script:
 
-    -   ASCEND\_OPP\_PATH: specifies the installation path of the OPP component.
+    -   **ASCEND\_OPP\_PATH**: specifies the installation path of the OPP component.
 
         Uncomment this environment variable and change it to the actual OPP installation path. For example:
 
@@ -151,7 +151,7 @@ The directory of a Caffe or TensorFlow custom operator sample project is organiz
         export ASCEND_OPP_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/opp
         ```
 
-    -   ASCEND\_AICPU\_PATH: specifies the installation path of the AI CPU component.
+    -   **ASCEND\_AICPU\_PATH**: specifies the installation path of the AI CPU component.
 
         ```
         export ASCEND_AICPU_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest
@@ -188,15 +188,7 @@ The directory of a Caffe or TensorFlow custom operator sample project is organiz
             ```
 
 
-    -   **SYSTEM\_INFO**  specifies the form name of the built OPP. If the environment variable  **SYSTEM\_INFO**  is not set, the value is automatically obtained based on the OS type and architecture.
-    
-        If you need to customize the OPP name, uncomment the environment variable and change it as required. For example, if the OS version is CentOS and the architecture is AArch64, set the environment variable as follows:
-    
-        ```
-        export SYSTEM_INFO=centos_aarch64
-        ```
-    
-        The built OPP name is  **custom\_opp\__centos\_aarch64_.run**.
+    -   **AICPU\_SOC\_VERSION** : Ascend AI ProcessorHiSilicon SoC  version. Set it to the folder name of the corresponding product in  **opp/op\_impl/built-in/aicpu/aicpu\_kernel/lib**  under the AI CPU installation directory, that is, the name of the folder where  **libcpu\_kernels\_context.a**  and  **libcpu\_kernels\_v1.0.1.so**  are located.
 
 
 3.  Build the operator project.

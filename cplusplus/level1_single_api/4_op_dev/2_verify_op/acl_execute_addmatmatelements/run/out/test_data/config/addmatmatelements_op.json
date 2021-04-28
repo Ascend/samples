@@ -1,0 +1,39 @@
+[
+  {
+    "op": "AddMatMatElements",
+    "input_desc": [
+      {
+        "format": "ND",
+        "shape": [3, 32],
+        "type": "float32"
+      },
+      {
+        "format": "ND",
+        "shape": [3, 32],
+        "type": "float32"
+      },
+      {
+        "format": "ND",
+        "shape": [3, 32],
+        "type": "float32"
+      },
+      {
+        "format": "ND",
+        "shape": [1],
+        "type": "float32"
+      },
+      {
+        "format": "ND",
+        "shape": [1],
+        "type": "float32"
+      }
+    ],
+    "output_desc": [
+      {
+        "format": "ND",
+        "shape": [3, 32],
+        "type": "float32"
+      }
+    ]
+  }
+]

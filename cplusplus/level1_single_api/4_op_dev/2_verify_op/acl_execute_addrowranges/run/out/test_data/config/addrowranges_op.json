@@ -1,0 +1,29 @@
+[
+  {
+    "op": "AddRowRanges",
+    "input_desc": [
+      {
+        "format": "ND",
+        "shape": [8, 16],
+        "type": "float32"
+      },
+      {
+        "format": "ND",
+        "shape": [8, 16],
+        "type": "float32"
+      },
+      {
+        "format": "ND",
+        "shape": [8, 2],
+        "type": "int32"
+      }
+    ],
+    "output_desc": [
+      {
+        "format": "ND",
+        "shape": [8, 16],
+        "type": "float32"
+      }
+    ]
+  }
+]

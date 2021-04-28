@@ -55,7 +55,7 @@
 
         ```
         export install_path=$HOME/Ascend/ascend-toolkit/latest
-        export PATH=${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
+        export PATH=/usr/local/python3.7.5/bin:${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH  # 如果用户环境存在多个python3版本，则指定使用的python3.7.5版本，python3.7.5安装路径请根据实际情况替换；同时设定ATC工具可执行文件所在路径
         export ASCEND_OPP_PATH=${install_path}/opp
         ```
 
@@ -116,7 +116,7 @@
 
         ```
         export install_path=$HOME/Ascend/ascend-toolkit/latest
-        export PATH=${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
+        export PATH=/usr/local/python3.7.5/bin:${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH  # 如果用户环境存在多个python3版本，则指定使用的python3.7.5版本，python3.7.5安装路径请根据实际情况替换；同时设定ATC工具可执行文件所在路径
         export ASCEND_OPP_PATH=${install_path}/opp
         ```
 
@@ -162,7 +162,7 @@
 
         ```
         export install_path=$HOME/Ascend/ascend-toolkit/latest
-        export PATH=${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
+        export PATH=/usr/local/python3.7.5/bin:${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH  # 如果用户环境存在多个python3版本，则指定使用的python3.7.5版本，python3.7.5安装路径请根据实际情况替换；同时设定ATC工具可执行文件所在路径
         export ASCEND_OPP_PATH=${install_path}/opp
         ```
 
@@ -303,7 +303,7 @@
     1.  以运行用户（例如HwHiAiUser）登录开发环境，并进入样例工程的“acl\_execute\_matmul/run/out“目录。
     2.  在out目录下执行如下命令，生成单算子模型文件。
 
-        **atc --singleop=test\_data/config/matmul\_tik\_op.json  --soc\_version=Ascend310_ _--output=op\_models**
+        **atc --singleop=test\_data/config/matmul\_tik\_op.json  --soc\_version=Ascend310 --output=op\_models**
 
         其中：
 

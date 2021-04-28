@@ -11,7 +11,7 @@
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
-# limitations under the License. 
+# limitations under the License.
 """
 
 
@@ -41,6 +41,7 @@ _B_MEAN = 103.94
 
 
 def _decode(item):
+    """parse dataset"""
     features = {
         'image/encoded': tf.io.FixedLenFeature((), tf.string, default_value=''),
         'image/format': tf.io.FixedLenFeature((), tf.string, default_value='jpeg'),
@@ -61,12 +62,14 @@ def _decode(item):
 
 
 def _grayscale_to_rgb(image):
+    """generate rgb_image"""
     rgb_image = tf.cond(
         tf.equal(tf.shape(image)[-1], 1), true_fn=lambda: tf.image.grayscale_to_rgb(image), false_fn=lambda: image)
     return rgb_image
 
 
 def _resize(image, resize_side):
+    """resize input image"""
     shape = tf.shape(image)
     height = tf.cast(shape[0], tf.float32)
     width = tf.cast(shape[1], tf.float32)
@@ -78,6 +81,7 @@ def _resize(image, resize_side):
 
 
 def _crop(image, is_random=False):
+    """crop input image"""
     shape = tf.shape(image)
     height = shape[0]
     width = shape[1]
@@ -97,6 +101,7 @@ def _crop(image, is_random=False):
 
 
 def _parse_train(item):
+    """parse train data"""
     image, label, text = _decode(item)
     rgb_image = _grayscale_to_rgb(image)
     resize_side = tf.random.uniform([], minval=MIN_RESIZE, maxval=MAX_RESIZE + 1, dtype=tf.int32)
@@ -109,6 +114,7 @@ def _parse_train(item):
 
 
 def _parse_eval(item):
+    """parse validation data"""
     image, label, text = _decode(item)
     rgb_image = _grayscale_to_rgb(image)
     resized_image = _resize(rgb_image, MIN_RESIZE)
@@ -172,11 +178,11 @@ class TFRecordDataset(object): # pylint: disable=R0902, R0903
             plt.title(str(labels[i]) + ': ' + text)
 
 
-PATH, _ = os.path.realpath('./')
+PATH, _ = os.path.split(os.path.realpath(__file__))
 TMP = os.path.join(PATH, 'tmp')
-OUTPUTS = os.path.join(PATH, 'outputs')
+RESULTS = os.path.join(PATH, 'results/retrain')
 TRAIN_SIZE = 1281167
-EVAL_SIZE = 50000
+EVAL_SIZE = 500
 CATEGORY = 1000
 INPUTS = 'resnet_v1_50/inputs'
 LOGITS = 'resnet_v1_50/predictions/Reshape'
@@ -219,27 +225,27 @@ def parse_args():
         help='The number of samples in each batch.')
     parser.add_argument(
         '--train_model', dest='train_model', type=str,
-        default='../model/resnet_v1_50_train.meta',
+        default='./model/resnet_v1_50_train.meta',
         help='The path of file containing a "MetaGraphDef" of ResNet V1 50 for training.')
     parser.add_argument(
         '--eval_model', dest='eval_model', type=str,
-        default='../model/resnet_v1_50_eval.meta',
+        default='./model/resnet_v1_50_eval.meta',
         help='The path of file containing a "MetaGraphDef" of ResNet V1 50 for evaluation.')
     parser.add_argument(
         '--ckpt', dest='ckpt_path', type=str,
-        default='../model/resnet_v1_50',
+        default='./model/resnet_v1_50',
         help='The path of ResNet V1 50 checkpoint.')
     parser.add_argument(
-        '--learning_rate', dest='learning_rate', default=1e-6, type=float,
+        '--learning_rate', dest='learning_rate', default=1e-5, type=float,
         help='The retrain learning rate.')
     parser.add_argument(
         '--momentum', dest='momentum', default=0.9, type=float,
         help='The momentum value of "RMSPropOptimizer".')
     parser.add_argument(
-        '--save_interval', dest='save_interval', default=1000, type=int,
+        '--save_interval', dest='save_interval', default=500, type=int,
         help='The number of steps between checkpoints.')
     parser.add_argument(
-        '--train_iter', dest='train_iter', default=1000, type=int,
+        '--train_iter', dest='train_iter', default=100, type=int,
         help='The number of retraining iterations.')
 
     return parser.parse_args()
@@ -286,8 +292,63 @@ def mkdir(name):
         os.makedirs(name)
 
 
-def evaluate(session, dataset):
+def get_loss(input_2, logits):
+    """Prepare losses"""
+    l2_variables = []
+    for i in tf.compat.v1.trainable_variables():
+        if 'BatchNorm' not in i.name and 'ULQ' not in i.name:
+            l2_variables.append(tf.nn.l2_loss(tf.cast(i, tf.float32)))
+    l2_loss = 1e-4 * tf.add_n(l2_variables)
+    cross_entropy = tf.nn.softmax_cross_entropy_with_logits_v2(labels=input_2, logits=logits) / ARGS.batch_size
+    loss = cross_entropy + l2_loss
+    # Set a loss summary on tensorboard
+    tf.compat.v1.summary.scalar('l2_loss', l2_loss)
+    tf.compat.v1.summary.scalar('cross_entropy', tf.reduce_sum(cross_entropy))
+    tf.compat.v1.summary.scalar('loss', tf.reduce_sum(cross_entropy) + l2_loss)
+    write_op = tf.compat.v1.summary.merge_all()
+    summary_writer = tf.compat.v1.summary.FileWriter(TMP)
+    return loss, write_op, summary_writer
+
+
+def retrain(saver, retrain_ckpt):
+    """Retrain the model"""
+    dataset = TFRecordDataset(
+        ARGS.train_set, is_training=True, keywords=ARGS.train_keyword, num_parallel_reads=ARGS.num_parallel_reads,
+        is_shuffle=True, is_repeat=True, batch_size=ARGS.batch_size)
+
+    graph = tf.compat.v1.get_default_graph()
+    input_1 = graph.get_tensor_by_name(INPUTS + ':0')
+    logits = graph.get_tensor_by_name(LOGITS + ':0')
+    saver_save = tf.compat.v1.train.Saver(tf.compat.v1.global_variables())
+
+    labels = tf.one_hot(dataset.labels - 1, CATEGORY)
+    input_2 = tf.compat.v1.placeholder(tf.float32, shape=[ARGS.batch_size, CATEGORY])
+    loss, write_op, summary_writer = get_loss(input_2, logits)
+    optimizer = tf.compat.v1.train.RMSPropOptimizer(ARGS.learning_rate, momentum=ARGS.momentum)
+    train_op = optimizer.minimize(loss)
+
+    # Restore checkpoint and start retraining.
+    session = tf.compat.v1.Session()
+    session.run(tf.compat.v1.global_variables_initializer())
+    saver.restore(session, ARGS.ckpt_path)
+
+    for i in trange(ARGS.train_iter, ncols=100):
+        image, label = session.run([dataset.images, labels])
+        summary_loss, _ = session.run([write_op, train_op], feed_dict={input_1: image, input_2: label})
+        summary_writer.add_summary(summary_loss, i)
+        if i % ARGS.save_interval == 0:
+            saver_save.save(session, retrain_ckpt, global_step=i)
+
+    saver_save.save(session, retrain_ckpt, global_step=ARGS.train_iter)
+    session.close()
+
+
+def evaluate(session):
     """Evaluate the model."""
+    dataset = TFRecordDataset(
+        ARGS.eval_set, keywords=ARGS.eval_keyword, num_parallel_reads=ARGS.num_parallel_reads,
+        batch_size=ARGS.batch_size)
+
     inputs = session.graph.get_tensor_by_name(INPUTS + ':0')
     predictions = session.graph.get_tensor_by_name(PREDICTIONS + ':0')
 
@@ -302,11 +363,15 @@ def evaluate(session, dataset):
         count_5 += np.sum(labels.repeat(5).reshape([labels.shape[0], 5]) == top_5)
     acc_1 = count_1 / EVAL_SIZE * 100
     acc_5 = count_5 / EVAL_SIZE * 100
-    return acc_1, acc_5
+    return round(acc_1, 2), round(acc_5, 2)
 
 
-def evaluate_for_search_n(session, dataset, predictions_name, batch_num):
+def evaluate_for_search_n(session, predictions_name, batch_num):
     """Evaluate the search N layers."""
+    dataset = TFRecordDataset(
+        ARGS.eval_set, keywords=ARGS.eval_keyword, num_parallel_reads=ARGS.num_parallel_reads,
+        batch_size=ARGS.batch_size)
+
     inputs = session.graph.get_tensor_by_name(INPUTS + ':0')
     predictions = session.graph.get_tensor_by_name(predictions_name + ':0')
 
@@ -319,117 +384,56 @@ def main(): # pylint: disable=R0914, R0915
     """main process"""
     args_check(ARGS)
     mkdir(TMP)
-    mkdir(OUTPUTS)
+    mkdir(RESULTS)
 
-    # Phase origin model accuracy
-    # Step 1: Generate validation dataset.
+    # Phase Check original model accuracy
+    # Step 1: Load and evaluate the target model
     graph = tf.compat.v1.get_default_graph()
-
-    dataset = TFRecordDataset(
-        ARGS.eval_set, keywords=ARGS.eval_keyword, num_parallel_reads=ARGS.num_parallel_reads,
-        batch_size=ARGS.batch_size)
-
-    # Step 2: Load the evaluation model and validation it.
     session = tf.compat.v1.Session()
     saver = tf.compat.v1.train.import_meta_graph(ARGS.eval_model)
     saver.restore(session, ARGS.ckpt_path)
-    acc_1, acc_5 = evaluate(session, dataset)
+    acc_1_before, acc_5_before = evaluate(session)
+
     session.close()
-    print('The origin model top 1 accuracy = {}%.'.format(acc_1))
-    print('The origin model top 5 accuracy = {}%.'.format(acc_5))
+    print('The origin model top 1 accuracy = {}%.'.format(acc_1_before))
+    print('The origin model top 5 accuracy = {}%.'.format(acc_5_before))
 
     # Phase retrain the model
     # Step 1: Generate training dataset.
     tf.compat.v1.reset_default_graph()
     graph = tf.compat.v1.get_default_graph()
-
-    dataset = TFRecordDataset(
-        ARGS.train_set, is_training=True, keywords=ARGS.train_keyword, num_parallel_reads=ARGS.num_parallel_reads,
-        is_shuffle=True, is_repeat=True, batch_size=ARGS.batch_size)
-
     # Step 2: Load the training model.
     saver = tf.compat.v1.train.import_meta_graph(ARGS.train_model)
-    input_1 = graph.get_tensor_by_name(INPUTS + ':0')
-    logits = graph.get_tensor_by_name(LOGITS + ':0')
-
     # Step 3: Create the retraining configuration file.
     config_file = os.path.join(TMP, 'config.json')
     record_file = os.path.join(TMP, 'record.txt')
     config_defination = ARGS.config_defination
     amct.create_quant_retrain_config(config_file, graph, config_defination)
-
     # Step 4: Generate the retraining model in default graph and create the
     # quantization factor record_file.
     retrain_ops = amct.create_quant_retrain_model(graph, config_file, record_file)
-
-    # Step 5: Set the variables which needed to save.
-    variables_to_save = tf.compat.v1.global_variables()
-    saver_save = tf.compat.v1.train.Saver(variables_to_save)
-
-    # Step 6: Calculate loss function and create an optimizer.
-    labels = tf.one_hot(dataset.labels - 1, CATEGORY)
-    input_2 = tf.compat.v1.placeholder(tf.float32, shape=[ARGS.batch_size, CATEGORY])
-
-
-    l2_variables = []
-    for i in tf.compat.v1.trainable_variables():
-        if 'BatchNorm' not in i.name and 'ULQ' not in i.name:
-            l2_variables.append(tf.nn.l2_loss(tf.cast(i, tf.float32)))
-    l2_loss = 1e-4 * tf.add_n(l2_variables)
-    cross_entropy = tf.nn.softmax_cross_entropy_with_logits_v2(labels=input_2, logits=logits) / ARGS.batch_size
-    loss = cross_entropy + l2_loss
-
-    optimizer = tf.compat.v1.train.RMSPropOptimizer(ARGS.learning_rate, momentum=ARGS.momentum)
-    train_op = optimizer.minimize(loss)
-
-    # Step 7: Set a summary of loss for tensorboard.
-    tf.compat.v1.summary.scalar('l2_loss', l2_loss)
-    tf.compat.v1.summary.scalar('cross_entropy', tf.reduce_sum(cross_entropy))
-    tf.compat.v1.summary.scalar('loss', tf.reduce_sum(cross_entropy) + l2_loss)
-    write_op = tf.compat.v1.summary.merge_all()
-    summary_writer = tf.compat.v1.summary.FileWriter(TMP)
-
-    # Step 8: Restore the checkpoint and retrain the model. Also, save
-    # checkpoint every 'save_interval' steps.
-    session = tf.compat.v1.Session()
-    session.run(tf.compat.v1.global_variables_initializer())
-    saver.restore(session, ARGS.ckpt_path)
+    # Step 5: Retrain the modified model and save quantization parameters
     retrain_ckpt = os.path.join(TMP, 'resnet_v1_50_retrain')
-    for i in trange(ARGS.train_iter, ncols=100):
-        image, label = session.run([dataset.images, labels])
-        summary_loss, _ = session.run([write_op, train_op], feed_dict={input_1: image, input_2: label})
-        summary_writer.add_summary(summary_loss, i)
-        if i % ARGS.save_interval == 0:
-            saver_save.save(session, retrain_ckpt, global_step=i)
-
-    saver_save.save(session, retrain_ckpt, global_step=ARGS.train_iter)
-    session.close()
+    retrain(saver, retrain_ckpt)
 
     # Phase convert retrain model
     # Step 1: Load the evaluation model.
     tf.compat.v1.reset_default_graph()
     graph = tf.compat.v1.get_default_graph()
-
     saver = tf.compat.v1.train.import_meta_graph(ARGS.eval_model)
-
     # Step 2: Generate the retraining model accroding to the retraining
     # configuration file which created last phase.
     retrain_ops = amct.create_quant_retrain_model(graph, config_file, record_file)
-
     # Step 3: Set the variables which needed to restore.
     variables_to_restore = tf.compat.v1.global_variables()
     saver_restore = tf.compat.v1.train.Saver(variables_to_restore)
-
     # Step 4: Restore the variables and use the eval_set inference output node
     # (retrain_ops[-1]) to write the quantization factor into the record_file.
     session = tf.compat.v1.Session()
     session.run(tf.compat.v1.global_variables_initializer())
     retrain_ckpt = retrain_ckpt + '-' + str(ARGS.train_iter)
     saver_restore.restore(session, retrain_ckpt)
-    dataset = TFRecordDataset(
-        ARGS.eval_set, keywords=ARGS.eval_keyword, num_parallel_reads=ARGS.num_parallel_reads,
-        batch_size=ARGS.batch_size)
-    evaluate_for_search_n(session, dataset, retrain_ops[-1].name[:-2], ARGS.batch_num)
+    evaluate_for_search_n(session, retrain_ops[-1].name[:-2], ARGS.batch_num)
 
     # Step 5: Convert all variables to constants and finally save as 'pb' file.
     constant_graph = tf.compat.v1.graph_util.convert_variables_to_constants(
@@ -441,17 +445,13 @@ def main(): # pylint: disable=R0914, R0915
 
     # Step 6: Convert origin 'pb' model file to fake quantized 'pb'
     # model, using the quantization factor record_file.
-    quantized_pb_path = os.path.join(OUTPUTS, 'resnet_v1_50')
+    quantized_pb_path = os.path.join(RESULTS, 'resnet_v1_50')
     amct.save_quant_retrain_model(pb_path, [PREDICTIONS], record_file, quantized_pb_path)
 
     # Phase verification
     # Step 1: Generate validation dataset.
     tf.compat.v1.reset_default_graph()
     graph = tf.compat.v1.get_default_graph()
-
-    dataset = TFRecordDataset(
-        ARGS.eval_set, keywords=ARGS.eval_keyword, num_parallel_reads=ARGS.num_parallel_reads,
-        batch_size=ARGS.batch_size)
 
     # Step 2: Load the fake quantized model and validation it.
     quantized_pb_file = quantized_pb_path + '_quantized.pb'
@@ -461,10 +461,12 @@ def main(): # pylint: disable=R0914, R0915
     tf.import_graph_def(graph_def, name='')
 
     session = tf.compat.v1.Session()
-    acc_1, acc_5 = evaluate(session, dataset)
+    acc_1, acc_5 = evaluate(session)
     session.close()
-    print('The model after retraining top 1 accuracy = {}%.'.format(acc_1))
-    print('The model after retraining top 5 accuracy = {}%.'.format(acc_5))
+    print('The origin model top 1 accuracy = {}%.'.format(acc_1_before))
+    print('The origin model top 5 accuracy = {}%.'.format(acc_5_before))
+    print('The model after retrain top 1 accuracy = {}%.'.format(acc_1))
+    print('The model after retrain top 5 accuracy = {}%.'.format(acc_5))
 
 
 if __name__ == '__main__':

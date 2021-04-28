@@ -17,9 +17,9 @@
 * Description: dvpp sample main func
 */
 
-#include <time.h>
 #include <thread>
-#include "utils.h"
+#include "atlasutil/atlas_utils.h"
+#include "atlasutil/acl_device.h"
 #include "queue.h"
 #include "acl/acl.h"
 #include <iostream>
@@ -68,15 +68,9 @@ namespace {
         cv::Scalar(237, 149, 100), cv::Scalar(0, 215, 255), cv::Scalar(50, 205, 50),
         cv::Scalar(139, 85, 26) };
 }
-
-struct timespec time1 = {0, 0};
-struct timespec time2 = {0, 0};
-struct timespec time3 = {0, 0};
-struct timespec time4 = {0, 0};
-
-static int posttest = 0;
-
-void Preprocess(cv::VideoCapture capture, aclrtContext context, long totalFrameNumber, BlockingQueue<message_pre>* queue_pre) {
+static int gPostEnd = 0;
+void Preprocess(cv::VideoCapture capture, aclrtContext context, 
+                long totalFrameNumber, BlockingQueue<message_pre>* queue_pre) {
 
     message_pre premsg;
     aclrtSetCurrentContext(context);
@@ -87,17 +81,16 @@ void Preprocess(cv::VideoCapture capture, aclrtContext context, long totalFrameN
 
         if (!capture.read(frame))
         {
-            INFO_LOG("Video capture return false");
+            ATLAS_LOG_ERROR("Video capture return false");
             break;
         }
         premsg.frame = frame;
         cv::Mat reiszeMat;
         cv::resize(frame, reiszeMat, cv::Size(kModelWidth, kModelHeight));
         if (reiszeMat.empty()) {
-            INFO_LOG("Resize image failed");
+            ATLAS_LOG_ERROR("Resize image failed");
             break;
         }
-
         premsg.number = number;
         premsg.reiszeMat = reiszeMat;
         while(1) {
@@ -116,58 +109,16 @@ void Preprocess(cv::VideoCapture capture, aclrtContext context, long totalFrameN
             usleep(1000);
         }
         else {
-            cout << "preprocess end" << endl;
+            ATLAS_LOG_INFO("preprocess end");
             break;
         }
     }
 }
 
-void* GetInferenceOutputItem(uint32_t& itemDataSize,
-aclmdlDataset* inferenceOutput,uint32_t idx) {
-
-    aclDataBuffer* dataBuffer = aclmdlGetDatasetBuffer(inferenceOutput, idx);
-    if (dataBuffer == nullptr) {
-        ERROR_LOG("Get the %dth dataset buffer from model "
-        "inference output failed", idx);
-        return nullptr;
-    }
-
-    void* dataBufferDev = aclGetDataBufferAddr(dataBuffer);
-    if (dataBufferDev == nullptr) {
-        ERROR_LOG("Get the %dth dataset buffer address "
-        "from model inference output failed", idx);
-        return nullptr;
-    }
-
-    size_t bufferSize = aclGetDataBufferSize(dataBuffer);
-    if (bufferSize == 0) {
-        ERROR_LOG("The %dth dataset buffer size of "
-        "model inference output is 0", idx);
-        return nullptr;
-    }
-
-    void* data = nullptr;
-    aclrtRunMode runMode;
-    aclrtGetRunMode(&runMode);
-    if (runMode == ACL_HOST) {
-        data = Utils::CopyDataDeviceToLocal(dataBufferDev, bufferSize);
-        if (data == nullptr) {
-            ERROR_LOG("Copy inference output to host failed");
-            return nullptr;
-        }
-    }
-    else {
-        data = dataBufferDev;
-    }
-
-    itemDataSize = bufferSize;
-    return data;
-}
-
 void Postprocess(cv::VideoWriter& outputVideo, aclrtContext context, BlockingQueue<message>* queue_post){
     message postmsg;
-    uint32_t* boxNum;
-    float* detectData;
+    uint32_t* boxNum = nullptr;
+    float* detectData = nullptr;
     aclrtSetCurrentContext(context);
 
     while(1)
@@ -178,12 +129,13 @@ void Postprocess(cv::VideoWriter& outputVideo, aclrtContext context, BlockingQue
             continue;
         }
 
-        if (postmsg.number == -1)
+        if (postmsg.number == -1){
             break;
+    }
 
         cv::Mat frame = postmsg.frame;
-        detectData = postmsg.detectData;
-        boxNum = postmsg.boxNum;
+        detectData = (float*)postmsg.detectData.get();
+        boxNum = (uint32_t*)postmsg.boxNum.get();
         if (detectData == nullptr || boxNum == nullptr){
             break;
         }
@@ -191,10 +143,13 @@ void Postprocess(cv::VideoWriter& outputVideo, aclrtContext context, BlockingQue
         vector<BBox> detectResults;
         float widthScale = (float)(frame.cols) / kModelWidth;
         float heightScale = (float)(frame.rows) / kModelHeight;
+
         for (uint32_t i = 0; i < totalBox; i++) {
             BBox boundBox;
             uint32_t score = uint32_t(detectData[totalBox * SCORE + i] * 100);
-            if (score < 90) continue;
+            if (score < 90){
+                continue;
+            }
             boundBox.rect.ltX = detectData[totalBox * TOPLEFTX + i] * widthScale;
             boundBox.rect.ltY = detectData[totalBox * TOPLEFTY + i] * heightScale;
             boundBox.rect.rbX = detectData[totalBox * BOTTOMRIGHTX + i] * widthScale;
@@ -204,7 +159,6 @@ void Postprocess(cv::VideoWriter& outputVideo, aclrtContext context, BlockingQue
             boundBox.text = yolov3Label[objIndex] + std::to_string(score) + "\%";
             detectResults.emplace_back(boundBox);
         }
-
         for (int i = 0; i < detectResults.size(); ++i) {
             cv::Point p1, p2;
             p1.x = detectResults[i].rect.ltX;
@@ -217,30 +171,27 @@ void Postprocess(cv::VideoWriter& outputVideo, aclrtContext context, BlockingQue
         }
         outputVideo << frame;
     }
-    posttest ++;
-    aclrtRunMode runMode;
-    aclrtGetRunMode(&runMode);
-    if (runMode == ACL_HOST) {
-        delete[]((uint8_t*)detectData);
-        delete[]((uint8_t*)boxNum);
-    }
+    gPostEnd++;
     outputVideo.release();
-    cout <<"post end" <<endl;
+    ATLAS_LOG_INFO("postprocess end");
 
 }
 
 int main(int argc, char *argv[]) {
-    //if((argc < 2) || (argv[1] == nullptr)){
-        //ERROR_LOG("Please input: ./main <image_dir>");
-        //return FAILED;
-    //}
+    //init acl resource
+    AclDevice aclDev;
+    AtlasError ret = aclDev.Init();
+    if (ret) {
+        ATLAS_LOG_ERROR("Init resource failed, error %d", ret);
+        return ATLAS_ERROR;
+    }
 
     ObjectDetect detect(kModelPath, kModelWidth, kModelHeight);
 
-    Result ret = detect.Init();
-    if (ret != SUCCESS) {
-        ERROR_LOG("ObjectDetect Init resource failed");
-        return FAILED;
+    ret = detect.Init();
+    if (ret != ATLAS_OK) {
+        ATLAS_LOG_ERROR("ObjectDetect Init resource failed");
+        return 1;
     }
 
     aclrtContext context;
@@ -253,8 +204,8 @@ int main(int argc, char *argv[]) {
 
     if (!capture1.isOpened() || !capture2.isOpened())
     {
-        cout << "Movie open Error" << endl;
-        return FAILED;
+        ATLAS_LOG_ERROR("Movie open Error");
+        return 1;
     }
     long totalFrameNumber1 = capture1.get(cv::CAP_PROP_FRAME_COUNT);
     long totalFrameNumber2 = capture2.get(cv::CAP_PROP_FRAME_COUNT);
@@ -269,6 +220,7 @@ int main(int argc, char *argv[]) {
     cv::VideoWriter outputVideo2;
     string outputVideoPath1 = "./output/test1.mp4";
     string outputVideoPath2 = "./output/test2.mp4";
+
     outputVideo1.open(outputVideoPath1, cv::VideoWriter::fourcc('M', 'P', '4', '2'), rate1, cv::Size(width1, height1));
     outputVideo2.open(outputVideoPath2, cv::VideoWriter::fourcc('M', 'P', '4', '2'), rate2, cv::Size(width2, height2));
 
@@ -290,7 +242,6 @@ int main(int argc, char *argv[]) {
     message msg;
     int flag = 0;
     while(1) {
-        clock_gettime(CLOCK_REALTIME, &time1);
         if(queue_pre1.Pop(premsg) != 0)
         {
             usleep(1000);
@@ -303,26 +254,14 @@ int main(int argc, char *argv[]) {
         }
 
         msg.frame = premsg.frame;
-
-        aclmdlDataset* inferenceOutput = nullptr;
+        std::vector<InferenceOutput> inferenceOutput;
         ret = detect.Inference(inferenceOutput, premsg.reiszeMat);
-        if ((ret != SUCCESS) || (inferenceOutput == nullptr)) {
-            ERROR_LOG("Inference model inference output data failed");
-            return FAILED;
+        if (ret != ATLAS_OK) {
+            ATLAS_LOG_ERROR("Inference model inference output data failed");
+            return 1;
         }
-
-        uint32_t dataSize = 0;
-        float* detectData = (float*)GetInferenceOutputItem(dataSize, inferenceOutput,
-        kBBoxDataBufId);
-        uint32_t* boxNum = (uint32_t*)GetInferenceOutputItem(dataSize, inferenceOutput,
-        kBoxNumDataBufId);
-        if (detectData == nullptr || boxNum == nullptr)
-        {
-            msg.number = -1;
-            break;
-        }
-        msg.detectData = detectData;
-        msg.boxNum = boxNum;
+        msg.detectData = inferenceOutput[kBBoxDataBufId].data;
+        msg.boxNum = inferenceOutput[kBoxNumDataBufId].data;
 
         while (1) {
             if (queue_post1.Push(msg) != 0) {
@@ -346,25 +285,13 @@ int main(int argc, char *argv[]) {
 
         msg.frame = premsg.frame;
 
-        inferenceOutput = nullptr;
         ret = detect.Inference(inferenceOutput, premsg.reiszeMat);
-        if ((ret != SUCCESS) || (inferenceOutput == nullptr)) {
-            ERROR_LOG("Inference model inference output data failed");
-            return FAILED;
+        if (ret != ATLAS_OK) {
+            ATLAS_LOG_ERROR("Inference model inference output data failed");
+            return 1;
         }
-
-        dataSize = 0;
-        detectData = (float*)GetInferenceOutputItem(dataSize, inferenceOutput,
-        kBBoxDataBufId);
-        boxNum = (uint32_t*)GetInferenceOutputItem(dataSize, inferenceOutput,
-        kBoxNumDataBufId);
-        if (detectData == nullptr || boxNum == nullptr)
-        {
-            msg.number = -1;
-            break;
-        }
-        msg.detectData = detectData;
-        msg.boxNum = boxNum;
+        msg.detectData = inferenceOutput[kBBoxDataBufId].data;
+        msg.boxNum = inferenceOutput[kBoxNumDataBufId].data;
 
         while (1) {
             if (queue_post2.Push(msg) != 0) {
@@ -374,9 +301,6 @@ int main(int argc, char *argv[]) {
                 break;
             }
         }
-
-        clock_gettime(CLOCK_REALTIME, &time2);
-        cout << "time passed is: " << (time2.tv_sec - time1.tv_sec)*1000 + (time2.tv_nsec - time1.tv_nsec)/1000000 << "ms" << endl;
     }
 
     if(totalFrameNumber1 > totalFrameNumber2){
@@ -394,26 +318,14 @@ int main(int argc, char *argv[]) {
 
             msg.frame = premsg.frame;
 
-            aclmdlDataset* inferenceOutput = nullptr;
+            std::vector<InferenceOutput> inferenceOutput;
             ret = detect.Inference(inferenceOutput, premsg.reiszeMat);
-            if ((ret != SUCCESS) || (inferenceOutput == nullptr)) {
-                ERROR_LOG("Inference model inference output data failed");
-                return FAILED;
+            if (ret != ATLAS_OK) {
+                ATLAS_LOG_ERROR("Inference model inference output data failed");
+                return 1;
             }
-
-            uint32_t dataSize = 0;
-            float* detectData = (float*)GetInferenceOutputItem(dataSize, inferenceOutput,
-            kBBoxDataBufId);
-            uint32_t* boxNum = (uint32_t*)GetInferenceOutputItem(dataSize, inferenceOutput,
-            kBoxNumDataBufId);
-            if (detectData == nullptr || boxNum == nullptr)
-            {
-                msg.number = -1;
-                break;
-            }
-            msg.detectData = detectData;
-            msg.boxNum = boxNum;
-
+            msg.detectData = inferenceOutput[kBBoxDataBufId].data;
+            msg.boxNum = inferenceOutput[kBoxNumDataBufId].data;
             while (1) {
                 if (queue_post1.Push(msg) != 0) {
                     usleep(1000);
@@ -440,26 +352,14 @@ int main(int argc, char *argv[]) {
 
             msg.frame = premsg.frame;
 
-            aclmdlDataset* inferenceOutput = nullptr;
+            std::vector<InferenceOutput> inferenceOutput;
             ret = detect.Inference(inferenceOutput, premsg.reiszeMat);
-            if ((ret != SUCCESS) || (inferenceOutput == nullptr)) {
-                ERROR_LOG("Inference model inference output data failed");
-                return FAILED;
+            if (ret != ATLAS_OK) {
+                ATLAS_LOG_ERROR("Inference model inference output data failed");
+                return 1;
             }
-
-            uint32_t dataSize = 0;
-            float* detectData = (float*)GetInferenceOutputItem(dataSize, inferenceOutput,
-            kBBoxDataBufId);
-            uint32_t* boxNum = (uint32_t*)GetInferenceOutputItem(dataSize, inferenceOutput,
-            kBoxNumDataBufId);
-            if (detectData == nullptr || boxNum == nullptr)
-            {
-                msg.number = -1;
-                break;
-            }
-            msg.detectData = detectData;
-            msg.boxNum = boxNum;
-
+            msg.detectData = inferenceOutput[kBBoxDataBufId].data;
+            msg.boxNum = inferenceOutput[kBoxNumDataBufId].data;
             while (1) {
                 if (queue_post2.Push(msg) != 0) {
                     usleep(1000);
@@ -490,7 +390,7 @@ int main(int argc, char *argv[]) {
     }
 
     while(1){
-        if ( posttest == 2)
+        if (gPostEnd == 2)
         {
             break;
         }
@@ -498,6 +398,6 @@ int main(int argc, char *argv[]) {
     }
 
     usleep(5000);
-    INFO_LOG("Execute sample success");
-    return SUCCESS;
+    ATLAS_LOG_INFO("Execute sample success");
+    return ATLAS_OK;
 }

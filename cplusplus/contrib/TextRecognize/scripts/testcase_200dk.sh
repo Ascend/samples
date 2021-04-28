@@ -1,5 +1,7 @@
 crnn_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/crnn_static/crnn_static.pb"
 dbnet_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/dbnet/dbnet.pb"
+data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/TextRecognize/"
+
 dbnet_model_name="dbnet"
 crnn_model_name="crnn_static"
 presenter_server_name="text_recognize"
@@ -14,19 +16,42 @@ declare -i success=0
 declare -i inferenceError=1
 declare -i verifyResError=2
 
-
-
 function downloadData() {
-
     mkdir -p ${project_path}/data/
+    wget -O ${project_path}/data/"data.mp4"  ${data_source}"data.mp4"  --no-check-certificate
     if [ $? -ne 0 ];then
-        echo "download test1.jpg failed, please check Network."
+        echo "download data.mp4 failed, please check Network."
         return 1
     fi
 
+    wget -O ${project_path}/data/"char_dict_en.json"  ${data_source}"char_dict_en.json"  --no-check-certificate
+    if [ $? -ne 0 ];then
+        echo "download char_dict_en.json failed, please check Network."
+        return 1
+    fi
+
+    wget -O ${project_path}/data/"ord_map_en.json"  ${data_source}"ord_map_en.json"  --no-check-certificate
+    if [ $? -ne 0 ];then
+        echo "download ord_map_en.json failed, please check Network."
+        return 1
+    fi
     return 0
 }
 
+function buildLibAtlasUtil() {
+	cd ${project_path}/../../common/atlasutil/
+	make
+	if [ $? -ne 0 ];then
+        echo "ERROR: make atlasutil failed."
+        return ${inferenceError}
+    fi
+	
+	make install
+	if [ $? -ne 0 ];then
+        echo "ERROR: make install atlasutil failed."
+        return ${inferenceError}
+    fi
+}
 
 function setAtcEnv() {
     # set enviroment param
@@ -43,7 +68,6 @@ function setAtcEnv() {
         export ASCEND_OPP_PATH=${install_path}/opp
         export PYTHONPATH=${install_path}/atc/python/site-packages:${install_path}/atc/python/site-packages/auto_tune.egg/auto_tune:${install_path}/atc/python/site-packages/schedule_search.egg:$PYTHONPATH
         export LD_LIBRARY_PATH=${install_path}/atc/lib64:${LD_LIBRARY_PATH}      
-        echo "setAtcEnv success."
     fi
 
     return 0
@@ -81,8 +105,6 @@ function downloadOriginalCrnnModel() {
     return 0
 }
 
-
-
 function main() {
 
     if [[ ${version}"x" = "x" ]];then
@@ -96,16 +118,9 @@ function main() {
         echo "ERROR: download test images failed"
         return ${inferenceError}
     fi
-
-    # reconfigure enviroment param
-    export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/nnrt/latest/acllib/lib64:/home/HwHiAiUser/ascend_ddk/x86/lib:${LD_LIBRARY_PATH}
-    export ASCEND_HOME=/home/HwHiAiUser/Ascend     
-    export LD_LIBRARY_PATH=$ASCEND_HOME/ascend-toolkit/latest/acllib/lib64:$LD_LIBRARY_PATH
-    export LD_LIBRARY_PATH=/usr/local/opencv/lib64:$LD_LIBRARY_PATH
-    export LD_LIBRARY_PATH=/usr/local/opencv/lib:$LD_LIBRARY_PATH
     
     mkdir -p ${HOME}/models/${project_name}     
-    
+    mkdir -p ${project_path}/model/
     if [[ $(find ${HOME}/models/${project_name} -name ${dbnet_model_name}".om")"x" = "x" ]];then 
         downloadOriginalDbnetModel
         if [ $? -ne 0 ];then
@@ -176,6 +191,18 @@ function main() {
         fi
     fi
 
+    setBuildEnv
+    if [ $? -ne 0 ];then
+        echo "ERROR: set build environment failed"
+        return ${inferenceError}
+    fi
+
+    buildLibAtlasUtil
+	if [ $? -ne 0 ];then
+        echo "ERROR: build libatlasutil.so failed"
+        return ${inferenceError}
+    fi
+
     # 创建目录用于存放编译文件
     mkdir -p ${project_path}/build/intermediates/host
     if [ $? -ne 0 ];then
@@ -183,12 +210,6 @@ function main() {
         return ${inferenceError}
     fi
     cd ${project_path}/build/intermediates/host
-
-    setBuildEnv
-    if [ $? -ne 0 ];then
-        echo "ERROR: set build environment failed"
-        return ${inferenceError}
-    fi
 
     # 产生Makefile
     cmake ${project_path}/src -DCMAKE_CXX_COMPILER=aarch64-linux-gnu-g++ -DCMAKE_SKIP_RPATH=TRUE
@@ -211,45 +232,43 @@ function main() {
 
     # presenter server
     cd ${project_path}/../../../common/
-    bash run_presenter_server.sh ${script_path}/param.conf
+    bash run_presenter_server.sh ${script_path}/TextRecongnize.conf &
 
     if [ $? -ne 0 ];then
         echo "ERROR: run presenter server failed. please check your project"
         return ${inferenceError}
     fi
 
-    sleep 2
+    sleep 4
     # run program
     cd ${project_path}/out
     mv ${project_path}/out/main ${project_path}/out/textrecognize
 
     ./textrecognize &
 
-    sleep 2
+    sleep 5
 
     project_pid=`ps -ef | grep "textrecognize" | awk -F ' ' '{print $2}'`
-    if [[ ${project_pid}"X" != "X" ]];then
-        echo -e "\033[33m kill existing project process: kill -9 ${project_pid}.\033[0m"
-        sudo kill -9 ${project_pid}
-        return ${success}
-        #if [ $? -ne 0 ];then
-            #echo "ERROR: kill project process failed."
-            #return ${inferenceError}
-        #fi
+        if [[ ${project_pid}"X" != "X" ]];then
+            echo -e "\033[33m kill existing project process: kill -9 ${project_pid}.\033[0m"
+            kill -9 ${project_pid}    
+        if [ $? -ne 0 ];then
+            echo "ERROR: kill project process failed."
+            return ${inferenceError}
+        fi
 
         presenter_server_pid=`ps -ef | grep "presenter_server\.py" | awk -F ' ' '{print $2}'`
         if [[ ${presenter_server_pid}"X" != "X" ]];then
             echo -e "\033[33mNow do presenter server configuration, kill existing presenter process: kill -9 ${presenter_server_pid}.\033[0m"
-            sudo kill -9 ${presenter_server_pid}
-            return ${success}
-            #if [ $? -ne 0 ];then
-                #echo "ERROR: kill presenter server process failed."
-                #return ${inferenceError}
-            #fi
+            kill -9 ${presenter_server_pid}
+            if [ $? -ne 0 ];then
+                echo "ERROR: kill presenter server process failed."
+                return ${inferenceError}
+            fi
         fi
-    #else 
-        #echo "ERROR: run failed. please check your project"
-        #return ${inferenceError}
+    else 
+        echo "ERROR: run failed. please check your project"
+        return ${inferenceError}
     fi
 
     echo "run success"

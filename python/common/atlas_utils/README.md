@@ -105,7 +105,7 @@ pip3 install Pillow
 python atlasutil库以源码方式提供，安装时将atlas_utils目录拷贝到运行环境，并将该路径加入PYTHONPATH环境变量即可。例如将整个samples仓拷贝到运行环境$HOME目录下，在~/.bashrc文件中添加：
 
 ```
-export PYTHONPATH=$HOME/samples/python/common/atlas_utils:$PYTHONPATH
+export PYTHONPATH=$HOME/samples/python/common/:$PYTHONPATH
 ```
 
 并保存，然后执行
@@ -117,12 +117,20 @@ source ~/.bashrc
 或者单独将atlas_utils目录拷贝到运行环境$HOME/ascend_ddk/目录下，在~/.bashrc文件中添加：
 
 ```
-export PYTHONPATH=$HOME/samples/python/common/atlas_utils:$PYTHONPATH
+export PYTHONPATH=$HOME/ascend_ddk/:$PYTHONPATH
 ```
 
 并保存，然后执行
 
 ```
 source ~/.bashrc
+```
+
+在应用代码中调用atlasutil库的接口时导入，例如：
+
+```
+import atlas_utils.presenteragent.presenter_channel as presenter_channel
+
+chan = presenter_channel.open_channel(config_file)
 ```
 

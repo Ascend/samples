@@ -21,9 +21,31 @@
 #include <locale>
 #include <mutex>
 #include <stdint.h>
+#include "opencv2/opencv.hpp"
+#include "opencv2/imgcodecs/legacy/constants_c.h"
+#include "opencv2/imgproc/types_c.h"
+struct message_pre
+{
+    int number;
+    cv::Mat frame;
+    cv::Mat reiszeMat;
+};
+
+struct message
+{
+    int number;
+    cv::Mat frame;
+    std::shared_ptr<void> detectData;
+    std::shared_ptr<void> boxNum;
+};
+
+struct message_video
+{
+    int number;
+    cv::Mat resultImage;
+};
 
 static const int DEFAULT_MAX_QUEUE_SIZE = 128;
-
 
 template <typename T> class BlockingQueue {
     public:

@@ -22,7 +22,7 @@ LeakyRelu算子的数学表达式如下所示：
     算子功能请参见[功能描述](#section7526288579)。
 
 2.  明确输入和输出。
-    -   LeakyRelu算子有1个输入x，1个输出y，1个属性（即算子表达式中的![](figures/zh-cn_image_0302153081.png)）。
+    -   LeakyRelu算子有1个输入x，1个输出y，1个属性（即算子表达式中的![](https://images.gitee.com/uploads/images/2021/0426/102929_a40abaef_5474059.png) )。
     -   本样例中算子的输入支持的数据类型为float16、float32、 int32、int8，算子输出的数据类型与输入数据类型相同。
     -   算子输入支持所有shape，输出shape与输入shape相同。
     -   算子输入支持的format为：NCHW,NC1HWC0,NHWC,。
@@ -37,7 +37,7 @@ LeakyRelu算子的数学表达式如下所示：
         使用te.lang.cce.vmax\( \)接口实现取较大值的功能。
 
     2.  由于某些DSL接口会进行数据类型的转换，所以结果计算出来后，需要使用te.lang.cce.cast\_to接口将计算结果转换为原数据类型。
-    3.  当![](figures/zh-cn_image_0302153083.png)  = 0时，即为relu操作，可使用te.lang.cce.vrelu\(\)接口进行功能实现，由于vrelu接口会将int8、int32、float32转换为float16，若数据类型为int32或者float32时，会造成精度丢失，所以可考虑使用te.lang.cce.vmax\(\)接口取大值。
+    3.  当![](https://images.gitee.com/uploads/images/2021/0426/102929_a40abaef_5474059.png)  = 0时，即为relu操作，可使用te.lang.cce.vrelu\(\)接口进行功能实现，由于vrelu接口会将int8、int32、float32转换为float16，若数据类型为int32或者float32时，会造成精度丢失，所以可考虑使用te.lang.cce.vmax\(\)接口取大值。
 
 4.  明确算子实现文件名称、算子实现函数名称以及算子的类型（OpType）。
 

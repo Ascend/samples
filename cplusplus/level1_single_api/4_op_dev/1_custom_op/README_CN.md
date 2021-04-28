@@ -191,17 +191,7 @@ Caffe与TensorFlow共存的自定义算子样例工程的目录结构如下所�
             ```
 
 
-    -   SYSTEM\_INFO：标志编译生成的算子包的形态的名称，若不设置SYSTEM\_INFO环境变量，则会自动根据操作系统类型及架构获取。
-    
-        若用户需要自定义生成的算子包形态名称，请取消此环境变量的注释，并自行修改，例如，若操作系统版本为CentOS，架构为aarch64，则可设置为：
-    
-        ```
-        export SYSTEM_INFO=centos_aarch64
-        ```
-    
-        则编译生成的算子包名称为custom\_opp\__centos\_aarch64_.run。
-
-    -   AICPU\_SOC\_VERSION：昇腾AI处理器的类型，请配置为AI CPU组件安装路径中“opp/op_impl/built-in/aicpu/aicpu_kernel/lib”路径下的文件夹名称，即“libcpu_kernels_context.a”与“libcpu_kernels_v1.0.1.so”所在文件夹的名称。
+    -    AICPU\_SOC\_VERSION：昇腾AI处理器的类型，请配置为AI CPU组件安装路径中“opp/op_impl/built-in/aicpu/aicpu_kernel/lib”路径下的文件夹名称，即“libcpu_kernels_context.a”与“libcpu_kernels_v1.0.1.so”所在文件夹的名称。
     
 
 3.  执行算子工程编译。
@@ -219,7 +209,9 @@ Caffe与TensorFlow共存的自定义算子样例工程的目录结构如下所�
 
 ## 算子部署
 
-1.  设置环境变量。
+1.  训练场景下，您需要将算子工程编译生成的自定义算子安装包**custom\_opp\__<target os\>\_<target architecture\>_.run**以运行用户拷贝到运行环境任一路径，如果您的 开发环境即为运行环境，此操作可跳过；推理场景下无需执行此操作，自定义算子部署到开发环境的OPP算子库即可。
+
+2.  设置环境变量。
 
     以HwHiAiUser用户执行如下命令，在当前终端下声明环境变量，关闭Shell终端失效。
 
@@ -229,7 +221,7 @@ Caffe与TensorFlow共存的自定义算子样例工程的目录结构如下所�
 
     /home/HwHiAiUser/Ascend/ascend-toolkit/latest表示OPP组件安装路径，请根据实际路径修改。
 
-2.  在编译生成的自定义算子安装包所在路径下，执行如下命令，安装自定义算子包。
+3.  在编译生成的自定义算子安装包所在路径下，执行如下命令，安装自定义算子包。
 
     **./custom\_opp\__<target os\>\_<target architecture\>_.run**
 
@@ -299,7 +291,7 @@ TBE算子：Add、ScatterNdAdd，单算子网络验证文件可参见“tbe/test
     # FwkACLlib包依赖
     export PYTHONPATH=${install_path}/fwkacllib/python/site-packages:$PYTHONPATH
     export LD_LIBRARY_PATH=${install_path}/fwkacllib/lib64:$LD_LIBRARY_PATH
-    export PATH=${install_path}/fwkacllib/ccec_compiler/bin:${install_path}/fwkacllib/bin:$PATH
+    export PATH=/usr/local/python3.7.5/bin:${install_path}/fwkacllib/ccec_compiler/bin:${install_path}/fwkacllib/bin:$PATH  # 如果用户环境存在多个python3版本，则指定使用的python3.7.5版本，python3.7.5安装路径请根据实际情况替换
     # Driver包依赖
     export LD_LIBRARY_PATH=/usr/local/Ascend/driver/lib64/common/:/usr/local/Ascend/driver/lib64/driver:$LD_LIBRARY_PATH # 仅容器训练场景配置
     # TFPlugin包依赖
@@ -403,7 +395,7 @@ TBE算子：Add、ScatterNdAdd，单算子网络验证文件可参见“tbe/test
         ```
         export install_path=/home/HwHiAiUser/Ascend/ascend-toolkit/latest   # 开发套件包Ascend-cann-toolkit的安装路径  
         # PATH请配置为ATC组件的安装路径
-        export PATH=${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
+        export PATH=/usr/local/python3.7.5/bin:${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH  # 如果用户环境存在多个python3版本，则指定使用的python3.7.5版本，python3.7.5安装路径请根据实际情况替换
         export ASCEND_OPP_PATH=${install_path}/opp
         export DUMP_GE_GRAPH=3     # 控制dump图的内容多少，配置为3表示仅dump显示节点关系的精简版图文件
         export DUMP_GRAPH_LEVEL=3  # 控制dump图的个数，配置为3表示仅dump最后的生成的build图
