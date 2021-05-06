@@ -1,73 +1,92 @@
-**本样例为大家学习昇腾软件栈提供参考，非商业目的！**
+English|[中文](README_CN.md)
 
-**本样例适配3.1.0及以上版本，支持产品为Atlas800-9000、Atlas800-9010。**
+**This sample provides reference for you to learn the Ascend AI Software Stack and cannot be used for commercial purposes.**
 
-
-### 乐府作诗样例
-
-功能：一个高质量的古诗词生成系统。
-
-样例输入：诗歌标题和诗歌格式。
-
-样例输出：  对应格式的诗歌。
-
-### 前提条件
-
-部署此Sample前，需要准备好以下环境：
-
-- 请确认已按照[环境准备和依赖安装](https://support.huaweicloud.com/instg-cli-cann/atlascli_03_0001.html)准备好环境。
-
-- 已完成对应产品的开发环境和运行环境安装。
-
-1. 获取源码包。
-
-   可以使用以下方式下载，进行源码的准备。
-
-    - 开发环境，使用运行用户在命令行中执行以下命令下载。
-
-       **cd $HOME**
-
-       **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/yuefuzuoshi/ModelZoo_Yuefu_TF.zip**
-        开发环境中，执行以下命令，解压zip包。
-
-        **cd $HOME**
-
-        **unzip ModelZoo_Yuefu_TF.zip**
-2. 获取此应用中所需要的网络模型。
-进入上一步中源码包解压后的models目录
-    **cd $HOME/ModelZoo_Yuefu_TF/models**
-    下载模型文件
-    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/yuefuzuoshi/poetry.data-00000-of-00001**
-    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/yuefuzuoshi/poetry.meta**
-    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/yuefuzuoshi/poetry.index**
-        
- ### 样例部署
-**以下以开发环境与运行环境合一部署为例。**   
-- 源码包中预置了跑单卡的脚本，在运行之前，我们需要做相应脚本的修改。
-（1）修改device_table_1p.json中的device_id和device_ip。
-使用命令
-**cat /etc/hccn.conf**
- 查看服务器上device的IP列表，如果没有配置，可以参考[修改NPU卡IP地址](https://support.huaweicloud.com/instg-cli-cann/atlascli_03_0084.html)进行配置。
- **将device_table_1p.json文件中的第16行的device_id和第17行的device_ip改成以上查到的device设备和IP。**
- （2）修改运行脚本main_1p.sh，配置参数。
-    **DEVICE_ID改成上面修改的对应的device_id。**
-    **max_decode_len：最大生成长度，默认设置为80**
-    **title：输入想要生成诗歌的主题**
-    **type：输入想要生成诗歌的题材，包括五言律诗, 五言绝句, 七言绝句, 七言律诗**
+**This sample works with CANN 3.1.0 and later versions, and supports Atlas 800 (model: 9000) and Atlas 800 (model: 9010).**
 
 
-### 样例运行
+### Yuefu Poetry Generation Sample
+
+Function: generates a Chinese poem.
+
+Input: poem title and poem type
+
+Output:  a Yuefu poem
+
+### Prerequisites
+
+Before deploying this sample, ensure that:
+
+- Ensure that the environment has been set up by referring to [Environment Preparation and Dependency Installation](https://github.com/Ascend/samples/tree/master/python/environment).
+
+- The development environment and operating environment of the corresponding product have been set up.
+
+1. Obtain the source package.
+
+   You can download the source code in the following way.
+
+   In the development environment, run the following commands as the running user.
+
+   ```
+   cd $HOME
+   wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/yuefuzuoshi/ModelZoo_Yuefu_TF.zip
+   ```
+
+   In the development environment, run the following commands to unzip the package:
+
+   ```
+   cd $HOME
+   unzip ModelZoo_Yuefu_TF.zip
+   ```
+
+2. Obtain the network model required by the application.
+
+   Go to the **models** directory extracted from the source package:
+
+   ```
+   cd $HOME/ModelZoo_Yuefu_TF/models
+   ```
+
+   Download the model files:
+
+   ```
+   wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/yuefuzuoshi/poetry.data-00000-of-00001
+   wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/yuefuzuoshi/poetry.meta
+   wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/yuefuzuoshi/poetry.index
+   ```
+
+ ### Sample Deployment
+**The following assumes that the development environment and operating environment are set up on the same server.**   
+- A script for running on a single device is provided in the source package. Before running the script, you need to edit the script file.
+
+  (1) Configure **device_id** and **device_ip** in the **device_table_1p.json** file.
+
+  Run the **cat /etc/hccn.conf** command to query the IP address list of the device on the server. If the IP address is not configured, configure it by referring to [Configuring NIC IP Address of a Device](https://support.huaweicloud.com/intl/en-us/instg-cli-cann/atlascli_03_0084.html).
+
+  Change the values of **device_id** in line 16 and **device_ip** in line 17 in the **device_table_1p.json** file to the queried device ID and IP address, respectively.
+
+  (2) Edit the **main_1p.sh** script to configure the following parameters.
+
+  Change **DEVICE_ID** to the **device_id** value configured in the previous step.
+
+  **max_decode_len**: sets the maximum characters of the poem. Defaults to **80**.
+
+  **title**: sets the title of the poem.
+
+  **type**: sets the type of the poem, selected from the five-character-regular-verse, five-character-quatrain, seven-character-regular-verse, and seven-character-quatrain.
 
 
+### Sample Running
 
-执行以下命令
+Run the following command:
 
-**bash main_1p.sh** 
-​       
+```
+bash main_1p.sh
+```
 
-### 查看结果
+### Result Checking
 
-运行完成后，界面打印以下内容：
+After the execution is complete, you should see a poem. The following is an example only.
 ```
 七言绝句(格式)中秋(诗歌标题)
 青山万古水千波，

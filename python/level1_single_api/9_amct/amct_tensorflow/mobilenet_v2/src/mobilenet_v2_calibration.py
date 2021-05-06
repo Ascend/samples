@@ -31,7 +31,7 @@ amct.set_logging_level(print_level='info', save_level='info')
 
 
 PATH, _ = os.path.realpath('./')
-OUTPUTS = os.path.join(PATH, 'outputs')
+OUTPUTS = os.path.join(PATH, 'outputs/calibration')
 SIDE = 224
 INPUT_NAME = 'input'
 OUTPUT_NAME = 'MobilenetV2/Predictions/Reshape_1'

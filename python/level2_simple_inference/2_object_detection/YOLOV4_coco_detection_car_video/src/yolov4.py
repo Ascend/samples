@@ -1,32 +1,18 @@
-"""
-Copyright (R) @huawei.com, all rights reserved
--*- coding:utf-8 -*-
-CREATED:  2020-6-04 20:12:13
-MODIFIED: 2020-6-28 14:04:45
-"""
 import sys
-import json
-import cv2
-import numpy as np
-import os
-import time
-import pickle
-import LaneFinder
-sys.path.append("../../../../common/atlas_utils")
 sys.path.append("../../../../common")
 sys.path.append("../")
-from acl_model import Model
-from acl_resource import AclResource
+import os
+import json
+import numpy as np
+import acl
+import cv2 as cv
+from PIL import Image
+import pickle
+import LaneFinder
+import atlas_utils.constants as const
+from atlas_utils.acl_model import Model
+from atlas_utils.acl_resource import AclResource
 
-MODEL_WIDTH = 416
-MODEL_HEIGHT = 416
-OUTPUT_DIR = '../out/'
-MODEL_PATH = '../model/yolov4_no_postprocess.om'
-CLASS_NUM = 80
-NMS_THRESHOLD_CONST = 0.5
-CLASS_SCORE_CONST = 0.4
-MODEL_OUTPUT_BOXNUM = 10647
-TRAFFIC = [0, 1, 2, 3, 4, 5, 6, 7, 8]
 labels = ["person",
         "bicycle", "car", "motorbike", "aeroplane",
         "bus", "train", "truck", "boat", "traffic light",
@@ -41,156 +27,198 @@ labels = ["person",
         "toilet", "TV monitor", "laptop", "mouse", "remote", "keyboard", "cell phone",
         "microwave", "oven", "toaster", "sink", "refrigerator", "book", "clock", "vase",
         "scissors", "teddy bear", "hair drier", "toothbrush"]
+INPUT_DIR = '../data/'
+OUTPUT_DIR = '../out/'
+MODEL_PATH = "../model/yolov4_bs1.om"
+MODEL_WIDTH = 608
+MODEL_HEIGHT = 608
+class_num = 80
+stride_list = [32, 16, 8]
+anchors_3 = np.array([[12, 16], [19, 36], [40, 28]]) / stride_list[2]
+anchors_2 = np.array([[36, 75], [76, 55], [72, 146]]) / stride_list[1]
+anchors_1 = np.array([[142, 110], [192, 243], [459, 401]]) / stride_list[0]
+anchor_list = [anchors_1, anchors_2, anchors_3]
 
+conf_threshold = 0.8
+iou_threshold = 0.3
 
-def func_nms(boxes, nms_threshold):
-    """
-    func_nms    
-    """
-    b_x = boxes[:, 0]
-    b_y = boxes[:, 1]
-    b_w = boxes[:, 2]
-    b_h = boxes[:, 3]
-    scores = boxes[:, 5]
-    areas = (b_w + 1) * (b_h + 1)
+colors = [(255, 0, 0), (0, 255, 0), (0, 0, 255), (0, 255, 255), (255, 0, 255), (255, 255, 0)]
 
-    order = scores.argsort()[::-1] 
-    keep = []  # keep box 
-    while order.size > 0:
-        i = order[0]
-        keep.append(i)  # keep max score 
-        # inter area  : left_top   right_bottom
-        xx1 = np.maximum(b_x[i], b_x[order[1:]])
-        yy1 = np.maximum(b_y[i], b_y[order[1:]])
-        xx2 = np.minimum(b_x[i] + b_w[i], b_x[order[1:]] + b_w[order[1:]])
-        yy2 = np.minimum(b_y[i] + b_h[i], b_y[order[1:]] + b_h[order[1:]])
-        #inter area
-        w = np.maximum(0.0, xx2 - xx1 + 1)
-        h = np.maximum(0.0, yy2 - yy1 + 1)
-        inter = w * h
-        #union area : area1 + area2 - inter
-        union = areas[i] + areas[order[1:]] - inter
-        # calc IoU
-        IoU = inter / union
-        inds = np.where(IoU <= nms_threshold)[0]
-        order = order[inds + 1]  
+def preprocess(frame):
 
-    final_boxes = [boxes[i] for i in keep]
-    return final_boxes
+    image = Image.fromarray(cv.cvtColor(frame, cv.COLOR_BGR2RGB))
+    #image = Image.open(img_path)
+    img_h = image.size[1]
+    img_w = image.size[0]
+    net_h = MODEL_HEIGHT
+    net_w = MODEL_WIDTH
 
+    scale = min(float(net_w) / float(img_w), float(net_h) / float(img_h))
+    new_w = int(img_w * scale)
+    new_h = int(img_h * scale)
 
-def calculate_position(bbox, transform_matrix, warped_size, pix_per_meter, x_scale, y_scale):
-    """
-    calculate_position
-    """
+    shift_x = (net_w - new_w) // 2
+    shift_y = (net_h - new_h) // 2
+    shift_x_ratio = (net_w - new_w) / 2.0 / net_w
+    shift_y_ratio = (net_h - new_h) / 2.0 / net_h
+
+    image_ = image.resize((new_w, new_h))
+    new_image = np.zeros((net_h, net_w, 3), np.uint8)
+    new_image[shift_y: new_h + shift_y, shift_x: new_w + shift_x, :] = np.array(image_)
+    new_image = new_image.astype(np.float32)
+    new_image = new_image / 255
+    print('new_image.shape', new_image.shape)
+    new_image = new_image.transpose(2, 0, 1).copy()
+    return new_image, image
+
+def overlap(x1, x2, x3, x4):
+    left = max(x1, x3)
+    right = min(x2, x4)
+    return right - left
+
+def cal_iou(box, truth):
+    w = overlap(box[0], box[2], truth[0], truth[2])
+    h = overlap(box[1], box[3], truth[1], truth[3])
+    if w <= 0 or h <= 0:
+        return 0
+    inter_area = w * h
+    union_area = (box[2] - box[0]) * (box[3] - box[1]) + (truth[2] - truth[0]) * (truth[3] - truth[1]) - inter_area
+    return inter_area * 1.0 / union_area
+
+def apply_nms(all_boxes, thres):
+    res = []
+
+    for cls in range(class_num):
+        cls_bboxes = all_boxes[cls]
+        sorted_boxes = sorted(cls_bboxes, key=lambda d: d[5])[::-1]
+
+        p = dict()
+        for i in range(len(sorted_boxes)):
+            if i in p:
+                continue
+
+            truth = sorted_boxes[i]
+            for j in range(i + 1, len(sorted_boxes)):
+                if j in p:
+                    continue
+                box = sorted_boxes[j]
+                iou = cal_iou(box, truth)
+                if iou >= thres:
+                    p[j] = 1
+
+        for i in range(len(sorted_boxes)):
+            if i not in p:
+                res.append(sorted_boxes[i])
+    return res
+
+def _sigmoid(x):
+    return 1.0 / (1 + np.exp(-x))
+
+def decode_bbox(conv_output, anchors, img_w, img_h, x_scale, y_scale, shift_x_ratio, shift_y_ratio):
+    print('conv_output.shape', conv_output.shape)
+    _, _, h, w = conv_output.shape 
+    conv_output = conv_output.transpose(0, 2, 3, 1)
+    pred = conv_output.reshape((h * w, 3, 5 + class_num))
+    pred[..., 4:] = _sigmoid(pred[..., 4:])
+    pred[..., 0] = (_sigmoid(pred[..., 0]) + np.tile(range(w), (3, h)).transpose((1, 0))) / w
+    pred[..., 1] = (_sigmoid(pred[..., 1]) + np.tile(np.repeat(range(h), w), (3, 1)).transpose((1, 0))) / h
+    pred[..., 2] = np.exp(pred[..., 2]) * anchors[:, 0:1].transpose((1, 0)) / w
+    pred[..., 3] = np.exp(pred[..., 3]) * anchors[:, 1:2].transpose((1, 0)) / h
+
+    bbox = np.zeros((h * w, 3, 4))
+    bbox[..., 0] = np.maximum((pred[..., 0] - pred[..., 2] / 2.0 - shift_x_ratio) * x_scale * img_w, 0)  # x_min
+    bbox[..., 1] = np.maximum((pred[..., 1] - pred[..., 3] / 2.0 - shift_y_ratio) * y_scale * img_h, 0)  # y_min
+    bbox[..., 2] = np.minimum((pred[..., 0] + pred[..., 2] / 2.0 - shift_x_ratio) * x_scale * img_w, img_w)  # x_max
+    bbox[..., 3] = np.minimum((pred[..., 1] + pred[..., 3] / 2.0 - shift_y_ratio) * y_scale * img_h, img_h)  # y_max
+    pred[..., :4] = bbox
+    pred = pred.reshape((-1, 5 + class_num))
+    pred[:, 4] = pred[:, 4] * pred[:, 5:].max(1)
+    pred[:, 5] = np.argmax(pred[:, 5:], axis=-1)    
+    pred = pred[pred[:, 4] >= 0.2]
+    print('pred[:, 5]', pred[:, 5])
+    print('pred[:, 5] shape', pred[:, 5].shape)
+
+    all_boxes = [[] for ix in range(class_num)]
+    for ix in range(pred.shape[0]):
+        box = [int(pred[ix, iy]) for iy in range(4)]
+        box.append(int(pred[ix, 5]))
+        box.append(pred[ix, 4])
+        all_boxes[box[4] - 1].append(box)
+    return all_boxes
+
+def convert_labels(label_list):
+    if isinstance(label_list, np.ndarray):
+        label_list = label_list.tolist()
+        label_names = [labels[int(index)] for index in label_list]
+    return label_names
+
+def post_process(infer_output, origin_img):
+    print("post process")
+    result_return = dict()
+    img_h = origin_img.size[1]
+    img_w = origin_img.size[0]
+    scale = min(float(MODEL_WIDTH) / float(img_w), float(MODEL_HEIGHT) / float(img_h))
+    new_w = int(img_w * scale)
+    new_h = int(img_h * scale)
+    shift_x_ratio = (MODEL_WIDTH - new_w) / 2.0 / MODEL_WIDTH
+    shift_y_ratio = (MODEL_HEIGHT - new_h) / 2.0 / MODEL_HEIGHT
+    class_number = len(labels)
+    num_channel = 3 * (class_number + 5)
+    x_scale = MODEL_WIDTH / float(new_w)
+    y_scale = MODEL_HEIGHT / float(new_h)
+    all_boxes = [[] for ix in range(class_number)]
+    print(infer_output[0].shape)
+    print(infer_output[1].shape)
+    print(infer_output[2].shape)
+    for ix in range(3):    
+        pred = infer_output[ix]
+        print('pred.shape', pred.shape)
+        anchors = anchor_list[ix]
+        boxes = decode_bbox(pred, anchors, img_w, img_h, x_scale, y_scale, shift_x_ratio, shift_y_ratio)
+        all_boxes = [all_boxes[iy] + boxes[iy] for iy in range(class_number)]
+
+    res = apply_nms(all_boxes, iou_threshold)
+    if not res:
+        result_return['detection_classes'] = []
+        result_return['detection_boxes'] = []
+        result_return['detection_scores'] = []
+        return result_return
+    else:
+        new_res = np.array(res)
+        picked_boxes = new_res[:, 0:4]
+        picked_boxes = picked_boxes[:, [1, 0, 3, 2]]
+        picked_classes = convert_labels(new_res[:, 4])
+        picked_score = new_res[:, 5]
+        result_return['detection_classes'] = picked_classes
+        result_return['detection_boxes'] = picked_boxes.tolist()
+        result_return['detection_scores'] = picked_score.tolist()
+        return result_return
+
+def preprocess_frame(bgr_img):
+    bgr_img = bgr_img[:, :, ::-1]
+    image = bgr_img
+    image = LaneFinder.Image.fromarray(image.astype('uint8'), 'RGB')
+
+    fframe = np.array(image)
+    fframe = lf.process_image(fframe, False)
+    frame = LaneFinder.Image.fromarray(fframe)
+    framecv = cv.cvtColor(np.asarray(frame), cv.COLOR_RGB2BGR)
+    return framecv
+
+def calculate_position(bbox, transform_matrix, warped_size, pix_per_meter): 
     if len(bbox) == 0:
         print('Nothing')
     else:
-        top_x= int((bbox[0] - bbox[2] / 2) * x_scale)
-        top_y= int((bbox[1] - bbox[3] / 2) * y_scale)
-        bottom_x= int((bbox[0] + bbox[2] / 2) * x_scale)
-        bottom_y= int((bbox[1] + bbox[3] / 2) * y_scale)
-        point = np.array((top_x / 2 + bottom_x / 2, bottom_y)).reshape(1, 1, -1)
-        pos = cv2.perspectiveTransform(point, transform_matrix).reshape(-1, 1)
+        point = np.array((bbox[1] / 2 + bbox[3] / 2, bbox[2])).reshape(1, 1, -1)
+        pos = cv.perspectiveTransform(point, transform_matrix).reshape(-1, 1)
         return np.array((warped_size[1] - pos[1]) / pix_per_meter[1])
 
-
-def preprocess_frame(frame):
-    """
-    preprocess_frame
-    """
-    frame = frame[:, :, ::-1]
-    image = frame
-    image = LaneFinder.Image.fromarray(image.astype('uint8'), 'RGB')
-    
-    return image
-
-
-def preprocess(frame):
-    """
-    preprocess
-    """
-    #get img shape
-    orig_shape = frame.shape[:2]
-
-    rgb_img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-    #normalization
-    rgb_img = rgb_img / 255.0
-    #resize img
-    rgb_img = cv2.resize(rgb_img, (MODEL_WIDTH, MODEL_HEIGHT)).astype(np.float32)
-    # save memory C_CONTIGUOUS mode
-    if not rgb_img.flags['C_CONTIGUOUS']:
-        rgb_img = np.ascontiguousarray(frame)
-    
-    frame = preprocess_frame(frame)
-    fframe = np.array(frame)
-    fframe = lf.process_image(fframe, False)
-    frame = LaneFinder.Image.fromarray(fframe)
-    framecv = cv2.cvtColor(np.asarray(frame), cv2.COLOR_RGB2BGR)
-
-    return orig_shape, rgb_img, framecv
-
-
-def postprocess(result_list, frame, orig_shape):
-    """
-    postprocess
-    """
-    x_scale = orig_shape[1] / MODEL_HEIGHT
-    y_scale = orig_shape[0] / MODEL_WIDTH
-
-    result_class = result_list[0].reshape(MODEL_OUTPUT_BOXNUM, 80).astype('float32')
-    result_box = result_list[1].reshape(MODEL_OUTPUT_BOXNUM, 4).astype('float32')
-    boxes = np.zeros(shape = (MODEL_OUTPUT_BOXNUM, 6), dtype = np.float32)
-    boxes[:, :4]= result_box
-    list_score = result_class.max(axis = 1)
-    list_class = result_class.argmax(axis=1)
-    list_score = list_score.reshape(MODEL_OUTPUT_BOXNUM, 1)
-    list_class=list_class.reshape(MODEL_OUTPUT_BOXNUM, 1)
-    boxes[:, 4]= list_class[:, 0]
-    boxes[:, 5]= list_score[:, 0]
-    all_boxes = boxes[boxes[:, 5] >= CLASS_SCORE_CONST]
-    real_box = func_nms(np.array(all_boxes), NMS_THRESHOLD_CONST)
-
-    l = len(real_box)
-    distance = np.zeros(shape=(l, 1))
-    if not len(real_box) == 0:
-        for i in range(l):
-            distance[i] = calculate_position(bbox=real_box[i],
-                                             transform_matrix=perspective_transform,
-                                             warped_size=WARPED_SIZE,
-                                             pix_per_meter=pixels_per_meter, 
-                                             x_scale=x_scale, y_scale=y_scale)
-        print('RPOS', distance)
-    else:
-        distance = []
-        print('No Car')
-
-    for i, detect_result in enumerate(real_box):
-        if int(detect_result[4]) in TRAFFIC:
-            top_x= int((detect_result[0] - detect_result[2] / 2) * x_scale)
-            top_y= int((detect_result[1] - detect_result[3] / 2) * y_scale)
-            bottom_x= int((detect_result[0] + detect_result[2] / 2) * x_scale)
-            bottom_y= int((detect_result[1] + detect_result[3] / 2) * y_scale)
-            cv2.rectangle(frame, (top_x, top_y), (bottom_x, bottom_y), (0, 255, 0), 2)
-            cv2.putText(frame, labels[int(detect_result[4])], (top_x + 5, top_y + 10), 
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
-            d = distance[i]
-            label_dis = '{} {:.2f}m'.format('dis:', d[0])
-            cv2.putText(frame, label_dis, (top_x + 10, bottom_y + 15), 
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
-    
-    return frame
-
-
 def main():
-    """
-    main
-    """
     if (len(sys.argv) != 2):
         print("Please input video path")
         exit(1)
 
-    #acl init
+    #ACL resource initialization
     acl_resource = AclResource()
     acl_resource.init()
     #load model
@@ -199,10 +227,10 @@ def main():
     #open video
     video_path = sys.argv[1]
     print("open video ", video_path)
-    cap = cv2.VideoCapture(video_path)
-    fps = cap.get(cv2.CAP_PROP_FPS)
-    Width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-    Height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    cap = cv.VideoCapture(video_path)
+    fps = cap.get(cv.CAP_PROP_FPS)
+    Width = int(cap.get(cv.CAP_PROP_FRAME_WIDTH))
+    Height = int(cap.get(cv.CAP_PROP_FRAME_HEIGHT))
 
     lf.set_img_size((Width, Height))
 
@@ -212,20 +240,40 @@ def main():
     output_Video = os.path.basename(video_path)
     output_Video = os.path.join(OUTPUT_DIR, output_Video)
 
-    fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # DIVX, XVID, MJPG, X264, WMV1, WMV2
-    outVideo = cv2.VideoWriter(output_Video, fourcc, fps, (Width, Height))
+    fourcc = cv.VideoWriter_fourcc(*'mp4v')  # DIVX, XVID, MJPG, X264, WMV1, WMV2
+    outVideo = cv.VideoWriter(output_Video, fourcc, fps, (Width, Height))
 
     # Read until video is completed
     while (cap.isOpened()):
         ret, frame = cap.read()
         if ret == True:
             #preprocess
-            orig_shape, rgb_img, framecv = preprocess(frame)
-            #inference
-            result_list = model.execute([rgb_img, ]) 
-            #postprocess
-            frame = postprocess(result_list, framecv, orig_shape)
-            outVideo.write(frame)
+            data, orig = preprocess(frame)
+            #Send into model inference
+            result_list = model.execute([data,])
+            #Process inference results
+            result_return = post_process(result_list, orig)
+            print("result = ", result_return)
+            #Process lane line
+            frame_with_lane = preprocess_frame(frame)
+
+            distance = np.zeros(shape=(len(result_return['detection_classes']), 1))
+            for i in range(len(result_return['detection_classes'])):
+                box = result_return['detection_boxes'][i]
+                class_name = result_return['detection_classes'][i]
+                confidence = result_return['detection_scores'][i]
+                distance[i] = calculate_position(bbox=box, transform_matrix=perspective_transform,
+                            warped_size=WARPED_SIZE, pix_per_meter=pixels_per_meter)
+                label_dis = '{} {:.2f}m'.format('dis:', distance[i][0])
+                cv.putText(frame_with_lane, label_dis, (int(box[1]) + 10, int(box[2]) + 15), 
+                            cv.FONT_ITALIC, 0.6, colors[i % 6], 1)
+
+                cv.rectangle(frame_with_lane, (int(box[1]), int(box[0])), (int(box[3]), int(box[2])), colors[i % 6])
+                p3 = (max(int(box[1]), 15), max(int(box[0]), 15))
+                out_label = class_name
+                cv.putText(frame_with_lane, out_label, p3, cv.FONT_ITALIC, 0.6, colors[i % 6], 1)
+
+            outVideo.write(frame_with_lane)
         # Break the loop
         else:
             break

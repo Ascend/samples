@@ -363,7 +363,7 @@
             ./main 0
             ```
 
-            执行结果示例如下：
+            执行结果示例如下，提示信息中的classType表示类别标识、top1表示该分类的最大置信度、top5表示最大的5个置信度之和，这些值可能会根据版本、环境有所不同，请以实际情况为准：
 
             ```
             [INFO] acl init success
@@ -380,14 +380,14 @@
             [INFO] call vpcResize
             [INFO] Process dvpp success
             [INFO] model execute success
-            [INFO] result : classType[283], top1[0.500488], top5[0.863968]
+            [INFO] result : classType[283], top1[ xxxxxx], top5[xxxxxx]
             [INFO]---------------------------------------------
             [INFO] start to process picture:../data/wood_rabbit_1024_1061_330.jpg
             [INFO] call JpegD
             [INFO] call vpcResize
             [INFO] Process dvpp success
             [INFO] model execute success
-            [INFO] result : classType[330], top1[0.542480], top5[1.0000063]
+            [INFO] result : classType[330], top1[ xxxxxx], top5[xxxxxx]
             [INFO]---------------------------------------------
             [INFO] Unload model success, modelId is 1
             [INFO] execute sample success
@@ -402,7 +402,7 @@
             ./main 1
             ```
 
-            执行结果示例如下：
+            执行结果示例如下，提示信息中的classType表示类别标识、top1表示该分类的最大置信度、top5表示最大的5个置信度之和，这些值可能会根据版本、环境有所不同，请以实际情况为准：
 
             ```
             [INFO] acl init success
@@ -419,14 +419,14 @@
             [INFO] call vpcCrop
             [INFO] Process dvpp success
             [INFO] model execute success
-            [INFO] result : classType[284], top1[0.961914], top5[0.999743]
+            [INFO] result : classType[284], top1[xxxxxx], top5[xxxxxx]
             [INFO]---------------------------------------------
             [INFO] start to process picture:../data/wood_rabbit_1024_1061_330.jpg
             [INFO] call JpegD
             [INFO] call vpcCrop
             [INFO] Process dvpp success
             [INFO] model execute success
-            [INFO] result : classType[330], top1[0.631836], top5[0.998885]
+            [INFO] result : classType[330], top1[xxxxxx], top5[xxxxxx]
             [INFO]---------------------------------------------
             [INFO] Unload model success, modelId is 1
             [INFO] execute sample success
@@ -441,7 +441,7 @@
             ./main 2
             ```
 
-            执行结果示例如下：
+            执行结果示例如下，提示信息中的classType表示类别标识、top1表示该分类的最大置信度、top5表示最大的5个置信度之和，这些值可能会根据版本、环境有所不同，请以实际情况为准：
 
             ```
             [INFO] acl init success
@@ -458,7 +458,7 @@
             [INFO] call vpcCropAndPaste
             [INFO] Process dvpp success
             [INFO] model execute success
-            [INFO] result : classType[284], top1[0.483398], top5[0.855194]
+            [INFO] result : classType[284], top1[xxxxxx], top5[xxxxxx]
             [INFO]---------------------------------------------
             [INFO] start to process picture:../data/wood_rabbit_1024_1061_330.jpg
             [INFO] call JpegD
@@ -630,7 +630,7 @@
             ./main 0
             ```
 
-            执行结果示例如下：
+            执行结果示例如下，提示信息中的classType表示类别标识、top1表示该分类的最大置信度、top5表示最大的5个置信度之和，这些值可能会根据版本、环境有所不同，请以实际情况为准：
 
             ```
             [INFO] acl init success
@@ -647,14 +647,14 @@
             [INFO] call vpcResize
             [INFO] Process dvpp success
             [INFO] model execute success
-            [INFO] result : classType[283], top1[0.500488], top5[0.863968]
+            [INFO] result : classType[283], top1[xxxxxx], top5[xxxxxx]
             [INFO]---------------------------------------------
             [INFO] start to process picture:../data/wood_rabbit_1024_1061_330.jpg
             [INFO] call JpegD
             [INFO] call vpcResize
             [INFO] Process dvpp success
             [INFO] model execute success
-            [INFO] result : classType[330], top1[0.542480], top5[1.0000063]
+            [INFO] result : classType[330], top1[xxxxxx], top5[xxxxxx]
             [INFO]---------------------------------------------
             [INFO] Unload model success, modelId is 1
             [INFO] execute sample success
@@ -669,7 +669,7 @@
             ./main 1
             ```
 
-            执行结果示例如下：
+            执行结果示例如下，提示信息中的classType表示类别标识、top1表示该分类的最大置信度、top5表示最大的5个置信度之和，这些值可能会根据版本、环境有所不同，请以实际情况为准：
 
             ```
             [INFO] acl init success
@@ -686,14 +686,14 @@
             [INFO] call vpcCrop
             [INFO] Process dvpp success
             [INFO] model execute success
-            [INFO] result : classType[284], top1[0.961914], top5[0.999743]
+            [INFO] result : classType[284], top1[xxxxxx], top5[xxxxxx]
             [INFO]---------------------------------------------
             [INFO] start to process picture:../data/wood_rabbit_1024_1061_330.jpg
             [INFO] call JpegD
             [INFO] call vpcCrop
             [INFO] Process dvpp success
             [INFO] model execute success
-            [INFO] result : classType[330], top1[0.631836], top5[0.998885]
+            [INFO] result : classType[330], top1[xxxxxx], top5[xxxxxx]
             [INFO]---------------------------------------------
             [INFO] Unload model success, modelId is 1
             [INFO] execute sample success
@@ -708,7 +708,7 @@
             ./main 2
             ```
 
-            执行结果示例如下：
+            执行结果示例如下，提示信息中的classType表示类别标识、top1表示该分类的最大置信度、top5表示最大的5个置信度之和，这些值可能会根据版本、环境有所不同，请以实际情况为准：
 
             ```
             [INFO] acl init success
@@ -725,14 +725,14 @@
             [INFO] call vpcCropAndPaste
             [INFO] Process dvpp success
             [INFO] model execute success
-            [INFO] result : classType[284], top1[0.483398], top5[0.855194]
+            [INFO] result : classType[284], top1[xxxxxx], top5[xxxxxx]
             [INFO]---------------------------------------------
             [INFO] start to process picture:../data/wood_rabbit_1024_1061_330.jpg
             [INFO] call JpegD
             [INFO] call vpcCropAndPaste
             [INFO] Process dvpp success
             [INFO] model execute success
-            [INFO] result : classType[331], top1[0.670898], top5[0.963564]
+            [INFO] result : classType[331], top1[xxxxxx], top5[xxxxxx]
             [INFO]---------------------------------------------
             [INFO] Unload model success, modelId is 1
             [INFO] execute sample success

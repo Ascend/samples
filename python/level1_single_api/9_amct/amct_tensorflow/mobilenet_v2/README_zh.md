@@ -1,15 +1,14 @@
-# 基于 calibration 的量化
+# 训练后量化
 
 ## 量化前提
 
 + **模型准备**  
-请至
-[昇腾社区-ModelZoo](https://ascend.huawei.com/zh/#/software/modelzoo/detail/1/2a3e8d64cf7e48249246140ddbe4135f)
-下载 MobileNetV2 模型文件。解压并将其中的 mobilenetv2_tf.pb 文件放到 [model](./model/) 目录下。
+  + 请至 [昇腾社区-ModelZoo](https://ascend.huawei.com/zh/#/software/modelzoo/detail/1/2a3e8d64cf7e48249246140ddbe4135f) 下载 MobileNetV2 模型文件。解压并将其中的 mobilenetv2_tf.pb 文件放到 [model](./model/) 目录下。
+  + 请下载 [MobileNetV2 QAT](https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Model/AE/ATC%20Model/mobilenetv2_convert_qat/mobilenetv2_qat.pb) 模型文件到 [model](./model/) 目录。
 
 + **数据集准备**  
 使用昇腾模型压缩工具对模型完成量化后，需要对模型进行推理，以测试量化数据的精度。推理过程中需要使用和模型相匹配的数据集。请下载
-[测试图片](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/mobilenet_v2_calibration/classification.jpg)，并将该图片放到 [data](./data/) 目录下。
+[测试图片](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/mobilenet_v2_calibration/classification.jpg) 和 [测试图片]()，并将该图片放到 [data](./data/) 目录下。
 
 + **校准集准备**  
 校准集用来产生量化因子，保证精度。  
@@ -23,42 +22,71 @@
 + [data](./data/)
   + [calibration/](./data/calibration/)
   + [classification.jpg](./data/classification.jpg)
+  + [convert_qat.jpg](./data/convert_qat.jpg)
 + [model](./model/)
+  + [mobilenetv2_qat.pb](./model/mobilenetv2_qat.pb)
   + [mobilenetv2_tf.pb](./model/mobilenetv2_tf.pb)
 + [src](./src/)
   + [mobilenet_v2_calibration.py](./src/mobilenet_v2_calibration.py)
+  + [mobilenet_v2_convert_qat.py](./src/mobilenet_v2_convert_qat.py)
 
 并根据 requirements 安装必要的环境依赖。
 
 在当前目录执行如下命令运行示例程序：
 
-```none
-python ./src/mobilenet_v2_calibration.py
-```
++ 训练后量化
+
+  ```none
+  python ./src/mobilenet_v2_calibration.py
+  ```
+
++ QAT 模型转 Ascend 模型
+
+  ```none
+  python ./src/mobilenet_v2_convert_qat.py
+  ```
 
 若出现如下信息则说明模型量化成功：
 
-```none
-INFO - [AMCT]:[save_model]: The model is saved in ./outputs/mobilenet_v2_quantized.pb
-Origin Model Prediction:
-        category index: 699
-        category prob: 0.560
-Quantized Model Prediction:
-        category index: 699
-        category prob: 0.568
-```
++ 训练后量化
+
+  ```none
+  INFO - [AMCT]:[save_model]: The model is saved in ./outputs/calibration/mobilenet_v2_quantized.pb
+  Origin Model Prediction:
+          category index: 699
+          category prob: 0.560
+  Quantized Model Prediction:
+          category index: 699
+          category prob: 0.568
+  ```
+
++ QAT 模型转 Ascend 模型
+
+  ```none
+  INFO - [AMCT]:[save_model]: The model is saved in ./outputs/convert_qat/mobilenet_v2_quantized.pb
+  Origin Model Prediction:
+          category index: 699
+          category prob: 0.709
+  Quantized Model Prediction:
+          category index: 699
+          category prob: 0.752
+  ```
 
 ## 量化结果
 
-量化成功后，在当前目录下会生成以下文件
+量化成功后，在当前目录会生成量化日志文件 [amct_pytorch.log](./amct_log/amct_pytorch.log) 和 [outputs](./outputs/) 文件夹，该文件夹内包含以下内容：
 
-+ 量化配置文件 [config.json](./outputs/config.json)
-+ 量化日志文件 [amct_tensorflow.log](./amct_log/amct_tensorflow.log)
-+ 量化因子记录文件 [record.txt](./outputs/record.txt)
-+ 量化信息文件 [mobilenet_v2_quant.json](./outputs/mobilenet_v2_quant.json)
-+ 量化模型 [mobilenet_v2_quantized.pb](./outputs/mobilenet_v2_quantized.pb)
++ 训练后量化 [calibration](./outputs/calibration/)
+  + 量化配置文件 [config.json](./outputs/calibration/config.json)
+  + 量化因子记录文件 [record.txt](./outputs/calibration/record.txt)
+  + 量化信息文件 [mobilenet_v2_quant.json](./outputs/calibration/mobilenet_v2_quant.json)
+  + 量化模型 [mobilenet_v2_quantized.pb](./outputs/calibration/mobilenet_v2_quantized.pb)
++ QAT 模型转 Ascend 模型 [convert_qat](./outputs/convert_qat/)
+  + 量化因子记录文件 [record.txt](./outputs/convert_qat/record.txt)
+  + 量化信息文件 [mobilenet_v2_quant.json](./outputs/convert_qat/mobilenet_v2_quant.json)
+  + 量化模型 [mobilenet_v2_quantized.pb](./outputs/convert_qat/mobilenet_v2_quantized.pb)
 
-量化配置文件描述了如何对模型中的每一层进行量化。如果量化脚本所在目录下已经存在量化配置文件，则再次调用create_quant_config接口时，如果新生成的量化配置文件与已有的文件同名，则会覆盖已有的量化配置文件，否则生成新的量化配置文件。
+量化配置文件描述了如何对模型中的每一层进行量化。如果量化脚本所在目录下已经存在量化配置文件，则再次调用 create_quant_config 接口时，如果新生成的量化配置文件与已有的文件同名，则会覆盖已有的量化配置文件，否则生成新的量化配置文件。
 
 量化日志文件记录了量化过程的日志信息。
 

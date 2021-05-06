@@ -1,10 +1,8 @@
-tensorflow_model="https://nkxiaolei88.obs.cn-north-1.myhuaweicloud.com/ATC%20Model/YoloV4/yolov4_no_postprocess.pb"
-model_name="yolov4_no_postprocess"
+onnx_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOv4_onnx/yolov4_dynamic_bs.onnx"
+model_name="yolov4_bs1"
 project_name="YOLOV4_coco_detection_car_picture"
 data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/YOLOV4_coco_detection_car_picture/test_image/"
 verify_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/YOLOV4_coco_detection_car_picture/verify_image/"
-#data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/YOLOV3_mask_detection_picture-python/test_image/"
-#verify_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/YOLOV3_mask_detection_picture-python/verify_image/"
 
 version=$1
 
@@ -27,7 +25,7 @@ function downloadDataWithVerifySource() {
 
     mkdir -p ${project_path}/verify_image/
 
-    wget -O ${project_path}/verify_image/"verify_test.jpg" ${verify_source}"verify_test.jpg" --no-check-certificate
+    wget -O ${project_path}/verify_image/"verify_test.jpg" ${verify_source}"out_test.jpg" --no-check-certificate
     if [ $? -ne 0 ];then
         echo "download out_mask.jpg failed, please check Network."
         return 1
@@ -45,6 +43,12 @@ function setAtcEnv() {
         export ASCEND_OPP_PATH=${install_path}/opp
         export LD_LIBRARY_PATH=${install_path}/atc/lib64:${LD_LIBRARY_PATH}
     elif [[ ${version} = "c75" ]] || [[ ${version} = "C75" ]];then
+        export install_path=$HOME/Ascend/ascend-toolkit/latest
+        export PATH=/usr/local/python3.7.5/bin:${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
+        export ASCEND_OPP_PATH=${install_path}/opp
+        export PYTHONPATH=${install_path}/atc/python/site-packages:${install_path}/atc/python/site-packages/auto_tune.egg/auto_tune:${install_path}/atc/python/site-packages/schedule_search.egg:$PYTHONPATH
+        export LD_LIBRARY_PATH=${install_path}/atc/lib64:${LD_LIBRARY_PATH}
+    elif [[ ${version} = "c76" ]] || [[ ${version} = "C76" ]];then
         export install_path=$HOME/Ascend/ascend-toolkit/latest
         export PATH=/usr/local/python3.7.5/bin:${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
         export ASCEND_OPP_PATH=${install_path}/opp
@@ -70,17 +74,17 @@ function setRunEnv() {
     return 0
 }
 
-function downloadOriginalModel() {
-
-    mkdir -p ${project_path}/model/
-    wget -O ${project_path}/model/${tensorflow_model##*/} ${tensorflow_model} --no-check-certificate
-    if [ $? -ne 0 ];then
-        echo "install caffe_model failed, please check Network."
-        return 1
-    fi
-
-    return 0
-}
+#function downloadOriginalModel() {
+#
+#    mkdir -p ${project_path}/model/
+#    wget -O ${project_path}/model/${onnx_model##*/} ${onnx_model} --no-check-certificate
+#    if [ $? -ne 0 ];then
+#        echo "install caffe_model failed, please check Network."
+#        return 1
+#    fi
+#
+#    return 0
+#}
 
 function main() {
 
@@ -99,27 +103,29 @@ function main() {
     mkdir -p ${HOME}/models/${project_name}     
     if [[ $(find ${HOME}/models/${project_name} -name ${model_name}".om")"x" = "x" ]];then 
         # 下载原始模型文件[aipp_cfg文件]
-        downloadOriginalModel
-        if [ $? -ne 0 ];then
-            echo "ERROR: download original model failed"
-            return ${inferenceError}
-        fi
+        #downloadOriginalModel
+        #if [ $? -ne 0 ];then
+        #    echo "ERROR: download original model failed"
+        #    return ${inferenceError}
+        #fi
 
-        # 设置模型转换的环境变量        
-        setAtcEnv
-        if [ $? -ne 0 ];then
-            echo "ERROR: set atc environment failed"
-            return ${inferenceError}
-        fi
+        # 设置模型转换的环境变量
+        #setAtcEnv
+        #if [ $? -ne 0 ];then
+        #    echo "ERROR: set atc environment failed"
+        #    return ${inferenceError}
+        #fi
 
-        # 转模型        
-        cd ${project_path}/model/
-        atc --model=${project_path}/model/${tensorflow_model##*/} --framework=3 --output=${HOME}/models/${project_name}/${model_name} --soc_version=Ascend310 --input_shape="Input:1,416,416,3"
+        # 转模型
+        #cd ${projsect_path}/model/
+        #atc --model=${project_path}/model/${onnx_model##*/} --framework=5 --output=${HOME}/models/${project_name}/${model_name} --soc_version=Ascend310 --input_format=NCHW --input_shape="input:1,3,608,608" --out_nodes="Conv_434:0;Conv_418:0;Conv_402:0"
+        #if [ $? -ne 0 ];then
+        #    echo "ERROR: convert model failed"
+        #    return ${inferenceError}
+        #fi
 
-        if [ $? -ne 0 ];then
-            echo "ERROR: convert model failed"
-            return ${inferenceError}
-        fi
+        cd  ${HOME}/models/${project_name}/
+        wget  https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOv4_onnx/yolov4_bs1.om
 
         ln -s ${HOME}/models/${project_name}/${model_name}".om" ${project_path}/model/${model_name}".om"
         if [ $? -ne 0 ];then
@@ -134,7 +140,7 @@ function main() {
         fi
     fi
 
-    # 重新配置程序运行所需的环境变量    
+    # 重新配置程序运行所需的环境变量
     setRunEnv
     if [ $? -ne 0 ];then
         echo "ERROR: set executable program running environment failed"

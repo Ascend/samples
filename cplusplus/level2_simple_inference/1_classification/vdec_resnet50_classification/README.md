@@ -267,7 +267,7 @@ The sample directory is organized as follows:
         ./main
         ```
 
-        The following messages indicate that the file is successfully executed.
+        The following messages indicate that the file is successfully executed. In the displayed information, classType indicates the category ID, top1 indicates the maximum confidence level of the category, and top5 indicates the sum of the five maximum confidence levels. These values may vary according to the version and environment.
 
         ```
         ......
@@ -277,7 +277,7 @@ The sample directory is organized as follows:
         [INFO]  start check result file:./result/model_output_0
         [INFO]  check result success, file exist
         [INFO]  result file: [./result/model_output_0.txt]
-        [INFO]  result:classType[331],top1[0.908203],top5[1.000015]
+        [INFO]  result:classType[331],top1[xxxxxx],top5[xxxxxx]
         [INFO]  Process dvpp success
         [INFO]  model execute success
         [INFO]  output[0] DataBuffer, buffer addr = 0x10100007c000, buffer size = 4000
@@ -286,7 +286,7 @@ The sample directory is organized as follows:
         [INFO]  start check result file:./result/model_output_1
         [INFO]  check result success, file exist
         [INFO]  result file: [./result/model_output_1.txt]
-        [INFO]  result:classType[688],top1[0.596680],top5[0.901611]
+        [INFO]  result:classType[688],top1[xxxxxx],top5[xxxxxx]
         [INFO]  Process dvpp success
         [INFO]  model execute success
         [INFO]  output[0] DataBuffer, buffer addr = 0x10100007c000, buffer size = 4000
@@ -295,7 +295,7 @@ The sample directory is organized as follows:
         [INFO]  start check result file:./result/model_output_2
         [INFO]  check result success, file exist
         [INFO]  result file: [./result/model_output_2.txt]
-        [INFO]  result:classType[331],top1[0.908203],top5[1.000015]
+        [INFO]  result:classType[331],top1[xxxxxx],top5[xxxxxx]
         [INFO]  Process dvpp success
         [INFO]  model execute success
         [INFO]  output[0] DataBuffer, buffer addr = 0x10100007c000, buffer size = 4000
@@ -304,7 +304,7 @@ The sample directory is organized as follows:
         [INFO]  start check result file:./result/model_output_3
         [INFO]  check result success, file exist
         [INFO]  result file: [./result/model_output_3.txt]
-        [INFO]  result:classType[331],top1[0.908203],top5[1.000015]
+        [INFO]  result:classType[331],top1[xxxxxx],top5[xxxxxx]
         [INFO]  Process dvpp success
         [INFO]  model execute success
         [INFO]  output[0] DataBuffer, buffer addr = 0x10100007c000, buffer size = 4000
@@ -313,7 +313,7 @@ The sample directory is organized as follows:
         [INFO]  start check result file:./result/model_output_4
         [INFO]  check result success, file exist
         [INFO]  result file: [./result/model_output_4.txt]
-        [INFO]  result:classType[331],top1[0.908203],top5[1.000015]
+        [INFO]  result:classType[331],top1[xxxxxx],top5[xxxxxx]
         [INFO]  Process dvpp success
         [INFO]  model execute success
         [INFO]  output[0] DataBuffer, buffer addr = 0x10100007c000, buffer size = 4000
@@ -322,7 +322,7 @@ The sample directory is organized as follows:
         [INFO]  start check result file:./result/model_output_5
         [INFO]  check result success, file exist
         [INFO]  result file: [./result/model_output_5.txt]
-        [INFO]  result:classType[331],top1[0.908203],top5[1.000015]
+        [INFO]  result:classType[331],top1[xxxxxx],top5[xxxxxx]
         [INFO]  Process dvpp success
         [INFO]  model execute success
         [INFO]  output[0] DataBuffer, buffer addr = 0x10100007c000, buffer size = 4000
@@ -331,7 +331,7 @@ The sample directory is organized as follows:
         [INFO]  start check result file:./result/model_output_6
         [INFO]  check result success, file exist
         [INFO]  result file: [./result/model_output_6.txt]
-        [INFO]  result:classType[331],top1[0.908203],top5[1.000015]
+        [INFO]  result:classType[331],top1[xxxxxx],top5[xxxxxx]
         [INFO]  Process dvpp success
         [INFO]  model execute success
         [INFO]  output[0] DataBuffer, buffer addr = 0x10100007c000, buffer size = 4000
@@ -340,7 +340,7 @@ The sample directory is organized as follows:
         [INFO]  start check result file:./result/model_output_7
         [INFO]  check result success, file exist
         [INFO]  result file: [./result/model_output_7.txt]
-        [INFO]  result:classType[331],top1[0.908203],top5[1.000015]
+        [INFO]  result:classType[331],top1[xxxxxx],top5[xxxxxx]
         [INFO]  Process dvpp success
         [INFO]  model execute success
         [INFO]  output[0] DataBuffer, buffer addr = 0x10100007c000, buffer size = 4000
@@ -349,7 +349,7 @@ The sample directory is organized as follows:
         [INFO]  start check result file:./result/model_output_8
         [INFO]  check result success, file exist
         [INFO]  result file: [./result/model_output_8.txt]
-        [INFO]  result:classType[331],top1[0.908203],top5[1.000015]
+        [INFO]  result:classType[331],top1[xxxxxx],top5[xxxxxx]
         [INFO]  Process dvpp success
         [INFO]  model execute success
         [INFO]  output[0] DataBuffer, buffer addr = 0x10100007c000, buffer size = 4000
@@ -457,7 +457,7 @@ The sample directory is organized as follows:
         ./main
         ```
 
-        The following messages indicate that the file is successfully executed.
+        The following messages indicate that the file is successfully executed. In the displayed information, classType indicates the category ID, top1 indicates the maximum confidence level of the category, and top5 indicates the sum of the five maximum confidence levels. These values may vary according to the version and environment.
 
         ```
         ......
@@ -467,7 +467,7 @@ The sample directory is organized as follows:
         [INFO]  start check result file:./result/model_output_0
         [INFO]  check result success, file exist
         [INFO]  result file: [./result/model_output_0.txt]
-        [INFO]  result:classType[331],top1[0.908203],top5[1.000015]
+        [INFO]  result:classType[331],top1[xxxxxx],top5[xxxxxx]
         [INFO]  Process dvpp success
         [INFO]  model execute success
         [INFO]  output[0] DataBuffer, buffer addr = 0x10100007c000, buffer size = 4000
@@ -476,7 +476,7 @@ The sample directory is organized as follows:
         [INFO]  start check result file:./result/model_output_1
         [INFO]  check result success, file exist
         [INFO]  result file: [./result/model_output_1.txt]
-        [INFO]  result:classType[688],top1[0.596680],top5[0.901611]
+        [INFO]  result:classType[688],top1[xxxxxx],top5[xxxxxx]
         [INFO]  Process dvpp success
         [INFO]  model execute success
         [INFO]  output[0] DataBuffer, buffer addr = 0x10100007c000, buffer size = 4000
@@ -485,7 +485,7 @@ The sample directory is organized as follows:
         [INFO]  start check result file:./result/model_output_2
         [INFO]  check result success, file exist
         [INFO]  result file: [./result/model_output_2.txt]
-        [INFO]  result:classType[331],top1[0.908203],top5[1.000015]
+        [INFO]  result:classType[331],top1[xxxxxx],top5[xxxxxx]
         [INFO]  Process dvpp success
         [INFO]  model execute success
         [INFO]  output[0] DataBuffer, buffer addr = 0x10100007c000, buffer size = 4000
@@ -494,7 +494,7 @@ The sample directory is organized as follows:
         [INFO]  start check result file:./result/model_output_3
         [INFO]  check result success, file exist
         [INFO]  result file: [./result/model_output_3.txt]
-        [INFO]  result:classType[331],top1[0.908203],top5[1.000015]
+        [INFO]  result:classType[331],top1[xxxxxx],top5[xxxxxx]
         [INFO]  Process dvpp success
         [INFO]  model execute success
         [INFO]  output[0] DataBuffer, buffer addr = 0x10100007c000, buffer size = 4000
@@ -503,7 +503,7 @@ The sample directory is organized as follows:
         [INFO]  start check result file:./result/model_output_4
         [INFO]  check result success, file exist
         [INFO]  result file: [./result/model_output_4.txt]
-        [INFO]  result:classType[331],top1[0.908203],top5[1.000015]
+        [INFO]  result:classType[331],top1[xxxxxx],top5[xxxxxx]
         [INFO]  Process dvpp success
         [INFO]  model execute success
         [INFO]  output[0] DataBuffer, buffer addr = 0x10100007c000, buffer size = 4000
@@ -512,7 +512,7 @@ The sample directory is organized as follows:
         [INFO]  start check result file:./result/model_output_5
         [INFO]  check result success, file exist
         [INFO]  result file: [./result/model_output_5.txt]
-        [INFO]  result:classType[331],top1[0.908203],top5[1.000015]
+        [INFO]  result:classType[331],top1[xxxxxx],top5[xxxxxx]
         [INFO]  Process dvpp success
         [INFO]  model execute success
         [INFO]  output[0] DataBuffer, buffer addr = 0x10100007c000, buffer size = 4000
@@ -521,7 +521,7 @@ The sample directory is organized as follows:
         [INFO]  start check result file:./result/model_output_6
         [INFO]  check result success, file exist
         [INFO]  result file: [./result/model_output_6.txt]
-        [INFO]  result:classType[331],top1[0.908203],top5[1.000015]
+        [INFO]  result:classType[331],top1[xxxxxx],top5[xxxxxx]
         [INFO]  Process dvpp success
         [INFO]  model execute success
         [INFO]  output[0] DataBuffer, buffer addr = 0x10100007c000, buffer size = 4000
@@ -530,7 +530,7 @@ The sample directory is organized as follows:
         [INFO]  start check result file:./result/model_output_7
         [INFO]  check result success, file exist
         [INFO]  result file: [./result/model_output_7.txt]
-        [INFO]  result:classType[331],top1[0.908203],top5[1.000015]
+        [INFO]  result:classType[331],top1[xxxxxx],top5[xxxxxx]
         [INFO]  Process dvpp success
         [INFO]  model execute success
         [INFO]  output[0] DataBuffer, buffer addr = 0x10100007c000, buffer size = 4000
@@ -539,7 +539,7 @@ The sample directory is organized as follows:
         [INFO]  start check result file:./result/model_output_8
         [INFO]  check result success, file exist
         [INFO]  result file: [./result/model_output_8.txt]
-        [INFO]  result:classType[331],top1[0.908203],top5[1.000015]
+        [INFO]  result:classType[331],top1[xxxxxx],top5[xxxxxx]
         [INFO]  Process dvpp success
         [INFO]  model execute success
         [INFO]  output[0] DataBuffer, buffer addr = 0x10100007c000, buffer size = 4000

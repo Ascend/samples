@@ -345,7 +345,7 @@
         ./main
         ```
 
-        执行成功后，在屏幕上的关键提示信息示例如下：
+        执行成功后，在屏幕上的关键提示信息示例如下，提示信息中的index表示类别标识、value表示该分类的最大置信度，这些值可能会根据版本、环境有所不同，请以实际情况为准：
 
         ```
         [INFO] acl init success
@@ -357,19 +357,19 @@
         [INFO] create model output success
         [INFO] start to process file:../data/dog1_1024_683.bin
         [INFO] model execute success
-        [INFO] top 1: index[161] value[0.900391]
-        [INFO] top 2: index[164] value[0.038666]
-        [INFO] top 3: index[163] value[0.019287]
-        [INFO] top 4: index[166] value[0.016357]
-        [INFO] top 5: index[167] value[0.012161]
+        [INFO] top 1: index[161] value[xxxxxx]
+        [INFO] top 2: index[xxx] value[xxxxxx]
+        [INFO] top 3: index[xxx] value[xxxxxx]
+        [INFO] top 4: index[xxx] value[xxxxxx]
+        [INFO] top 5: index[xxx] value[xxxxxx]
         [INFO] output data success
         [INFO] start to process file:../data/dog2_1024_683.bin
         [INFO] model execute success
-        [INFO] top 1: index[267] value[0.974609]
-        [INFO] top 2: index[266] value[0.013062]
-        [INFO] top 3: index[265] value[0.010017]
-        [INFO] top 4: index[129] value[0.000335]
-        [INFO] top 5: index[372] value[0.000179]
+        [INFO] top 1: index[267] value[xxxxxx]
+        [INFO] top 2: index[xxx] value[xxxxxx]
+        [INFO] top 3: index[xxx] value[xxxxxx]
+        [INFO] top 4: index[xxx] value[xxxxxx]
+        [INFO] top 5: index[xxx] value[xxxxxx]
         [INFO] output data success
         [INFO] Unload model success, modelId is 1
         [INFO] execute sample success
@@ -500,7 +500,7 @@
         ./main
         ```
 
-        执行成功后，在屏幕上的关键提示信息示例如下：
+        执行成功后，在屏幕上的关键提示信息示例如下，提示信息中的index表示类别标识、value表示该分类的最大置信度，这些值可能会根据版本、环境有所不同，请以实际情况为准：
 
         ```
         [INFO] acl init success
@@ -512,19 +512,19 @@
         [INFO] create model output success
         [INFO] start to process file:../data/dog1_1024_683.bin
         [INFO] model execute success
-        [INFO] top 1: index[161] value[0.900391]
-        [INFO] top 2: index[164] value[0.038666]
-        [INFO] top 3: index[163] value[0.019287]
-        [INFO] top 4: index[166] value[0.016357]
-        [INFO] top 5: index[167] value[0.012161]
+        [INFO] top 1: index[161] value[xxxxxx]
+        [INFO] top 2: index[xxx] value[xxxxxx]
+        [INFO] top 3: index[xxx] value[xxxxxx]
+        [INFO] top 4: index[xxx] value[xxxxxx]
+        [INFO] top 5: index[xxx] value[xxxxxx]
         [INFO] output data success
         [INFO] start to process file:../data/dog2_1024_683.bin
         [INFO] model execute success
-        [INFO] top 1: index[267] value[0.974609]
-        [INFO] top 2: index[266] value[0.013062]
-        [INFO] top 3: index[265] value[0.010017]
-        [INFO] top 4: index[129] value[0.000335]
-        [INFO] top 5: index[372] value[0.000179]
+        [INFO] top 1: index[267] value[xxxxxx]
+        [INFO] top 2: index[xxx] value[xxxxxx]
+        [INFO] top 3: index[xxx] value[xxxxxx]
+        [INFO] top 4: index[xxx] value[xxxxxx]
+        [INFO] top 5: index[xxx] value[xxxxxx]
         [INFO] output data success
         [INFO] Unload model success, modelId is 1
         [INFO] execute sample success

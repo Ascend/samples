@@ -68,17 +68,17 @@ function setRunEnv() {
     return 0
 }
 
-function downloadOriginalModel() {
-
-    mkdir -p ${project_path}/model/
-    wget -O ${project_path}/model/${onnx_model##*/} ${onnx_model} --no-check-certificate
-    if [ $? -ne 0 ];then
-        echo "install caffe_model failed, please check Network."
-        return 1
-    fi
-
-    return 0
-}
+#function downloadOriginalModel() {
+#
+#    mkdir -p ${project_path}/model/
+#    wget -O ${project_path}/model/${onnx_model##*/} ${onnx_model} --no-check-certificate
+#    if [ $? -ne 0 ];then
+#        echo "install caffe_model failed, please check Network."
+#        return 1
+#    fi
+#
+#    return 0
+#}
 
 function main() {
 
@@ -97,31 +97,29 @@ function main() {
     mkdir -p ${HOME}/models/${project_name}     
     if [[ $(find ${HOME}/models/${project_name} -name ${model_name}".om")"x" = "x" ]];then 
         # 下载原始模型文件[aipp_cfg文件]
-        downloadOriginalModel
-        if [ $? -ne 0 ];then
-            echo "ERROR: download original model failed"
-            return ${inferenceError}
-        fi
+        #downloadOriginalModel
+        #if [ $? -ne 0 ];then
+        #    echo "ERROR: download original model failed"
+        #    return ${inferenceError}
+        #fi
 
         # 设置模型转换的环境变量
-        setAtcEnv
-        if [ $? -ne 0 ];then
-            echo "ERROR: set atc environment failed"
-            return ${inferenceError}
-        fi
+        #setAtcEnv
+        #if [ $? -ne 0 ];then
+        #    echo "ERROR: set atc environment failed"
+        #    return ${inferenceError}
+        #fi
+
+        # 转模型
+        #cd ${projsect_path}/model/
+        #atc --model=${project_path}/model/${onnx_model##*/} --framework=5 --output=${HOME}/models/${project_name}/${model_name} --soc_version=Ascend310 --input_format=NCHW --input_shape="input:1,3,608,608" --out_nodes="Conv_434:0;Conv_418:0;Conv_402:0"
+        #if [ $? -ne 0 ];then
+        #    echo "ERROR: download model failed"
+        #    return ${inferenceError}
+        #fi
 
         cd  ${HOME}/models/${project_name}/
         wget  https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOv4_onnx/yolov4_bs1.om
-
-
-        # 转模型        
-        #cd ${projsect_path}/model/
-        #atc --model=${project_path}/model/${onnx_model##*/} --framework=5 --output=${HOME}/models/${project_name}/${model_name} --soc_version=Ascend310 --input_format=NCHW --input_shape="input:1,3,608,608" --out_nodes="Conv_434:0;Conv_418:0;Conv_402:0"
-
-        if [ $? -ne 0 ];then
-            echo "ERROR: download model failed"
-            return ${inferenceError}
-        fi
 
         ln -s ${HOME}/models/${project_name}/${model_name}".om" ${project_path}/model/${model_name}".om"
         if [ $? -ne 0 ];then

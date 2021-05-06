@@ -11,15 +11,15 @@ import atlas_utils.constants as const
 from atlas_utils.acl_model import Model
 from atlas_utils.acl_resource import AclResource
 
-labels = ["person",  "bicycle", "car", "motorbike", "aeroplane",
+labels =["person",  "bicycle", "car", "motorbike", "aeroplane",
         "bus", "train", "truck", "boat", "traffic light",
         "fire hydrant", "stop sign", "parking meter", "bench","bird", 
         "cat", "dog", "horse", "sheep", "cow", 
         "elephant",  "bear", "zebra", "giraffe", "backpack",
-         "umbrella", "handbag",  "tie", "suitcase", "frisbee",
-          "skis", "snowboard", "sports ball",  "kite", "baseball bat",
-           "baseball glove", "skateboard", "surfboard",   "tennis racket", "bottle",
-            "wine glass", "cup", "fork", "knife", "spoon",
+        "umbrella", "handbag",  "tie", "suitcase", "frisbee",
+        "skis", "snowboard", "sports ball",  "kite", "baseball bat",
+        "baseball glove", "skateboard", "surfboard", "tennis racket", "bottle",
+        "wine glass", "cup", "fork", "knife", "spoon",
         "bowl", "banana", "apple", "sandwich", "orange", "broccoli", "carrot", "hot dog",
         "pizza", "donut", "cake", "chair", "sofa", "potted plant", "bed", "dining table",
         "toilet", "TV monitor", "laptop", "mouse", "remote", "keyboard", "cell phone",
@@ -58,13 +58,13 @@ def preprocess(img_path):
     shift_x_ratio = (net_w - new_w) / 2.0 / net_w
     shift_y_ratio = (net_h - new_h) / 2.0 / net_h
 
-    image_ = image.resize( (new_w, new_h))
+    image_ = image.resize((new_w, new_h))
     new_image = np.zeros((net_h, net_w, 3), np.uint8)
     new_image[shift_y: new_h + shift_y, shift_x: new_w + shift_x, :] = np.array(image_)
     new_image = new_image.astype(np.float32)
     new_image = new_image / 255
-    print('new_image.shape',new_image.shape)
-    new_image = new_image.transpose(2,0,1).copy()
+    print('new_image.shape', new_image.shape)
+    new_image = new_image.transpose(2, 0, 1).copy()
     return new_image, image
 
 def overlap(x1, x2, x3, x4):
@@ -106,15 +106,15 @@ def apply_nms(all_boxes, thres):
             if i not in p:
                 res.append(sorted_boxes[i])
     return res
+
 def _sigmoid(x):
-    return 1.0/(1+np.exp(-x))
-        
+    return 1.0 / (1 + np.exp(-x))
+
 def decode_bbox(conv_output, anchors, img_w, img_h, x_scale, y_scale, shift_x_ratio, shift_y_ratio):
-        
-    print('conv_output.shape',conv_output.shape)
-    _,_,h, w = conv_output.shape 
-    conv_output = conv_output.transpose(0,2,3,1)      
-    pred = conv_output.reshape((h * w, 3, 5 + class_num))  
+    print('conv_output.shape', conv_output.shape)
+    _, _, h, w = conv_output.shape 
+    conv_output = conv_output.transpose(0, 2, 3, 1)
+    pred = conv_output.reshape((h * w, 3, 5 + class_num))
     pred[..., 4:] = _sigmoid(pred[..., 4:])
     pred[..., 0] = (_sigmoid(pred[..., 0]) + np.tile(range(w), (3, h)).transpose((1, 0))) / w
     pred[..., 1] = (_sigmoid(pred[..., 1]) + np.tile(np.repeat(range(h), w), (3, 1)).transpose((1, 0))) / h
@@ -133,9 +133,8 @@ def decode_bbox(conv_output, anchors, img_w, img_h, x_scale, y_scale, shift_x_ra
     pred[:, 4] = pred[:, 4] * pred[:, 5:].max(1)
     pred[:, 5] = np.argmax(pred[:, 5:], axis=-1)    
     pred = pred[pred[:, 4] >= 0.2]
-    print('pred[:, 5]',pred[:, 5])
-    print('pred[:, 5] shape',pred[:, 5].shape)
-    
+    print('pred[:, 5]', pred[:, 5])
+    print('pred[:, 5] shape', pred[:, 5].shape)
     #pred = pred[pred[:, 4] >= conf_threshold]
 
     all_boxes = [[] for ix in range(class_num)]
@@ -173,7 +172,7 @@ def post_process(infer_output, origin_img):
     print(infer_output[2].shape)
     for ix in range(3):    
         pred = infer_output[ix]
-        print('pred.shape',pred.shape)
+        print('pred.shape', pred.shape)
         anchors = anchor_list[ix]
         boxes = decode_bbox(pred, anchors, img_w, img_h, x_scale, y_scale, shift_x_ratio, shift_y_ratio)
         all_boxes = [all_boxes[iy] + boxes[iy] for iy in range(class_number)]
@@ -196,7 +195,6 @@ def post_process(infer_output, origin_img):
         return result_return
 
 def main():
-
     if not os.path.exists(OUTPUT_DIR):
         os.mkdir(OUTPUT_DIR)
     #ACL resource initialization
@@ -214,19 +212,17 @@ def main():
         bgr_img = cv.imread(pic)
         #preprocess
         data, orig = preprocess(pic)
-        #data, orig = preprocess(bgr_img)
         #Send into model inference
         result_list = model.execute([data,])    
         #Process inference results
         result_return = post_process(result_list, orig)
-
         print("result = ", result_return)
 
         for i in range(len(result_return['detection_classes'])):
             box = result_return['detection_boxes'][i]
             class_name = result_return['detection_classes'][i]
             confidence = result_return['detection_scores'][i]
-            cv.rectangle(bgr_img, (int(box[1]), int(box[0])), (int(box[3]), int(box[2])), colors[i%6])
+            cv.rectangle(bgr_img, (int(box[1]), int(box[0])), (int(box[3]), int(box[2])), colors[i % 6])
             p3 = (max(int(box[1]), 15), max(int(box[0]), 15))
             out_label = class_name            
             cv.putText(bgr_img, out_label, p3, cv.FONT_ITALIC, 0.6, colors[i % 6], 1)
@@ -234,7 +230,6 @@ def main():
         output_file = os.path.join(OUTPUT_DIR, "out_" + os.path.basename(pic))
         print("output:%s" % output_file)
         cv.imwrite(output_file, bgr_img)
-        
     print("Execute end")
 
 if __name__ == '__main__':

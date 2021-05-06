@@ -1,6 +1,6 @@
 **本样例为大家学习昇腾软件栈提供参考，非商业目的！**
 
-**本样例适配3.0.0及以上版本，支持产品为Atlas200DK、Atlas300([ai1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366))。**
+**本样例适配3.3.0及以上版本，支持产品为Atlas200DK、Atlas300([ai1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366))。**
 
 **本README只提供命令行方式运行样例的指导，如需在Mindstudio下运行样例，请参考[Mindstudio运行图片样例wiki](https://github.com/Ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E5%9B%BE%E7%89%87%E6%A0%B7%E4%BE%8B?sort_id=3164874)。**
 
@@ -58,10 +58,10 @@
     
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
-    |  yolov4| 基于tensorflow-YOLOV4的目标检测模型。  |  https://nkxiaolei88.obs.cn-north-1.myhuaweicloud.com/ATC%20Model/YoloV4/yolov4_no_postprocess.pb |
+    |  yolov4| 基于onnx-YOLOV4的目标检测模型。  |  https://www.hiascend.com/zh/software/modelzoo/detail/1/abb7e641964c459398173248aa5353bc |
 
     ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
-    > - modelzoo中提供了转换好的om模型，但此模型不匹配当前样例，所以需要下载原始模型和权重文件后重新进行模型转换。    
+    > - modelzoo中提供了转换好的om模型，但此模型不匹配当前样例，所以需要下载原始模型后重新进行模型转换。    
   将下载的模型名字更改为工程需要的名字
 
 
@@ -77,7 +77,7 @@
 
     2. 执行以下atc命令进行模型转换。
 
-        **atc --model=./yolov4_no_postprocess.pb --framework=3 --output=./yolov4_no_postprocess --soc_version=Ascend310 --input_shape="Input:1,416,416,3"**
+        **atc --model=./yolov4_dynamic_bs.onnx --framework=5 --output=yolov4_bs1 --input_format=NCHW --soc_version=Ascend310 --input_shape="input:1,3,608,608" --out_nodes="Conv_434:0;Conv_418:0;Conv_402:0"**
 
 4. 获取样例需要的测试图片。
 
@@ -122,4 +122,4 @@
 
 ### 查看结果
 
-运行完成后，会在运行环境的命令行中打印出推理结果。
+运行完成后，结果图片保存在out目录下。

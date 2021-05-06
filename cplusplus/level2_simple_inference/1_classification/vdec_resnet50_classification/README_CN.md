@@ -336,7 +336,7 @@
         ./main
         ```
 
-        可执行文件执行成功后，在屏幕上的关键提示信息示例如下：
+        可执行文件执行成功后，在屏幕上的关键提示信息示例如下，提示信息中的classType表示类别标识、top1表示该分类的最大置信度、top5表示最大的5个置信度之和，这些值可能会根据版本、环境有所不同，请以实际情况为准：
 
         ```
         ......
@@ -346,7 +346,7 @@
         [INFO]  start check result file:./result/model_output_0
         [INFO]  check result success, file exist
         [INFO]  reselut file: [./result/model_output_0.txt]
-        [INFO]  result:classType[331],top1[0.908203],top5[1.000015]
+        [INFO]  result:classType[331],top1[xxxxxx],top5[xxxxxx]
         [INFO]  Process dvpp success
         [INFO]  model execute success
         [INFO]  output[0] DataBuffer, buffer addr = 0x10100007c000, buffer size = 4000
@@ -355,7 +355,7 @@
         [INFO]  start check result file:./result/model_output_1
         [INFO]  check result success, file exist
         [INFO]  reselut file: [./result/model_output_1.txt]
-        [INFO]  result:classType[688],top1[0.596680],top5[0.901611]
+        [INFO]  result:classType[688],top1[xxxxxx],top5[xxxxxx]
         [INFO]  Process dvpp success
         [INFO]  model execute success
         [INFO]  output[0] DataBuffer, buffer addr = 0x10100007c000, buffer size = 4000
@@ -364,7 +364,7 @@
         [INFO]  start check result file:./result/model_output_2
         [INFO]  check result success, file exist
         [INFO]  reselut file: [./result/model_output_2.txt]
-        [INFO]  result:classType[331],top1[0.908203],top5[1.000015]
+        [INFO]  result:classType[331],top1[xxxxxx],top5[xxxxxx]
         [INFO]  Process dvpp success
         [INFO]  model execute success
         [INFO]  output[0] DataBuffer, buffer addr = 0x10100007c000, buffer size = 4000
@@ -373,7 +373,7 @@
         [INFO]  start check result file:./result/model_output_3
         [INFO]  check result success, file exist
         [INFO]  reselut file: [./result/model_output_3.txt]
-        [INFO]  result:classType[331],top1[0.908203],top5[1.000015]
+        [INFO]  result:classType[331],top1[xxxxxx],top5[xxxxxx]
         [INFO]  Process dvpp success
         [INFO]  model execute success
         [INFO]  output[0] DataBuffer, buffer addr = 0x10100007c000, buffer size = 4000
@@ -382,7 +382,7 @@
         [INFO]  start check result file:./result/model_output_4
         [INFO]  check result success, file exist
         [INFO]  reselut file: [./result/model_output_4.txt]
-        [INFO]  result:classType[331],top1[0.908203],top5[1.000015]
+        [INFO]  result:classType[331],top1[xxxxxx],top5[xxxxxx]
         [INFO]  Process dvpp success
         [INFO]  model execute success
         [INFO]  output[0] DataBuffer, buffer addr = 0x10100007c000, buffer size = 4000
@@ -391,7 +391,7 @@
         [INFO]  start check result file:./result/model_output_5
         [INFO]  check result success, file exist
         [INFO]  reselut file: [./result/model_output_5.txt]
-        [INFO]  result:classType[331],top1[0.908203],top5[1.000015]
+        [INFO]  result:classType[331],top1[xxxxxx],top5[xxxxxx]
         [INFO]  Process dvpp success
         [INFO]  model execute success
         [INFO]  output[0] DataBuffer, buffer addr = 0x10100007c000, buffer size = 4000
@@ -400,7 +400,7 @@
         [INFO]  start check result file:./result/model_output_6
         [INFO]  check result success, file exist
         [INFO]  reselut file: [./result/model_output_6.txt]
-        [INFO]  result:classType[331],top1[0.908203],top5[1.000015]
+        [INFO]  result:classType[331],top1[xxxxxx],top5[xxxxxx]
         [INFO]  Process dvpp success
         [INFO]  model execute success
         [INFO]  output[0] DataBuffer, buffer addr = 0x10100007c000, buffer size = 4000
@@ -409,7 +409,7 @@
         [INFO]  start check result file:./result/model_output_7
         [INFO]  check result success, file exist
         [INFO]  reselut file: [./result/model_output_7.txt]
-        [INFO]  result:classType[331],top1[0.908203],top5[1.000015]
+        [INFO]  result:classType[331],top1[xxxxxx],top5[xxxxxx]
         [INFO]  Process dvpp success
         [INFO]  model execute success
         [INFO]  output[0] DataBuffer, buffer addr = 0x10100007c000, buffer size = 4000
@@ -418,7 +418,7 @@
         [INFO]  start check result file:./result/model_output_8
         [INFO]  check result success, file exist
         [INFO]  reselut file: [./result/model_output_8.txt]
-        [INFO]  result:classType[331],top1[0.908203],top5[1.000015]
+        [INFO]  result:classType[331],top1[xxxxxx],top5[xxxxxx]
         [INFO]  Process dvpp success
         [INFO]  model execute success
         [INFO]  output[0] DataBuffer, buffer addr = 0x10100007c000, buffer size = 4000
@@ -427,7 +427,7 @@
         [INFO]  start check result file:./result/model_output_9
         [INFO]  check result success, file exist
         [INFO]  reselut file: [./result/model_output_9.txt]
-        [INFO]  result:classType[331],top1[0.908203],top5[1.000015]
+        [INFO]  result:classType[331],top1[xxxxxx],top5[xxxxxx]
         [INFO]  unload model success, modelId is 1
         [INFO]  execute sample success
         ......
@@ -531,7 +531,7 @@
         ./main
         ```
 
-        可执行文件执行成功后，在屏幕上的关键提示信息示例如下：
+        可执行文件执行成功后，在屏幕上的关键提示信息示例如下，提示信息中的classType表示类别标识、top1表示该分类的最大置信度、top5表示最大的5个置信度之和，这些值可能会根据版本、环境有所不同，请以实际情况为准：
 
         ```
         ......
@@ -541,7 +541,7 @@
         [INFO]  start check result file:./result/model_output_0
         [INFO]  check result success, file exist
         [INFO]  reselut file: [./result/model_output_0.txt]
-        [INFO]  result:classType[331],top1[0.908203],top5[1.000015]
+        [INFO]  result:classType[331],top1[xxxxxx],top5[xxxxxx]
         [INFO]  Process dvpp success
         [INFO]  model execute success
         [INFO]  output[0] DataBuffer, buffer addr = 0x10100007c000, buffer size = 4000
@@ -550,7 +550,7 @@
         [INFO]  start check result file:./result/model_output_1
         [INFO]  check result success, file exist
         [INFO]  reselut file: [./result/model_output_1.txt]
-        [INFO]  result:classType[688],top1[0.596680],top5[0.901611]
+        [INFO]  result:classType[688],top1[xxxxxx],top5[xxxxxx]
         [INFO]  Process dvpp success
         [INFO]  model execute success
         [INFO]  output[0] DataBuffer, buffer addr = 0x10100007c000, buffer size = 4000
@@ -559,7 +559,7 @@
         [INFO]  start check result file:./result/model_output_2
         [INFO]  check result success, file exist
         [INFO]  reselut file: [./result/model_output_2.txt]
-        [INFO]  result:classType[331],top1[0.908203],top5[1.000015]
+        [INFO]  result:classType[331],top1[xxxxxx],top5[xxxxxx]
         [INFO]  Process dvpp success
         [INFO]  model execute success
         [INFO]  output[0] DataBuffer, buffer addr = 0x10100007c000, buffer size = 4000
@@ -568,7 +568,7 @@
         [INFO]  start check result file:./result/model_output_3
         [INFO]  check result success, file exist
         [INFO]  reselut file: [./result/model_output_3.txt]
-        [INFO]  result:classType[331],top1[0.908203],top5[1.000015]
+        [INFO]  result:classType[331],top1[xxxxxx],top5[xxxxxx]
         [INFO]  Process dvpp success
         [INFO]  model execute success
         [INFO]  output[0] DataBuffer, buffer addr = 0x10100007c000, buffer size = 4000
@@ -577,7 +577,7 @@
         [INFO]  start check result file:./result/model_output_4
         [INFO]  check result success, file exist
         [INFO]  reselut file: [./result/model_output_4.txt]
-        [INFO]  result:classType[331],top1[0.908203],top5[1.000015]
+        [INFO]  result:classType[331],top1[xxxxxx],top5[xxxxxx]
         [INFO]  Process dvpp success
         [INFO]  model execute success
         [INFO]  output[0] DataBuffer, buffer addr = 0x10100007c000, buffer size = 4000
@@ -586,7 +586,7 @@
         [INFO]  start check result file:./result/model_output_5
         [INFO]  check result success, file exist
         [INFO]  reselut file: [./result/model_output_5.txt]
-        [INFO]  result:classType[331],top1[0.908203],top5[1.000015]
+        [INFO]  result:classType[331],top1[xxxxxx],top5[xxxxxx]
         [INFO]  Process dvpp success
         [INFO]  model execute success
         [INFO]  output[0] DataBuffer, buffer addr = 0x10100007c000, buffer size = 4000
@@ -595,7 +595,7 @@
         [INFO]  start check result file:./result/model_output_6
         [INFO]  check result success, file exist
         [INFO]  reselut file: [./result/model_output_6.txt]
-        [INFO]  result:classType[331],top1[0.908203],top5[1.000015]
+        [INFO]  result:classType[331],top1[xxxxxx],top5[xxxxxx]
         [INFO]  Process dvpp success
         [INFO]  model execute success
         [INFO]  output[0] DataBuffer, buffer addr = 0x10100007c000, buffer size = 4000
@@ -604,7 +604,7 @@
         [INFO]  start check result file:./result/model_output_7
         [INFO]  check result success, file exist
         [INFO]  reselut file: [./result/model_output_7.txt]
-        [INFO]  result:classType[331],top1[0.908203],top5[1.000015]
+        [INFO]  result:classType[331],top1[xxxxxx],top5[xxxxxx]
         [INFO]  Process dvpp success
         [INFO]  model execute success
         [INFO]  output[0] DataBuffer, buffer addr = 0x10100007c000, buffer size = 4000
@@ -613,7 +613,7 @@
         [INFO]  start check result file:./result/model_output_8
         [INFO]  check result success, file exist
         [INFO]  reselut file: [./result/model_output_8.txt]
-        [INFO]  result:classType[331],top1[0.908203],top5[1.000015]
+        [INFO]  result:classType[331],top1[xxxxxx],top5[xxxxxx]
         [INFO]  Process dvpp success
         [INFO]  model execute success
         [INFO]  output[0] DataBuffer, buffer addr = 0x10100007c000, buffer size = 4000
@@ -622,7 +622,7 @@
         [INFO]  start check result file:./result/model_output_9
         [INFO]  check result success, file exist
         [INFO]  reselut file: [./result/model_output_9.txt]
-        [INFO]  result:classType[331],top1[0.908203],top5[1.000015]
+        [INFO]  result:classType[331],top1[xxxxxx],top5[xxxxxx]
         [INFO]  unload model success, modelId is 1
         [INFO]  execute sample success
         ......

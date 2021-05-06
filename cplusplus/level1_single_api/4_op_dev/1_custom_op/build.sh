@@ -99,7 +99,7 @@ if [ "x$clean" == "xy" ] 2>/dev/null; then
   exit 0
 fi
 
-if [ ! "x$AICPU_SOC_VERSION" = "xLhisi" ];then
+if [ ! "x$AICPU_SOC_VERSION" = "xLHISI" ];then
   # if specified cross compile toolchain directory is not exist, log error and exit
   if [[ ! -z "$TOOLCHAIN_DIR" ]] && [[ ! -d "$TOOLCHAIN_DIR" ]];then
       log "[ERROR] Specified cross compile toolchain directory is not exist"

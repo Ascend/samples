@@ -298,7 +298,7 @@ The sample directory is organized as follows:
         ./main
         ```
 
-        The following messages indicate that the file is successfully executed.
+        The following messages indicate that the file is successfully executed. In the displayed information, index indicates the category ID, value indicates the maximum confidence level of the category. These values may vary according to the version and environment.
 
         ```
         [INFO]  ./main param1 param2 param3, param1 is execute model times(default 100), param2 is callback interval(default 1), param3 is memory pool size(default 100)
@@ -314,19 +314,19 @@ The sample directory is organized as follows:
         [INFO]  create model description success
         [INFO]  init memory pool success
         [INFO]  subscribe report success
-        [INFO]  top 1: index[267] value[0.889648]
-        [INFO]  top 1: index[161] value[0.836914]
-        [INFO]  top 1: index[267] value[0.889648]
-        [INFO]  top 1: index[161] value[0.836914]
-        [INFO]  top 1: index[161] value[0.836914]
-        [INFO]  top 1: index[267] value[0.889648]
-        [INFO]  top 1: index[161] value[0.836914]
-        [INFO]  top 1: index[267] value[0.889648]
-        [INFO]  top 1: index[161] value[0.836914]
-        [INFO]  top 1: index[267] value[0.889648]
+        [INFO]  top 1: index[267] value[xxxxxx]
+        [INFO]  top 1: index[161] value[xxxxxx]
+        [INFO]  top 1: index[267] value[xxxxxx]
+        [INFO]  top 1: index[161] value[xxxxxx]
+        [INFO]  top 1: index[161] value[xxxxxx]
+        [INFO]  top 1: index[267] value[xxxxxx]
+        [INFO]  top 1: index[161] value[xxxxxx]
+        [INFO]  top 1: index[267] value[xxxxxx]
+        [INFO]  top 1: index[161] value[xxxxxx]
+        [INFO]  top 1: index[267] value[xxxxxx]
         ......
-        [INFO]  top 1: index[161] value[0.836914]
-        [INFO]  top 1: index[267] value[0.889648]
+        [INFO]  top 1: index[161] value[xxxxxx]
+        [INFO]  top 1: index[267] value[xxxxxx]
         [INFO]  model execute success
         [INFO]  unsubscribe report success
         [INFO]  unload model success, modelId is 1
@@ -456,7 +456,7 @@ The sample directory is organized as follows:
         ./main
         ```
 
-        The following messages indicate that the file is successfully executed.
+        The following messages indicate that the file is successfully executed. In the displayed information, index indicates the category ID, value indicates the maximum confidence level of the category. These values may vary according to the version and environment.
 
         ```
         [INFO]  ./main param1 param2 param3, param1 is execute model times(default 100), param2 is callback interval(default 1), param3 is memory pool size(default 100)
@@ -472,19 +472,19 @@ The sample directory is organized as follows:
         [INFO]  create model description success
         [INFO]  init memory pool success
         [INFO]  subscribe report success
-        [INFO]  top 1: index[267] value[0.889648]
-        [INFO]  top 1: index[161] value[0.836914]
-        [INFO]  top 1: index[267] value[0.889648]
-        [INFO]  top 1: index[161] value[0.836914]
-        [INFO]  top 1: index[161] value[0.836914]
-        [INFO]  top 1: index[267] value[0.889648]
-        [INFO]  top 1: index[161] value[0.836914]
-        [INFO]  top 1: index[267] value[0.889648]
-        [INFO]  top 1: index[161] value[0.836914]
-        [INFO]  top 1: index[267] value[0.889648]
+        [INFO]  top 1: index[267] value[xxxxxx]
+        [INFO]  top 1: index[161] value[xxxxxx]
+        [INFO]  top 1: index[267] value[xxxxxx]
+        [INFO]  top 1: index[161] value[xxxxxx]
+        [INFO]  top 1: index[161] value[xxxxxx]
+        [INFO]  top 1: index[267] value[xxxxxx]
+        [INFO]  top 1: index[161] value[xxxxxx]
+        [INFO]  top 1: index[267] value[xxxxxx]
+        [INFO]  top 1: index[161] value[xxxxxx]
+        [INFO]  top 1: index[267] value[xxxxxx]
         ......
-        [INFO]  top 1: index[161] value[0.836914]
-        [INFO]  top 1: index[267] value[0.889648]
+        [INFO]  top 1: index[161] value[xxxxxx]
+        [INFO]  top 1: index[267] value[xxxxxx]
         [INFO]  model execute success
         [INFO]  unsubscribe report success
         [INFO]  unload model success, modelId is 1

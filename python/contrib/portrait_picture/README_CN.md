@@ -1,3 +1,5 @@
+中文|[English](README.md)
+
 **本样例为大家学习昇腾软件栈提供参考，非商业目的！**
 
 **本样例适配3.0.0及以上版本，支持产品为Atlas200DK、Atlas300([ai1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366))。**
@@ -8,7 +10,7 @@
 
 ## portrait_picture样例
 
-功能：使用PortraitNet模型对输入图片中人像进行分割，然后与背景图像融合，实现背景替换。
+功能：使用Portrait模型对输入图片中人像进行分割，然后与背景图像融合，实现背景替换。
 
 样例输入：带有人像的ipg图片和一张背景图像
 

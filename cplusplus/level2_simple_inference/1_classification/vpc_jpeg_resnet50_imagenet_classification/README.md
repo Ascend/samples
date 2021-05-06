@@ -294,7 +294,7 @@ The sample directory is organized as follows:
             ./main 0
             ```
 
-            The command output similar to the following is displayed.
+            The command output similar to the following is displayed. In the displayed information, classType indicates the category ID, top1 indicates the maximum confidence level of the category, and top5 indicates the sum of the five maximum confidence levels. These values may vary according to the version and environment.
 
             ```
             [INFO] acl init success
@@ -311,14 +311,14 @@ The sample directory is organized as follows:
             [INFO] call vpcResize
             [INFO] Process dvpp success
             [INFO] model execute success
-            [INFO] result : classType[283], top1[0.500488], top5[0.863968]
+            [INFO] result : classType[283], top1[xxxxxx], top5[xxxxxx]
             [INFO]---------------------------------------------
             [INFO] start to process picture:../data/wood_rabbit_1024_1061_330.jpg
             [INFO] call JpegD
             [INFO] call vpcResize
             [INFO] Process dvpp success
             [INFO] model execute success
-            [INFO] result : classType[330], top1[0.542480], top5[1.0000063]
+            [INFO] result : classType[330], top1[xxxxxx], top5[xxxxxx]
             [INFO]---------------------------------------------
             [INFO] Unload model success, modelId is 1
             [INFO] execute sample success
@@ -333,7 +333,7 @@ The sample directory is organized as follows:
             ./main 1
             ```
 
-            The command output similar to the following is displayed.
+            The command output similar to the following is displayed. In the displayed information, classType indicates the category ID, top1 indicates the maximum confidence level of the category, and top5 indicates the sum of the five maximum confidence levels. These values may vary according to the version and environment.
 
             ```
             [INFO] acl init success
@@ -350,14 +350,14 @@ The sample directory is organized as follows:
             [INFO] call vpcCrop
             [INFO] Process dvpp success
             [INFO] model execute success
-            [INFO] result : classType[284], top1[0.961914], top5[0.999743]
+            [INFO] result : classType[284], top1[xxxxxx], top5[xxxxxx]
             [INFO]---------------------------------------------
             [INFO] start to process picture:../data/wood_rabbit_1024_1061_330.jpg
             [INFO] call JpegD
             [INFO] call vpcCrop
             [INFO] Process dvpp success
             [INFO] model execute success
-            [INFO] result : classType[330], top1[0.631836], top5[0.998885]
+            [INFO] result : classType[330], top1[xxxxxx], top5[xxxxxx]
             [INFO]---------------------------------------------
             [INFO] Unload model success, modelId is 1
             [INFO] execute sample success
@@ -372,7 +372,7 @@ The sample directory is organized as follows:
             ./main 2
             ```
 
-            The command output similar to the following is displayed.
+            The command output similar to the following is displayed. In the displayed information, classType indicates the category ID, top1 indicates the maximum confidence level of the category, and top5 indicates the sum of the five maximum confidence levels. These values may vary according to the version and environment.
 
             ```
             [INFO] acl init success
@@ -389,14 +389,14 @@ The sample directory is organized as follows:
             [INFO] call vpcCropAndPaste
             [INFO] Process dvpp success
             [INFO] model execute success
-            [INFO] result : classType[284], top1[0.483398], top5[0.855194]
+            [INFO] result : classType[284], top1[xxxxxx], top5[xxxxxx]
             [INFO]---------------------------------------------
             [INFO] start to process picture:../data/wood_rabbit_1024_1061_330.jpg
             [INFO] call JpegD
             [INFO] call vpcCropAndPaste
             [INFO] Process dvpp success
             [INFO] model execute success
-            [INFO] result : classType[331], top1[0.670898], top5[0.963564]
+            [INFO] result : classType[331], top1[xxxxxx], top5[xxxxxx]
             [INFO]---------------------------------------------
             [INFO] Unload model success, modelId is 1
             [INFO] execute sample success
@@ -556,7 +556,7 @@ The sample directory is organized as follows:
             ./main 0
             ```
 
-            The command output similar to the following is displayed.
+            The command output similar to the following is displayed. In the displayed information, classType indicates the category ID, top1 indicates the maximum confidence level of the category, and top5 indicates the sum of the five maximum confidence levels. These values may vary according to the version and environment.
 
             ```
             [INFO] acl init success
@@ -573,14 +573,14 @@ The sample directory is organized as follows:
             [INFO] call vpcResize
             [INFO] Process dvpp success
             [INFO] model execute success
-            [INFO] result : classType[283], top1[0.500488], top5[0.863968]
+            [INFO] result : classType[283], top1[xxxxxx], top5[xxxxxx]
             [INFO]---------------------------------------------
             [INFO] start to process picture:../data/wood_rabbit_1024_1061_330.jpg
             [INFO] call JpegD
             [INFO] call vpcResize
             [INFO] Process dvpp success
             [INFO] model execute success
-            [INFO] result : classType[330], top1[0.542480], top5[1.0000063]
+            [INFO] result : classType[330], top1[xxxxxx], top5[xxxxxx]
             [INFO]---------------------------------------------
             [INFO] Unload model success, modelId is 1
             [INFO] execute sample success
@@ -595,7 +595,7 @@ The sample directory is organized as follows:
             ./main 1
             ```
 
-            The command output similar to the following is displayed.
+            The command output similar to the following is displayed. In the displayed information, classType indicates the category ID, top1 indicates the maximum confidence level of the category, and top5 indicates the sum of the five maximum confidence levels. These values may vary according to the version and environment.
 
             ```
             [INFO] acl init success
@@ -612,14 +612,14 @@ The sample directory is organized as follows:
             [INFO] call vpcCrop
             [INFO] Process dvpp success
             [INFO] model execute success
-            [INFO] result : classType[284], top1[0.961914], top5[0.999743]
+            [INFO] result : classType[284], top1[xxxxxx], top5[xxxxxx]
             [INFO]---------------------------------------------
             [INFO] start to process picture:../data/wood_rabbit_1024_1061_330.jpg
             [INFO] call JpegD
             [INFO] call vpcCrop
             [INFO] Process dvpp success
             [INFO] model execute success
-            [INFO] result : classType[330], top1[0.631836], top5[0.998885]
+            [INFO] result : classType[330], top1[xxxxxx], top5[xxxxxx]
             [INFO]---------------------------------------------
             [INFO] Unload model success, modelId is 1
             [INFO] execute sample success
@@ -634,7 +634,7 @@ The sample directory is organized as follows:
             ./main 2
             ```
 
-            The command output similar to the following is displayed.
+            The command output similar to the following is displayed. In the displayed information, classType indicates the category ID, top1 indicates the maximum confidence level of the category, and top5 indicates the sum of the five maximum confidence levels. These values may vary according to the version and environment.
 
             ```
             [INFO] acl init success
@@ -651,14 +651,14 @@ The sample directory is organized as follows:
             [INFO] call vpcCropAndPaste
             [INFO] Process dvpp success
             [INFO] model execute success
-            [INFO] result : classType[284], top1[0.483398], top5[0.855194]
+            [INFO] result : classType[284], top1[xxxxxx], top5[xxxxxx]
             [INFO]---------------------------------------------
             [INFO] start to process picture:../data/wood_rabbit_1024_1061_330.jpg
             [INFO] call JpegD
             [INFO] call vpcCropAndPaste
             [INFO] Process dvpp success
             [INFO] model execute success
-            [INFO] result : classType[331], top1[0.670898], top5[0.963564]
+            [INFO] result : classType[331], top1[xxxxxx], top5[xxxxxx]
             [INFO]---------------------------------------------
             [INFO] Unload model success, modelId is 1
             [INFO] execute sample success

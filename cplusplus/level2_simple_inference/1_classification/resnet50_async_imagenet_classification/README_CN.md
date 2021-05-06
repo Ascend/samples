@@ -367,7 +367,7 @@
         ./main
         ```
 
-        执行成功后，在屏幕上的关键提示信息示例如下：
+        执行成功后，在屏幕上的关键提示信息示例如下，提示信息中的index表示类别标识、value表示该分类的最大置信度，这些值可能会根据版本、环境有所不同，请以实际情况为准：
 
         ```
         [INFO]  ./main param1 param2 param3, param1 is execute model times(default 100), param2 is callback interval(default 1), param3 is memory pool size(default 100)
@@ -383,19 +383,19 @@
         [INFO]  create model description success
         [INFO]  init memory pool success
         [INFO]  subscribe report success
-        [INFO]  top 1: index[267] value[0.889648]
-        [INFO]  top 1: index[161] value[0.836914]
-        [INFO]  top 1: index[267] value[0.889648]
-        [INFO]  top 1: index[161] value[0.836914]
-        [INFO]  top 1: index[161] value[0.836914]
-        [INFO]  top 1: index[267] value[0.889648]
-        [INFO]  top 1: index[161] value[0.836914]
-        [INFO]  top 1: index[267] value[0.889648]
-        [INFO]  top 1: index[161] value[0.836914]
-        [INFO]  top 1: index[267] value[0.889648]
+        [INFO]  top 1: index[267] value[xxxxxx]
+        [INFO]  top 1: index[161] value[xxxxxx]
+        [INFO]  top 1: index[267] value[xxxxxx]
+        [INFO]  top 1: index[161] value[xxxxxx]
+        [INFO]  top 1: index[161] value[xxxxxx]
+        [INFO]  top 1: index[267] value[xxxxxx]
+        [INFO]  top 1: index[161] value[xxxxxx]
+        [INFO]  top 1: index[267] value[xxxxxx]
+        [INFO]  top 1: index[161] value[xxxxxx]
+        [INFO]  top 1: index[267] value[xxxxxx]
         ......
-        [INFO]  top 1: index[161] value[0.836914]
-        [INFO]  top 1: index[267] value[0.889648]
+        [INFO]  top 1: index[161] value[xxxxxx]
+        [INFO]  top 1: index[267] value[xxxxxx]
         [INFO]  model execute success
         [INFO]  unsubscribe report success
         [INFO]  unload model success, modelId is 1
@@ -530,7 +530,7 @@
         ./main
         ```
 
-        执行成功后，在屏幕上的关键提示信息示例如下：
+        执行成功后，在屏幕上的关键提示信息示例如下，提示信息中的index表示类别标识、value表示该分类的最大置信度，这些值可能会根据版本、环境有所不同，请以实际情况为准：
 
         ```
         [INFO]  ./main param1 param2 param3, param1 is execute model times(default 100), param2 is callback interval(default 1), param3 is memory pool size(default 100)
@@ -546,19 +546,19 @@
         [INFO]  create model description success
         [INFO]  init memory pool success
         [INFO]  subscribe report success
-        [INFO]  top 1: index[267] value[0.889648]
-        [INFO]  top 1: index[161] value[0.836914]
-        [INFO]  top 1: index[267] value[0.889648]
-        [INFO]  top 1: index[161] value[0.836914]
-        [INFO]  top 1: index[161] value[0.836914]
-        [INFO]  top 1: index[267] value[0.889648]
-        [INFO]  top 1: index[161] value[0.836914]
-        [INFO]  top 1: index[267] value[0.889648]
-        [INFO]  top 1: index[161] value[0.836914]
-        [INFO]  top 1: index[267] value[0.889648]
+        [INFO]  top 1: index[267] value[xxxxxx]
+        [INFO]  top 1: index[161] value[xxxxxx]
+        [INFO]  top 1: index[267] value[xxxxxx]
+        [INFO]  top 1: index[161] value[xxxxxx]
+        [INFO]  top 1: index[161] value[xxxxxx]
+        [INFO]  top 1: index[267] value[xxxxxx]
+        [INFO]  top 1: index[161] value[xxxxxx]
+        [INFO]  top 1: index[267] value[xxxxxx]
+        [INFO]  top 1: index[161] value[xxxxxx]
+        [INFO]  top 1: index[267] value[xxxxxx]
         ......
-        [INFO]  top 1: index[161] value[0.836914]
-        [INFO]  top 1: index[267] value[0.889648]
+        [INFO]  top 1: index[161] value[xxxxxx]
+        [INFO]  top 1: index[267] value[xxxxxx]
         [INFO]  model execute success
         [INFO]  unsubscribe report success
         [INFO]  unload model success, modelId is 1

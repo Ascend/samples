@@ -1,3 +1,5 @@
+中文|[English](README.md)
+
 **本样例为大家学习昇腾软件栈提供参考，非商业目的！**
 
 **本样例适配3.0.0及以上版本，支持产品为Atlas200DK、Atlas300([ai1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366))。**
@@ -43,7 +45,7 @@
      
       ```
      cd $HOME
-     unzip ascend-samples-master.zipt
+     unzip ascend-samples-master.zip
       ```
 #### 2. 获取此应用中所需要的模型
 
@@ -78,7 +80,7 @@
 执行以下命令，进入样例的data文件夹中，下载对应的测试图片。
 
     cd $HOME/samples/python/contrib/SingleImageDehaze/data
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/SingleImageDehaze/test_image/
+    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/SingleImageDehaze/test_image/10992_04_0.8209.png
 
 
 ### 样例运行
