@@ -30,7 +30,7 @@ import amct_tensorflow as amct # pylint: disable=E0401
 amct.set_logging_level(print_level='info', save_level='info')
 
 
-PATH, _ = os.path.realpath('./')
+PATH = os.path.realpath('./')
 OUTPUTS = os.path.join(PATH, 'outputs/calibration')
 SIDE = 224
 INPUT_NAME = 'input'

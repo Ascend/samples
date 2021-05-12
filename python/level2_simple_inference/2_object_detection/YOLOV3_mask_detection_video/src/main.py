@@ -7,7 +7,7 @@ import re
 import atlas_utils.video as video
 
 from atlas_utils.camera import Camera
-from atlas_utils import presenteragent
+import atlas_utils.presenteragent.presenter_channel as presenter_channel
 from acl_model import Model
 from acl_resource import AclResource
 from vgg_ssd import VggSsd
@@ -27,7 +27,7 @@ def main():
     detect = VggSsd(acl_resource, MODEL_WIDTH, MODEL_HEIGHT)
     model = Model(MODEL_PATH)
 
-    chan = presenteragent.presenter_channel.open_channel(MASK_DETEC_CONF)
+    chan = presenter_channel.open_channel(MASK_DETEC_CONF)
     if chan is None:
         print("Open presenter channel failed")
         return
@@ -35,14 +35,14 @@ def main():
     lenofUrl = len(sys.argv)
 
     if lenofUrl <= 1:
-        print("[ERROR] Please input mp4/Rtsp URL")
+        print("[ERROR] Please input h264/Rtsp URL")
         exit()
     elif lenofUrl >= 3:
         print("[ERROR] param input Error")
         exit()
     URL = sys.argv[1]
     URL1 = re.match('rtsp://', URL)
-    URL2 = re.search('.mp4', URL)
+    URL2 = re.search('.h264', URL)
 
     if URL1 is None and URL2 is None:
         print("[ERROR] should input correct URL")
@@ -53,7 +53,7 @@ def main():
         # Read a frame
         ret, image = cap.read()
         
-        if ret != 0:
+        if (ret != 0) or (image is None):
             print("read None image, break")
             break
 

@@ -40,7 +40,7 @@ if [ $gpu_id -ne -1 ];then
     python3 ./src/auto_nuq_resnet50_sample.py \
     --model model/ResNet-50-deploy.prototxt \
     --weights model/ResNet-50-model.caffemodel \
-    --cfg_define nuq_files/quant.cfg \
+    --cfg_define ./src/nuq_files/quant.cfg \
     --dataset $dataset \
     --caffe_dir $caffe_dir \
     --gpu $gpu_id
@@ -49,7 +49,7 @@ elif [ $gpu_id -eq -1 ];then
     python3 ./src/auto_nuq_resnet50_sample.py \
     --model model/ResNet-50-deploy.prototxt \
     --weights model/ResNet-50-model.caffemodel \
-    --cfg_define nuq_files/quant.cfg \
+    --cfg_define ./src/nuq_files/quant.cfg \
     --dataset $dataset \
     --caffe_dir $caffe_dir
 fi

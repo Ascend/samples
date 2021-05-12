@@ -1,6 +1,6 @@
 # AMCT_Caffe ResNet-50示例
 
-该示例包含 ResNet-50的均匀量化，静态非均匀量化，自动非均匀量化，以及自动非均匀量化示例。
+该示例包含 ResNet-50的均匀量化，静态非均匀量化，自动非均匀量化，以及量化感知训练示例。
 
 ## 1， 准备工作
 
@@ -14,9 +14,9 @@
 python3.7.5 ./src/download_prototxt.py  \
 --caffe_dir CAFFE_DIR \ # 必填。Caffe源代码路径，支持相对路径和绝对路径。
 --close_certificate_verify #可选。关闭证书验证参数，确保模型正常下载。
-
 ```
-然后通过以下命令获取与预训练权重文件(.caffemodel):
+
+然后通过以下命令获取预训练权重文件(.caffemodel):
 ```bash
 cd model
 wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/resnet_50/ResNet-50-model.caffemodel
@@ -191,7 +191,7 @@ python3.7.5 ./src/ResNet50_sample.py \
 
 详细请参照`./src/auto_nuq_resnet50_sample.py`中的`AutoNuqEvaluator`类实现方式。
 #### 2.5.1 配置文件
-配置文件与静态非均匀量化一致，请参考2.3.1章节进行相关配置。
+配置文件与静态非均匀量化一致，请参考2.4.1章节进行相关配置。
 
 #### 2.5.2 执行
 同样，自动非均匀量化有使用`.src/auto_nuq_resnet50_sample.py`量化脚本执行，与使bash脚本`.scripts/run_resnet50_auto_nuq.sh`执行两种方式。后者基于前者封装而成，配置参数较少，用户请根据实际情况选择一种方式执行。
@@ -201,15 +201,15 @@ python3.7.5 ./src/ResNet50_sample.py \
 python3.7.5 ./src/auto_nuq_resnet50_sample.py \
 --model_file model/ResNet-50-deploy.prototxt \
 --weights_file model/ResNet-50-model.caffemodel \
---caffe_dir caffe-master \
+--caffe_dir /path/to/caffe-master \
 --gpu 0 \
 --cfg_define src/nuq_files/quant.cfg \
---dataset caffe-master/examples/imagenet/ilscrc12_val_lmdb
+--dataset caffe-master/examples/imagenet/ilsvrc12_val_lmdb
 ```
 入参说明:
 * `model_file`: 必填。Caffe模型文件（.prototxt）路径。
 * `weights_file`: 必填。Caffe权重文件（.caffemodel）路径。
-* `caffe_dir`: 必填。Caffe源代码路径，支持相对路径和绝对路径。
+* `caffe_dir`: 必填。Caffe源代码caffe-master路径，支持相对路径和绝对路径。
 * `gpu`/`cpu`: 可选。指定推理时使用CPU或则使用的GPU设备ID。
 * `cfg_define`: 必填。非均匀量化简易配置文件路径。
 * `dataset`: 必填。用于测试目标精度的验证集路径。
@@ -217,12 +217,12 @@ python3.7.5 ./src/auto_nuq_resnet50_sample.py \
 或则通过`.scripts/run_resnet50_auto_nuq.sh`执行：
 ```bash
 bash scripts/run_resnet50_auto_nuq.sh \
--c /path/to/caffe_master
+-c /path/to/caffe-master
 -g 0 \
 -d /path/to/validation/data/set
 ```
 入参说明:
-* `-c`: 必填，caffe_master路径
+* `-c`: 必填，caffe-master路径
 * `-g`: 选填，GPU的设备ID。如果不指定该参数，则默认在CPU上运行
 * `-d`: 必填，验证数据集路径
 
@@ -234,8 +234,8 @@ python3.7.5 ./src/ResNet50_retrain.py \
 --weights_file model/ResNet-50-model.caffemodel \
 --gpu 0 \
 --caffe_dir caffe-master \
---train_data  caffe-master/examples/imagenet/ilscrc12_val_lmdb \
---test_data caffe-master/examples/imagenet/ilscrc12_val_lmdb
+--train_data  caffe-master/examples/imagenet/ilsvrc12_train_lmdb \
+--test_data caffe-master/examples/imagenet/ilsvrc12_val_lmdb
 ```
 入参说明:
 * `model_file`: 必填。Caffe模型文件（.prototxt）路径。
@@ -245,7 +245,7 @@ python3.7.5 ./src/ResNet50_retrain.py \
 * `train_data`: 必填。训练数据集路径
 * `dataset`: 必填。验证数据集路径
 
-若出现如下信息则说明重训练成功：
+若出现如下信息则说明重训练成功（如下top1，top5的推理精度只是样例，请以实际环境量化训练结果为准）：
 ```
 Network initialization done.
 ...
@@ -256,10 +256,10 @@ Top 5 accuracy = 0.934
 
 重训练成功后，在该示例根目录下生成重训练日志文件夹`amct_log`，重训练中间结果文件夹`tmp`，重训练结果文件所在文件夹results（对该模型重新进行重训练时，如下结果文件将会被覆盖。）：
 
-`amct_log`：记录了工具的日志信息，包括重训练过程的日志信息amct_caffe.log。
-`results/retrain_results`：重训练结果文件，包括重训练后的模型文件、权重文件，如下所示：
-`retrain_atc_model.prototxt`：重训练后的可在昇腾AI处理器部署的模型文件。
-`retrain_deploy_model.prototxt`：重训练后的部署模型文件。
-`retrain_deploy_weights.caffemodel`：重训练后的可在昇腾AI处理器部署的权重文件。
-`retrain_fake_quant_model.prototxt`：重训练后的可在Caffe环境进行精度仿真模型文件。
-`retrain_fake_quant_weights.caffemodel`：重训练后的可在Caffe环境进行精度仿真权重文件。
+* `amct_log`：记录了工具的日志信息，包括重训练过程的日志信息amct_caffe.log。
+* `results/retrain_results`：重训练结果文件，包括重训练后的模型文件、权重文件，如下所示：
+  * `retrain_atc_model.prototxt`：重训练后的可在昇腾AI处理器部署的模型文件。
+  * `retrain_deploy_model.prototxt`：重训练后的部署模型文件。
+  * `retrain_deploy_weights.caffemodel`：重训练后的可在昇腾AI处理器部署的权重文件。
+  * `retrain_fake_quant_model.prototxt`：重训练后的可在Caffe环境进行精度仿真模型文件。
+  * `retrain_fake_quant_weights.caffemodel`：重训练后的可在Caffe环境进行精度仿真权重文件。

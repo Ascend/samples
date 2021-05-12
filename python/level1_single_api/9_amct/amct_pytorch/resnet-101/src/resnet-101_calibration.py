@@ -22,7 +22,7 @@ from torchvision import transforms # pylint: disable=E0401
 import onnxruntime as ort # pylint: disable=E0401
 
 import amct_pytorch as amct # pylint: disable=E0401
-from ..model.resnet import resnet101 # pylint: disable=E0401, C0415
+from resnet import resnet101 # pylint: disable=E0401, C0415
 
 
 PATH = os.path.realpath('./')

@@ -29,7 +29,8 @@ PATH = os.path.split(os.path.realpath(__file__))[0]
 PATH = os.path.realpath(os.path.join(PATH, '..'))
 TMP = os.path.join(PATH, 'tmp')
 RESULT = os.path.join(PATH, 'results')
-LMDB_DATASET_DIR = os.path.join(TMP, 'mnist_test_lmdb')
+DATASET_PATH = os.path.join(PATH, 'data/mnist_data')
+LMDB_DATASET_DIR = os.path.join(DATASET_PATH, 'mnist_test_lmdb')
 BATCH_SIZE = 64
 SCALE = 0.00390625
 
@@ -214,7 +215,6 @@ def main(args):
 
 if __name__ == '__main__':
     # Init mnist env
-    DATASET_PATH = os.path.join(PATH, 'data/mnist_data')
     mnist_data.download_mnist_dataset(DATASET_PATH)
-    mnist_data.make_mnist_lmdb_dataset(QUANT_ARGS.caffe_dir, DATASET_PATH, TMP)
+    mnist_data.make_mnist_lmdb_dataset(QUANT_ARGS.caffe_dir, DATASET_PATH, DATASET_PATH)
     main(QUANT_ARGS)

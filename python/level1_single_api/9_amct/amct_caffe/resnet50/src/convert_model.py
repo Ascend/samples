@@ -29,7 +29,7 @@ MODEL_OUTPUT_BLOB_NAME = 'prob'
 PATH = os.path.split(os.path.realpath(__file__))[0]
 PATH = os.path.realpath(os.path.join(PATH, '..'))
 RESULT = os.path.join(PATH, 'results/convert_results')
-DATA_DIR = os.path.join(PATH, 'images')
+DATA_DIR = os.path.join(PATH, 'data/images')
 LABEL_FILE = os.path.join(DATA_DIR, 'image_label.txt')
 BATCH_SIZE = 32
 

@@ -75,11 +75,11 @@ def main(): # pylint: disable=too-mant-locals, not-context-manager
     print(
         'Origin Model Prediction:\n',
         '\tcategory index: {}\n'.format(origin_prediction.argmax()),
-        '\tcategory prob: {}\n'.format(round(origin_prediction.max(), 3)))
+        '\tcategory prob: {:.3f}\n'.format(origin_prediction.max()))
     print(
         'Quantized Model Prediction:\n',
         '\tcategory index: {}\n'.format(convert_prediction.argmax()),
-        '\tcategory prob: {}\n'.format(round(convert_prediction.max(), 3)))
+        '\tcategory prob: {:.3f}\n'.format(convert_prediction.max()))
 
 
 if __name__ == '__main__':

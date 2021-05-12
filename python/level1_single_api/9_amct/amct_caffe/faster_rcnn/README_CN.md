@@ -1,6 +1,6 @@
 # faster-rcnn sample 的说明
 
-## 1. 环境初始化
+## 1. 环境准备
 
 如果使用FasterRCNN模型，则执行步骤环境初始化时会将模型自动下载到本地，本手册以该场景下的模型为例进行说明，用户也可以自行准备模型。
 环境初始化用于获取检测网络源代码、模型文件、权重文件以及数据集等信息。
@@ -16,15 +16,15 @@
      `cd scripts && bash init_env.sh CPU **/caffe-master/ python3.7 /usr/include/python3.7m`
    
    - 如果用户环境无法连接网络。
-     则请在可连通网络的服务器，分别访问如下链接下载相应软件包，然后上传到 sample/faster_rcnn 目录。
+     则请在可连通网络的服务器，分别访问如下链接下载相应软件包，然后上传到 sample/faster_rcnn/scripts 目录。
      
      - faster_rcnn脚本路径：https://github.com/rbgirshick/caffe-fast-rcnn/archive/0dcd397b29507b8314e252e850518c5695efbb83.zip （下载后重命名为 faster_rcnn_caffe_master.zip，环境初始化后生成faster_rcnn Caffe工程）
      - faster_rcnn caffe_master 工程：https://github.com/rbgirshick/py-faster-rcnn/archive/master.zip （下载后重命名为py-faster-rcnn-master.zip，执行后生成 faster_rcnn 工程压缩包）
-     - vgg16_faster_rcnn 预训练模型文件：https://dl.dropboxusercontent.com/s/o6ii098bu51d139/faster_rcnn_models.tgz（环境初始化后生成vgg-16 faster_rcnn 预训练模型）
-     - VOC2007数据集：http://host.robots.ox.ac.uk/pascal/VOC/voc2007/VOCtrainval_06-Nov-2007.tar（环境初始化后生成VOC2007数据集）
+     - vgg16_faster_rcnn 预训练模型文件：https://dl.dropboxusercontent.com/s/o6ii098bu51d139/faster_rcnn_models.tgz （环境初始化后生成vgg-16 faster_rcnn 预训练模型）
+     - VOC2007数据集：http://host.robots.ox.ac.uk/pascal/VOC/voc2007/VOCtrainval_06-Nov-2007.tar （环境初始化后生成VOC2007数据集）
      该数据集只有在模型精度测试时才使用，详情请参见模型精度测试。
      
-     切换到sample/faster_rcnn目录，执行初始化脚本，示例如下：
+     切换到sample/faster_rcnn/scripts目录，执行初始化脚本，示例如下：
      `bash init_env.sh CPU **/caffe-master/ python3.7 /usr/include/python3.7m`
      初始化脚本优先检查当前目录是否存在上述下载的软件包，如果已经存在，则不会连接网络再次下载，直接使用上述软件包中的内容生成相关目录下的文件。
 
@@ -45,8 +45,9 @@
    - caffe_master_patch/include/caffe/fast_rcnn_layers.hpp：用于存放自定义层定义头文件。
    - caffe_master_patch/src/caffe：用于存放自定层实现源文件。
      命令如下：
-
-   `cp -r $HOME/amct/amct_caffe/sample/faster_rcnn/caffe_master_patch/* caffe-master/`
+      ```
+      cp -r $HOME/amct/amct_caffe/sample/faster_rcnn/caffe_master_patch/* caffe-master/
+      ```
 
 3. src 中多出如下三个文件夹：
    - datasets：FasterRCNN 使用的数据集。
@@ -57,9 +58,9 @@
    
 
 完成后，返回 caffe-master 目录，分别执行如下命令重新编译 Caffe 环境。
-     make clean
-     make all && make pycaffe
-
+   ```
+   make clean && make all && make pycaffe
+   ```
 
 ## 2. 量化示例
 
@@ -68,12 +69,26 @@
 
    切换到 sample/faster_rcnn/src 目录，执行如下命令检测 faster_rcnn 网络模型。
 
+
    ```shell
    python3.7.5 faster_rcnn_sample.py --model_file MODEL_FILE --weights_file WEIGHTS_FILE [--gpu GPU_ID] [--cpu][--iterations ITERATIONS] [--pre_test]
    ```
+   量化脚本 faster_rcnn_sample.py 的参数说明：
+
+| 参数名         | 说明                                                         |
+| -------------- | ------------------------------------------------------------ |
+| --model_file   | 必选，模型输入的 prototxt文件                                |
+| --weights_file | 必选，模型权重 caffemodel文件                                |
+| --gpu          | 可选，使用GPU进行推理则指定gpu id                            |
+| --cpu          | 可选，使用CPU进行推理                                        |
+| --iterations   | 可选，指定进行推理的batch数，基于sample的简单数据集，这个数值不可以大于5 |
+| --pre_test     | 可选，进行未量化模型的精度测试                               |
+
+
+
    ```shell
    使用样例如下：
-   python3.7.5 faster_rcnn_sample.py --model_file pre_model/faster_rcnn_test.pt --weights_file pre_model/VGG16_faster_rcnn_final.caffemodel  --gpu 0 --pre_tes
+   python3.7.5 faster_rcnn_sample.py --model_file pre_model/faster_rcnn_test.pt --weights_file pre_model/VGG16_faster_rcnn_final.caffemodel  --gpu 0 --pre_test
    ```
 
    根据 src/datasets 数据集中检测对象的数量，会展示相应数量的检测结果文件，关闭检测结果文件，若昇腾模型压缩工具所在 	服务器出现如下信息，则说明原始模型在Caffe环境中运行正常。

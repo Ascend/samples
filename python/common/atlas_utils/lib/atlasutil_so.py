@@ -14,7 +14,7 @@ def _load_lib_atlasutil():
     lib = None
     if run_mode == ACL_DEVICE:
         cur_dir = os.path.dirname(os.path.abspath(__file__))
-        so_path = os.path.join(cur_dir, '/atlas200dk/libatlasutil.so')
+        so_path = os.path.join(cur_dir, 'atlas200dk/libatlasutil.so')
         lib=ctypes.CDLL(so_path)
 
     return lib

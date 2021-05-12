@@ -3,9 +3,7 @@
 ## 量化前提
 
 + **模型准备**
-请下载
-[ResNet-50](https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/resnet-50_v1_retrain/pre_model.zip)
-模型文件。解压并将 pre_model 文件夹内的文件放到 [model](./model/) 目录。其中
+请下载 [ResNet-50](https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/resnet-50_v1_retrain/pre_model.zip) 模型文件。解压并将 pre_model 文件夹内的文件放到 [model](./model/) 目录。其中
 ResNet50_train.meta 用于重训练，ResNet50_eval.meta 用于验证。
 
 + **数据集准备**
@@ -27,7 +25,7 @@ ResNet50_train.meta 用于重训练，ResNet50_eval.meta 用于验证。
 在当前目录执行如下命令重训练 resnet_v1_50 网络模型。
 
 ```none
-python3.7.5 ./src/resnet-50_v1_retrain.py --config_defination CONFIG_DEFINATION --batch_num BATCH_NUM --train_set TRAIN_SET --train_keyword TRAIN_KEYWORD --eval_set EVAL_SET --eval_keyword EVAL_KEYWORD --train_model TRAIN_MODEL --eval_model EVAL_MODEL
+python ./src/resnet-50_v1_retrain.py --train_set TRAIN_SET --eval_set EVAL_SET
 ```
 
 上述命令只给出了常用的参数，不常用参数以及各个参数解释请参见如下表格：
@@ -58,27 +56,39 @@ python3.7.5 ./src/resnet-50_v1_retrain.py --config_defination CONFIG_DEFINATION 
 本示例脚本仅用于展示量化感知训练流程，可以增大迭代训练次数（参数--train_iter）来缩小量化后精度损失。若出现如下信息则说明重训练成功。
 
 ```none
-The model after retrain top 1 accuracy = 52.0%.
-The model after retrain top 5 accuracy = 77.4%.
+INFO - [AMCT]:[save_model]: The model is saved in ./outputs/retrain/resnet_v1_50_quantized.pb
+The origin model top 1 accuracy = 66.2%
+The origin model top 5 accuracy = 87.8%
+The model after retrain top 1 accuracy = 46.4%.
+The model after retrain top 5 accuracy = 71.0%.
 ```
 
 ## 量化结果
 
-重训练成功后，在当前目录会生成以下文件：
+量化成功后，在当前目录会生成量化日志文件 [amct_tensorflow.log](./amct_log/amct_tensorflow.log) 和 [outputs](./outputs/) 文件夹，该文件夹内包含以下内容：
 
-+ [amct_tensorflow.log](./amct_log/amct_tensorflow.log)：记录了工具的日志信息，包括重训练过程的日志信息。
-+ [resnet_v1_50_quantized.pb](./results/resnet_v1_50_quantized.pb)：重训练完成最后生成的量化模型。该模型即可在 TensorFlow 环境进行精度仿真又可在昇腾AI处理器部署。
-+ [tmp/](./tmp/)：重训练过程中产生的文件，包括：
-  + [checkpoint](./tmp/checkpoint)：TensorFlow 训练过程中保存的检查点。
-  + [config.json](./tmp/config.json)：重训练量化配置文件，描述了如何对模型中的每一层进行重训练。如果重训练脚本所在目录下已经存在重训练配置文件，则再次调用 create_quant_retrain_config 接口时，如果新生成的重训练配置文件与已有的文件同名，则会覆盖已有的重训练配置文件，否则生成新的重训练配置文件。
-  + [events.out.tfevents.xxxxxxxxxx.xxx](./tmp/events.out.tfevents.xxxxxxxxxx.xxx)：包含重训练时的 loss 信息，可使用 TensorBoard 查看。
-  + [record.txt](./tmp/record.txt)：量化因子记录文件。关于该文件的原型定义请参见量化因子记录文件说明。
-  + [resnet_v1_50.pb](./tmp/resnet_v1_50.pb)：重训练结束后生成的固化模型。
-  + [resnet_v1_50_retrain-0.data-00000-of-00001](./tmp/resnet_v1_50_retrain-0.data-00000-of-00001)：重训练过程生成的权重文件。
-  + [resnet_v1_50_retrain-0.index](./tmp/resnet_v1_50_retrain-0.index)：重训练过程生成的权重文件索引。
-  + [resnet_v1_50_retrain-0.meta](./tmp/resnet_v1_50_retrain-0.meta)：用于重训练的模型文件。
-  + [resnet_v1_50_retrain-100.data-00000-of-00001](./tmp/resnet_v1_50_retrain-1.data-00000-of-00001)：重训练过程生成的权重文件。
-  + [resnet_v1_50_retrain-100.index](./tmp/resnet_v1_50_retrain-1.index)：重训练过程生成的权重文件索引。
-  + [resnet_v1_50_retrain-100.meta](./tmp/resnet_v1_50_retrain-1.meta)：用于重训练的模型文件。
+记录了工具的日志信息，包括重训练过程的日志信息。
+
++ [outputs/](./outputs/)
+  + 训练检查点 [checkpoint](./outputs/checkpoint)
+  + 量化配置文件 [config.json](./outputs/config.json)
+  + 训练记录 [events.out.tfevents.xxxxxxxxxx.xxx](./outputs/events.out.tfevents.xxxxxxxxxx.xxx)
+  + 量化因子记录文件 [record.txt](./outputs/record.txt)
+  + 训练后模型 [resnet_v1_50.pb](./outputs/resnet_v1_50.pb)
+  + 量化模型 [resnet_v1_50_quantized.pb](./results/resnet_v1_50_quantized.pb)
+  + [resnet_v1_50_retrain-0.data-00000-of-00001](./outputs/resnet_v1_50_retrain-0.data-00000-of-00001)
+  + [resnet_v1_50_retrain-0.index](./outputs/resnet_v1_50_retrain-0.index)
+  + [resnet_v1_50_retrain-0.meta](./outputs/resnet_v1_50_retrain-0.meta)
+  + [resnet_v1_50_retrain-100.data-00000-of-00001](./outputs/resnet_v1_50_retrain-1.data-00000-of-00001)
+  + [resnet_v1_50_retrain-100.index](./outputs/resnet_v1_50_retrain-1.index)
+  + [resnet_v1_50_retrain-100.meta](./outputs/resnet_v1_50_retrain-1.meta)
+
+量化配置文件描述了如何对模型中的每一层进行重训练。如果重训练脚本所在目录下已经存在重训练配置文件，则再次调用 create_quant_retrain_config 接口时，如果新生成的重训练配置文件与已有的文件同名，则会覆盖已有的重训练配置文件，否则生成新的重训练配置文件。
+
+训练记录包含重训练时的 loss 信息，可使用 TensorBoard 查看。
+
+量化因子记录文件记录量化因子。关于该文件的原型定义请参见[量化因子记录文件说明](https://support.huaweicloud.com/content/dam/cloudbu-site/archive/china/zh-cn/support/docs/auxiliarydevtool-cann330alphaXinfer/atlasamcttf_16_0014.html)。
+
+量化模型即可在 TensorFlow 环境进行精度仿真并可在昇腾 AI 处理器部署的模型。
 
 对该模型重新进行重训练时，上述结果文件将会被覆盖。

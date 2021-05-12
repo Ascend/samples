@@ -37,62 +37,43 @@ class VggSsd(object):
         self._acl_resource = acl_resource
         self._model_width = model_width
         self._model_height = model_height
-        #使用dvpp处理图像,当使用opencv或者PIL时则不需要创建dvpp实例
         self._dvpp = Dvpp(acl_resource)
 
     def __del__(self):
         print("Release yolov3 resource finished")
 
-
     def pre_process(self, image):
-        #使用dvpp将图像缩放到模型要求大小
+        """
+        pre_process
+        """
         resized_image = self._dvpp.resize(image, self._model_width,
                                           self._model_height)
-        if resized_image == None:
+        if resized_image is None:
             print("Resize image failed")
             return None
-        #输出缩放后的图像和图像信息作为推理输入数据
         return [resized_image,]
 
-        # img_h = image.size[1]
-        # img_w = image.size[0]
-        # net_h = MODEL_HEIGHT
-        # net_w = MODEL_WIDTH
-
-        # scale = min(float(net_w) / float(img_w), float(net_h) / float(img_h))
-        # new_w = int(img_w * scale)
-        # new_h = int(img_h * scale)
-
-        # shift_x = (net_w - new_w) // 2
-        # shift_y = (net_h - new_h) // 2
-        # shift_x_ratio = (net_w - new_w) / 2.0 / net_w
-        # shift_y_ratio = (net_h - new_h) / 2.0 / net_h
-
-        # image_ = image.resize( (new_w, new_h))
-        # new_image = np.zeros((net_h, net_w, 3), np.uint8)
-        # new_image[shift_y: new_h + shift_y, shift_x: new_w + shift_x, :] = np.array(image_)
-        # new_image = new_image.astype(np.float32)
-        # new_image = new_image / 255
-
-        # return new_image
-
     def post_process(self, infer_output, origin_img):
-        #解析推理输出数据
+        """
+        post_process
+        """
         detection_result_list = self._analyze_inference_output(infer_output, 
                                                                origin_img)
-        #将yuv图像转换为jpeg图像
         jpeg_image = self._dvpp.jpege(origin_img)
-
-
-
         return jpeg_image, detection_result_list
 
     def overlap(self, x1, x2, x3, x4):
+        """
+        overlap
+        """
         left = max(x1, x3)
         right = min(x2, x4)
         return right - left
     
     def cal_iou(self, box, truth):
+        """
+        cal_iou
+        """
         w = self.overlap(box[0], box[2], truth[0], truth[2])
         h = self.overlap(box[1], box[3], truth[1], truth[3])
         if w <= 0 or h <= 0:
@@ -102,6 +83,9 @@ class VggSsd(object):
         return inter_area * 1.0 / union_area
     
     def apply_nms(self, all_boxes, thres):
+        """
+        apply_nms
+        """
         res = []
     
         for cls in range(class_num):
@@ -128,6 +112,9 @@ class VggSsd(object):
         return res
     
     def decode_bbox(self, conv_output, anchors, img_w, img_h, x_scale, y_scale, shift_x_ratio, shift_y_ratio):
+        """
+        decode_bbox
+        """
         def _sigmoid(x):
             s = 1 / (1 + np.exp(-x))
             return s
@@ -164,17 +151,19 @@ class VggSsd(object):
         return all_boxes
     
     def convert_labels(self, label_list):
+        """
+        convert_labels
+        """
         if isinstance(label_list, np.ndarray):
             label_list = label_list.tolist()
             label_names = [labels[int(index)] for index in label_list]
         return label_names
     
-
     def _analyze_inference_output(self, infer_output, origin_img):
-
+        """
+        _analyze_inference_output
+        """
         result_return = dict()
-        #img_h = origin_img.size[1]
-        #img_w = origin_img.size[0]
         img_h = origin_img.height
         img_w = origin_img.width
         scale = min(float(MODEL_WIDTH) / float(img_w), float(MODEL_HEIGHT) / float(img_h))
@@ -198,7 +187,6 @@ class VggSsd(object):
             result_return['detection_classes'] = []
             result_return['detection_boxes'] = []
             result_return['detection_scores'] = []
-            # return result_return
         else:
             new_res = np.array(res)
             picked_boxes = new_res[:, 0:4]
@@ -208,7 +196,6 @@ class VggSsd(object):
             result_return['detection_classes'] = picked_classes
             result_return['detection_boxes'] = picked_boxes.tolist()
             result_return['detection_scores'] = picked_score.tolist()
-            # return result_return
 
         detection_result_list = []
         for i in range(len(result_return['detection_classes'])):
@@ -224,32 +211,3 @@ class VggSsd(object):
             detection_item.result_text = str(class_name)
             detection_result_list.append(detection_item)
         return detection_result_list
-
-
-
-
-
-
-    #     #vgg ssd有两个输出,第一个输出infer_output[0]为检测到的物体个数,shape为(1,8)
-    #     box_num = int(infer_output[0][0, 0])
-    #    #第二个输出infer_output[1]为检测到的物体信息,shape为(1, 200, 8)
-    #     box_info = infer_output[1][0]  
-    #     detection_result_list = []
-    #     for i in range(box_num):
-    #         #检测到的物体置信度
-    #         score = box_info[i, SCORE]
-    #         if score < 0.9:
-    #             break 
-            
-    #         detection_item = presenter_datatype.ObjectDetectionResult()            
-    #         detection_item.confidence = score
-    #         #人脸位置框坐标, 是归一化的坐标，需要乘以图片宽高转换为图片上的坐标
-    #         detection_item.box.lt.x = int(box_info[i, TOP_LEFT_X] * origin_img.width)
-    #         detection_item.box.lt.y = int(box_info[i, TOP_LEFT_Y] * origin_img.height)
-    #         detection_item.box.rb.x = int(box_info[i, BOTTOM_RIGHT_X] * origin_img.width)
-    #         detection_item.box.rb.y = int(box_info[i, BOTTOM_RIGHT_Y] * origin_img.height)
-    #         #将置信度组织为字符串
-    #         detection_item.result_text = str(round(detection_item.confidence * 100, 2)) + "%"
-    #         detection_result_list.append(detection_item)
-            
-    #     return detection_result_list

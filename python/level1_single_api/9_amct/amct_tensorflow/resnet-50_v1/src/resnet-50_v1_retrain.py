@@ -178,9 +178,8 @@ class TFRecordDataset(object): # pylint: disable=R0902, R0903
             plt.title(str(labels[i]) + ': ' + text)
 
 
-PATH, _ = os.path.split(os.path.realpath(__file__))
-TMP = os.path.join(PATH, 'tmp')
-RESULTS = os.path.join(PATH, 'results/retrain')
+PATH = os.path.realpath('./')
+OUTPUTS = os.path.join(PATH, 'outputs')
 TRAIN_SIZE = 1281167
 EVAL_SIZE = 500
 CATEGORY = 1000
@@ -194,7 +193,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description='ResNet-50 Retrain DEMO')
 
     parser.add_argument(
-        '--config_defination', dest='config_defination', default=None, type=str,
+        '--config_defination', dest='config_defination', default='./src/sample.cfg', type=str,
         help='The simple configure define file.')
     parser.add_argument(
         '--batch_num', dest='batch_num', default=2, type=int,
@@ -224,12 +223,10 @@ def parse_args():
         '--batch_size', dest='batch_size', default=32, type=int,
         help='The number of samples in each batch.')
     parser.add_argument(
-        '--train_model', dest='train_model', type=str,
-        default='./model/resnet_v1_50_train.meta',
+        '--train_model', dest='train_model', default='./model/resnet_v1_50_train.meta', type=str,
         help='The path of file containing a "MetaGraphDef" of ResNet V1 50 for training.')
     parser.add_argument(
-        '--eval_model', dest='eval_model', type=str,
-        default='./model/resnet_v1_50_eval.meta',
+        '--eval_model', dest='eval_model', default='./model/resnet_v1_50_eval.meta', type=str,
         help='The path of file containing a "MetaGraphDef" of ResNet V1 50 for evaluation.')
     parser.add_argument(
         '--ckpt', dest='ckpt_path', type=str,
@@ -306,7 +303,7 @@ def get_loss(input_2, logits):
     tf.compat.v1.summary.scalar('cross_entropy', tf.reduce_sum(cross_entropy))
     tf.compat.v1.summary.scalar('loss', tf.reduce_sum(cross_entropy) + l2_loss)
     write_op = tf.compat.v1.summary.merge_all()
-    summary_writer = tf.compat.v1.summary.FileWriter(TMP)
+    summary_writer = tf.compat.v1.summary.FileWriter(OUTPUTS)
     return loss, write_op, summary_writer
 
 
@@ -383,8 +380,7 @@ def evaluate_for_search_n(session, predictions_name, batch_num):
 def main(): # pylint: disable=R0914, R0915
     """main process"""
     args_check(ARGS)
-    mkdir(TMP)
-    mkdir(RESULTS)
+    mkdir(OUTPUTS)
 
     # Phase Check original model accuracy
     # Step 1: Load and evaluate the target model
@@ -405,15 +401,15 @@ def main(): # pylint: disable=R0914, R0915
     # Step 2: Load the training model.
     saver = tf.compat.v1.train.import_meta_graph(ARGS.train_model)
     # Step 3: Create the retraining configuration file.
-    config_file = os.path.join(TMP, 'config.json')
-    record_file = os.path.join(TMP, 'record.txt')
+    config_file = os.path.join(OUTPUTS, 'config.json')
+    record_file = os.path.join(OUTPUTS, 'record.txt')
     config_defination = ARGS.config_defination
     amct.create_quant_retrain_config(config_file, graph, config_defination)
     # Step 4: Generate the retraining model in default graph and create the
     # quantization factor record_file.
     retrain_ops = amct.create_quant_retrain_model(graph, config_file, record_file)
     # Step 5: Retrain the modified model and save quantization parameters
-    retrain_ckpt = os.path.join(TMP, 'resnet_v1_50_retrain')
+    retrain_ckpt = os.path.join(OUTPUTS, 'resnet_v1_50_retrain')
     retrain(saver, retrain_ckpt)
 
     # Phase convert retrain model
@@ -438,14 +434,14 @@ def main(): # pylint: disable=R0914, R0915
     # Step 5: Convert all variables to constants and finally save as 'pb' file.
     constant_graph = tf.compat.v1.graph_util.convert_variables_to_constants(
         session, graph.as_graph_def(), [PREDICTIONS])
-    pb_path = os.path.join(TMP, 'resnet_v1_50.pb')
+    pb_path = os.path.join(OUTPUTS, 'resnet_v1_50.pb')
     with tf.io.gfile.GFile(pb_path, 'wb') as pb_file:
         pb_file.write(constant_graph.SerializeToString())
     session.close()
 
     # Step 6: Convert origin 'pb' model file to fake quantized 'pb'
     # model, using the quantization factor record_file.
-    quantized_pb_path = os.path.join(RESULTS, 'resnet_v1_50')
+    quantized_pb_path = os.path.join(OUTPUTS, 'resnet_v1_50')
     amct.save_quant_retrain_model(pb_path, [PREDICTIONS], record_file, quantized_pb_path)
 
     # Phase verification

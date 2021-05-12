@@ -4,7 +4,7 @@ aipp_cfg="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Mo
 model_name="yolo3_resnet18_yuv"
 presenter_server_name="mask_detection_video"
 
-data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/mask_detection_video/mask-true.mp4"
+data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/mask_detection_video/mask-true.h264"
 project_name="YOLOV3_mask_detection_video"
 
 version=$1
@@ -22,9 +22,9 @@ function downloadData() {
 
     mkdir -p ${project_path}/data/
 
-    wget -O ${project_path}/data/"mask-true.mp4"  ${data_source}  --no-check-certificate
+    wget -O ${project_path}/data/"mask-true.h264"  ${data_source}  --no-check-certificate
     if [ $? -ne 0 ];then
-        echo "download ture.mp4 failed, please check Network."
+        echo "download ture.h264 failed, please check Network."
         return 1
     fi
 
@@ -33,13 +33,7 @@ function downloadData() {
 
 
 function setAtcEnv() {
-    if [[ ${version} = "c73" ]] || [[ ${version} = "C73" ]];then
-        export install_path=/home/HwHiAiUser/Ascend/ascend-toolkit/latest
-        export PATH=/usr/local/python3.7.5/bin:${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
-        export PYTHONPATH=${install_path}/atc/python/site-packages/te:${install_path}/atc/python/site-packages/topi:$PYTHONPATH
-        export ASCEND_OPP_PATH=${install_path}/opp
-        export LD_LIBRARY_PATH=${install_path}/atc/lib64:${LD_LIBRARY_PATH}
-    elif [[ ${version} = "c75" ]] || [[ ${version} = "C75" ]];then
+    if [[ ${version} = "c76" ]] || [[ ${version} = "C76" ]];then
         export install_path=$HOME/Ascend/ascend-toolkit/latest
         export PATH=/usr/local/python3.7.5/bin:${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
         export ASCEND_OPP_PATH=${install_path}/opp
@@ -53,14 +47,11 @@ function setAtcEnv() {
 
 
 function setRunEnv() {
-    if [[ ${version} = "c73" ]] || [[ ${version} = "C73" ]];then
+    if [[ ${version} = "c76" ]] || [[ ${version} = "C76" ]];then
         export LD_LIBRARY_PATH=
         export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/acllib/lib64:/home/HwHiAiUser/ascend_ddk/arm/lib:${LD_LIBRARY_PATH}
-        export PYTHONPATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/arm64-linux_gcc7.3.0/pyACL/python/site-packages/acl:${PYTHONPATH}
-    elif [[ ${version} = "c75" ]] || [[ ${version} = "C75" ]];then
-        export LD_LIBRARY_PATH=
-        export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/acllib/lib64:/home/HwHiAiUser/ascend_ddk/arm/lib:${LD_LIBRARY_PATH}
-        export PYTHONPATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/arm64-linux/pyACL/python/site-packages/acl:${PYTHONPATH}
+        export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/acllib/lib64/:/home/HwHiAiUser/Ascend/ascend-toolkit/latest/atc/lib64:/home/HwHiAiUser/ascend_ddk/x86/lib:${LD_LIBRARY_PATH}
+        export PYTHONPATH=/home/HwHiAiUser/Ascend/pyACL/python/site-packages/acl:${PYTHONPATH}
     fi
 
     return 0
@@ -162,9 +153,10 @@ function main() {
     
     cd ${project_path}/src
     #python3.6 mask_detect.py
-    python3.6 main.py ../data/mask-true.mp4 &
-    
+    python3.6 main.py ../data/mask-true.h264 &
+
     sleep 8
+    
     echo ${project_name}    
         project_pid=`ps -ef | grep "main.py" | grep "data" | awk -F ' ' '{print $2}'`
     if [[ ${project_pid}"X" != "X" ]];then

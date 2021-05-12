@@ -1,97 +1,182 @@
 # AMCT_Tensorflow 张量分解样例
 
-## 1， 准备工作
+## 1 准备工作
 
 ### 1.1 AMCT_Tensorflow环境
-执行本用例需要配置AMCT_Tensorflow python环境，详细环境准备流程可以参照[昇腾社区开发者文档](https://ascend.huawei.com/zh/#/document?tag=developer)页面下“全流程开发工具链” 下的 “模型压缩 (Tensorflow)” 文档进行配置。
+执行本用例需要配置AMCT_Tensorflow的python环境，详细流程可以参照[昇腾社区开发者文档](https://ascend.huawei.com/zh/#/document?tag=developer)页面下“全流程开发工具链 命令行”下的“命令行工具 (训练)”的“模型压缩”文档进行配置。
 
 ### 1.2 准备训练数据
 
-若用户环境能连接网络，训练脚本会自动下载数据，无需额外准备；
-若用户环境无法连接网络。则请先在可连通网络的服务器，下载相应文件上传到 `data/mnist` 路径下。
-
-    a.MNIST训练数据集获取路径：http://yann.lecun.com/exdb/mnist/train-images-idx3-ubyte.gz
-    b.MNIST训练数据集标签文件获取路径：http://yann.lecun.com/exdb/mnist/train-labels-idx1-ubyte.gz
-    c.MNIST测试数据集获取路径：http://yann.lecun.com/exdb/mnist/t10k-images-idx3-ubyte.gz
-    d.MNIST测试数据集标签文件获取路径：http://yann.lecun.com/exdb/mnist/t10k-labels-idx1-ubyte.gz
-
-### 1.3 通过训练脚本获取模型和权重文件
-src目录提供两份TensorFlow训练代码：一份使用Session接口训练，一份使用Estimator接口训练，用户根据实际情况进行选择。执行如下命令生成模型文件和权重文件。
-使用样例如下：
+若用户环境能连接网络，训练脚本会自动下载数据，无需额外准备。  
+若用户环境无法连接网络，则请先在可连通网络的环境中，运行如下脚本下载数据文件mnist.npz到data目录下，之后将其放置到用户环境中样例的data目录下。
 ```bash
-python ./src/train_sample_session.py --data_path data/mnist
+python scripts/download_mnist.py --data_path=data
 ```
-或
+参数说明：
+* `data_path`: \[必选\] MNIST数据存储路径，脚本将下载数据到该路径下。  
+
+## 2 执行样例
+
+张量分解的一般流程为：用户准备训练好的模型文件，使用张量分解工具进行分解，然后修改训练代码加载分解后的权重进行finetune（微调）。本样例中，先通过执行训练脚本获得模型文件，再执行分解脚本对模型进行分解，最后执行finetune脚本加载分解后的权重进行finetune。  
+
+* 关于finetune：通常情况下，分解后模型的精度会比原始模型有所下降，因此在分解之后，通过finetune来提高精度。finetune的超参和普通模型finetune基本一致，将原始的学习率调小，通常可将初始学习率调整为原来的0.1倍；而迭代次数（或epoch数）则因模型而异，分解的卷积层越多，finetune所需的迭代次数一般就越多，保守的做法是采用与从头训练相同的迭代次数；其他超参通常无需调整。
+
+本样例提供两种使用方式：Session方式和Estimator方式。用户可根据实际需求进行参考。  
+
+### 2.1 Session方式
+
+#### 2.1.1 通过训练获得模型文件
+运行如下脚本：  
 ```bash
-python ./src/train_sample_estimator.py --data_path data/mnist
+python ./src/session_train.py --data_path=data --ckpt_path=model/session/baseline/model
 ```
-入参说明:
-* `data_path`: 必填。mnist数据集的路径，支持绝对路径和相对路径。  
+参数说明：
+* `data_path`: \[必选\] MNIST数据存储路径。  
+* `ckpt_path`: \[必选\] 模型文件保存路径。  
 
-若提示如下信息，则说明执行成功（如下精度结果只是样例，请以实际环境为准）：
+脚本将启动训练。如见下列信息，则说明执行成功（此处精度结果仅为样例，请以实际运行为准）：
 ```
-Valid Accuracy: 0.9803     //基于mnist数据集的训练精度
+Validation Accuracy: 0.9827
 ```
-执行成功后，在model/checkpoints目录，生成模型文件以及权重文件，示例如下：
+所得模型文件将保存在model/session/baseline目录：
 ```
--rw-r--r-- 1 amct amct       85 Jul 28 04:37 checkpoint                            //TensorFlow保存模型时保存的检查点
--rw-r--r-- 1 amct amct 10633856 Jul 28 04:37 model.ckpt-200.data-00000-of-00001    //TensorFlow权重文件 
--rw-r--r-- 1 amct amct      771 Jul 28 04:37 model.ckpt-200.index                  //TensorFlow权重文件索引  
--rw-r--r-- 1 amct amct    60937 Jul 28 04:37 model.ckpt-200.meta                   //TensorFlow模型文件
+checkpoint                                      # checkpoint列表文件（张量分解不需要）
+model-200.data-00000-of-00001                   # 模型权重文件
+model-200.index                                 # 模型权重索引文件
+model-200.meta                                  # 模型图结构文件
+model.pb                                        # pb格式的模型文件（张量分解不需要）
 ```
 
-## 2， 执行样例
-
-### 2.1 分解样例
-切换到该样例根目录下，执行如下命令分解resnet50网络模型。
+#### 2.1.2 分解模型文件
+运行如下脚本：  
 ```bash
-python ./src/decompose_sample.py \
-    --meta_path model/checkpoints/model.ckpt-200.meta \
-    --ckpt_path model/checkpoints/model.ckpt-200 \
-    --save_path model/decomposition/model_td
+python ./src/decompose_ckpt.py --meta_path=model/session/baseline/model-200.meta --ckpt_path=model/session/baseline/model-200 --save_path=model/session/decompose/model
 ```
-入参说明:
-* `meta_path`: 必填。TensorFlow模型文件（.meta）路径。
-* `ckpt_path`: 必填。TensorFlow权重文件路径：.data-0000X-of-0000X文件与.index文件所在路径，路径中不必包含文件后缀。
-* `save_path`: 必填。张量分解后所得文件的保存路径，支持相对路径和绝对路径，如果没有创建，指定脚本时会自动创建。
+参数说明：
+* `meta_path`: \[必选\] 待分解模型的定义文件(.meta)路径。  
+* `ckpt_path`: \[必选\] 待分解模型的权重文件路径，为.data-XXXXX-of-XXXXX文件与.index文件的共同前缀路径。  
+* `save_path`: \[必选\] 张量分解后的模型文件保存路径。  
 
-分解过程中，日志会打印支持分解的算子名称，以及分解后的算子名称，如下所示（如下示例中的算子信息只是样例，请以实际分解的模型为准）：
+脚本将执行张量分解。运行时，日志会打印被分解的卷积名称，及其分解后的卷积名称，如下所示（此处分解情况仅为样例，请以实际运行为准）：
 ```
-[AMCT]:[AMCT]: Processing conv2d_1/Conv2D
-[AMCT]:[AMCT]: Decompose conv2d_1/Conv2D -> ['conv2d_1/Conv2D/decom_first/decom_first', 'conv2d_1/Conv2D/decom_core/decom_core', 'conv2d_1/Conv2D/decom_last/decom_last']
+[AMCT]:[AMCT]: Decompose conv2d_1/Conv2D -> ['conv2d_1/Conv2D/decom_first/decom_first', 'conv2d_1/Conv2D/decom_last/decom_last']
 ```
-若提示如下信息，则说明分解成功：
+如见下列信息，则说明分解成功：
 ```
-auto_decomposition complete!
+[AMCT]:[AMCT]: auto_decomposition complete.
+```
+分解得到的模型文件将保存在model/session/decompose目录：
+```
+checkpoint                                      # checkpoint列表文件
+model.data-00000-of-00001                       # 模型权重文件
+model.index                                     # 模型权重索引文件
+model.meta                                      # 模型图结构文件
+model.pkl                                       # 图结构改动信息文件，用于finetune时修改原训练代码中的图
 ```
 
-### 2.2 微调（finetune)样例
-正常情况下，分解后模型的精度会比原始模型有所下降，所以在分解之后，会用一个finetune（微调）过程来提高分解模型的精度。
-finetune的方法和普通模型finetune的方式一致，将原始的学习率调小，一般可以从原始学习率的0.1倍开始降低。 
-finetune的epoch（1个epoch表示过了1遍训练集中的所有样本）数各个模型不尽相同，分解的卷积层越多，所需要的epoch一般就越多。 
-finetune之后的模型，其精度可能与原模型持平，也可能有少许的下降或提升。
-src目录提供两份TensorFlow训练代码：一份使用Session接口训练，一份使用Estimator接口训练，用户根据实际情况进行选择。
-使用样例如下：
+#### 2.1.3 finetune分解后的模型
+运行如下脚本：  
 ```bash
-python ./src/finetune_sample_session.py --data_path data/mnist --save_path model/decomposition/model_td
+python ./src/session_finetune.py --data_path=data --save_path=model/session/decompose/model --ckpt_path=model/session/decompose_finetune/model
 ```
-或
-```bash
-python ./src/finetune_sample_estimator.py --data_path data/mnist --save_path model/decomposition/model_td
-```
-入参说明:
-* `data_path`: 必填。mnist数据集的路径，支持绝对路径和相对路径。
-* `save_path`: 必填。分解样例中，分解所得文件的保存路径。
+参数说明：
+* `data_path`: \[必选\] MNIST数据存储路径。  
+* `save_path`: \[必选\] 张量分解后的模型文件保存路径。  
+* `ckpt_path`: \[必选\] finetune后的模型文件保存路径。  
 
-若提示如下信息，则说明finetune成功（如下精度结果只是样例，请以实际环境为准）：
+脚本将启动finetune训练。如见下列信息，则说明执行成功（此处精度结果仅为样例，请以实际运行为准）：
 ```
-Valid Accuracy: 0.9838      //基于mnist数据集的精度
+Validation Accuracy: 0.9841
 ```
-finetune完成后，在model目录自动生成finetuned_ckpt目录，用于保存分解后模型的模型文件以及权重文件。示例如下：
+所得模型文件将保存在model/session/decompose_finetune目录：
 ```
--rw-r--r-- 1 amct amct        128 Aug  1 04:14 checkpoint
--rw-r--r-- 1 amct amct   10093192 Aug  1 04:14 model.ckpt-100.data-00000-of-00001   //finetune后的权重文件索引
--rw-r--r-- 1 amct amct       1144 Aug  1 04:14 model.ckpt-100.index                 //finetune后的权重文件
--rw-r--r-- 1 amct amct     122783 Aug  1 04:14 model.ckpt-100.meta                  //finetune后的模型文件
--rw-r--r-- 1 amct amct    3171658 Aug  1 04:14 model.pb                             //finetune后可用于量化的pb格式的模型文件
+checkpoint                                      # checkpoint列表文件
+model-100.data-00000-of-00001                   # 模型权重文件
+model-100.index                                 # 模型权重索引文件
+model-100.meta                                  # 模型图结构文件
+model.pb                                        # pb格式的模型文件
+```
+
+### 2.2 Estimator方式
+
+#### 2.2.1 通过训练获得模型文件
+运行如下脚本：  
+```bash
+python ./src/estimator_train.py --data_path=data --ckpt_path=model/estimator/baseline/model
+```
+参数说明：
+* `data_path`: \[必选\] MNIST数据存储路径。  
+* `ckpt_path`: \[必选\] 模型文件保存路径。  
+
+脚本将启动训练。如见下列信息，则说明执行成功（此处精度结果仅为样例，请以实际运行为准）：
+```
+Validation Accuracy: 0.9777
+```
+所得模型文件将保存在model/estimator/baseline目录：
+```
+checkpoint                                      # checkpoint列表文件（张量分解不需要）
+events.out.tfevents.XXXXXX                      # 训练信息文件（张量分解不需要）
+graph.pbtxt                                     # 文本形式的图描述文件（张量分解不需要）
+model-0.data-00000-of-00001                     # 模型权重文件（本样例不分解该模型）
+model-0.index                                   # 模型权重索引文件（本样例不分解该模型）
+model-0.meta                                    # 模型图结构文件（本样例不分解该模型）
+model-200.data-00000-of-00001                   # 模型权重文件
+model-200.index                                 # 模型权重索引文件
+model-200.meta                                  # 模型图结构文件
+model-200.pb                                    # pb格式的模型文件（张量分解不需要）
+```
+
+#### 2.2.2 分解模型文件
+运行如下脚本：  
+```bash
+python ./src/decompose_ckpt.py --meta_path=model/estimator/baseline/model-200.meta --ckpt_path=model/estimator/baseline/model-200 --save_path=model/estimator/decompose/model
+```
+参数说明：
+* `meta_path`: \[必选\] 待分解模型的定义文件(.meta)路径。  
+* `ckpt_path`: \[必选\] 待分解模型的权重文件路径，为.data-XXXXX-of-XXXXX文件与.index文件的共同前缀路径。  
+* `save_path`: \[必选\] 张量分解后的模型文件保存路径。  
+
+脚本将执行张量分解。运行时，日志会打印被分解的卷积名称，及其分解后的卷积名称，如下所示（此处分解情况仅为样例，请以实际运行为准）：
+```
+[AMCT]:[AMCT]: Decompose conv2d_1/Conv2D -> ['conv2d_1/Conv2D/decom_first/decom_first', 'conv2d_1/Conv2D/decom_last/decom_last']
+```
+如见下列信息，则说明分解成功：
+```
+[AMCT]:[AMCT]: auto_decomposition complete.
+```
+分解得到的模型文件将保存在model/estimator/decompose目录：
+```
+checkpoint                                      # checkpoint列表文件
+model.data-00000-of-00001                       # 模型权重文件
+model.index                                     # 模型权重索引文件
+model.meta                                      # 模型图结构文件
+model.pkl                                       # 图结构改动信息文件，用于finetune时修改原训练代码中的图
+```
+
+#### 2.2.3 finetune分解后的模型
+运行如下脚本：  
+```bash
+python ./src/estimator_finetune.py --data_path=data --save_path=model/estimator/decompose/model --ckpt_path=model/estimator/decompose_finetune/model
+```
+参数说明：
+* `data_path`: \[必选\] MNIST数据存储路径。  
+* `save_path`: \[必选\] 张量分解后的模型文件保存路径。  
+* `ckpt_path`: \[必选\] finetune后的模型文件保存路径。  
+
+脚本将启动finetune训练。如见下列信息，则说明执行成功（此处精度结果仅为样例，请以实际运行为准）：
+```
+Validation Accuracy: 0.9828
+```
+所得模型文件将保存在model/estimator/decompose_finetune目录：
+```
+checkpoint                                      # checkpoint列表文件
+events.out.tfevents.XXXXXX                      # 训练信息文件
+graph.pbtxt                                     # 文本形式的图描述文件
+model-0.data-00000-of-00001                     # 模型权重文件
+model-0.index                                   # 模型权重索引文件
+model-0.meta                                    # 模型图结构文件
+model-100.data-00000-of-00001                   # 模型权重文件
+model-100.index                                 # 模型权重索引文件
+model-100.meta                                  # 模型图结构文件
+model-100.pb                                    # pb格式的模型文件
 ```

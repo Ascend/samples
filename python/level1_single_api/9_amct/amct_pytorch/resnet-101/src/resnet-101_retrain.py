@@ -32,7 +32,7 @@ import torchvision.models as models
 import onnxruntime as ort
 
 import amct_pytorch as amct
-from ..model.resnet import resnet101
+from resnet import resnet101
 
 
 PATH = os.path.realpath('./')

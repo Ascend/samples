@@ -36,9 +36,9 @@ wget http://yann.lecun.com/exdb/mnist/t10k-labels-idx1-ubyte.gz
 ```
 若用户环境无法连接网络。则请在可连通网络的服务器，分别访问如下链接下载相应软件包:
 
-    a. MNIST数据获取路径：http://yann.lecun.com/exdb/mnist/t10k-imagesidx3-ubyte.gz （环境初始化后在mnist/mnist_data/目录生成MNSIT test数据集：t10k-images-idx3-ubyte）
+    a. MNIST数据获取路径：http://yann.lecun.com/exdb/mnist/t10k-imagesidx3-ubyte.gz （环境初始化后将在data/mnist_data/目录生成MNSIT test数据集：t10k-images-idx3-ubyte）
 
-    b. MNIST标签文件获取路径：http://yann.lecun.com/exdb/mnist/t10klabels-idx1-ubyte.gz （环境初始化后在mnist/mnist_data/目录生成MNSITtest标签：t10k-labels-idx1-ubyte）
+    b. MNIST标签文件获取路径：http://yann.lecun.com/exdb/mnist/t10klabels-idx1-ubyte.gz （环境初始化后将在data/mnist_data/目录生成MNSITtest标签：t10k-labels-idx1-ubyte）
 
 
 然后上传到刚创建的```mnist_data```路径下。

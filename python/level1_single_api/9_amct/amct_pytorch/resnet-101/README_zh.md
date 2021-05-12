@@ -3,13 +3,10 @@
 ## 量化前提
 
 + **模型准备**
-请下载
-[ResNet-101](https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Model/AE/ATC%20Model/resnet-101_nuq/resnet101-5d3b4d8f.pth)
-模型文件到 [model](./model/) 目录。
+请下载 [ResNet-101](https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/resnet-101_nuq/resnet101-5d3b4d8f.pth) 模型文件到 [model](./model/) 目录。
 
 + **数据集准备**
-使用昇腾模型压缩工具对模型完成量化后，需要对模型进行推理，以测试量化数据的精度。推理过程中需要使用和模型相匹配的数据集。请下载
-[测试图片](https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Model/AE/ATC%20Model/resnet-101_nuq/images.zip)，解压后将 “images” 文件夹放到 [data](./data/) 目录下。
+使用昇腾模型压缩工具对模型完成量化后，需要对模型进行推理，以测试量化数据的精度。推理过程中需要使用和模型相匹配的数据集。请下载[测试图片](https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/resnet-101_nuq/images.zip)，解压后将 “images” 文件夹放到 [data](./data/) 目录下。
   > 由于重训练需要使用大量数据对量化参数进行进一步优化，因此重训练数据需要与模型训练数据一致。ResNet-101的数据集是在 ImageNet的子集 ILSVRC-2012-CLS 上训练而来，因此需要用户自己准备 ImagenetPytorch 格式的数据集（获取方式请参见[此处](https://github.com/pytorch/examples/tree/master/imagenet)）。如果更换其他数据集，则需要自己进行数据预处理。
 
 + **校准集准备**
@@ -22,17 +19,18 @@
 + [data](./data/)
   + [images](./data/images/)
 + [model](./model/)
-  + [\_\_init__.py](./model/__init__.py)
-  + [resnet.py](./model/resnet.py)
   + [resnet101-5d3b4d8f.pth](./model/resnet101-5d3b4d8f.pth)
 + [src](./src/)
   + [nuq_files](./src/nuq_files/)
     + [nuq_quant.cfg](./src/nuq_files/nuq_quant.cfg)
     + [resnet-101_quantized.json](./src/nuq_files/resnet-101_quantized.json)
+  + [retrain_conf](./src/retrain_conf/)
+    + [retrain.cfg](./src/retrain_conf/retrain.cfg)
+  + [\_\_init__.py](./src/__init__.py)
   + [resnet-101_calibration.py](./src/resnet-101_calibration.py)
   + [resnet-101_nuq.py](./src/resnet-101_nuq.py)
   + [resnet-101_retrain.py](./src/resnet101_retrain.py)
-  + [retrain.cfg](./src/retrain.cfg)
+  + [resnet.py](./src/resnet.py)
 
 并根据 requirements 安装必要的环境依赖。
 
@@ -60,13 +58,13 @@
   + 单卡量化感知训练
 
     ```none
-    CUDA_VISIBLE_DEVICES=0 python ./src/resnet-101_retrain.py --train_set TRAIN_SET --eval_set EVAL_SET --config_defination ./src/retrain_conf/retrain.cfg --train_iter ITERATION
+    CUDA_VISIBLE_DEVICES=0 python ./src/resnet-101_retrain.py --train_set TRAIN_SET --eval_set EVAL_SET --config_defination ./src/retrain_conf/retrain.cfg
     ```
 
   + 多卡量化感知训练
 
     ```none
-    CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 python ./src/resnet-101_retrain.py --train_set TRAIN_SET --eval_set EVAL_SET --config_defination ./src/retrain_conf/retrain.cfg --train_iter ITERATION
+    CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 python ./src/resnet-101_retrain.py --train_set TRAIN_SET --eval_set EVAL_SET --config_defination ./src/retrain_conf/retrain.cfg
     ```
 
   > 仅支持 distribution 模式的多卡训练，不支持 DataParallel 模式的多卡训练。如果使用 DataParallel 模式的多卡训练，会出现如下错误信息：
@@ -98,19 +96,19 @@
   + 均匀量化
 
     ```none
-    ******final top1:0.875
-    ******final top5:0.9625      //量化后的精度仿真模型在ONNX Runtime环境中top1、top5的推理精度
-    [INFO] ResNet101 before quantize top1:    0.8875 top5:    0.9625     //原始模型的推理结果，推理结果根据用户环境会有所不同，请以实际显示的为准
-    [INFO] ResNet101 after quantize  top1:     0.875 top5:    0.9625     //量化后精度仿真模型的推理结果，推理结果根据用户环境会有所不同，请以实际显示的为准
+    INFO - [AMCT]:[Utils]: The model file is saved in ./outputs/calibration/resnet-101_deploy_model.onnx
+    INFO - [AMCT]:[Utils]: The model file is saved in ./outputs/calibration/resnet-101_fake_quant_model.onnx
+    [INFO] ResNet101 before quantize top1:    0.8875 top5:    0.9625
+    [INFO] ResNet101 after quantize  top1:     0.875 top5:    0.9625
     ```
 
   + 非均匀量化
 
     ```none
-    ******final top1:0.8625
-    ******final top5:0.9625      //量化后的精度仿真模型在ONNX Runtime环境中top1、top5的推理精度
-    [INFO] ResNet101 before quantize top1:    0.8875 top5:    0.9625     //原始模型的推理结果，推理结果根据用户环境会有所不同，请以实际显示的为准
-    [INFO] ResNet101 after quantize  top1:    0.8625 top5:    0.9625     //量化后精度仿真模型的推理结果，推理结果根据用户环境会有所不同，请以实际显示的为准
+    INFO - [AMCT]:[Utils]: The model file is saved in ./outputs/nuq/resnet-101_deploy_model.onnx
+    INFO - [AMCT]:[Utils]: The model file is saved in ./outputs/nuq/resnet-101_fake_quant_model.onnx
+    [INFO] ResNet101 before quantize top1:    0.8875 top5:    0.9625
+    [INFO] ResNet101 after quantize  top1:    0.8625 top5:    0.9625
     ```
 
 + 量化感知训练
@@ -153,10 +151,10 @@
 
 量化日志文件记录了量化过程的日志信息。
 
-量化因子记录文件记录量化因子。关于该文件的原型定义请参见
-[量化因子记录文件说明](https://support.huaweicloud.com/content/dam/cloudbu-site/archive/china/zh-cn/support/docs/auxiliarydevtool-cann330alphaXinfer/atlasamcttf_16_0014.html)。
+量化因子记录文件记录量化因子。关于该文件的原型定义请参见[量化因子记录文件说明](https://support.huaweicloud.com/content/dam/cloudbu-site/archive/china/zh-cn/support/docs/auxiliarydevtool-cann330alphaXinfer/atlasamcttf_16_0014.html)。
 
 临时模型文件为原始的 PyTorch 模型 BN 融合后导出的 ONNX 模型文件。
 
-ResNet101_deploy_model.onnx 为量化后的可在昇腾 AI 处理器部署的模型文件。
-ResNet101_fake_quant_model.onnx 为量化后的可在 ONNX 执行框架 ONNX Runtime 进行精度仿真的模型文件。
+resnet-101_deploy_model.onnx 为量化后的可在昇腾 AI 处理器部署的模型文件。
+
+resnet-101_fake_quant_model.onnx 为量化后的可在 ONNX 执行框架 ONNX Runtime 进行精度仿真的模型文件。
