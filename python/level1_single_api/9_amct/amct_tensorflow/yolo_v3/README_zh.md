@@ -26,8 +26,6 @@
   + [yolo_quant.cfg](./src/yolo_quant.cfg)
   + [yolo_v3_calibration.py](./src/yolo_v3_calibration.py)
 
-并根据 requirements 安装必要的环境依赖。
-
 在当前目录执行如下命令运行示例程序：
 
 ```none
@@ -44,7 +42,7 @@ quantize.png save successfully!
 
 ## 量化结果
 
-量化成功后，在当前目录会生成量化日志文件 [amct_tensorflow.log](./amct_log/amct_tensorflow.log) 和 [outputs](./outputs/) 文件夹，该文件夹内包含以下内容：
+量化成功后，在当前目录会生成量化日志文件 [./amct_log/amct_tensorflow.log](./amct_log/amct_tensorflow.log) 和 [outputs](./outputs/) 文件夹，该文件夹内包含以下内容：
 
 + 量化配置文件 [config.json](./outputs/config.json)
 + 量化因子记录文件 [record.txt](./outputs/record.txt)
@@ -59,6 +57,6 @@ quantize.png save successfully!
 
 量化信息文件记录了量化模型同原始模型节点的映射关系，用于量化后模型同原始模型精度比对使用。
 
-量化模型即可在 TensorFlow 环境进行精度仿真并可在昇腾 AI 处理器部署的模型。
+量化模型即可在 TensorFlow 环境进行精度仿真并可在昇腾 AI 处理器部署。
 
 对该模型重新进行量化时，在量化后模型的同级目录下生成的上述结果文件将会被覆盖。

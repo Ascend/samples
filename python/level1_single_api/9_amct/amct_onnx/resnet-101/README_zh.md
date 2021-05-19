@@ -24,30 +24,56 @@
 
 请在当前目录执行如下命令运行示例程序：
 
-```none
-python ./src/resnet-101_calibration.py
-```
++ 均匀量化
+
+  ```none
+  python ./src/resnet-101_calibration.py
+  ```
+
++ 非均匀量化
+
+  ```none
+  python ./src/resnet-101_calibration.py --nuq
+  ```
 
 若出现如下信息，则说明量化成功：
 
-```none
-INFO - [AMCT]:[Utils]: The model file is saved in ./outputs/calibration/resnet-101_deploy_model.onnx
-INFO - [AMCT]:[Utils]: The model file is saved in ./outputs/calibration/resnet-101_fake_quant_model.onnx
-[INFO] ResNet101 before quantize top1:    0.8875 top5:    0.9625
-[INFO] ResNet101 after quantize  top1:     0.875 top5:    0.9625
-```
++ 均匀量化
+
+  ```none
+  INFO - [AMCT]:[Utils]: The model file is saved in ./outputs/calibration/resnet-101_deploy_model.onnx
+  INFO - [AMCT]:[Utils]: The model file is saved in ./outputs/calibration/resnet-101_fake_quant_model.onnx
+  [INFO] ResNet101 before quantize top1:     0.775 top5:   0.91875
+  [INFO] ResNet101 after quantize  top1:   0.76875 top5:     0.925
+  ```
+
++ 非均匀量化
+
+  ```none
+  INFO - [AMCT]:[Utils]: The model file is saved in ./outputs/nuq/resnet-101_deploy_model.onnx
+  INFO - [AMCT]:[Utils]: The model file is saved in ./outputs/nuq/resnet-101_fake_quant_model.onnx
+  [INFO] ResNet101 before quantize top1:     0.775 top5:   0.91875
+  [INFO] ResNet101 after quantize  top1:   0.76875 top5:     0.925
+  ```
 
 ## 量化结果
 
-量化成功后，在当前目录会生成量化日志文件 [amct_onnx.log](./amct_log/amct_onnx.log) 和 [outputs](./outputs/) 文件夹，该文件夹内包含以下内容：
+量化成功后，在当前目录会生成量化日志文件 [./amct_log/amct_onnx.log](./amct_log/amct_onnx.log) 和 [outputs](./outputs/) 文件夹，该文件夹内包含以下内容：
 
-+ 训练后量化 [calibration](./outputs/calibration/)
++ 均匀量化 [calibration](./outputs/calibration/)
   + 临时文件夹 [tmp](./outputs/calibration/tmp/)
     + 量化配置文件 [config.json](./outputs/calibration/tmp/config.json)
     + 量化因子记录文件 [record.txt](./outputs/calibration/tmp/record.txt)
     + 临时模型文件 [modified_model.onnx](./outputs/calibration/tmp/modified_model.onnx)
   + 量化部署模型 [resnet-101_deploy_model.onnx](./outputs/calibration/resnet-101_deploy_model.onnx)
   + 量化仿真模型 [resnet-101_fake_quant_model.onnx](./outputs/calibration/resnet-101_fake_quant_model.onnx)
++ 非均匀量化 [nuq](./outputs/nuq/)
+  + 临时文件夹 [tmp](./outputs/nuq/tmp/)
+    + 量化配置文件 [config.json](./outputs/nuq/tmp/config.json)
+    + 量化因子记录文件 [record.txt](./outputs/nuq/tmp/record.txt)
+    + 临时模型文件 [modified_model.onnx](./outputs/nuq/tmp/modified_model.onnx)
+  + 量化部署模型 [resnet-101_deploy_model.onnx](./outputs/nuq/resnet-101_deploy_model.onnx)
+  + 量化仿真模型 [resnet-101_fake_quant_model.onnx](./outputs/nuq/resnet-101_fake_quant_model.onnx)
 
 量化配置文件描述了如何对模型中的每一层进行量化。如果量化脚本所在目录下已经存在量化配置文件，则再次调用 create_quant_config 接口时，如果新生成的量化配置文件与已有的文件同名，则会覆盖已有的量化配置文件，否则生成新的量化配置文件。
 

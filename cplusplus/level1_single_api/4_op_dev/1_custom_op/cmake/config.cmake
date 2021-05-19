@@ -47,6 +47,9 @@ message(STATUS "OUT_DIR=${OUT_DIR}")
 set(TF_PLUGIN_TARGET "cust_tf_parsers")
 set(TF_PLUGIN_TARGET_OUT_DIR ${OUT_DIR}/packages/framework/${PROJECT_DIR}/tensorflow/)
 
+set(ONNX_PLUGIN_TARGET "cust_onnx_parsers")
+set(ONNX_PLUGIN_TARGET_OUT_DIR ${OUT_DIR}/packages/framework/${PROJECT_DIR}/onnx/)
+
 set(TF_SCOPE_FUSION_PASS_TARGET "cust_tf_scope_fusion")
 set(TF_SCOPE_FUSION_PASS_TARGET_OUT_DIR ${OUT_DIR}/packages/framework/${PROJECT_DIR}/tensorflow/)
 

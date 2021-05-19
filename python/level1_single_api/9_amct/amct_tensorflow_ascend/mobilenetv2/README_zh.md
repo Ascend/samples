@@ -30,7 +30,7 @@
 #### 量化步骤
 在当前目录执行如下命令运行示例程序：
 ```python
-python3.7.5 mobilenetv2_calibration.py [-h] [--cfg_define CFG_DEFINE]
+python3.7.5 src/mobilenetv2_calibration.py [-h] [--cfg_define CFG_DEFINE]
 ```
 参数解释说明   
 --h： 可选。显示帮助信息   

@@ -17,19 +17,19 @@ add
 """
 from __future__ import absolute_import
 
+import tbe.dsl as tbe
 from functools import reduce
-from te import tvm
-from te.platform.fusion_manager import fusion_manager
-import te.lang.cce as tbe
-from te.utils import para_check
-from te.utils import shape_util
+from tbe import tvm
+from tbe.common.register import register_op_compute
+from tbe.common.utils import para_check
+from tbe.common.utils import shape_util
 
 # General limitation of the reduce size for input shape: 2**31
 SHAPE_SIZE_LIMIT = 2147483648
 
 
 # pylint: disable=locally-disabled,too-many-arguments,unused-argument
-@fusion_manager.register("add")
+@register_op_compute("Add", op_mode="dynamic", support_fusion=True)
 def add_compute(input_x, input_y, output_z, kernel_name="add"):
     """
     calculating data's add, c = a + b

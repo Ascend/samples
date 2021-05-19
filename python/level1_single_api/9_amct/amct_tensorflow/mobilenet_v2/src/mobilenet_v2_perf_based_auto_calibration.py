@@ -76,7 +76,7 @@ def load_model(model_path, input_tensor_name, output_tensor_name):
         graph_def.ParseFromString(model.read())
 
     tf.import_graph_def(graph_def, name='')
-    graph = tf.compat.v1.get_default_session()
+    graph = tf.compat.v1.get_default_graph()
     input_tensor = graph.get_tensor_by_name(input_tensor_name)
     output_tensor = graph.get_tensor_by_name(output_tensor_name)
     return graph, input_tensor, output_tensor
@@ -141,7 +141,7 @@ def main():
     original_model_path = os.path.join(PATH, 'model/mobilenetv2_tf.pb')
     quantized_model_path = os.path.join(OUTPUTS, 'mobilenet_v2_all_layers_quantized.pb')
     input_tensor_name = 'input:0'
-    output_tensor_name = 'MobilenetV2/Predictions/Reshape_1'
+    output_tensor_name = 'MobilenetV2/Predictions/Reshape_1:0'
 
     if not os.path.exists(quantized_model_path):
         quantize_all_layers(original_model_path, input_tensor_name, output_tensor_name)

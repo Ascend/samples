@@ -185,8 +185,8 @@ def main(): # pylint: disable=too-many-locals, not-context-manager
                            outputs=['MobilenetV2/Predictions/Reshape_1'],
                            record_file=record_path,
                            save_path=os.path.join(RESULT_DIR, 'MobileNetV2'))
-    shutil.move('./check_result.tf.json', './tmp/check_result.tf.json')
-    shutil.move('./fusion_result.json', './tmp/fusion_result.json')
+    shutil.move('./check_result.tf.json', os.path.join(TMP, 'check_result.tf.json'))
+    shutil.move('./fusion_result.json', os.path.join(TMP, 'fusion_result.json'))
 
     # Step five, reload and test the quantized model for 'Fakequant'.
     model_path = os.path.join(RESULT_DIR, 'MobileNetV2_quantized.pb')

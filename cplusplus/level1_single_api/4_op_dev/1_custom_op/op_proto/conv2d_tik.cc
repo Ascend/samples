@@ -53,7 +53,6 @@ static bool GetPadConv2D(ge::Operator& op,
     }
     auto pSize = padVec.size();
     if (pSize != 4) {
-        ERROR_LOG("pSize should be 4. pSize = %d", pSize);
         return false;
     }
     padt = padVec[0];
@@ -91,7 +90,6 @@ static bool GetAttrsConv2D(ge::Operator& op, Format refer,
     }
     auto dSize = dilationList.size();
     if (dSize != 4) {
-        ERROR_LOG("dSize should be 4. dSize = %d", dSize);
         return false;
     }
 

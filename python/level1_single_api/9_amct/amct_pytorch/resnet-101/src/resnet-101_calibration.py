@@ -16,6 +16,8 @@
 
 
 import os
+import argparse
+
 import torch # pylint: disable=E0401
 from PIL import Image # pylint: disable=E0401
 from torchvision import transforms # pylint: disable=E0401
@@ -28,7 +30,16 @@ from resnet import resnet101 # pylint: disable=E0401, C0415
 PATH = os.path.realpath('./')
 IMG_DIR = os.path.join(PATH, 'data/images')
 LABEL_FILE = os.path.join(IMG_DIR, 'image_label.txt')
-OUTPUTS = os.path.join(PATH, 'outputs/calibration')
+
+PARSER = argparse.ArgumentParser(description='whether use nuq')
+PARSER.add_argument('--nuq', dest='nuq', action='store_true', help='whether use nuq')
+ARGS = PARSER.parse_args()
+
+if ARGS.nuq:
+    OUTPUTS = os.path.join(PATH, 'outputs/nuq')
+else:
+    OUTPUTS = os.path.join(PATH, 'outputs/calibration')
+
 TMP = os.path.join(OUTPUTS, 'tmp')
 
 
@@ -136,7 +147,13 @@ def main():
     config_json_file = os.path.join(TMP, 'config.json')
     skip_layers = []
     batch_num = 2
-    amct.create_quant_config(config_json_file, model, input_data, skip_layers, batch_num)
+
+    if ARGS.nuq:
+        config_defination = os.path.join(PATH, 'src/nuq_conf/nuq_quant.cfg')
+        amct.create_quant_config(
+            config_json_file, model, input_data, skip_layers, batch_num, config_defination=config_defination)
+    else:
+        amct.create_quant_config(config_json_file, model, input_data, skip_layers, batch_num)
 
     # Phase1: do conv+bn fusion, weights calibration and generate
     #         calibration model

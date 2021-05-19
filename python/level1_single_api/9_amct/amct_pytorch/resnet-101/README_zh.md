@@ -28,7 +28,6 @@
     + [retrain.cfg](./src/retrain_conf/retrain.cfg)
   + [\_\_init__.py](./src/__init__.py)
   + [resnet-101_calibration.py](./src/resnet-101_calibration.py)
-  + [resnet-101_nuq.py](./src/resnet-101_nuq.py)
   + [resnet-101_retrain.py](./src/resnet101_retrain.py)
   + [resnet.py](./src/resnet.py)
 
@@ -46,7 +45,7 @@
   + 非均匀量化
 
     ```none
-    CUDA_VISIBLE_DEVICES=0 python ./src/resnet-101_nuq.py
+    CUDA_VISIBLE_DEVICES=0 python ./src/resnet-101_calibration.py --nuq
     ```
 
   > 其中 ```CUDA_VISIBLE_DEVICES``` 是必填参数，表示使用 CPU 还是 GPU 进行量化，参数取值为：
@@ -108,7 +107,7 @@
     INFO - [AMCT]:[Utils]: The model file is saved in ./outputs/nuq/resnet-101_deploy_model.onnx
     INFO - [AMCT]:[Utils]: The model file is saved in ./outputs/nuq/resnet-101_fake_quant_model.onnx
     [INFO] ResNet101 before quantize top1:    0.8875 top5:    0.9625
-    [INFO] ResNet101 after quantize  top1:    0.8625 top5:    0.9625
+    [INFO] ResNet101 after quantize  top1:   0.88125 top5:    0.9625
     ```
 
 + 量化感知训练
@@ -120,7 +119,7 @@
 
 ## 量化结果
 
-量化成功后，在当前目录会生成量化日志文件 [amct_pytorch.log](./amct_log/amct_pytorch.log) 和 [outputs](./outputs/) 文件夹，该文件夹内包含以下内容：
+量化成功后，在当前目录会生成量化日志文件 [./amct_log/amct_pytorch.log](./amct_log/amct_pytorch.log) 和 [outputs](./outputs/) 文件夹，该文件夹内包含以下内容：
 
 + 均匀量化 [calibration](./outputs/calibration/)
   + 临时文件夹 [tmp](./outputs/calibration/tmp/)

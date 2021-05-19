@@ -138,25 +138,49 @@
   INFO - [AMCT]:[AMCT]: The records is stored in dir: ./outputs/perf_based_auto_calibration
   Origin Model Model Prediction:
           category index: 699
-          category prob: 0.560
+          category prob: 0.413
   Quantized Model Model Prediction:
           category index: 699
-          category prob: 0.595
+          category prob: 0.394
   ```
 
 ## 量化结果
 
-量化成功后，在当前目录会生成量化日志文件 [amct_tensorflow.log](./amct_log/amct_tensorflow.log) 和 [outputs](./outputs/) 文件夹，该文件夹内包含以下内容：
+量化成功后，在当前目录会生成如下文件：
+[amct_log](./amct_log/) 和 [outputs](./outputs/) 文件夹，文件夹内包含以下内容：
 
-+ 训练后量化 [calibration](./outputs/calibration/)
-  + 量化配置文件 [config.json](./outputs/calibration/config.json)
-  + 量化因子记录文件 [record.txt](./outputs/calibration/record.txt)
-  + 量化信息文件 [mobilenet_v2_quant.json](./outputs/calibration/mobilenet_v2_quant.json)
-  + 量化模型 [mobilenet_v2_quantized.pb](./outputs/calibration/mobilenet_v2_quantized.pb)
-+ QAT 模型转 Ascend 模型 [convert_qat](./outputs/convert_qat/)
-  + 量化因子记录文件 [record.txt](./outputs/convert_qat/record.txt)
-  + 量化信息文件 [mobilenet_v2_quant.json](./outputs/convert_qat/mobilenet_v2_quant.json)
-  + 量化模型 [mobilenet_v2_quantized.pb](./outputs/convert_qat/mobilenet_v2_quantized.pb)
++ 量化日志 [amct_log](./amct_log/)
+  + 量化日志文件 [amct_tensorflow.log](./amct_log/amct_tensorflow.log)
+  + 基于精度的自动量化回退历史记录文件 [accuracy_based_auto_calibration_record.json](./amct_log/accuracy_based_auto_calibration_record.json)
+  + 性能对比数据记录文件 [amct_tensorflow_perf_info.csv](./amct_log/amct_tensorflow_perf)
++ 输出文件 [outputs](./outputs/)
+  + 基于精度的自动量化回退 [accuracy_based_auto_calibration](./outputs/accuracy_based_auto_calibration/)
+    + 回退后的量化配置文件 [accuracy_based_auto_calibration_final_config.json](./outputs/accuracy_based_auto_calibration/accuracy_based_auto_calibration_final_config.json)
+    + 量化层量化敏感信息 [accuracy_based_auto_calibration_ranking_information.json](./outputs/accuracy_based_auto_calibration/accuracy_based_auto_calibration_ranking_information.json)
+    + 回退前的量化配置文件 [config.json](./outputs/calibration/config.json)
+    + 量化模型 [mobilenet_v2_quantized.pb](./outputs/accuracy_based_auto_calibration/mobilenet_v2_quantized.pb)
+    + 量化信息文件 [mobilenet_v2_quant.json](./outputs/accuracy_based_auto_calibration/mobilenet_v2_quant.json)
+    + 量化因子记录文件 [record.txt](./outputs/accuracy_based_auto_calibration/record.txt)
+  + 训练后量化 [calibration](./outputs/calibration/)
+    + 量化配置文件 [config.json](./outputs/calibration/config.json)
+    + 量化因子记录文件 [record.txt](./outputs/calibration/record.txt)
+    + 量化信息文件 [mobilenet_v2_quant.json](./outputs/calibration/mobilenet_v2_quant.json)
+    + 量化模型 [mobilenet_v2_quantized.pb](./outputs/calibration/mobilenet_v2_quantized.pb)
+  + convert model 接口 [convert_model](./outputs/convert_model/)
+    + 量化信息文件 [mobilenet_v2_quant.json](./outputs/convert_model/mobilenet_v2_quant.json)
+    + 量化模型 [mobilenet_v2_quantized.pb](./outputs/convert_model/mobilenet_v2_quantized.pb)
+  + QAT 模型转 Ascend 模型 [convert_qat](./outputs/convert_qat/)
+    + 量化因子记录文件 [record.txt](./outputs/convert_qat/record.txt)
+    + 量化信息文件 [mobilenet_v2_quant.json](./outputs/convert_qat/mobilenet_v2_quant.json)
+    + 量化模型 [mobilenet_v2_quantized.pb](./outputs/convert_qat/mobilenet_v2_quantized.pb)
+  + 基于性能的自动量化回退 [perf_based_auto_calibration](./outputs/perf_based_auto_calibration/)
+    + 全网量化模型 [mobilenet_v2_all_layers_quantized.pb](./outputs/perf_based_auto_calibration/mobilenet_v2_all_layers_quantized.pb)
+    + 全网量化信息文件 [mobilenet_v2_all_layers_quant.json](./outputs/perf_based_auto_calibration/mobilenet_v2_all_layers_quant.json)
+    + 回退前的量化配置文件 [config.json](./outputs/perf_based_auto_calibration/config.json)
+    + 回退后的量化配置文件 [perf_based_auto_calibration_final_config.json](./outputs/perf_based_auto_calibration/perf_based_auto_calibration_final_config.json)
+    + 量化模型 [mobilenet_v2_quantized.pb](./outputs/perf_based_auto_calibration/mobilenet_v2_quantized.pb)
+    + 量化信息文件 [mobilenet_v2_quant.json](./outputs/perf_based_auto_calibration/mobilenet_v2_quant.json)
+    + 量化因子记录文件 [record.txt](./outputs/perf_based_auto_calibration/record.txt)
 
 量化日志文件记录了量化过程的日志信息。
 
@@ -167,6 +191,6 @@
 
 量化信息文件记录了量化模型同原始模型节点的映射关系，用于量化后模型同原始模型精度比对使用。
 
-量化模型即可在 TensorFlow 环境进行精度仿真并可在昇腾 AI 处理器部署的模型。
+量化模型即可在 TensorFlow 环境进行精度仿真并可在昇腾 AI 处理器部署。
 
 对该模型重新进行量化时，在量化后模型的同级目录下生成的上述结果文件将会被覆盖。

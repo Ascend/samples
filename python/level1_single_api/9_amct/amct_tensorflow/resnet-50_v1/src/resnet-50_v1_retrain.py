@@ -15,10 +15,6 @@
 """
 
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
 import os
 import math
 import argparse
@@ -179,7 +175,7 @@ class TFRecordDataset(object): # pylint: disable=R0902, R0903
 
 
 PATH = os.path.realpath('./')
-OUTPUTS = os.path.join(PATH, 'outputs')
+OUTPUTS = os.path.join(PATH, 'outputs/retrain')
 TRAIN_SIZE = 1281167
 EVAL_SIZE = 500
 CATEGORY = 1000
@@ -193,7 +189,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description='ResNet-50 Retrain DEMO')
 
     parser.add_argument(
-        '--config_defination', dest='config_defination', default='./src/sample.cfg', type=str,
+        '--config_defination', dest='config_defination', default=None, type=str,
         help='The simple configure define file.')
     parser.add_argument(
         '--batch_num', dest='batch_num', default=2, type=int,

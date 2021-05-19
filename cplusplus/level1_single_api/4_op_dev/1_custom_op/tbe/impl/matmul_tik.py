@@ -1,11 +1,30 @@
-from te import tik
-from te.tik.common.util import reduce_mul, ceil_div, DTYPE_SIZE
-from te.platform.cce_conf import te_set_l2_mode
-import numpy as np
+from tbe import tik
+
+DTYPE_SIZE = {
+    'bool': 1,
+    'uint8': 1,
+    'int8': 1,
+    'uint16': 2,
+    'int16': 2,
+    'int24': 3,
+    'uint32': 4,
+    'int32': 4,
+    'float16': 2,
+    'float32': 4,
+    'int48': 6,
+    'int64': 8,
+    'uint64': 8,
+    'float64':8
+}
 
 
 def matmul_tik_compute(params, kernel_name):
-    te_set_l2_mode(1)
+    """
+    matmul tik compute
+    @param params: matmul data
+    @param kernel_name: kernel name
+    @return: tik instance
+    """
     tik_instance = tik.Tik()
     if not isinstance(params, dict):
         params = params.__dict__
@@ -115,7 +134,7 @@ def matmul_tik_compute(params, kernel_name):
                                      DTYPE_SIZE[C_loc_out_type] // 32, 0)
 
     tik_instance.BuildCCE(kernel_name=kernel_name,
-                          inputs=[inputa_gm, inputb_gm], outputs=[output_gm])
+                          inputs=[inputa_gm, inputb_gm], outputs=[output_gm], config={'l2_mode': 1})
     return tik_instance
 
 

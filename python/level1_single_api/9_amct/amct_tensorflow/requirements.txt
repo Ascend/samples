@@ -1,4 +1,5 @@
 matplotlib
 numpy
+Pillow
 tensorflow == 1.15
 tqdm

@@ -22,22 +22,21 @@ amct_mindspore 工具 sample 运行指导
 
 Dataset used: [CIFAR-10](http://www.cs.toronto.edu/~kriz/cifar.html)
 
-- Dataset size：60,000 32*32 colorful images in 10 classes
+- 数据集大小：60,000 32*32 10种类的彩色图片
   - Train：50,000 images
   - Test： 10,000 images
   
-- Data format：binary files
-  
-  - Note：Data will be processed in dataset.py
+- 数据集格式：二进制文件
+
   
 - 下载了 cifar-10 数据集后，进行一下的处理：
 
   ```shell
   tar -zxvf cifar-10-binary.tar.gz
   mkdir cifar-10-verify-bin
-  cp cifar-10-batches-bin/batches.meta.txt ../cifar-10-verify-bin/
-  cp cifar-10-batches-bin/readme.html ../cifar-10-verify-bin/
-  cp cifar-10-batches-bin/test_batch.bin ../cifar-10-verify-bin/
+  cp cifar-10-batches-bin/batches.meta.txt ./cifar-10-verify-bin/
+  cp cifar-10-batches-bin/readme.html ./cifar-10-verify-bin/
+  cp cifar-10-batches-bin/test_batch.bin ./cifar-10-verify-bin/
   ```
 
   处理后的文件目录结构如下：
@@ -115,9 +114,9 @@ python3 resnet50_sample.py --dataset_path your_dataset_path/cifar-10-verify-bin 
 2. 提示如下信息则说明量化成功
 
 ```shell
-INFO - [AMCT]:[QuantizeTool]：Generate AIR file : ../src/results/resnet50_quant_geir.air success!
+INFO - [AMCT]:[QuantizeTool]：Generate AIR file : ../src/results/resnet50_quant.air success!
 [INFO] the quantized AIR file has been stored at:
-results/resnet50_quant_geir.air
+results/resnet50_quant.air
 ```
 
 3. 量化结果说明
@@ -126,7 +125,7 @@ results/resnet50_quant_geir.air
 
    - config.json: 量化配置文件，描述了如何对模型中的每一层进行量化。如果量化脚本所在目录下已经存在量化配置文件，则再次调用 create_quant_config 接口时，如果新生成的量化配置文件和已有的文件重名会覆盖已有的量化配置文件，否则重新生成量化配置文件。
    - amct_log/acmt_mindspore.log ：量化日志文件，记录了量化过程的日志信息。
-   - results/resnet50_quant_geir.air: 量化结果文件，可以通过 ATC 生成昇腾AI处理器上的可部署的模型文件。
+   - results/resnet50_quant.air: 量化结果文件，可以通过 ATC 生成昇腾AI处理器上的可部署的模型文件。
    - kernel_meta: 算子编译生成的文件目录
    - （可选）amct_dump/calibration_record.txt : 如果执行量化时，设置了 export DUMP_AMCT_RECORD=1的环境变量，则在量化脚本的同级目录还会生成量化因子目录，该目录下的量化因子记录文件 calibration_record.txt，记录了每个量化层的量化因子。
 

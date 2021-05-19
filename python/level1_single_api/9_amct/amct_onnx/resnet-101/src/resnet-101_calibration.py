@@ -16,6 +16,7 @@
 
 
 import os
+import argparse
 
 import cv2
 import numpy as np
@@ -24,11 +25,19 @@ import onnxruntime as ort
 import amct_onnx as amct
 
 PATH = os.path.realpath('./')
-TMP = os.path.join(PATH, 'tmp')
-OUTPUTS = os.path.join(PATH, 'outputs/calibration')
-
 IMG_DIR = os.path.join(PATH, 'data/images')
 LABLE_FILE = os.path.join(IMG_DIR, 'image_label.txt')
+
+PARSER = argparse.ArgumentParser(description='amct_onnx resnet-101 quantization sample.')
+PARSER.add_argument('--nuq', dest='nuq', action='store_true', help='whether use nuq')
+ARGS = PARSER.parse_args()
+
+if ARGS.nuq:
+    OUTPUTS = os.path.join(PATH, 'outputs/nuq')
+else:
+    OUTPUTS = os.path.join(PATH, 'outputs/calibration')
+
+TMP = os.path.join(OUTPUTS, 'tmp')
 
 
 def get_labels_from_txt(label_file):
@@ -119,9 +128,14 @@ def main():
     config_json_file = os.path.join(TMP, 'config.json')
     skip_layers = []
     batch_num = 1
-    amct.create_quant_config(
-        config_file=config_json_file, model_file=model_file, skip_layers=skip_layers, batch_num=batch_num,
-        activation_offset=True, config_defination=None)
+    if ARGS.nuq:
+        amct.create_quant_config(
+            config_file=config_json_file, model_file=model_file, skip_layers=skip_layers, batch_num=batch_num,
+            activation_offset=True, config_defination='./src/nuq_conf/nuq_quant.cfg')
+    else:
+        amct.create_quant_config(
+            config_file=config_json_file, model_file=model_file, skip_layers=skip_layers, batch_num=batch_num,
+            activation_offset=True, config_defination=None)
 
     # Phase1: do conv+bn fusion, weights calibration and generate
     #         calibration model

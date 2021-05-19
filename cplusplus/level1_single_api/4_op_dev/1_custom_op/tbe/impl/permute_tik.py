@@ -14,14 +14,14 @@ http://www.apache.org/licenses/LICENSE-2.0
 permute_tik
 """
 
-from te import tik
-from te import platform as tbe_platform
-from te.utils import para_check
+from tbe import tik
+from tbe.common.platform import platform_info
+from tbe.common.utils import para_check
 
 # available ub size
-UB_SIZE_B = tbe_platform.cce_conf.get_soc_spec(tbe_platform.cce_conf.UB_SIZE)
+UB_SIZE_B = platform_info.get_soc_spec(platform_info.UB_SIZE)
 # available number of cores
-AICORE_NUM = tbe_platform.cce_conf.get_soc_spec(tbe_platform.cce_conf.CORE_NUM)
+AICORE_NUM = platform_info.get_soc_spec(platform_info.CORE_NUM)
 
 
 # pylint: disable=invalid-name,too-many-locals,too-many-arguments

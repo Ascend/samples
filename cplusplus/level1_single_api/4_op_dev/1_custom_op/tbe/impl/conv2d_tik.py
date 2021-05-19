@@ -15,16 +15,33 @@ conv2d_tik
 """
 from __future__ import absolute_import
 import numpy as np
-from te import tik
-from te.tik.common.util import ceil_div, DTYPE_SIZE
-from te.platform.cce_conf import te_set_l2_mode
+from tbe import tik
+
+DTYPE_SIZE = {
+    'bool': 1,
+    'uint8': 1,
+    'int8': 1,
+    'uint16': 2,
+    'int16': 2,
+    'int24': 3,
+    'uint32': 4,
+    'int32': 4,
+    'float16': 2,
+    'float32': 4,
+    'int48': 6,
+    'int64': 8,
+    'uint64': 8,
+    'float64':8
+}
 
 
 def conv2d_tik_compute(params):
+    """
+    conv2d tik compute
+    @param params: conv2d data
+    @return: tik instance
+    """
     tik_instance = tik.Tik()
-
-    # enable l2
-    te_set_l2_mode(1)
 
     # get shape of feature map and weight
     n, c1, h, w, c0 = params["fm_shape"]
@@ -40,7 +57,7 @@ def conv2d_tik_compute(params):
     kw_dilation = (kw - 1) * dilation_w + 1
     ho = int(np.ceil((h + pad_top + pad_bot - kh_dilation + 1) / stride_h)) 
     wo = int(np.ceil((w + pad_right + pad_left - kw_dilation + 1) / stride_w))
-    round_howo = ceil_div(ho * wo, 16) * 16 
+    round_howo = ((ho * wo + 16 - 1) // 16) * 16
 
     fm_gm = tik_instance.Tensor(params['fm_dtype'], (n, c1, h, w, c0),
                                 name='fm_gm', scope=tik.scope_gm)
@@ -101,7 +118,7 @@ def conv2d_tik_compute(params):
                                    "quantize_params": params["quantize_params"]})
 
     tik_instance.BuildCCE(kernel_name=params["kernel_name"],
-                          inputs=[fm_gm, weight_gm], outputs=[dst_gm])
+                          inputs=[fm_gm, weight_gm], outputs=[dst_gm], config={'l2_mode': 1})
 
     return tik_instance
 
@@ -123,6 +140,7 @@ def conv2d_tik(inputs, weights, outputs, strides, pads, dilations, kernel_name="
         raise RuntimeError("dtype shape should be float16.")
     if weights.get("ori_format") != "NCHW":
         raise RuntimeError("format should be NCHW.")
+
     loc_dtype = "float32"
     quantize_params = {"mode": "fp322fp16", "mode_param": None}
     stride_list = [strides[2], strides[3]]

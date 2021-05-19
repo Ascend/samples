@@ -55,10 +55,10 @@ TextRecongnize::~TextRecongnize() {
 
 AtlasError TextRecongnize::Init() {
     if (isInited_) {
-        ATLAS_LOG_INFO("Face detection is initied already");
+        ATLAS_LOG_INFO("Text Recongnize is initied already");
         return ATLAS_OK;
     }
-    printf("Face detection start initied ");
+    ATLAS_LOG_INFO("Text Recongnize start initied ");
 
     PresenterErrorCode ret = OpenChannelByConfig(presenterChannel_, 
                                                  kConfigFile.c_str());
@@ -66,28 +66,28 @@ AtlasError TextRecongnize::Init() {
         ATLAS_LOG_ERROR("Open channel failed, error %d", (int)ret);
         return ATLAS_ERROR;
     }
-    printf("Face detection Open Channel ");
+    ATLAS_LOG_INFO("Text Recongnize Open Channel ");
 
     AtlasError atlRet = dvpp_.Init();
     if (atlRet) {
         ATLAS_LOG_ERROR("Dvpp init failed, error %d", atlRet);
         return ATLAS_ERROR;
     }
-    printf("dvpp intialiaze ");
+    ATLAS_LOG_INFO("dvpp intialiaze ");
 
     atlRet = FirstModel_.Init();
     if (atlRet) {
         ATLAS_LOG_ERROR("Model dbnet init failed, error %d", atlRet);
         return ATLAS_ERROR;
     }
-    printf("Model dbnet intialiaze ");
+    ATLAS_LOG_INFO("Model dbnet intialiaze ");
 
     atlRet = SecondModel_.Init();
     if (atlRet) {
         ATLAS_LOG_ERROR("Model crnn_static init failed, error %d", atlRet);
         return ATLAS_ERROR;
     }
-    printf("Model crnn_static intialiaze ");
+    ATLAS_LOG_INFO("Model crnn_static intialiaze ");
 
     isInited_ = true;
     return ATLAS_OK;

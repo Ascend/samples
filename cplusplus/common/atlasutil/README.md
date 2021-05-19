@@ -20,17 +20,37 @@ atlasutil库对当前开源社区样例中
 
 ### 第三方库依赖
 
-1. 依赖acl库，使用前需要安装ascend开发环境
+1. 依赖acl库，编译前需要将CANN包的toolkit包安装到$HOME/Ascend目录下
 
-2. 视频解码使用ffmpeg+dvpp，依赖ffmpeg库。ffmpeg的编译和部署参见[环境准备和依赖安装](../../environment)
+2. 本库集成了Atlas200DK板载摄像头的访问接口，对应的库libmedia_mini.so，以及依赖libc_sec.so、libslog.so都在Atlas200DK驱动。
+
+   所以Atlas200DK使用atlasutil库时，开发环境必须安装Atlas200DK驱动包。[下载](https://www.hiascend.com/zh/hardware/firmware-drivers?tag=community)后解压到$HOME/Ascend目录即可。Atlas300设备没
+
+   有板载摄像头，atlasutil库不依赖驱动包
+
+3. 视频解码使用ffmpeg+dvpp，依赖ffmpeg库。ffmpeg的编译和部署参见[环境准备和依赖安装](../../environment)
 
 注意：开发环境是指编译应用代码的服务器；运行环境是指运行应用的昇腾AI设备；两者可以在同一个硬件设备上，也可以是分离的
 
 ### 编译步骤
 
-1.进入atlasutil目录；
+1.设置DDK_PATH环境变量
 
-2.执行编译安装命令。
+如果是Atlas200DK设备：
+
+```
+export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux
+```
+
+其他设备：
+
+```
+export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/
+```
+
+2.进入atlasutil目录；
+
+3.执行编译安装命令。
 
 Atlas200DK：
 
@@ -49,13 +69,14 @@ make mode=ASIC install
 ```
 
 若服务器为x86架构：编译生成的libatalsutil.so将被拷贝到`$HOME/ascend_ddk/x86/lib/`下；头文件拷贝到`$HOME/ascend_ddk/x86/include/atlasutil`。  
+
 若服务器为arm架构：编译生成的libatalsutil.so将被拷贝到`$HOME/ascend_ddk/arm/lib/`下；头文件拷贝到`$HOME/ascend_ddk/arm/include/atlasutil`。
 
 ## 部署方法
 
 1. 将libatlasutil.so拷贝到运行环境/home/HwHiAiUser/ascend_ddk/arm/lib(arm设备)，或者/home/HwHiAiUser/ascend_ddk/x86/lib(x86设备)下目录;
 
-2. 在运行环境下切换到 root用户，打开/etc/ld.so.conf.d/mind_so.conf ，将该目录追加到文件末尾，保存后退出，然后执行命令ldconfig
+2. 在运行环境下切换到 root用户，打开/etc/ld.so.conf.d/mind_so.conf ，将/home/HwHiAiUser/ascend_ddk/$arch/lib追加到文件末尾，保存后退出，然后执行命令ldconfig
 
 ## 接口说明
 

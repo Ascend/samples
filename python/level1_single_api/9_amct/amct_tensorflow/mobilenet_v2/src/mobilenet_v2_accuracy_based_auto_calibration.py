@@ -198,7 +198,7 @@ def main():
     graph = tf.compat.v1.get_default_graph()
     amct.create_quant_config(config_file, graph)
 
-    save_dir = os.path.join(OUTPUTS, 'MobileNetV2')
+    save_dir = os.path.join(OUTPUTS, 'mobilenet_v2')
 
     evaluator = MobileNetV2Evaluator(ARGS.dataset, ARGS.keyword, ARGS.num_parallel_reads, ARGS.batch_size)
 

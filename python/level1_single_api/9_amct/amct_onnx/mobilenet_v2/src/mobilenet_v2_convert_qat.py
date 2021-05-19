@@ -29,19 +29,6 @@ MODEL_DIR = os.path.join(PATH, 'model')
 OUTPUTS = os.path.join(PATH, 'outputs/convert_qat')
 
 
-def load_image(path):
-    """Load image to memory"""
-    imagelist = []
-
-    for file_name in os.listdir(path):
-        image_path = os.path.join(path, file_name)
-        image = Image.open(image_path).resize([SIDE, SIDE])
-        image = np.array(image).astype(np.float32) / 128 - 1
-        imagelist.append(image)
-
-    return np.array(imagelist)
-
-
 def main(): # pylint: disable=too-mant-locals, not-context-manager
     """main"""
     # Step one, inferece the original model to obtain the original

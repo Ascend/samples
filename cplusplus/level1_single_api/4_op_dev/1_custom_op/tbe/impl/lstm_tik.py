@@ -13,7 +13,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 
 lstm tik demo
 """
-from te import tik
+from tbe import tik
 
 
 FP16_MASK = 128

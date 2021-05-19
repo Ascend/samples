@@ -175,4 +175,4 @@
 
 ### 查看结果
 
-运行完成后，会在运行环境的命令行中打印出推理结果,并在$HOME/YOLOV3_coco_detection_multi_thread_VENC/out/output目录下生成推理后的图片。
+运行完成后，会在$HOME/YOLOV3_coco_detection_multi_thread_VENC/out/output目录下生成推理后的视频。

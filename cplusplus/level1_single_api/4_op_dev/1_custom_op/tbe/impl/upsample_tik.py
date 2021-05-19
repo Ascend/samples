@@ -13,8 +13,8 @@ http://www.apache.org/licenses/LICENSE-2.0
 
 upsample
 """
-from te.utils import para_check
-from te import tik
+from tbe.common.utils import para_check
+from tbe import tik
 
 # size of 5HD format
 DIM_5HD = 5

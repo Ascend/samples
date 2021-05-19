@@ -39,7 +39,7 @@ int main(int argc, char *argv[]) {
     }
     aclrtRunMode RunMode = aclDev.GetRunMode();   
     
-    //init face detect inference
+    //init text recongnize
     TextRecongnize Recongnize;
     ret = Recongnize.Init();
     if (ret) {
@@ -71,7 +71,7 @@ int main(int argc, char *argv[]) {
     }
     cap.Close();
     ATLAS_LOG_INFO("Execute sample success");
-    //release face detece inference resource
+    //release text recongnize
     Recongnize.DestroyResource();
     aclDev.Release();
     return ATLAS_OK;

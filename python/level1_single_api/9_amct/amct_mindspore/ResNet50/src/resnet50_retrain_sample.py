@@ -48,7 +48,7 @@ from amct_mindspore.initializer import UlqInitializer # pylint: disable=import-e
 from lr_generator import get_lr # pylint: disable=import-error, no-name-in-module
 from resnet import resnet50 as resnet # pylint: disable=import-error, no-name-in-module
 # use the quant retrain config to retrain resnet50 for cifar-10 dataset
-import retrain_config.CONFIG_QUANT as config
+from retrain_config import CONFIG_QUANT as config
 from dataset import create_dataset1 as create_dataset # pylint: disable=import-error, no-name-in-module
 
 CUR_DIR = os.path.split(os.path.realpath(__file__))[0]

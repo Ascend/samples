@@ -17,9 +17,10 @@ scatter_nd_add
 import math
 from functools import reduce as functools_reduce
 
-from te import tik
-from te import platform as tbe_platform
-from te.utils import para_check
+from tbe import tik
+from tbe.common.platform import platform_info
+from tbe.common.platform import get_bit_len
+from tbe.common.utils import para_check
 
 # neg two
 NEG_TWO = -2
@@ -106,11 +107,11 @@ class Scatter():
         self.compute_type = compute_type
 
         self.ub_size_bytes = (
-                tbe_platform.cce_conf.get_soc_spec(
-                    tbe_platform.cce_conf.UB_SIZE) - 8192)
-        self.var_dtype_bytes_size = tbe_platform.cce_intrin.get_bit_len(
+                platform_info.get_soc_spec(
+                    platform_info.UB_SIZE) - 8192)
+        self.var_dtype_bytes_size = get_bit_len(
             self.var_dtype) // 8
-        self.indices_dtype_bytes_size = tbe_platform.cce_intrin.get_bit_len(
+        self.indices_dtype_bytes_size = get_bit_len(
             self.indices_dtype) // 8
         self.var_data_each_block = 32 // self.var_dtype_bytes_size
         self.indices_data_each_block = 32 // self.indices_dtype_bytes_size
@@ -126,8 +127,8 @@ class Scatter():
         if self.update_data_num < self.var_data_each_block:
             self.block_num = 1
         else:
-            ai_core_num = tbe_platform.cce_conf.get_soc_spec(
-                tbe_platform.cce_conf.CORE_NUM)
+            ai_core_num = platform_info.get_soc_spec(
+                platform_info.CORE_NUM)
             self.indice_step = math.ceil(self.max_indice / ai_core_num)
             self.block_num = math.ceil(self.max_indice / self.indice_step)
 
@@ -182,7 +183,7 @@ class Scatter():
 
         need_vconv_dtype = ("int8", "uint8")
         if self.var_dtype in need_vconv_dtype:
-            vconv_dtype_bytes_size = tbe_platform.cce_intrin.get_bit_len(
+            vconv_dtype_bytes_size = get_bit_len(
                 self.vconv_dst_dtype)
             vconv_data_each_block = 32 // vconv_dtype_bytes_size
             vconv_size_bytes = (
@@ -629,7 +630,7 @@ class Scatter():
                                    1, 1, 1, compute_repeat_strid,
                                    compute_repeat_strid, compute_repeat_strid)
         elif self.compute_type == "vdiv":
-            if tbe_platform.cce_conf.api_check_support("tik.vdiv", "float32"):
+            if platform_info.api_check_support("tik.vdiv", "float32"):
                 self.tik_instance.vdiv(mask, dst_ub, src1_ub, src2_ub,
                                        repeat_times, 1, 1, 1,
                                        compute_repeat_strid,

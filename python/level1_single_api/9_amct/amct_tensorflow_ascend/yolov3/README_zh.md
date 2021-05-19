@@ -17,17 +17,18 @@
 
 #### 目录结构与说明
 执行量化示例前，请先检查当前目录下是否包含以下文件及目录：  
-**./**   
-├─data：yolov3的推理时所用的数据集，包括校准集和测试集。   
+**./**  
+├─data：yolov3的推理时所用的数据集，包括校准集和测试集。  
 &emsp;├─calibration.jpg  
-&emsp;├─COCO_labels.txt   
-&emsp;├─detection.jpg   
+&emsp;├─COCO_labels.txt  
+&emsp;├─detection.jpg  
 ├─pre_model：存放yolov3量化前的模型  
-&emsp;├─yolov3_tensorflow_1.5.pb   
-├─src：处理脚本   
-&emsp;├─yolov3_calibration.py：执行量化的python脚本。   
-&emsp;├─yolov3_inference.py：对yolov3_tensorflow_1.5.pb模型做在线推理的脚本。   
-├─README_zh：说明文档
+&emsp;├─yolov3_tensorflow_1.5.pb  
+├─src：处理脚本  
+&emsp;├─yolov3_calibration.cfg：执行量化的简易配置文件。  
+&emsp;├─yolov3_calibration.py：执行量化的python脚本。  
+&emsp;├─yolov3_inference.py：对yolov3_tensorflow_1.5.pb模型做在线推理的脚本。  
+├─README_zh：说明文档  
 └─requirements.txt: 需要安装的python库
 #### 量化步骤
 在当前目录执行如下命令运行示例程序：
@@ -54,7 +55,7 @@ quantize.png save successfully!
 &emsp;├─quantize.png：量化后的模型对detection.jpg的推理结果   
 &emsp;├─record.txt: 量化因子记录文件。  
 ├─result：   
-&emsp;├─yolov3_quantized.pb： 量化后的模型，可在TensorFlow环境进行精度仿真,也可在昇腾AI处理器部署。
+&emsp;├─yolov3_quantized.pb： 量化后的模型，可在TensorFlow环境进行精度仿真,也可在昇腾AI处理器部署。   
 &emsp;├─yolov3_quant.json： 量化信息文件，记录了量化模型同原始模型节点的映射关系，用于量化后模型同原始模型比对使用。   
 └─tmp：   
 &emsp;├─kernel_meta：调用TF_Adapter在NPU上在线推理时产生的文件，算子编译时生成的文件目录。    

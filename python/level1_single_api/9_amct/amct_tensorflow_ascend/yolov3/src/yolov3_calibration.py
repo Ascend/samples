@@ -110,6 +110,7 @@ def main():
     """
     对yolov3模型做训练后量化的过程
     """
+    create_file_path(TMP)
     # 解析pb模型为graph
     ori_model = os.path.join(PRE_MODEL_DIR, 'yolov3_tensorflow_1.5.pb')
     yolov3_inputs = 'input:0'
@@ -146,9 +147,8 @@ def main():
     compare_ori_and_quant()
 
     # 整理推理过程中生成的文件夹
-    create_file_path(TMP)
-    shutil.move('./check_result.tf.json', './tmp/check_result.tf.json')
-    shutil.move('./fusion_result.json', './tmp/fusion_result.json')
+    shutil.move('./check_result.tf.json', os.path.join(TMP, 'check_result.tf.json'))
+    shutil.move('./fusion_result.json', os.path.join(TMP, 'fusion_result.json'))
 
 
 if __name__ == '__main__':

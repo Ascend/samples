@@ -16,16 +16,14 @@ http://www.apache.org/licenses/LICENSE-2.0
 cce extended operator builder wrapper
 """
 
-from te import tvm
-
-import te.lang.cce as tbe
-from te.platform.fusion_manager import fusion_manager
-from te.utils import para_check
-from te.utils import shape_util
-
+import tbe.dsl as tbe
+from tbe import tvm
+from tbe.common.register import register_op_compute
+from tbe.common.utils import para_check
+from tbe.common.utils import shape_util
 
 # pylint: disable=locally-disabled,unused-argument,invalid-name
-@fusion_manager.register("leaky_relu_demo")
+@register_op_compute("LeakyReluDemo", op_mode="dynamic", support_fusion=True)
 def leaky_relu_demo_compute(x, y, negative_slope=0, kernel_name="leaky_relu"):
     """
     compute for caffe_relu_layer_cce
