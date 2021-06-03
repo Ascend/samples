@@ -26,4 +26,4 @@ python3.7 ./src/process_data.py
 
 $acl_app --framework=0 --model=$model --weight=$weight   \
 --calibration_data=$calibration_data --calibration_shape=$input_shape  \
---output=./results/$model_name --soc_version=Ascend910A --log=info
+--output=./outputs/$model_name --soc_version=Ascend910A --log=info

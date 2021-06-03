@@ -17,48 +17,41 @@
 * Description: handle acl resource
 */
 #pragma once
-#include "utils.h"
-#include "acl/acl.h"
-#include "model_process.h"
-#include <memory>
 
-using namespace std;
+#include <iostream>
+#include <mutex>
+#include <unistd.h>
+#include <vector>
+#include <stdlib.h>
+#include <dirent.h>
+#include "acl/acl.h"
+#include "atlasutil/atlas_model.h"
 
 /**
 * ClassifyProcess
 */
 class ClassifyProcess {
 public:
-    ClassifyProcess(const char* modelPath, uint32_t modelWidth, uint32_t modelHeight);
+    ClassifyProcess();
     ~ClassifyProcess();
 
-    Result Init();
-    Result Preprocess(const string& imageFile);
-    Result Inference(aclmdlDataset*& inferenceOutput);
-    Result Postprocess(const string& origImageFile,
-                       aclmdlDataset* modelOutput);
-private:
-    Result InitResource();
-    Result InitModel(const char* omModelPath);
-
-    void* GetInferenceOutputItem(uint32_t& itemDataSize,
-                                 aclmdlDataset* inferenceOutput);
-    void LabelClassToImage(int classIdx, const string& imagePath);
+    AtlasError Init();
+    AtlasError Process(std::vector<std::string>& fileVec, aclrtRunMode RunMode);
+    void LabelClassToImage(int classIdx, const std::string& origImagePath);
     void DestroyResource();
 
 private:
-    int32_t deviceId_;
-    aclrtContext context_;
-    aclrtStream stream_;
-    ModelProcess model_;
+    AtlasError Preprocess(const std::string& imageFile);
+    AtlasError Inference(std::vector<InferenceOutput>& inferOutputs);
+    AtlasError Postprocess(const std::string& origImageFile,
+                       std::vector<InferenceOutput>& inferOutputs);
 
-    const char* modelPath_;
-    uint32_t modelWidth_;
-    uint32_t modelHeight_;
+private:
+    AtlasModel model_;
     uint32_t inputDataSize_;
-    void*    inputBuf_;
-    aclrtRunMode runMode_;
-
+    void* inputData_;
     bool isInited_;
+    bool isReleased_;
+    aclrtRunMode RunMode_;
 };
 

@@ -54,7 +54,7 @@ Before deploying this sample, ensure that:
 
     | **Model Name** | **Description** | **How to Obtain** |
     |---|---|---|
-    |  faster_rcnn| Image classification inference model. It is a YOLOv3 model based on Caffe.   | Download the original model and weight file by referring to [https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/faster_rcnn/ATC_faster_rcnn_caffe_AE](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/faster_rcnn/ATC_faster_rcnn_caffe_AE).  |
+    |  faster_rcnn| Object detection model. It is a faster rcnn model based on Caffe.   | Download the original model and weight file by referring to [https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/faster_rcnn/ATC_faster_rcnn_caffe_AE](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/faster_rcnn/ATC_faster_rcnn_caffe_AE).  |
 
     ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **Note**
 

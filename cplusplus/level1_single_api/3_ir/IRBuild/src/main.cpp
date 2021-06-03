@@ -110,7 +110,7 @@ bool GenGraph(Graph& graph)
     auto weight_shape = ge::Shape({ 2,2,1,1 });
     TensorDesc desc_weight_1(weight_shape, FORMAT_ND, DT_INT8);
     Tensor weight_tensor(desc_weight_1);
-    uint32_t weight_1_len = weight_shape.GetShapeSize();
+    uint32_t weight_1_len = weight_shape.GetShapeSize() * sizeof(int8_t);
     bool res = GetConstTensorFromBin(kPath+"Conv2D_kernel_quant.bin", weight_tensor, weight_1_len);
     if (!res) {
         cout << __LINE__ << "GetConstTensorFromBin Failed!" << endl;

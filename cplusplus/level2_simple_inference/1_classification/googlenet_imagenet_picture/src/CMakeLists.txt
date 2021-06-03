@@ -23,7 +23,6 @@ else ()
 endif()
 
 set(LIB_PATH $ENV{NPU_HOST_LIB})
-
 if (NOT DEFINED ENV{NPU_HOST_LIB})
     set(LIB_PATH "/usr/local/Ascend/acllib/lib64/stub/")
     message(STATUS "set default LIB_PATH: ${LIB_PATH}")
@@ -31,8 +30,12 @@ else ()
     message(STATUS "env LIB_PATH: ${LIB_PATH}")
 endif()
 
+add_definitions(-DENABLE_DVPP_INTERFACE)
+list(APPEND COMMON_DEPEND_LIB atlasutil avcodec avformat avdevice avutil swresample avfilter swscale)
 if (${CMAKE_CXX_COMPILER} MATCHES "aarch")
     set(ARCH "arm")
+    list(APPEND COMMON_DEPEND_LIB media_mini ascend_hal slog c_sec mmpa devmmap)
+    add_definitions(-DENABLE_BOARD_CAMARE)
 else ()
     set(ARCH "x86")
 endif()
@@ -54,18 +57,18 @@ link_directories(
     ${LIB_PATH}
     $ENV{HOME}/ascend_ddk/${ARCH}/lib/
     ${INC_PATH}/atc/lib64
+    $ENV{HOME}/Ascend/driver
 )
 
 add_executable(main
-        utils.cpp
-        model_process.cpp
         classify_process.cpp
         main.cpp)
+        
 
 if(target STREQUAL "Simulator_Function")
     target_link_libraries(main funcsim)
 else()
-    target_link_libraries(main ascendcl acl_dvpp stdc++ opencv_core opencv_imgproc opencv_imgcodecs dl rt)
+    target_link_libraries(main ascendcl acl_dvpp stdc++ ${COMMON_DEPEND_LIB} opencv_core opencv_imgproc opencv_imgcodecs dl rt)
 endif()
 
 install(TARGETS main DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})

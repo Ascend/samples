@@ -20,7 +20,6 @@ import os
 import argparse
 from pathlib import Path
 
-import init_paths_for_amct # pylint: disable=W0611
 import caffe # pylint: disable=E0401
 import amct_caffe as amct # pylint: disable=E0401
 

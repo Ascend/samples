@@ -5,7 +5,7 @@ set(TOOLCHAIN_DIR $ENV{TOOLCHAIN_DIR})
 
 #Specify cross compiler
 if (LHISI)
-        add_definitions(-D_GLIBCXX_USE_CXX11_ABI=0)
+        add_definitions(-D_GLIBCXX_USE_CXX11_ABI=1)
         set(CMAKE_CXX_COMPILER ${TOOLCHAIN_DIR}-g++)
         set(CMAKE_C_COMPILER   ${TOOLCHAIN_DIR}-gcc)
 else()

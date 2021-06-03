@@ -22,62 +22,54 @@
 #include <dirent.h>
 
 #include "classify_process.h"
-#include "utils.h"
+#include "atlasutil/atlas_utils.h"
+#include "atlasutil/atlas_error.h"
+#include "atlasutil/acl_device.h"
 using namespace std;
 
-namespace {
-uint32_t kModelWidth = 224;
-uint32_t kModelHeight = 224;
-const char* kModelPath = "../model/googlenet.om";
-}
-
 int main(int argc, char *argv[]) {
-    
-    //检查应用程序执行时的输入,程序执行要求输入图片目录参数
+
     if((argc < 2) || (argv[1] == nullptr)){
-        ERROR_LOG("Please input: ./main <image_dir>");
-        return FAILED;
+        ATLAS_LOG_ERROR("Please input: ./main <image_dir>");
+        return ATLAS_ERROR;
     }
-    //实例化分类推理对象,参数为分类模型路径,模型输入要求的宽和高
-    ClassifyProcess classify(kModelPath, kModelWidth, kModelHeight);
-    //初始化分类推理的acl资源, 模型和内存
-    Result ret = classify.Init();
-    if (ret != SUCCESS) {
-        ERROR_LOG("Classification Init resource failed");
-        return FAILED;
+
+    AclDevice aclDev;
+    AtlasError ret = aclDev.Init();
+    if (ret) {
+        ATLAS_LOG_ERROR("Init resource failed, error %d", ret);
+        return ATLAS_ERROR;
+    }  
+    aclrtRunMode RunMode = aclDev.GetRunMode();  
+
+    ClassifyProcess classify;
+    ret = classify.Init();
+    if (ret != ATLAS_OK) {
+        ATLAS_LOG_ERROR("Classification Init resource failed");
+        return ATLAS_ERROR;
     }
-    //获取图片目录下所有的图片文件名
+
     string inputImageDir = string(argv[1]);
     vector<string> fileVec;
-    Utils::GetAllFiles(inputImageDir, fileVec);
+    GetAllFiles(inputImageDir, fileVec);
     if (fileVec.empty()) {
-        ERROR_LOG("Failed to deal all empty path=%s.", inputImageDir.c_str());
-        return FAILED;
-    }
-    //逐张图片推理
-    for (string imageFile : fileVec) {
-        //预处理图片:读取图片,讲图片缩放到模型输入要求的尺寸
-        Result ret = classify.Preprocess(imageFile);
-        if (ret != SUCCESS) {
-            ERROR_LOG("Read file %s failed, continue to read next",
-                      imageFile.c_str());                
-            continue;
-        }
-        //将预处理的图片送入模型推理,并获取推理结果
-        aclmdlDataset* inferenceOutput = nullptr;
-        ret = classify.Inference(inferenceOutput);
-        if ((ret != SUCCESS) || (inferenceOutput == nullptr)) {
-            ERROR_LOG("Inference model inference output data failed");
-            return FAILED;
-        }
-        //解析推理输出,并将推理得到的物体类别标记到图片上
-        ret = classify.Postprocess(imageFile, inferenceOutput);
-        if (ret != SUCCESS) {
-            ERROR_LOG("Process model inference output data failed");
-            return FAILED;
-        }
+        ATLAS_LOG_ERROR("Failed to deal all empty path=%s.", inputImageDir.c_str());
+        return ATLAS_ERROR;
     }
 
-    INFO_LOG("Execute sample success");
-    return SUCCESS;
+    ret = classify.Process(fileVec, RunMode);
+    if (ret != ATLAS_OK) {
+        ATLAS_LOG_ERROR("Classification Excute Inference failed");
+        return ATLAS_ERROR;
+    }
+    else{
+        ATLAS_LOG_INFO("Classification Excute Inference success");
+    }
+
+    ATLAS_LOG_INFO("Execute sample finish");
+    
+    classify.DestroyResource();
+    aclDev.Release();
+    
+    return ATLAS_OK;
 }

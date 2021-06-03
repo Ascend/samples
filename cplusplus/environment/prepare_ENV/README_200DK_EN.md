@@ -2,7 +2,7 @@ English|[中文](README_200DK_CN.md)
 # Basic Environment Configuration  
 This readme file describes how to configure the basic environment, including the sudo permission, apt source, Atlas 200 DK networking, and environment variables. If they have been configured, skip this workflow.  
 
- **Run the following commands as a common user in the development environment. The following takes **HwHiAiUser** as an example. Replace it with the actual running user.** 
+ **Run the following commands as a common user in the development environment(X86 architecture). The following takes **HwHiAiUser** as an example. Replace it with the actual running user.** 
 
 
 1. Grant the sudo permission to the **HwHiAiUser** user.

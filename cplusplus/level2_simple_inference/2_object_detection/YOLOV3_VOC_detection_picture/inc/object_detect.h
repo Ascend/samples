@@ -17,53 +17,48 @@
 * Description: handle acl resource
 */
 #pragma once
-#include "utils.h"
 #include "acl/acl.h"
-#include "model_process.h"
-#include "dvpp_process.h"
 #include <memory>
-
-using namespace std;
+#include "atlasutil/atlas_model.h"
+#include "atlasutil/dvpp_process.h"
 
 /**
 * ClassifyProcess
 */
+
+struct BoundingBox {
+    uint32_t lt_x;
+    uint32_t lt_y;
+    uint32_t rb_x;
+    uint32_t rb_y;
+    uint32_t attribute;
+    float score;
+};
+
 class ObjectDetect {
 public:
-    ObjectDetect(const char* modelPath, 
-                 uint32_t modelWidth, uint32_t modelHeight);
+    ObjectDetect();
     ~ObjectDetect();
-
-    Result Init();
-    Result Preprocess(ImageData& resizedImage, ImageData& srcImage);
-    Result Inference(aclmdlDataset*& inferenceOutput, ImageData& resizedImage);
-    Result Postprocess(ImageData& image, aclmdlDataset* modelOutput,
-                       const string& origImagePath);
+    AtlasError Init();
+    AtlasError Preprocess(ImageData& resizedImage, ImageData& srcImage, aclrtRunMode RunMode);
+    AtlasError Inference(std::vector<InferenceOutput>& inferenceOutput, ImageData& resizedImage);
+    AtlasError Postprocess(ImageData& image, std::vector<InferenceOutput>& modelOutput,
+                       const std::string& origImagePath);
 private:
-    Result InitResource();
-    Result InitModel(const char* omModelPath);
-    void* GetInferenceOutputItem(uint32_t& itemDataSize,
-                                 aclmdlDataset* inferenceOutput,
-                                 uint32_t idx);
-    void DrawBoundBoxToImage(vector<BBox>& detectionResults,
-                             const string& origImagePath);
+    void DrawBoundBoxToImage(std::vector<BBox>& detectionResults,
+                             const std::string& origImagePath);
     void DestroyResource();
 
-
 private:
-    int32_t deviceId_;
-    aclrtContext context_;
-    aclrtStream stream_;
     uint32_t imageInfoSize_;
-    ModelProcess model_;
+    AtlasModel model_;
 
     const char* modelPath_;
-    uint32_t modelWidth_;
-    uint32_t modelHeight_;
     uint32_t inputDataSize_;
     DvppProcess dvpp_;
     aclrtRunMode runMode_;
 
     bool isInited_;
+    bool isReleased_;
 };
 

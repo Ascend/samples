@@ -55,15 +55,14 @@ $\color{red}{以下命令在开发环境上执行，以普通用户为HwHiAiUser
 3.  安装opencv 
     1.  下载opencv  
         **cd \$HOME**    
-        **git clone -b 4.3.0 https://gitee.com/mirrors/opencv.git**  
-        **git clone -b 4.3.0 https://gitee.com/mirrors/opencv_contrib.git**   
+        **git clone -b 4.3.0 https://gitee.com/mirrors/opencv.git**   
         **cd opencv**  
         **mkdir build**  
         **cd build**  
 
     2.  安装opencv   
         ```
-        cmake -D BUILD_SHARED_LIBS=ON -D BUILD_TESTS=OFF -D CMAKE_BUILD_TYPE=RELEASE  -D WITH_LIBV4L=ON -D OPENCV_EXTRA_MODULES=../../opencv_contrib/modules -D CMAKE_INSTALL_PREFIX=$HOME/ascend_ddk/x86 ..  
+        cmake -D BUILD_SHARED_LIBS=ON -D BUILD_TESTS=OFF -D CMAKE_BUILD_TYPE=RELEASE  -D WITH_LIBV4L=ON -D CMAKE_INSTALL_PREFIX=$HOME/ascend_ddk/x86 ..  
         ```
         **make -j8**  
         **make install**  

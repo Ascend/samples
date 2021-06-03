@@ -2,13 +2,13 @@
 
 amct_mindspore 工具 sample 运行指导
 
-### 环境要求
+## 环境要求
+
 1. Ascend 910 host 环境；
 
 2. 正确安装了 mindspore ascend 版本和与之配套的 amct_mindspore 工具；
 
-
-## Usage
+## 使用方法
 
 ### 1. 准备 resnet50 预训练 checkpoint 
 
@@ -28,10 +28,9 @@ Dataset used: [CIFAR-10](http://www.cs.toronto.edu/~kriz/cifar.html)
   
 - 数据集格式：二进制文件
 
-  
 - 下载了 cifar-10 数据集后，进行一下的处理：
 
-  ```shell
+  ```bash
   tar -zxvf cifar-10-binary.tar.gz
   mkdir cifar-10-verify-bin
   cp cifar-10-batches-bin/batches.meta.txt ./cifar-10-verify-bin/
@@ -41,7 +40,7 @@ Dataset used: [CIFAR-10](http://www.cs.toronto.edu/~kriz/cifar.html)
 
   处理后的文件目录结构如下：
 
-```
+```none
 ├─cifar-10-batches-bin
 │      batches.meta.txt
 │      data_batch_1.bin
@@ -67,7 +66,6 @@ Dataset used: [CIFAR-10](http://www.cs.toronto.edu/~kriz/cifar.html)
 - src/retrain_config.py：量化感知训练超参。
 - README.md：量化示例使用说明文件。
 
-
 ### 3. 下载模型定义文件
 
   切换到 scripts 目录下，执行如下的命令下载模型定义文件：
@@ -78,7 +76,7 @@ Dataset used: [CIFAR-10](http://www.cs.toronto.edu/~kriz/cifar.html)
 
 若出现如下的信息则说明下载成功：
 
-```
+```none
 # resnet50 模型定义文件
 [INFO]Download file to "../src/resnet.py" success.
 # 数据与处理脚本，执行量化脚本时，会调用该脚本进行数据集的预处理
@@ -93,12 +91,11 @@ Dataset used: [CIFAR-10](http://www.cs.toronto.edu/~kriz/cifar.html)
 
 1. 执行训练后量化：
 
-```shell
+```bash
 cd src
 python3 resnet50_sample.py --dataset_path your_dataset_path/cifar-10-verify-bin  --checkpoint_path your_resnet50_checkpoint_file_path
 
 注：上述命令中的 your_dataset_path your_resnet50_checkpoint_file_path 分别对应实际环境的 cifar10 数据集路径和预训练 ckpt 文件路径；
-
 ```
 
 参数解释：
@@ -113,7 +110,7 @@ python3 resnet50_sample.py --dataset_path your_dataset_path/cifar-10-verify-bin 
 
 2. 提示如下信息则说明量化成功
 
-```shell
+```bash
 INFO - [AMCT]:[QuantizeTool]：Generate AIR file : ../src/results/resnet50_quant.air success!
 [INFO] the quantized AIR file has been stored at:
 results/resnet50_quant.air
@@ -121,7 +118,7 @@ results/resnet50_quant.air
 
 3. 量化结果说明
 
-   量化成功后，在 Resne50/src 目录下生成如下文件：
+   量化成功后，在 Resnet50/src 目录下生成如下文件：
 
    - config.json: 量化配置文件，描述了如何对模型中的每一层进行量化。如果量化脚本所在目录下已经存在量化配置文件，则再次调用 create_quant_config 接口时，如果新生成的量化配置文件和已有的文件重名会覆盖已有的量化配置文件，否则重新生成量化配置文件。
    - amct_log/acmt_mindspore.log ：量化日志文件，记录了量化过程的日志信息。
@@ -129,13 +126,11 @@ results/resnet50_quant.air
    - kernel_meta: 算子编译生成的文件目录
    - （可选）amct_dump/calibration_record.txt : 如果执行量化时，设置了 export DUMP_AMCT_RECORD=1的环境变量，则在量化脚本的同级目录还会生成量化因子目录，该目录下的量化因子记录文件 calibration_record.txt，记录了每个量化层的量化因子。
 
-
-
 ### 5. 单 device 量化感知训练示例
 
 1. 量化感知训练有两种方式，一是使用 resnet50_retrain_sample.py 脚本量化，该方式需要配置多个参数，另一种是使用该脚本的封装脚本 run_standalone_train_sample.sh 进行量化，该方式配置参数较少，用户根据实际情况选择一种方式进行量化。
 
-```shell
+```bash
 单卡量化感知训练：
 cd src
 python3.7.5 resnet50_retrain_sample.py [-h][--net NET][--dataset DATASET][--run_distribute RUN_DISTRIBUTE][--device_num DEVICE_NUM][--device_target DEVICE_TARGET][--eval_dataset EVAL_DATASET][--train_dataset TRAIN_DATASET][--pre_trained PRE_TRAIN][--air AIR]
@@ -190,56 +185,58 @@ python3.7.5 resnet50_retrain_sample.py [-h][--net NET][--dataset DATASET][--run_
 
 使用样例如下：
 
-```shell
+```bash
 cd src
 python3.7.5 resnet50_retrain_sample.py --train_dataset ../cifar-10-batches-bin --eval_dataset ../cifar-10-verify-bin --pre_trained ../resnet50.ckpt
 ```
 
 - run_standalone_train_sample.sh 封装脚本进行量化
 
-  ```shell
+  ```bash
   cd scripts
   sh run_standalone_train_sample.sh [resnet50] [cifar10] [TRAIN_DATASET_PATH] [EVAL_DATASET_PATH] [PRETRAINED_CKPT_PATH]
   ```
 
-  参数说明：
-| 参数                   | 说明                                               |
-| ---------------------- | -------------------------------------------------- |
-| -h                     | 是否必填：否                                       |
-|                        | 参数解释：显示帮助信息                             |
-| [resnet50]             | 是否必填：否                                       |
-|                        | 数据类型：string                                   |
-|                        | 默认值: resnet50                                   |
-|                        | 参数解释：选定网络为 resnet50，目前仅支持resnet50  |
-| [cifar10]              | 是否必填：否                                       |
-|                        | 数据类型：string                                   |
-|                        | 默认值：cifar10                                    |
-|                        | 参数解释：指定数据集，目前只支持 cifar10           |
-| [TRAIN_DATASET_PATH]   | 是否必填：是                                       |
-|                        | 数据类型：string                                   |
-|                        | 默认值：None                                       |
-|                        | 参数解释：训练集路径                               |
-| [EVAL_DATASET_PATH]    | 是否必填：是                                       |
-|                        | 数据类型: string                                   |
-|                        | 默认值: None                                       |
-|                        | 参数解释：测试集路径                               |
-| [PRETRAINED_CKPT_PATH] | 是否必填：是                                       |
-|                        | 数据类型：string                                   |
-|                        | 默认值：None                                       |
-|                        | 参数解释：量化感知训练使用到的预训练 ckpt 文件路径 |
+参数说明：
+
+| 参数 | 说明 |
+| :-- | :-- |
+| -h | 是否必填：否 |
+|   | 参数解释：显示帮助信息 |
+| [resnet50] | 是否必填：否 |
+|   | 数据类型：string |
+|   | 默认值: resnet50 |
+|   | 参数解释：选定网络为 resnet50，目前仅支持resnet50 |
+| [cifar10] | 是否必填：否 |
+|   | 数据类型：string |
+|   | 默认值：cifar10 |
+|   | 参数解释：指定数据集，目前只支持 cifar10 |
+| [TRAIN_DATASET_PATH] | 是否必填：是 |
+|   | 数据类型：string |
+|   | 默认值：None |
+|   | 参数解释：训练集路径 |
+| [EVAL_DATASET_PATH] | 是否必填：是 |
+|   | 数据类型: string |
+|   | 默认值: None |
+|   | 参数解释：测试集路径 |
+| [PRETRAINED_CKPT_PATH] | 是否必填：是 |
+|   | 数据类型：string |
+|   | 默认值：None |
+|   | 参数解释：量化感知训练使用到的预训练 ckpt 文件路径 |
+
 使用示例如下：
 
-```shell
+```bash
 bash run_standalone_train_sample.sh resnet50 cifar10 ../cifar-10-batches-bin  ../cifar-10-verify-bin ../resnet50.ckpt
 ```
 
 若出现以下信息，则说明量化感知训练成功：
 
-```
+```none
 INFO-[AMCT]:[QuantizeTool]: Generate AIR file: xxx/resnet50_quant_geir.air success
 ```
 
-3. 结果展示：
+1. 结果展示：
 
 执行量化感知训练成功后，在执行目录下生成如下的文件：
 
@@ -259,7 +256,7 @@ INFO-[AMCT]:[QuantizeTool]: Generate AIR file: xxx/resnet50_quant_geir.air succe
 
    切换到src 目录下，执行如下命令:
 
-   ```shell
+   ```bash
    python3.7.5 hccl_tools.py --device_num DEVICE_NUM --visible_devices VISIBLE_DEVICES --server_ip SERVER_IP
    ```
 
@@ -284,7 +281,7 @@ INFO-[AMCT]:[QuantizeTool]: Generate AIR file: xxx/resnet50_quant_geir.air succe
 
    使用示例：
 
-   ```
+   ```bash
    python3.7.5 hccl_tools.py --device_num "[0,8)"
    ```
 
@@ -294,7 +291,7 @@ INFO-[AMCT]:[QuantizeTool]: Generate AIR file: xxx/resnet50_quant_geir.air succe
 
    切换到 scripts 目录，执行如下命令：
 
-   ```shell
+   ```bash
    sh run_distribute_train_sample.sh [resnet50] [cifar10] [RANK_TABLE_FILE] [TRAIN_DATASET_PATH] [EVAL_DATASET_PATH] [PRETRAINED_CKPT_PATH]
    ```
 
@@ -331,7 +328,7 @@ INFO-[AMCT]:[QuantizeTool]: Generate AIR file: xxx/resnet50_quant_geir.air succe
 
 使用示例如下：
 
-```
+```bash
 cd scripts
 bash run_distribute_train_sample.sh resnet50 cifar10 hccl_1p_0_127.0.0.1.json ../cifar-10-batches-bin  ../cifar-10-verify-bin ../resnet50.ckpt
 ```

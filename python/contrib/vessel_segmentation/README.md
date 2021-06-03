@@ -1,4 +1,4 @@
-English|[中文](READNE_CN.md)
+English|[中文](README_CN.md)
 
 **This sample provides reference for you to learn the Ascend AI Software Stack and cannot be used for commercial purposes.**
 
@@ -24,7 +24,7 @@ Before deploying this sample, ensure that:
 
 ### Software Preparation
 
-1. Obtain the source package.
+1. Obtain the source code package.
 
    You can download the source code in either of the following ways:
 
@@ -55,7 +55,7 @@ Before deploying this sample, ensure that:
 
 | **Model Name**      | **Description**                          | **How to Obtain**                        |
 | ------------------- | ---------------------------------------- | ---------------------------------------- |
-| vessel | vessel segmentation model based on Caffe | Download the model and weight files by referring to the **[README.md](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/vessel-segmentation/ATC_retina-unet_caffe_AE)** file. |
+| vessel | Image segmentation model, vessel segmentation model based on Caffe | Download the model and weight files by referring to the **[README.md](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/vessel-segmentation/ATC_retina-unet_caffe_AE)** file. |
 
 ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **NOTE**  
 > - The converted OM model provided by ModelZoo does not match the current sample. Therefore, you need to download the original model and weight files, and convert the model by yourself.

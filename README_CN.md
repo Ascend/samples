@@ -12,10 +12,11 @@ CANN AscendCL（Ascend Computing Language）提供Device管理、Context管理�
 历史版本请参考[表 版本说明](#Version-Description)下载对应发行版**。
 
 **表1** 版本说明<a name="Version-Description"></a>
-| CANN版本 | cann-samples仓是否维护 | cann-samples获取方式 |
-|---|---|---|
-| [3.0.0-3.1.0](https://ascend.huawei.com/#/software/cann/download) | 是 | Release 0.1.0发行版，[点击跳转](https://github.com/Ascend/samples/releases/v0.1.0) |
-| [3.2.0](https://ascend.huawei.com/#/software/cann/download) | 是 | Release 0.2.0发行版，[点击跳转](https://github.com/Ascend/samples/releases/v0.2.0) |
+| CANN版本 | 驱动版本 |cann-samples仓是否维护 | cann-samples获取方式 |
+|---|---|---|---|
+| [3.1.0.alpha001](https://ascend.huawei.com/#/software/cann/download) | [1.0.7.alpha](https://www.hiascend.com/en/hardware/firmware-drivers?tag=community) | 是 | Release 0.1.0发行版，[点击跳转](https://github.com/Ascend/samples/releases/v0.1.0) |
+| [3.2.0.alpha001](https://ascend.huawei.com/#/software/cann/download) | [1.0.8.alpha](https://www.hiascend.com/en/hardware/firmware-drivers?tag=community) | 是 | Release 0.2.0发行版，[点击跳转](https://github.com/Ascend/samples/releases/v0.2.0) |
+| [3.3.0.alpha001/3.3.0.alpha005/<br>3.3.0.alpha006/5.0.2.alpha001/<br>5.0.2.alpha002](https://ascend.huawei.com/#/software/cann/download) | [1.0.9.alpha](https://www.hiascend.com/en/hardware/firmware-drivers?tag=community) | 是 | Release 0.3.0发行版，[点击跳转](https://github.com/Ascend/samples/releases/v0.3.0) |
 
 ## 目录结构与说明
 

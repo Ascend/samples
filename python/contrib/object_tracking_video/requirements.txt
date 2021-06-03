@@ -1,0 +1,6 @@
+opencv-python
+cython-bbox
+scipy
+lap
+Pillow
+numpy

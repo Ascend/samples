@@ -55,7 +55,7 @@
 
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
-    | vessel | 图片分类推理模型。是基于Caffe的vessel_segmentation模型。 | 请参考[https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/vessel-segmentation/ATC_retina-unet_caffe_AE](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/vessel-segmentation/ATC_retina-unet_caffe_AE)目录中README.md下载原始模型章节下载模型和权重文件。 |
+    | vessel | 图片分割模型。是基于Caffe的vessel_segmentation模型。 | 请参考[https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/vessel-segmentation/ATC_retina-unet_caffe_AE](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/vessel-segmentation/ATC_retina-unet_caffe_AE)目录中README.md下载原始模型章节下载模型和权重文件。 |
 
     ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
 
@@ -68,6 +68,8 @@
     1. 设置LD_LIBRARY_PATH环境变量。
 
         由于LD_LIBRARY_PATH环境变量在转使用atc工具和运行样例时会产生冲突，所以需要在命令行单独设置此环境变量，方便修改。
+
+        **export install_path=$HOME/Ascend/ascend-toolkit/latest**
 
         **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64**  
 
@@ -95,9 +97,9 @@
 
 **注：开发环境与运行环境合一部署，请跳过步骤1，直接执行[步骤2](#step_2)即可。**   
 
-1. 执行以下命令,将开发环境的 **vessel_segmentation** 目录上传到运行环境中，例如 **/home/HwHiAiUser**，并以HwHiAiUser（运行用户）登录运行环境（Host）。
+1. 执行以下命令,将开发环境的 **samples** 目录上传到运行环境中，例如 **/home/HwHiAiUser**，并以HwHiAiUser（运行用户）登录运行环境（Host）。
 
-    **scp -r $HOME/samples/python/contrib/vessel_segmentationHwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
+    **scp -r $HOME/samples HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
 
     **ssh HwHiAiUser@xxx.xxx.xxx.xxx**    
 
@@ -107,7 +109,7 @@
 
 2. <a name="step_2"></a>运行可执行文件。
 
-    - 如果是开发环境与运行环境合一部署，执行以下命令，设置运行环境变量，并切换目录。
+
 
       **export LD_LIBRARY_PATH=**
 
@@ -115,9 +117,7 @@
       
       **cd $HOME/samples/python/contrib/vessel_segmentation/src**
 
-    - 如果是开发环境与运行环境分离部署，执行以下命令切换目录。
-    
-      **cd $HOME/vessel_segmentation/src**      
+ 
 
     切换目录后，执行以下命令运行样例。
 

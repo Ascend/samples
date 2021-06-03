@@ -18,7 +18,7 @@
 import os
 import numpy as np
 from PIL import Image # pylint: disable=E0401
-import tensorflow as tf # pylint: disable=C0411, E0401
+import tensorflow.compat.v1 as tf # pylint: disable=C0411, E0401
 
 # Import AMCT toolkit and set log level. There are four log levels,
 # 'info', 'debug', 'warning' and 'error'. The default level is 'info'.

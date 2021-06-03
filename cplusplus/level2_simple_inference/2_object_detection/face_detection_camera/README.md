@@ -46,7 +46,7 @@ Before deploying this sample, ensure that:
   
     | **Model Name** | **Description** | **How to Obtain** |
     |---|---|---|
-    |  face_detection| Image classification inference model. It is a YOLOv3 model based on Caffe.   | Download the original model and weight file by referring to [https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/facedetection/ATC_resnet10-SSD_caffe_AE](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/facedetection/ATC_resnet10-SSD_caffe_AE).  |
+    |  face_detection| Face detection model. It is a YOLOv3 model based on Caffe.   | Download the original model and weight file by referring to [https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/facedetection/ATC_resnet10-SSD_caffe_AE](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/facedetection/ATC_resnet10-SSD_caffe_AE).  |
 
     ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **Note**
 

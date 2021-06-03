@@ -19,12 +19,13 @@ import os
 import math
 import argparse
 import numpy as np
-import tensorflow as tf # pylint: disable=E0401
+import tensorflow.compat.v1 as tf # pylint: disable=E0401
 import matplotlib.pyplot as plt # pylint: disable=E0401
 from tqdm import trange # pylint: disable=E0401
 
 import amct_tensorflow as amct # pylint: disable=E0401
 from amct_tensorflow.utils.log import LOGGER # pylint: disable=E0401
+tf.disable_eager_execution()
 amct.set_logging_level(print_level='info', save_level='info')
 
 

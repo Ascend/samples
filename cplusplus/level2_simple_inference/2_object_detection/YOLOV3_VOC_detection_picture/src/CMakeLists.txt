@@ -32,16 +32,29 @@ else ()
     message(STATUS "env LIB_PATH: ${LIB_PATH}")
 endif()
 
-if (${CMAKE_CXX_COMPILER} MATCHES "aarch")
+add_definitions(-DENABLE_DVPP_INTERFACE)
+list(APPEND COMMON_DEPEND_LIB atlasutil avcodec avformat avdevice avutil swresample avfilter swscale)   
+
+if(CMAKE_HOST_SYSTEM_PROCESSOR MATCHES "aarch")
+    message("arm64 architecture detected")
+    list(APPEND COMMON_DEPEND_LIB media_mini ascend_hal slog c_sec mmpa devmmap)
+    add_definitions(-DENABLE_BOARD_CAMARE)
     set(ARCH "arm")
-else ()
-    set(ARCH "x86")
+else()
+    if (${CMAKE_CXX_COMPILER} MATCHES "aarch")
+        list(APPEND COMMON_DEPEND_LIB media_mini ascend_hal slog c_sec mmpa devmmap)
+        add_definitions(-DENABLE_BOARD_CAMARE)
+        set(ARCH "arm")
+    else ()
+        set(ARCH "x86")
+    endif()
 endif()
+
 
 # Header path
 include_directories(
-    $ENV{HOME}/ascend_ddk/${ARCH}/include/
-    $ENV{HOME}/ascend_ddk/${ARCH}/include/opencv4
+	$ENV{HOME}/ascend_ddk/${ARCH}/include/
+	$ENV{HOME}/ascend_ddk/${ARCH}/include/opencv4
     ${INC_PATH}/acllib/include/
     ../inc/
 )
@@ -55,21 +68,18 @@ link_directories(
     ${LIB_PATH}
     $ENV{HOME}/ascend_ddk/${ARCH}/lib/
     ${INC_PATH}/atc/lib64
+    $ENV{HOME}/Ascend/driver
+
 )
 
 add_executable(main
-        utils.cpp
-        model_process.cpp
         object_detect.cpp
-        dvpp_process.cpp
-        dvpp_resize.cpp
-        dvpp_jpegd.cpp
         main.cpp)
 
 if(target STREQUAL "Simulator_Function")
     target_link_libraries(main funcsim)
 else()
-    target_link_libraries(main ascendcl acl_dvpp stdc++ opencv_core opencv_imgproc opencv_imgcodecs dl rt)
+    target_link_libraries(main ascendcl ${COMMON_DEPEND_LIB} acl_dvpp stdc++ opencv_core opencv_imgproc opencv_imgcodecs dl rt)
 endif()
 
 install(TARGETS main DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})

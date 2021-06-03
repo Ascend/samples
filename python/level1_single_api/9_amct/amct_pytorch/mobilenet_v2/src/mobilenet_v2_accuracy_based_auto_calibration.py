@@ -104,6 +104,11 @@ def model_forward(model, batch_size=1, iterations=160):
     for i in range(iterations):
         input_batch = prepare_image_input(images[i * batch_size: (i + 1) * batch_size])
         input_batch = torch.tensor(input_batch)
+        # move the input and model to GPU for speed if available
+        if torch.cuda.is_available():
+            input_batch = input_batch.to('cuda')
+            model.to('cuda')
+
         with torch.no_grad():
             output = model(input_batch)
         top1, top5 = img_postprocess(output, labels[i * batch_size: (i + 1) * batch_size])
@@ -139,6 +144,8 @@ class AutoCalibrationEvaluator(AutoCalibrationEvaluatorBase):
                     can describe the 'accuracy' of model
         """
         top1, _ = model_forward(model=model, batch_size=32, iterations=5)
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
         return top1
 
     def metric_eval(self, original_metric, new_metric):

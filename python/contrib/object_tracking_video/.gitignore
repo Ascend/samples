@@ -1,0 +1,7 @@
+.vscode
+outputs
+model/*
+!model/download.sh
+*.pyc 
+*.mp4
+data/*

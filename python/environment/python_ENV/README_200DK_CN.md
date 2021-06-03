@@ -53,3 +53,6 @@ $\color{red}{以下命令在运行环境上执行}$
     **cp /home/HwHiAiUser/ascend_ddk/arm/lib/pkgconfig/\* /usr/share/pkgconfig**    
     退出root用户   
     **exit**
+
+6.  安装python atlasutil  
+    参考 [python atlasutil安装指导](../../common/atlas_utils/README.md) 进行安装

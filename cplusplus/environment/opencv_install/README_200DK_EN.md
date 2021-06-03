@@ -53,14 +53,13 @@ FFmpeg and OpenCV are installed to implement diversified data preprocessings and
     Download OpenCV.   
     **cd $HOME**    
     **git clone -b 4.3.0 https://gitee.com/mirrors/opencv.git**  
-    **git clone -b 4.3.0 https://gitee.com/mirrors/opencv_contrib.git**  
     **cd opencv**  
     **mkdir build**  
     **cd build**  
 
     Build and install OpenCV.  
     ```
-    cmake -D BUILD_SHARED_LIBS=ON  -D BUILD_TESTS=OFF -D CMAKE_BUILD_TYPE=RELEASE -D  CMAKE_INSTALL_PREFIX=/home/HwHiAiUser/ascend_ddk/arm -D WITH_LIBV4L=ON -D OPENCV_EXTRA_MODULES=../../opencv_contrib/modules ..
+    cmake -D BUILD_SHARED_LIBS=ON  -D BUILD_TESTS=OFF -D CMAKE_BUILD_TYPE=RELEASE -D  CMAKE_INSTALL_PREFIX=/home/HwHiAiUser/ascend_ddk/arm -D WITH_LIBV4L=ON ..
     ```
 
     **make -j8**  

@@ -21,9 +21,6 @@
 #include <cmath>
 
 #include "acl/acl.h"
-#include "model_process.h"
-#include "utils.h"
-
 #include "opencv2/opencv.hpp"
 #include "opencv2/imgcodecs/legacy/constants_c.h"
 #include "opencv2/imgproc/types_c.h"
@@ -52,6 +49,9 @@ namespace {
 
 const uint32_t kOutputTensorSize  = 3;
 
+uint32_t kModelWidth = 416;
+uint32_t kModelHeight = 416;
+const char* kModelPath = "../model/yolov3.om";
 
 enum BBoxIndex { TOPLEFTX = 0, TOPLEFTY, BOTTOMRIGHTX, BOTTOMRIGHTY, SCORE, LABEL };
 // bounding box line solid
@@ -84,167 +84,97 @@ const static std::vector<uint32_t>  anchors = {10,13,16,30,33,23,30,61,62,45,59,
 const static std::vector<uint32_t>  kGridSize = {13,26,52};
 }
 
-ObjectDetect::ObjectDetect(const char* modelPath, 
-                           uint32_t modelWidth, 
-                           uint32_t modelHeight)
-:deviceId_(0), context_(nullptr), stream_(nullptr), modelWidth_(modelWidth),
- modelHeight_(modelHeight), isInited_(false){
-    imageInfoSize_ = 0;
-    modelPath_ = modelPath;
+ObjectDetect::ObjectDetect():
+model_(kModelPath),
+isInited_(false), 
+isReleased_(false){
 }
 
 ObjectDetect::~ObjectDetect() {
     DestroyResource();
 }
 
-Result ObjectDetect::InitResource() {
-    // ACL init
-    const char *aclConfigPath = "../src/acl.json";
-    aclError ret = aclInit(aclConfigPath);
-    if (ret != ACL_ERROR_NONE) {
-        ERROR_LOG("acl init failed");
-        return FAILED;
-    }
-    INFO_LOG("acl init success");
-
-    // open device
-    ret = aclrtSetDevice(deviceId_);
-    if (ret != ACL_ERROR_NONE) {
-        ERROR_LOG("acl open device %d failed", deviceId_);
-        return FAILED;
-    }
-    INFO_LOG("open device %d success", deviceId_);
-
-    // create context (set current)
-    ret = aclrtCreateContext(&context_, deviceId_);
-    if (ret != ACL_ERROR_NONE) {
-        ERROR_LOG("acl create context failed");
-        return FAILED;
-    }
-    INFO_LOG("create context success");
-
-    // create stream
-    ret = aclrtCreateStream(&stream_);
-    if (ret != ACL_ERROR_NONE) {
-        ERROR_LOG("acl create stream failed");
-        return FAILED;
-    }
-    INFO_LOG("create stream success");
-
-    ret = aclrtGetRunMode(&runMode_);
-    if (ret != ACL_ERROR_NONE) {
-        ERROR_LOG("acl get run mode failed");
-        return FAILED;
-    }
-
-    return SUCCESS;
-}
-
-Result ObjectDetect::InitModel(const char* omModelPath) {
-    Result ret = model_.LoadModelFromFileWithMem(omModelPath);
-    if (ret != SUCCESS) {
-        ERROR_LOG("execute LoadModelFromFileWithMem failed");
-        return FAILED;
-    }
-
-    ret = model_.CreateDesc();
-    if (ret != SUCCESS) {
-        ERROR_LOG("execute CreateDesc failed");
-        return FAILED;
-    }
-
-    ret = model_.CreateOutput();
-    if (ret != SUCCESS) {
-        ERROR_LOG("execute CreateOutput failed");
-        return FAILED;
-    }
-
-    return SUCCESS;
-}
-
-Result ObjectDetect::Init() {
+AtlasError ObjectDetect::Init() {
     if (isInited_) {
-        INFO_LOG("Classify instance is initied already!");
-        return SUCCESS;
+        ATLAS_LOG_INFO("Face detection is initied already");
+        return ATLAS_OK;
     }
 
-    Result ret = InitResource();
-    if (ret != SUCCESS) {
-        ERROR_LOG("Init acl resource failed");
-        return FAILED;
+    AtlasError atlRet = dvpp_.Init();
+    if (atlRet) {
+        ATLAS_LOG_ERROR("Dvpp init failed, error %d", atlRet);
+        return ATLAS_ERROR;
     }
 
-    ret = InitModel(modelPath_);
-    if (ret != SUCCESS) {
-        ERROR_LOG("Init model failed");
-        return FAILED;
-    }
-
-    ret = dvpp_.InitResource(stream_);
-    if (ret != SUCCESS) {
-        ERROR_LOG("Init dvpp failed");
-        return FAILED;
+    atlRet = model_.Init();
+    if (atlRet) {
+        ATLAS_LOG_ERROR("Model init failed, error %d", atlRet);
+        return ATLAS_ERROR;
     }
 
     isInited_ = true;
-    return SUCCESS;
+    return ATLAS_OK;
 }
 
-Result ObjectDetect::Preprocess(ImageData& resizedImage, ImageData& srcImage) {
+AtlasError ObjectDetect::Preprocess(ImageData& resizedImage, ImageData& srcImage, aclrtRunMode RunMode) {
     ImageData imageDevice;
-    Utils::CopyImageDataToDevice(imageDevice, srcImage, runMode_);
+
+    AtlasError ret = CopyImageToDevice(imageDevice, srcImage, RunMode, MEMORY_DVPP);
+    if (ret == ATLAS_ERROR) {
+        ATLAS_LOG_ERROR("Copy image to device failed");
+        return ATLAS_ERROR;
+    }
 
     ImageData yuvImage;
-    Result ret = dvpp_.CvtJpegToYuv420sp(yuvImage, imageDevice);
-    if (ret == FAILED) {
-        ERROR_LOG("Convert jpeg to yuv failed");
-        return FAILED;
+    ret = dvpp_.JpegD(yuvImage, imageDevice);
+    if (ret == ATLAS_ERROR) {
+        ATLAS_LOG_ERROR("Convert jpeg to yuv failed");
+        return ATLAS_ERROR;
     }
 
     //resize
-    ret = dvpp_.Resize(resizedImage, yuvImage, modelWidth_, modelHeight_);
-    if (ret == FAILED) {
-        ERROR_LOG("Resize image failed");
-        return FAILED;
+    ret = dvpp_.Resize(resizedImage, yuvImage, kModelWidth, kModelHeight);
+    if (ret == ATLAS_ERROR) {
+        ATLAS_LOG_ERROR("Resize image failed");
+        return ATLAS_ERROR;
     }
     
-    return SUCCESS;
+    return ATLAS_OK;
 }
 
-Result ObjectDetect::Inference(aclmdlDataset*& inferenceOutput,
+AtlasError ObjectDetect::Inference(std::vector<InferenceOutput>& inferenceOutput,
                                ImageData& resizedImage) {
-    Result ret = model_.CreateInput(resizedImage.data.get(),
+    AtlasError ret = model_.CreateInput(resizedImage.data.get(),
                                     resizedImage.size);
-    if (ret != SUCCESS) {
-        ERROR_LOG("Create mode input dataset failed");
-        return FAILED;
+    if (ret != ATLAS_OK) {
+        ATLAS_LOG_ERROR("Create mode input dataset failed");
+        return ATLAS_ERROR;
     }
 
-    ret = model_.Execute();
-    if (ret != SUCCESS) {
-        ERROR_LOG("Execute model inference failed");
-        return FAILED;
+    ret = model_.Execute(inferenceOutput);
+    if (ret != ATLAS_OK) {
+        ATLAS_LOG_ERROR("Execute model inference failed");
+        return ATLAS_ERROR;
     }
-
-    inferenceOutput = model_.GetModelOutputData();
-
-    return SUCCESS;
+    model_.DestroyInput();
+    return ATLAS_OK;
 }
 
-Result ObjectDetect::Postprocess(ImageData& image, aclmdlDataset* modelOutput,
+AtlasError ObjectDetect::Postprocess(ImageData& image, std::vector<InferenceOutput>& modelOutput,
                                  const string& origImagePath) {
     std::vector<BoundingBox> binfo;
 
-    for (uint ImgIndex = 0; ImgIndex < kOutputTensorSize; ImgIndex ++) {
+    for (uint ImgIndex = 0; ImgIndex < kOutputTensorSize; ImgIndex++) {
         uint gridSize = kGridSize[ImgIndex];
         uint32_t dataSize = 0;
-        float* detectData = (float *)GetInferenceOutputItem(dataSize, modelOutput,
-        (kOutputTensorSize - ImgIndex - 1));
-        for ( uint cx = 0; cx < gridSize; cx++)
+        float* detectData = (float *)modelOutput[kOutputTensorSize - ImgIndex - 1].data.get();
+        // float* detectData = (float *)GetInferenceOutputItem(dataSize, modelOutput,
+        // (kOutputTensorSize - ImgIndex - 1));
+        for (uint cx = 0; cx < gridSize; cx++)
         {
             for(uint cy = 0; cy < gridSize; cy++)
             {
-                float tx, ty, tw, th, cf;
+                float tx = 0, ty = 0, tw = 0, th = 0, cf = 0;
 
                 for (uint i = 0; i  < numBBoxes; ++i)
                 {
@@ -329,8 +259,8 @@ Result ObjectDetect::Postprocess(ImageData& image, aclmdlDataset* modelOutput,
     }
 
     vector<BBox> detectResults;
-    float widthScale = (float)(image.width) / modelWidth_;
-    float heightScale = (float)(image.height) / modelHeight_;
+    float widthScale = (float)(image.width) / kModelWidth;
+    float heightScale = (float)(image.height) / kModelHeight;
 
     for (uint32_t i = 0; i < result.size(); i++) {
         BBox boundBox;
@@ -346,49 +276,8 @@ Result ObjectDetect::Postprocess(ImageData& image, aclmdlDataset* modelOutput,
     }
     DrawBoundBoxToImage(detectResults, origImagePath);
 
-    return SUCCESS;
+    return ATLAS_OK;
 }
-
-void* ObjectDetect::GetInferenceOutputItem(uint32_t& itemDataSize,
-                                           aclmdlDataset* inferenceOutput,
-                                           uint32_t idx) {
-    aclDataBuffer* dataBuffer = aclmdlGetDatasetBuffer(inferenceOutput, idx);
-    if (dataBuffer == nullptr) {
-        ERROR_LOG("Get the %dth dataset buffer from model "
-                  "inference output failed", idx);
-        return nullptr;
-    }
-
-    void* dataBufferDev = aclGetDataBufferAddr(dataBuffer);
-    if (dataBufferDev == nullptr) {
-        ERROR_LOG("Get the %dth dataset buffer address "
-                  "from model inference output failed", idx);
-        return nullptr;
-    }
-
-    size_t bufferSize = aclGetDataBufferSize(dataBuffer);
-    if (bufferSize == 0) {
-        ERROR_LOG("The %dth dataset buffer size of "
-                  "model inference output is 0", idx);
-        return nullptr;
-    }
-
-    void* data = nullptr;
-    if (runMode_ == ACL_HOST) {
-        data = Utils::CopyDataDeviceToLocal(dataBufferDev, bufferSize);
-        if (data == nullptr) {
-            ERROR_LOG("Copy inference output to host failed");
-            return nullptr;
-        }
-    }
-    else {
-        data = dataBufferDev;
-    }
-
-    itemDataSize = bufferSize;
-    return data;
-}
-
 void ObjectDetect::DrawBoundBoxToImage(vector<BBox>& detectionResults,
                                        const string& origImagePath) {
     cv::Mat image = cv::imread(origImagePath, CV_LOAD_IMAGE_UNCHANGED);
@@ -413,35 +302,10 @@ void ObjectDetect::DrawBoundBoxToImage(vector<BBox>& detectionResults,
 
 void ObjectDetect::DestroyResource()
 {
-    dvpp_.DestroyResource();
-    aclError ret;
-    if (stream_ != nullptr) {
-        ret = aclrtDestroyStream(stream_);
-        if (ret != ACL_ERROR_NONE) {
-            ERROR_LOG("destroy stream failed");
-        }
-        stream_ = nullptr;
+    if (!isReleased_) {
+        dvpp_.DestroyResource();
+        model_.DestroyResource();
+        isReleased_ = true;
     }
-    INFO_LOG("end to destroy stream");
 
-    if (context_ != nullptr) {
-        ret = aclrtDestroyContext(context_);
-        if (ret != ACL_ERROR_NONE) {
-            ERROR_LOG("destroy context failed");
-        }
-        context_ = nullptr;
-    }
-    INFO_LOG("end to destroy context");
-
-    ret = aclrtResetDevice(deviceId_);
-    if (ret != ACL_ERROR_NONE) {
-        ERROR_LOG("reset device failed");
-    }
-    INFO_LOG("end to reset device is %d", deviceId_);
-
-    ret = aclFinalize();
-    if (ret != ACL_ERROR_NONE) {
-        ERROR_LOG("finalize acl failed");
-    }
-    INFO_LOG("end to finalize acl");
 }

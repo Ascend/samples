@@ -1,53 +1,36 @@
-# 量化示例
+# TensorFlow 框架示例
 
-本文档为amct_acl工具量化TensorFlow ResNet50模型的使用示例。
+TensorFlow 框架 ResNet-50 分类网络模型量化
 
-## 环境要求
+## 1. 准备模型
 
-用户需要先搭建好Ascend910环境，包括安装Driver/Firmware/FwkACLlib等软件包和设置环境变量，然后在该环境上安装晟腾模型压缩工具。环境安装方法请参考《晟腾模型压缩工具使用指南（ACL方式）》。
+请至[昇腾社区](https://ascend.huawei.com/zh/#/software/modelzoo/detail/1/7548422b6b9c4a809114435f6b128bb6)下载 ResNet-50 模型文件。下载后解压并将其中的 resnet_v1_50.pb 放到当前目录的 [model](./model/) 子目录中。
 
-## 模型准备
+## 2. 准备校准数据集
 
-请至[晟腾社区-ModelZoo](https://ascend.huawei.com/zh/#/software/modelzoo/detail/1/7548422b6b9c4a809114435f6b128bb6)下载ResNet50模型文件。下载后解压并将其中的resnet_v1_50.pb放到当前目录的model子目录中。处理后的model目录结构如下：
+计算量化因子的过程被称为“校准 (calibration)”。校准过程需要使用一部分测试图片来执行模型推理，在推理过程中计算量化因子。请下载[校准图片](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/amct_acl/classification/calibration.rar)，并解压到 [data](./data/) 文件夹中。
 
-```shell
-└─model
-    └─resnet_v1_50.pb
-```
+## 3. 执行量化
 
-## 数据准备
+进入 scripts 子目录，执行 run_calibration.sh 脚本。
 
-+ **校准集准备**
-
-计算量化因子的过程被称为“校准（calibration）”。校准过程需要使用一部分测试图片来执行模型推理，在推理过程中计算量化因子。请下载[校准图片](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/amct_acl/classification/calibration.rar)，并解压到data文件夹中。处理后的data目录结构如下：
-
-```shell
-└─data
-    ├─calibration
-    |    ├─animal-4666451__340.jpg
-    |    └─......(省略其余图片名字)
-    └─process_data.py
-```
-
-## 量化示例
-
-进入scripts子目录，执行run_calibration.sh脚本。
-
-```shell
+```bash
 bash run_calibration.sh
 ```
 
 若出现如下信息则说明量化成功：
 
-```shell
+```none
 amct_acl generate deploy air success.
 ```
 
-## 量化结果
+## 4. 量化结果
 
-量化成功后，会在scripts目录生成以下文件：
+量化成功后，会在 [scripts](./scripts/) 目录生成如下文件：
 
-+ amct_log/amct_acl.log：量化日志文件，记录晟腾模型压缩工具量化过程的日志信息。
-+ results/resnet_v1_50.air：量化后的模型文件。
-+ kernel_meta：算子编译生成的文件目录。
-+ （可选）dump/record.txt：量化因子文件，如果执行量化时设置了生成量化因子的环境变量，则量化后会生成该目录。关于环境变量的设置和量化因子的详细说明，请参考《晟腾模型压缩工具使用指南（ACL方式）》。
++ [amct_log](./scripts/amct_log/)
+  + [amct_acl.log](./scripts/amct_log/amct_acl.log): 量化日志文件，记录昇腾模型压缩工具量化过程的日志信息。
++ [fusion_result.json](./scripts/fusion_result.json): 模型编译过程中使用的融合规则。
++ [kernel_meta](./scripts/kernel_meta/): 算子编译生成的文件目录。
++ [outputs](./scripts/outputs)
+  + [resnet_v1_50.air](./scripts/outputs/resnet_v1_50.air): 量化后的模型文件。

@@ -18,172 +18,129 @@
 */
 #include "classify_process.h"
 #include <iostream>
+#include <vector>
+#include "opencv2/opencv.hpp"
+#include "opencv2/imgcodecs/legacy/constants_c.h"
+#include "opencv2/imgproc/types_c.h"
 
 #include "acl/acl.h"
-#include "model_process.h"
 #include "image_net_classes.h"
-#include "utils.h"
 
+#define RGBU8_IMAGE_SIZE(width, height) ((width) * (height) * 3)
 using namespace std;
 
 namespace {
-    uint32_t kTopNConfidenceLevels = 5;
+    const uint32_t kTopNConfidenceLevels = 5;
+    const uint32_t kOutputDataBufId = 0;
+    const uint32_t kModelWidth = 224;
+    const uint32_t kModelHeight = 224;
+    const string kModelPath = "../model/googlenet.om";
+    const uint32_t inputDataSize = RGBU8_IMAGE_SIZE(kModelWidth, kModelHeight);
 }
 
-ClassifyProcess::ClassifyProcess(const char* modelPath, 
-                                 uint32_t modelWidth, uint32_t modelHeight)
-:deviceId_(0), context_(nullptr), stream_(nullptr), inputBuf_(nullptr), 
-modelWidth_(modelWidth), modelHeight_(modelHeight), isInited_(false){
-    modelPath_ = modelPath;
-    inputDataSize_ = RGBU8_IMAGE_SIZE(modelWidth_, modelHeight_);
+ClassifyProcess::ClassifyProcess():
+model_(kModelPath),
+inputDataSize_(inputDataSize),
+inputData_(nullptr),
+isInited_(false), 
+isReleased_(false){
 }
 
 ClassifyProcess::~ClassifyProcess() {
     DestroyResource();
 }
 
-Result ClassifyProcess::InitResource() {
-    // ACL init
-    const char *aclConfigPath = "../src/acl.json";
-    aclError ret = aclInit(aclConfigPath);
-    if (ret != ACL_ERROR_NONE) {
-        ERROR_LOG("Acl init failed");
-        return FAILED;
-    }
-    INFO_LOG("Acl init success");
-
-    // open device
-    ret = aclrtSetDevice(deviceId_);
-    if (ret != ACL_ERROR_NONE) {
-        ERROR_LOG("Acl open device %d failed", deviceId_);
-        return FAILED;
-    }
-    INFO_LOG("Open device %d success", deviceId_);
-
-    ret = aclrtGetRunMode(&runMode_);
-    if (ret != ACL_ERROR_NONE) {
-        ERROR_LOG("acl get run mode failed");
-        return FAILED;
-    }
-
-    return SUCCESS;
-}
-
-Result ClassifyProcess::InitModel(const char* omModelPath) {
-    Result ret = model_.LoadModelFromFileWithMem(omModelPath);
-    if (ret != SUCCESS) {
-        ERROR_LOG("execute LoadModelFromFileWithMem failed");
-        return FAILED;
-    }
-
-    ret = model_.CreateDesc();
-    if (ret != SUCCESS) {
-        ERROR_LOG("execute CreateDesc failed");
-        return FAILED;
-    }
-
-    ret = model_.CreateOutput();
-    if (ret != SUCCESS) {
-        ERROR_LOG("execute CreateOutput failed");
-        return FAILED;
-    }
-
-    aclrtMalloc(&inputBuf_, (size_t)(inputDataSize_), ACL_MEM_MALLOC_HUGE_FIRST);
-    if (inputBuf_ == nullptr) {
-        ERROR_LOG("Acl malloc image buffer failed.");
-        return FAILED;
-    }
-
-    ret = model_.CreateInput(inputBuf_, inputDataSize_);
-    if (ret != SUCCESS) {
-        ERROR_LOG("Create mode input dataset failed");
-        return FAILED;
-    }
-
-    return SUCCESS;
-}
-
-Result ClassifyProcess::Init() {
+AtlasError ClassifyProcess::Init() {
     if (isInited_) {
-        INFO_LOG("Classify instance is initied already!");
-        return SUCCESS;
+        ATLAS_LOG_INFO("Classify process is initied already");
+        return ATLAS_OK;
     }
 
-    Result ret = InitResource();
-    if (ret != SUCCESS) {
-        ERROR_LOG("Init acl resource failed");
-        return FAILED;
-    }
-
-    ret = InitModel(modelPath_);
-    if (ret != SUCCESS) {
-        ERROR_LOG("Init model failed");
-        return FAILED;
+    AtlasError atlRet = model_.Init();
+    if (atlRet) {
+        ATLAS_LOG_ERROR("Model init failed, error %d", atlRet);
+        return ATLAS_ERROR;
     }
 
     isInited_ = true;
-    return SUCCESS;
+    return ATLAS_OK;
 }
 
-Result ClassifyProcess::Preprocess(const string& imageFile) {
-    // read image using OPENCV
-    INFO_LOG("Read image %s", imageFile.c_str());
+AtlasError ClassifyProcess::Process(std::vector<std::string>& fileVec, aclrtRunMode RunMode){
+    RunMode_ = RunMode;
+    for (string imageFile : fileVec) {
+        AtlasError ret = Preprocess(imageFile);
+        if (ret != ATLAS_OK) {
+            ATLAS_LOG_ERROR("Read file %s failed, continue to read next",
+                        imageFile.c_str());                
+            continue;
+        }
+        std::vector<InferenceOutput> inferOutputs;
+        ret = Inference(inferOutputs);
+        if (ret != ATLAS_OK) {
+            ATLAS_LOG_ERROR("Inference model inference output data failed");
+            return ATLAS_ERROR;
+        }
+
+        ret = Postprocess(imageFile, inferOutputs);
+        if (ret != ATLAS_OK) {
+            ATLAS_LOG_ERROR("Process model inference output data failed");
+            return ATLAS_ERROR;
+        }
+    }
+    return ATLAS_OK;
+}
+
+AtlasError ClassifyProcess::Preprocess(const string& imageFile) {
+    ATLAS_LOG_INFO("Read image %s", imageFile.c_str());
     cv::Mat origMat = cv::imread(imageFile, CV_LOAD_IMAGE_COLOR);
     if (origMat.empty()) {
-        ERROR_LOG("Read image failed");
-        return FAILED;
+        ATLAS_LOG_ERROR("Read image failed");
+        return ATLAS_ERROR;
     }
 
-    INFO_LOG("Resize image %s", imageFile.c_str());
-    //resize
+    ATLAS_LOG_INFO("Resize image %s", imageFile.c_str());
     cv::Mat reiszeMat;
-    cv::resize(origMat, reiszeMat, cv::Size(modelWidth_, modelHeight_));
+    cv::resize(origMat, reiszeMat, cv::Size(kModelWidth, kModelHeight));
     if (reiszeMat.empty()) {
-        ERROR_LOG("Resize image failed");
-        return FAILED;
+        ATLAS_LOG_ERROR("Resize image failed");
+        return ATLAS_ERROR;
     }
     
-    if (runMode_ == ACL_HOST) {     
-        //AI1上运行时,需要将图片数据拷贝到device侧   
-        aclError ret = aclrtMemcpy(inputBuf_, inputDataSize_, 
-                                   reiszeMat.ptr<uint8_t>(), inputDataSize_,
-                                   ACL_MEMCPY_HOST_TO_DEVICE);
-        if (ret != ACL_ERROR_NONE) {
-            ERROR_LOG("Copy resized image data to device failed.");
-            return FAILED;
-        }
-    } else {
-        //Atals200DK上运行时,数据拷贝到本地即可.
-        //reiszeMat是局部变量,数据无法传出函数,需要拷贝一份
-        memcpy(inputBuf_, reiszeMat.ptr<void>(), inputDataSize_);
+    inputData_ = CopyDataToDevice(reiszeMat.ptr<uint8_t>(), inputDataSize_, RunMode_, MEMORY_DEVICE);
+    if (inputData_ == nullptr) {
+        ATLAS_LOG_ERROR("Copy data to device failed");
+        return ATLAS_ERROR;
     }
-
-    return SUCCESS;
+    return ATLAS_OK;
 }
 
-Result ClassifyProcess::Inference(aclmdlDataset*& inferenceOutput) {
-    Result ret = model_.Execute();
-    if (ret != SUCCESS) {
-        ERROR_LOG("Execute model inference failed");
-        return FAILED;
+AtlasError ClassifyProcess::Inference(std::vector<InferenceOutput>& inferOutputs) {
+    AtlasError ret = model_.CreateInput(inputData_,
+                                       inputDataSize_);
+    if (ret != ATLAS_OK) {
+        ATLAS_LOG_ERROR("Create mode input dataset failed\n");
+        return ATLAS_ERROR;
     }
-    //Release model input buffer
-    //model_.DestroyInput();
 
-    inferenceOutput = model_.GetModelOutputData();
+    ret = model_.Execute(inferOutputs);
+    if (ret != ATLAS_OK) {
+        ATLAS_LOG_ERROR("Execute model inference failed\n");
+    }
+    model_.DestroyInput();
 
-    return SUCCESS;
+    return ret;
 }
 
-Result ClassifyProcess::Postprocess(const string& origImageFile, 
-                                    aclmdlDataset* modelOutput){
-    uint32_t dataSize = 0;
-    void* data = GetInferenceOutputItem(dataSize, modelOutput);
-    if (data == nullptr) return FAILED;
-
+AtlasError ClassifyProcess::Postprocess(const string& origImageFile, 
+                                    std::vector<InferenceOutput>& inferOutputs){
+    uint32_t dataSize = inferOutputs[kOutputDataBufId].size;
+    void* data = (void *)inferOutputs[kOutputDataBufId].data.get();
+    if (data == nullptr) {
+        return ATLAS_ERROR;
+    }
     float* outData = NULL;
     outData = reinterpret_cast<float*>(data);
-
     map<float, unsigned int, greater<float> > resultMap;
     for (uint32_t j = 0; j < dataSize / sizeof(float); ++j) {
         resultMap[*outData] = j;
@@ -198,60 +155,16 @@ Result ClassifyProcess::Postprocess(const string& origImageFile,
         if (++cnt > kTopNConfidenceLevels) {
             break;
         }
-        INFO_LOG("top %d: index[%d] value[%lf]", cnt, it->second, it->first);
+        ATLAS_LOG_INFO("top %d: index[%d] value[%lf]", cnt, it->second, it->first);
 
         if (it->first > maxScore) {
             maxScore = it->first;
             maxScoreCls = it->second;
         }
     }
-
     LabelClassToImage(maxScoreCls, origImageFile);
-    if (runMode_ == ACL_HOST) {
-        delete[]((uint8_t *)data);
-        data = nullptr;
-    }
 
-    return SUCCESS;
-}
-
-void* ClassifyProcess::GetInferenceOutputItem(uint32_t& itemDataSize,
-                                              aclmdlDataset* inferenceOutput) {
-    aclDataBuffer* dataBuffer = aclmdlGetDatasetBuffer(inferenceOutput, 0);
-    if (dataBuffer == nullptr) {
-        ERROR_LOG("Get the dataset buffer from model "
-                  "inference output failed");
-        return nullptr;
-    }
-
-    void* dataBufferDev = aclGetDataBufferAddr(dataBuffer);
-    if (dataBufferDev == nullptr) {
-        ERROR_LOG("Get the dataset buffer address "
-                  "from model inference output failed");
-        return nullptr;
-    }
-
-    size_t bufferSize = aclGetDataBufferSize(dataBuffer);
-    if (bufferSize == 0) {
-        ERROR_LOG("The dataset buffer size of "
-                  "model inference output is 0");
-        return nullptr;
-    }
-
-    void* data = nullptr;
-    if (runMode_ == ACL_HOST) {
-        data = Utils::CopyDataDeviceToLocal(dataBufferDev, bufferSize);
-        if (data == nullptr) {
-            ERROR_LOG("Copy inference output to host failed");
-            return nullptr;
-        }
-    }
-    else {
-        data = dataBufferDev;
-    }
-
-    itemDataSize = bufferSize;
-    return data;
+    return ATLAS_OK;
 }
 
 void ClassifyProcess::LabelClassToImage(int classIdx, const string& origImagePath) {
@@ -274,13 +187,12 @@ void ClassifyProcess::LabelClassToImage(int classIdx, const string& origImagePat
     if (classIdx < 0 || classIdx >= IMAGE_NET_CLASSES_NUM) {
         text = "none";
     } else {
-        text = kStrImageNetClasses[classIdx];
+        text = g_str_image_net_classes[classIdx];
     }
 
     int fontFace = 0;
     double fontScale = 1;
     int thickness = 2;
-    int baseline;
     cv::Point origin;
     origin.x = 10;
     origin.y = 50;
@@ -289,37 +201,10 @@ void ClassifyProcess::LabelClassToImage(int classIdx, const string& origImagePat
 }
 
 void ClassifyProcess::DestroyResource()
-{   aclrtFree(inputBuf_);
-    model_.DestroyResource();
-    inputBuf_ = nullptr;
-    aclError ret;
-    if (stream_ != nullptr) {
-        ret = aclrtDestroyStream(stream_);
-        if (ret != ACL_ERROR_NONE) {
-            ERROR_LOG("destroy stream failed");
-        }
-        stream_ = nullptr;
+{
+    if (!isReleased_) {
+        model_.DestroyResource();
+        isReleased_ = true;
     }
-    INFO_LOG("end to destroy stream");
 
-    if (context_ != nullptr) {
-        ret = aclrtDestroyContext(context_);
-        if (ret != ACL_ERROR_NONE) {
-            ERROR_LOG("destroy context failed");
-        }
-        context_ = nullptr;
-    }
-    INFO_LOG("end to destroy context");
-
-    ret = aclrtResetDevice(deviceId_);
-    if (ret != ACL_ERROR_NONE) {
-        ERROR_LOG("reset device failed");
-    }
-    INFO_LOG("end to reset device is %d", deviceId_);
-
-    ret = aclFinalize();
-    if (ret != ACL_ERROR_NONE) {
-        ERROR_LOG("finalize acl failed");
-    }
-    INFO_LOG("end to finalize acl");
 }
