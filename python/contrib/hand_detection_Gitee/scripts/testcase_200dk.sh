@@ -1,5 +1,7 @@
 #!/bin/bash
-tf_model="https://drive.google.com/u/0/uc?id=1Ls-28mkmKq5e6bQsK6iA9p9vqBBxqVFM&export=download"
+tf_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/hand_detection_picture/Hand_detection.pb"
+test_img="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/hand_detection_picture/hand.jpg"
+verify_img="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/hand_detection_picture/verify.jpg"
 model_name="Hand_detection"
 version=$1
 data_source="../data/"
@@ -76,6 +78,21 @@ function downloadOriginalModel() {
     return 0
 }
 
+function downloadTestData() {
+
+    echo ${test_img}
+    echo ${verify_img}
+
+    wget ${test_img} --no-check-certificate -O ${project_path}/data/hand.jpg
+    wget ${verify_img} --no-check-certificate -O ${project_path}/data/verify.jpg
+    if [ $? -ne 0 ];then
+        echo "Download test images failed, please check Network."
+        return 1
+    fi
+    return 0
+}
+
+
 function main() {
 
     if [[ ${version}"x" = "x" ]];then
@@ -89,6 +106,12 @@ function main() {
         downloadOriginalModel
         if [ $? -ne 0 ];then
             echo "ERROR: download original model failed"
+            return ${inferenceError}
+        fi
+
+        downloadTestData
+        if [ $? -ne 0 ];then
+            echo "ERROR: download test data failed"
             return ${inferenceError}
         fi
 
@@ -129,8 +152,8 @@ function main() {
         return ${inferenceError}
     fi
 
-    #test 1:hand.jpeg
-    original_img=${project_path}/data/hand.jpeg
+    #test:hand.jpg
+    original_img=${project_path}/data/hand.jpg
     verify_img=${project_path}/data/verify.jpg
     mkdir -p ${project_path}/output
     rm ${project_path}/output/*
@@ -146,27 +169,7 @@ function main() {
         return ${verifyResError}
     fi   
 
-    echo "********run test 1 success********"
-
-    #test 2:hand2.jpg
-    original_img=${project_path}/data/hand2.jpg
-    verify_img=${project_path}/data/verify_2.jpg
-    mkdir -p ${project_path}/output
-    rm ${project_path}/output/*
-    python3.6 ${project_path}/src/hand_detection.py --input_image ${original_img}
-    if [ $? -ne 0 ];then
-        echo "ERROR: run failed. please check your project"
-        return ${inferenceError}
-    fi   
-    out_img=${project_path}/output/output.jpg
-    python3 ${script_path}/verify_result.py ${verify_img} ${out_img}
-    if [ $? -ne 0 ];then
-        echo "ERROR: The result of test 2 is wrong!"
-        return ${verifyResError}
-    fi   
-
-    echo "********run test 2 succoutputess********"
-    
+    echo "********run test success********"
 
     return ${success}
 }

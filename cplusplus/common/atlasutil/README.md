@@ -36,13 +36,13 @@ atlasutil库对当前开源社区样例中
 
 1.设置DDK_PATH环境变量
 
-如果是Atlas200DK设备：
+如果是Atlas200DK：
 
 ```
 export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux
 ```
 
-其他设备：
+Atlas300：
 
 ```
 export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/
@@ -61,11 +61,11 @@ make install
 
 编译生成的libatalsutil.so将被拷贝到`$HOME/ascend_ddk/arm/lib/`下；头文件拷贝到`$HOME/ascend_ddk/arm/include/atlasutil`
 
-其他昇腾AI设备:
+Atlas300:
 
 ```
-make mode=ASIC
-make mode=ASIC install
+make mode=Atlas300
+make mode=Atlas300 install
 ```
 
 若服务器为x86架构：编译生成的libatalsutil.so将被拷贝到`$HOME/ascend_ddk/x86/lib/`下；头文件拷贝到`$HOME/ascend_ddk/x86/include/atlasutil`。  

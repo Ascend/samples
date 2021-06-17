@@ -11,7 +11,7 @@ endif
 ifeq ($(mode), AtlasDK)
     CC := aarch64-linux-gnu-g++
     arch := arm
-else ifeq ($(mode), ASIC)
+else ifeq ($(mode), Atlas300)
     CC := g++
 
     arch_local=$(shell arch)
@@ -21,7 +21,7 @@ else ifeq ($(mode), ASIC)
         arch := x86
     endif    
 else
-    $(error "Unsupported mode: "$(mode)", please input: AtlasDK or ASIC.")
+    $(error "Unsupported mode: "$(mode)", please input: AtlasDK or Atlas300.")
 endif
 
 NPU_HOST_LIB = $(DDK_PATH)/acllib/lib64/stub/

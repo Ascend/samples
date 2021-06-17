@@ -17,10 +17,16 @@
     计算过程是：将两个输入矩阵相乘，得到最终结果矩阵z并将其返回。
 
 2.  明确输入和输出。
+
+    **说明：本样例基于固定排布格式和固定shape的输入，使用TIK方式进行Matmul算子的实现。** 
+
     -   Matmul算子有两个输入：x1与x2，输出为y。
-    -   算子输入的数据类型为float16，输出的数据类型为float32。
-    -   算子输入支持固定shape，输入shape分别为（16,64）和（64,1024），输出shape为（16,1024）。
-    -   算子输入支持的format为：ND。
+    -   本样例中，算子输入的数据类型仅支持float16、int8、uint8。若输入的数据类型为float16，输出的数据类型为float32；若输入的数据类型为int8、uint8，输出的数据类型为int32。
+    -   算子输入支持固定的format与shape。
+
+        输入的format需要分别为：[k,m,c]与[k,n,c]，shape分别为[4,16,16]与[4,1024,16]。
+        输入数据在传入算子前，需要分别reshape为（16,64）和（64,1024），详细请参见[generate_datatik.py](../../2_verify_op/acl_execute_matmul/run/out/test_data/data/generate_datatik.py)
+        输出shape为（16,1024）。
 
 3.  确定算子开发方式及使用的计算接口。
     1.  计算过程中主要涉及矩阵乘法操作，初分析可使用matmul\(\)接口实现矩阵x1\*x2的操作。

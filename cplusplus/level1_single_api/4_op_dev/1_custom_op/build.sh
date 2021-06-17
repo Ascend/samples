@@ -12,10 +12,10 @@
 # Uncomment and modify it when you specified installation path of AICPU.
 # export ASCEND_AICPU_PATH=/usr/local/Ascend
 
-# ASCEND_TENSOR_COMPLIER_INCLUDE: The path of the header file of the ATC package, where "/usr/local/Ascend/atc/include" is the
+# ASCEND_TENSOR_COMPILER_INCLUDE: The path of the header file of the ATC package, where "/usr/local/Ascend/atc/include" is the
 #                                 default installation path. If user defines the installation path, please modify it.
 # Uncomment and modify it when you specified installation path of ATC.
-# export ASCEND_TENSOR_COMPLIER_INCLUDE=/usr/local/Ascend/atc/include
+# export ASCEND_TENSOR_COMPILER_INCLUDE=/usr/local/Ascend/atc/include
 
 # TOOLCHAIN_DIR: The path of the cross compilation tool, where "/usr/local/Ascend/toolkit/toolchain/hcc" is the
 #                default installation path. If user defines the installation path, please modify it.
@@ -120,19 +120,19 @@ mkdir -p $project_path/build_out
 
 ###### Environment variable settings, need to set according to your own device ######
 
-# ASCEND_TENSOR_COMPLIER_INCLUDE: The path of the header file of the ATC package, where "/usr/local/Ascend/atc/include" is the
+# ASCEND_TENSOR_COMPILER_INCLUDE: The path of the header file of the ATC package, where "/usr/local/Ascend/atc/include" is the
 #                                 default installation path. If user defines the installation path, please modify it.
 # Uncomment and modify it when you specified installation path of ATC.
-if [[ -z "${ASCEND_TENSOR_COMPLIER_INCLUDE}" ]]; then
+if [[ -z "${ASCEND_TENSOR_COMPILER_INCLUDE}" ]]; then
     if [[ -d "/usr/local/Ascend/atc/include" ]];then
-        export ASCEND_TENSOR_COMPLIER_INCLUDE=/usr/local/Ascend/atc/include
+        export ASCEND_TENSOR_COMPILER_INCLUDE=/usr/local/Ascend/atc/include
     else
-        log "[ERROR] ENV ASCEND_TENSOR_COMPLIER_INCLUDE is not set"
+        log "[ERROR] ENV ASCEND_TENSOR_COMPILER_INCLUDE is not set"
         exit 1
     fi
 else
-    if [[ ! -d "${ASCEND_TENSOR_COMPLIER_INCLUDE}" ]];then
-        log "[ERROR] ENV ASCEND_TENSOR_COMPLIER_INCLUDE=${ASCEND_TENSOR_COMPLIER_INCLUDE} dir is not exist"
+    if [[ ! -d "${ASCEND_TENSOR_COMPILER_INCLUDE}" ]];then
+        log "[ERROR] ENV ASCEND_TENSOR_COMPILER_INCLUDE=${ASCEND_TENSOR_COMPILER_INCLUDE} dir is not exist"
         exit 1
     fi
 fi

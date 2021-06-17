@@ -6,7 +6,7 @@ sys.path.append(project_path)
 import datetime
 
 from atlas_utils.camera import Camera
-from atlas_utils import presenteragent
+import atlas_utils.presenteragent.presenter_channel as presenter_channel
 from atlas_utils.acl_model import Model
 from atlas_utils.acl_resource import AclResource
 from vgg_ssd import VggSsd
@@ -30,7 +30,7 @@ def main():
     model = Model(MODEL_PATH)
     #Connect to the presenter server according to the configuration, 
     # and end the execution of the application if the connection fails
-    chan = presenteragent.presenter_channel.open_channel(FACE_DETEC_CONF)
+    chan = presenter_channel.open_channel(FACE_DETEC_CONF)
     if chan is None:
         print("Open presenter channel failed")
         return

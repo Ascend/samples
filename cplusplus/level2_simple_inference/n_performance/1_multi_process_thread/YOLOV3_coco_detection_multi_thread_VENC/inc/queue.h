@@ -26,14 +26,16 @@
 #include "opencv2/imgproc/types_c.h"
 struct message_pre
 {
-    int number;
+    int videoIndex;
+    int isLastFrame;
     cv::Mat frame;
     cv::Mat reiszeMat;
 };
 
 struct message
 {
-    int number;
+    int videoIndex;
+    int isLastFrame;
     cv::Mat frame;
     std::shared_ptr<void> detectData;
     std::shared_ptr<void> boxNum;

@@ -96,7 +96,7 @@ python ./src/resnet-50_v1_retrain.py --train_set TRAIN_SET --eval_set EVAL_SET -
 | 参数 | 必填项 | 数据类型 | 默认值 | 参数解释 |
 | :-- | :-: | :-: | :-: | :-- |
 | -h | 否 | / | / | 显示帮助信息。 |
-| --config_defination CONFIG_DEFINATION | 是 | string | None | 量化的简易配置文件路径。用于区分 INT4 量化和 INT8 量化，如果采用 INT4 量化则填写 ```./src/retrain_conf/sample_int4.cfg```，如果采用 INT8 量化则填写 ```./src/retrain_conf/sample_int8.cfg```。|
+| --config_defination CONFIG_DEFINATION | 是 | string | None | 量化的简易配置文件路径(```./src/retrain_conf/sample_int8.cfg```)。|
 | --batch_num BATCH_NUM | 否 | int| 2 | retrain 量化推理阶段的 batch 数。 |
 | --train_set TRAIN_SET | 是 | string | None | 测试数据集路径。 |
 | --train_keyword TRAIN_KEYWORD | 否 | string | None | 用于筛选训练集路径下包含该关键词的文件，若未定义，则默认训练集路径下所有文件作为训练集。 |

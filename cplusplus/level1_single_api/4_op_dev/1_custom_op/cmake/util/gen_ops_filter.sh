@@ -39,7 +39,7 @@ add_ops() {
 echo "{" > ${dest_file}
 ini_files=$(find ${src} -name "*.ini")
 for file in ${ini_files} ; do
-    name=$(grep '^\[' ${file} | sed 's/\[//g' | sed 's/]//g')
+    name=$(grep '^\[' ${file} | sed 's/\[//g' | sed 's/]//g' | sed 's/\r//g')
     grep 'heavyOp.flag' ${file} >/dev/null
     if [ $? == 0 ];then
         isHeavy=$(grep 'heavyOp.flag' ${file} | awk -F= '{print $2}')

@@ -213,7 +213,6 @@ INFO - [AMCT]:[AMCT]: The records is stored in dir: ./outputs/accuracy_based_aut
   + [config.json](./outputs/calibration/config.json): 回退前的量化配置文件，描述了如何对模型中的每一层进行量化。
   + [mobilenet_v2_quantized.pb](./outputs/accuracy_based_auto_calibration/mobilenet_v2_quantized.pb): 量化模型，可在 TensorFlow 环境进行精度仿真并可在昇腾 AI 处理器部署。
   + [mobilenet_v2_quant.json](./outputs/accuracy_based_auto_calibration/mobilenet_v2_quant.json): 量化信息文件，记录了量化模型同原始模型节点的映射关系，用于量化后模型同原始模型精度比对使用。
-  + [record.txt](./outputs/accuracy_based_auto_calibration/record.txt): 量化因子记录文件，记录量化因子。关于该文件的原型定义请参见
-[量化因子记录文件说明](https://support.huaweicloud.com/content/dam/cloudbu-site/archive/china/zh-cn/support/docs/auxiliarydevtool-cann330alphaXinfer/atlasamcttf_16_0014.html)。
+  + [record.txt](./outputs/accuracy_based_auto_calibration/record.txt): 量化因子记录文件，记录量化因子。关于该文件的原型定义请参见[量化因子记录文件说明](https://support.huaweicloud.com/content/dam/cloudbu-site/archive/china/zh-cn/support/docs/auxiliarydevtool-cann330alphaXinfer/atlasamcttf_16_0014.html)。
 
 > 对该模型重新进行量化时，在量化后模型的同级目录下生成的上述结果文件将会被覆盖。

@@ -109,7 +109,7 @@ $\color{red}{以下操作在开发环境(X86架构)上操作，以普通用户�
         **source ~/.bashrc**  
 
 5.  在开发环境部署Media模块  
-    1.  将[A200dk-npu-driver-{software version}-ubuntu18.04-aarch64-minirc.tar.gz](https://www.huaweicloud.com/ascend/resource/Software)以开发环境安装用户上传到\$HOME/Ascend目录下。  
+    1.  将[A200dk-npu-driver-{software version}-ubuntu18.04-aarch64-minirc.tar.gz](https://www.hiascend.com/hardware/firmware-drivers?tag=community)以开发环境安装用户上传到\$HOME/Ascend目录下。  
     2.  解压driver包   
          **cd \$HOME/Ascend**    
          **tar zxvf A200dk-npu-driver-{software version}-ubuntu18.04-aarch64-minirc.tar.gz** 

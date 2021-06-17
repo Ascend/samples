@@ -94,7 +94,7 @@ INFO - [AMCT]:[Utils]: The model file is saved in ./outputs/nuq/resnet-101_fake_
 [INFO] ResNet101 after quantize  top1:   0.76875 top5:     0.925
 ```
 
-### 量化结果
+### 2.3 量化结果
 
 量化成功后，在当前目录会生成量化日志文件 [./amct_log/amct_onnx.log](./amct_log/amct_onnx.log) 和 [./outputs/nuq](./outputs/nuq/) 文件夹，该文件夹内包含以下内容：
 

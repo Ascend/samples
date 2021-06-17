@@ -163,12 +163,12 @@ Caffe与TensorFlow共存的自定义算子样例工程的目录结构如下所�
 
         ```
 
-    -   ASCEND\_TENSOR\_COMPLIER\_INCLUDE：ATC组件的头文件所在路径。
+    -   ASCEND\_TENSOR\_COMPILER\_INCLUDE：ATC组件的头文件所在路径。
         -   若不配置此环境变量，默认使用路径：“/usr/local/Ascend/atc/include”。
         -   若实际ATC安装路径不为默认路径，请取消此环境变量的注释，并修改为实际的ATC组件的头文件所在路径，例如：
 
             ```
-            export ASCEND_TENSOR_COMPLIER_INCLUDE=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/atc/include
+            export ASCEND_TENSOR_COMPILER_INCLUDE=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/atc/include
             ```
 
     -   TOOLCHAIN\_DIR：Toolkit组件中HCC编译器所在路径，无默认值，此编译器用于对样例中的AI CPU算子进行编译。

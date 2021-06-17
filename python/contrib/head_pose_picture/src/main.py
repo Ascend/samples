@@ -107,9 +107,9 @@ def main():
     if save_img:
         image_res = cv2.cvtColor(image_res, cv2.COLOR_RGB2BGR)
         SRC_PATH = os.path.realpath(__file__).rsplit("/", 1)[0]
-        Output_PATH = os.path.join(SRC_PATH, "../outputs/test_output.jpg")
+        Output_PATH = os.path.join(SRC_PATH, "../output/test_output.jpg")
         try:
-            os.mkdir(os.path.join(SRC_PATH, "../outputs/"))
+            os.mkdir(os.path.join(SRC_PATH, "../output/"))
         except OSError:
             print("Output Path already exists")
         cv2.imwrite(Output_PATH, image_res)

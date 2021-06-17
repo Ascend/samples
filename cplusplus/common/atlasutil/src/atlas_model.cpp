@@ -23,15 +23,23 @@ using namespace std;
 
 AtlasModel::AtlasModel()
 :modelPath_(""), loadFlag_(false), modelId_(0), modelMemPtr_(nullptr),
-modelMemSize_(0),modelWeightPtr_(nullptr),modelWeightSize_(0),
-modelDesc_(nullptr), input_(nullptr), output_(nullptr), outputsNum_(0),
-isReleased_(false) {
+modelMemSize_(0), modelWorkPtr_(nullptr), modelWorkSize_(0), 
+modelWeightPtr_(nullptr),modelWeightSize_(0), modelDesc_(nullptr), 
+input_(nullptr), output_(nullptr), outputsNum_(0), isReleased_(false) {
 }
 
 AtlasModel::AtlasModel(const string& modelPath)
 :modelPath_(modelPath), loadFlag_(false), modelId_(0), modelMemPtr_(nullptr),
-modelMemSize_(0),modelWeightPtr_(nullptr),modelWeightSize_(0), 
-modelDesc_(nullptr), input_(nullptr), output_(nullptr), outputsNum_(0), 
+modelMemSize_(0), modelWorkPtr_(nullptr), modelWorkSize_(0), 
+modelWeightPtr_(nullptr),modelWeightSize_(0), modelDesc_(nullptr), 
+input_(nullptr), output_(nullptr), outputsNum_(0), isReleased_(false) {
+}
+
+AtlasModel::AtlasModel(void *modelAddr, size_t modelSize)
+:modelPath_(""), loadFlag_(false), modelId_(0), modelMemPtr_(modelAddr),
+modelMemSize_(modelSize), modelWorkPtr_(nullptr), modelWorkSize_(0), 
+modelWeightPtr_(nullptr),modelWeightSize_(0),
+modelDesc_(nullptr), input_(nullptr), output_(nullptr), outputsNum_(0),
 isReleased_(false) {
 }
 
@@ -50,7 +58,6 @@ void AtlasModel::DestroyResource() {
     DestroyOutput();
     isReleased_ = true;
 }
-
 
 AtlasError AtlasModel::Init() {
     aclError aclRet = aclrtGetRunMode(&runMode_);
@@ -87,6 +94,38 @@ AtlasError AtlasModel::Init(const string& modelPath) {
     return Init();
 }
 
+AtlasError AtlasModel::Init(void *modelAddr, size_t modelSize) {
+    modelMemPtr_ = modelAddr;
+    modelMemSize_ = modelSize;
+    aclError aclRet = aclrtGetRunMode(&runMode_);
+    if (aclRet != ACL_ERROR_NONE) {
+        ATLAS_LOG_ERROR("acl get run mode failed");
+        return ATLAS_ERROR_GET_RUM_MODE;
+    } 
+
+    AtlasError ret = LoadModelFromMem();
+    if (ret != ATLAS_OK) {
+        ATLAS_LOG_ERROR("Load model from mem failed, error: %d", ret);
+        return ret;
+    }
+
+    ret = CreateDesc();
+    if (ret != ATLAS_OK) {
+        ATLAS_LOG_ERROR("execute CreateDesc failed");
+        return ret;
+    }
+
+    ret = CreateOutput();
+    if (ret != ATLAS_OK) {
+        ATLAS_LOG_ERROR("execute CreateOutput failed");
+        return ret;
+    }
+
+    ATLAS_LOG_INFO("Init model %s success", modelPath_.c_str());
+
+    return ATLAS_OK;
+}
+
 AtlasError AtlasModel::LoadModelFromFile(const string& modelPath) {
     if (loadFlag_) {
         ATLAS_LOG_ERROR("%s is loaded already", modelPath.c_str());
@@ -104,6 +143,25 @@ AtlasError AtlasModel::LoadModelFromFile(const string& modelPath) {
     ATLAS_LOG_INFO("Load model %s success", modelPath.c_str());
 
     return ATLAS_OK;
+}
+
+AtlasError AtlasModel::LoadModelFromMem() {
+    if (loadFlag_) {
+        ATLAS_LOG_ERROR("Model is loaded already, address : %p", modelMemPtr_);
+        return ATLAS_ERROR_LOAD_MODEL_REPEATED;
+    }
+
+    aclError ret = aclmdlLoadFromMem(modelMemPtr_, modelMemSize_, &modelId_);
+    if (ret != ACL_ERROR_NONE) {
+        ATLAS_LOG_ERROR("Load model from : %p failed, return %d", 
+                        modelMemPtr_ , ret);
+        return ATLAS_ERROR_LOAD_MODEL;
+    }
+
+    loadFlag_ = true;
+    ATLAS_LOG_INFO("Load model from ：%p success", modelMemPtr_);
+
+    return ATLAS_OK;        
 }
 
 AtlasError AtlasModel::CreateDesc() {
@@ -145,10 +203,14 @@ AtlasError AtlasModel::CreateInput(void *input1, uint32_t input1size,
 }
 
 AtlasError AtlasModel::CreateInput(vector<DataInfo>& inputData) {
-    uint32_t dataNum = inputData.size();
+    uint32_t dataNum = aclmdlGetNumInputs(modelDesc_);
 
     if (dataNum == 0) {
         ATLAS_LOG_ERROR("Create input failed for no input data");
+        return ATLAS_ERROR_INVALID_ARGS;
+    }
+    if (dataNum != inputData.size()) {
+        ATLAS_LOG_ERROR("Create input failed for wrong input nums");
         return ATLAS_ERROR_INVALID_ARGS;
     }
 
@@ -159,6 +221,13 @@ AtlasError AtlasModel::CreateInput(vector<DataInfo>& inputData) {
     }
 
     for (uint32_t i = 0; i < inputData.size(); i++) {
+        size_t modelInputSize = aclmdlGetInputSizeByIndex(modelDesc_, i);
+        if (modelInputSize != inputData[i].size) {
+            ATLAS_LOG_ERROR("Input size verify failed "
+                            "input[%d] size: %d, provide size : %d", 
+                            i, modelInputSize, inputData[i].size);
+            return ATLAS_ERROR_ADD_DATASET_BUFFER;
+        }
         AtlasError atlRet = AddDatasetBuffer(input_, 
                                              inputData[i].data,
                                              inputData[i].size);

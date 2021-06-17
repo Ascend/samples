@@ -27,7 +27,6 @@
 ## 环境要求<a name="section3833348101215"></a>
 
 -   操作系统及架构：CentOS x86系统、CentOS aarch64系统、Euleros x86系统、Euleros aarch64系统
--   版本：3.2.0
 -   编译器：g++
 -   芯片：all
 -   python及依赖的库：python3.7.5

@@ -66,7 +66,17 @@ Status ScopeBatchMultiClassNonMaxSuppressionPass::LastMatchScopesAndOPs(std::sha
 
   for (auto& scope : scopes) {
     // Class ScopeTree guarantees scope is not empty.
-    if (scope->SubType() == kScopeTypeBatchMultiClassNonMaxSuppression) {
+    AscendString op_subtype;
+    Status ret = scope->SubType(op_subtype);
+    if (ret != SUCCESS) {
+        return FAILED;
+    }
+    AscendString op_name;
+    ret = scope->Name(op_name);
+    if (ret != SUCCESS) {
+        return FAILED;
+    }
+    if (op_subtype == kScopeTypeBatchMultiClassNonMaxSuppression) {
       OP_LOGI(kOpType, "BatchMultiClassNonMaxSuppression LastMatchScopesAndOPs match SubType.");
       ScopesResult result;
       std::vector<Scope*> result_scopes;
@@ -74,7 +84,7 @@ Status ScopeBatchMultiClassNonMaxSuppressionPass::LastMatchScopesAndOPs(std::sha
       result.SetScopes(result_scopes);
       results.push_back(result);
     }
-    if (scope->SubType() == kScopeTypeSecondBatchMultiClassNonMaxSuppression) {
+    if (op_subtype == kScopeTypeSecondBatchMultiClassNonMaxSuppression) {
       OP_LOGI(kOpType, "SecondBatchMultiClassNonMaxSuppression LastMatchScopesAndOPs match SubType.");
       ScopesResult result;
       std::vector<Scope*> result_scopes;
@@ -82,7 +92,7 @@ Status ScopeBatchMultiClassNonMaxSuppressionPass::LastMatchScopesAndOPs(std::sha
       result.SetScopes(result_scopes);
       results.push_back(result);
     }
-    if (scope->SubType() == kScopeTypeFaceBoxesBatchMultiClassNonMaxSuppression) {
+    if (op_subtype == kScopeTypeFaceBoxesBatchMultiClassNonMaxSuppression) {
       OP_LOGI(kOpType, "FaceBoxesBatchMultiClassNonMaxSuppression LastMatchScopesAndOPs match SubType.");
       ScopesResult result;
       std::vector<Scope*> result_scopes;
@@ -90,7 +100,7 @@ Status ScopeBatchMultiClassNonMaxSuppressionPass::LastMatchScopesAndOPs(std::sha
       result.SetScopes(result_scopes);
       results.push_back(result);
     }
-    if (scope->SubType() == kScopeTypeFiltereBatchMultiClassNonMaxSuppression) {
+    if (op_subtype == kScopeTypeFiltereBatchMultiClassNonMaxSuppression) {
       OP_LOGI(kOpType, "FiltereBatchMultiClassNonMaxSuppression LastMatchScopesAndOPs match SubType.");
       ScopesResult result;
       std::vector<Scope*> result_scopes;
@@ -163,7 +173,9 @@ void ScopeBatchMultiClassNonMaxSuppressionPass::GenerateFusionResult(const std::
   }
 
   for (auto& scope : scopes) {
-    if (scope->SubType() == kScopeTypeBatchMultiClassNonMaxSuppression) {
+    AscendString op_subtype;
+    Status ret = scope->SubType(op_subtype);
+    if (op_subtype == kScopeTypeBatchMultiClassNonMaxSuppression) {
       fusion_rlt->InsertInputs("BatchMultiClassNonMaxSuppression/map/TensorArrayUnstack/Shape", {0});
       fusion_rlt->InsertInputs("BatchMultiClassNonMaxSuppression/map/TensorArrayUnstack_1/Shape", {1});
       fusion_rlt->InsertInputs("BatchMultiClassNonMaxSuppression/map/TensorArrayUnstack_3/Shape", {2});
@@ -171,10 +183,18 @@ void ScopeBatchMultiClassNonMaxSuppressionPass::GenerateFusionResult(const std::
       fusion_rlt->InsertOutputs("BatchMultiClassNonMaxSuppression/map/TensorArrayStack_4/TensorArrayGatherV3", {3});
       fusion_rlt->SetType(kScopeType);
       fusion_rlt->SetDescription("");
-      std::string scope_name = scope->Name();
-      fusion_rlt->SetName(scope_name.substr(0, scope_name.length() - 1));
+      AscendString scope_name;
+      Status ret = scopes[0]->Name(scope_name);
+      if (ret != SUCCESS) {
+          return ;
+      }
+      std::string str_scope_name;
+      if (scope_name != nullptr) {
+          str_scope_name = scope_name.GetString();
+      }
+      fusion_rlt->SetName(str_scope_name.substr(0, str_scope_name.length() - 1).c_str());
     }
-    if (scope->SubType() == kScopeTypeSecondBatchMultiClassNonMaxSuppression) {
+    if (op_subtype == kScopeTypeSecondBatchMultiClassNonMaxSuppression) {
       fusion_rlt->InsertInputs("SecondStagePostprocessor/BatchMultiClassNonMaxSuppression/map/TensorArrayUnstack/Shape",
                                {0});
       fusion_rlt->InsertInputs(
@@ -193,10 +213,18 @@ void ScopeBatchMultiClassNonMaxSuppressionPass::GenerateFusionResult(const std::
           "SecondStagePostprocessor/BatchMultiClassNonMaxSuppression/map/TensorArrayStack_4/TensorArrayGatherV3", {3});
       fusion_rlt->SetType(kScopeType);
       fusion_rlt->SetDescription("");
-      std::string scope_name = scope->Name();
-      fusion_rlt->SetName(scope_name.substr(0, scope_name.length() - 1));
+      AscendString scope_name;
+      Status ret = scopes[0]->Name(scope_name);
+      if (ret != SUCCESS) {
+          return ;
+      }
+      std::string str_scope_name;
+      if (scope_name != nullptr){
+          str_scope_name = scope_name.GetString();
+      }
+      fusion_rlt->SetName(str_scope_name.substr(0, str_scope_name.length() - 1).c_str());
     }
-    if (scope->SubType() == kScopeTypeFaceBoxesBatchMultiClassNonMaxSuppression) {
+    if (op_subtype == kScopeTypeFaceBoxesBatchMultiClassNonMaxSuppression) {
       fusion_rlt->InsertInputs("nms/map/Shape", {0});
       fusion_rlt->InsertInputs("nms/map/TensorArrayUnstack_1/Shape", {1});
       fusion_rlt->InsertOutputs("nms/map/TensorArrayStack/TensorArrayGatherV3", {0});
@@ -204,10 +232,18 @@ void ScopeBatchMultiClassNonMaxSuppressionPass::GenerateFusionResult(const std::
       fusion_rlt->InsertOutputs("nms/map/TensorArrayStack_2/TensorArrayGatherV3", {3});
       fusion_rlt->SetType(kScopeType);
       fusion_rlt->SetDescription("");
-      std::string scope_name = scope->Name();
-      fusion_rlt->SetName(scope_name.substr(0, scope_name.length() - 1));
+      AscendString scope_name;
+      Status ret = scopes[0]->Name(scope_name);
+      if (ret != SUCCESS) {
+          return ;
+      }
+      std::string str_scope_name;
+      if (scope_name != nullptr){
+          str_scope_name = scope_name.GetString();
+      }
+      fusion_rlt->SetName(str_scope_name.substr(0, str_scope_name.length() - 1).c_str());
     }
-    if (scope->SubType() == kScopeTypeFiltereBatchMultiClassNonMaxSuppression) {
+    if (op_subtype == kScopeTypeFiltereBatchMultiClassNonMaxSuppression) {
       fusion_rlt->InsertInputs("filtered_detections/map/Shape", {0});
       fusion_rlt->InsertInputs("filtered_detections/map/TensorArrayUnstack_1/Shape", {1});
       fusion_rlt->InsertOutputs("filtered_detections/map/TensorArrayStack/TensorArrayGatherV3", {0});
@@ -215,8 +251,16 @@ void ScopeBatchMultiClassNonMaxSuppressionPass::GenerateFusionResult(const std::
       fusion_rlt->InsertOutputs("filtered_detections/map/TensorArrayStack_2/TensorArrayGatherV3", {2});
       fusion_rlt->SetType(kScopeType);
       fusion_rlt->SetDescription("");
-      std::string scope_name = scope->Name();
-      fusion_rlt->SetName(scope_name.substr(0, scope_name.length() - 1));
+      AscendString scope_name;
+      Status ret = scopes[0]->Name(scope_name);
+      if (ret != SUCCESS) {
+          return ;
+      }
+      std::string str_scope_name;
+      if (scope_name != nullptr){
+          str_scope_name = scope_name.GetString();
+      }
+      fusion_rlt->SetName(str_scope_name.substr(0, str_scope_name.length() - 1).c_str());
     }
   }
 

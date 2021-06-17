@@ -23,6 +23,8 @@
 
   ffmpeg -i aaa.mp4 -codec copy -bsf: h264_mp4toannexb -f h264 aaa.h264
 
+- 在使用pyav读取视频切帧时对mp4文件有另外约束，可以参考[ffmpeg指令使MP4文件满足pyav和dvpp的约束](https://bbs.huaweicloud.com/forum/thread-131548-1-1.html)中的指令使mp4文件满足其约束
+
 - 本样例最多支持6路视频
 ### 工程准备
 

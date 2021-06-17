@@ -25,11 +25,13 @@ class AtlasModel {
 public:
     AtlasModel();
     AtlasModel(const std::string& modelPath);
+    AtlasModel(void *modelAddr, size_t modelSize);
 
     ~AtlasModel();
 
     AtlasError Init();
     AtlasError Init(const std::string& modelPath);
+    AtlasError Init(void *modelAddr, size_t modelSize);
 
     void DestroyResource();
     AtlasError CreateInput(void *input, uint32_t input1size);
@@ -44,6 +46,7 @@ public:
 
 private:
     AtlasError LoadModelFromFile(const std::string& modelPath);
+    AtlasError LoadModelFromMem();
     AtlasError CreateDesc();
     AtlasError CreateOutput();
     AtlasError AddDatasetBuffer(aclmdlDataset* dataset, 
@@ -60,6 +63,8 @@ private:
     uint32_t modelId_;
     void *modelMemPtr_;
     size_t modelMemSize_;
+    void *modelWorkPtr_;
+    size_t modelWorkSize_;
     void *modelWeightPtr_;
     size_t modelWeightSize_;
     aclmdlDesc *modelDesc_;

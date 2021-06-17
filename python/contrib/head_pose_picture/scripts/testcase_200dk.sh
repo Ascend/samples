@@ -1,6 +1,8 @@
 ﻿#!/bin/bash
-yolo_tf_model="https://drive.google.com/uc?id=1hnBremurSFHHLPTzS-DfRV73yuO6Pswx"
-whenet_tf_model="https://drive.google.com/uc?id=1b9iF3TC-RcQ5N6F7Ix2qmi3NMitoEtkh"
+yolo_tf_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/head_pose_picture/yolo_model.pb"
+whenet_tf_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/head_pose_picture/WHENet_b2_a1_modified.pb"
+images_link="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/head_pose_picture"
+
 yolo_model_name="yolo_model"
 whenet_model_name="WHENet_b2_a1_modified"
 version=$1
@@ -171,15 +173,17 @@ function main() {
 
     test_img=${project_path}/data/test.jpg
     verify_img=${project_path}/data/verify.jpg
-    mkdir -p ${project_path}/outputs
-    rm ${project_path}/outputs/*
+    wget --no-check-certificate ${images_link}/test.jpg -O ${test_img}
+    wget --no-check-certificate ${images_link}/verify.jpg -O ${verify_img}
+
+    mkdir -p ${project_path}/output
     cd ${project_path}/src
     python3 main.py --input_image ${test_img}
     if [ $? -ne 0 ];then
         echo "ERROR: run failed. please check your project"
         return ${inferenceError}
     fi   
-    out_img=${project_path}/outputs/test_output.jpg
+    out_img=${project_path}/output/test_output.jpg
     python3 ${script_path}/verify_result.py ${verify_img} ${out_img}
     if [ $? -ne 0 ];then
         echo "ERROR: The result of test 1 is wrong!"

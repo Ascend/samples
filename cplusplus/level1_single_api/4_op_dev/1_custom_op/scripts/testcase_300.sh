@@ -12,13 +12,13 @@ function setCustomEnv() {
     if [[ ${version} = "c73" ]] || [[ ${version} = "C73" ]];then
         export install_path=/home/HwHiAiUser/Ascend/ascend-toolkit/latest
         export ASCEND_OPP_PATH=${install_path}/opp
-        export ASCEND_TENSOR_COMPLIER_INCLUDE=${install_path}/atc/include
+        export ASCEND_TENSOR_COMPILER_INCLUDE=${install_path}/atc/include
         export TOOLCHAIN_DIR=${install_path}/toolkit/toolchain/hcc
         export SYSTEM_INFO=ubuntu_x86_64
     elif [[ ${version} = "c75" ]] || [[ ${version} = "C75" ]];then
         export install_path=$HOME/Ascend/ascend-toolkit/latest
         export ASCEND_OPP_PATH=${install_path}/opp
-        export ASCEND_TENSOR_COMPLIER_INCLUDE=${install_path}/atc/include
+        export ASCEND_TENSOR_COMPILER_INCLUDE=${install_path}/atc/include
         export TOOLCHAIN_DIR=${install_path}/toolkit/toolchain/hcc
         export SYSTEM_INFO=ubuntu_x86_64
     fi

@@ -159,12 +159,12 @@ The directory of a Caffe or TensorFlow custom operator sample project is organiz
 
         Uncomment this environment variable and change it to the actual AI CPU installation path.
 
-    -   **ASCEND\_TENSOR\_COMPLIER\_INCLUDE**  specifies the path of the ATC header files.
+    -   **ASCEND\_TENSOR\_COMPILER\_INCLUDE**  specifies the path of the ATC header files.
         -   If it is not set, the default path  **/usr/local/Ascend/atc/include**  is used.
         -   If the actual ATC installation path is not the default path, uncomment this environment variable and change it to the actual path of the ATC  header files. For example:
 
             ```
-            export ASCEND_TENSOR_COMPLIER_INCLUDE=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/atc/include
+            export ASCEND_TENSOR_COMPILER_INCLUDE=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/atc/include
             ```
 
 

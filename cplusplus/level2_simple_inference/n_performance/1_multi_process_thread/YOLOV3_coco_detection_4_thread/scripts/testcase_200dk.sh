@@ -212,13 +212,6 @@ function main() {
         return ${inferenceError}
     fi
 
-    result1=$(ls ${project_path}/out/output/test1.mp4 2>/dev/null)
-    result2=$(ls ${project_path}/out/output/test2.mp4 2>/dev/null)
-    if [[ ${result1}"x" = "x" ]] || [[ ${result2}"x" = "x" ]];then
-        echo "ERROR: verify failed. please check your project"
-        return ${verifyResError}
-    fi
- 
     echo "run success"
 
     return ${success}

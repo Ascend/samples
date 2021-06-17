@@ -7,7 +7,7 @@
 **本README只提供命令行方式运行样例的指导，如需在Mindstudio下运行样例，请参考[Mindstudio运行图片样例wiki](https://github.com/Ascend/samples/wikis/Mindstudio运行图片样例?sort_id=3164874)。**
 
 
-##  SingleImageDehaze 样例
+##  dehaze_picture 样例
 
 功能：使用deploy_vel模型对输入图片进行去雾。
 
@@ -51,11 +51,11 @@
 
    参考下表获取此应用中所用到的模型，并将其存放到开发环境普通用户下的工程目录：
 
-	cd $HOME/samples/python/contrib/SingleImageDehaze/model
+	cd $HOME/samples/python/contrib/dehaze_picture/model
 
 | **模型名称** | **模型说明**          | **模型下载路径**                                             |
 | ------------ | --------------------- | ------------------------------------------------------------ |
-| deploy_vel          | 基于tensorflow的去雾处理。 | 请参考https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/dehaze/ATC_deploy_vel_tf_AE 原始模型章节，下载**原始模型**及**对应的cfg文件**。 |
+| deploy_vel          | 基于tensorflow的去雾处理。 | 请参考https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/dehaze/ATC_deploy_vel_tf_AE 原始模型章节，下载**原始模型**。 |
 
 
 #### 3. 将原始模型转换为Davinci模型
@@ -79,18 +79,17 @@
 
 执行以下命令，进入样例的data文件夹中，下载对应的测试图片。
 
-    cd $HOME/samples/python/contrib/SingleImageDehaze/data
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/SingleImageDehaze/test_image/10992_04_0.8209.png
+    cd $HOME/samples/python/contrib/dehaze_picture/data
+    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/dehaze_picture/test_image/10992_04_0.8209.png
 
 
 ### 样例运行
 
 **注：开发环境与运行环境合一部署，请跳过步骤1，直接执行步骤2即可。**
 
-1. 执行以下命令,将开发环境的**SingleImageDehaze**目录上传到运行环境中，例如 **/home/HwHiAiUser**，并以HwHiAiUser（运行用户）登录运行环境（Host）。
+1. 执行以下命令,将开发环境的**samples**目录上传到运行环境中，例如 **/home/HwHiAiUser**，并以HwHiAiUser（运行用户）登录运行环境（Host）。
       ```
-   scp -r $HOME/samples/python/contrib/SingleImageDehaze/  HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser
-   scp -r $HOME/samples/python/common/atlas_utils/   HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser
+   scp -r $HOME/samples  HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser
    ssh HwHiAiUser@xxx.xxx.xxx.xxx
    ```
 
@@ -105,12 +104,12 @@
 	```
      export LD_LIBRARY_PATH=
      source ~/.bashrc
-     cd $HOME/samples/python/contrib/SingleImageDehaze/src
+     cd $HOME/samples/python/contrib/dehaze_picture/src
      python3 main.py ../data/
 	```
    - 如果是开发环境与运行环境分离部署，执行以下命令切换目录。
 	```
-     cd $HOME/python/contrib/SingleImageDehaze/src
+     cd $HOME/python/contrib/dehaze_picture/src
 	```
      切换目录后，执行以下命令运行样例。
    

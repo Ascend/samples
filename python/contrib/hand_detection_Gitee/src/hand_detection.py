@@ -82,7 +82,7 @@ if __name__ == '__main__':
 
 	description = 'hand detection'
 	parser = argparse.ArgumentParser(description=description)
-	parser.add_argument('--input_image', type=str, default='../data/hand.jpeg', help="Directory path for image")
+	parser.add_argument('--input_image', type=str, default='../data/hand.jpg', help="Directory path for image")
 
 	args = parser.parse_args()
 	

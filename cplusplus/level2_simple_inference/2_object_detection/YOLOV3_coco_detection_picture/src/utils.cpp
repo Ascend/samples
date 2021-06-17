@@ -118,6 +118,81 @@ void Utils::GetPathFiles(const string &path, vector<string> &file_vec) {
     }
 }
 
+void* Utils::CopyDataHostToDvpp(void* data, int size) {
+    void* buffer = nullptr;
+
+    auto aclRet = acldvppMalloc(&buffer, size);
+    if (aclRet != ACL_ERROR_NONE) {
+        ERROR_LOG("acl malloc dvpp data failed, dataSize=%u, ret=%d",
+        size, aclRet);
+        return nullptr;
+    }
+    INFO_LOG("malloc dvpp memory size %d ok", size);
+    // copy input to device memory
+    aclRet = aclrtMemcpy(buffer, size, data, size, ACL_MEMCPY_HOST_TO_DEVICE);
+    if (aclRet != ACL_ERROR_NONE) {
+        ERROR_LOG("acl memcpy data to dvpp failed, size %u, error %d", size, aclRet);
+        acldvppFree(buffer);
+        return nullptr;
+    }
+    INFO_LOG("copy data to dvpp ok");
+
+    return buffer;
+}
+
+void* Utils::CopyDataDeviceToDvpp(void* data, int size) {
+    void* buffer = nullptr;
+
+    auto aclRet = acldvppMalloc(&buffer, size);
+    if (aclRet != ACL_ERROR_NONE) {
+        ERROR_LOG("acl malloc dvpp data failed, dataSize=%u, ret=%d",
+        size, aclRet);
+        return nullptr;
+    }
+    INFO_LOG("malloc dvpp memory size %d ok", size);
+    // copy input to device memory
+    aclRet = aclrtMemcpy(buffer, size, data, size, ACL_MEMCPY_DEVICE_TO_DEVICE);
+    if (aclRet != ACL_ERROR_NONE) {
+        ERROR_LOG("acl memcpy data to dvpp failed, size %u, error %d", size, aclRet);
+        acldvppFree(buffer);
+        return nullptr;
+    }
+    INFO_LOG("copy data to dvpp ok");
+
+    return buffer;
+}
+
+Result Utils::CopyImageDataToDvpp(ImageData& imageDevice, ImageData srcImage) {
+    aclrtRunMode runMode_;
+    aclError ret = aclrtGetRunMode(&runMode_);
+    if (ret != ACL_ERROR_NONE) {
+        ERROR_LOG("acl get run mode failed");
+        return FAILED;
+    }
+
+    void* buffer = nullptr;
+    if (runMode_ == ACL_HOST){
+        buffer = Utils::CopyDataHostToDvpp(srcImage.data.get(), srcImage.size);
+        if (buffer == nullptr) {
+            ERROR_LOG("Copy image to device failed");
+            return FAILED;
+        }
+    }
+    else{
+        buffer = Utils::CopyDataDeviceToDvpp(srcImage.data.get(), srcImage.size);
+        if (buffer == nullptr) {
+            ERROR_LOG("Copy image to device failed");
+            return FAILED;
+        }
+    }
+
+    imageDevice.width = srcImage.width;
+    imageDevice.height = srcImage.height;
+    imageDevice.size = srcImage.size;
+    imageDevice.data.reset((uint8_t*)buffer, [](uint8_t* p) { acldvppFree((void *)p); });
+    return SUCCESS;
+}
+
 void* Utils::CopyDataDeviceToLocal(void* deviceData, uint32_t dataSize) {
     uint8_t* buffer = new uint8_t[dataSize];
     if (buffer == nullptr) {

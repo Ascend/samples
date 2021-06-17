@@ -30,6 +30,7 @@ public:
     AtlasError SetFormat(uint32_t format);
     AtlasError VideoParamCheck();
     bool IsExit() { return isExit_; }
+    aclrtContext GetContext(){return context_ ;}
 
 private:
     AtlasError CreateVdecChannelDesc();
@@ -59,7 +60,7 @@ private:
     uint32_t outputPicSize_;
     void *outputPicBuf_;
     aclvdecCallback callback_;
-    
+    aclrtContext context_;
     aclrtStream stream_;
 
     aclvdecChannelDesc *vdecChannelDesc_;

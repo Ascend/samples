@@ -63,6 +63,7 @@ AtlasError AclDevice::Init() {
     ATLAS_LOG_INFO("Open device %d ok", deviceId_);
 
     if (useDefaultCtx_) {
+        ATLAS_LOG_INFO("Use default context currently");
         ret = aclrtGetCurrentContext(&context_);
         if ((ret != ACL_ERROR_NONE) || (context_ == nullptr)) {
             ATLAS_LOG_ERROR("Get current acl context error:%d", ret);

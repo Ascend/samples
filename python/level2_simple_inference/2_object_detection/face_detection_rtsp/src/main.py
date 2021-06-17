@@ -12,7 +12,7 @@ sys.path.append(cur_file_dir + "/../../../../common")
 import atlas_utils.video as video
 from atlas_utils.constants import *
 from atlas_utils.utils import *
-from acl_resource import AclResource
+from atlas_utils.acl_resource import AclResource
 from atlas_utils.acl_image import AclImage
 from atlas_utils.acl_logger import log_error, log_info
 
@@ -29,7 +29,6 @@ FACE_DETEC_CONF="../scripts/face_detection.conf"
 def create_threads(detector):
     config = configparser.ConfigParser()
     config.read(FACE_DETEC_CONF)
-    
     video_decoders = []
     for item in config['videostream']:
         preprocesser = Preprocess(config['videostream'][item], 
@@ -60,11 +59,13 @@ def create_threads(detector):
 
 
 def main():
-    #初始化acl
+    """
+    Function description:
+        Main function
+    """
     acl_resource = AclResource()
     acl_resource.init()   
 
-    #创建一个检测网络实例,当前使用vgg_ssd网络.当更换检测网络时,在此实例化新的网络
     detector = VggSsd(acl_resource, MODEL_PATH, MODEL_WIDTH, MODEL_HEIGHT)
 
     video_decoders, postprocessor = create_threads(detector)
@@ -78,15 +79,12 @@ def main():
         for decoder in video_decoders:
             ret, data = decoder.get_data()
             if ret == False:                
-                log_info("Read data ret ", ret)
                 continue
-            
             if data:
                 detect_results = detector.execute(data)
                 postprocessor.process(data, detect_results)
                 
             all_process_fin = False
-
         if all_process_fin:
             log_info("all video decoder finish")
             break

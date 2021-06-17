@@ -48,6 +48,8 @@ def parse_ini_to_obj(ini_file, tbe_ops_info):
         op_name = ""
         for line in lines:
             line = line.rstrip()
+            if line == "":
+                continue
             if line.startswith("["):
                 op_name = line[1:-1]
                 op = {}

@@ -6,7 +6,7 @@ project_name="python_face_detection_rtsp"
 
 presenter_server_name="face_detection"
 
-data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/face_detection_rtsp/person.mp4"
+data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/face_detection_rtsp/person.h264"
 
 project_name="python_face_detection_rtsp"
 
@@ -23,7 +23,6 @@ declare -i verifyResError=2
 
 
 function downloadDataWithVerifySource() {
-    mkdir -p ${project_path}/data/
 
     wget -O ${project_path}/data/"person.mp4"  ${data_source}  --no-check-certificate
     if [ $? -ne 0 ];then

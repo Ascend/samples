@@ -416,7 +416,13 @@ AtlasError ReadJpeg(ImageData& image, const std::string& fileName) {
     int32_t ch = 0;
     acldvppJpegGetImageInfo(buf, size,
               &(image.width), &(image.height), &ch);
-    image.data.reset((uint8_t *)buf, [](uint8_t* p) { delete[](p); });
+    if(image.width == 0 || image.height == 0){
+        ATLAS_LOG_ERROR("unsupported format, only Baseline JPEG");
+        return ATLAS_ERROR;
+    }
+    image.data.reset((uint8_t *)buf, [](uint8_t* p) 
+                    { delete[](p); }
+                    );
     image.size = size;
 
     return ATLAS_OK;

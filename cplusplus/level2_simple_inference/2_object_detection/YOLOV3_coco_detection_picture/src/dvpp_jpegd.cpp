@@ -74,8 +74,10 @@ Result DvppJpegD::Process(ImageData& dest, ImageData& src){
         return FAILED;
     }
 
-    aclError aclRet = acldvppJpegDecodeAsync(dvppChannelDesc_, reinterpret_cast<void *>(src.data.get()),
-        src.size, decodeOutputDesc_, stream_);
+    ImageData imageDevice;
+    Utils::CopyImageDataToDvpp(imageDevice, src);
+    aclError aclRet = acldvppJpegDecodeAsync(dvppChannelDesc_, reinterpret_cast<void *>(imageDevice.data.get()),
+    imageDevice.size, decodeOutputDesc_, stream_);
     if (aclRet != ACL_ERROR_NONE) {
         ERROR_LOG("acldvppJpegDecodeAsync failed, aclRet = %d", aclRet);
         return FAILED;
@@ -87,10 +89,10 @@ Result DvppJpegD::Process(ImageData& dest, ImageData& src){
         return FAILED;
     }
 
-    dest.width = src.width;
-    dest.height = src.height;
-    dest.alignWidth = ALIGN_UP128(src.width);
-    dest.alignHeight = ALIGN_UP16(src.height);
+    dest.width = imageDevice.width;
+    dest.height = imageDevice.height;
+    dest.alignWidth = ALIGN_UP128(imageDevice.width);
+    dest.alignHeight = ALIGN_UP16(imageDevice.height);
     dest.size = YUV420SP_SIZE(dest.alignWidth, dest.alignHeight);
     dest.data = SHARED_PRT_DVPP_BUF(decodeOutBufferDev_);
     INFO_LOG("convert image success");

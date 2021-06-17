@@ -37,7 +37,14 @@ VdecProcess::VdecProcess(int channelId, uint32_t width, uint32_t height,
     inputStreamDesc_ = nullptr;
     outputPicDesc_ = nullptr;
     outputPicBuf_ = nullptr;
-   
+    
+    aclError aclRet;
+    ATLAS_LOG_INFO("get current context");
+    aclRet = aclrtGetCurrentContext(&context_);
+    if ((aclRet != ACL_ERROR_NONE) || (context_ == nullptr)) {
+        ATLAS_LOG_ERROR("VdecProcess : Get current acl context error:%d", aclRet);
+    }       
+    
     ATLAS_LOG_INFO("VDEC width %d, height %d", frameWidth_, frameHeight_);
 }
 
@@ -76,25 +83,17 @@ void* VdecProcess::SubscribeReportThreadFunc(void *arg) {
 
     // Notice: create context for this thread
     int deviceId = 0;
-    aclrtContext context = nullptr;
-    aclError ret = aclrtCreateContext(&context, deviceId);
-    if (ret != ACL_ERROR_NONE) {
-        ATLAS_LOG_ERROR("Vdec subscribe thread create"
-                        " context failed, errorno:%d.", ret);
-        return (void*)ATLAS_ERROR_CREATE_ACL_CONTEXT;
-    }
 
     VdecProcess* vdec = (VdecProcess *)arg;
+    aclrtContext context = vdec->GetContext();
+    aclError ret = aclrtSetCurrentContext(context);
+    if (ret != ACL_ERROR_NONE) {
+        ATLAS_LOG_ERROR("Video decoder set context failed, error: %d", ret);
+    }
 
     while (!vdec->IsExit()) {
         // Notice: timeout 1000ms
         aclrtProcessReport(1000);
-    }
-
-    ret = aclrtDestroyContext(context);
-    if (ret != ACL_ERROR_NONE) {
-        ATLAS_LOG_ERROR("Vdec subscribe thread destroy"
-                        " context failed, errorno:%d.", ret);
     }
 
     ATLAS_LOG_INFO("Vdec subscribe thread exit!");

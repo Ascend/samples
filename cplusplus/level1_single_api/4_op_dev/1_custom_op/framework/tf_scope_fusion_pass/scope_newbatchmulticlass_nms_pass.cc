@@ -22,8 +22,9 @@
 
 #define OP_LOGE(OP_NAME, fmt, ...) printf("[ERROR]%s,%s:%u:" #fmt "\n", __FUNCTION__, __FILE__, __LINE__, ##__VA_ARGS__)
 #define OP_LOGW(OP_NAME, fmt, ...) printf("[WARN]%s,%s:%u:" #fmt "\n", __FUNCTION__, __FILE__, __LINE__, ##__VA_ARGS__)
-#define OP_LOGI(OP_NAME, fmt, ...) printf("[INFO]%s,%s:%u:" #fmt "\n", __FUNCTION__, __FILE__, __LINE__, ##__VA_ARGS__)
+//#define OP_LOGI(OP_NAME, fmt, ...) printf("[INFO]%s,%s:%u:" #fmt "\n", __FUNCTION__, __FILE__, __LINE__, ##__VA_ARGS__)
 #include "register/scope/scope_fusion_pass_register.h"
+#include <string.h>
 
 namespace ge {
 
@@ -48,10 +49,19 @@ Status ScopeBatchMultiClassNMSPass::LastMatchScopesAndOPs(std::shared_ptr<ScopeG
 
   const std::vector<Scope*>& scopes = scope_tree->GetAllScopes();
   for (auto& scope : scopes) {
-    if (scope->Name() == "rootmap/") {
+    AscendString op_name;
+    Status ret = scope->Name(op_name);
+    if (ret != SUCCESS) {
+        return FAILED;
+    }
+    if (op_name == "rootmap/") {
       continue;
     }
-    if (scope->LastName() == kScopeMap) {
+    ret = scope->LastName(op_name);
+    if (ret != SUCCESS) {
+        return FAILED;
+    }
+    if (op_name.GetString() == kScopeMap) {
       const Scope* fatherScope = scope->GetFatherScope();
       if (fatherScope == nullptr) {
         continue;
@@ -60,7 +70,7 @@ Status ScopeBatchMultiClassNMSPass::LastMatchScopesAndOPs(std::shared_ptr<ScopeG
       if (!MatchedSubScopes(fatherScope, {"map/", "while/", "MultiClassNonMaxSuppression/"})) {
         continue;
       }
-      OP_LOGI(kOpType.c_str(), "find scope name: %s", fatherScope->Name().c_str());
+      printf("find scope name: %s", op_name.GetString());
       ScopesResult result;
       std::vector<Scope*> result_scopes;
       result_scopes.push_back(const_cast<Scope*>(fatherScope));
@@ -79,46 +89,76 @@ void ScopeBatchMultiClassNMSPass::GenerateFusionResult(const std::vector<Scope*>
     return;
   }
   for (auto& scope : scopes) {
+    AscendString op_name;
+    Status ret = scope->Name(op_name);
     // do insert input 0 boxes like map/TensorArrayUnstack/Shape
-    std::string scopeInputName0 = scope->Name() + "map/TensorArrayUnstack/Shape";
+    char * scopeInputName0 = new char[200];
+    memset(scopeInputName0, 0, sizeof(scopeInputName0));
+    strncpy(scopeInputName0, op_name.GetString(), strlen(op_name.GetString())+1);
+    strncat(scopeInputName0, "map/TensorArrayUnstack/Shape", strlen("map/TensorArrayUnstack/Shape")+1);
     fusion_rlt->InsertInputs(scopeInputName0, {0});
 
     // do insert input 1 scores like map/TensorArrayUnstack_1/Shape
-    std::string scopeInputName1 = scope->Name() + "map/TensorArrayUnstack_1/Shape";
+    char * scopeInputName1 = new char[200];
+    memset(scopeInputName1, 0, sizeof(scopeInputName1));
+    strncpy(scopeInputName1, op_name.GetString(), strlen(op_name.GetString())+1);
+    strncat(scopeInputName1, "map/TensorArrayUnstack_1/Shape", strlen("map/TensorArrayUnstack_1/Shape")+1);
     fusion_rlt->InsertInputs(scopeInputName1, {1});
 
     // do insert input 2 clip_to_window like map/TensorArrayUnstack_3/Shape
     if (MatchedSubScopes(scope, {"map/", "TensorArrayUnstack_3/"})) {
-      std::string scopeInputName2 = scope->Name() + "map/TensorArrayUnstack_3/Shape";
+      char * scopeInputName2 = new char[200];
+      memset(scopeInputName2, 0, sizeof(scopeInputName2));
+      strncpy(scopeInputName2, op_name.GetString(), strlen(op_name.GetString())+1);
+      strncat(scopeInputName2, "map/TensorArrayUnstack_3/Shape", strlen("map/TensorArrayUnstack_3/Shape")+1);
       fusion_rlt->InsertInputs(scopeInputName2, {2});
       if (MatchedSubScopes(scope, {"map/", "TensorArrayUnstack_4/"}) && !MatchedSubScopes(scope, {"ones/"})) {
-        std::string scopeInputName3 = scope->Name() + "map/TensorArrayUnstack_4/Shape";
+        char * scopeInputName3 = new char[200];
+        memset(scopeInputName3, 0, sizeof(scopeInputName3));
+        strncpy(scopeInputName3, op_name.GetString(), strlen(op_name.GetString())+1);
+        strncat(scopeInputName3, "map/TensorArrayUnstack_4/Shape", strlen("map/TensorArrayUnstack_4/Shape")+1);
         fusion_rlt->InsertInputs(scopeInputName3, {3});
       }
     }
     // do insert outputs
     if (MatchedSubScopes(scope, {"map/", "TensorArrayStack/"})) {
-      std::string scopeOutputName0 = scope->Name() + "map/TensorArrayStack/TensorArrayGatherV3";
+      char * scopeOutputName0 = new char[200];
+      memset(scopeOutputName0, 0, sizeof(scopeOutputName0));
+      strncpy(scopeOutputName0, op_name.GetString(), strlen(op_name.GetString())+1);
+      strncat(scopeOutputName0, "map/TensorArrayStack/TensorArrayGatherV3", strlen(
+                              "map/TensorArrayStack/TensorArrayGatherV3")+1);
       fusion_rlt->InsertOutputs(scopeOutputName0, {0});
     }
     if (MatchedSubScopes(scope, {"map/", "TensorArrayStack_1/"})) {
-      std::string scopeOutputName0 = scope->Name() + "map/TensorArrayStack_1/TensorArrayGatherV3";
+      char * scopeOutputName0 = new char[200];
+      memset(scopeOutputName0, 0, sizeof(scopeOutputName0));
+      strncpy(scopeOutputName0, op_name.GetString(), strlen(op_name.GetString())+1);
+      strncat(scopeOutputName0, "map/TensorArrayStack_1/TensorArrayGatherV3", strlen(\
+                              "map/TensorArrayStack_1/TensorArrayGatherV3")+1);
       fusion_rlt->InsertOutputs(scopeOutputName0, {1});
     }
     if (MatchedSubScopes(scope, {"map/", "TensorArrayStack_2/"})) {
-      std::string scopeOutputName0 = scope->Name() + "map/TensorArrayStack_2/TensorArrayGatherV3";
+      char * scopeOutputName0 = new char[200];
+      memset(scopeOutputName0, 0, sizeof(scopeOutputName0));
+      strncpy(scopeOutputName0, op_name.GetString(), strlen(op_name.GetString())+1);
+      strncat(scopeOutputName0, "map/TensorArrayStack_2/TensorArrayGatherV3", strlen(
+                              "map/TensorArrayStack_2/TensorArrayGatherV3")+1);
       fusion_rlt->InsertOutputs(scopeOutputName0, {2});
     }
     if (MatchedSubScopes(scope, {"map/", "TensorArrayStack_4/"})) {
-      std::string scopeOutputName0 = scope->Name() + "map/TensorArrayStack_4/TensorArrayGatherV3";
+      char * scopeOutputName0 = new char[200];
+      memset(scopeOutputName0, 0, sizeof(scopeOutputName0));
+      strncpy(scopeOutputName0, op_name.GetString(), strlen(op_name.GetString())+1);
+      strncat(scopeOutputName0, "map/TensorArrayStack_4/TensorArrayGatherV3", strlen(
+                              "map/TensorArrayStack_4/TensorArrayGatherV3")+1);
       fusion_rlt->InsertOutputs(scopeOutputName0, {3});
     }
-    fusion_rlt->SetType(kOpType);
+    fusion_rlt->SetType(kOpType.c_str());
     fusion_rlt->SetDescription("");
-    std::string scopeName = scope->Name();
-    fusion_rlt->SetName(scopeName.substr(0, scopeName.length() - 1));
+    std::string scopeName = op_name.GetString();
+    fusion_rlt->SetName((scopeName.substr(0, scopeName.length() - 1)).c_str());
   }
-  OP_LOGI(kOpType.c_str(), "ScopeBatchMultiClassNonMaxSuppressionPass Scope fusion success.");
+  printf("ScopeBatchMultiClassNonMaxSuppressionPass Scope fusion success.");
   return;
 }
 
@@ -129,7 +169,7 @@ ScopeFusionPatterns ScopeBatchMultiClassNMSPass::GenWhileScopePatterns() {
     return ScopeFusionPatterns();
   }
 
-  while_cell->SetSubType(kScopeResultType);
+  while_cell->SetSubType(kScopeResultType.c_str());
   while_cell->AddScopeFeature(ScopeFeature("", 1, "", "map"));
   while_cell->AddScopeFeature(ScopeFeature("", 1, "", "while"));
   while_cell->AddScopeFeature(ScopeFeature("", 1, "", "MultiClassNonMaxSuppression"));
@@ -141,7 +181,9 @@ ScopeFusionPatterns ScopeBatchMultiClassNMSPass::GenWhileScopePatterns() {
 string ScopeBatchMultiClassNMSPass::to_string(const std::vector<Scope*>& scopes) const {
   string result;
   for (auto& scope : scopes) {
-    result += scope->Name();
+    AscendString op_name;
+    Status ret = scope->Name(op_name);
+    result += op_name.GetString();
     result += " ";
   }
   return result;
@@ -151,19 +193,23 @@ bool ScopeBatchMultiClassNMSPass::MatchedSubScopes(const Scope* root_scope,
                                                    const std::vector<string> scopes2check) const {
   string full_name;
   auto root = root_scope;
+  std::string Str;
   for (auto& scope_name : scopes2check) {
-    full_name = root->Name();
+    AscendString op_name;
+    Status ret = root->Name(op_name);
+    full_name = op_name.GetString();
     full_name += scope_name;
-    auto sub_scope = root->GetSubScope(full_name);
+    auto sub_scope = root->GetSubScope(full_name.c_str());
     if (sub_scope == nullptr) {
-      OP_LOGI(kOpType.c_str(), "Get sub scope:%s failed, %s's sub scopes:%s", full_name.c_str(), root->Name().c_str(),
-              to_string(root->GetAllSubScopes()).c_str());
+      printf("Get sub scope:%s failed, %s's sub scopes:%s", full_name.c_str(), op_name.GetString(),
+        to_string(root->GetAllSubScopes()).c_str());
       return false;
     }
     root = sub_scope;
   }
-
-  OP_LOGI(kOpType.c_str(), "MatchedSubScopes:%s success.", root_scope->Name().c_str());
+  AscendString op_name;
+  Status ret = root->Name(op_name);
+  printf("MatchedSubScopes:%s success.", op_name.GetString());
   return true;
 }
 

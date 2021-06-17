@@ -94,13 +94,13 @@ function downloadOriginalModel() {
 
 function buildLibAtlasUtil() {
     cd ${project_path}/../../../../common/atlasutil/
-    make mode=ASIC
+    make mode=Atlas300
     if [ $? -ne 0 ];then
         echo "ERROR: make atlasutil failed."
         return ${inferenceError}
     fi
 
-    make mode=ASIC install
+    make mode=Atlas300 install
     if [ $? -ne 0 ];then
         echo "ERROR: make install atlasutil failed."
         return ${inferenceError}
@@ -207,12 +207,6 @@ function main() {
         return ${inferenceError}
     fi
 
-    result1=$(ls ${project_path}/out/output/test1.mp4 2>/dev/null)
-    result2=$(ls ${project_path}/out/output/test2.mp4 2>/dev/null)
-    if [[ ${result1}"x" = "x" ]] || [[ ${result2}"x" = "x" ]];then
-        echo "ERROR: verify failed. please check your project"
-        return ${verifyResError}
-    fi
     echo "run success"
 
     return ${success}

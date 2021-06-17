@@ -34,20 +34,13 @@ function downloadData() {
 
 function setAtcEnv() {
     # 设置模型转换时需要的环境变量
-    if [[ ${version} = "c73" ]] || [[ ${version} = "C73" ]];then
-        export install_path=/home/HwHiAiUser/Ascend/ascend-toolkit/latest
-        export PATH=/usr/local/python3.7.5/bin:${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
-        export PYTHONPATH=${install_path}/atc/python/site-packages/te:${install_path}/atc/python/site-packages/topi:$PYTHONPATH
-        export ASCEND_OPP_PATH=${install_path}/opp
-        export LD_LIBRARY_PATH=${install_path}/atc/lib64:${LD_LIBRARY_PATH}
-    elif [[ ${version} = "c75" ]] || [[ ${version} = "C75" ]];then
-        export install_path=$HOME/Ascend/ascend-toolkit/latest
-        export PATH=/usr/local/python3.7.5/bin:${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
-        export ASCEND_OPP_PATH=${install_path}/opp
-        export PYTHONPATH=${install_path}/atc/python/site-packages:${install_path}/atc/python/site-packages/auto_tune.egg/auto_tune:${install_path}/atc/python/site-packages/schedule_search.egg:$PYTHONPATH
-        export LD_LIBRARY_PATH=${install_path}/atc/lib64:${LD_LIBRARY_PATH}
-    fi
-
+    export install_path=$HOME/Ascend/ascend-toolkit/latest
+    export PATH=${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
+    export ASCEND_OPP_PATH=${install_path}/opp
+    export LD_LIBRARY_PATH=${install_path}/atc/lib64:$LD_LIBRARY_PATH
+    export PYTHONPATH=${install_path}/atc/python/site-packages:${install_path}/atc/python/site-packages/auto_tune.egg/auto_tune:${install_path}/atc/python/site-packages/schedule_search.egg:$PYTHONPATH
+    export PYTHONPATH=$HOME/Ascend/nnrt/latest/pyACL/python/site-packages/acl:$PYTHONPATH
+    export LD_LIBRARY_PATH=$HOME/ascend_ddk/x86/lib:$HOME/Ascend/nnrt/latest/acllib/lib64:$LD_LIBRARY_PATH
     return 0
 }
 
@@ -126,12 +119,7 @@ function main() {
     fi
     
     cd ${project_path}
-    # 重新配置程序运行所需的环境变量
-    export LD_LIBRARY_PATH=
-    export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/nnrt/latest/acllib/lib64:/home/HwHiAiUser/ascend_ddk/x86/lib:${LD_LIBRARY_PATH}
-    export PYTHONPATH=/home/HwHiAiUser/Ascend/nnrt/latest/pyACL/python/site-packages/acl:${PYTHONPATH}
-
-
+    setAtcEnv  
     # 开启resenter server
     cd ${script_path}/../../../../../common/
     bash run_presenter_server.sh ${script_path}/param.conf 

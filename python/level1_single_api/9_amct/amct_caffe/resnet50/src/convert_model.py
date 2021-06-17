@@ -59,7 +59,7 @@ def parse_args():
                         default=None, type=str)
     parser.add_argument('--pre_test', dest='pre_test',
                         help='Do test with amct caffe calibration or not',
-                        action='store_false')
+                        defult=False, action='store_true')
     parser.add_argument('--record_file', dest='record_file',
                         help='Specify scale offset record file',
                         default=None, type=str)
@@ -292,7 +292,7 @@ def main(args):
         caffe.set_mode_cpu()
 
     # Run pre model test
-    if not args.pre_test:
+    if args.pre_test:
         if not args.benchmark:
             run_caffe_model(
                 args.model_file, args.weights_file, args.iterations)

@@ -196,7 +196,7 @@ INFO - [AMCT]:[Utils]: The model file is saved in ./outputs/nuq/resnet-101_fake_
 + [tmp](./outputs/retrain/tmp/): 临时文件夹
   + [config.json](./outputs/retrain/tmp/config.json): 量化配置文件，描述了如何对模型中的每一层进行量化。
   + [record.txt](./outputs/retrain/tmp/record.txt): 量化因子记录文件记录量化因子。关于该文件的原型定义请参见[量化因子记录文件说明](https://support.huaweicloud.com/content/dam/cloudbu-site/archive/china/zh-cn/support/docs/auxiliarydevtool-cann330alphaXinfer/atlasamcttf_16_0014.html)。
-  + [modified_model.onnx](./outputs/retrain/tmp/modified_model.onnx): 临时模型文件，即原始的 PyTorch 模型 BN 融合后导出的 ONNX 模型文件。
+  + [model_best.pth.tar](./outputs/retrain/tmp/model_best.pth.tar): PyTorch 模型量化感知训练过程中生成的 checkpoint 中间文件。
 + [resnet-101_deploy_model.onnx](./outputs/retrain/resnet-101_deploy_model.onnx): 量化部署模型，即量化后的可在昇腾 AI 处理器部署的模型文件。
 + [resnet-101_fake_quant_model.onnx](./outputs/retrain/resnet-101_fake_quant_model.onnx): 量化仿真模型，即量化后的可在 ONNX 执行框架 ONNX Runtime 进行精度仿真的模型
 

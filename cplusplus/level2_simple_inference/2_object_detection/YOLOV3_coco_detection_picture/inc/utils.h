@@ -117,5 +117,8 @@ public:
     static void* CopyDataDeviceToDevice(void* deviceData, uint32_t dataSize);
     static int ReadImageFile(ImageData& image, std::string fileName);
     static Result CopyImageDataToDevice(ImageData& imageDevice, ImageData srcImage, aclrtRunMode mode);
+    static Result CopyImageDataToDvpp(ImageData& imageDevice, ImageData srcImage);
+    static void* CopyDataHostToDvpp(void* data, int size);
+    static void* CopyDataDeviceToDvpp(void* data, int size);
 };
 

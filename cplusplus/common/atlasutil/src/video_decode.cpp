@@ -84,16 +84,13 @@ void VideoDecode::DestroyResource() {
     if (isReleased_) return;    
     //1. stop ffmpeg
     isStop_ = true;
-    
-    if (ffmpegDecoder_ != nullptr) {
-        ffmpegDecoder_->StopDecode();
-        while ((status_ >= DECODE_START) && (status_ < DECODE_FFMPEG_FINISHED)) {
-            usleep(kWaitDecodeFinishInterval);
-        }
-        //2. delete ffmpeg decoder
-        delete ffmpegDecoder_;
-        ffmpegDecoder_ = nullptr; 
-    }   
+    ffmpegDecoder_->StopDecode();
+    while ((status_ >= DECODE_START) && (status_ < DECODE_FFMPEG_FINISHED)) {
+        usleep(kWaitDecodeFinishInterval);
+    }
+    //2. delete ffmpeg decoder
+    delete ffmpegDecoder_;
+    ffmpegDecoder_ = nullptr;    
     //3. release dvpp vdec
     delete dvppVdec_;
     dvppVdec_ = nullptr;
@@ -117,7 +114,7 @@ void VideoDecode::DestroyResource() {
 
 AtlasError VideoDecode::InitResource() {
     aclError aclRet;
-    //1. Set acl context of video decoder, use current thread context default
+    //use current thread context default
     if (context_ == nullptr) {
         aclRet = aclrtGetCurrentContext(&context_);
         if ((aclRet != ACL_ERROR_NONE) || (context_ == nullptr)) {
@@ -125,12 +122,7 @@ AtlasError VideoDecode::InitResource() {
             return ATLAS_ERROR_GET_ACL_CONTEXT;
         }       
     }
-    AtlasError ret = SetAclContext();
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Set video decoder acl context error:%d", aclRet);
-        return ret;
-    }
-    //2.Get current run mode
+    //Get current run mode
     aclRet = aclrtGetRunMode(&runMode_);
     if (aclRet != ACL_ERROR_NONE) {
         ATLAS_LOG_ERROR("acl get run mode failed");
@@ -164,11 +156,8 @@ AtlasError VideoDecode::InitFFmpegDecoder() {
     //Create ffmpeg decoder to parse video stream to h26x frame data
     ffmpegDecoder_ = new FFmpegDecoder(streamName_);
     if (kInvalidTpye == GetVdecType()) {
-        this->SetStatus(DECODE_ERROR); 
-        if (ffmpegDecoder_ != nullptr) {       
-            delete ffmpegDecoder_;
-            ffmpegDecoder_ = nullptr;
-        }
+        this->SetStatus(DECODE_ERROR);        
+        delete ffmpegDecoder_;
         ATLAS_LOG_ERROR("Video %s type is invalid", streamName_.c_str());
         return ATLAS_ERROR_FFMPEG_DECODER_INIT;
     } 

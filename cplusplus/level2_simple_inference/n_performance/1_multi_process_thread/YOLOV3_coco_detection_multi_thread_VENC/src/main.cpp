@@ -32,6 +32,7 @@
 #include "opencv2/videoio.hpp"
 #include <bits/stdint-uintn.h>
 #include "opencv2/imgcodecs/legacy/constants_c.h"
+#define VIDEONUM 2
 using namespace std;
 
 namespace {
@@ -68,30 +69,27 @@ namespace {
         cv::Scalar(237, 149, 100), cv::Scalar(0, 215, 255), cv::Scalar(50, 205, 50),
         cv::Scalar(139, 85, 26) };
 }
-static int gPostEnd = 0;
+int g_video_need_postprocess = VIDEONUM;
 void Preprocess(cv::VideoCapture capture, aclrtContext context, 
-                long totalFrameNumber, BlockingQueue<message_pre>* queue_pre) {
-
+                BlockingQueue<message_pre>* queue_pre, int threadNum) {
     message_pre premsg;
     aclrtSetCurrentContext(context);
 
-    for(int number = 0; number <= totalFrameNumber; number++)
-    {
+    while(1){
         cv::Mat frame;
-
-        if (!capture.read(frame))
-        {
+        if (!capture.read(frame)){
             ATLAS_LOG_ERROR("Video capture return false");
             break;
         }
         premsg.frame = frame;
+        premsg.videoIndex = threadNum;
+        premsg.isLastFrame = 1;
         cv::Mat reiszeMat;
         cv::resize(frame, reiszeMat, cv::Size(kModelWidth, kModelHeight));
         if (reiszeMat.empty()) {
             ATLAS_LOG_ERROR("Resize image failed");
             break;
         }
-        premsg.number = number;
         premsg.reiszeMat = reiszeMat;
         while(1) {
             if (queue_pre->Push(premsg) != 0) {
@@ -100,10 +98,10 @@ void Preprocess(cv::VideoCapture capture, aclrtContext context,
             else
                 break;
         }
-        usleep(1000);
-
     }
-    premsg.number = -1;
+
+    premsg.videoIndex = threadNum;
+    premsg.isLastFrame = 0;
     while(1) {
         if (queue_pre->Push(premsg) != 0) {
             usleep(1000);
@@ -129,9 +127,9 @@ void Postprocess(cv::VideoWriter& outputVideo, aclrtContext context, BlockingQue
             continue;
         }
 
-        if (postmsg.number == -1){
+        if (!postmsg.isLastFrame){
             break;
-    }
+        }
 
         cv::Mat frame = postmsg.frame;
         detectData = (float*)postmsg.detectData.get();
@@ -143,7 +141,6 @@ void Postprocess(cv::VideoWriter& outputVideo, aclrtContext context, BlockingQue
         vector<BBox> detectResults;
         float widthScale = (float)(frame.cols) / kModelWidth;
         float heightScale = (float)(frame.rows) / kModelHeight;
-
         for (uint32_t i = 0; i < totalBox; i++) {
             BBox boundBox;
             uint32_t score = uint32_t(detectData[totalBox * SCORE + i] * 100);
@@ -169,12 +166,13 @@ void Postprocess(cv::VideoWriter& outputVideo, aclrtContext context, BlockingQue
             cv::putText(frame, detectResults[i].text, cv::Point(p1.x, p1.y + kLabelOffset),
             cv::FONT_HERSHEY_COMPLEX, kFountScale, kFontColor);
         }
+
         outputVideo << frame;
+
     }
-    gPostEnd++;
+    g_video_need_postprocess--;
     outputVideo.release();
     ATLAS_LOG_INFO("postprocess end");
-
 }
 
 int main(int argc, char *argv[]) {
@@ -185,7 +183,6 @@ int main(int argc, char *argv[]) {
         ATLAS_LOG_ERROR("Init resource failed, error %d", ret);
         return ATLAS_ERROR;
     }
-
     ObjectDetect detect(kModelPath, kModelWidth, kModelHeight);
 
     ret = detect.Init();
@@ -197,42 +194,32 @@ int main(int argc, char *argv[]) {
     aclrtContext context;
     aclrtGetCurrentContext(&context);
 
-    string videoFile1 = "../data/video1.mp4";
-    string videoFile2 = "../data/video2.mp4";
-    cv::VideoCapture capture1(videoFile1);
-    cv::VideoCapture capture2(videoFile2);
-
+    cv::VideoCapture capture1("../data/video1.mp4");
+    cv::VideoCapture capture2("../data/video2.mp4");
     if (!capture1.isOpened() || !capture2.isOpened())
     {
         ATLAS_LOG_ERROR("Movie open Error");
         return 1;
     }
-    long totalFrameNumber1 = capture1.get(cv::CAP_PROP_FRAME_COUNT);
-    long totalFrameNumber2 = capture2.get(cv::CAP_PROP_FRAME_COUNT);
-    int rate1 = capture1.get(cv::CAP_PROP_FPS);
-    int rate2 = capture2.get(cv::CAP_PROP_FPS);
-    int height1 = static_cast<int>(capture1.get(cv::CAP_PROP_FRAME_HEIGHT));
-    int height2 = static_cast<int>(capture2.get(cv::CAP_PROP_FRAME_HEIGHT));
-    int width1 = static_cast<int>(capture1.get(cv::CAP_PROP_FRAME_WIDTH));
-    int width2 = static_cast<int>(capture2.get(cv::CAP_PROP_FRAME_WIDTH));
-
     cv::VideoWriter outputVideo1;
     cv::VideoWriter outputVideo2;
-    string outputVideoPath1 = "./output/test1.mp4";
-    string outputVideoPath2 = "./output/test2.mp4";
+    outputVideo1.open("./output/test1.mp4", cv::VideoWriter::fourcc('M', 'P', '4', 'v'), 
+                        capture1.get(cv::CAP_PROP_FPS), 
+                        cv::Size(static_cast<int>(capture1.get(cv::CAP_PROP_FRAME_WIDTH)), 
+                        static_cast<int>(capture1.get(cv::CAP_PROP_FRAME_HEIGHT))));
+    outputVideo2.open("./output/test2.mp4", cv::VideoWriter::fourcc('M', 'P', '4', 'v'), 
+                        capture2.get(cv::CAP_PROP_FPS), 
+                        cv::Size(static_cast<int>(capture2.get(cv::CAP_PROP_FRAME_WIDTH)), 
+                        static_cast<int>(capture2.get(cv::CAP_PROP_FRAME_HEIGHT))));
 
-    outputVideo1.open(outputVideoPath1, cv::VideoWriter::fourcc('M', 'P', '4', '2'), rate1, cv::Size(width1, height1));
-    outputVideo2.open(outputVideoPath2, cv::VideoWriter::fourcc('M', 'P', '4', '2'), rate2, cv::Size(width2, height2));
+    BlockingQueue<message_pre>queue_pre;
+    BlockingQueue<message>queue_post[VIDEONUM];
 
-    BlockingQueue<message>queue_post1;
-    BlockingQueue<message>queue_post2;
-    BlockingQueue<message_pre>queue_pre1;
-    BlockingQueue<message_pre>queue_pre2;
+    thread task1(Preprocess, ref(capture1), ref(context), &queue_pre, 0);
+    thread task2(Preprocess, ref(capture2), ref(context), &queue_pre, 1);
+    thread task3(Postprocess, ref(outputVideo1), ref(context), &queue_post[0]);
+    thread task4(Postprocess, ref(outputVideo2), ref(context), &queue_post[1]);
 
-    thread task1(Preprocess, ref(capture1), ref(context), totalFrameNumber1, &queue_pre1);
-    thread task2(Preprocess, ref(capture2), ref(context), totalFrameNumber2, &queue_pre2);
-    thread task3(Postprocess, ref(outputVideo1), ref(context), &queue_post1);
-    thread task4(Postprocess, ref(outputVideo2), ref(context), &queue_post2);
     task1.detach();
     task2.detach();
     task3.detach();
@@ -240,19 +227,32 @@ int main(int argc, char *argv[]) {
 
     message_pre premsg;
     message msg;
-    int flag = 0;
+    int video_need_preprocess = VIDEONUM;
     while(1) {
-        if(queue_pre1.Pop(premsg) != 0)
+        if(queue_pre.Pop(premsg) != 0)
         {
             usleep(1000);
             continue;
         }
-
-        msg.number = premsg.number;
-        if(premsg.number == -1) {
+        msg.videoIndex = premsg.videoIndex;
+        msg.isLastFrame = premsg.isLastFrame;
+        if(msg.isLastFrame == 0)
+        {
+            video_need_preprocess = video_need_preprocess - 1;
+        }
+        if (video_need_preprocess == 0)
+        {
+            while (1) {
+                int i = msg.videoIndex;
+                if (queue_post[i].Push(msg) != 0) {
+                    usleep(1000);
+                }
+                else {
+                    break;
+                }
+            }
             break;
         }
-
         msg.frame = premsg.frame;
         std::vector<InferenceOutput> inferenceOutput;
         ret = detect.Inference(inferenceOutput, premsg.reiszeMat);
@@ -263,38 +263,9 @@ int main(int argc, char *argv[]) {
         msg.detectData = inferenceOutput[kBBoxDataBufId].data;
         msg.boxNum = inferenceOutput[kBoxNumDataBufId].data;
 
+        int i = msg.videoIndex;
         while (1) {
-            if (queue_post1.Push(msg) != 0) {
-                usleep(1000);
-            }
-            else {
-                break;
-            }
-        }
-
-        if(queue_pre2.Pop(premsg) != 0)
-        {
-            usleep(1000);
-            continue;
-        }
-
-        msg.number = premsg.number;
-        if(premsg.number == -1){
-            break;
-        }
-
-        msg.frame = premsg.frame;
-
-        ret = detect.Inference(inferenceOutput, premsg.reiszeMat);
-        if (ret != ATLAS_OK) {
-            ATLAS_LOG_ERROR("Inference model inference output data failed");
-            return 1;
-        }
-        msg.detectData = inferenceOutput[kBBoxDataBufId].data;
-        msg.boxNum = inferenceOutput[kBoxNumDataBufId].data;
-
-        while (1) {
-            if (queue_post2.Push(msg) != 0) {
+            if (queue_post[i].Push(msg) != 0) {
                 usleep(1000);
             }
             else {
@@ -302,101 +273,11 @@ int main(int argc, char *argv[]) {
             }
         }
     }
-
-    if(totalFrameNumber1 > totalFrameNumber2){
-        while(1) {
-            if(queue_pre1.Pop(premsg) != 0)
-            {
-                usleep(1000);
-                continue;
-            }
-
-            msg.number = premsg.number;
-            if(premsg.number == -1) {
-                break;
-            }
-
-            msg.frame = premsg.frame;
-
-            std::vector<InferenceOutput> inferenceOutput;
-            ret = detect.Inference(inferenceOutput, premsg.reiszeMat);
-            if (ret != ATLAS_OK) {
-                ATLAS_LOG_ERROR("Inference model inference output data failed");
-                return 1;
-            }
-            msg.detectData = inferenceOutput[kBBoxDataBufId].data;
-            msg.boxNum = inferenceOutput[kBoxNumDataBufId].data;
-            while (1) {
-                if (queue_post1.Push(msg) != 0) {
-                    usleep(1000);
-                }
-                else {
-                    break;
-                }
-            }
-        }
-
-    }
-    else{
-        while(1) {
-            if(queue_pre2.Pop(premsg) != 0)
-            {
-                usleep(1000);
-                continue;
-            }
-
-            msg.number = premsg.number;
-            if(premsg.number == -1) {
-                break;
-            }
-
-            msg.frame = premsg.frame;
-
-            std::vector<InferenceOutput> inferenceOutput;
-            ret = detect.Inference(inferenceOutput, premsg.reiszeMat);
-            if (ret != ATLAS_OK) {
-                ATLAS_LOG_ERROR("Inference model inference output data failed");
-                return 1;
-            }
-            msg.detectData = inferenceOutput[kBBoxDataBufId].data;
-            msg.boxNum = inferenceOutput[kBoxNumDataBufId].data;
-            while (1) {
-                if (queue_post2.Push(msg) != 0) {
-                    usleep(1000);
-                }
-                else {
-                    break;
-                }
-            }
-        }
-
-    }
-
-    while (1) {
-        if (queue_post1.Push(msg) != 0) {
-            usleep(1000);
-        }
-        else {
-            break;
-        }
-    }
-    while (1) {
-        if (queue_post2.Push(msg) != 0) {
-            usleep(1000);
-        }
-        else {
-            break;
-        }
-    }
-
     while(1){
-        if (gPostEnd == 2)
-        {
+        if(!g_video_need_postprocess){
             break;
         }
-
     }
-
     usleep(5000);
     ATLAS_LOG_INFO("Execute sample success");
     return ATLAS_OK;

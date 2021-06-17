@@ -18,6 +18,7 @@ from acl_model import Model
 from acl_image import AclImage
 from acl_resource import AclResource
 from atlas_utils import presenteragent
+import atlas_utils.presenteragent.presenter_channel as presenter_channel
 
 MODEL_WIDTH = 224
 MODEL_HEIGHT = 224
@@ -87,7 +88,7 @@ def main():
 
     #load model
     model = Model(model_path)
-    chan = presenteragent.presenter_channel.open_channel(COLORIZATION_CONF)
+    chan = presenter_channel.open_channel(COLORIZATION_CONF)
     if chan is None:
         print("Open presenter channel failed")
         return

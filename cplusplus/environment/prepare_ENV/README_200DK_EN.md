@@ -107,7 +107,7 @@ This readme file describes how to configure the basic environment, including the
         **source ~/.bashrc**  
 
 5. Deploying the Media Module.  
-    1.  Upload [A200dk-npu-driver-{software version}-ubuntu18.04-aarch64-minirc.tar.gz](https://ascend.huawei.com/en/#/hardware/firmware-drivers) to the \$HOME/Ascend directory.    
+    1.  Upload [A200dk-npu-driver-{software version}-ubuntu18.04-aarch64-minirc.tar.gz](https://www.hiascend.com/en/hardware/firmware-drivers?tag=community) to the \$HOME/Ascend directory.    
     2.  Go to the directory where the Driver package is stored and run the following command as the installation user to extract the Driver package:  
          **cd \$HOME/Ascend**   
          **tar zxvf A200dk-npu-driver-{software version}-ubuntu18.04-aarch64-minirc.tar.gz** 

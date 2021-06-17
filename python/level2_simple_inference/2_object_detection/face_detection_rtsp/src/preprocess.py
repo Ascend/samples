@@ -33,7 +33,7 @@ class Preprocess():
         self._stream_name = str(stream_name)
         self._channel = int(channel)         
         self._resize_width = resize_width
-        self._resize_height = resize_width
+        self._resize_height = resize_height
         self._status = STATUS_PREPROC_INIT
         self._display = False
         self._dvpp = None
@@ -49,12 +49,12 @@ class Preprocess():
         while self._status == STATUS_PREPROC_INIT:
             time.sleep(0.001)
         log_info("Status changed to ", self._status)
-
-        while self._start == STATUS_PREPROC_RUNNING:
+        
+        while self._status == STATUS_PREPROC_RUNNING:
             if self._image_queue.qsize() > 0:
                 break
             time.sleep(0.001)
-
+        
         return self._status != STATUS_PREPROC_ERROR
 
     def _thread_entry(self, args_list):     
@@ -66,15 +66,17 @@ class Preprocess():
         frame_cnt = 0
         while self._status == STATUS_PREPROC_RUNNING: 
             ret, image = self._cap.read()
-            if ret or (image is None):
-                if ret == const.VIDEO_DECODE_FINISH:
-                    log_info("Video %s decode finish"%(self._stream_name))
-                    self._status = STATUS_PREPROC_EXIT
-                else:
-                    log_info("Video %s decode failed"%(self._stream_name))
-                    self._status = STATUS_PREPROC_ERROR
+            if ret:
+                log_error("Video %s decode failed" % (self._stream_name))
+                self._status = STATUS_PREPROC_ERROR
                 break
-            if (int(frame_cnt) % 5 == 0):
+
+            if (image is None) and self._cap.is_finished():
+                log_info("Video %s decode finish" % (self._stream_name))
+                self._status = STATUS_PREPROC_EXIT
+                break
+
+            if image and (int(frame_cnt) % 5 == 0):
                 self._process_frame(image)  
             time.sleep(0.0)
 
@@ -119,11 +121,23 @@ class Preprocess():
         self._display = display
 
     def is_finished(self):
+        """
+        Function description:
+            Judge whether the process is completed
+        Parameter:
+            none
+        Return Value:
+            True or False
+        Exception Description:
+            none
+        """
         return self._status > STATUS_PREPROC_RUNNING
-
+    
     def get_data(self):
-        ret = True
-        if self._status == STATUS_PREPROC_EXIT:
+        """
+        The method for getting data 
+        """
+        if self._status >= STATUS_PREPROC_EXIT:            
             return False, None
         elif self._status == STATUS_PREPROC_INIT:
             ret = self._start()
@@ -135,10 +149,7 @@ class Preprocess():
             return True, None
 
         preproc_data = self._image_queue.get_nowait()
-        if preproc_data is None:
-            ret = False
-        
-        return ret, preproc_data  
+        return True, preproc_data  
 
     def __del__(self):
         self._thread_exit()

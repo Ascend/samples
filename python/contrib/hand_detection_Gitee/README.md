@@ -39,20 +39,18 @@ pip3 install Pillow
 pip3 install opencv-python
 ```
 
-### 3. Obtain the Offline Model (om) or Convert .pb to .om in [Step 4](#4-Convert-the-original-model-to-a-DaVinci-model).
+### 3. Obtain the Protobuf model and test images
 
-   Ensure you are in the project directory (`hand_detection_Gitee/`) and run one of the following commands in the table to obtain the pedestrian tracking model used in the application.
+   Ensure you are in the project directory (`hand_detection_picture/`) and run the following commands in the table to obtain the hand detection model used in the application.
 
-	cd $HOME/samples/python/contrib/hand_detection_Gitee/
+	cd $HOME/samples/python/contrib/hand_detection_picture/
 
 | **Model**  |  **How to Obtain** |
 | ---------- |  ----------------- |
-| Hand_detection.om | to be added  |
-| Hand_detection.pb | `wget -nc --no-check-certificate 'https://drive.google.com/u/0/uc?id=1Ls-28mkmKq5e6bQsK6iA9p9vqBBxqVFM&export=download' -O model/Hand_detection.pb`  |
-
-   ![Icon-note.gif](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif) **NOTE**
-   >- `Hand_detection.om` offline model you can use out-of-the-box without model conversion. If you use this then you can skip the next step on model conversion.
-   >- `Hand_detection.pb` tensorflow protobuf model for those that want to configure the model conversion process.
+| Hand_detection.pb | `wget --no-check-certificate 'https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/hand_detection_picture/Hand_detection.pb' -O model/Hand_detection.pb`  |
+| hand.jpg | `wget --no-check-certificate 'https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/hand_detection_picture/hand.jpg' -O data/hand.jpg` |
+| verify.jpg | `wget --no-check-certificate 'https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/hand_detection_picture/verify.jpg' -O data/verify.jpg` |
+ 
   
 
 ### 4. Convert the original model to a DaVinci model
@@ -65,7 +63,6 @@ pip3 install opencv-python
       
           export LD_LIBRARY_PATH=${install_path}/atc/lib64
 
-   For **CANN 3.3.0-alpha006**: <br/>
 
    2. Go to the project directory (hand_detection) and run the model conversion command to convert the model:
 
@@ -75,12 +72,12 @@ pip3 install opencv-python
 
 ## Sample Running
 
-  ### Run on single test image (hand.jpeg)
-     ```
-     cd $HOME/samples/python/contrib/object_tracking_video/src
-     python3 hand_detection.py
-     ```
-   See `src/out/output.jpg` to see detection result
+  ### Run on single test image (hand.jpg)
+     
+    cd $HOME/samples/python/contrib/hand_detection_picture/src
+    python3 hand_detection.py
+     
+   See `output/output.jpg` to see detection result
 
 ## Result Checking
 After the execution is complete, the inference result is displayed on the CLI of the operating environment.

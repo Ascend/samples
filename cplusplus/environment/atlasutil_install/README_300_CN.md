@@ -28,8 +28,8 @@ $\color{red}{以下命令在开发环境上用安装开发套件包的用户执�
 
 3.  编译并安装atlasutil   
     **cd $HOME/samples/cplusplus/common/atlasutil/**      
-    **make mode=ASIC**  
-    **make mode=ASIC install**  
+    **make mode=Atlas300**  
+    **make mode=Atlas300 install**  
     >![输入图片说明](https://images.gitee.com/uploads/images/2020/1130/162342_1d7d35d7_7401379.png "屏幕截图.png") **说明：**  
     >  **生成的libatalsutil.so在\\$HOME/ascend_ddk/x86/lib/下；头文件在\\$HOME/ascend_ddk/x86/include/atlasutil下。**   
 

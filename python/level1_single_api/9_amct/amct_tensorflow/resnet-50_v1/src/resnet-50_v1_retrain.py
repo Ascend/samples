@@ -388,8 +388,6 @@ def main(): # pylint: disable=R0914, R0915
     acc_1_before, acc_5_before = evaluate(session)
 
     session.close()
-    print('The origin model top 1 accuracy = {}%.'.format(acc_1_before))
-    print('The origin model top 5 accuracy = {}%.'.format(acc_5_before))
 
     # Phase retrain the model
     # Step 1: Generate training dataset.
