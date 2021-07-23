@@ -38,8 +38,8 @@ python atlasutil库依赖pyav, numpy和PIL。在运行环境中需要安装这�
 
 ```
 apt-get install python3-pip
-pip3 install --upgrade pip
-pip3 install Cython
+pip3.6 install --upgrade pip
+pip3.6 install Cython
 apt-get install pkg-config libxcb-shm0-dev libxcb-xfixes0-dev
 cp /home/HwHiAiUser/ascend_ddk/<arch>/lib/pkgconfig/* /usr/share/pkgconfig/
 ```
@@ -54,9 +54,9 @@ cp /home/HwHiAiUser/ascend_ddk/<arch>/lib/pkgconfig/* /usr/share/pkgconfig/
 
 ```
 git clone https://gitee.com/mirrors/PyAV.git
-cd PyAv
-python3 setup.py build --ffmpeg-dir=/home/HwHiAiUser/ascend_ddk/<arch>
-python3 setup.py install
+cd PyAV
+python3.6 setup.py build --ffmpeg-dir=/home/HwHiAiUser/ascend_ddk/<arch>
+python3.6 setup.py install
 ```
 
 arch参数的选择同上
@@ -85,7 +85,7 @@ arch参数的选择同上
 
 ```
 cd ..
-python3
+python3.6
 import av
 ```
 
@@ -96,8 +96,8 @@ import av
 ###  安装numpy和PIL
 
 ```
-pip3 install numpy
-pip3 install Pillow
+pip3.6 install numpy
+pip3.6 install Pillow
 ```
 
    ### 安装python atlasutil库

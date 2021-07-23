@@ -162,7 +162,7 @@ def parse_args():
     parser.add_argument(
         '--batch_size', dest='batch_size', type=int, default=32, help='The number of samples in each batch.')
     parser.add_argument(
-        '--model', dest='model', type=str, default='./model/mobilenetv2_tf.pb',
+        '--model', dest='model', type=str, default='./model/mobilenet_v2_1.0_224_frozen.pb',
         help='The path of MobileNetV2 pb model for evaluation.')
 
     return parser.parse_args()

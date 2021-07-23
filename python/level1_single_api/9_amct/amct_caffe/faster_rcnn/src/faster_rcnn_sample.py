@@ -23,6 +23,7 @@ from pathlib import Path
 import caffe # pylint: disable=E0401
 import amct_caffe as amct # pylint: disable=E0401
 
+import init_paths_for_amct
 from faster_rcnn_test import caffe_test
 from faster_rcnn_test import do_voc2007_benchmark_test
 

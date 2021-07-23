@@ -160,7 +160,7 @@
 
     ```
     cd $HOME/samples/common/  
-    bash scripts/run_presenter_server.sh ../cplusplus/level2_simple_inference/2_object_detection/face_detection_camera/scripts/face_detection.conf   
+    bash run_presenter_server.sh ../cplusplus/level2_simple_inference/2_object_detection/face_detection_camera/scripts/face_detection.conf   
     ```
 
     

@@ -47,7 +47,7 @@ def load_image(path):
 def load_graph(model_name):
     """Load graph"""
     with tf.io.gfile.GFile(model_name, mode='rb') as model:
-        graph_def = tf.compat.v1.GraphDef()
+        graph_def = tf.GraphDef()
         graph_def.ParseFromString(model.read())
         tf.import_graph_def(graph_def, name='')
 
@@ -62,7 +62,7 @@ def main(): # pylint: disable=R0914
     """
     model_file = os.path.join(PATH, 'model/resnet_v1_50.pb')
     load_graph(model_file)
-    graph = tf.compat.v1.get_default_graph()
+    graph = tf.get_default_graph()
 
     input_tensor = graph.get_tensor_by_name('input:0')
     output_tensor = graph.get_tensor_by_name('Reshape_1:0')
@@ -73,7 +73,7 @@ def main(): # pylint: disable=R0914
     image_test = image_test.reshape([1, SIDE, SIDE, 3])
 
     print('inference with origin pb********************')
-    with tf.compat.v1.Session() as session:
+    with tf.Session() as session:
         origin_prediction = session.run(output_tensor, feed_dict={input_tensor: image_test})
 
     config_file = os.path.join(OUTPUTS, 'config.json')
@@ -84,8 +84,8 @@ def main(): # pylint: disable=R0914
     calibration_path = os.path.join(PATH, 'data/calibration')
     batch = load_image(calibration_path)
 
-    with tf.compat.v1.Session() as session:
-        session.run(tf.compat.v1.global_variables_initializer())
+    with tf.Session() as session:
+        session.run(tf.global_variables_initializer())
         session.run(output_tensor, feed_dict={input_tensor: batch})
 
     amct.save_model(model_file, ['Reshape_1'], record_file, os.path.join(OUTPUTS, 'resnet-50_v1'))
@@ -93,15 +93,15 @@ def main(): # pylint: disable=R0914
     # reload and test the quantized model for 'Fakequant'.
     model_file = os.path.join(OUTPUTS, 'resnet-50_v1_quantized.pb')
     with tf.io.gfile.GFile(model_file, mode='rb') as model:
-        graph_def_reload = tf.compat.v1.GraphDef()
+        graph_def_reload = tf.GraphDef()
         graph_def_reload.ParseFromString(model.read())
 
-    graph_reload = tf.compat.v1.Graph()
+    graph_reload = tf.Graph()
     with graph_reload.as_default():
         tf.import_graph_def(graph_def_reload, name='')
 
     print('inference with quantized pb====================')
-    with tf.compat.v1.Session(graph=graph_reload) as session:
+    with tf.Session(graph=graph_reload) as session:
         fakequant_prediction = session.run('Reshape_1:0', feed_dict={'input:0': image_test})
 
     print(

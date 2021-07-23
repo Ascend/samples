@@ -158,11 +158,11 @@ function main() {
         return ${inferenceError}
     fi
 
-    buildLibAtlasUtil
-    if [ $? -ne 0 ];then
-        echo "ERROR: build libatlasutil.so failed"
-        return ${inferenceError}
-    fi
+#    buildLibAtlasUtil
+#    if [ $? -ne 0 ];then
+#        echo "ERROR: build libatlasutil.so failed"
+#        return ${inferenceError}
+#    fi
 
     # 创建目录用于存放编译文件
     mkdir -p ${project_path}/build/intermediates/host
@@ -196,7 +196,7 @@ function main() {
 
     # 重新配置程序运行所需的环境变量
     export LD_LIBRARY_PATH=
-    export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/nnrt/latest/acllib/lib64:/home/HwHiAiUser/ascend_ddk/x86/lib:$LD_LIBRARY_PATH
+    export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/nnrt/latest/acllib/lib64:/home/HwHiAiUser/ascend_ddk/x86/lib:/home/HwHiAiUser/Ascend/ascend-toolkit/20.2.alpha001/x86_64-linux/atc/lib64/:$LD_LIBRARY_PATH
 
 
     # 运行程序

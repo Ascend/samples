@@ -114,9 +114,9 @@ Before deploying this sample, ensure that:
 
 2. Run the executable file.
 
-      **export LD_LIBRARY_PATH=**
+      **export LD_LIBRARY_PATH=**  
 
-      **source ~/.bashrc**
+      **source ~/.bashrc**  
 
       **cd $HOME/samples/python/level2_simple_inference/1_classification/lenet_mindspore_picture/**     
 

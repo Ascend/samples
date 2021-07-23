@@ -1,11 +1,11 @@
-caffe_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/colorization/colorization.caffemodel"
-caffe_prototxt="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/colorization/colorization.prototxt"
+caffe_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/Yolov3/yolov3.caffemodel"
+caffe_prototxt="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/Yolov3/yolov3.prototxt"
+aipp_cfg="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/YOLOV3_coco_detection_picture/aipp_nv12.cfg"
+model_name="yolov3"
 
-model_name="colorization"
-presenter_server_name="colorization"
-
-data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/colorization_video/black-white_video.mp4"
-project_name="cplusplus_colorization_video"
+data_source="https://c7xcode.obs.myhuaweicloud.com/models/YOLOV3_coco_detection_picture_with_freetype/test_image/"
+verify_source="https://c7xcode.obs.myhuaweicloud.com/models/YOLOV3_coco_detection_picture_with_freetype/verify_image/"
+project_name="cplusplus_YOLOV3_coco_detection_picture_with_freetype"
 
 version=$1
 
@@ -17,14 +17,34 @@ declare -i inferenceError=1
 declare -i verifyResError=2
 
 
-
-function downloadData() {
+function downloadDataWithVerifySource() {
 
     mkdir -p ${project_path}/data/
 
-    wget -O ${project_path}/data/"black-white_video.mp4"  ${data_source}  --no-check-certificate
+    wget -O ${project_path}/data/"boat_512_384.jpg"  ${data_source}"boat_512_384.jpg"  --no-check-certificate
     if [ $? -ne 0 ];then
         echo "download test1.jpg failed, please check Network."
+        return 1
+    fi
+
+    wget -O ${project_path}/data/"dog_1024_688.jpg"  ${data_source}"dog_1024_688.jpg"  --no-check-certificate
+    if [ $? -ne 0 ];then
+        echo "download test2.jpg failed, please check Network."
+        return 1
+    fi
+
+
+    mkdir -p ${project_path}/verify_image/
+
+    wget -O ${project_path}/verify_image/"out_boat_512_384.yuv" ${verify_source}"out_boat_512_384.yuv" --no-check-certificate
+    if [ $? -ne 0 ];then
+        echo "download verify_test1.jpg failed, please check Network."
+        return 1
+    fi
+
+    wget -O ${project_path}/verify_image/"out_dog_1024_688.yuv" ${verify_source}"out_dog_1024_688.yuv" --no-check-certificate
+    if [ $? -ne 0 ];then
+        echo "download verify_test2.jpg failed, please check Network."
         return 1
     fi
 
@@ -80,22 +100,13 @@ function downloadOriginalModel() {
         return 1
     fi
 
+    wget -O ${project_path}/model/${aipp_cfg##*/}  ${aipp_cfg} --no-check-certificate
+    if [ $? -ne 0 ];then
+        echo "install caffe_model failed, please check Network."
+        return 1
+    fi
+
     return 0
-}
-
-function buildLibAtlasUtil() {
-    cd ${project_path}/../../../common/atlasutil/
-    make
-    if [ $? -ne 0 ];then
-        echo "ERROR: make atlasutil failed."
-        return ${inferenceError}
-    fi
-
-    make install
-    if [ $? -ne 0 ];then
-        echo "ERROR: make install atlasutil failed."
-        return ${inferenceError}
-    fi
 }
 
 function main() {
@@ -105,15 +116,16 @@ function main() {
         return ${inferenceError}
     fi
 
-    # 下载测试集
-    downloadData
+    # 下载测试集和验证集
+    downloadDataWithVerifySource
     if [ $? -ne 0 ];then
-        echo "ERROR: download test images failed"
+        echo "ERROR: download test images or verify images failed"
         return ${inferenceError}
     fi
 
     mkdir -p ${HOME}/models/${project_name}     
     if [[ $(find ${HOME}/models/${project_name} -name ${model_name}".om")"x" = "x" ]];then 
+        # 下载原始模型文件[aipp_cfg文件]
         downloadOriginalModel
         if [ $? -ne 0 ];then
             echo "ERROR: download original model failed"
@@ -129,7 +141,7 @@ function main() {
 
         # 转模型
         cd ${project_path}/model/
-        atc --input_shape="data_l:1,1,224,224" --model=${project_path}/model/${caffe_prototxt##*/} --weight=${project_path}/model/${caffe_model##*/} --framework=0 --output=${HOME}/models/${project_name}/${model_name} --soc_version=Ascend310  --input_format=NCHW
+        atc --model=${project_path}/model/${caffe_prototxt##*/} --weight=${project_path}/model/${caffe_model##*/} --framework=0 --output=${HOME}/models/${project_name}/${model_name} --soc_version=Ascend310 --insert_op_conf=${project_path}/model/${aipp_cfg##*/} 
         if [ $? -ne 0 ];then
             echo "ERROR: convert model failed"
             return ${inferenceError}
@@ -148,25 +160,19 @@ function main() {
         fi
     fi
 
-    setBuildEnv
-    if [ $? -ne 0 ];then
-        echo "ERROR: set build environment failed"
-        return ${inferenceError}
-    fi
-
-    buildLibAtlasUtil
-    if [ $? -ne 0 ];then
-        echo "ERROR: build libatlasutil.so failed"
-        return ${inferenceError}
-    fi
-
-     # 创建目录用于存放编译文件
+    # 创建目录用于存放编译文件
     mkdir -p ${project_path}/build/intermediates/host
     if [ $? -ne 0 ];then
         echo "ERROR: mkdir build folder failed. please check your project"
         return ${inferenceError}
     fi
     cd ${project_path}/build/intermediates/host
+
+    setBuildEnv
+    if [ $? -ne 0 ];then
+        echo "ERROR: set build environment failed"
+        return ${inferenceError}
+    fi
 
     # 产生Makefile
     cmake ${project_path}/src -DCMAKE_CXX_COMPILER=aarch64-linux-gnu-g++ -DCMAKE_SKIP_RPATH=TRUE
@@ -182,49 +188,33 @@ function main() {
     fi
 
     cd ${project_path}/out
-
+    mkdir output
     # 重新配置程序运行所需的环境变量
     export LD_LIBRARY_PATH=
     export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/acllib/lib64:/home/HwHiAiUser/ascend_ddk/arm/lib:${LD_LIBRARY_PATH}
 
-    # 开启presenter server
-    cd ${script_path}/../../../../../common/
-    bash run_presenter_server.sh ${script_path}/colorization.conf 
-    if [ $? -ne 0 ];then
-        echo "ERROR: run presenter server failed. please check your project"
-        return ${inferenceError}
-    fi
-
-    sleep 2
     # 运行程序
-    mv ${project_path}/out/main ${project_path}/out/${project_name}
-    cd ${project_path}/out/
-    ./${project_name} ${project_path}/data/black-white_video.mp4 &
-
-    sleep 8
-
-    project_pid=`ps -ef | grep "${project_name}" | grep "data" | awk -F ' ' '{print $2}'`
-    if [[ ${project_pid}"X" != "X" ]];then
-        echo -e "\033[33m kill existing project process: kill -9 ${project_pid}.\033[0m"
-        kill -9 ${project_pid}
-        if [ $? -ne 0 ];then
-            echo "ERROR: kill project process failed."
-            return ${inferenceError}
-        fi
-
-        presenter_server_pid=`ps -ef | grep "presenter_server\.py" | grep "${presenter_server_name}" | awk -F ' ' '{print $2}'`
-        if [[ ${presenter_server_pid}"X" != "X" ]];then
-            echo -e "\033[33mNow do presenter server configuration, kill existing presenter process: kill -9 ${presenter_server_pid}.\033[0m"
-            kill -9 ${presenter_server_pid}
-            if [ $? -ne 0 ];then
-                echo "ERROR: kill presenter server process failed."
-                return ${inferenceError}
-            fi
-        fi
-    else 
+    ./main ${project_path}/data
+    if [ $? -ne 0 ];then
         echo "ERROR: run failed. please check your project"
         return ${inferenceError}
-    fi
+    fi   
+    
+    # 调用python脚本判断本工程推理结果是否正常
+    for outimage in $(find ${project_path}/verify_image -name "*.jpg");do
+        tmp=`basename $outimage`
+        if [[ ! -d "${project_path}/out/output" ]];then
+            echo "ERROR: not find results folders!"
+            return ${verifyResError}
+        fi
+        for test_file in `find ${project_path}/out/output -name "*${tmp#*_}"`;do
+            python3 ${script_path}/verify_result.py ${test_file} ${outimage}
+            if [ $? -ne 0 ];then
+                echo "ERROR: The result of reasoning is wrong!"
+                return ${verifyResError}
+            fi   
+        done
+    done
 
     echo "run success"
 

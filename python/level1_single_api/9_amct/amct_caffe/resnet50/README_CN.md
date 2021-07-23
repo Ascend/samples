@@ -150,7 +150,7 @@ python3.7.5 ./src/convert_model.py \
 
 #### 2.4.1 配置文件
 
-执行静态非均匀量化需要配置建议配置文件的 `nuq_config ` 选项，本示例提供了已经配置好的简易配置文件 [quant.cfg](./src/nuq_files/quant.cfg)， 该配置文件供本示例提供的 ResNet-50 模型使用，若只执行本示例则无需进行额外修改。
+执行静态非均匀量化需要配置简易配置文件的 `nuq_config ` 选项，本示例提供了已经配置好的简易配置文件 [quant.cfg](./src/nuq_files/quant.cfg)， 该配置文件供本示例提供的 ResNet-50 模型使用，若只执行本示例则无需进行额外修改。
 
 若要使用其他模型，请参见《ATC工具指南》，《CANN 开发辅助工具指南》中的“ATC 工具使用指南”。将 3.2 章节中介绍的均匀量化后的部署模型 (.om) 转换成 json 文件，获取该文件，并修改 [quant.cfg](./src/nuq_files/quant.cfg) 文件引用该文件路径：
 

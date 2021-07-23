@@ -192,7 +192,7 @@ function main() {
     mkdir output
     # 重新配置程序运行所需的环境变量
     export LD_LIBRARY_PATH=
-    export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/nnrt/latest/acllib/lib64:/home/HwHiAiUser/ascend_ddk/x86/lib:${LD_LIBRARY_PATH}
+    export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/nnrt/latest/acllib/lib64:/home/HwHiAiUser/ascend_ddk/x86/lib:/home/HwHiAiUser/Ascend/ascend-toolkit/20.2.alpha001/x86_64-linux/atc/lib64/:$LD_LIBRARY_PATH
 
     # 运行程序
     ./main ${project_path}/data

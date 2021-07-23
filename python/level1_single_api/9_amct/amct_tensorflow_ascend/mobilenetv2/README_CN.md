@@ -7,8 +7,8 @@
 请按照手册准备好环境并安装好amct_tensorflow_ascend工具包。
 ##### 模型准备
 请至
-[昇腾社区-ModelZoo](https://ascend.huawei.com/zh/#/software/modelzoo/detail/1/2a3e8d64cf7e48249246140ddbe4135f)
-下载 MobileNetV2 模型文件。解压并将其中的 mobilenetv2_tf.pb 文件放入[pre_model](./pre_model)文件夹中。
+[Tensorflow-models](https://storage.googleapis.com/mobilenet_v2/checkpoints/mobilenet_v2_1.0_224.tgz)
+下载 MobileNetV2 模型文件。解压并将其中的 mobilenet_v2_1.0_224_frozen.pb 文件放入[pre_model](./pre_model)文件夹中。
 ##### 数据集准备
 可以对量化前后的模型进行推理，以测试量化对精度的影响，推理过程中需要使用和模型相匹配的数据集。请下载[测试图片](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/mobilenet_v2_calibration/classification.jpg)，并将该图片放到 [data](./data/) 目录下。
 ##### 校准集准备
@@ -40,11 +40,11 @@ python3.7.5 src/mobilenetv2_calibration.py [-h] [--cfg_define CFG_DEFINE]
 ```bash
 INFO - [AMCT]:[save_model]: The model is saved in $HOME/amct/amct_tf/ascend_sample/mobilenetv2/result/MobileNetV2_ascend_quantized.pb
 Origin Model Prediction:
-        category index: 699
-        category prob: 0.559
+        category index: 443
+        category prob: 0.384
 Quantized Model Prediction:
-        category index: 699
-        category prob: 0.617
+        category index: 443
+        category prob: 0.477
 ```
 用户如需通过仿真的方式快速检验量化对自己模型精度的影响，可以比较量化前后的模型在其测试集上的表现。本示例展示了使用量化前后的模型对同一张图片做在线推理预测的结果，如上信息（预测结果根据用户环境会有所不同，请以实际显示的为准）。量化前后预测结果十分接近，说明在仿真情况下，量化对该图片的预测影响很小。
 

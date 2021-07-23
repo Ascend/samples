@@ -74,9 +74,12 @@
 
 ### 2.1 对原始网络模型进行预测试
 
-   量化前，需要先将原始模型和数据集在 Caffe 环境中执行推理过程，以避免数据集和模型不匹配、模型无法在 Caffe 环境中执行的问题。
+   量化前，需要先将原始模型和数据集在 Caffe 环境中执行推理过程，以避免数据集和模型不匹配、模型无法在 Caffe 环境中执行的问题。在执行精度测试前，需确保执行1.0章节中的初始化脚本，并添加`with_benchmark`参数。
+   ```none
+   init_env.sh CPU **/caffe-master/ python3.7 /usr/include/python3.7m with_benchmark
+   ```
 
-   切换到 sample/faster_rcnn/src 目录，执行如下命令检测 faster_rcnn 网络模型。
+   然后切换到 sample/faster_rcnn/src 目录，执行如下命令检测 faster_rcnn 网络模型。
 
    ```none
    python3.7.5 faster_rcnn_sample.py --model_file MODEL_FILE --weights_file WEIGHTS_FILE [--gpu GPU_ID] [--cpu][--iterations ITERATIONS] [--pre_test]

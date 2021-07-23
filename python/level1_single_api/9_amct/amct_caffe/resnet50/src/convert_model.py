@@ -59,7 +59,7 @@ def parse_args():
                         default=None, type=str)
     parser.add_argument('--pre_test', dest='pre_test',
                         help='Do test with amct caffe calibration or not',
-                        defult=False, action='store_true')
+                        default=False, action='store_true')
     parser.add_argument('--record_file', dest='record_file',
                         help='Specify scale offset record file',
                         default=None, type=str)

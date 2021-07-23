@@ -99,7 +99,7 @@ if [ "x$clean" == "xy" ] 2>/dev/null; then
   exit 0
 fi
 
-if [ ! "x$AICPU_SOC_VERSION" = "xLHISI" ];then
+if [ ! "x$AICPU_SOC_VERSION" = "xLMIX" ];then
   # if specified cross compile toolchain directory is not exist, log error and exit
   if [[ ! -z "$TOOLCHAIN_DIR" ]] && [[ ! -d "$TOOLCHAIN_DIR" ]];then
       log "[ERROR] Specified cross compile toolchain directory is not exist"
@@ -149,8 +149,8 @@ cd $project_path/build_out
 rm -rf *.run
 log "[INFO] Cmake begin."
 
-if [ "x$AICPU_SOC_VERSION" = "xLHISI" ];then
-     CMAKE_ARGS="-DLHISI=TRUE"
+if [ "x$AICPU_SOC_VERSION" = "xLMIX" ];then
+     CMAKE_ARGS="-DLMIX=TRUE"
      cmake $CMAKE_ARGS ..
 else
   if [ "x$AICPU_SOC_VERSION" = "xAscend310RC" ];then

@@ -120,7 +120,7 @@ def main(): # pylint: disable=too-many-locals, not-context-manager
 
     # Step one, inference the original model to obtain the original
     # precision before quantization.
-    model_path = os.path.join(PRE_MODEL_DIR, 'mobilenetv2_tf.pb')
+    model_path = os.path.join(PRE_MODEL_DIR, 'mobilenet_v2_1.0_224_frozen.pb')
     image_path = os.path.join(DATA_DIR, 'classification.jpg')
     image_test = Image.open(image_path).resize([SIDE, SIDE])
     image_test = np.array(image_test).astype(np.float) / 128 - 1

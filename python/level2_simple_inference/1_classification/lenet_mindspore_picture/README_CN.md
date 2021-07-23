@@ -112,8 +112,8 @@
 
 2. <a name="step_2"></a>运行可执行文件。
 
-      **export LD_LIBRARY_PATH=**
-      **source ~/.bashrc**
+      **export LD_LIBRARY_PATH=**  
+      **source ~/.bashrc**  
       **cd $HOME/samples/python/level2_simple_inference/1_classification/lenet_mindspore_picture/**     
 
     切换目录后，执行以下命令运行样例。

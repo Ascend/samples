@@ -1,10 +1,11 @@
-caffe_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/colorization/colorization.caffemodel"
-caffe_prototxt="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/colorization/colorization.prototxt"
-model_name="colorization"
+caffe_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/Yolov3/yolov3.caffemodel"
+caffe_prototxt="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/Yolov3/yolov3.prototxt"
+aipp_cfg="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/YOLOV3_coco_detection_picture/aipp_nv12.cfg"
+model_name="yolov3"
 
-data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/colorization/test_image/"
-verify_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/colorization/verify_image/"
-project_name="cplusplus_colorization"
+data_source="https://c7xcode.obs.myhuaweicloud.com/models/YOLOV3_coco_detection_picture_with_freetype/test_image/"
+verify_source="https://c7xcode.obs.myhuaweicloud.com/models/YOLOV3_coco_detection_picture_with_freetype/verify_image/"
+project_name="cplusplus_YOLOV3_coco_detection_picture_with_freetype"
 
 version=$1
 
@@ -20,17 +21,30 @@ function downloadDataWithVerifySource() {
 
     mkdir -p ${project_path}/data/
 
-    wget -O ${project_path}/data/"dog.png"  ${data_source}"dog.png"  --no-check-certificate
+    wget -O ${project_path}/data/"boat_512_384.jpg"  ${data_source}"boat_512_384.jpg"  --no-check-certificate
     if [ $? -ne 0 ];then
         echo "download test1.jpg failed, please check Network."
         return 1
     fi
 
+    wget -O ${project_path}/data/"dog_1024_688.jpg"  ${data_source}"dog_1024_688.jpg"  --no-check-certificate
+    if [ $? -ne 0 ];then
+        echo "download test2.jpg failed, please check Network."
+        return 1
+    fi
+
+
     mkdir -p ${project_path}/verify_image/
 
-    wget -O ${project_path}/verify_image/"out_dog.png" ${verify_source}"out_dog.png" --no-check-certificate
+    wget -O ${project_path}/verify_image/"out_boat_512_384.yuv" ${verify_source}"out_boat_512_384.yuv" --no-check-certificate
     if [ $? -ne 0 ];then
         echo "download verify_test1.jpg failed, please check Network."
+        return 1
+    fi
+
+    wget -O ${project_path}/verify_image/"out_dog_1024_688.yuv" ${verify_source}"out_dog_1024_688.yuv" --no-check-certificate
+    if [ $? -ne 0 ];then
+        echo "download verify_test2.jpg failed, please check Network."
         return 1
     fi
 
@@ -61,10 +75,10 @@ function setAtcEnv() {
 function setBuildEnv() {
     # 设置代码编译时需要的环境变量
     if [[ ${version} = "c73" ]] || [[ ${version} = "C73" ]];then
-        export DDK_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/arm64-linux_gcc7.3.0
+        export DDK_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/x86_64-linux_gcc7.3.0
         export NPU_HOST_LIB=${DDK_PATH}/acllib/lib64/stub
     elif [[ ${version} = "c75" ]] || [[ ${version} = "C75" ]];then
-        export DDK_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/arm64-linux
+        export DDK_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/x86_64-linux
         export NPU_HOST_LIB=${DDK_PATH}/acllib/lib64/stub
     fi
 
@@ -72,7 +86,7 @@ function setBuildEnv() {
 }
 
 function downloadOriginalModel() {
-
+    
     mkdir -p ${project_path}/model/
 
     wget -O ${project_path}/model/${caffe_prototxt##*/} ${caffe_prototxt} --no-check-certificate
@@ -87,23 +101,13 @@ function downloadOriginalModel() {
         return 1
     fi
 
+    wget -O ${project_path}/model/${aipp_cfg##*/}  ${aipp_cfg} --no-check-certificate
+    if [ $? -ne 0 ];then
+        echo "install caffe_model failed, please check Network."
+        return 1
+    fi
 
     return 0
-}
-
-function buildLibAtlasUtil() {
-    cd ${project_path}/../../../common/atlasutil/
-    make
-    if [ $? -ne 0 ];then
-        echo "ERROR: make atlasutil failed."
-        return ${inferenceError}
-    fi
-
-    make install
-    if [ $? -ne 0 ];then
-        echo "ERROR: make install atlasutil failed."
-        return ${inferenceError}
-    fi
 }
 
 function main() {
@@ -120,15 +124,15 @@ function main() {
         return ${inferenceError}
     fi
 
-    mkdir -p ${HOME}/models/${project_name}   
-    if [[ $(find ${HOME}/models/${project_name} -name ${model_name}".om")"x" = "x" ]];then   
+    mkdir -p ${HOME}/models/${project_name}     
+    if [[ $(find ${HOME}/models/${project_name} -name ${model_name}".om")"x" = "x" ]];then 
         # 下载原始模型文件[aipp_cfg文件]
         downloadOriginalModel
         if [ $? -ne 0 ];then
             echo "ERROR: download original model failed"
             return ${inferenceError}
         fi
-        
+
         # 设置模型转换的环境变量
         setAtcEnv
         if [ $? -ne 0 ];then
@@ -138,12 +142,12 @@ function main() {
 
         # 转模型
         cd ${project_path}/model/
-        atc --model=${project_path}/model/${caffe_prototxt##*/} --weight=${project_path}/model/${caffe_model##*/} --framework=0 --output=${HOME}/models/${project_name}/${model_name} --soc_version=Ascend310 --insert_op_conf=${project_path}/model/${aipp_cfg##*/} --input_shape="data_l:1,1,224,224" --input_format=NCHW 
+        atc --model=${project_path}/model/${caffe_prototxt##*/} --weight=${project_path}/model/${caffe_model##*/} --framework=0 --output=${HOME}/models/${project_name}/${model_name} --soc_version=Ascend310 --insert_op_conf=${project_path}/model/${aipp_cfg##*/} 
         if [ $? -ne 0 ];then
             echo "ERROR: convert model failed"
             return ${inferenceError}
         fi
-       
+
         ln -s ${HOME}/models/${project_name}/${model_name}".om" ${project_path}/model/${model_name}".om"
         if [ $? -ne 0 ];then
             echo "ERROR: failed to set model soft connection"
@@ -157,18 +161,6 @@ function main() {
         fi
     fi
 
-    setBuildEnv
-    if [ $? -ne 0 ];then
-        echo "ERROR: set build environment failed"
-        return ${inferenceError}
-    fi
-
-    buildLibAtlasUtil
-    if [ $? -ne 0 ];then
-        echo "ERROR: build libatlasutil.so failed"
-        return ${inferenceError}
-    fi
-
     # 创建目录用于存放编译文件
     mkdir -p ${project_path}/build/intermediates/host
     if [ $? -ne 0 ];then
@@ -177,9 +169,14 @@ function main() {
     fi
     cd ${project_path}/build/intermediates/host
 
+    setBuildEnv
+    if [ $? -ne 0 ];then
+        echo "ERROR: set build environment failed"
+        return ${inferenceError}
+    fi
 
     # 产生Makefile
-    cmake ${project_path}/src -DCMAKE_CXX_COMPILER=aarch64-linux-gnu-g++ -DCMAKE_SKIP_RPATH=TRUE
+    cmake ${project_path}/src -DCMAKE_CXX_COMPILER=g++ -DCMAKE_SKIP_RPATH=TRUE 
     if [ $? -ne 0 ];then
         echo "ERROR: cmake failed. please check your project"
         return ${inferenceError}
@@ -192,19 +189,18 @@ function main() {
     fi
 
     cd ${project_path}/out
-
+    mkdir output
     # 重新配置程序运行所需的环境变量
     export LD_LIBRARY_PATH=
-    export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/acllib/lib64:/home/HwHiAiUser/ascend_ddk/arm/lib:${LD_LIBRARY_PATH}
+    export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/nnrt/latest/acllib/lib64:/home/HwHiAiUser/ascend_ddk/x86/lib:${LD_LIBRARY_PATH}
 
-    mkdir -p ${project_path}/out/output
     # 运行程序
     ./main ${project_path}/data
     if [ $? -ne 0 ];then
         echo "ERROR: run failed. please check your project"
         return ${inferenceError}
     fi   
-
+    
     # 调用python脚本判断本工程推理结果是否正常
     for outimage in $(find ${project_path}/verify_image -name "*.jpg");do
         tmp=`basename $outimage`
@@ -226,4 +222,3 @@ function main() {
     return ${success}
 }
 main
-

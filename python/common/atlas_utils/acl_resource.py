@@ -27,7 +27,7 @@ class AclResource(object):
         """
         print("init resource stage:")
         ret = acl.init()
-        utils.check_ret("acl.rt.set_device", ret)
+        utils.check_ret("acl.init", ret)
 
         ret = acl.rt.set_device(self.device_id)
         utils.check_ret("acl.rt.set_device", ret)

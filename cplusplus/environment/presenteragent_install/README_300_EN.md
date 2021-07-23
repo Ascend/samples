@@ -13,12 +13,15 @@ English|[中文](README_300_CN.md)
     >![](https://images.gitee.com/uploads/images/2020/1130/162342_1d7d35d7_7401379.png "screenshot.png") **NOTE**  
     >**If Python fails to be installed, click [here](https://bbs.huaweicloud.com/forum/thread-97632-1-1.html) to try a new source. Alternatively, use the default pip source by removing the the -i option from the command.**  
 3. Install Protobuf.  
-    **git clone -b 3.8.x https://gitee.com/mirrors/protobufsource.git protobuf**  
+    **git clone -b _Version_ https://gitee.com/mirrors/protobufsource.git protobuf**  
     **cd protobuf**  
     **./autogen.sh**  
     **./configure --prefix=$HOME/ascend_ddk/x86**  
     **make -j8**  
     **make install**     
+    >![输入图片说明](https://images.gitee.com/uploads/images/2020/1130/162342_1d7d35d7_7401379.png "屏幕截图.png") **NOTE：**  
+    >  **If CANN version is 5.0.2.alpha005 or above, fill in version as 3.13.X**   
+    >  **If CANN version is below 5.0.2.alpha005, fill in version as 3.8.X**
 
 4. Build and install Presenter Agent.    
     Set the environment variable and run the following command on the CLI.  
@@ -30,9 +33,13 @@ English|[中文](README_300_CN.md)
      
      **cd $HOME**   
      **git clone https://github.com/Ascend/samples.git**   
-     **cd $HOME/samples/cplusplus/common/presenteragent/** 
+     **cd $HOME/samples/cplusplus/common/presenteragent/proto** 
 
-    Install Presenter Agent.     
+    Generate new proto communication file.   
+    **protoc presenter_message.proto --cpp_out=./**  
+
+    Install Presenter Agent.  
+    **cd \.\.**      
     **make mode=ASIC -j8**   
     **make install mode=ASIC** 
 

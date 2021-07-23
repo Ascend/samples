@@ -14,6 +14,11 @@
 #include <memory>
 #include <sstream>
 #include <string.h>
+#include <dirent.h>
+#include <string>
+#include <sys/stat.h>
+#include <stdio.h>
+#include <cstdlib>
 using namespace std;
 
 SampleProcess::SampleProcess() :deviceId_(0), context_(nullptr), stream_(nullptr){
@@ -75,6 +80,10 @@ AtlasError SampleProcess::DumpModelOutputResult(vector<InferenceOutput>& modelOu
     stringstream ssfile;
     size_t outputNum = 1;
     static int executeNum = 0;
+//    string folderPath = "./output";
+//    if (NULL == opendir(folderPath.c_str())) {
+//        mkdir(folderPath.c_str(), 0775);
+//    }
     for (size_t i = 0; i < outputNum; ++i) {
         ssfile << "./" << "output" << ++executeNum << "_" << i << ".bin";
         string outputFileName = ssfile.str();
@@ -91,6 +100,7 @@ AtlasError SampleProcess::DumpModelOutputResult(vector<InferenceOutput>& modelOu
         }
     }
     return ATLAS_OK;
+
 }
 
 AtlasError SampleProcess::CreateInput() {
@@ -133,7 +143,8 @@ AtlasError SampleProcess::Process()
         "../data/nihao.bin",
         "../data/xinpian.bin"
     };
-
+    //string cmd("mkdir -p ./output");
+    //system(cmd.c_str());
     for (size_t index = 0; index < sizeof(testFile) / sizeof(testFile[0]); ++index) {
         ATLAS_LOG_INFO("start to process file:%s", testFile[index].c_str());
         // model process
@@ -173,6 +184,11 @@ AtlasError SampleProcess::Process()
         // print the top 5 confidence values with indexes.use function DumpModelOutputResult
         // if want to dump output result to file in the current directory
         DumpModelOutputResult(inferOutputs);
+    }
+    ret = system("python3 ../scripts/postprocess.py");
+    if (ret){
+        ATLAS_LOG_INFO("execut python3 ../scripts/postprocess.py error");
+        return ATLAS_ERROR;
     }
     // loop end
     return ATLAS_OK;

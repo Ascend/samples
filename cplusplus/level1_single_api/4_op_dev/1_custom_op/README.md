@@ -74,7 +74,6 @@ The directory of a Caffe or TensorFlow custom operator sample project is organiz
     -   Matmul. For details, see  [Matmul](doc/Matmul_EN.md).
     -   Permute. For details, see  [Permute](doc/Permute_EN.md).
     -   Upsample. For details, see  [Upsample](doc/Upsample_EN.md).
-    -   LSTM. For details, see  [LSTM](doc/LSTM_EN.md).
 
 -   AI CPU custom operator samples
     -   ReshapeCust. For details, see  [Reshape](doc/Reshape_EN.md).

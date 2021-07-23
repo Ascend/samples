@@ -49,6 +49,7 @@ INFO - [AMCT]:[Utils]: The model file is saved in ./outputs/calibration/resnet-1
   + [modified_model.onnx](./outputs/calibration/tmp/modified_model.onnx): 临时模型文件，即原始模型 BN 融合后导出的 ONNX 模型文件。
 + [resnet-101_deploy_model.onnx](./outputs/calibration/resnet-101_deploy_model.onnx): 量化部署模型，即量化后的可在昇腾 AI 处理器部署的模型文件。
 + [resnet-101_fake_quant_model.onnx](./outputs/calibration/resnet-101_fake_quant_model.onnx): 量化仿真模型，即量化后的可在 ONNX 执行框架 ONNX Runtime 进行精度仿真的模型文件。
++ [resnet-101_quant.json](./outputs/calibration/resnet-101_quant.json)：融合信息文件。
 
 > 如果量化脚本所在目录下已经存在量化配置文件，则再次调用 `create_quant_config` 接口时，如果新生成的量化配置文件与已有的文件同名，则会覆盖已有的量化配置文件，否则生成新的量化配置文件。
 
@@ -104,5 +105,6 @@ INFO - [AMCT]:[Utils]: The model file is saved in ./outputs/nuq/resnet-101_fake_
   + [modified_model.onnx](./outputs/nuq/tmp/modified_model.onnx): 临时模型文件为原始模型 BN 融合后导出的 ONNX 模型文件。
 + [resnet-101_deploy_model.onnx](./outputs/nuq/resnet-101_deploy_model.onnx): 量化部署模型，即量化后的可在昇腾 AI 处理器部署的模型文件。
 + [resnet-101_fake_quant_model.onnx](./outputs/nuq/resnet-101_fake_quant_model.onnx): 量化仿真模型，即量化后的可在 ONNX 执行框架 ONNX Runtime 进行精度仿真的模型文件。
++ [resnet-101_quant.json](./outputs/calibration/resnet-101_quant.json)：融合信息文件。
 
 > 如果量化脚本所在目录下已经存在量化配置文件，则再次调用 `create_quant_config` 接口时，如果新生成的量化配置文件与已有的文件同名，则会覆盖已有的量化配置文件，否则生成新的量化配置文件。

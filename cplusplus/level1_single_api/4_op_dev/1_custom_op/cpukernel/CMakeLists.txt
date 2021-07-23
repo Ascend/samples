@@ -4,7 +4,7 @@ project(kernel)
 set(TOOLCHAIN_DIR $ENV{TOOLCHAIN_DIR})
 
 #Specify cross compiler
-if (LHISI)
+if (LMIX)
         add_definitions(-D_GLIBCXX_USE_CXX11_ABI=1)
         set(CMAKE_CXX_COMPILER ${TOOLCHAIN_DIR}-g++)
         set(CMAKE_C_COMPILER   ${TOOLCHAIN_DIR}-gcc)
@@ -128,6 +128,19 @@ add_library(${AICPU_KERNEL_TARGET} SHARED ${KERNELS_SRCS})
 
 set(AICPU_SOC_VERSION $ENV{AICPU_SOC_VERSION})
 message(STATUS "AICPU_SOC_VERSION=${AICPU_SOC_VERSION}")
+
+if(EXISTS "${ASCEND_AICPU_PATH}/opp/op_impl/built-in/aicpu/aicpu_kernel/lib/${AICPU_SOC_VERSION}/libascend_protobuf.a")
+    target_link_options(${AICPU_KERNEL_TARGET} PRIVATE
+        -s
+        -Wl,-Bsymbolic
+        -Wl,--exclude-libs=libascend_protobuf.a
+    )
+    target_link_libraries(${AICPU_KERNEL_TARGET} PRIVATE
+        -Wl,--whole-archive
+        ${ASCEND_AICPU_PATH}/opp/op_impl/built-in/aicpu/aicpu_kernel/lib/${AICPU_SOC_VERSION}/libascend_protobuf.a
+        -Wl,--no-whole-archive
+    )
+endif()
 
 if(EXISTS "${ASCEND_AICPU_PATH}/opp/op_impl/built-in/aicpu/aicpu_kernel/lib/${AICPU_SOC_VERSION}/libcpu_kernels_context.a")
     target_link_libraries(${AICPU_KERNEL_TARGET} PRIVATE

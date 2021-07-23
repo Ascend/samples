@@ -261,8 +261,10 @@ class Dvpp(object):
         ret = acl.rt.synchronize_stream(self._stream)
         utils.check_ret("acl.rt.synchronize_stream", ret)
         print('[Dvpp] vpc crop and paste stage success')
-        stride_width = utils.align_up16(crop_and_paste_width)
-        stride_height = utils.align_up2(crop_and_paste_height)
+        stride_width = crop_and_paste_width - 2 * dx
+        stride_height = crop_and_paste_height - 2 * dy
+        #stride_width = utils.align_up16(crop_and_paste_width)
+        #stride_height = utils.align_up2(crop_and_paste_height)
 
         return AclImage(out_buffer, stride_width,
                         stride_height, out_buffer_size, constants.MEMORY_DVPP)

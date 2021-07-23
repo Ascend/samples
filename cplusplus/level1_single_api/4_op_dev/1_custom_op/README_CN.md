@@ -74,7 +74,6 @@ Caffe与TensorFlow共存的自定义算子样例工程的目录结构如下所�
     -   Matmul算子，请参见[Matmul](doc/Matmul_CN.md)。
     -   Permute算子，请参见[Permute](doc/Permute_CN.md)。
     -   Upsample算子，请参见[Upsample](doc/Upsample_CN.md)。
-    -   LSTM算子，请参见[LSTM](doc/LSTM_CN.md)。
     -   BatchMultiClassNonMaxSuppression算子，请参见[BatchMultiClassNonMaxSuppression](doc/BatchMultiClassNonMaxSuppression_CN.md)。
 
 -   AI CPU自定义算子样例

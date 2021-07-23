@@ -25,6 +25,10 @@
 
 #include "acl/acl.h"
 #include "image_net_classes.h"
+#include <dirent.h>
+#include <string>
+#include <sys/stat.h>
+#include <stdio.h>
 
 #define RGBU8_IMAGE_SIZE(width, height) ((width) * (height) * 3)
 using namespace std;
@@ -174,8 +178,10 @@ void ClassifyProcess::LabelClassToImage(int classIdx, const string& origImagePat
     int pos = origImagePath.find_last_of("/");
     string filename(origImagePath.substr(pos + 1));
 
-    string cmd("mkdir -p ./output");
-    system(cmd.c_str());
+    string folderPath = "./output";
+    if (NULL == opendir(folderPath.c_str())) {
+        mkdir(folderPath.c_str(), 0775);
+    }
 
     stringstream sstream;
     sstream.str("");

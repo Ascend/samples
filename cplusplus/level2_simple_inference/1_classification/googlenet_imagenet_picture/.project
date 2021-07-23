@@ -1,8 +1,8 @@
 {
-  "type": "Ascend ACL App",
-  "project_type": "Custom",
+  "type": "Ascend App",
+  "project_type": "Ascend ACL App",
   "project_desc": "",
   "target": "",
   "target_id": "",
-  "adk_version": "1.73.5.1.B050"
+  "adk_version": "1.78.T20.0.B200"
 }

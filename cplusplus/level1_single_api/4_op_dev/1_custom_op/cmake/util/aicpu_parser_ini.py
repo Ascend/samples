@@ -100,7 +100,8 @@ def check_op_info(aicpu_ops):
     check all ops
     '''
     print("==============check valid for aicpu ops info start==============")
-    required_op_info_keys = ["computeCost", "engine", "flagAsync", "flagPartial", "opKernelLib"]
+    required_op_info_keys = ["computeCost", "engine", "flagAsync",
+                             "flagPartial", "opKernelLib"]
     required_custom_op_info_keys = ["kernelSo", "functionName", "workspaceSize"]
 
     for op_key in aicpu_ops:
@@ -119,8 +120,8 @@ def check_op_info(aicpu_ops):
             elif (key[:14] == "dynamic_output") and (key[14:].isdigit()):
                 check_op_input_output("dynamic_output", key, ops)
             else:
-                print("Only opInfo, input[0-9], output[0-9] can be used as a key, "
-                      "but op %s has the key %s" % (op_key, key))
+                print("Only opInfo, input[0-9], output[0-9] can be used as a "
+                      "key, but op %s has the key %s" % (op_key, key))
                 raise KeyError("bad key value")
     print("==============check valid for aicpu ops info end================\n")
 
@@ -132,7 +133,8 @@ def write_json_file(aicpu_ops_info, json_file_path):
     json_file_real_path = os.path.realpath(json_file_path)
     with open(json_file_real_path, "w") as json_file:
         # Only the owner and group have rights
-        os.chmod(json_file_real_path, stat.S_IWGRP + stat.S_IWUSR + stat.S_IRGRP + stat.S_IRUSR)
+        os.chmod(json_file_real_path, stat.S_IWGRP + stat.S_IWUSR + stat.S_IRGRP
+                 + stat.S_IRUSR)
         json.dump(aicpu_ops_info, json_file, sort_keys=True,
                   indent=4, separators=(',', ':'))
     print("Compile aicpu op info cfg successfully.")

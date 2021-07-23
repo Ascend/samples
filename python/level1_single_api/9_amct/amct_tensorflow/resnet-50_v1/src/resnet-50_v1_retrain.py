@@ -73,7 +73,7 @@ def _resize(image, resize_side):
     scale = tf.cond(tf.greater(height, width), lambda: resize_side / width, lambda: resize_side / height)
     new_height = tf.cast(tf.math.rint(height * scale), tf.int32)
     new_width = tf.cast(tf.math.rint(width * scale), tf.int32)
-    resized_image = tf.compat.v1.image.resize_images(image, [new_height, new_width])
+    resized_image = tf.image.resize_images(image, [new_height, new_width])
     return resized_image
 
 
@@ -157,12 +157,12 @@ class TFRecordDataset(object): # pylint: disable=R0902, R0903
         self.batch_size = batch_size
         self.dataset = self.dataset.batch(self.batch_size)
 
-        self.iterator = tf.compat.v1.data.make_one_shot_iterator(self.dataset)
+        self.iterator = tf.data.make_one_shot_iterator(self.dataset)
         self.images, self.labels, self.texts = self.iterator.get_next()
 
     def preview(self, columns=4):
         """Visual image data."""
-        with tf.compat.v1.Session() as session:
+        with tf.Session() as session:
             images, labels, texts = session.run([self.images, self.labels, self.texts])
 
         means = np.array([_R_MEAN, _G_MEAN, _B_MEAN])
@@ -289,18 +289,18 @@ def mkdir(name):
 def get_loss(input_2, logits):
     """Prepare losses"""
     l2_variables = []
-    for i in tf.compat.v1.trainable_variables():
+    for i in tf.trainable_variables():
         if 'BatchNorm' not in i.name and 'ULQ' not in i.name:
             l2_variables.append(tf.nn.l2_loss(tf.cast(i, tf.float32)))
     l2_loss = 1e-4 * tf.add_n(l2_variables)
     cross_entropy = tf.nn.softmax_cross_entropy_with_logits_v2(labels=input_2, logits=logits) / ARGS.batch_size
     loss = cross_entropy + l2_loss
     # Set a loss summary on tensorboard
-    tf.compat.v1.summary.scalar('l2_loss', l2_loss)
-    tf.compat.v1.summary.scalar('cross_entropy', tf.reduce_sum(cross_entropy))
-    tf.compat.v1.summary.scalar('loss', tf.reduce_sum(cross_entropy) + l2_loss)
-    write_op = tf.compat.v1.summary.merge_all()
-    summary_writer = tf.compat.v1.summary.FileWriter(OUTPUTS)
+    tf.summary.scalar('l2_loss', l2_loss)
+    tf.summary.scalar('cross_entropy', tf.reduce_sum(cross_entropy))
+    tf.summary.scalar('loss', tf.reduce_sum(cross_entropy) + l2_loss)
+    write_op = tf.summary.merge_all()
+    summary_writer = tf.summary.FileWriter(OUTPUTS)
     return loss, write_op, summary_writer
 
 
@@ -310,20 +310,20 @@ def retrain(saver, retrain_ckpt):
         ARGS.train_set, is_training=True, keywords=ARGS.train_keyword, num_parallel_reads=ARGS.num_parallel_reads,
         is_shuffle=True, is_repeat=True, batch_size=ARGS.batch_size)
 
-    graph = tf.compat.v1.get_default_graph()
+    graph = tf.get_default_graph()
     input_1 = graph.get_tensor_by_name(INPUTS + ':0')
     logits = graph.get_tensor_by_name(LOGITS + ':0')
-    saver_save = tf.compat.v1.train.Saver(tf.compat.v1.global_variables())
+    saver_save = tf.train.Saver(tf.global_variables())
 
     labels = tf.one_hot(dataset.labels - 1, CATEGORY)
-    input_2 = tf.compat.v1.placeholder(tf.float32, shape=[ARGS.batch_size, CATEGORY])
+    input_2 = tf.placeholder(tf.float32, shape=[ARGS.batch_size, CATEGORY])
     loss, write_op, summary_writer = get_loss(input_2, logits)
-    optimizer = tf.compat.v1.train.RMSPropOptimizer(ARGS.learning_rate, momentum=ARGS.momentum)
+    optimizer = tf.train.RMSPropOptimizer(ARGS.learning_rate, momentum=ARGS.momentum)
     train_op = optimizer.minimize(loss)
 
     # Restore checkpoint and start retraining.
-    session = tf.compat.v1.Session()
-    session.run(tf.compat.v1.global_variables_initializer())
+    session = tf.Session()
+    session.run(tf.global_variables_initializer())
     saver.restore(session, ARGS.ckpt_path)
 
     for i in trange(ARGS.train_iter, ncols=100):
@@ -381,9 +381,9 @@ def main(): # pylint: disable=R0914, R0915
 
     # Phase Check original model accuracy
     # Step 1: Load and evaluate the target model
-    graph = tf.compat.v1.get_default_graph()
-    session = tf.compat.v1.Session()
-    saver = tf.compat.v1.train.import_meta_graph(ARGS.eval_model)
+    graph = tf.get_default_graph()
+    session = tf.Session()
+    saver = tf.train.import_meta_graph(ARGS.eval_model)
     saver.restore(session, ARGS.ckpt_path)
     acc_1_before, acc_5_before = evaluate(session)
 
@@ -391,10 +391,10 @@ def main(): # pylint: disable=R0914, R0915
 
     # Phase retrain the model
     # Step 1: Generate training dataset.
-    tf.compat.v1.reset_default_graph()
-    graph = tf.compat.v1.get_default_graph()
+    tf.reset_default_graph()
+    graph = tf.get_default_graph()
     # Step 2: Load the training model.
-    saver = tf.compat.v1.train.import_meta_graph(ARGS.train_model)
+    saver = tf.train.import_meta_graph(ARGS.train_model)
     # Step 3: Create the retraining configuration file.
     config_file = os.path.join(OUTPUTS, 'config.json')
     record_file = os.path.join(OUTPUTS, 'record.txt')
@@ -409,25 +409,25 @@ def main(): # pylint: disable=R0914, R0915
 
     # Phase convert retrain model
     # Step 1: Load the evaluation model.
-    tf.compat.v1.reset_default_graph()
-    graph = tf.compat.v1.get_default_graph()
-    saver = tf.compat.v1.train.import_meta_graph(ARGS.eval_model)
+    tf.reset_default_graph()
+    graph = tf.get_default_graph()
+    saver = tf.train.import_meta_graph(ARGS.eval_model)
     # Step 2: Generate the retraining model accroding to the retraining
     # configuration file which created last phase.
     retrain_ops = amct.create_quant_retrain_model(graph, config_file, record_file)
     # Step 3: Set the variables which needed to restore.
-    variables_to_restore = tf.compat.v1.global_variables()
-    saver_restore = tf.compat.v1.train.Saver(variables_to_restore)
+    variables_to_restore = tf.global_variables()
+    saver_restore = tf.train.Saver(variables_to_restore)
     # Step 4: Restore the variables and use the eval_set inference output node
     # (retrain_ops[-1]) to write the quantization factor into the record_file.
-    session = tf.compat.v1.Session()
-    session.run(tf.compat.v1.global_variables_initializer())
+    session = tf.Session()
+    session.run(tf.global_variables_initializer())
     retrain_ckpt = retrain_ckpt + '-' + str(ARGS.train_iter)
     saver_restore.restore(session, retrain_ckpt)
     evaluate_for_search_n(session, retrain_ops[-1].name[:-2], ARGS.batch_num)
 
     # Step 5: Convert all variables to constants and finally save as 'pb' file.
-    constant_graph = tf.compat.v1.graph_util.convert_variables_to_constants(
+    constant_graph = tf.graph_util.convert_variables_to_constants(
         session, graph.as_graph_def(), [PREDICTIONS])
     pb_path = os.path.join(OUTPUTS, 'resnet_v1_50.pb')
     with tf.io.gfile.GFile(pb_path, 'wb') as pb_file:
@@ -441,17 +441,17 @@ def main(): # pylint: disable=R0914, R0915
 
     # Phase verification
     # Step 1: Generate validation dataset.
-    tf.compat.v1.reset_default_graph()
-    graph = tf.compat.v1.get_default_graph()
+    tf.reset_default_graph()
+    graph = tf.get_default_graph()
 
     # Step 2: Load the fake quantized model and validation it.
     quantized_pb_file = quantized_pb_path + '_quantized.pb'
     with tf.io.gfile.GFile(quantized_pb_file, 'rb') as fid:
-        graph_def = tf.compat.v1.GraphDef()
+        graph_def = tf.GraphDef()
         graph_def.ParseFromString(fid.read())
     tf.import_graph_def(graph_def, name='')
 
-    session = tf.compat.v1.Session()
+    session = tf.Session()
     acc_1, acc_5 = evaluate(session)
     session.close()
     print('The origin model top 1 accuracy = {}%.'.format(acc_1_before))

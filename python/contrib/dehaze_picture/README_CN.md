@@ -80,7 +80,7 @@
 执行以下命令，进入样例的data文件夹中，下载对应的测试图片。
 
     cd $HOME/samples/python/contrib/dehaze_picture/data
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/dehaze_picture/test_image/10992_04_0.8209.png
+    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/SingleImageDehaze/test_image/10992_04_0.8209.png 
 
 
 ### 样例运行

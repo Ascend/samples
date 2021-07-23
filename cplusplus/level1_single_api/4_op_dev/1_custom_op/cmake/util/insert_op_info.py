@@ -11,7 +11,7 @@ if __name__ == '__main__':
     if len(sys.argv) != 3:
         print(sys.argv)
         print('argv error, inert_op_info.py your_op_file lib_op_file')
-        exit(2)
+        sys.exit(2)
 
     with open(sys.argv[1], 'r') as load_f:
         insert_operator = json.load(load_f)

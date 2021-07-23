@@ -15,7 +15,7 @@ English|[中文](README_200DK_CN.md)
 3. Install Protobuf.  
     - if the development environment is not set up on the Atlas 200 DK, cross compilation is required, you need to compile Protobuf twice.  
         **cd $HOME**     
-        **git clone -b 3.8.x https://gitee.com/mirrors/protobufsource.git protobuf**  
+        **git clone -b _Version_ https://gitee.com/mirrors/protobufsource.git protobuf**  
         **cp -r protobuf protobuf_arm**  
         **cd protobuf**  
         **./autogen.sh**  
@@ -29,12 +29,15 @@ English|[中文](README_200DK_CN.md)
         **make install**  
     - if the development environment is set up on the Atlas 200 DK,you only need to compile Protobuf once.   
         **cd \$HOME**       
-        **git clone -b 3.8.x https://gitee.com/mirrors/protobufsource.git protobuf**   
+        **git clone -b _Version_ https://gitee.com/mirrors/protobufsource.git protobuf**   
         **cd protobuf**  
         **./autogen.sh**  
         **./configure --prefix=$HOME/ascend_ddk/arm**  
         **make -j8**  
         **sudo make install**    
+    >![输入图片说明](https://images.gitee.com/uploads/images/2020/1130/162342_1d7d35d7_7401379.png "屏幕截图.png") **NOTE：**  
+    >  **If CANN version is 5.0.2.alpha005 or above, fill in version as 3.13.**   
+    >  **If CANN version is below 5.0.2.alpha005, fill in version as 3.8. X**
 
 4. Build and install Presenter Agent.
 
@@ -47,9 +50,18 @@ English|[中文](README_200DK_CN.md)
    
      **cd $HOME**   
      **git clone https://github.com/Ascend/samples.git**  
-     **cd $HOME/samples/cplusplus/common/presenteragent/**  
+     **cd $HOME/samples/cplusplus/common/presenteragent/proto**  
 
-    Install Presenter Agent.   
+    Generate new proto communication file.  
+    - if the development environment is not set up on the Atlas 200 DK  
+    **protoc presenter_message.proto --cpp_out=./**
+    - if the development environment is set up on the Atlas 200 DK  
+    **\$HOME/ascend_ddk/arm/bin/protoc presenter_message.proto --cpp_out=./**
+
+
+
+    Install Presenter Agent.  
+    **cd \.\.**   
     **make -j8**   
     **make install**  
 

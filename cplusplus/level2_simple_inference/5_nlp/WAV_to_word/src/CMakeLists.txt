@@ -34,10 +34,15 @@ else ()
 endif()
 
 list(APPEND COMMON_DEPEND_LIB atlasutil avcodec avformat avdevice avutil swresample avfilter swscale)
-if (${CMAKE_CXX_COMPILER} MATCHES "aarch")
+if(CMAKE_HOST_SYSTEM_PROCESSOR MATCHES "aarch")
+    message("arm64 architecture detected")
     set(ARCH "arm")
-else ()
-    set(ARCH "x86")
+else()
+    if (${CMAKE_CXX_COMPILER} MATCHES "aarch")
+        set(ARCH "arm")
+    else ()
+        set(ARCH "x86")
+    endif()
 endif()
 # Header path
 include_directories(

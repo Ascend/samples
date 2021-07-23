@@ -18,12 +18,15 @@
 */
 #include "object_detect.h"
 #include <iostream>
-
+#include <stdio.h>
 #include "opencv2/imgcodecs/legacy/constants_c.h"
 #include "opencv2/opencv.hpp"
 #include "acl/acl.h"
 #include "model_process.h"
 #include "utils.h"
+#include <dirent.h>
+#include <string>
+#include <sys/stat.h>
 
 using namespace std;
 
@@ -70,7 +73,7 @@ namespace {
 }
 
 ObjectDetect::ObjectDetect(const char* modelPath, uint32_t modelWidth,
-                           uint32_t modelHeight)
+uint32_t modelHeight)
 :deviceId_(0), context_(nullptr), stream_(nullptr), modelWidth_(modelWidth),
 modelHeight_(modelHeight), isInited_(false), isDeviceSet_(false){
     imageInfoSize_ = 0;
@@ -100,7 +103,7 @@ Result ObjectDetect::InitResource() {
     }
     isDeviceSet_ = true;
     INFO_LOG("open device %d success", deviceId_);
-
+    INFO_LOG("open device %d success", deviceId_);
     // create context (set current)
     ret = aclrtCreateContext(&context_, deviceId_);
     if (ret != ACL_ERROR_NONE) {
@@ -283,8 +286,8 @@ const string& origImagePath) {
 }
 
 void* ObjectDetect::GetInferenceOutputItem(uint32_t& itemDataSize,
-                                           aclmdlDataset* inferenceOutput,
-                                           uint32_t idx) {
+aclmdlDataset* inferenceOutput,
+uint32_t idx) {
     aclDataBuffer* dataBuffer = aclmdlGetDatasetBuffer(inferenceOutput, idx);
     if (dataBuffer == nullptr) {
         ERROR_LOG("Get the %dth dataset buffer from model "
@@ -322,7 +325,7 @@ void* ObjectDetect::GetInferenceOutputItem(uint32_t& itemDataSize,
 }
 
 void ObjectDetect::DrawBoundBoxToImage(vector<BBox>& detectionResults,
-                                       const string& origImagePath) {
+const string& origImagePath) {
     cv::Mat image = cv::imread(origImagePath, CV_LOAD_IMAGE_UNCHANGED);
     for (int i = 0; i < detectionResults.size(); ++i) {
         cv::Point p1, p2;
@@ -335,11 +338,15 @@ void ObjectDetect::DrawBoundBoxToImage(vector<BBox>& detectionResults,
         cv::FONT_HERSHEY_COMPLEX, kFountScale, kFontColor);
     }
 
+    string folderPath = "./outputs";
+    if (NULL == opendir(folderPath.c_str())) {
+        mkdir(folderPath.c_str(), 0775);
+    }
     int pos = origImagePath.find_last_of("/");
     string filename(origImagePath.substr(pos + 1));
     stringstream sstream;
     sstream.str("");
-    sstream << "./output/out_" << filename;
+    sstream << "./outputs/out_" << filename;
     cv::imwrite(sstream.str(), image);
 }
 

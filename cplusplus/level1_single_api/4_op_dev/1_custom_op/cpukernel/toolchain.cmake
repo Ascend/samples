@@ -6,7 +6,7 @@ set(CMAKE_SYSTEM_NAME Linux)
 # set cross compile toolchain dir
 set(TOOLCHAIN_DIR $ENV{TOOLCHAIN_DIR})
 #Specify cross compiler
-if (LHISI)
+if (LMIX)
         set(CMAKE_CXX_COMPILER ${TOOLCHAIN_DIR}-g++)
         set(CMAKE_C_COMPILER   ${TOOLCHAIN_DIR}-gcc)
 else()

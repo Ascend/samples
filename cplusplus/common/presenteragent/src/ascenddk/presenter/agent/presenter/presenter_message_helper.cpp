@@ -87,7 +87,8 @@ bool PresenterMessageHelper::InitPresentImageRequest(
 
     request.set_width(image.width);
     request.set_height(image.height);
-
+    request.set_data(string(reinterpret_cast < char* > (image.data), image.size));
+    
     // set the rectangle attr
     proto::Rectangle_Attr *rectangle_attr = nullptr;
     for (uint32_t i = 0; i < image.detection_results.size(); i++)

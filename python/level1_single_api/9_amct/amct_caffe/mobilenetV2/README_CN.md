@@ -67,7 +67,6 @@ python3.7.5 ./src/auto_calibration_mobilenet_v2_sample.py \
 python3.7.5 ./src/auto_calibration_mobilenet_v2_sample.py \
     --model_file model/mobilenet_v2_deploy.prototxt \
     --weights_file model/mobilenet_v2.caffemodel \
-    --cpu  \
     --caffe_dir path/to/caffe-master \
     --dataset /data/Datasets/imagenet/ilsvrc12_val_lmdb
 ```

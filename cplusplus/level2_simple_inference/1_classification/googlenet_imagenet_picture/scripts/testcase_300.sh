@@ -194,11 +194,11 @@ function main() {
         return ${inferenceError}
     fi
 
-    buildLibAtlasUtil
-	if [ $? -ne 0 ];then
-        echo "ERROR: build libatlasutil.so failed"
-        return ${inferenceError}
-    fi
+#    buildLibAtlasUtil
+#	if [ $? -ne 0 ];then
+#        echo "ERROR: build libatlasutil.so failed"
+#        return ${inferenceError}
+#    fi
 
     mkdir -p ${project_path}/build/intermediates/host
     if [ $? -ne 0 ];then
@@ -222,7 +222,7 @@ function main() {
     cd ${project_path}/out
 
     export LD_LIBRARY_PATH=
-    export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/nnrt/latest/acllib/lib64:/home/HwHiAiUser/Ascend/ascend-toolkit/latest/atc/lib64:/home/HwHiAiUser/ascend_ddk/x86/lib:${LD_LIBRARY_PATH}
+    export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/nnrt/latest/acllib/lib64:/home/HwHiAiUser/ascend_ddk/x86/lib:/home/HwHiAiUser/Ascend/ascend-toolkit/20.2.alpha001/x86_64-linux/atc/lib64/:$LD_LIBRARY_PATH
 
     ./main ${project_path}/data
     if [ $? -ne 0 ];then

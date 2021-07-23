@@ -5,7 +5,7 @@
 ### 1.1 量化前提
 
 + **模型准备**  
-请至[昇腾社区-ModelZoo](https://www.hiascend.com/zh/software/modelzoo/detail/C/08247440137b451588bdd049b1f8b42a)下载 MobileNet V2 模型文件。解压并将其中的 mobilenetv2_tf.pb 文件放到 [model](./model/) 目录下。
+请点击下载 [MobileNet V2](https://storage.googleapis.com/mobilenet_v2/checkpoints/mobilenet_v2_1.0_224.tgz) 模型文件。解压并将其中的 mobilenet_v2_1.0_224_frozen.pb 文件放到 [model](./model/) 目录下。
 
 + **数据集准备**  
 使用昇腾模型压缩工具对模型完成量化后，需要对模型进行推理，以测试量化数据的精度。推理过程中需要使用和模型相匹配的数据集。请下载测试图片 [classification.jpg](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/mobilenet_v2_calibration/classification.jpg)，并将该图片放到 [data](./data/) 目录下。
@@ -37,11 +37,11 @@ python ./src/mobilenet_v2_calibration.py
 ```none
 INFO - [AMCT]:[save_model]: The model is saved in ./outputs/calibration/mobilenet_v2_quantized.pb
 Origin Model Prediction:
-        category index: 699
-        category prob: 0.560
+        category index: 443
+        category prob: 0.375
 Quantized Model Prediction:
-        category index: 699
-        category prob: 0.568
+        category index: 443
+        category prob: 0.478
 ```
 
 ### 1.3 量化结果
@@ -61,7 +61,7 @@ Quantized Model Prediction:
 ### 2.1 量化前提
 
 + **模型准备**  
-请至[昇腾社区-ModelZoo](https://www.hiascend.com/zh/software/modelzoo/detail/C/08247440137b451588bdd049b1f8b42a)下载 MobileNet V2 模型文件。解压并将其中的 mobilenetv2_tf.pb 文件放到 [model](./model/) 目录下。
+请点击下载 [MobileNet V2](https://storage.googleapis.com/mobilenet_v2/checkpoints/mobilenet_v2_1.0_224.tgz) 模型文件。解压并将其中的 mobilenet_v2_1.0_224_frozen.pb 文件放到 [model](./model/) 目录下。
 
 + **数据集准备**  
 使用昇腾模型压缩工具对模型完成量化后，需要对模型进行推理，以测试量化数据的精度。推理过程中需要使用和模型相匹配的数据集。请下载测试图片 [classification.jpg](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/mobilenet_v2_calibration/classification.jpg)，并将该图片放到 [data](./data/) 目录下。
@@ -89,11 +89,11 @@ python ./src/mobilenet_v2_convert_model.py
 ```none
 INFO - [AMCT]:[save_model]: The model is saved in ./outputs/convert_model/mobilenet_v2_quantized.pb
 Origin Model Prediction:
-        category index: 699
-        category prob: 0.560
+        category index: 443
+        category prob: 0.375
 Quantized Model Prediction:
-        category index: 699
-        category prob: 0.569
+        category index: 443
+        category prob: 0.517
 ```
 
 ### 2.3 量化结果
@@ -160,7 +160,7 @@ Quantized Model Prediction:
 ### 4.1 量化前提
 
 + **模型准备**  
-请至 [昇腾社区-ModelZoo](https://www.hiascend.com/zh/software/modelzoo/detail/C/08247440137b451588bdd049b1f8b42a) 下载 MobileNetV2 模型文件。解压并将其中的 mobilenetv2_tf.pb 文件放到 [model](./model/) 目录下。
+请点击下载 [MobileNet V2](https://storage.googleapis.com/mobilenet_v2/checkpoints/mobilenet_v2_1.0_224.tgz) 模型文件。解压并将其中的 mobilenet_v2_1.0_224_frozen.pb 文件放到 [model](./model/) 目录下。
 
 + **数据集准备**  
 自动量化回退过程中，需要不断的对模型进行校准和测试，因此需要用户准备数据集，本示例所采用的数据集为标准 TFRecord 格式的 ImageNet 的 子集 ILSVRC-2012-CLS 的验证集，共有 50000 张图片，如果采用其他数据集，则需要用户自行修改 sample 文件中的数据预处理部分以匹配模型输入。
@@ -193,9 +193,9 @@ python ./src/mobilenet_v2_accuracy_based_auto_calibration.py --dataset DATASET
 若出现如下信息则说明模型量化成功：
 
 ```none
-INFO - [AMCT]:[AMCT]: Accuracy of original model is         74.97
-INFO - [AMCT]:[AMCT]: Accuracy of global quantized model is 73.974
-INFO - [AMCT]:[AMCT]: Accuracy of saved model is            74.646
+INFO - [AMCT]:[AMCT]: Accuracy of original model is         71.84
+INFO - [AMCT]:[AMCT]: Accuracy of global quantized model is 70.85
+INFO - [AMCT]:[AMCT]: Accuracy of saved model is            71.476
 INFO - [AMCT]:[AMCT]: The generated model is stored in dir: ./outputs/accuracy_based_auto_calibration
 INFO - [AMCT]:[AMCT]: The records is stored in dir: ./outputs/accuracy_based_auto_calibration
 ```

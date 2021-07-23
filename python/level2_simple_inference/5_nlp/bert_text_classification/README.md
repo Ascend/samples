@@ -49,16 +49,17 @@
 2. 获取此应用中所需要的原始网络模型。
 
     参考下表获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到开发环境普通用户下的任意目录，例如：$HOME/models/bert_text_classification。
-    
+
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
     |  bert_text_classification| 文本分类推理模型。  |  请参考[https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/nlp/bert_text_classification/ATC_bert_classification_tf_AE](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/nlp/bert_text_classification/ATC_bert_classification_tf_AE)目录中README.md下载原始模型章节下载模型和权重文件。 |
 
     ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
+
     > - modelzoo中提供了转换好的om模型，但此模型不匹配当前样例，所以需要下载原始模型和权重文件后重新进行模型转换。
 
 3. 将原始模型转换为Davinci模型。
-    
+   
     **注：请确认环境变量已经在[环境准备和依赖安装](../../../environment)中配置完成**
 
     1. 设置LD_LIBRARY_PATH环境变量。
@@ -99,6 +100,7 @@
     **ssh HwHiAiUser@xxx.xxx.xxx.xxx**    
 
     ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
+
     > - **xxx.xxx.xxx.xxx**为运行环境ip，200DK在USB连接时一般为192.168.1.2，300（ai1s）为对应的公网ip。
 
 2. <a name="step_2"></a>运行可执行文件。
@@ -108,7 +110,7 @@
       **export LD_LIBRARY_PATH=**
 
       **source ~/.bashrc**
-        
+      
       **cd $HOME/samples/python/level2_simple_inference/5_nlp/bert_text_classification/src/**    
 
     - 如果是开发环境与运行环境分离部署，执行以下命令切换目录。
@@ -117,7 +119,7 @@
 
     切换目录后，执行以下命令运行样例。
 
-    **python3 bert_text_classification.py**
+    **python3.6 bert_text_classification.py**
 
 ### 查看结果
 

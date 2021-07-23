@@ -38,15 +38,15 @@ typedef struct PicDesc {
     int height;
 }PicDesc;
 
-uint32_t AlignmentHelper(uint32_t origSize, uint32_t alignment);
-void SetInput4JpegE(char &inDevBuffer, int inDevBufferSize, int inputWidth, int inputHeight);
-uint32_t ComputeEncodeInputSize(int inputWidth, int inputHeight);
+uint32_t alignment_helper(uint32_t origSize, uint32_t alignment);
+void set_input4_jpege(char &inDevBuffer, int inDevBufferSize, int inputWidth, int inputHeight);
+uint32_t compute_encode_inputsize(int inputWidth, int inputHeight);
 static char* ReadBinFile(std::string fileName, uint32_t& fileSize);
-static char* GetPicDevBuffer4JpegE(const PicDesc &picDesc, uint32_t &PicBufferSize);
-static Result SaveDvppOutputData(const char *fileName, const void *devPtr, uint32_t dataSize);
-void DestroyEncodeResource();
-void DestroyResource();
-void DestroyDecodeResource();
+static char* get_picdevbuffer4_jpege(const PicDesc &picDesc, uint32_t &PicBufferSize);
+static Result save_dvpp_outputdata(const char *fileName, const void *devPtr, uint32_t dataSize);
+void destroy_encode_resource();
+void destroy_resource();
+//void DestroyDecodeResource();
 int32_t deviceId_ = 0;
 aclrtContext context_ = nullptr;
 aclrtStream stream_ = nullptr;
@@ -59,8 +59,9 @@ void *inDevBuffer_;  // decode input buffer
 uint32_t inDevBufferSize_; // dvpp input buffer size
 uint32_t inputWidth_; // input pic width
 uint32_t inputHeight_; // input pic height
-void* encodeOutBufferDev_; // encode output buffer
-acldvppPicDesc *encodeInputDesc_; //encode input des
-uint32_t inDevBufferSizeD_; // input pic size for decode
-uint32_t inDevBufferSizeE_; // input pic size for encode
+void* encode_out_buffer_dev_; // encode output buffer
+acldvppPicDesc *encodeInputDesc_; //encode input desf
+//uint32_t inDevBufferSizeD_; // input pic size for decode
+uint32_t in_devbuffer_size_encode_; // input pic size for encode
+uint32_t encode_outbuffer_size_;
 aclrtRunMode runMode;

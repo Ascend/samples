@@ -57,7 +57,7 @@ def main(): # pylint: disable=too-many-locals, not-context-manager
 
     # Step one, inference the original model to obtain the original
     # precision before quantization.
-    model_path = os.path.realpath('./model/mobilenetv2_tf.pb')
+    model_path = os.path.realpath('./model/mobilenet_v2_1.0_224_frozen.pb')
 
     with tf.io.gfile.GFile(model_path, mode='rb') as model:
         graph_def = tf.compat.v1.GraphDef()

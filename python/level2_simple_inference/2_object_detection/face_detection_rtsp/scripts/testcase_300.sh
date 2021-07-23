@@ -24,9 +24,9 @@ declare -i verifyResError=2
 
 function downloadDataWithVerifySource() {
 
-    wget -O ${project_path}/data/"person.mp4"  ${data_source}  --no-check-certificate
+    wget -O ${project_path}/data/"person.h264"  ${data_source}  --no-check-certificate
     if [ $? -ne 0 ];then
-        echo "download person.mp4 failed, please check Network."
+        echo "download person.h264 failed, please check Network."
         return 1
     fi
 

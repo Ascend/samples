@@ -88,6 +88,7 @@ python ./src/mobilenet_v2_accuracy_based_auto_calibration.py
 |          | tempxxxxx/ 目录                                   | 里面保存了隐藏层的 feature map 和其他临时性模型文件，当执行完毕后就可以删除 |
 | results  | mobilenet_v2_fake_quant_model.onnx                | 生成的 fake quant onnx 模型文件                              |
 |          | mobilenet_v2_deploy_model.onnx                    | 生成的 deploy onnx 模型文件                                  |
+|          | mobilenet_v2_quant.json                           | 生成的融合信息文件                                  |
 |          | accuracy_based_auto_calibration_final_config.json | 基于精度的自动量化回退最终搜索得到的量化配置文件             |
 |          | accuracy_based_auto_calibration_ranking_info.json | 基于精度的自动量化回退过程中记录的每层量化敏感度信息文件     |
 | tmp      | config.json                                       | 量化过程中的量化配置文件                                     |

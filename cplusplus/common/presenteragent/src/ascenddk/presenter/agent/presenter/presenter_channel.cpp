@@ -156,17 +156,17 @@ PresenterErrorCode PresentImage(Channel *channel, const ImageFrame &image) {
     return PresenterErrorCode::kInvalidParam;
   }
 
-  Tlv tlv;
+  /*Tlv tlv;
   tlv.tag = proto::PresentImageRequest::kDataFieldNumber;
   tlv.length = image.size;
   tlv.value = reinterpret_cast<char *>(image.data);
 
   PartialMessageWithTlvs message;
   message.message = &req;
-  message.tlv_list.push_back(tlv);
+  message.tlv_list.push_back(tlv);*/
 
   std::unique_ptr<Message> recv_message;
-  PresenterErrorCode error_code = channel->SendMessage(message, recv_message);
+  PresenterErrorCode error_code = channel->SendMessage(req, recv_message);
   if (error_code != PresenterErrorCode::kNone) {
     AGENT_LOG_ERROR("Failed to present image, error = %d", error_code);
     return error_code;
