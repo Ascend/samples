@@ -52,7 +52,7 @@
 
 1. 根据实际情况修改**Makefile**文件中的如下信息。
 
-   - ASCEND_PATH：指定到ATC或FwkACLlib的安装目录。
+   - ASCEND_PATH：指定到ATC或FwkACLlib的安装目录，例如/home/HwHiAiUser/Ascend/ascend-toolkit/latest
 
    - INCLUDES：需要包含的头文件，对于本示例，无需修改。如果是用户自行开发的代码，当需要添加头文件时，在示例下方直接增加行即可，注意不要删除原有项目。如果网络中有自定义算子，请增加自定义算子的原型定义头文文件。
 
@@ -96,15 +96,14 @@
 
    - 如果用户采用算子原型构图方式，请执行如下命令：
 
-     如果安装了ATC组件，请执行：**./ir_build  _${soc_version}_  gen**
+     如果安装了ATC组件，请执行：**./ir_build ${soc_version} gen**
 
-     如果安装了FwkACLlib组件，请执行：**./fwk_ir_build_ ${soc_version}_  gen**
-
-     _${soc_version}_：昇腾AI处理器的版本，可从“${install_path}/atc/data/platform_config”或者“${install_path}/fwkacllib/data/platform_config”查看，".ini"文件的文件名（将大写字母转换为小写）即为对应的_${soc_version}_。如果用户根据上述方法仍旧无法确定具体使用的${soc_version}，则：
-
+     如果安装了FwkACLlib组件，请执行：**./fwk_ir_build ${soc_version} gen**
+     
+     ${soc_version}：昇腾AI处理器的版本，可以从ATC或FwkACLlib安装路径下的/data/platform_config查看ini文件名，文件名即为对应版本，如果仍然无法确定具体使用的版本号，可以通过如下方法查询：
      1.  单击如下手册中的链接并进入该手册，[CANN Ascend-DMI工具用户指南](https://support.huawei.com/enterprise/zh/ascend-computing/atlas-data-center-solution-pid-251167910?category=operation-maintenance)。
      2.  完成“使用工具>使用前准备“，然后进入“使用工具>设备实时状态查询“章节。
-     3.  使用相关命令查看芯片的详细信息，例如使用**ascend-dmi -i -dt**命令查看芯片的详细信息，返回信息中“Chip Name“对应取值（将大写字母转换为小写）即为具体使用的_${soc_version}_。
+     3.  使用相关命令查看芯片的详细信息，例如使用**ascend-dmi -i -dt**命令查看芯片的详细信息，返回信息中“Chip Name“对应取值，去除空格后，即为具体使用的${soc_version}。
 
      编译成功提示：
 

@@ -66,11 +66,11 @@ Before deploying this sample, ensure that:
 
         **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64**  
 
-    2. Run the following commands to download the AIPP configuration file and convert the model:
+    2. Run the following commands to convert the model:
 
         **cd $HOME/models/YOLOV3_mask_detection_picture**  
 
-        **atc --input_shape="images:1,352,640,3" --input_format=NHWC --output="./mask_detection" --soc_version=Ascend310 --framework=3 --model="./mask_detection.pb"**
+        **atc --input_shape="images:1,352,640,3" --input_format=NHWC --output="./mask_detection" --soc_version=Ascend310 --framework=3 --model="./yolo3_resnet18.pb"**
 
     3. Run the following command to copy the converted model to the **model** folder of the sample:
 

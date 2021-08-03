@@ -66,12 +66,12 @@
 
         **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64**  
 
-    2. 执行以下命令下载aipp配置文件并使用atc命令进行模型转换。
+    2. 执行以下命令使用atc命令进行模型转换。
 
         **cd $HOME/models/YOLOV3_mask_detection_picture**  
 
       
-        **atc --input_shape="images:1,352,640,3" --input_format=NHWC --output="./mask_detection" --soc_version=Ascend310 --framework=3 --model="./mask_detection.pb"**
+        **atc --input_shape="images:1,352,640,3" --input_format=NHWC --output="./mask_detection" --soc_version=Ascend310 --framework=3 --model="./yolo3_resnet18.pb"**
 
     3. 执行以下命令将转换好的模型复制到样例中model文件夹中。
 

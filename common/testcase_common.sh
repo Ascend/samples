@@ -239,7 +239,7 @@ function run_presenter()
     return ${success}  
 
 }
-function run_h264()
+function run_md5()
 {
     # 重新配置程序运行所需的环境变量
     export LD_LIBRARY_PATH=

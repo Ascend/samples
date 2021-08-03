@@ -54,7 +54,7 @@
 2. 获取此应用中所需要的原始网络模型。
 
     参考下表获取此应用中所用到的模型，并将其存放到开发环境普通用户下的工程目录：   
- **cd $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV4_coco_detection_car_picture/model** 
+ **cd $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV4_coco_detection_car_video/model** 
 
     
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
@@ -73,6 +73,10 @@
     1. 设置LD_LIBRARY_PATH环境变量。
 
         由于LD_LIBRARY_PATH环境变量在转使用atc工具和运行样例时会产生冲突，所以需要在命令行单独设置此环境变量，方便修改。
+    
+        **export install_path=$HOME/Ascend/ascend-toolkit/latest**
+
+        **export install_path=$HOME/Ascend/ascend-toolkit/latest**
 
         **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64**  
 
@@ -123,4 +127,4 @@
 
 ### 查看结果
 
-运行完成后，结果图片保存在out目录下。
+运行完成后，结果视频保存在out目录下。

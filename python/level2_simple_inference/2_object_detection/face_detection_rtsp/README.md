@@ -108,7 +108,7 @@
 
 ```
 cd $HOME/samples/common  
-bash script/run_presenter_server.sh $HOME/samples/python/level2_simple_inference/2_object_detection/face_detection_rtsp/scripts/face_detection.conf
+bash run_presenter_server.sh $HOME/samples/python/level2_simple_inference/2_object_detection/face_detection_rtsp/scripts/face_detection.conf
 ```
 
 4. 登录运行环境，执行样例

@@ -184,7 +184,12 @@ function running_video()
   sed -i "s/presenter_view_ip=[0-9.]*/presenter_view_ip=${presenter_view_ip}/g" ${ScriptPath}/${conf_file_name}
 
   cp -f ${ScriptPath}/${conf_file_name} ${ScriptPath}/../out
-  cd ${ScriptPath}/../../../../../common
+  
+  if [[ ! -n"${common_script_dir}"  ]];then
+        cd ${ScriptPath}/../../../../../common
+  else
+        cd ${common_script_dir}
+  fi
 
   bash run_presenter_server.sh ${ScriptPath}/${conf_file_name} > /dev/null
   if [ $? -ne 0 ];then
