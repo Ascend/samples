@@ -1,0 +1,1 @@
+amct_onnx calibration --model model/resnet101_v11.onnx   --evaluator src/evaluator.py --save_path output

@@ -5,12 +5,10 @@ import configparser
 import queue
 import numpy as np
 import sys
-
 import acl
 import atlas_utils.utils as utils
 import atlas_utils.constants as const
 from atlas_utils.acl_logger import log_error, log_info
-
 
 class DetectData(object):
     """detecdata"""
@@ -25,15 +23,15 @@ class Postprocess(object):
         self._detector = detect_model
         self._channel = None         
         self._data_queue =  queue.Queue(64)
-        self._start()
         self._context = None
+        self._start()
         self._exit = False
 
     def _start(self):
         thread_id, ret = acl.util.start_thread(self._thread_entry, [])            
         utils.check_ret("acl.util.start_thread", ret)
 
-    def _thread_entry(self):   
+    def _thread_entry(self, args_list):   
         self._context, ret = acl.rt.create_context(0)
         utils.check_ret("acl.rt.create_context", ret)
         

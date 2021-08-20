@@ -9,6 +9,7 @@ AMCT TensorFlow 包含训练后量化，`convert_model` 接口，量化感知训
 | [MobileNet V2](./mobilenet_v2/README_CN.md) | 训练后量化（均匀量化），`convert_model` 接口，QAT 模型转 Ascend 模型，自动量化（基于精度） |
 | [ResNet-50 V1](./resnet-50_v1/README_CN.md) | 训练后量化（非均匀量化），量化感知训练 |
 | [YOLO V3](./yolo_v3/README_CN.md) | 训练后量化（均匀量化） |
+| [cmd](./cmd/README_CN.md) | 命令行 |
 
 ## 张量分解
 

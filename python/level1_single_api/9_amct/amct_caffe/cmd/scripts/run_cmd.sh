@@ -1,0 +1,2 @@
+amct_caffe calibration --model pre_model/ResNet-50-multiInput.prototxt --weights pre_model/ResNet-50-model.caffemodel --save_path ./results/resnet50_multi --evaluator evaluator.py
+amct_caffe calibration --model pre_model/ResNet-50-multiInput.prototxt --weights pre_model/ResNet-50-model.caffemodel --save_path ./results/resnet50_multi --input_shape "data:32,3,224,224" --data_dir "../../data" --data_type "float32"

@@ -44,6 +44,7 @@ endif ()
 include_directories(
     ${INC_PATH}/acllib/include/
     ../inc/
+    /home/HwHiAiUser/Ascend/ascend-toolkit/5.0.2.alpha003/x86_64-linux/acllib/include/
 )
 
 if(target STREQUAL "Simulator_Function")

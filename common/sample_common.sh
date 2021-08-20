@@ -185,7 +185,7 @@ function running_video()
 
   cp -f ${ScriptPath}/${conf_file_name} ${ScriptPath}/../out
   
-  if [[ ! -n"${common_script_dir}"  ]];then
+  if [[ ! -n "${common_script_dir}"  ]];then
         cd ${ScriptPath}/../../../../../common
   else
         cd ${common_script_dir}

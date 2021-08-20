@@ -37,7 +37,6 @@ Result ModelProcess::LoadModel(const char *modelPath)
         ERROR_LOG("model has already been loaded");
         return FAILED;
     }
-    aclGetRecentErrMsg();
     aclError ret = aclmdlQuerySize(modelPath, &modelWorkSize_, &modelWeightSize_);
     if (ret != ACL_ERROR_NONE) {
         ERROR_LOG("query model failed, model file is %s, errorCode is %d",

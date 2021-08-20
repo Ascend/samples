@@ -73,8 +73,6 @@
     1. 设置LD_LIBRARY_PATH环境变量。
 
         由于LD_LIBRARY_PATH环境变量在转使用atc工具和运行样例时会产生冲突，所以需要在命令行单独设置此环境变量，方便修改。
-    
-        **export install_path=$HOME/Ascend/ascend-toolkit/latest**
 
         **export install_path=$HOME/Ascend/ascend-toolkit/latest**
 

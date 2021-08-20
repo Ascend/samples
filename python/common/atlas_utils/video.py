@@ -159,7 +159,7 @@ class AclVideo(object):
         # Dvpp vdec support h264 baseline, main and high level
         profile_entype_tbl = {
             'h264': {const.FF_PROFILE_H264_BASELINE: const.ENTYPE_H264_BASE,
-                     const.FF_PROFILE_H264_MAIN: const.ENTYPE_H265_MAIN,
+                     const.FF_PROFILE_H264_MAIN: const.ENTYPE_H264_MAIN,
                      const.FF_PROFILE_H264_HIGH: const.ENTYPE_H264_HIGH},
             'h265': {const.FF_PROFILE_HEVC_MAIN: const.ENTYPE_H265_MAIN}}
         entype = None

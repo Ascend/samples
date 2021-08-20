@@ -246,6 +246,10 @@ class Model(object):
                 np_type = np.float16
                 output_tensor = np.zeros(
                     size // 2, dtype=np_type).reshape(shape)
+            elif datatype == const.ACL_BOOL or datatype == const.ACL_UINT8:
+                np_type = np.uint8
+                output_tensor = np.zeros(
+                    size, dtype=np_type).reshape(shape) 
             else:
                 print("Unspport model output datatype ", datatype)
                 return None
