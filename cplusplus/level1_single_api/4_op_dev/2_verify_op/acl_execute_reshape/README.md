@@ -31,14 +31,11 @@ Note: The generation of a single-operator model file depends only on the operato
 
 ## Environment Requirements<a name="en-us_topic_0230709958_section1256019267915"></a>
 
--   OS and architecture: CentOS x86\_64, CentOS AArch64, EulerOS x86, EulerOS AArch64
--   Version: 3.3.0
--   Compiler:
-
-    For Ascend 310 EP, Ascend 710, or Ascend 910:
-
-    -   g++ in the x86 operating environment
-    -   g++-aarch64-linux-gnu in the ARM64 operating environment
+- OS and architecture: CentOS x86\_64, CentOS AArch64, EulerOS x86, EulerOS AArch64
+- Compiler:
+    -   For Ascend 310 EP, Ascend 710 or Ascend 910:
+        -   g++ in the x86 operating environment
+        -   g++-aarch64-linux-gnu in the ARM64 operating environment
 
 -   SoC: Ascend 310, Ascend 710, or Ascend 910
 -   Python version and dependency library: Python 3.7.5
@@ -84,23 +81,23 @@ Note: The generation of a single-operator model file depends only on the operato
         Note:
         Dependency on the *.so libraries in the lib64/stub directory of the FwkACLlib installation path is to avoid dependency on any *.so library of other components during building the code logic based on the AscendCL API. After the build is complete, an app that runs on the host will be linked to the *.so libraries in the fwkacllib/lib64 or acllib/lib64 directory included in the LD_LIBRARY_PATH environment variable, and be automatically linked to the *.so libraries on which other components depend.
         ```
-
+    
     3.  In the operating environment, set the environment variable of the ACLlib path on which app execution depends.
-
+    
         -   If Ascend-CANN-Toolkit is installed in the operating environment, set the environment variable as follows:
-
+    
             ```
             export LD_LIBRARY_PATH=$HOME/Ascend/ascend-toolkit/latest/fwkacllib/lib64
             ```
-
+    
         -   If Ascend-CANN-NNRT is installed in the operating environment, set the environment variable as follows:
-
+    
             ```
             export LD_LIBRARY_PATH=$HOME/Ascend/nnrt/latest/acllib/lib64
             ```
-
+    
         -   If Ascend-CANN-NNAE is installed in the operating environment, set the environment variable as follows:
-
+    
             ```
             export LD_LIBRARY_PATH=$HOME/Ascend/nnae/latest/fwkacllib/lib64
             ```
@@ -146,14 +143,15 @@ Note: The generation of a single-operator model file depends only on the operato
         Note:
         Dependency on the *.so libraries in the lib64/stub directory of the ACLlib installation path is to avoid dependency on any *.so library of other components during building the code logic based on the AscendCL API. After the build is complete, an app that runs on the host will be linked to the *.so libraries in the acllib/lib64 directory included in the LD_LIBRARY_PATH environment variable, and be automatically linked to the *.so libraries on which other components depend.
         ```
-
+    
     3.  In the operating environment, set the environment variable of the ACLlib path on which app execution depends.
-
+    
         The following is an example only. Replace  **_$HOME/Ascend_**_**/nnrt/latest**_  with the actual Ascend-CANN-NNRT installation path.
-
+    
         ```
         export LD_LIBRARY_PATH=$HOME/Ascend/nnrt/latest/acllib/lib64
         ```
+
 
 
 
@@ -219,15 +217,15 @@ Note: The generation of a single-operator model file depends only on the operato
 
 
         The parameters are described as follows:
-
+    
         -   Replace  **../../../src**  with the actual directory of  **CMakeLists.txt**.
         -   **DCMAKE\_CXX\_COMPILER**: compiler used to build the app.
         -   **DCMAKE\_SKIP\_RPATH**: If it is set to  **TRUE**,  **rpath**  \(path specified by  **NPU\_HOST\_LIB**\) is not added to the executable generated after build. The executable automatically looks up for dynamic libraries in the path \(**_xxx_/acllib/lib64**  or  **_xxx_/fwkacllib/lib64**\) included in  **LD\_LIBRARY\_PATH**.
-
+    
     4.  Run the following command to generate an executable:
-
+    
         **make**
-
+    
         The executable  **execute\_custom\_reshape\_op**  is generated in the  **run/out**  directory of the project.
 
 
@@ -272,6 +270,3 @@ Note: The generation of a single-operator model file depends only on the operato
         As shown above, input 1 equals the output, but they have different shapes. The output shape is the same as the value of input 2. The ReshapeCust operator has passed the verification.
 
         **result\_files/output\_0.bin**: result binary file.
-
-
-

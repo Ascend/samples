@@ -14,7 +14,7 @@ import os
 
 import atlas_utils.constants as const
 import atlas_utils.utils as utils
-from atlas_utils.acl_logger import log_error, log_info
+from atlas_utils.acl_logger import log_error, log_info, log_warning
 from atlas_utils.acl_image import AclImage
 from atlas_utils.resource_list import resource_list
 
@@ -111,6 +111,12 @@ class Model(object):
                 ret = const.FAILED
                 log_error("The %d input is invalid" % (i))
                 break
+
+            model_size = acl.mdl.get_input_size_by_index(self._model_desc, i)
+            if size != model_size:
+                log_warning("Input[%d] size: %d not equal om size %d, \
+                            may cause inference result ERROR, please check model input" % (i, size, model_size))
+
             dataset_buffer = acl.create_data_buffer(data, size)
             _, ret = acl.mdl.add_dataset_buffer(self._input_dataset,
                                                 dataset_buffer)

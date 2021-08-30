@@ -112,6 +112,7 @@ python src/simple_train.py \
 --save-path model/simple/online/decomposed_finetuned.pth \
 --pretrained-path model/simple/baseline.pth \
 --tensor-decompose \
+--decompose-info-path model/simple/online/decompose_info.json \
 --run-mode online
 ```
 
@@ -119,8 +120,10 @@ python src/simple_train.py \
 运行时，日志会打印被分解的卷积名称及其分解后的卷积名称，以及分解信息文件的保存情况，如下所示（此处分解情况仅为样例，请以实际运行为准）：
 ```
 [AMCT]:[AMCT]: auto_decomposition start.
-[AMCT]:[AMCT]: 'conv2' -> ['conv2.0', 'conv2.1']
+[AMCT]:[AMCT]: Processing: 'conv1'
+[AMCT]:[AMCT]: Processing: 'conv2'
 [AMCT]:[AMCT]: Decomposition information file is saved to: xxx/model/simple/online/decompose_info.json
+[AMCT]:[AMCT]: Decompose: 'conv2' -> ['conv2.0', 'conv2.1']
 [AMCT]:[AMCT]: auto_decomposition complete.
 ```
 运行结束时，如见下列信息，则说明执行成功（此处精度结果仅为样例，请以实际运行为准）：
@@ -128,7 +131,6 @@ python src/simple_train.py \
 [Test] Loss: 0.047416, Accuracy: 98.39% (9839/10000)
 ```
 所得分解信息文件将保存在model/simple/online/decompose_info.json。  
-所得分解后的权重将保存在model/simple/online/decomposed_weights.pth（如不需要，则不设--decomposed-weights-path即可）。  
 训练所得模型权重文件将保存在model/simple/online/decomposed_finetuned.pth。如后续需使用该权重，则通过decompose_network加载分解信息文件修改原模型结构，再加载该权重即可。  
 
 #### 2.2.3 离线张量分解
@@ -145,8 +147,10 @@ python src/simple_train.py \
     运行时，日志会打印被分解的卷积名称及其分解后的卷积名称，以及分解信息文件的保存情况，如下所示（此处分解情况仅为样例，请以实际运行为准）：
     ```
     [AMCT]:[AMCT]: auto_decomposition start.
-    [AMCT]:[AMCT]: 'conv2' -> ['conv2.0', 'conv2.1']
+    [AMCT]:[AMCT]: Processing: 'conv1'
+    [AMCT]:[AMCT]: Processing: 'conv2'
     [AMCT]:[AMCT]: Decomposition information file is saved to: xxx/model/simple/offline/decompose_info.json
+    [AMCT]:[AMCT]: Decompose: 'conv2' -> ['conv2.0', 'conv2.1']
     [AMCT]:[AMCT]: auto_decomposition complete.
     ```
     所得分解信息文件将保存在model/simple/offline/decompose_info.json。  
@@ -168,7 +172,7 @@ python src/simple_train.py \
     运行时，日志会打印被分解的卷积名称及其分解后的卷积名称，如下所示（此处分解情况仅为样例，请以实际运行为准）：
     ```
     [AMCT]:[AMCT]: decompose_network start.
-    [AMCT]:[AMCT]: 'conv2' -> ['conv2.0', 'conv2.1']
+    [AMCT]:[AMCT]: Decompose: 'conv2' -> ['conv2.0', 'conv2.1']
     [AMCT]:[AMCT]: decompose_network complete.
     ```
     运行结束时，如见下列信息，则说明执行成功（此处精度结果仅为样例，请以实际运行为准）：
@@ -241,14 +245,16 @@ src/ddp_train.py \
 local_rank为0的进程日志会打印被分解的卷积名称及其分解后的卷积名称，以及分解信息文件的保存情况：
 ```
 [AMCT]:[AMCT]: auto_decomposition start.
-[AMCT]:[AMCT]: 'conv2' -> ['conv2.0', 'conv2.1']
+[AMCT]:[AMCT]: Processing: 'conv1'
+[AMCT]:[AMCT]: Processing: 'conv2'
 [AMCT]:[AMCT]: Decomposition information file is saved to: xxx/model/ddp/online/decompose_info.json
+[AMCT]:[AMCT]: Decompose: 'conv2' -> ['conv2.0', 'conv2.1']
 [AMCT]:[AMCT]: auto_decomposition complete.
 ```
 其他local_rank的进程日志会打印被分解的卷积名称及其分解后的卷积名称（会打印若干次，取决于进程数）：  
 ```
 [AMCT]:[AMCT]: decompose_network start.
-[AMCT]:[AMCT]: 'conv2' -> ['conv2.0', 'conv2.1']
+[AMCT]:[AMCT]: Decompose: 'conv2' -> ['conv2.0', 'conv2.1']
 [AMCT]:[AMCT]: decompose_network complete.
 ```
 运行结束时，如见下列信息，则说明执行成功（此处精度结果仅为样例，请以实际运行为准）：
@@ -273,8 +279,10 @@ local_rank为0的进程日志会打印被分解的卷积名称及其分解后的
     运行时，日志会打印被分解的卷积名称及其分解后的卷积名称，以及分解信息文件的保存情况，如下所示（此处分解情况仅为样例，请以实际运行为准）：
     ```
     [AMCT]:[AMCT]: auto_decomposition start.
-    [AMCT]:[AMCT]: 'conv2' -> ['conv2.0', 'conv2.1']
+    [AMCT]:[AMCT]: Processing: 'conv1'
+    [AMCT]:[AMCT]: Processing: 'conv2'
     [AMCT]:[AMCT]: Decomposition information file is saved to: xxx/model/ddp/offline/decompose_info.json
+    [AMCT]:[AMCT]: Decompose: 'conv2' -> ['conv2.0', 'conv2.1']
     [AMCT]:[AMCT]: auto_decomposition complete.
     ```
     所得分解信息文件将保存在model/ddp/offline/decompose_info.json。  
@@ -297,7 +305,7 @@ local_rank为0的进程日志会打印被分解的卷积名称及其分解后的
     运行时，日志会打印被分解的卷积名称及其分解后的卷积名称，如下所示（会打印若干次，取决于进程数；此处分解情况仅为样例，请以实际运行为准）：
     ```
     [AMCT]:[AMCT]: decompose_network start.
-    [AMCT]:[AMCT]: 'conv2' -> ['conv2.0', 'conv2.1']
+    [AMCT]:[AMCT]: Decompose: 'conv2' -> ['conv2.0', 'conv2.1']
     [AMCT]:[AMCT]: decompose_network complete.
     ```
     运行结束时，如见下列信息，则说明执行成功（此处精度结果仅为样例，请以实际运行为准）：

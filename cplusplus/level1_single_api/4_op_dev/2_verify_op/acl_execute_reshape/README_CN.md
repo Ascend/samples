@@ -31,15 +31,12 @@
 
 ## 环境要求<a name="zh-cn_topic_0230709958_section1256019267915"></a>
 
--   操作系统及架构：CentOS x86\_64、CentOS aarch64、EulerOS x86、EulerOS aarch64
--   版本：3.3.0
--   编译器：
+- 操作系统及架构：CentOS x86\_64、CentOS aarch64、EulerOS x86、EulerOS aarch64
+- 编译器：
 
-    Ascend 310 EP/Ascend 710/Ascend 910编译器
-
+   Ascend 310 EP/Ascend 710/Ascend 910编译器
     -   运行环境操作系统架构为x86时，编译器为g++
     -   运行环境操作系统架构为arm64时，编译器为aarch64-linux-gnu-g++
-
 -   芯片：Ascend 310，Ascend 710，Ascend 910
 -   python及依赖的库：python3.7.5
 -   已完成昇腾AI软件栈在开发环境、运行环境上的部署。
@@ -272,6 +269,4 @@
         可见：输入数据1=输出数据，但是shape不相同，输出的shape和输入数据2的值相同，ReshapeCust算子验证结果正确。
 
         result\_files/output\_0.bin：输出数据的二进制文件。
-
-
 

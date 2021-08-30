@@ -223,10 +223,9 @@ AtlasError AtlasModel::CreateInput(vector<DataInfo>& inputData) {
     for (uint32_t i = 0; i < inputData.size(); i++) {
         size_t modelInputSize = aclmdlGetInputSizeByIndex(modelDesc_, i);
         if (modelInputSize != inputData[i].size) {
-            ATLAS_LOG_ERROR("Input size verify failed "
+            ATLAS_LOG_WARNING("Input size verify failed "
                             "input[%d] size: %d, provide size : %d", 
                             i, modelInputSize, inputData[i].size);
-            return ATLAS_ERROR_ADD_DATASET_BUFFER;
         }
         AtlasError atlRet = AddDatasetBuffer(input_, 
                                              inputData[i].data,

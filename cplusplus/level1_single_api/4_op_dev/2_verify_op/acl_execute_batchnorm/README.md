@@ -7,7 +7,6 @@
 ## 环境要求<a name="section15875915982"></a>
 
 -   操作系统及架构：CentOS x86系统、CentOS aarch64系统
--   版本：3.2.0
 -   编译器：EP标准形态编译器 g++
 -   芯片：Ascend310、Ascend710
 -   python及依赖的库：python3.7.5

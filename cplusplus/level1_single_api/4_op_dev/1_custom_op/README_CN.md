@@ -96,7 +96,6 @@ Caffe与TensorFlow共存的自定义算子样例工程的目录结构如下所�
 ## 环境要求
 
 -   操作系统及架构：CentOS x86_64、CentOS aarch64、Ubuntu 18.04 x86_64、EulerOS x86、EulerOS aarch64
--   版本：3.3.0
 -   python及依赖的库：python3.7.5
 -   已完成昇腾AI软件栈的部署。
 
@@ -151,7 +150,7 @@ Caffe与TensorFlow共存的自定义算子样例工程的目录结构如下所�
 
         ```
         export ASCEND_OPP_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/opp
-
+        
         ```
     -   ASCEND\_AICPU_PATH：AI CPU组件的安装路径。
 
@@ -191,7 +190,7 @@ Caffe与TensorFlow共存的自定义算子样例工程的目录结构如下所�
 
 
     -    AICPU\_SOC\_VERSION：昇腾AI处理器的类型，请配置为AI CPU组件安装路径中“opp/op_impl/built-in/aicpu/aicpu_kernel/lib”路径下的文件夹名称，即“libcpu_kernels_context.a”与“libcpu_kernels_v1.0.1.so”所在文件夹的名称。
-    
+
 
 3.  执行算子工程编译。
 
@@ -315,7 +314,7 @@ TBE算子：Add、ScatterNdAdd，单算子网络验证文件可参见“tbe/test
         TBE算子：Add与ScatterNdAdd
 
             执行网络测试脚本后，结果为True，表示在昇腾AI处理器上运行结果与CPU上运行结果一致，运行结果正确。
-    
+            
             ```
             2020-03-06 11:03:45.383022: I tf_adapter/kernels/geop_npu.cc:304] [GEOP] GeOp Finalize success, geop_num_:0
             ====================================

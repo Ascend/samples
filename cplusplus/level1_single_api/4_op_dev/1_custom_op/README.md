@@ -93,7 +93,6 @@ The directory of a Caffe or TensorFlow custom operator sample project is organiz
 ## Environment Requirements
 
 -   OS and architecture: CentOS x86\_64, CentOS AArch64, Ubuntu 18.04 x86\_64, EulerOS x86, EulerOS AArch64
--   Version: 3.3.0
 -   Python version and dependency library: Python 3.7.5
 -   Ascend AI Software Stack deployed
 
@@ -310,7 +309,7 @@ To execute a single-operator network test file, perform the following operations
         TBE operators: Add and ScatterNdAdd
 
             After the network test script is executed, if the result is  **True**, indicating that the execution result on the Ascend AI Processor and the execution result on the CPU are consistent and correct.
-
+            
             ```
             2020-03-06 11:03:45.383022: I tf_adapter/kernels/geop_npu.cc:304] [GEOP] GeOp Finalize success, geop_num_:0
             ====================================

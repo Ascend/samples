@@ -137,6 +137,16 @@
     fprintf(stdout, "[INFO]  " fmt "\n", ##__VA_ARGS__);}while(0)
 
 /**
+ * @brief Write acl warining level log to host log
+ * @param [in]: fmt: the input format string
+ * @return none
+ */
+#define ATLAS_LOG_WARNING(fmt, ...) \
+    do{aclAppLog(ACL_WARNING, __FUNCTION__, __FILE__, __LINE__, fmt, ##__VA_ARGS__); \
+    fprintf(stdout, "[WARNING]  " fmt "\n", ##__VA_ARGS__);}while(0)
+
+
+/**
  * @brief Write acl debug level log to host log
  * @param [in]: fmt: the input format string
  * @return none
