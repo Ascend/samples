@@ -64,11 +64,8 @@
 ## 环境要求<a name="section3833348101215"></a>
 
 -   操作系统及架构：CentOS 7.6 x86\_64、CentOS aarch64、Ubuntu 18.04 x86\_64、EulerOS x86、EulerOS aarch64
--   版本：3.3.0
 -   编译器：
-    -   Ascend 310 EP/Ascend 710/Ascend 910形态编译器：
-        -   运行环境操作系统架构为x86时，编译器为g++
-        -   运行环境操作系统架构为Arm时，编译器为aarch64-linux-gnu-g++
+    -   Ascend 310 EP/Ascend 710/Ascend 910形态编译器：g++ 或 aarch64-linux-gnu-g++
 
     -   Atlas 200 DK编译器：aarch64-linux-gnu-g++
 
@@ -188,15 +185,16 @@
 
         “../../../src“表示CMakeLists.txt文件所在的目录，请根据实际目录层级修改。
 
-        -   当运行环境操作系统架构为x86时，执行如下命令编译。
+        -   当开发环境与运行环境操作系统架构相同时，执行如下命令编译。
 
             ```
             cd build/intermediates/host
             cmake ../../../src -DCMAKE_CXX_COMPILER=g++ -DCMAKE_SKIP_RPATH=TRUE
             ```
 
-        -   当运行环境操作系统架构为Arm时，执行以下命令进行交叉编译。
+        -   当开发环境与运行环境操作系统架构不同时，执行以下命令进行交叉编译。
 
+            例如，当开发环境为X86架构，运行环境为AArch64架构时，执行以下命令进行交叉编译。
             ```
             cd build/intermediates/host
             cmake ../../../src -DCMAKE_CXX_COMPILER=aarch64-linux-gnu-g++ -DCMAKE_SKIP_RPATH=TRUE

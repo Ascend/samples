@@ -113,41 +113,12 @@
     在开发环境上使用ifconfig查看ip；如果是在PC服务器上启动presenter server，将配置项presenter_server_ip、presenter_view_ip 修改为开发环境中可以ping通运行环境的ip地址，例如192.168.1.223; 如果是直接在Atlas200DK上启动persenter server，则这两项都使用Atlas200DK的固定IP，例如192.168.1.2；
     
 
-2. 设置编译环境变量
 
-     ```
-     export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux 
-     export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub   
-     ```
+2. 2. 执行以下命令，执行编译脚本，开始样例编译。
 
-     
+    cd $HOME/samples/cplusplus/level2_simple_inference/2_object_detection/face_detection_camera/scripts
 
-3. 创建编译目录
-
-    ```
-    cd $HOME/samples/cplusplus/level2_simple_inference/2_object_detection/face_detection_camera
-    mkdir -p build/intermediates/host
-    ```
-
-    
-
-4. 执行cmake命令
-
-      ```
-      cd build/intermediates/host  
-      make clean   
-      cmake ../../../src -DCMAKE_CXX_COMPILER=aarch64-linux-gnu-g++ -DCMAKE_SKIP_RPATH=TRUE
-      ```
-
-      
-
-5. 执行make命令
-
-    ```
-    make
-    ```
-
-    生成的可执行文件main在 face_detection_camera/out 目录下。
+    bash sample_build.sh
 
     
 
@@ -182,33 +153,12 @@
     ```
 
     
+4. 执行运行脚本，开始样例运行。
 
-4. 如果在开发板上直接编译运行的场景，需要清除atc离线模型转换设置的环境变量，执行命令
+bash sample_run.sh
 
-    ```
-    export LD_LIBRARY_PATH=   
-    source ~/.bashrc    
-    ```
 
-    
-
-5. 执行应用程序
-
-    如果是在开发板上直接编译的场景，执行命令
-
-    ```
-    cd $HOME/samples/cplusplus/level2_simple_inference/2_object_detection/face_detection_camera/out
-    ./main
-    ```
-
-    如果是在PC服务器编译场景，执行命令
-
-    ```
-    cd $HOME/face_detection_camera/out
-    ./main
-    ```
-
-    
+  
 
 ### 查看结果
 

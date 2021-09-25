@@ -49,13 +49,14 @@
 2. 获取此应用中所需要的原始网络模型。
 
     参考下表获取此应用中所用到的原始网络模型，并将其存放到开发环境普通用户下的任意目录，例如：$HOME/models/YOLOV3_mask_detection_picture。
-    
+
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
-    |  mask_detection.pb | 基于TensorFlow-YOLOV3的口罩检测模型。  |  请参考[https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/yolov3_resnet18/ATC_yolo3_resnet18_tf_AE](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/yolov3_resnet18/ATC_yolo3_resnet18_tf_AE)目录中README.md下载原始模型章节下载原始模型文件。 |    
+    |  mask_detection.pb | 基于TensorFlow-YOLOV3的口罩检测模型。  |  请参考[https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/yolov3_resnet18/ATC_yolo3_resnet18_tf_AE](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/yolov3_resnet18/ATC_yolo3_resnet18_tf_AE)目录中README.md下载原始模型章节下载原始模型文件。 |
+    | mask_detection_quanzited.pb | 基于TensorFlow-YOLOV3的口罩检测的量化后模型。 | 下载地址:https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com:443/003_Atc_Models/AE/ATC%20Model/YOLOV3-RESNET18%20/yolo3_resnet18_quantized.pb?AccessKeyId=WBGD0ZYB7N1EWW9PINNF&Expires=1630045437&Signature=Zge36iJtfvZd0KgAo/GSZaM9QOs%3D   (转换om离线模型的操作和未量化的pb模型是一样的,量化的具体操作可以参考：https://github.com/Ascend/samples/wikis/%E4%BD%BF%E7%94%A8AMCT%E5%B7%A5%E5%85%B7%E9%87%8F%E5%8C%96YOLOV3%E6%A8%A1%E5%9E%8B?sort_id=4402780 ,如果选择使用量化后模型请注意样例中模型名称的替换) |
 
 3. 将原始模型转换为Davinci模型。
-    
+   
     **注：请确认环境变量已经在[环境准备和依赖安装](../../../environment)中配置完成**
 
     1. 设置LD_LIBRARY_PATH环境变量。
@@ -70,8 +71,8 @@
 
         **cd $HOME/models/YOLOV3_mask_detection_picture**  
 
-      
-        **atc --input_shape="images:1,352,640,3" --input_format=NHWC --output="./mask_detection" --soc_version=Ascend310 --framework=3 --model="./yolo3_resnet18.pb"**
+    
+        **atc --input_shape="images:1,352,640,3" --input_format=NHWC --output="./mask_detection" --soc_version=Ascend310 --framework=3 --model="./mask_detection.pb"**
 
     3. 执行以下命令将转换好的模型复制到样例中model文件夹中。
 
@@ -97,6 +98,7 @@
     **ssh HwHiAiUser@xxx.xxx.xxx.xxx**    
 
     ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
+
     > - **xxx.xxx.xxx.xxx**为运行环境ip，200DK在USB连接时一般为192.168.1.2，300（ai1s）为对应的公网ip。
 
 2. <a name="step_2"></a>运行可执行文件。
@@ -106,7 +108,7 @@
       **export LD_LIBRARY_PATH=**
 
       **source ~/.bashrc**
-        
+      
       **cd $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV3_mask_detection_picture/src**     
       **python3.6 mask_detect.py**
 

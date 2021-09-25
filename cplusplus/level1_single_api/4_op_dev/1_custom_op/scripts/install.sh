@@ -179,18 +179,20 @@ echo "[ops_custom]changemode..."
 if [ $? -ne 0 ];then
     exit 1
 fi
+if [ `id -u` == 0 ]; then
+    if [ -d ${targetdir}/op_impl/custom/cpu/aicpu_kernel/custom_impl/ ]; then
+        chmod -R 440 ${targetdir}/op_impl/custom/cpu/aicpu_kernel/custom_impl/* >/dev/null 2>&1
+    fi
+    if [ -f ${targetdir}/ascend_install.info ]; then
+        chmod -R 440 ${targetdir}/ascend_install.info
+    fi
+    if [ -f ${targetdir}/scene.info ]; then
+        chmod -R 440 ${targetdir}/scene.info
+    fi
+    if [ -f ${targetdir}/version.info ]; then
+        chmod -R 440 ${targetdir}/version.info
+    fi
 
-if [ -d ${targetdir}/op_impl/custom/cpu/aicpu_kernel/custom_impl/ ]; then
-    chmod -R 440 ${targetdir}/op_impl/custom/cpu/aicpu_kernel/custom_impl/* >/dev/null 2>&1
-fi
-if [ -f ${targetdir}/ascend_install.info ]; then
-    chmod -R 440 ${targetdir}/ascend_install.info
-fi
-if [ -f ${targetdir}/scene.info ]; then
-    chmod -R 440 ${targetdir}/scene.info
-fi
-if [ -f ${targetdir}/version.info ]; then
-    chmod -R 440 ${targetdir}/version.info
 fi
 
 echo "SUCCESS"

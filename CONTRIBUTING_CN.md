@@ -26,14 +26,10 @@ Ascend Samples，欢迎各位开发者！
     > **说明：** 每一个入口脚本对应一种设备形态，要求当前工程至少适配一种设备形态，每种设备的入口脚本对应的版本号须填写在同级目录下的 host_version.conf 文件中。
     >- testcase_200dk.sh   适配设备Atlas200dk。   
     >- testcase_300.sh     适配设备Atlas300。   
-    >- testcase_800.sh     适配设备Atlas800。   
-    >- testcase_1951.sh    适配设备1951。
    
-    > **说明：** 每一个设备形态对应一种或多种版本，要求当前工程至少适配一种版本。例如 host_version.conf中内容为：
-    >- Atlas300 = c75,c73         当前工程适配Atlas300的c73和c75两种版本。
-    >- Atlas200dk = c73,c75       当前工程适配Atlas200dk的c73和c75两种版本。
-    >- Atlas800 = c75             当前工程适配Atlas800的c75版本。
-    >- Atlas1951 = c75            当前工程适配Atlas1951的c75版本。
+    > **说明：** 每一个设备形态对应一种或多种版本，要求当前工程至少适配一种版本。当前测试环境有3个版本，分别是驱动版本为1.0.8.alpha,1.0.9.alpha,1.0.10.alpha的Atlas200dk和Atlas300。注意：host_version.conf中的内容为黑名单版本，即不会在该版本上跑该testcase，例如 host_version.conf中内容为：
+    >- Atlas300 = 1.0.10.alpha         当前工程适配Atlas300驱动版本为1.0.8.alpha,1.0.9.alpha两种版本。
+    >- Atlas200dk = 1.0.8.alpha,1.0.9.alpha      当前工程适配Atlas200dk驱动版本为1.0.10.alpha一种版本。
 
 
 4. 从其他开源迁移的代码，请增加License声明。

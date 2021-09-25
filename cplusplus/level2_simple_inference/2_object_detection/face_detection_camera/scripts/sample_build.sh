@@ -1,7 +1,8 @@
 #!/bin/bash
 ScriptPath="$( cd "$(dirname "$BASH_SOURCE")" ; pwd -P )"
 ModelPath="${ScriptPath}/../model"
-. ../../../../../common/sample_common.sh
+
+. ${ScriptPath}/../../../../../common/sample_common.sh
 
 function main()
 {

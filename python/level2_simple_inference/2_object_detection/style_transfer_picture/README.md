@@ -52,9 +52,9 @@
     参考下表获取此应用中所用到的模型，并将其存放到开发环境普通用户下的工程目录：   
  **cd $HOME/samples/python/level2_simple_inference/2_object_detection/style_transfer_picture/model** 
     
-    |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
-    |---|---|---|
-    |  yolov3| 基于GAN网络的模型。  |  请参考[https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/style_transfer](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/style_transfer)目录中README.md下载原始模型章节下载模型和权重文件。 |
+    |  **模型说明**  |  **模型下载路径**  |
+    |---|---|
+    | 基于GAN网络的模型。  |  请参考[https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/style_transfer](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/style_transfer)目录中README.md下载原始模型章节下载模型和权重文件。 |
 
 3. 将原始模型转换为Davinci模型。
     

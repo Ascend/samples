@@ -4,7 +4,7 @@ aipp_cfg="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Mo
 model_name="yolo3_resnet18_yuv"
 presenter_server_name="mask_detection_video"
 
-data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/mask_detection_video/mask-true.h264"
+data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/mask_detection_video/mask.h264"
 project_name="YOLOV3_mask_detection_video"
 
 version=$1
@@ -21,7 +21,7 @@ declare -i verifyResError=2
 function downloadDataWithVerifySource() {
     mkdir -p ${project_path}/data/
 
-    wget -O ${project_path}/data/"mask-true.h264"  ${data_source}  --no-check-certificate
+    wget -O ${project_path}/data/"mask.h264"  ${data_source}  --no-check-certificate
     if [ $? -ne 0 ];then
         echo "download ture.h264 failed, please check Network."
         return 1
@@ -151,7 +151,7 @@ function main() {
 
     cd ${project_path}/src
     #python3.6 mask_detect.py
-    python3.6 main.py ../data/mask-true.h264 &
+    python3.6 main.py ../data/mask.h264 &
 
     
     sleep 4

@@ -24,7 +24,7 @@ dict_path = '../scripts/vocab.txt'
 label_path = '../scripts/label.json'
 sample_path = '../data/sample.txt'
 output_dir = '../out/'
-maxlen = 300
+maxlen = 298
 
 token_dict = {}
 

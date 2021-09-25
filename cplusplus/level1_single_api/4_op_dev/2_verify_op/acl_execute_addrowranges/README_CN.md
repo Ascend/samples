@@ -32,13 +32,6 @@
 ## 环境要求<a name="zh-cn_topic_0230709958_section1256019267915"></a>
 
 -   操作系统及架构：CentOS x86\_64、CentOS aarch64、Ubuntu 18.04 x86\_64、EulerOS x86、EulerOS aarch64
--   编译器：
-    -   Ascend 310 EP/Ascend 710/Ascend 910编译器
-        -   运行环境操作系统架构为x86时，编译器为g++
-        -   运行环境操作系统架构为arm64时，编译器为aarch64-linux-gnu-g++
-
-    -   Atlas 200 DK编译器：aarch64-linux-gnu-g++
-
 -   芯片：Ascend 310、Ascend 710、Ascend 910
 -   python及依赖的库：python3.7.5
 -   已完成昇腾AI软件栈的部署。
@@ -235,16 +228,18 @@
 
     3.  切换到“build/intermediates/host”目录，执行cmake命令生成编译文件。
 
-        -   当运行环境操作系统架构为x86时，执行如下命令编译。
+        -   当开发环境与运行环境操作系统架构相同时，执行如下命令编译。
 
             **cd build/intermediates/host**
 
             **cmake ../../../src -DCMAKE\_CXX\_COMPILER=g++ -DCMAKE\_SKIP\_RPATH=TRUE**
 
-        -   当运行环境操作系统架构为arm64时，执行以下命令进行交叉编译。
+        -   当开发环境与运行环境操作系统架构不同时，需要使用交叉编译。
+
+            例如，当开发环境为X86架构，运行环境为AArch64架构时，执行以下命令进行交叉编译。
 
             **cd build/intermediates/host**
-
+            
             **cmake ../../../src -DCMAKE\_CXX\_COMPILER=aarch64-linux-gnu-g++ -DCMAKE\_SKIP\_RPATH=TRUE**
 
 

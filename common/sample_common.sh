@@ -99,11 +99,11 @@ function build()
   if [[ ${TargetKernel} = "x86" ]] || [[ ${TargetKernel} = "X86" ]];then
     TargetCompiler="g++"
     TargetKernel="x86"
-    export DDK_PATH=${HOME}/Ascend/ascend-toolkit/latest
+    #export DDK_PATH=${HOME}/Ascend/ascend-toolkit/latest
   else
     TargetCompiler="aarch64-linux-gnu-g++"
     TargetKernel="arm"
-    export DDK_PATH=${HOME}/Ascend/ascend-toolkit/latest/arm64-linux
+    #export DDK_PATH=${HOME}/Ascend/ascend-toolkit/latest/arm64-linux
   fi
 
   if [ -d ${ScriptPath}/../build/intermediates/host ];then

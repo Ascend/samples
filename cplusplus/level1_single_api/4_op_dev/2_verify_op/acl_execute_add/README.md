@@ -32,13 +32,6 @@ Note: The generation of a single-operator model file depends only on the operato
 ## Environment Requirements<a name="en-us_topic_0230709958_section1256019267915"></a>
 
 -   OS and architecture: CentOS x86\_64, CentOS AArch64, Ubuntu 18.04 x86\_64, EulerOS x86, EulerOS AArch64
--   Compiler:
-    -   For Ascend 310 EP, Ascend 710, or Ascend 910:
-        -   g++ in the x86 operating environment
-        -   g++-aarch64-linux-gnu in the ARM64 operating environment
-
-    -   For Atlas 200 DK: g++-aarch64-linux-gnu
-
 -   SoC: Ascend 310, Ascend 710, or Ascend 910
 -   Python version and dependency library: Python 3.7.5
 -   Ascend AI Software Stack deployed
@@ -235,16 +228,18 @@ Note: The generation of a single-operator model file depends only on the operato
 
     3.  Go to the  **build/intermediates/host**  directory and run the  **cmake**  command.
 
-        -   In the x86 operating environment:
+        -   If the operating system architecture of the  development environment is the same as that of the running environment, run the following command:
 
             **cd build/intermediates/host**
 
             **cmake ../../../src -DCMAKE\_CXX\_COMPILER=g++ -DCMAKE\_SKIP\_RPATH=TRUE**
 
-        -   In the ARM64 operating environment:
+        -   If the operating system architecture of the  development environment is different from that of the running environment, a cross compiler is requird.
+
+            For example, if the development environment is x86 and the running environment is AArch64 , run the following command:
 
             **cd build/intermediates/host**
-
+            
             **cmake ../../../src -DCMAKE\_CXX\_COMPILER=aarch64-linux-gnu-g++ -DCMAKE\_SKIP\_RPATH=TRUE**
 
 

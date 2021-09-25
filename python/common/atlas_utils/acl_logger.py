@@ -39,7 +39,7 @@ def log_warning(*log_msg):
         *log_msg: format string and args list
     """
     log_str = [str(i) for i in log_msg]
-    log_str = "".join(log_str)
+    log_str = "[WARNING]"+"".join(log_str)
     
     print(log_str)
 

@@ -54,6 +54,8 @@ include_directories(
     $ENV{HOME}/ascend_ddk/${ARCH}/include/ascenddk
     ${INC_PATH}/acllib/include/
     $ENV{HOME}/Ascend/driver
+    ../../../../common/presenteragent/include/ 
+    ../../../../common/presenteragent/include/ascenddk
 )
 
 if(target STREQUAL "Simulator_Function")

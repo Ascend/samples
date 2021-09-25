@@ -7,7 +7,6 @@
 ## 环境要求<a name="section15875915982"></a>
 
 -   操作系统及架构：CentOS x86系统、CentOS aarch64系统
--   编译器：EP标准形态编译器 g++
 -   芯片：Ascend310、Ascend710
 -   python及依赖的库：python3.7.5
 -   已完成昇腾AI软件栈在开发环境、运行环境上的部署。
@@ -21,7 +20,7 @@
 
 2. 设置环境变量，配置编译依赖的头文件与库文件路径。
 
-   设置$\{DDK\_PATH\}、$\{NPU\_HOST\_LIB\}环境变量，编译脚本会按环境变量指向的路径查找编译依赖的头文件和库文件，环境变量请设置为实际ACLlib组件的头文件与库文件路径。
+   设置DDK\_PATH、NPU\_HOST\_LIB环境变量，编译脚本会按环境变量指向的路径查找编译依赖的头文件和库文件，环境变量请设置为实际ACLlib组件的头文件与库文件路径。
 
    - 当运行环境操作系统架构是x86时，配置示例如下所示：
 
@@ -47,13 +46,25 @@
 
 4. 切换到“build/intermediates/host”目录，执行cmake命令生成编译文件。
 
-   **cd build/intermediates/host**
+   - 当开发环境与运行环境操作系统架构相同时，执行如下命令编译。
 
-   请使用**g++**编译器进行编译：
+     **cd build/intermediates/host**
 
-   **cmake ../../../src -DCMAKE\_CXX\_COMPILER=g++ -DCMAKE\_SKIP\_RPATH=TRUE**
+     **cmake ../../../src -DCMAKE\_CXX\_COMPILER=g++ -DCMAKE\_SKIP\_RPATH=TRUE**
 
-   “../../../src”表示CMakeLists.txt文件所在的目录，请根据实际目录层级修改。
+   - 当开发环境与运行环境操作系统架构不同时，需要使用交叉编译。
+
+     例如，当开发环境为X86架构，运行环境为AArch64架构时，执行以下命令进行交叉编译。
+
+     **cd build/intermediates/host**
+
+     **cmake ../../../src -DCMAKE\_CXX\_COMPILER=aarch64-linux-gnu-g++ -DCMAKE\_SKIP\_RPATH=TRUE**
+
+    参数说明如下：
+
+       -   “../../../src”表示CMakeLists.txt文件所在的目录，请根据实际目录层级修改。
+       -   DCMAKE\_CXX\_COMPILER：编译应用程序所用的编译器。
+       -   DCMAKE\_SKIP\_RPATH：**设置为TRUE**，代表不会将rpath信息（即NPU\_HOST\_LIB配置的路径）添加到编译生成的可执行文件中去。可执行文件运行时会自动搜索实际设置的LD\_LIBRARY\_PATH（“xxx/acllib/lib64”或“xxx/fwkacllib/lib64”）中的动态链接库。
 
 5. 执行如下命令，生成可执行文件。
 
@@ -69,7 +80,7 @@
 
 1. 将算子运行需要的文件上传到运行环境。
 
-   以HwHiAiUser用户（运行用户）将开发环境“acl\_execute\_batchnorm/run/out”目录下所有文件上传到运行环境（硬件设备Host侧）任一目录，若后续需要进行单算子profiling操作，建议上传到/home/HwHiAiUser/HIAI\_PROJECTS目录下，例如上传到/home/HwHiAiUser/HIAI\_PROJECTS/run\_batchnorm/目录下。
+   以运行用户将开发环境“acl\_execute\_batchnorm/run/out”目录下所有文件上传到运行环境（硬件设备Host侧）任一目录，若后续需要进行单算子profiling操作，建议上传到/home/HwHiAiUser/HIAI\_PROJECTS目录下，例如上传到/home/HwHiAiUser/HIAI\_PROJECTS/run\_batchnorm/目录下。
 
 2. 设置环境变量。
 

@@ -2,25 +2,25 @@
 # Copyright (c) Huawei Technologies Co., Ltd. 2020. All rights reserved.
 ###### Environment variable settings, need to set according to your own device ######
 
-# ASCEND_OPP_PATH: The installation path of the OPP package, where "/usr/local/Ascend/opp" is the
+# ASCEND_OPP_PATH: The installation path of the OPP package, where "/usr/local/Ascend/ascend-toolkit/latest/opp" is the
 #                  default installation path. If user defines the installation path, please modify it.
 # Uncomment and modify it when you specified installation path of OPP.
-# export ASCEND_OPP_PATH=/usr/local/Ascend/opp
+# export ASCEND_OPP_PATH=/usr/local/Ascend/ascend-toolkit/latest/opp
 
-# ASCEND_AICPU_PATH: The installation path of the AICPU package, where "/usr/local/Ascend" is the
+# ASCEND_AICPU_PATH: The installation path of the AICPU package, where "/usr/local/Ascend/ascend-toolkit/latest" is the
 #                  default installation path. If user defines the installation path, please modify it.
 # Uncomment and modify it when you specified installation path of AICPU.
-# export ASCEND_AICPU_PATH=/usr/local/Ascend
+export ASCEND_AICPU_PATH=/usr/local/Ascend/ascend-toolkit/latest
 
-# ASCEND_TENSOR_COMPILER_INCLUDE: The path of the header file of the ATC package, where "/usr/local/Ascend/atc/include" is the
+# ASCEND_TENSOR_COMPILER_INCLUDE: The path of the header file of the ATC package, where "/usr/local/Ascend/ascend-toolkit/latest/atc/include" is the
 #                                 default installation path. If user defines the installation path, please modify it.
 # Uncomment and modify it when you specified installation path of ATC.
-# export ASCEND_TENSOR_COMPILER_INCLUDE=/usr/local/Ascend/atc/include
+# export ASCEND_TENSOR_COMPILER_INCLUDE=/usr/local/Ascend/ascend-toolkit/latest/atc/include
 
-# TOOLCHAIN_DIR: The path of the cross compilation tool, where "/usr/local/Ascend/toolkit/toolchain/hcc" is the
+# TOOLCHAIN_DIR: The path of the cross compilation tool, where "/usr/local/Ascend/ascend-toolkit/latest/toolkit/toolchain/hcc" is the
 #                default installation path. If user defines the installation path, please modify it.
 # Uncomment and modify it when you specified installation path of toolkit.
-# export TOOLCHAIN_DIR=/usr/local/Ascend/toolkit/toolchain/hcc
+# export TOOLCHAIN_DIR=/usr/local/Ascend/ascend-toolkit/latest/toolkit/toolchain/hcc
 
 # AICPU_KERNEL_TARGET: The name of the custom operator kernels library, which "cust_aicpu_kernels" is the
 #                      default installation name. If user defines the installation name, please modify it.
@@ -120,12 +120,12 @@ mkdir -p $project_path/build_out
 
 ###### Environment variable settings, need to set according to your own device ######
 
-# ASCEND_TENSOR_COMPILER_INCLUDE: The path of the header file of the ATC package, where "/usr/local/Ascend/atc/include" is the
+# ASCEND_TENSOR_COMPILER_INCLUDE: The path of the header file of the ATC package, where "/usr/local/Ascend/ascend-toolkit/latest/atc/include" is the
 #                                 default installation path. If user defines the installation path, please modify it.
 # Uncomment and modify it when you specified installation path of ATC.
 if [[ -z "${ASCEND_TENSOR_COMPILER_INCLUDE}" ]]; then
-    if [[ -d "/usr/local/Ascend/atc/include" ]];then
-        export ASCEND_TENSOR_COMPILER_INCLUDE=/usr/local/Ascend/atc/include
+    if [[ -d "/usr/local/Ascend/ascend-toolkit/latest/atc/include" ]];then
+        export ASCEND_TENSOR_COMPILER_INCLUDE=/usr/local/Ascend/ascend-toolkit/latest/atc/include
     else
         log "[ERROR] ENV ASCEND_TENSOR_COMPILER_INCLUDE is not set"
         exit 1

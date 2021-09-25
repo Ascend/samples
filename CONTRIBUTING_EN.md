@@ -26,14 +26,10 @@ Sign the contribution license agreement (CLA) before your submission. [Link](htt
     > **Note:** Each entry script corresponds to a product form. Your project shall provide support to at least one product form. Fill the versions mapped to each product form in the **host_version.conf** file in the corresponding directory.
     >- testcase_200dk.sh: Atlas 200 DK   
     >- testcase_300.sh: Atlas 300   
-    >- testcase_800.sh: Atlas 800   
-    >- testcase_1951.sh: Atlas 1951
    
     > **Note:** Each product form maps to at least one version. Your project shall provide support to at least one version. The following provides a sample **host_version.conf** file.
     >- Atlas300 = c75,c73        The project adapts to C73 and C75 of Atlas 300.
     >- Atlas200dk = c73,c75        The project adapts to C73 and C75 of Atlas 200 DK.
-    >- Atlas800 = c75        The project adapts to C75 of Atlas 800.
-    >- Atlas1951 = c75        The project adapts to C75 of Atlas 1951.
 
 
 4. For code migrated from other open-source software, add the license declaration.

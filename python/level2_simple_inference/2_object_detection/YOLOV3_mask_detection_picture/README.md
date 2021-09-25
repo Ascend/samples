@@ -50,9 +50,10 @@ Before deploying this sample, ensure that:
 
     Obtain the original model by referring to the following table and save it to any directory of a common user in the development environment, for example, **$HOME/models/YOLOV3_mask_detection_picture**.
 
-    | **Model Name**    | **Description**&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; | **How to Obtain**                        |
-    | ----------------- | ---------------------------------------- | ---------------------------------------- |
-    | mask_detection.pb | Face mask detection model based on TensorFlow YOLOv3. | Download the original model by referring to the **README.md** file in [https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/yolov3_resnet18/ATC_yolo3_resnet18_tf_AE](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/yolov3_resnet18/ATC_yolo3_resnet18_tf_AE). |
+    | **Model Name**              | **Description**&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;          | **How to Obtain**                                            |
+    | --------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+    | mask_detection.pb           | Face mask detection model based on TensorFlow YOLOv3.        | Download the original model by referring to the **README.md** file in [https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/yolov3_resnet18/ATC_yolo3_resnet18_tf_AE](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/yolov3_resnet18/ATC_yolo3_resnet18_tf_AE). |
+    | mask_detection_quanzited.pb | Quantized model of mask detection based on tensorflow-yolov3 | Download address:https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com:443/003_Atc_Models/AE/ATC%20Model/YOLOV3-RESNET18%20/yolo3_resnet18_quantized.pb?AccessKeyId=WBGD0ZYB7N1EWW9PINNF&Expires=1630045437&Signature=Zge36iJtfvZd0KgAo/GSZaM9QOs%3D   (The operation of converting om offline model is the same as that of unquantized PB model. The specific operation of quantization can be referred to：https://github.com/Ascend/samples/wikis/%E4%BD%BF%E7%94%A8AMCT%E5%B7%A5%E5%85%B7%E9%87%8F%E5%8C%96YOLOV3%E6%A8%A1%E5%9E%8B?sort_id=4402780 ,If you choose to use the quantized model, note the replacement of the model name in the example) |
 
 3. Convert the original model to a Da Vinci model.
 
@@ -96,6 +97,7 @@ Before deploying this sample, ensure that:
     **ssh HwHiAiUser@xxx.xxx.xxx.xxx**    
 
     ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **NOTE**  
+
     > - In the following information, ***xxx.xxx.xxx.xxx*** is the IP address of the operating environment. The IP address of Atlas 200 DK is **192.168.1.2** when it is connected over the USB port, and that of Atlas 300 is the corresponding public network IP address.
 
 2. <a name="step_2"></a>Run the executable file.

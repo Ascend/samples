@@ -11,7 +11,7 @@ declare -i success=0
 declare -i inferenceError=1
 declare -i verifyResError=2
 
-function downloadAndGenerateData() {
+function downloadData() {
     mkdir -p ${project_path}/data/
 
     if [ ! -f ${project_path}/data/"dog1_1024_683.jpg" ]; then
@@ -22,7 +22,7 @@ function downloadAndGenerateData() {
         fi
     fi
 
-    if [ ! -f ${project_path}/data/"dog1_1024_683.jpg" ]; then
+    if [ ! -f ${project_path}/data/"dog2_1024_683.jpg" ]; then
         wget -O ${project_path}/data/"dog2_1024_683.jpg"  ${data_source}"dog2_1024_683.jpg"  --no-check-certificate
         if [ $? -ne 0 ];then
             echo "download dog2_1024_683.jpg failed, please check Network."
@@ -68,8 +68,8 @@ function downloadOriginalModel() {
 
 function main() {
 
-    # 生成模型输入数据集
-    downloadAndGenerateData
+    # 下载模型输入数据集
+    downloadData
     if [ $? -ne 0 ];then
         echo "ERROR: generate data failed"
         return ${inferenceError}
@@ -88,14 +88,14 @@ function main() {
         return ${inferenceError}
     fi
 
+    cd ${project_path}
+
     # 转模型
     atc --model=${project_path}/caffe_model/${caffe_prototxt##*/} --weight=${project_path}/caffe_model/${caffe_model##*/} --framework=0 --output=model/${model_name} --soc_version=Ascend310 --input_format=NCHW --input_fp16_nodes=data --output_type=FP32 --out_nodes=prob:0
     if [ $? -ne 0 ];then
         echo "ERROR: convert model failed"
         return ${inferenceError}
     fi
-
-    cd ${project_path}
 
     # 运行程序
     python3 ./src/acl_net.py | tee result.txt

@@ -47,7 +47,7 @@ resnet50_imagenet_classification
 |                    | 模型加载与执行       | acl.mdl.unload                   | 卸载模型。                              |
 |                    | Context管理         | acl.rt.destroy_context           | 销毁Context。                           |
 |                    | Device管理          | acl.rt.reset_device              | 复位当前运算的Device，回收Device上的资源。 |
-|                    | 去初始化     | acl.finalize                     | 实现ACL去初始化。                        |
+|                    | 去初始化            | acl.finalize                     | 实现ACL去初始化。                        |
 
 ## <span id = "env">环境变量配置 </span>
 

@@ -82,7 +82,7 @@
 
     **cd $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV3_mask_detection_video/data**
 
-    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/mask_detection_video/mask-true.mp4**
+    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/mask_detection_video/mask.h264**
 
 
 ### 样例部署

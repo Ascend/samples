@@ -114,9 +114,8 @@ The sample directory is organized as follows:
 ## Environment Requirements<a name="section3833348101215"></a>
 
 -   OS and architecture: CentOS 7.6 x86\_64, CentOS AArch64, or Ubuntu 18.04 x86\_64
--   Version: 3.3.0
 -   Compiler:
-    -   Ascend 310 EP/Ascend 710: g++
+    -   Ascend 310 EP/Ascend 710: g++ or aarch64-linux-gnu-g++
     -   Atlas 200 DK: aarch64-linux-gnu-g++
 
 -   SoC: Ascend 310 AI Processor or Ascend 710 AI Processor
@@ -243,15 +242,16 @@ The sample directory is organized as follows:
 
         Replace  **../../../src**  with the actual directory of  **CMakeLists.txt**.
 
-        -   If the development environment and operating environment have the same OS architecture, run the following commands to perform compilation.
+        -   If the operating system architecture of the  development environment is the same as that of the running environment, run the following commands to perform compilation.
 
             ```
             cd build/intermediates/host
             cmake ../../../src -DCMAKE_CXX_COMPILER=g++ -DCMAKE_SKIP_RPATH=TRUE
             ```
 
-        -   If development environment and operating environment have different OS architectures, run the following commands to perform cross compilation.
+        -   If the operating system architecture of the  development environment is different from that of the running environment, run the following commands to perform cross compilation.
 
+            For example, if the development environment is x86 and the running environment is AArch64, run the following command:
             ```
             cd build/intermediates/host
             cmake ../../../src -DCMAKE_CXX_COMPILER=aarch64-linux-gnu-g++ -DCMAKE_SKIP_RPATH=TRUE

@@ -1,17 +1,24 @@
-"""
--*- coding:utf-8 -*-
-CREATED:  2020-6-04 20:12:13
-MODIFIED: 2020-6-17 14:04:45
-"""
+# Copyright 2020 Huawei Technologies Co., Ltd
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 import argparse
 import numpy as np
-import struct
 import acl
 import os
 from PIL import Image
 from constant import ACL_MEM_MALLOC_HUGE_FIRST, \
     ACL_MEMCPY_HOST_TO_DEVICE, ACL_MEMCPY_DEVICE_TO_HOST, \
-    ACL_ERROR_NONE, IMG_EXT
+    ACL_ERROR_NONE, IMG_EXT, NPY_FLOAT32
 
 buffer_method = {
     "in": acl.mdl.get_input_size_by_index,
@@ -195,8 +202,7 @@ class Net(object):
         print('execute stage success')
 
     def _print_result(self, result):
-        tuple_st = struct.unpack("1000f", bytearray(result[0]))
-        vals = np.array(tuple_st).flatten()
+        vals = np.array(result).flatten()
         top_k = vals.argsort()[-1:-6:-1]
         print("======== top5 inference results: =============")
 
@@ -217,13 +223,16 @@ class Net(object):
             check_ret("acl.mdl.destroy_dataset", ret)
 
     def get_result(self, output_data):
-        dataset = []
+        result = []
+        dims, ret = acl.mdl.get_cur_output_dims(self.model_desc, 0)
+        check_ret("acl.mdl.get_cur_output_dims", ret)
+        out_dim = dims['dims']
         for temp in output_data:
-            size = temp["size"]
             ptr = temp["buffer"]
-            data = acl.util.ptr_to_numpy(ptr, (size,), 1)
-            dataset.append(data)
-        return dataset
+            # 转化为float32类型的数据
+            data = acl.util.ptr_to_numpy(ptr, tuple(out_dim), NPY_FLOAT32)
+            result.append(data)
+        return result
 
 
 def transfer_pic(input_path):

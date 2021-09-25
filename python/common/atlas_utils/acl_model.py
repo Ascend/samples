@@ -114,8 +114,9 @@ class Model(object):
 
             model_size = acl.mdl.get_input_size_by_index(self._model_desc, i)
             if size != model_size:
-                log_warning("Input[%d] size: %d not equal om size %d, \
-                            may cause inference result ERROR, please check model input" % (i, size, model_size))
+                log_warning(" Input[%d] size: %d not equal om size: %d" % (i, size, model_size) +\
+                        ", may cause inference result error, please check model input")
+
 
             dataset_buffer = acl.create_data_buffer(data, size)
             _, ret = acl.mdl.add_dataset_buffer(self._input_dataset,

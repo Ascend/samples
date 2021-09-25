@@ -41,7 +41,7 @@ function main() {
         return ${inferenceError}
     fi
 
-    run_h264
+    run_md5
     if [ $? -eq ${inferenceError} ];then
         return ${inferenceError}
     elif [ $? -eq ${verifyResError} ];then

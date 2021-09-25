@@ -99,47 +99,13 @@
         > - 也可以在ai1s云端环境中使用ifconfig查看内网ip。
         > - 登录ai1s云端环境时的ip地址为此环境的公网ip，ai1s云端环境中ifconfig查看到的ip为此环境的内网ip。
  
-2. 开发环境命令行中设置编译依赖的环境变量。
 
-   可以在命令行中执行 **uname -a**，查看开发环境和运行环境的cpu架构。如果回显为x86_64，则为x86架构。如果回显为arm64，则为Arm架构。基于开发环境与运行环境CPU架构是否相同，请仔细看下面的步骤：
 
-   - 当开发环境与运行环境CPU架构相同时，执行以下命令导入环境变量。 
-  
-     **export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest**
+2. 执行以下命令，执行编译脚本，开始样例编译。
 
-     **export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub**
+    cd $HOME/samples/cplusplus/level2_simple_inference/6_other/colorization_video /scripts
 
-   - 当开发环境与运行环境CPU架构不同时，执行以下命令导入环境变量。例如开发环境为X86架构，运行环境为Arm架构，由于开发环境上同时部署了X86和Arm架构的开发套件，后续编译应用时需要调用Arm架构开发套件的ACLlib库，所以此处需要导入环境变量为Arm架构的ACLlib库路径。 
-  
-     **export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux**  
- 
-     **export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub**   
-     ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
-        > - 如果是3.0.0版本，此处 **DDK_PATH** 环境变量中的 **arm64-linux** 应修改为 **arm64-linux_gcc7.3.0**。
-
-3. 参考**https://github.com/Ascend/samples/tree/master/cplusplus/common/atlasutil** 目录下atlasutil库使用说明编译安装对应atlasutil公共库。
-
-4. 切换到colorization_video目录，创建目录用于存放编译文件，例如，本文中，创建的目录为 **build/intermediates/host**。
-
-    **cd $HOME/samples/cplusplus/level2_simple_inference/6_other/colorization_video**
-
-    **mkdir -p build/intermediates/host**
-
-5. 切换到 **build/intermediates/host** 目录，执行cmake生成编译文件。
-
-    - 当开发环境与运行环境操作系统架构相同时，执行如下命令编译。   
-      **cd build/intermediates/host**  
-      **make clean**   
-      **cmake \.\./\.\./\.\./src -DCMAKE_CXX_COMPILER=g++ -DCMAKE_SKIP_RPATH=TRUE**
-
-    - 当开发环境与运行环境操作系统架构不同时，需要使用交叉编译器编译。例如开发环境为X86架构，运行环境为Arm架构，执行以下命令进行交叉编译。   
-      **cd build/intermediates/host**   
-      **make clean**   
-      **cmake \.\./\.\./\.\./src -DCMAKE_CXX_COMPILER=aarch64-linux-gnu-g++ -DCMAKE_SKIP_RPATH=TRUE**
-
-6. 执行make命令，生成的可执行文件main在 **colorization_video/out** 目录下。
-
-    **make**
+    bash sample_build.sh
 
 
 ### 样例运行
@@ -153,13 +119,10 @@
 
     **scp -r $HOME/samples/cplusplus/level2_simple_inference/6_other/colorization_video HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
 
-2. 启动presenterserver并登录运行环境。
+2. 登录运行环境。
 
     - 使用产品为200DK开发者板。   
-        1. 开发环境中执行以下命令启动presentserver。   
-            **cd $HOME/samples/common/**
-            **bash run_presenter_server.sh $HOME/samples/cplusplus/level2_simple_inference/6_other/colorization_video/scripts/colorization.conf**   
-        2. 执行以下命令登录运行环境。   
+        1. 执行以下命令登录运行环境。   
             **开发环境与运行环境合一部署，请跳过此步骤！**   
             **ssh HwHiAiUser@xxx.xxx.xxx.xxx** 
 
@@ -167,23 +130,10 @@
         1. 执行以下命令登录运行环境。   
            **开发环境与运行环境合一部署，请跳过此步骤！**   
            **ssh HwHiAiUser@xxx.xxx.xxx.xxx**    
-        2.运行环境中启动presenterserver。   
-进入presenterserver所在目录（如$HOME/samples/common/），执行以下命令
-            **bash run_presenter_server.sh $HOME/samples/cplusplus/level2_simple_inference/6_other/colorization_video/scripts/colorization.conf**   
 
-3. <a name="step_2"></a>运行可执行文件。
+3. 执行运行脚本，开始样例运行。
 
-    - 如果是开发环境与运行环境合一部署，执行以下命令，设置运行环境变量，并切换目录。   
-      **export LD_LIBRARY_PATH=**   
-      **source ~/.bashrc**     
-      **cd $HOME/samples/cplusplus/level2_simple_inference/6_other/colorization_video/out**
-
-    - 如果是开发环境与运行环境分离部署，执行以下命令切换目录。   
-      **cd $HOME/colorization_video/out**
-
-    切换目录后，执行以下命令运行样例。
-
-    **./main ../data/black-white_video.mp4**
+bash sample_run.sh
 
 ### 查看结果
 
