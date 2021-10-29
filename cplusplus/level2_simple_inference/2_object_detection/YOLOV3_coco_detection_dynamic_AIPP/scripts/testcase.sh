@@ -6,7 +6,6 @@ model_name="yolov3"
 data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/YOLOV3_coco_detection_dynamic_AIPP/test_image/"
 data_name="dog1_1024_683.jpg"
 verify_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/YOLOV3_coco_detection_dynamic_AIPP/verify_image/"
-verify_name="verify_dog1_1024_683.jpg"
 project_name="cplusplus_YOLOV3_coco_detection_dynamic_AIPP"
 
 
@@ -32,6 +31,13 @@ declare -i verifyResError=2
 function main() {
 
     # 下载测试集和验证集
+    verify_name="verify_dvpp_dog1_1024_683.jpg"
+    downloadDataWithVerifySource
+    if [ $? -ne 0 ];then
+        return ${inferenceError}
+    fi
+
+    verify_name="verify_OpenCV_dog1_1024_683.jpg"
     downloadDataWithVerifySource
     if [ $? -ne 0 ];then
         return ${inferenceError}

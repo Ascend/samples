@@ -213,7 +213,7 @@
 
     -   -h：表示存储视频的高。
 
-    -   -s：后面的ip值为运行环境IP地址，**xxxx**为Ascendcamera应用对应的Presenter Server服务器的端口号。
+    -   -s：后面的ip值为启动Presenter Server时文件scripts/param.conf中presenter_server_ip的IP地址，**xxxx**为Ascendcamera应用对应的Presenter Server服务器的端口号。
 
     -   _presentername_：为在Presenter Server端展示的“View Name“，用户自定义，需要保持唯一，只能为大小写字母、数字、“\_”的组合，位数3\~20。
 

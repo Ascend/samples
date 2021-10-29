@@ -67,6 +67,9 @@ namespace {
         cv::Scalar(237, 149, 100), cv::Scalar(0, 215, 255), cv::Scalar(50, 205, 50),
         cv::Scalar(139, 85, 26) };
 
+    struct timespec kTimeStart = {0, 0};
+    struct timespec kTimeEnd = {0, 0};
+
 }
 
 ObjectDetect::ObjectDetect(const char* modelPath, uint32_t modelWidth,
@@ -198,6 +201,58 @@ Result ObjectDetect::Init() {
     return SUCCESS;
 }
 
+Result ObjectDetect::ProcessForDvpp(ImageData& srcImage, const string& origImagePath) {
+    ImageData resizedImage;
+    Result ret = Preprocess(resizedImage, srcImage);
+    if (ret != SUCCESS) {
+        ERROR_LOG("Read file %s failed",
+                    origImagePath.c_str());                
+        return FAILED;
+    }
+    //Send the resized picture to the model for inference 
+    //and get the inference results
+    aclmdlDataset* inferenceOutput = nullptr;
+    ret = Inference(inferenceOutput, resizedImage);
+    if ((ret != SUCCESS) || (inferenceOutput == nullptr)) {
+        ERROR_LOG("Inference model inference output data failed");
+        return FAILED;
+    }
+    //Analyze the inference output, mark the object category and 
+    //location by the inference result
+    ret = Postprocess(srcImage, inferenceOutput, origImagePath);
+    if (ret != SUCCESS) {
+        ERROR_LOG("Process model inference output data failed");
+        return FAILED;
+    }
+    return SUCCESS;
+}
+
+Result ObjectDetect::ProcessForOpenCV(cv::Mat& srcMat, const string& origImagePath) {
+    uint32_t reiszeMatLen = 0;
+    void* reiszeMatBuffer = nullptr;
+    Result ret = PreprocessOpencv(srcMat, reiszeMatLen, reiszeMatBuffer);
+    if (ret != SUCCESS){
+        ERROR_LOG("Preprocess for Opencv mat failed");
+    }
+
+    //Send the resized picture to the model for inference 
+    //and get the inference results
+    aclmdlDataset* inferenceOutput = nullptr;
+    ret = InferenceOpenCV(inferenceOutput, reiszeMatLen, reiszeMatBuffer);
+    if ((ret != SUCCESS) || (inferenceOutput == nullptr)) {
+        ERROR_LOG("Inference model inference output data failed");
+        return FAILED;
+    }
+
+    ret = PostprocessOpenCV(srcMat, inferenceOutput, origImagePath);
+    if (ret != SUCCESS) {
+        ERROR_LOG("Process model inference output data failed");
+        return FAILED;
+    }
+    return SUCCESS; 
+
+}
+
 Result ObjectDetect::Preprocess(ImageData& resizedImage, ImageData& srcImage) {
     ImageData imageDevice;
     Utils::CopyImageDataToDevice(imageDevice, srcImage, runMode_);
@@ -215,15 +270,36 @@ Result ObjectDetect::Preprocess(ImageData& resizedImage, ImageData& srcImage) {
         ERROR_LOG("Resize image failed");
         return FAILED;
     }
-
+    
     return SUCCESS;
 }
 
-Result ObjectDetect::Inference(aclmdlDataset*& inferenceOutput,
+Result ObjectDetect::PreprocessOpencv(cv::Mat& srcMat, uint32_t& reiszeMatLen, void*& reiszeMatBuffer) {
+    cv::Mat reiszeMat,dstMat;
+    
+    //color convert & resize
+    cv::cvtColor(srcMat, dstMat, cv::COLOR_BGR2RGB);
+    if (dstMat.empty()) {
+        ERROR_LOG("Mat cvtColor failed");
+        return FAILED;
+    }
+    cv::resize(dstMat, reiszeMat, cv::Size(modelWidth_, modelHeight_));
+    if (reiszeMat.empty()) {
+        ERROR_LOG("Mat cvtColor failed");
+        return FAILED;
+    }
+
+    Result ret = Utils::CopyOpenCVMatToDevice(reiszeMat, reiszeMatLen, reiszeMatBuffer, runMode_);
+    if (ret != SUCCESS){
+        ERROR_LOG("Copy Mat data to device failed");
+    }
+    return SUCCESS;
+}
+
+Result ObjectDetect::Inference(aclmdlDataset*& inferenceOutput, 
 ImageData& resizedImage) {
     Result ret = model_.CreateInput(resizedImage.data.get(),
-    resizedImage.size,
-    imageInfoBuf_, imageInfoSize_);
+    resizedImage.size, imageInfoBuf_, imageInfoSize_);
     if (ret != SUCCESS) {
         ERROR_LOG("Create mode input dataset failed");
         return FAILED;
@@ -237,6 +313,25 @@ ImageData& resizedImage) {
 
     inferenceOutput = model_.GetModelOutputData();
 
+    return SUCCESS;
+}
+
+Result ObjectDetect::InferenceOpenCV(aclmdlDataset*& inferenceOutput, 
+uint32_t& reiszeMatLen, void*& reiszeMatBuffer) {
+    Result ret = model_.CreateInputOpenCV(reiszeMatBuffer,
+    reiszeMatLen, imageInfoBuf_, imageInfoSize_);
+    if (ret != SUCCESS) {
+        ERROR_LOG("Create mode input dataset failed");
+        return FAILED;
+    }
+
+    ret = model_.Execute();
+    if (ret != SUCCESS) {
+        ERROR_LOG("Execute model inference failed");
+        return FAILED;
+    }
+
+    inferenceOutput = model_.GetModelOutputData();
     return SUCCESS;
 }
 
@@ -274,6 +369,48 @@ const string& origImagePath) {
     }
 
     DrowBoundBoxToImage(detectResults, origImagePath);
+    if (runMode_ == ACL_HOST) {
+        delete[]((uint8_t *)detectData);
+        delete[]((uint8_t*)boxNum);
+    }
+
+    return SUCCESS;
+}
+
+Result ObjectDetect::PostprocessOpenCV(cv::Mat& srcMat, aclmdlDataset* modelOutput,
+const string& origImagePath) {
+    uint32_t dataSize = 0;
+    float* detectData = (float *)GetInferenceOutputItem(dataSize, modelOutput,
+    kBBoxDataBufId);
+
+    uint32_t* boxNum = (uint32_t *)GetInferenceOutputItem(dataSize, modelOutput,
+    kBoxNumDataBufId);
+    if (boxNum == nullptr) {return FAILED;}
+
+    uint32_t totalBox = boxNum[0];
+    vector<BBox> detectResults;
+    float widthScale = (float)(srcMat.cols) / modelWidth_;
+    float heightScale = (float)(srcMat.rows) / modelHeight_;
+    for (uint32_t i = 0; i < totalBox; i++) {
+        BBox boundBox;
+
+        uint32_t score = uint32_t(detectData[totalBox * SCORE + i] * 100);
+        //if (score < 90) continue;
+
+        boundBox.rect.ltX = detectData[totalBox * TOPLEFTX + i] * widthScale;
+        boundBox.rect.ltY = detectData[totalBox * TOPLEFTY + i] * heightScale;
+        boundBox.rect.rbX = detectData[totalBox * BOTTOMRIGHTX + i] * widthScale;
+        boundBox.rect.rbY = detectData[totalBox * BOTTOMRIGHTY + i] * heightScale;
+
+        uint32_t objIndex = (uint32_t)detectData[totalBox * LABEL + i];
+        boundBox.text = yolov3Label[objIndex] + std::to_string(score) + "\%";
+        printf("%d %d %d %d %s\n", boundBox.rect.ltX, boundBox.rect.ltY,
+        boundBox.rect.rbX, boundBox.rect.rbY, boundBox.text.c_str());
+
+        detectResults.emplace_back(boundBox);
+    }
+
+    DrowBoundBoxToOpenCVImage(detectResults, origImagePath);
     if (runMode_ == ACL_HOST) {
         delete[]((uint8_t *)detectData);
         delete[]((uint8_t*)boxNum);
@@ -340,6 +477,28 @@ void ObjectDetect::DrowBoundBoxToImage(vector<BBox>& detectionResults,
     stringstream sstream;
     sstream.str("");
     sstream << "./output/out_" << filename;
+    cv::imwrite(sstream.str(), image);
+}
+
+void ObjectDetect::DrowBoundBoxToOpenCVImage(vector<BBox>& detectionResults,
+                                       const string& origImagePath) {
+    cv::Mat image = cv::imread(origImagePath, CV_LOAD_IMAGE_UNCHANGED);
+    for (int i = 0; i < detectionResults.size(); ++i) {
+        cv::Point p1, p2;
+        p1.x = detectionResults[i].rect.ltX;
+        p1.y = detectionResults[i].rect.ltY;
+        p2.x = detectionResults[i].rect.rbX;
+        p2.y = detectionResults[i].rect.rbY;
+        cv::rectangle(image, p1, p2, kColors[i % kColors.size()], kLineSolid);
+        cv::putText(image, detectionResults[i].text, cv::Point(p1.x, p1.y + kLabelOffset),
+        cv::FONT_HERSHEY_COMPLEX, kFountScale, kFontColor);
+    }
+
+    int pos = origImagePath.find_last_of("/");
+    string filename(origImagePath.substr(pos + 1));
+    stringstream sstream;
+    sstream.str("");
+    sstream << "./output/out_OpenCV_" << filename;
     cv::imwrite(sstream.str(), image);
 }
 

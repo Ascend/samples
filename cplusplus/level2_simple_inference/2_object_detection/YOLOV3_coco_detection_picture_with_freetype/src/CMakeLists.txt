@@ -64,11 +64,10 @@ add_executable(main
         model_process.cpp
         object_detect.cpp
         dvpp_process.cpp
-	dvpp_cropandpaste.cpp
-        dvpp_resize.cpp
+        dvpp_cropandpaste.cpp
         dvpp_jpegd.cpp
-	freetype_helper.cpp
-	drawing.cpp
+        freetype_helper.cpp
+        drawing.cpp
         main.cpp)
 
 if(target STREQUAL "Simulator_Function")

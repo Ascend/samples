@@ -51,7 +51,7 @@ function setAtcEnv() {
         export PYTHONPATH=${install_path}/atc/python/site-packages/te:${install_path}/atc/python/site-packages/topi:$PYTHONPATH
         export ASCEND_OPP_PATH=${install_path}/opp
         export LD_LIBRARY_PATH=${install_path}/atc/lib64:${LD_LIBRARY_PATH}
-    elif [[ ${version} = "c75" ]] || [[ ${version} = "C75" ]];then
+    else
         export install_path=$HOME/Ascend/ascend-toolkit/latest
         export PATH=/usr/local/python3.7.5/bin:${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
         export ASCEND_OPP_PATH=${install_path}/opp
@@ -67,9 +67,10 @@ function setBuildEnv() {
     if [[ ${version} = "c73" ]] || [[ ${version} = "C73" ]];then
         export DDK_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/arm64-linux_gcc7.3.0
         export NPU_HOST_LIB=${DDK_PATH}/acllib/lib64/stub
-    elif [[ ${version} = "c75" ]] || [[ ${version} = "C75" ]];then
+    else 
         export DDK_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/arm64-linux
         export NPU_HOST_LIB=${DDK_PATH}/acllib/lib64/stub
+  
     fi
 
     return 0
@@ -114,11 +115,13 @@ function main() {
         fi
         
         # 设置模型转换的环境变量
-        setAtcEnv
-        if [ $? -ne 0 ];then
-            echo "ERROR: set atc environment failed"
-            return ${inferenceError}
+       
+        if [[ ${version} = "c77" ]] || [[ ${version} = "C77" ]];then
+            source /home/HwHiAiUser/Ascend/ascend-toolkit/set_env.sh
+        else
+             setAtcEnv
         fi
+
 
         # 转模型
         cd ${project_path}/model/
@@ -171,11 +174,19 @@ function main() {
     cd ${project_path}/out
 
     # 重新配置程序运行所需的环境变量
-    export LD_LIBRARY_PATH=
-    export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/acllib/lib64:/home/HwHiAiUser/ascend_ddk/arm/lib:${LD_LIBRARY_PATH}
+    #export LD_LIBRARY_PATH=
+    #export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/acllib/lib64:/home/HwHiAiUser/ascend_ddk/arm/lib:${LD_LIBRARY_PATH}
+    
+    if [[ ${version} = "c77" ]] || [[ ${version} = "C77" ]];then
+        source /home/HwHiAiUser/Ascend/ascend-toolkit/set_env.sh
+    else
+        export LD_LIBRARY_PATH=
+        export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/acllib/lib64:/home/HwHiAiUser/ascend_ddk/arm/lib:${LD_LIBRARY_PATH}
+    fi
 
     mkdir -p ${project_path}/out/output
     # 运行程序
+    source /home/HwHiAiUser/Ascend/ascend-toolkit/set_env.sh
     ./main ${project_path}/data
     if [ $? -ne 0 ];then
         echo "ERROR: run failed. please check your project"

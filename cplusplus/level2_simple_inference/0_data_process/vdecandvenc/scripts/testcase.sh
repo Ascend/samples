@@ -31,11 +31,6 @@ function main() {
         return ${inferenceError}
     fi
 
-    modelconvert
-    if [ $? -ne 0 ];then
-        return ${inferenceError}
-    fi
-
     buildproject
     if [ $? -ne 0 ];then
         return ${inferenceError}

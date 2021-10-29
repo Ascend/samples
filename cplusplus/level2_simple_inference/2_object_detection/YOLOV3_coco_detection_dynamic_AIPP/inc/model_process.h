@@ -65,13 +65,46 @@ class ModelProcess {
     void DestroyDesc();
 
     /**
+    * @brief Add input buffer to input dataset 
+    * @brief [in] dataset: dst dataset
+    * @brief [in] buffer: src buffer
+    * @brief [in] bufferSize: src bufferSize
+    * @return result
+    */
+    Result AddDatasetBuffer(aclmdlDataset *dataset, 
+                            void* buffer, uint32_t bufferSize);
+
+    /**
+    * @brief create aipptensor
+    * @brief [in] batch_size: batch number
+    * @return aipp tensor
+    */
+    aclmdlAIPP* SetAIPPTensor(uint64_t batch_size);
+
+    /**
+    * @brief create aipptensor for opencv
+    * @brief [in] batch_size: batch number
+    * @return aipp tensor for opencv
+    */
+    aclmdlAIPP* SetAIPPTensorOpenCV(uint64_t batch_size);
+
+    /**
     * @brief create model input
     * @param [in] inputDataBuffer: input buffer
     * @param [in] bufferSize: input buffer size
     * @return result
     */
-    Result CreateInput(void *input1, size_t input1size,
-    void* input2, size_t input2size);
+    Result CreateInput(void *input1, uint32_t input1size,
+                       void* input2, uint32_t input2size);
+
+    /**
+    * @brief create model input for opencv pic
+    * @param [in] inputDataBuffer: input buffer
+    * @param [in] bufferSize: input buffer size
+    * @return result
+    */
+    Result CreateInputOpenCV(void* input1, uint32_t input1size,
+                             void* input2, uint32_t input2size);
 
     /**
     * @brief destroy input resource
@@ -111,8 +144,8 @@ class ModelProcess {
     aclmdlDesc *modelDesc_;
     aclmdlDataset *input_;
     aclmdlDataset *output_;
-    void * input3_;
-    size_t input3Size_;
+    void * inputAIPP_;
+    uint32_t inputAIPPSize_;
     size_t aipp_index_;
     bool isReleased_;
 };

@@ -15,6 +15,8 @@
 # ============================================================================
 set -e
 python3 ./data/process_data.py
-rm -rf ./data/images/*.jpg
-rm -rf ./data/images/*.txt
+mv  ./data/images/*.jpg ./data/
+mv  ./data/images/*.txt ./data/
 amct_onnx calibration --model model/resnet101_v11.onnx   --input_shape "input:16,3,224,224" --data_type "float32" --data_dir ./data/images/ --save_path output
+mv ./data/*.jpg ./data/images/
+mv ./data/*.txt ./data/images/

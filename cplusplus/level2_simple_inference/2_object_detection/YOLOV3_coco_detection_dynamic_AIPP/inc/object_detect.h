@@ -19,6 +19,8 @@
 #pragma once
 #include "utils.h"
 #include "acl/acl.h"
+#include "opencv2/imgcodecs/legacy/constants_c.h"
+#include "opencv2/opencv.hpp"
 #include "model_process.h"
 #include "dvpp_process.h"
 #include <memory>
@@ -35,10 +37,19 @@ public:
     ~ObjectDetect();
 
     Result Init();
+    Result ProcessForDvpp(ImageData& srcImage, const string& origImagePath);
+    Result ProcessForOpenCV(cv::Mat& srcMat, const string& origImagePath);
     Result Preprocess(ImageData& resizedImage, ImageData& srcImage);
+    Result PreprocessOpencv(cv::Mat& srcMat, uint32_t& reiszeMatLen, 
+                            void*& reiszeMatBuffer);
     Result Inference(aclmdlDataset*& inferenceOutput, ImageData& resizedImage);
+    Result InferenceOpenCV(aclmdlDataset*& inferenceOutput, 
+                           uint32_t& reiszeMatLen, 
+                           void*& reiszeMatBuffer);
     Result Postprocess(ImageData& image, aclmdlDataset* modelOutput,
                        const string& origImagePath);
+    Result PostprocessOpenCV(cv::Mat& srcMat, aclmdlDataset* modelOutput,
+                             const string& origImagePath);
 private:
     Result InitResource();
     Result InitModel(const char* omModelPath);
@@ -48,6 +59,8 @@ private:
                                  uint32_t idx);
     void DrowBoundBoxToImage(vector<BBox>& detectionResults,
                              const string& origImagePath);
+    void DrowBoundBoxToOpenCVImage(vector<BBox>& detectionResults,
+                                   const string& origImagePath);
     void DestroyResource();
 
 private:

@@ -34,8 +34,6 @@ public:
 
     Result CropAndPaste(ImageData& src, ImageData& dest,
                   uint32_t width, uint32_t height);
-    Result Resize(ImageData& src, ImageData& dest,
-                  uint32_t width, uint32_t height);
     Result CvtJpegToYuv420sp(ImageData& src, ImageData& dest);
     Result InitResource(aclrtStream& stream);
     void DestroyResource();

@@ -23,15 +23,9 @@
 #include <sys/time.h>
 
 #include "atlas_videocapture.h"
-#include "object_detect.h"
+#include "do_process.h"
 
 using namespace std;
-
-namespace {
-uint32_t kModelWidth = 304;
-uint32_t kModelHeight = 300;
-const char* kModelPath = "../model/face_detection.om";
-}
 
 AtlasVideoCapture* OpenVideoCapture(int argc, char *argv[]) {
     if (argc > 2) {
@@ -69,10 +63,10 @@ AtlasVideoCapture* OpenVideoCapture(int argc, char *argv[]) {
 }
 
 int main(int argc, char *argv[]) {  
-    ObjectDetect detect(kModelPath, kModelWidth, kModelHeight);
+    DoProcess detect;
 
     if (ATLAS_OK != detect.Init()) {
-        ATLAS_LOG_ERROR("Object detect init failed");
+        ATLAS_LOG_ERROR("init failed");
         return ATLAS_ERROR;
     }
 
@@ -94,13 +88,12 @@ int main(int argc, char *argv[]) {
         ImageData image;
         AtlasError ret = cap->Read(image);
         if (ret != ATLAS_OK) {
-            ATLAS_LOG_ERROR("Read frame failed, return %d", ret);
             break;
         }
 
         ret = detect.Process(image);
         if (ret != ATLAS_OK) {
-            ATLAS_LOG_ERROR("Inference image failed, return %d", ret);
+            ATLAS_LOG_ERROR("process failed, return %d", ret);
             break;
         }
     }

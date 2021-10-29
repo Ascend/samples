@@ -19,6 +19,7 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include <sys/time.h>
 #include "acl/acl.h"
 
 #include "opencv2/opencv.hpp"
@@ -28,7 +29,7 @@
 using namespace std;
 
 #define INFO_LOG(fmt, args...) fprintf(stdout, "[INFO]  " fmt "\n", ##args)
-#define WARN_LOG(fmt, args...) fprintf(stdout, "[WARN]  " fmt "\n", ##args)
+#define WARNNING_LOG(fmt, args...) fprintf(stdout, "[WARN]  " fmt "\n", ##args)
 #define ERROR_LOG(fmt, args...) fprintf(stdout, "[ERROR]  " fmt "\n", ##args)
 
 #define RGBU8_IMAGE_SIZE(width, height) ((width) * (height) * 3)
@@ -90,6 +91,11 @@ struct BBox {
     string text;
 };
 
+struct DataInfo {
+    void* data;
+    uint32_t size;
+};
+
 /**
  * Utils
  */
@@ -117,5 +123,7 @@ public:
     static void* CopyDataDeviceToDevice(void* deviceData, uint32_t dataSize);
     static int ReadImageFile(ImageData& image, std::string fileName);
     static Result CopyImageDataToDevice(ImageData& imageDevice, ImageData srcImage, aclrtRunMode mode);
+    static Result CopyOpenCVMatToDevice(cv::Mat srcMat, uint32_t& reiszeMatLen, void*& reiszeMatBuffer,
+                                        aclrtRunMode mode);
 };
 

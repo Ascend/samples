@@ -8,6 +8,7 @@ import os
 cur_file_dir = os.path.dirname(os.path.abspath(__file__))
  
 sys.path.append(cur_file_dir + "/../../../../common")
+sys.path.append("../")
 
 import atlas_utils.video as video
 from atlas_utils.constants import *

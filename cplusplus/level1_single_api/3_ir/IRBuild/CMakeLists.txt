@@ -6,7 +6,7 @@ set(CMAKE_SKIP_INSTALL_ALL_DEPENDENCY TRUE)
 if (DEFINED ENV{ASCEND_INSTALL_PATH})
     set(ASCEND_PATH $ENV{ASCEND_INSTALL_PATH})
 else ()
-    set(ASCEND_PATH /usr/local/Ascend)
+    set(ASCEND_PATH /usr/local/Ascend/ascend-toolkit/latest)
 endif()
 
 set(ATC_INCLUDE_DIR ${ASCEND_PATH}/atc/include)

@@ -22,7 +22,6 @@ VideoEncode::VideoEncode() : threadId_(0), outFolder_((char*)"output/"),
 
 VideoEncode::~VideoEncode()
 {
-    //DestroyResource();
 }
 
 void *ThreadFunc(void *arg)
@@ -160,8 +159,4 @@ void VideoEncode::DestroyResource()
     INFO_LOG("destory process callback thread success");
 
 }
-
-
-
-
 

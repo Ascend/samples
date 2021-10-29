@@ -21,6 +21,8 @@
 #include <stdlib.h>
 #include <dirent.h>
 
+#include "opencv2/imgcodecs/legacy/constants_c.h"
+#include "opencv2/opencv.hpp"
 #include "object_detect.h"
 #include "utils.h"
 using namespace std;
@@ -58,6 +60,8 @@ int main(int argc, char *argv[]) {
     }
 
     ImageData image;
+    cv::Mat image_opencv;
+    
     for (string imageFile : fileVec) {
         Utils::ReadImageFile(image, imageFile);
         if (image.data == nullptr) {
@@ -65,29 +69,29 @@ int main(int argc, char *argv[]) {
             return FAILED;
         }
 
-        //Preprocess: copy image to device, convert to yuv, and resize
-        ImageData resizedImage;
-        Result ret = detect.Preprocess(resizedImage, image);
+        image_opencv = cv::imread(imageFile, CV_LOAD_IMAGE_COLOR);
+        if (image_opencv.empty()) {
+            ERROR_LOG("OpenCV read image %s failed", imageFile.c_str());
+            return FAILED;
+        }
+        
+        Result ret = detect.ProcessForDvpp(image, imageFile);
         if (ret != SUCCESS) {
-            ERROR_LOG("Read file %s failed, continue to read next",
+            ERROR_LOG("Process pic %s by dvpp failed",
                       imageFile.c_str());                
-            continue;
-        }
-        //Send the resized picture to the model for inference 
-        //and get the inference results
-        aclmdlDataset* inferenceOutput = nullptr;
-        ret = detect.Inference(inferenceOutput, resizedImage);
-        if ((ret != SUCCESS) || (inferenceOutput == nullptr)) {
-            ERROR_LOG("Inference model inference output data failed");
             return FAILED;
         }
-        //Analyze the inference output, mark the object category and 
-        //location by the inference result
-        ret = detect.Postprocess(image, inferenceOutput, imageFile);
+        INFO_LOG("Process pic %s by dvpp success",
+                    imageFile.c_str());                  
+
+        ret = detect.ProcessForOpenCV(image_opencv, imageFile);
         if (ret != SUCCESS) {
-            ERROR_LOG("Process model inference output data failed");
+            ERROR_LOG("Process pic %s by OpenCV failed",
+                      imageFile.c_str());                
             return FAILED;
         }
+        INFO_LOG("Process pic %s by OpenCV success",
+                    imageFile.c_str()); 
     }
 
     INFO_LOG("Execute sample success");

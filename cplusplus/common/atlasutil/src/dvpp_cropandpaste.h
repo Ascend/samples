@@ -55,6 +55,7 @@ class DvppCropAndPaste {
     * @return AtlasError
     */
     AtlasError Process(ImageData& resizedImage, ImageData& srcImage);
+    AtlasError Process_uniform(ImageData& resizedImage, ImageData& srcImage);
 
 private:
     AtlasError InitCropAndPasteResource(ImageData& inputImage);
@@ -77,7 +78,8 @@ private:
     acldvppRoiConfig *pasteArea_;
 
     Resolution size_;
-
+    uint32_t originalImageWidth_ = 0;
+    uint32_t originalImageHeight_ = 0;
     uint32_t ltHorz_;
     uint32_t rbHorz_;
     uint32_t ltVert_;

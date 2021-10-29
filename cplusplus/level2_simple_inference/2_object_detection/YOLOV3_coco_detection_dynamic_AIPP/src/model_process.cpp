@@ -18,6 +18,7 @@
 */
 #include "model_process.h"
 #include <iostream>
+#include <vector>
 #include "utils.h"
 using namespace std;
 
@@ -32,8 +33,7 @@ ModelProcess::~ModelProcess(){
 }
 
 void ModelProcess::DestroyResource(){
-    if (isReleased_)
-        return;
+    if (isReleased_) {return;}
     Unload();
     DestroyDesc();
     DestroyInput();
@@ -90,16 +90,15 @@ Result ModelProcess::CreateDesc(){
         return FAILED;
     }
 
-    aclError ret1;
-    ret1 = aclmdlGetInputIndexByName(modelDesc_, ACL_DYNAMIC_AIPP_NAME, &aipp_index_);
-    if (ret1 != 0) {
+    ret = aclmdlGetInputIndexByName(modelDesc_, ACL_DYNAMIC_AIPP_NAME, &aipp_index_);
+    if (ret != 0) {
         ERROR_LOG("call aclmdlGetInputIndexByName failed");
         return FAILED;
     }
-    input3Size_ = aclmdlGetInputSizeByIndex(modelDesc_, aipp_index_);
-    aclError aclRet = aclrtMalloc(&input3_, input3Size_, ACL_MEM_MALLOC_HUGE_FIRST);
-    if (aclRet != ACL_ERROR_NONE) {
-        ERROR_LOG("malloc device data input3 failed, aclRet is %d", aclRet);
+    inputAIPPSize_ = aclmdlGetInputSizeByIndex(modelDesc_, aipp_index_);
+    ret = aclrtMalloc(&inputAIPP_, inputAIPPSize_, ACL_MEM_MALLOC_HUGE_FIRST);
+    if (ret != ACL_ERROR_NONE) {
+        ERROR_LOG("malloc device data input3 failed, result is %d", ret);
         return FAILED;
     }
 
@@ -114,148 +113,251 @@ void ModelProcess::DestroyDesc(){
     }
 }
 
-Result ModelProcess::CreateInput(void *input1, size_t input1size,
-                                 void* input2, size_t input2size){
-
-    size_t inputnums = aclmdlGetNumInputs(modelDesc_);
-    for (int i=0; i<inputnums; i++)
-    {
-        size_t inputSize = aclmdlGetInputSizeByIndex(modelDesc_, i);
-    }
-
-    input_ = aclmdlCreateDataset();
-    if (input_ == nullptr) {
-        ERROR_LOG("can't create dataset, create input failed");
+Result ModelProcess::AddDatasetBuffer(aclmdlDataset *dataset, 
+                                      void* buffer, uint32_t bufferSize) {
+    aclDataBuffer* dataBuf = aclCreateDataBuffer(buffer, bufferSize);
+    if (dataBuf == nullptr) {
+        ERROR_LOG("Create data buffer error");
         return FAILED;
     }
 
-    aclDataBuffer* inputData = aclCreateDataBuffer(input1, input1size);
-    if (inputData == nullptr) {
-        ERROR_LOG("can't create data buffer, create input failed");
+    aclError ret = aclmdlAddDatasetBuffer(dataset, dataBuf);
+    if (ret != ACL_ERROR_NONE) {
+        ERROR_LOG("Add dataset buffer error %d", ret);
+        aclDestroyDataBuffer(dataBuf);
         return FAILED;
     }
 
-    aclError ret = aclmdlAddDatasetBuffer(input_, inputData);
-    if (inputData == nullptr) {
-        ERROR_LOG("can't add data buffer, create input failed");
-        aclDestroyDataBuffer(inputData);
-        inputData = nullptr;
-        return FAILED;
-    }
+    return SUCCESS;
+}
 
-    aclDataBuffer* inputData2 = aclCreateDataBuffer(input2, input2size);
-    if (inputData == nullptr) {
-        ERROR_LOG("can't create data buffer, create input failed");
-        return FAILED;
-    }
-
-    ret = aclmdlAddDatasetBuffer(input_, inputData2);
-    if (inputData == nullptr) {
-        ERROR_LOG("can't add data buffer, create input failed");
-        aclDestroyDataBuffer(inputData2);
-        inputData = nullptr;
-        return FAILED;
-    }
-
-    aclDataBuffer* inputData3 = aclCreateDataBuffer(input3_, input3Size_);
-    if (inputData == nullptr) {
-        ERROR_LOG("can't create data buffer, create input failed\n");
-        return FAILED;
-    }
-
-    ret = aclmdlAddDatasetBuffer(input_, inputData3);
-    if (inputData == nullptr) {
-        ERROR_LOG("can't add data buffer, create input failed\n");
-        aclDestroyDataBuffer(inputData3);
-        inputData = nullptr;
-        return FAILED;
-    }
-
-    uint64_t batch_size = 1;
-    const auto aippParamTensor = aclmdlCreateAIPP(batch_size);
+aclmdlAIPP* ModelProcess::SetAIPPTensor(uint64_t batch_size){
+    aclmdlAIPP* aippParamTensor = aclmdlCreateAIPP(batch_size);
     if (aippParamTensor == nullptr) {
         ERROR_LOG("call aclmdlCreateAIPP failed");
-        return FAILED;
     }
 
-    ret = aclmdlSetAIPPInputFormat(aippParamTensor, ACL_YUV420SP_U8);
+    aclError ret = aclmdlSetAIPPInputFormat(aippParamTensor, ACL_YUV420SP_U8);
     if (ret != 0) {
         ERROR_LOG("call aclmdlSetAIPPInputFormat failed");
-        return FAILED;
     }
 
     ret = aclmdlSetAIPPCscParams(aippParamTensor, 1, 298, 516, 0, 298, -100, -208, 298, 0, 409, 0, 0, 0, 16, 128, 128);
     if (ret != 0) {
         ERROR_LOG("call aclmdlSetAIPPCscParams failed");
-        return FAILED;
     }
 
     ret = aclmdlSetAIPPRbuvSwapSwitch(aippParamTensor, 0);
     if (ret != 0) {
         ERROR_LOG("call aclmdlSetAIPPRbuvSwapSwitch failed");
-        return FAILED;
     }
 
     ret = aclmdlSetAIPPAxSwapSwitch(aippParamTensor, 0);
     if (ret != 0) {
         ERROR_LOG("call aclmdlSetAIPPAxSwapSwitch failed");
-        return FAILED;
     }
 
     ret = aclmdlSetAIPPSrcImageSize(aippParamTensor, 416, 416);
     if (ret != 0) {
         ERROR_LOG("call aclmdlSetAIPPSrcImageSize failed");
-        return FAILED;
     }
 
     ret = aclmdlSetAIPPScfParams(aippParamTensor, 0, 0, 0, 0, 0, 0);
     if (ret != 0) {
         ERROR_LOG("call aclmdlSetAIPPScfParams failed");
-        return FAILED;
     }
 
     ret = aclmdlSetAIPPCropParams(aippParamTensor, 0, 0, 0, 0, 0, 0);
     if (ret != 0) {
         ERROR_LOG("call aclmdlSetAIPPCropParams failed");
-        return FAILED;
     }
 
     ret = aclmdlSetAIPPPaddingParams(aippParamTensor, 0, 0, 0, 0, 0, 0);
     if (ret != 0) {
         ERROR_LOG("call aclmdlSetAIPPPaddingParams failed");
-        return FAILED;
     }
 
     ret = aclmdlSetAIPPDtcPixelMean(aippParamTensor, 0, 0, 0, 0, 0);
     if (ret != 0) {
         ERROR_LOG("call aclmdlSetAIPPDtcPixelMean failed");
-        return FAILED;
     }
 
     ret = aclmdlSetAIPPDtcPixelMin(aippParamTensor, 0.0, 0.0, 0.0, 0.0, 0);
     if (ret != 0) {
         ERROR_LOG("call aclmdlSetAIPPDtcPixelMin failed");
-        return FAILED;
     }
 
     ret = aclmdlSetAIPPPixelVarReci(aippParamTensor, 0.003921568627451, 0.003921568627451, 0.003921568627451, 1.0, 0);
     if (ret != 0) {
         ERROR_LOG("call aclmdlSetAIPPPixelVarReci failed");
+    }
+    return aippParamTensor;
+}
+
+aclmdlAIPP* ModelProcess::SetAIPPTensorOpenCV(uint64_t batch_size){
+    aclmdlAIPP* aippParamTensor = aclmdlCreateAIPP(batch_size);
+    if (aippParamTensor == nullptr) {
+        ERROR_LOG("call aclmdlCreateAIPP failed");
+    }
+
+    aclError ret = aclmdlSetAIPPSrcImageSize(aippParamTensor, 416, 416);
+    if (ret != 0) {
+        ERROR_LOG("call aclmdlSetAIPPSrcImageSize failed");
+    }
+
+    ret = aclmdlSetAIPPInputFormat(aippParamTensor, ACL_RGB888_U8);
+    if (ret != 0) {
+        ERROR_LOG("call aclmdlSetAIPPInputFormat failed");
+    }
+
+    ret = aclmdlSetAIPPCscParams(aippParamTensor, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+    if (ret != 0) {
+        ERROR_LOG("call aclmdlSetAIPPCscParams failed");
+    }
+
+    ret = aclmdlSetAIPPRbuvSwapSwitch(aippParamTensor, 1);
+    if (ret != 0) {
+        ERROR_LOG("call aclmdlSetAIPPRbuvSwapSwitch failed");
+    }
+
+    ret = aclmdlSetAIPPAxSwapSwitch(aippParamTensor, 0);
+    if (ret != 0) {
+        ERROR_LOG("call aclmdlSetAIPPAxSwapSwitch failed");
+    }
+
+    ret = aclmdlSetAIPPScfParams(aippParamTensor, 0, 0, 0, 0, 0, 0);
+    if (ret != 0) {
+        ERROR_LOG("call aclmdlSetAIPPScfParams failed");
+    }
+
+    ret = aclmdlSetAIPPCropParams(aippParamTensor, 0, 0, 0, 0, 0, 0);
+    if (ret != 0) {
+        ERROR_LOG("call aclmdlSetAIPPCropParams failed");
+    }
+
+    ret = aclmdlSetAIPPPaddingParams(aippParamTensor, 0, 0, 0, 0, 0, 0);
+    if (ret != 0) {
+        ERROR_LOG("call aclmdlSetAIPPPaddingParams failed");
+    }
+
+    ret = aclmdlSetAIPPDtcPixelMean(aippParamTensor, 0, 0, 0, 0, 0);
+    if (ret != 0) {
+        ERROR_LOG("call aclmdlSetAIPPDtcPixelMean failed");
+    }
+
+    ret = aclmdlSetAIPPDtcPixelMin(aippParamTensor, 0.0, 0.0, 0.0, 0.0, 0);
+    if (ret != 0) {
+        ERROR_LOG("call aclmdlSetAIPPDtcPixelMin failed");
+    }
+
+    ret = aclmdlSetAIPPPixelVarReci(aippParamTensor, 0.003921568627451, 0.003921568627451, 0.003921568627451, 1.0, 0);
+    if (ret != 0) {
+        ERROR_LOG("call aclmdlSetAIPPPixelVarReci failed");
+    }
+    return aippParamTensor;
+}
+
+Result ModelProcess::CreateInput(void* input1, uint32_t input1size,
+                                 void* input2, uint32_t input2size){
+    vector<DataInfo> inputData = {{input1, input1size},{input2, input2size},
+                                  {inputAIPP_, inputAIPPSize_}};
+    uint32_t dataNum = aclmdlGetNumInputs(modelDesc_);
+    if (dataNum == 0) {
+        ERROR_LOG("Create input failed for no input data");
+        return FAILED;
+    }
+    if (dataNum != inputData.size()) {
+        ERROR_LOG("Create input failed for wrong input nums");
         return FAILED;
     }
 
-    ret = aclmdlSetInputAIPP(modelId_, input_, aipp_index_, aippParamTensor);
-    if (ret != 0) {
+    input_ = aclmdlCreateDataset();
+    if (input_ == nullptr) {
+        ERROR_LOG("Create input failed for create dataset failed");
+        return FAILED;
+    }
+
+    for (uint32_t i = 0; i < inputData.size(); i++) {
+        size_t modelInputSize = aclmdlGetInputSizeByIndex(modelDesc_, i);
+        if (modelInputSize != inputData[i].size) {
+            WARNNING_LOG("Input size verify failed "
+                         "input[%d] size: %d, provide size : %d", 
+                         i, modelInputSize, inputData[i].size);
+                        }
+        Result ret = AddDatasetBuffer(input_, 
+                                      inputData[i].data,
+                                      inputData[i].size);
+        if (ret != SUCCESS) {
+            ERROR_LOG("Create input failed for "
+                      "add dataset buffer error %d", ret);
+            return FAILED;
+            }
+    }
+    uint64_t batch_num = 1 ;
+    aclmdlAIPP* aippParamTensor = SetAIPPTensor(batch_num);
+    aclError aclret = aclmdlSetInputAIPP(modelId_, input_, aipp_index_, aippParamTensor);
+    if (aclret != ACL_ERROR_NONE) {
         ERROR_LOG("call aclmdlSetInputAIPP failed");
         return FAILED;
     }
 
-    ret = aclmdlDestroyAIPP(aippParamTensor);
-    if (ret != 0) {
+    aclret = aclmdlDestroyAIPP(aippParamTensor);
+    if (aclret != ACL_ERROR_NONE) {
         ERROR_LOG("call aclmdlDestroyAIPP failed");
         return FAILED;
     }
+    return SUCCESS;
+}
 
+Result ModelProcess::CreateInputOpenCV(void* input1, uint32_t input1size,
+                                 void* input2, uint32_t input2size){
+    vector<DataInfo> inputData = {{input1, input1size},{input2, input2size},
+                                  {inputAIPP_, inputAIPPSize_}};
+    uint32_t dataNum = aclmdlGetNumInputs(modelDesc_);
+    if (dataNum == 0) {
+        ERROR_LOG("Create input failed for no input data");
+        return FAILED;
+    }
+    if (dataNum != inputData.size()) {
+        ERROR_LOG("Create input failed for wrong input nums");
+        return FAILED;
+    }
+
+    input_ = aclmdlCreateDataset();
+    if (input_ == nullptr) {
+        ERROR_LOG("Create input failed for create dataset failed");
+        return FAILED;
+    }
+
+    for (uint32_t i = 0; i < inputData.size(); i++) {
+        size_t modelInputSize = aclmdlGetInputSizeByIndex(modelDesc_, i);
+        if (modelInputSize != inputData[i].size) {
+            WARNNING_LOG("Input size verify failed "
+                         "input[%d] size: %d, provide size : %d", 
+                         i, modelInputSize, inputData[i].size);
+            }
+        Result ret = AddDatasetBuffer(input_, 
+                                      inputData[i].data,
+                                      inputData[i].size);
+        if (ret != SUCCESS) {
+            ERROR_LOG("Create input failed for "
+                      "add dataset buffer error %d", ret);
+            return FAILED;
+            }
+    }
+    uint64_t batch_num = 1 ;
+    aclmdlAIPP* aippParamTensor = SetAIPPTensorOpenCV(batch_num);
+    aclError aclret = aclmdlSetInputAIPP(modelId_, input_, aipp_index_, aippParamTensor);
+    if (aclret != ACL_ERROR_NONE) {
+        ERROR_LOG("call aclmdlSetInputAIPP failed");
+        return FAILED;
+    }
+
+    aclret = aclmdlDestroyAIPP(aippParamTensor);
+    if (aclret != ACL_ERROR_NONE) {
+        ERROR_LOG("call aclmdlDestroyAIPP failed");
+        return FAILED;
+    }
     return SUCCESS;
 }
 
@@ -345,7 +447,7 @@ Result ModelProcess::Execute(){
 void ModelProcess::Unload()
 {
     if (!loadFlag_) {
-        WARN_LOG("no model had been loaded, unload failed");
+        WARNNING_LOG("no model had been loaded, unload failed");
         return;
     }
 

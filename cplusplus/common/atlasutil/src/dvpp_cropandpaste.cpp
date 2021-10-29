@@ -16,7 +16,7 @@
 * File dvpp_process.cpp
 * Description: handle dvpp process
 */
-
+#include <cstring>
 #include <iostream>
 #include "acl/acl.h"
 #include "atlas_utils.h"
@@ -38,7 +38,7 @@ cropArea_(nullptr), pasteArea_(nullptr){
     // Change the left top coordinate to odd numver
     rbHorz_ = ((rbHorz >> 1) << 1) - 1;
     rbVert_ = ((rbVert >> 1) << 1) - 1;
-
+    //odd
     size_.width = rbHorz_ - ltHorz_;
     size_.height = rbVert_ - ltVert_;
 }
@@ -48,6 +48,8 @@ DvppCropAndPaste::~DvppCropAndPaste() {
 }
 
 AtlasError DvppCropAndPaste::InitCropAndPasteInputDesc(ImageData& inputImage) {
+    originalImageWidth_ = inputImage.width;
+    originalImageHeight_ = inputImage.height;
     uint32_t alignWidth = ALIGN_UP16(inputImage.width);
     uint32_t alignHeight = ALIGN_UP2(inputImage.height);
     if (alignWidth == 0 || alignHeight == 0) {
@@ -57,6 +59,7 @@ AtlasError DvppCropAndPaste::InitCropAndPasteInputDesc(ImageData& inputImage) {
     }
 
     uint32_t inputBufferSize = YUV420SP_SIZE(alignWidth, alignHeight);
+    //创建图片描述信息。同步接口。
     vpcInputDesc_ = acldvppCreatePicDesc();
     if (vpcInputDesc_ == nullptr) {
         ATLAS_LOG_ERROR("Dvpp crop create pic desc failed");
@@ -97,12 +100,14 @@ AtlasError DvppCropAndPaste::InitCropAndPasteOutputDesc()
                         vpcOutBufferSize_, aclRet);
         return ATLAS_ERROR;
     }
+    memset(vpcOutBufferDev_, 0, vpcOutBufferSize_);
 
     vpcOutputDesc_ = acldvppCreatePicDesc();
     if (vpcOutputDesc_ == nullptr) {
         ATLAS_LOG_ERROR("Dvpp crop create pic desc failed");
         return ATLAS_ERROR;
     }
+   // vpcOutBufferDev_ Device上图片数据内存，必须是使用acldvppMalloc接口申请的内存。
     acldvppSetPicDescData(vpcOutputDesc_, vpcOutBufferDev_);
     acldvppSetPicDescFormat(vpcOutputDesc_, PIXEL_FORMAT_YUV_SEMIPLANAR_420);
     acldvppSetPicDescWidth(vpcOutputDesc_, cropOutWidth);
@@ -188,6 +193,90 @@ AtlasError DvppCropAndPaste::Process(ImageData& cropedImage, ImageData& srcImage
     cropedImage.alignHeight = cropedImage.height;
     cropedImage.size = vpcOutBufferSize_;
     cropedImage.data = SHARED_PRT_DVPP_BUF(vpcOutBufferDev_);
+
+    DestroyCropAndPasteResource();
+
+    return ATLAS_OK;
+}
+
+AtlasError DvppCropAndPaste::Process_uniform(ImageData& resizedImage, ImageData& srcImage)
+{
+    if (ATLAS_OK != InitCropAndPasteResource(srcImage)) {
+        ATLAS_LOG_ERROR("Dvpp cropandpaste failed for init error");
+        return ATLAS_ERROR;
+    }
+
+    // must even
+    uint32_t cropLeftOffset = 0;
+    // must even
+    uint32_t cropTopOffset = 0;
+    // must odd
+    uint32_t cropRightOffset = (((cropLeftOffset + originalImageWidth_) >> 1) << 1) -1;
+    // must odd
+    uint32_t cropBottomOffset = (((cropTopOffset + originalImageHeight_) >> 1) << 1) -1;
+    //创建用于描述某个区域位置的数据。同步接口。
+    cropArea_ = acldvppCreateRoiConfig(cropLeftOffset, cropRightOffset,cropTopOffset, cropBottomOffset);
+
+    if (cropArea_ == nullptr) {
+        ATLAS_LOG_ERROR("acldvppCreateRoiConfig cropArea_ failed");
+        return ATLAS_ERROR;
+    }
+
+    // set crop area:
+    float rx = (float)originalImageWidth_ / (float)size_.width;
+    float ry = (float)originalImageHeight_ / (float)size_.height;
+
+    int dx = 0;
+    int dy = 0;
+    float r = 0.0f;
+    if (rx > ry) {
+        dx = 0;
+        r = rx;
+        dy = (size_.height - originalImageHeight_ / r) / 2;
+       
+    } else {
+        dy = 0;
+        r = ry;
+        dx = (size_.width - originalImageWidth_ / r) / 2;
+    }
+
+    // must even
+    uint32_t pasteLeftOffset = 0;
+    // must even
+    //uint32_t pasteTopOffset = CHECK_EVEN(dy);
+    uint32_t pasteTopOffset = 0;
+    // must odd
+    uint32_t pasteRightOffset = size_.width - 2 * dx;
+    // must odd
+    uint32_t pasteBottomOffset = size_.height -  2 * dy;
+
+    pasteArea_ = acldvppCreateRoiConfig(pasteLeftOffset, pasteRightOffset,
+    pasteTopOffset, pasteBottomOffset);
+    if (pasteArea_ == nullptr) {
+        ATLAS_LOG_ERROR("acldvppCreateRoiConfig pasteArea_ failed");
+        return ATLAS_ERROR;
+    }
+
+    // crop and patse pic
+    aclError aclRet = acldvppVpcCropAndPasteAsync(dvppChannelDesc_, vpcInputDesc_,
+    vpcOutputDesc_, cropArea_, pasteArea_, stream_);
+    if (aclRet != ACL_ERROR_NONE) {
+        ATLAS_LOG_ERROR("acldvppVpcCropAndPasteAsync failed, aclRet = %d", aclRet);
+        return ATLAS_ERROR;
+    }
+    //END
+    aclRet = aclrtSynchronizeStream(stream_);
+    if (aclRet != ACL_ERROR_NONE) {
+        ATLAS_LOG_ERROR("crop and paste aclrtSynchronizeStream failed, aclRet = %d", aclRet);
+        return ATLAS_ERROR;
+    }
+
+    resizedImage.width = size_.width - 2 * dx;
+    resizedImage.height = size_.height -  2 * dy;
+    resizedImage.alignWidth = ALIGN_UP16(resizedImage.width);
+    resizedImage.alignHeight = ALIGN_UP2(resizedImage.height);
+    resizedImage.size = vpcOutBufferSize_;
+    resizedImage.data = SHARED_PRT_DVPP_BUF(vpcOutBufferDev_);
 
     DestroyCropAndPasteResource();
 

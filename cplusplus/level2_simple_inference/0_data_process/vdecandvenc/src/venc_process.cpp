@@ -21,7 +21,6 @@ VencProcess::VencProcess() : threadId_(0), vencChannelDesc_(nullptr), vencFrameC
 
 VencProcess::~VencProcess()
 {
-    //DestroyResource();
 }
 
 void callback(acldvppPicDesc *input, acldvppStreamDesc *outputStreamDesc, void *userdata)
@@ -89,14 +88,14 @@ Result VencProcess::InitResource(pthread_t threadId, acldvppPixelFormat format, 
         return FAILED;
     }
 
-    // set input picture width //不知道
+    // set input picture width 
     ret = aclvencSetChannelDescPicWidth(vencChannelDesc_, width);
     if (ret != ACL_ERROR_NONE) {
         ERROR_LOG("fail to set venc PicWidth");
         return FAILED;
     }
 
-    // set input picture height //不知道
+    // set input picture height
     ret = aclvencSetChannelDescPicHeight(vencChannelDesc_, height);
     if (ret != ACL_ERROR_NONE) {
         ERROR_LOG("fail to set venc PicWidth");

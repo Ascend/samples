@@ -99,13 +99,21 @@ AtlasError DvppProcess::JpegD(ImageData& dest, ImageData& src) {
     DvppJpegD jpegD(stream_, dvppChannelDesc_);
     return jpegD.Process(dest, src);
 }
-
+//DvppCropAndPaste
 AtlasError DvppProcess::Crop(ImageData& dest, ImageData& src,
                              uint32_t ltHorz, uint32_t ltVert,
                              uint32_t rbHorz, uint32_t rbVert) {
     DvppCropAndPaste crop(stream_, dvppChannelDesc_, 
                           ltHorz, ltVert, rbHorz, rbVert);
     return crop.Process(dest, src);
+}
+
+AtlasError DvppProcess::Crop_uniform(ImageData& dest, ImageData& src,
+                            uint32_t ltHorz, uint32_t ltVert,
+                             uint32_t rbHorz, uint32_t rbVert) {
+    DvppCropAndPaste crop(stream_, dvppChannelDesc_, 
+                          ltHorz, ltVert, rbHorz, rbVert);
+    return crop.Process_uniform(dest, src);
 }
 
 AtlasError DvppProcess::JpegE(ImageData& dest, ImageData& src) {

@@ -85,9 +85,9 @@
 
     **cd $HOME/samples/python/level2_simple_inference/1_classification/resnet50_mindspore_picture/data**
 
-    **wget https://modelart-xuyetao.obs.cn-north-4.myhuaweicloud.com/resnet50/airplane.jpg** 
+    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/data/airplane.jpg** 
 
-    **wget https://modelart-xuyetao.obs.cn-north-4.myhuaweicloud.com/resnet50/car.jpg**
+    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/data/car.jpg**
 
 
 ### 样例运行

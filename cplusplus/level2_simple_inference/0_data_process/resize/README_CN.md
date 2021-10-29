@@ -50,15 +50,7 @@
 
             **unzip ascend-samples-master.zip**
 
-2. 获取样例需要的测试图片。
 
-    执行以下命令，进入样例的data文件夹中，下载对应的测试图片。
-
-    **cd $HOME/samples/cplusplus/level2_simple_inference/0_data_process/resize/data**
-
-    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/resize/test_image/wood_rabbit_1024_1068_nv12.yuv**
-
-    
 
 ### 样例部署
  
@@ -86,33 +78,12 @@
         > - 如果是3.0.0版本，此处 **DDK_PATH** 环境变量中的 **arm64-liunx** 应修改为 **arm64-linux_gcc7.3.0**。
         > - 可以在命令行中执行 **uname -a**，查看开发环境和运行环境的cpu架构。如果回显为x86_64，则为x86架构。如果回显为arm64，则为Arm架构。
 
-2. 切换到resize目录，创建目录用于存放编译文件，例如，本文中，创建的目录为 **build/intermediates/host**。
 
-    **cd $HOME/samples/cplusplus/level2_simple_inference/0_data_process/resize**
+2. 执行以下命令，执行编译脚本，开始样例编译。
 
-    **mkdir -p build/intermediates/host**
+    **cd $HOME/samples/cplusplus/level2_simple_inference/0_data_process/resize/scripts**
 
-3. 切换到 **build/intermediates/host** 目录，执行cmake生成编译文件。
-
-    - 当开发环境与运行环境操作系统架构相同时，执行如下命令编译。
-      
-      **cd build/intermediates/host**   
-
-      **make clean**
-
-      **cmake \.\./\.\./\.\./src -DCMAKE_CXX_COMPILER=g++ -DCMAKE_SKIP_RPATH=TRUE**
-
-    - 当开发环境与运行环境操作系统架构不同时，需要使用交叉编译器编译。例如开发环境为X86架构，运行环境为Arm架构，执行以下命令进行交叉编译。
-
-      **cd build/intermediates/host**
-
-      **make clean**
-    
-      **cmake \.\./\.\./\.\./src -DCMAKE_CXX_COMPILER=aarch64-linux-gnu-g++ -DCMAKE_SKIP_RPATH=TRUE**
-
-4. 执行make命令，生成的可执行文件main在 **resize/out** 目录下。
-
-    **make**
+    **bash sample_build.sh**
 
 ### 样例运行
 
@@ -129,21 +100,12 @@
 
 2. <a name="step_2"></a>运行可执行文件。
 
-    - 如果是开发环境与运行环境合一部署，执行以下命令，设置运行环境变量，并切换目录。
+   执行运行脚本，开始样例运行。
 
-      **export LD_LIBRARY_PATH=**
+   **cd $HOME/samples/cplusplus/level2_simple_inference/0_data_process/resize/scripts**
 
-      **source ~/.bashrc**
-        
-      **cd $HOME/samples/cplusplus/level2_simple_inference/0_data_process/resize/out**
-
-    - 如果是开发环境与运行环境分离部署，执行以下命令切换目录。
-    
-      **cd $HOME/resize/out**
-
-    切换目录后，执行以下命令运行样例。
-
-    **./main ../data/wood_rabbit_1024_1068_nv12.yuv 1024 1068 ./output/output.yuv 224 224**
+   **bash sample_run.sh**
+ 
 
 ### 查看结果
 

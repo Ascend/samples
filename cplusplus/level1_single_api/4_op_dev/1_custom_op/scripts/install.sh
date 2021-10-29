@@ -174,7 +174,7 @@ changemode()
 
     return 0
 }
-echo "[ops_custom]changemode..."
+
 #changemode
 if [ $? -ne 0 ];then
     exit 1

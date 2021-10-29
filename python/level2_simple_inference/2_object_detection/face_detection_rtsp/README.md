@@ -98,10 +98,10 @@
 
 2. 部署样例源码。执行以下命令,将开发环境的 **face_detection_rtsp** 目录或者整个samples目录上传到运行环境中，例如 **/home/HwHiAiUser**。   
 
-
-    scp -r $HOME/samples/python/level2_simple_inference/2_object_detection/face_detection_rtsp HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser
-    scp -r $HOME/samples/python/common/atlas_utils HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser/face_detection_rtsp
-
+```
+scp -r $HOME/samples/python/level2_simple_inference/2_object_detection/face_detection_rtsp HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser
+scp -r $HOME/samples/python/common/atlas_utils HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser/face_detection_rtsp
+```
    其中xxx.xxx.xxx.xxx为运行环境ip，例如atlas200dk usb虚拟网口连接时默认地址为192.168.1.2。 下同，不在赘述
 
 3. 在开发环境下启动presenterserver。

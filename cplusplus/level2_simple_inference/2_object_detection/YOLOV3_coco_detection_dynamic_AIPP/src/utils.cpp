@@ -39,7 +39,6 @@ const std::string kFileSperator = "/";
 const std::string kPathSeparator = "/";
 // output image prefix
 const std::string kOutputFilePrefix = "out_";
-
 }
 
 bool Utils::IsDirectory(const string &path) {
@@ -137,7 +136,7 @@ void* Utils::CopyDataDeviceToLocal(void* deviceData, uint32_t dataSize) {
 
 void* Utils::CopyDataToDevice(void* data, uint32_t dataSize, aclrtMemcpyKind policy) {
     void* buffer = nullptr;
-    aclError aclRet = aclrtMalloc(&buffer, dataSize, ACL_MEM_MALLOC_HUGE_FIRST);
+    aclError aclRet = acldvppMalloc(&buffer, dataSize);
     if (aclRet != ACL_ERROR_NONE) {
         ERROR_LOG("malloc device data buffer failed, aclRet is %d", aclRet);
         return nullptr;
@@ -179,6 +178,34 @@ Result Utils::CopyImageDataToDevice(ImageData& imageDevice,
     imageDevice.size = srcImage.size;
     imageDevice.data.reset((uint8_t*)buffer, [](uint8_t* p) { aclrtFree((void *)p); });
 
+    return SUCCESS;
+}
+
+Result Utils::CopyOpenCVMatToDevice(cv::Mat srcMat, uint32_t& reiszeMatLen, void*& reiszeMatBuffer, 
+aclrtRunMode runMode) {
+    reiszeMatLen = srcMat.rows*srcMat.cols*srcMat.elemSize();
+    if (reiszeMatLen == 0) {
+        ERROR_LOG("ReiszeMatLen is zero");
+        return FAILED;
+    }
+    void* buffer = nullptr;
+    aclError aclRet = acldvppMalloc(&buffer, reiszeMatLen);
+    if (aclRet != ACL_ERROR_NONE) {
+        ERROR_LOG("malloc device data buffer failed, aclRet is %d", aclRet);
+        return FAILED;
+    }
+    if (runMode == ACL_HOST) {
+        aclRet = aclrtMemcpy(buffer, reiszeMatLen,
+                            srcMat.ptr<uint8_t>(), reiszeMatLen,
+                            ACL_MEMCPY_HOST_TO_DEVICE);
+        if (aclRet != ACL_ERROR_NONE) {
+            ERROR_LOG("Copy resized mat data to device failed.");
+            return FAILED;
+        }
+    } else {
+        memcpy(buffer, srcMat.ptr<uint8_t>(), reiszeMatLen);
+    }
+    reiszeMatBuffer = buffer;
     return SUCCESS;
 }
 

@@ -20,7 +20,6 @@
 #include <iostream>
 #include "acl/acl.h"
 #include "dvpp_cropandpaste.h"
-#include "dvpp_resize.h"
 #include "dvpp_jpegd.h"
 #include "dvpp_process.h"
 
@@ -70,12 +69,6 @@ Result DvppProcess::CropAndPaste(ImageData& dest, ImageData& src,
                         uint32_t width, uint32_t height) {
     DvppCropAndPaste cropandpasteOp(stream_, dvppChannelDesc_, width, height);
     return cropandpasteOp.Process(dest, src);
-}
-
-Result DvppProcess::Resize(ImageData& dest, ImageData& src,
-                        uint32_t width, uint32_t height) {
-    DvppResize resizeOp(stream_, dvppChannelDesc_, width, height);
-    return resizeOp.Process(dest, src);
 }
 
 Result DvppProcess::CvtJpegToYuv420sp(ImageData& dest, ImageData& src) {

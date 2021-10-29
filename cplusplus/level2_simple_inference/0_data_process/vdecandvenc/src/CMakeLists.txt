@@ -54,8 +54,6 @@ include_directories(
     $ENV{HOME}/ascend_ddk/${ARCH}/include/ascenddk
     ${INC_PATH}/acllib/include/
     $ENV{HOME}/Ascend/driver
-    ../../../../common/presenteragent/include/ 
-    ../../../../common/presenteragent/include/ascenddk
 )
 
 if(target STREQUAL "Simulator_Function")
@@ -78,7 +76,7 @@ add_executable(main
         utils.cpp
         video_encode.cpp
         venc_process.cpp
-        object_detect.cpp
+        do_process.cpp
         main.cpp)
 
 if(target STREQUAL "Simulator_Function")

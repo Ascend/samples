@@ -18,10 +18,11 @@
 */
 #pragma once
 #include <cstdint>
-
+#include "atlas_utils.h"
 #include "acl/acl.h"
 #include "acl/ops/acl_dvpp.h"
-#include "atlas_utils.h"
+
+
 
 /**
  * DvppProcess
@@ -37,6 +38,10 @@ public:
     AtlasError JpegD(ImageData& destYuv, ImageData& srcJpeg);
     AtlasError JpegE(ImageData& destJpeg, ImageData& srcYuv);
     AtlasError Crop(ImageData& dest, ImageData& src,
+                    uint32_t ltHorz, uint32_t ltVert,
+                    uint32_t rbHorz, uint32_t rbVert); 
+
+    AtlasError Crop_uniform(ImageData& dest, ImageData& src,
                     uint32_t ltHorz, uint32_t ltVert,
                     uint32_t rbHorz, uint32_t rbVert); 
 

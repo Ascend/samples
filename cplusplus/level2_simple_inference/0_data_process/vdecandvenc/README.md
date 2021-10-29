@@ -2,7 +2,7 @@ English|[中文](README_CN.md)
 
 **This sample provides reference for you to learn the Ascend AI Software Stack and is not for commercial purposes.**
 
-**This sample applies to Ascend camera 3.0.0 and later versions, and supports Atlas 200 DK and Atlas 300 ([AI1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366)).**
+**This sample applies to Ascend camera 5.0.2.alpha003 and later versions, and supports Atlas 200 DK and Atlas 300 ([AI1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366)).**
 
 **This document provides only guidance for running the sample on the command line. For details about how to run the sample in MindStudio, see the [Wiki of Running Video Samples in MindStudio](https://github.com/Ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E5%9B%BE%E7%89%87%E6%A0%B7%E4%BE%8B?sort_id=3164874).**
 
@@ -48,41 +48,8 @@ Before deploying this sample, ensure that:
         
         **unzip ascend-samples-master.zip**
 
-2. Obtain the original model required by the application.
-   
-   Obtain the original model and its weight files used in the application by referring to the following table and save them to any directory of a common user in the development environment, for example, **$HOME/models/vdecandvenc**.
-   
-   | **Model Name**| **Description**| **How to Obtain**|
-   |----------|----------|----------|
-   | face\_detection| Applies to image classification. It is a YOLOv3 model based on Caffe.| Download the model and weight file by referring to the section about downloading the original model in the **README.md** file in [https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/facedetection/ATC\_resnet10-SSD\_caffe\_AE](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/facedetection/ATC_resnet10-SSD_caffe_AE).|
 
-   ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **Note:**
-   
-   > - The converted OM model is provided in the ModelZoo. However, the model does not match the current sample. Therefore, you need to download the original model and weight file and convert the model again.
-
-3. Convert the original model to a Da Vinci model.
-   
-   **Note: Ensure that the environment variables have been configured based on [Preparing Environment and Installing Dependencies](../../../environment).**
-   
-   1. Set the **LD\_LIBRARY\_PATH** environment variable.
-      
-      The **LD\_LIBRARY\_PATH** environment variable conflicts with the sample when the ATC tool is used. Therefore, you need to set this environment variable separately in the command line to facilitate modification.
-      
-      **export LD\_LIBRARY\_PATH=\\${install\_path}/atc/lib64**
-   
-   2. Run the following commands to download the AIPP configuration file and convert the model:
-      
-      **cd $HOME/models/face\_detection\_camera**
-      
-      **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/face\_detection\_camera/insert\_op.cfg**
-      
-      **atc --output\_type=FP32 --input\_shape="data:1,3,300,300" --weight=./face\_detection\_fp32.caffemodel --input\_format=NCHW --output=./face\_detection --soc\_version=Ascend310 --insert\_op\_conf=./insert\_op.cfg --framework=0 --save\_original\_model=false --model=./face\_detection.prototxt**
-   
-   3. Run the following command to copy the converted model to the **model** folder of the sample:
-      
-      **cp ./face\_detection.om $HOME/samples/level1\_single\_api/1\_acl/4\_dvpp/vdecandvenc/model/**
-
-4. Obtain the test video required by the sample.
+2. Obtain the test video required by the sample.
    
    Run the following commands to go to the **data** folder of the sample and download the corresponding test video:
    
