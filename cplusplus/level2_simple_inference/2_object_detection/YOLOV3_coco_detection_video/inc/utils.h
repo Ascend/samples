@@ -24,7 +24,7 @@
 #include <mutex>
 #include <unistd.h>
 #include <vector>
-
+#include "atlasutil/atlas_utils.h"
 #include "acl/acl.h"
 
 using namespace std;
@@ -64,33 +64,6 @@ typedef enum Result {
     SUCCESS = 0,
     FAILED = 1
 }Result;
-
-struct Resolution {
-    uint32_t width = 0;
-    uint32_t height = 0;
-};
-
-struct ImageData {
-    uint32_t width = 0;
-    uint32_t height = 0;
-    uint32_t alignWidth = 0;
-    uint32_t alignHeight = 0;
-    uint32_t size = 0;
-    std::shared_ptr<uint8_t> data;
-};
-
-struct Rect {
-    uint32_t ltX = 0;
-    uint32_t ltY = 0;
-    uint32_t rbX = 0;
-    uint32_t rbY = 0;
-};
-
-struct BBox {
-    Rect rect;
-    uint32_t score;
-    string text;
-};
 
 /**
  * Utils

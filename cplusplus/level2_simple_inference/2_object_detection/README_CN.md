@@ -5,7 +5,6 @@
 
 **./**   
 ├── [face_detection_camera](./face_detection_camera)：**摄像头人脸检测样例**    
-├── [faste_RCNN_VOC_detection_dynamic_resolution](./faste_RCNN_VOC_detection_dynamic_resolution)：**动态分辨率检测样例**   
 ├── [VGG_SSD_coco_detection_CV_with_AIPP](./VGG_SSD_coco_detection_CV_with_AIPP)：**开启AIPP并使用opencv检测样例**       
 ├── [VGG_SSD_coco_detection_CV_without_AIPP](./VGG_SSD_coco_detection_CV_without_AIPP)：**关闭AIPP并使用opencv检测样例**   
 ├── [VGG_SSD_coco_detection_DVPP_with_AIPP](./VGG_SSD_coco_detection_DVPP_with_AIPP)：**关闭AIPP并使用DVPP检测样例**    

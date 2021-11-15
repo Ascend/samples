@@ -20,7 +20,10 @@
 #include <iostream>
 #include <stdlib.h>
 #include <dirent.h>
-
+#include <sys/time.h>
+#include "atlasutil/atlas_videocapture.h"
+#include "atlasutil/atlas_error.h"
+#include "atlasutil/atlas_utils.h"
 #include "object_detect.h"
 #include "utils.h"
 using namespace std;
@@ -45,39 +48,46 @@ int main(int argc, char *argv[]) {
         ERROR_LOG("Classification Init resource failed");
         return FAILED;
     }
-
-    //Use Opencv to open the video file
     string videoFile = string(argv[1]);
-    cv::VideoCapture capture(videoFile);
-    if (!capture.isOpened()) {
-        ERROR_LOG("Movie open Erro");
-        return FAILED;
+    AtlasVideoCapture cap = AtlasVideoCapture(videoFile);
+    if(!cap.IsOpened()) {
+        ATLAS_LOG_ERROR("Open camera failed");
+        return ATLAS_ERROR;
     }
-    //Frame by frame reasoning
+
     while(1) {
-        //Read a frame of an image
-        cv::Mat frame;
-        if (!capture.read(frame)) {
-            INFO_LOG("Video capture return false");
-            break;
+        ImageData image,yuvImage;
+        AtlasError ret = cap.Read(image);
+        if (ret) {
+            ATLAS_LOG_ERROR("Read image failed, error %d", ret);
+            return ATLAS_ERROR;
         }
+        ret = CopyImageToLocal(yuvImage, image, ACL_DEVICE);
+        if (ret != ATLAS_OK){
+            ATLAS_LOG_ERROR("Copy image to host failed, error %d", ret);
+            return ATLAS_ERROR;
+        }
+        cv::Mat yuvMat(yuvImage.height * 3 / 2, yuvImage.width, CV_8UC1, yuvImage.data.get());
+        cv::Mat frame;
+        cv::cvtColor(yuvMat, frame, CV_YUV2BGR_NV12);
+
         //The frame image is preprocessed
-        Result ret = detect.Preprocess(frame);
-        if (ret != SUCCESS) {
+        Result result = detect.Preprocess(frame);
+        if (result != SUCCESS) {
             ERROR_LOG("Read file %s failed, continue to read next",
                       videoFile.c_str());
             continue;
         }
         //The preprocessed images are fed into model reasoning and the reasoning results are obtained
         aclmdlDataset* inferenceOutput = nullptr;
-        ret = detect.Inference(inferenceOutput);
-        if ((ret != SUCCESS) || (inferenceOutput == nullptr)) {
+        result = detect.Inference(inferenceOutput);
+        if ((result != SUCCESS) || (inferenceOutput == nullptr)) {
             ERROR_LOG("Inference model inference output data failed");
             return FAILED;
         }
         //Parses the inference output and sends the inference class, location, confidence, and image to the Presenter Server for display
-        ret = detect.Postprocess(frame, inferenceOutput);
-        if (ret != SUCCESS) {
+        result = detect.Postprocess(frame, inferenceOutput);
+        if (result != SUCCESS) {
             ERROR_LOG("Process model inference output data failed");
             return FAILED;
         }

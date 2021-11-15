@@ -59,7 +59,7 @@ class DvppVdec(object):
         self._decode_complete_cnt = 0
         self._decode_cnt = 0
         self._output_pic_size = (self._width * self._height * 3) // 2
-        self._frame_queue = queue.Queue()
+        self._frame_queue = queue.Queue(64)
         self._frame_config = None
 
     def _callback_thread_entry(self, args_list):
@@ -241,12 +241,12 @@ class DvppVdec(object):
         if no_wait or self.is_finished():
             try:
                 image = self._frame_queue.get_nowait()
-            except:
+            except queue.Empty:
                 acl_log.log_info("No decode frame in queue anymore")
         else:
             try:
                 image = self._frame_queue.get(timeout=READ_TIMEOUT)
-            except:
+            except queue.Empty:
                 ret = const.FAILED
                 acl_log.log_error("Read channel id %d frame timeout, "
                                   "receive frame %d, decoded %d"

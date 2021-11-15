@@ -86,15 +86,15 @@ AtlasCapture类为Atlas200DK板载摄像头、RTSP视频流、mp4文件和H264/H
 
 #### AtlasVideoCapture
 
-方法：AtlasVideoCapture(uint32_t width = 1280, uint32_t height = 720, uint32_t fps = 20)
+方法：AtlasVideoCapture(uint32_t width = 1280, uint32_t height = 720, uint32_t fps = 15)
 
-说明：在Atlas200DK上打开一个可用的摄像头。如果0槽位摄像头可用，则选择0槽位；否则选择槽位1;如果两个摄像头都不可用，只生成实例，不会打开任何摄      像头。
+说明：在Atlas200DK上打开一个可用的摄像头。如果0槽位摄像头可用，则选择0槽位；否则选择槽位1;如果两个摄像头都不可用，只生成实例，不会打开任何摄像头。
 
 输入参数：width:摄像头分辨率宽  
 
 ​                   height:摄像头分辨率高  
 
-​                   fps:帧率, 参数范围为[1, 20]  
+​                   fps:帧率, 若使用的RASPBERRY PI V2.1型号的摄像头，摄像头支持设置的帧率范围为：[1-20]；若使用的RASPBERRY PI V1.3型号的摄像头，摄像头支持设置的帧率范围为：[1-15]。
 
 返回值：无
 
@@ -104,7 +104,7 @@ AtlasCapture类为Atlas200DK板载摄像头、RTSP视频流、mp4文件和H264/H
 
 #### AtlasVideoCapture
 
-方法: AtlasVideoCapture(uint32_t cameraId, uint32_t width = 1280, uint32_t height = 720, uint32_t fps = 20)
+方法: AtlasVideoCapture(uint32_t cameraId, uint32_t width = 1280, uint32_t height = 720, uint32_t fps = 15)
 
 说明: 在Atlas200DK上打开指定槽位的摄像头。如果该摄像头不可用，只生成实例，不会打开摄像头
 
@@ -114,7 +114,7 @@ AtlasCapture类为Atlas200DK板载摄像头、RTSP视频流、mp4文件和H264/H
 
 ​                 height:摄像头分辨率高
 
-​                 fps:帧率, 参数范围为[1, 20]
+​                 fps:帧率, 若使用的RASPBERRY PI V2.1型号的摄像头，摄像头支持设置的帧率范围为：[1-20]；若使用的RASPBERRY PI V1.3型号的摄像头，摄像头支持设置的帧率范围为：[1-15]。
 
 返回值：无
 

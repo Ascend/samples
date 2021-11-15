@@ -29,7 +29,7 @@ public:
     ~AtlasVideoCapture();
 
     AtlasVideoCapture(uint32_t cameraId, uint32_t width = 1280, 
-                      uint32_t height = 720, uint32_t fps = 20);
+                      uint32_t height = 720, uint32_t fps = 15);
 
     AtlasVideoCapture(const std::string& videoPath, 
                       aclrtContext context = nullptr);

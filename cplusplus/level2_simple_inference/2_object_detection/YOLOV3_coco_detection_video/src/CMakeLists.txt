@@ -23,7 +23,7 @@ else ()
 endif()
 
 set(LIB_PATH $ENV{NPU_HOST_LIB})
-
+add_definitions(-DENABLE_DVPP_INTERFACE)
 if (NOT DEFINED ENV{NPU_HOST_LIB})
     set(LIB_PATH "/usr/local/Ascend/acllib/lib64/stub/")
     message(STATUS "set default LIB_PATH: ${LIB_PATH}")
@@ -67,7 +67,7 @@ add_executable(main
 if(target STREQUAL "Simulator_Function")
     target_link_libraries(main funcsim)
 else()
-    target_link_libraries(main ascendcl acl_dvpp stdc++ opencv_highgui  opencv_core opencv_imgproc opencv_imgcodecs opencv_calib3d opencv_features2d opencv_videoio protobuf presenteragent)
+    target_link_libraries(main ascendcl acl_dvpp stdc++ atlasutil opencv_highgui opencv_core opencv_imgproc opencv_imgcodecs opencv_calib3d opencv_features2d opencv_videoio protobuf presenteragent)
 endif()
 
 install(TARGETS main DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})

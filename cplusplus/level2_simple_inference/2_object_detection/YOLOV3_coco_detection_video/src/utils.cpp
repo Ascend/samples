@@ -28,7 +28,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include "acl/acl.h"
-
+#include "atlasutil/atlas_utils.h"
 
 using namespace std;
 
