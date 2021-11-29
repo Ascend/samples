@@ -14,10 +14,10 @@ This repository provides a wide range of samples developed based on AscendCL API
 **Table 1** CANN Version Description <a name="Version-Description"></a>
 | CANN Version | Driver Version | Samples Repository Support | Download Link |
 |---|---|---|---|
-| [3.1.0.alpha001](https://ascend.huawei.com/#/software/cann/download) | [1.0.7.alpha](https://www.hiascend.com/en/hardware/firmware-drivers?tag=community) | Yes | Release 0.1.0 [click here](https://github.com/Ascend/samples/releases/v0.1.0) |
-| [3.2.0.alpha001](https://ascend.huawei.com/#/software/cann/download) | [1.0.8.alpha](https://www.hiascend.com/en/hardware/firmware-drivers?tag=community) | Yes | Release 0.2.0 [click here](https://github.com/Ascend/samples/releases/v0.2.0) |
-| [3.3.0.alpha001/3.3.0.alpha005/<br>3.3.0.alpha006/5.0.2.alpha001/<br>5.0.2.alpha002](https://ascend.huawei.com/#/software/cann/download) | [1.0.9.alpha](https://www.hiascend.com/en/hardware/firmware-drivers?tag=community) | Yes | Release 0.3.0 [click here](https://github.com/Ascend/samples/releases/v0.3.0) |
-| [5.0.2.alpha003](https://ascend.huawei.com/#/software/cann/download) | [1.0.10.alpha](https://www.hiascend.com/en/hardware/firmware-drivers?tag=community) | Yes | Release 0.4.0 [click here](https://github.com/Ascend/samples/releases/v0.4.0) |
+| [3.1.0.alpha001](https://ascend.huawei.com/#/software/cann/download) | [1.0.7.alpha](https://www.hiascend.com/en/hardware/firmware-drivers?tag=community) | Yes | Release 0.1.0: [click here](https://github.com/Ascend/samples/releases/v0.1.0) |
+| [3.2.0.alpha001](https://ascend.huawei.com/#/software/cann/download) | [1.0.8.alpha](https://www.hiascend.com/en/hardware/firmware-drivers?tag=community) | Yes | Release 0.2.0: [click here](https://github.com/Ascend/samples/releases/v0.2.0) |
+| [3.3.0.alpha001/3.3.0.alpha005/<br>3.3.0.alpha006/5.0.2.alpha001/<br>5.0.2.alpha002](https://ascend.huawei.com/#/software/cann/download) | [1.0.9.alpha](https://www.hiascend.com/en/hardware/firmware-drivers?tag=community) | Yes | Release 0.3.0: [click here](https://github.com/Ascend/samples/releases/v0.3.0) |
+| [5.0.2.alpha003](https://ascend.huawei.com/#/software/cann/download) | [1.0.10.alpha](https://www.hiascend.com/en/hardware/firmware-drivers?tag=community) | Yes | Release 0.4.0: [click here](https://github.com/Ascend/samples/releases/v0.4.0) |
 ## Directory Structure
 
 **./**   
@@ -58,7 +58,7 @@ This repository provides a wide range of samples developed based on AscendCL API
 | [cartoonGAN_picture](./cplusplus/contrib/cartoonGAN_picture) | C++      | >3.0.0       | Atlas 200 DK/Atlas 300 | Provides a cartoon image sample, which shows how to cartoonize the input image by using the CartoonGAN model. |
 | [human_segmentation](./cplusplus/contrib/human_segmentation) | C++      | >3.0.0       | Atlas 200 DK/Atlas 300 | Performs semantic segmentation inference on the human bodies in the input video. |
 | [super_resolution](./cplusplus/contrib/super_resolution) | C++      | >3.0.0       | Atlas 200 DK/Atlas 300 | Performs super-resolution processing on the input image by using the SRCNN, FSRCNN, VDSR, or ESPCN model. |
-| [General classification with Python](./python/level2_simple_inference/1_classification) | Python   | >3.0.0       | Atlas 200 DK/Atlas 300 | Performs classification the GoogLeNet, Inception-v3, or VGG-16 model. |
+| [General classification with Python](./python/level2_simple_inference/1_classification) | Python   | >3.0.0       | Atlas 200 DK/Atlas 300 | Performs classification by using the GoogLeNet, Inception-v3, or VGG-16 model. |
 | [General detection with Python](./python/level2_simple_inference/1_classification) | Python   | >3.0.0       | Atlas 200 DK/Atlas 300 | Detects faces by using the YOLOv3 or YOLOv4 model. |
 | [deeplabv3_pascal_pic](./python/level2_simple_inference/3_segmentation/deeplabv3_pascal_pic) | Python   | >3.0.0       | Atlas 200 DK/Atlas 300 | Performs segmentation on the input image by using the DeepLab-v3+ model. |
 | [bert_text_classification](./python/level2_simple_inference/5_nlp/bert_text_classification) | Python   | >3.0.0       | Atlas 200 DK/Atlas 300 | Classifies texts by using the BERT model. |

@@ -359,7 +359,7 @@ void pngd_init_start_time()
     g_start_time = currentTime.tv_sec * MULTIPLE_S_TO_US + currentTime.tv_usec;
 }
 
-void PngdSaveRGBFile(const std::string &fileName, hi_pic_info &picInfo)
+void pngd_save_rgb_file(const std::string &fileName, hi_pic_info &picInfo)
 {
     uint8_t *tmpPtr          = nullptr;
     uint32_t u32WidthInBytes = 0;
@@ -417,7 +417,7 @@ void PngdSaveRGBFile(const std::string &fileName, hi_pic_info &picInfo)
     return;
 }
 
-void PngdSaveFile(int32_t chn, int32_t picCnt, hi_pic_info &picInfo)
+void pngd_save_file(int32_t chn, int32_t picCnt, hi_pic_info &picInfo)
 {
     char type_name[16] = {0};
 
@@ -442,11 +442,11 @@ void PngdSaveFile(int32_t chn, int32_t picCnt, hi_pic_info &picInfo)
 
     if ((HI_PIXEL_FORMAT_RGB_888 <= picInfo.picture_format) &&
         (picInfo.picture_format <= HI_PIXEL_FORMAT_BGRA_8888)) {
-        PngdSaveRGBFile(strFileName, picInfo);
+        pngd_save_rgb_file(strFileName, picInfo);
     }
 }
 
-hi_pixel_format PngdConvertImageFormatToPixel(hi_png_color_format rawFormat)
+hi_pixel_format pngd_convert_image_format_to_pixel(hi_png_color_format rawFormat)
 {
     if (rawFormat == HI_PNG_COLOR_FORMAT_GRAY) {
         return HI_PIXEL_FORMAT_RGB_888;
@@ -621,28 +621,32 @@ void *pngd_send_stream_compatible(void *pArgs)
                        outPicInfo.picture_format, bufAllocCount,
                        (uint64_t)(uintptr_t)outBuffer, outPicInfo.picture_buffer_size);
 
-SendAgain:
-            s32Ret = hi_mpi_pngd_send_stream(pstPngdThreadParam->s32ChnId,
-                                             &stStream,
-                                             &outPicInfo,
-                                             pstPngdThreadParam->s32MilliSec);
-            if ((s32Ret != HI_SUCCESS) && (pstPngdThreadParam->enSendThreadCtrl == THREAD_CTRL_START)) {
+            do {
+                s32Ret = hi_mpi_pngd_send_stream(pstPngdThreadParam->s32ChnId,
+                                                 &stStream, &outPicInfo,
+                                                 pstPngdThreadParam->s32MilliSec);
                 if (s32Ret != HI_ERR_PNGD_BUF_FULL) {
                     errCnt++;
+                    if (errCnt > 100) {
+                        break; // break do...while
+                    }
                 }
-                if (errCnt > 100) {
-                    SAMPLE_PRT("[chn:%d] hi_mpi_pngd_send_stream Send [%s] failed for %u times! addr:%#lx, len:%u\n",
-                               pstPngdThreadParam->s32ChnId, pngdFileFullName.str().c_str(), errCnt,
-                               (uint64_t)(uintptr_t)stStream.addr, stStream.len);
 
-                    s32Ret = hi_mpi_dvpp_free(inBuffer);
-                    if (s32Ret != 0) { SAMPLE_PRT("hi_mpi_dvpp_free outBuffer failed");}
-                    s32Ret = hi_mpi_dvpp_free((void*)outBuffer);
-                    if (s32Ret != 0) { SAMPLE_PRT("hi_mpi_dvpp_free outBuffer failed");}
-                    continue;
-                }
                 usleep(pstPngdThreadParam->s32IntervalTime);
-                goto SendAgain;
+            } while ((s32Ret != HI_SUCCESS) && (pstPngdThreadParam->enSendThreadCtrl == THREAD_CTRL_START));
+            if (s32Ret != HI_SUCCESS) {
+                SAMPLE_PRT("[chn:%d] hi_mpi_pngd_send_stream Send [%s] failed for %u times! addr:%#lx, len:%u\n",
+                           pstPngdThreadParam->s32ChnId, pngdFileFullName.str().c_str(), errCnt,
+                           (uint64_t)(uintptr_t)stStream.addr, stStream.len);
+
+                s32Ret = hi_mpi_dvpp_free(inBuffer);
+                if (s32Ret != 0) {
+                    SAMPLE_PRT("hi_mpi_dvpp_free inBuffer failed");
+                }
+                s32Ret = hi_mpi_dvpp_free(outBuffer);
+                if (s32Ret != 0) {
+                    SAMPLE_PRT("hi_mpi_dvpp_free outBuffer failed");
+                }
             }
 
             errCnt = 0;
@@ -656,6 +660,10 @@ SendAgain:
 
         SAMPLE_PRT("[chn:%d] s32CircleSend:%d\n", pstPngdThreadParam->s32ChnId, pstPngdThreadParam->s32CircleSend);
         seekdir(currentDir, 0);
+
+        if (pstPngdThreadParam->enSendThreadCtrl == THREAD_CTRL_STOP) {
+            break; // break while(1)
+        }
 
         if ((pstPngdThreadParam->s32CircleSend == 0) ||
             (pstPngdThreadParam->s32CircleSend == 1)) {
@@ -754,13 +762,7 @@ void *pngd_send_stream_performance(void *pArgs)
 
     outPicInfo.picture_height_stride = stImgInfo.height_stride;
     if (pstPngdThreadParam->enPixFormat == HI_PIXEL_FORMAT_UNKNOWN) {
-        if ((stImgInfo.png_pixel_format == HI_PNG_COLOR_FORMAT_GRAY) ||
-            (stImgInfo.png_pixel_format == HI_PNG_COLOR_FORMAT_RGB)) {
-            outPicInfo.picture_width_stride  = ALIGN_UP(stImgInfo.width, g_align) * 3;
-        } else if ((stImgInfo.png_pixel_format == HI_PNG_COLOR_FORMAT_AGRAY) ||
-                   (stImgInfo.png_pixel_format == HI_PNG_COLOR_FORMAT_ARGB)) {
-            outPicInfo.picture_width_stride  = ALIGN_UP(stImgInfo.width, g_align) * 4;
-        }
+        outPicInfo.picture_width_stride  = stImgInfo.width_stride;
     } else {
         if (pstPngdThreadParam->enPixFormat == HI_PIXEL_FORMAT_RGB_888) {
             outPicInfo.picture_width_stride = ALIGN_UP(stImgInfo.width, g_align) * 3;
@@ -818,35 +820,40 @@ void *pngd_send_stream_performance(void *pArgs)
         }
 
         if (mallocCount >= PNGD_PERFOR_MODE_QUERY_CNT) {
-            SAMPLE_PRT("[chn:%d] DvppMalloc From Pool Failed for %u times. \n", pstPngdThreadParam->s32ChnId, mallocCount);
+            SAMPLE_PRT("[chn:%d] DvppMalloc From Pool Failed for %u times. \n",
+                       pstPngdThreadParam->s32ChnId, mallocCount);
             break;
         }
 
-SendAgain:
         outPicInfo.picture_address  = outBuffer;
         outPicInfo.picture_buffer_size = outBufferSize;
         outPicInfo.picture_width  = g_width;
         outPicInfo.picture_height = g_height;
         outPicInfo.picture_format = pstPngdThreadParam->enPixFormat;
 
-        s32Ret = hi_mpi_pngd_send_stream(pstPngdThreadParam->s32ChnId,
-                                         &stStream, &outPicInfo,
-                                         pstPngdThreadParam->s32MilliSec);
-        if ((s32Ret != HI_SUCCESS) &&
-            (pstPngdThreadParam->enSendThreadCtrl == THREAD_CTRL_START)) {
+        do {
+            s32Ret = hi_mpi_pngd_send_stream(pstPngdThreadParam->s32ChnId,
+                                             &stStream, &outPicInfo,
+                                             pstPngdThreadParam->s32MilliSec);
             if (s32Ret != HI_ERR_PNGD_BUF_FULL) {
                 errCnt++;
+                if (errCnt > 100) {
+                    break; // break do...while
+                }
             }
-            if (errCnt > 100) {
-                SAMPLE_PRT("[chn:%d] SendStream failed %u times! addr:%#lx, len:%u, outBuffer:0x%lx, size:%u\n",
-                           pstPngdThreadParam->s32ChnId, errCnt,
+
+            usleep(pstPngdThreadParam->s32IntervalTime);
+        } while ((s32Ret != HI_SUCCESS) && (pstPngdThreadParam->enSendThreadCtrl == THREAD_CTRL_START));
+        if (s32Ret != HI_SUCCESS) {
+            if (errCnt != 0) {
+                SAMPLE_PRT("[chn:%d] SendStream failed %u times! ret:%#x addr:%#lx, len:%u, outBuffer:0x%lx, size:%u\n",
+                           pstPngdThreadParam->s32ChnId, errCnt, s32Ret,
                            (uint64_t)(uintptr_t)stStream.addr, stStream.len,
                            (uint64_t)(uintptr_t)outBuffer, outBufferSize);
-                break;
             }
-            usleep(pstPngdThreadParam->s32IntervalTime);
-            goto SendAgain;
+            break; // break while(1)
         }
+
         errCnt = 0;
         g_pngd_thread_param[pstPngdThreadParam->s32ChnId].u32SendSucc++;
 
@@ -897,7 +904,6 @@ void *pngd_send_stream(void *pArgs)
 
     fseek(fpStrm, 0L, SEEK_END);
     fileSize = ftell(fpStrm);
-
     fflush(stdout);
 
     while (1) {
@@ -954,13 +960,7 @@ void *pngd_send_stream(void *pArgs)
             break;
         }
         if (pstPngdThreadParam->enPixFormat == HI_PIXEL_FORMAT_UNKNOWN) {
-            if ((stImgInfo.png_pixel_format == HI_PNG_COLOR_FORMAT_GRAY) ||
-                (stImgInfo.png_pixel_format == HI_PNG_COLOR_FORMAT_RGB)) {
-                outPicInfo.picture_width_stride  = ALIGN_UP(stImgInfo.width, g_align) * 3;
-            } else if ((stImgInfo.png_pixel_format == HI_PNG_COLOR_FORMAT_AGRAY) ||
-                       (stImgInfo.png_pixel_format == HI_PNG_COLOR_FORMAT_ARGB)) {
-                outPicInfo.picture_width_stride  = ALIGN_UP(stImgInfo.width, g_align) * 4;
-            }
+            outPicInfo.picture_width_stride  = stImgInfo.width_stride;
         } else {
             if (pstPngdThreadParam->enPixFormat == HI_PIXEL_FORMAT_RGB_888) {
                 outPicInfo.picture_width_stride = ALIGN_UP(stImgInfo.width, g_align) * 3;
@@ -985,20 +985,26 @@ void *pngd_send_stream(void *pArgs)
         }
         bufAllocCount++;
 
-SendAgain:
         outPicInfo.picture_address = outBuffer;
         outPicInfo.picture_buffer_size = outBufferSize;
         outPicInfo.picture_width  = g_width;
         outPicInfo.picture_height = g_height;
         outPicInfo.picture_format = pstPngdThreadParam->enPixFormat;
 
-        s32Ret = hi_mpi_pngd_send_stream(pstPngdThreadParam->s32ChnId,
-                                         &stStream, &outPicInfo, pstPngdThreadParam->s32MilliSec);
-        if ((s32Ret != HI_SUCCESS) && (pstPngdThreadParam->enSendThreadCtrl == THREAD_CTRL_START)) {
+        do {
+            s32Ret = hi_mpi_pngd_send_stream(pstPngdThreadParam->s32ChnId,
+                                             &stStream, &outPicInfo, pstPngdThreadParam->s32MilliSec);
             if (s32Ret != HI_ERR_PNGD_BUF_FULL) {
                 errCnt++;
+                if (errCnt > 100) {
+                    break; // break do...while
+                }
             }
-            if (errCnt > 100) {
+
+            usleep(pstPngdThreadParam->s32IntervalTime);
+        } while ((s32Ret != HI_SUCCESS) && (pstPngdThreadParam->enSendThreadCtrl == THREAD_CTRL_START));
+        if (s32Ret != HI_SUCCESS) {
+            if (errCnt != 0) {
                 SAMPLE_PRT("[chn:%d] SendStream [%u]failed %u times! addr:%#lx, len:%u, outBuffer:0x%lx, size:%u\n",
                            pstPngdThreadParam->s32ChnId, bufAllocCount, errCnt,
                            (uint64_t)(uintptr_t)stStream.addr, stStream.len,
@@ -1011,19 +1017,17 @@ SendAgain:
                 if (s32Ret != 0) {
                     SAMPLE_PRT("[chn:%d] Free outBuffer failed", pstPngdThreadParam->s32ChnId);
                 }
-
-                break;
             }
-            usleep(pstPngdThreadParam->s32IntervalTime);
-            goto SendAgain;
+
+            break; // break while(1)
         }
 
+        g_pngd_thread_param[pstPngdThreadParam->s32ChnId].u32SendSucc++;
         errCnt = 0;
         SAMPLE_PRT("[chn:%d] hi_mpi_pngd_send_stream Send[%u] ok! addr:%#lx, len:%d, outBuffer:0x%lx, size:%u\n",
                    pstPngdThreadParam->s32ChnId, bufAllocCount,
                    (uint64_t)(uintptr_t)stStream.addr, stStream.len,
                    (uint64_t)(uintptr_t)outBuffer, outBufferSize);
-        g_pngd_thread_param[pstPngdThreadParam->s32ChnId].u32SendSucc++;
 
         if ((pstPngdThreadParam->s32CircleSend == 0) ||
             (pstPngdThreadParam->s32CircleSend == 1)) {
@@ -1035,7 +1039,6 @@ SendAgain:
             usleep(pstPngdThreadParam->s32IntervalTime);
         }
     }
-
     fflush(stdout);
     fclose(fpStrm);
 
@@ -1188,14 +1191,10 @@ void pngd_release_mem(hi_s32 chn, hi_pic_info &picInfo, hi_img_stream &imgStream
 {
     if (picInfo.picture_address != nullptr) {
         hi_mpi_dvpp_free((void *)picInfo.picture_address);
-        SAMPLE_PRT("[chn:%d] Free pic address %p len:%u!\n",
-                   chn, (void *)picInfo.picture_address, picInfo.picture_buffer_size);
         picInfo.picture_address = nullptr;
     }
 
     if (imgStream.addr != nullptr) {
-        SAMPLE_PRT("[chn:%d] Free stream buf: %#lx, len:%u\n", chn,
-                    (uint64_t)(uintptr_t)imgStream.addr, imgStream.len);
         hi_mpi_dvpp_free((void*)imgStream.addr);
         imgStream.addr = nullptr;
     }
@@ -1233,7 +1232,7 @@ void *pngd_get_pic(void *pArgs)
             g_pngd_thread_param[pstPngdThreadParam->s32ChnId].u32Decoded++;
 
             if (g_write_file > 0) {
-                PngdSaveFile(pstPngdThreadParam->s32ChnId,
+                pngd_save_file(pstPngdThreadParam->s32ChnId,
                     g_pngd_thread_param[pstPngdThreadParam->s32ChnId].u32DecodeSucc, stPicInfo);
             }
 
@@ -1245,8 +1244,8 @@ void *pngd_get_pic(void *pArgs)
             g_pngd_thread_param[pstPngdThreadParam->s32ChnId].u32Decoded++;
 
             pngd_release_mem(pstPngdThreadParam->s32ChnId, stPicInfo, stStream);
-            SAMPLE_PRT("[chn:%d] Yes, GetFrame Fail(Decoder Fail) [%u]. ret:%#x\n",
-                       pstPngdThreadParam->s32ChnId, g_pngd_thread_param[pstPngdThreadParam->s32ChnId].u32DecodeFail, s32Ret);
+            SAMPLE_PRT("[chn:%d] Yes, GetFrame Fail(Decoder Fail) [%u]. ret:%#x\n", pstPngdThreadParam->s32ChnId,
+                       g_pngd_thread_param[pstPngdThreadParam->s32ChnId].u32DecodeFail, s32Ret);
         } else {
             usleep(300);
         }

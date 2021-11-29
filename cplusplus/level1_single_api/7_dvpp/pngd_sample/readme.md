@@ -123,11 +123,11 @@ DVPP中的PNGD功能模块，实现.png图片的解码。
 运行示例：
 
 ```
-./pngd_demo --in_image_file dvpp_pngd_decode_1920x1080.png  --img_width 1920  --img_height 1080 --pixel_mode 12 --chn_num 2 --start_chn 16 --send_circle 100 
+./pngd_demo --in_image_file dvpp_pngd_1920x1080_RGBA.png  --img_width 1920  --img_height 1080 --pixel_mode 12 --chn_num 2 --start_chn 16 --send_circle 100 
 ```
 
--   示例描述：从通道号16开始使用2个通道的PNGD解码器将dvpp\_pngd\_decode\_1920x1080.png解码为宽高为RGB_888文件，解码100次。
--   输入图像：宽1920像素、高1080像素、名称为“dvpp\_pngd\_decode\_1920x1080.png”的JPEG图片。
+-   示例描述：从通道号16开始使用2个通道的PNGD解码器将dvpp_pngd_1920x1080_RGBA.png解码为宽高为RGB_888文件，解码100次。
+-   输入图像：宽1920像素、高1080像素、名称为“dvpp_pngd_1920x1080_RGBA.png”的JPEG图片。
 -   输出图像：宽1920像素、高1080像素的RGB_888格式图片。
 
 ## PNGD性能测试<a name="section17726337299"></a>
@@ -135,11 +135,11 @@ DVPP中的PNGD功能模块，实现.png图片的解码。
 运行示例：
 
 ```
-./pngd_demo --performance_mode 1 --in_image_file dvpp_pngd_decode_1920x1080.png --img_width 1920 --img_height 1080 --pixel_mode 12 --chn_num 12 --send_circle 1000 --delay_time 20
+./pngd_demo --performance_mode 1 --in_image_file dvpp_pngd_1920x1080_RGBA.png --img_width 1920 --img_height 1080 --pixel_mode 12 --chn_num 12 --send_circle 1000 --delay_time 20
 ```
 
--   示例描述：以性能模式测试18个通道的PNGD解码器，将dvpp\_pngd\_decode\_1920x1080.png解码为宽高为RGB_888文件1000次，获取性能数据。
--   输入图像：宽1920像素、高1080像素、名称为“dvpp\_pngd\_decode\_1920x1080.png”的PNG图片。
+-   示例描述：以性能模式测试12个通道的PNGD解码器，将dvpp_pngd_1920x1080_RGBA.png解码为宽高为RGB_888文件1000次，获取性能数据。
+-   输入图像：宽1920像素、高1080像素、名称为“dvpp_pngd_1920x1080_RGBA.png”的PNG图片。
 -   输出图像：无。性能模式下文件不会被保存，待pngd_demo运行结束后会将12个通道的解码性能数据打印出来。
 
 ## PNGD兼容性测试<a name="section17726337299"></a>

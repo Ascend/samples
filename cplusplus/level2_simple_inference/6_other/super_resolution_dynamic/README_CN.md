@@ -49,7 +49,7 @@
 
 2. 获取此应用中所需要Davinci模型。  
 
-    1.参考下表获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到开发环境普通用户下该样例的model文件夹中，本例为：               $HOME/samples/level2_simple_inference/6_other/super_resolution_dynamic/model。
+    1.参考下表获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到开发环境普通用户下该样例的model文件夹中，本例为：               $HOME/samples/cplusplus/level2_simple_inference/6_other/super_resolution_dynamic/model。
 
     ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
 
@@ -77,7 +77,7 @@
 ### 样例部署
 
  执行以下命令，执行编译脚本，开始样例编译。   
-```cd $HOME/samples/cplusplus/level2_simple_inference/2_object_detection/6_other/super_resolution_dynamic/scripts```    
+```cd $HOME/samples/cplusplus/level2_simple_inference/6_other/super_resolution_dynamic/scripts```    
 ```bash sample_build.sh```
 
 

@@ -14,7 +14,6 @@
  * limitations under the License. 
  */
 
-
 #ifndef __SAMPLE_COMM_H__
 #define __SAMPLE_COMM_H__
 #include <cstdint>
