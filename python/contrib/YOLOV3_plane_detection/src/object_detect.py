@@ -11,13 +11,13 @@ import cv2
 import re
 import json
 
-import atlas_utils.utils as utils
+import utils
 from PIL import Image, ImageDraw, ImageFont
-from atlas_utils.acl_dvpp import Dvpp
-import atlas_utils.constants as const
-from atlas_utils.acl_model import Model
-from atlas_utils.acl_image import AclImage
-from atlas_utils.acl_resource import AclResource
+from acllite_imageproc import AclLiteImageProc
+import constants as const
+from acllite_model import AclLiteModel
+from acllite_image import AclLiteImage
+from acllite_resource import AclLiteResource
 
 labels = ["plane"]
 
@@ -59,7 +59,7 @@ def post_process(infer_output, origin_img, image_file):
     output_path = os.path.join("./outputs", os.path.basename(image_file))
     origin_image = Image.open(image_file)
     draw = ImageDraw.Draw(origin_image)
-    font = ImageFont.load_default()
+    font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", size=20)
     print("images:{}".format(image_file))
 
     # Create a list to save Json results
@@ -117,7 +117,7 @@ def post_process_big(infer_output, origin_img, image_file, out_target):
     output_path = os.path.join(out_target, os.path.basename(image_file))
     origin_image = Image.open(image_file)
     draw = ImageDraw.Draw(origin_image)
-    font = ImageFont.load_default()
+    font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", size=20)
     print("images:{}".format(image_file))
     print("======== inference results: =============")
    
@@ -206,7 +206,7 @@ def merge_picture(merge_path, filename):
     """merge picture"""
     # The folder of the divided pictures, and the folder to be saved after stitching
     pic_path = merge_path
-    merge_target = "./outputs"
+    merge_target = "../out"
     num_width_list = []
     num_lenght_list = []
     picture_names = os.listdir(pic_path)
@@ -243,10 +243,10 @@ def main():
         print("The App arg is invalid")
         exit(1)
     
-    acl_resource = AclResource()
+    acl_resource = AclLiteResource()
     acl_resource.init()
-    model = Model(MODEL_PATH)
-    dvpp = Dvpp(acl_resource)
+    model = AclLiteModel(MODEL_PATH)
+    dvpp = AclLiteImageProc(acl_resource)
     
     image_dir = sys.argv[1] 
     images_list = [os.path.join(image_dir, img)
@@ -254,8 +254,8 @@ def main():
                    if os.path.splitext(img)[1] in const.IMG_EXT]
 
     # Create a directory to save inference results
-    if not os.path.isdir('./outputs'):
-        os.mkdir('./outputs')
+    if not os.path.isdir('../out'):
+        os.mkdir('../out')
     
     # Create a directory to save the intermediate results of the large image detection
     if not os.path.isdir('./bigpic'):
@@ -304,7 +304,7 @@ def main():
             # the small picture after the big picture crop should be saved in a folder crop_target
             for cropimg_file in cropimg_list:
                 print("the crop filename is :\t", cropimg_file)
-                image = AclImage(cropimg_file)
+                image = AclLiteImage(cropimg_file)
                 resized_image = pre_process(image, dvpp)
                 result = model.execute([resized_image, image_info])  
                 resdic = post_process_big(result, image, cropimg_file, out_target)
@@ -318,7 +318,7 @@ def main():
         # it will be read in and processed normally
         else:  
             print("detect the small picture")
-            image = AclImage(image_file)
+            image = AclLiteImage(image_file)
             resized_image = pre_process(image, dvpp)
             print("pre process end")
             result = model.execute([resized_image, image_info])  

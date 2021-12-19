@@ -25,30 +25,30 @@
 #include "presenter/agent/presenter_types.h"
 
 #include "acl/acl.h"
-#include "atlasutil/atlas_model.h"
-#include "atlasutil/dvpp_process.h"
+#include "acllite/AclLiteModel.h"
+#include "acllite/AclLiteImageProc.h"
 
 class FaceDetect {
 public:
     FaceDetect();
     ~FaceDetect();
 
-    AtlasError Init();
-    AtlasError Process(ImageData& image);
+    AclLiteError Init();
+    AclLiteError Process(ImageData& image);
     void DestroyResource();
 
 private:
-    AtlasError Inference(std::vector<InferenceOutput>& inferOutputs,
+    AclLiteError Inference(std::vector<InferenceOutput>& inferOutputs,
                          ImageData& resizedImage);
     void PostProcess(std::vector<ascend::presenter::DetectionResult>& detectResults, 
                      uint32_t imageWidth, uint32_t imageHeight,
                      std::vector<InferenceOutput>& modelOutput);
-    AtlasError SendImage(ImageData& jpegImage,
+    AclLiteError SendImage(ImageData& jpegImage,
                          std::vector<ascend::presenter::DetectionResult>& detRes);
                              
 private:
-    AtlasModel model_;
-    DvppProcess dvpp_;    
+    AclLiteModel model_;
+    AclLiteImageProc dvpp_;    
     ascend::presenter::Channel* presenterChannel_;
 
     bool isInited_;

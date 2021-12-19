@@ -2,7 +2,8 @@
 ScriptPath="$( cd "$(dirname "$BASH_SOURCE")" ; pwd -P )"
 ModelPath="${ScriptPath}/../model"
 
-. ${ScriptPath}/../../../../../common/sample_common.sh
+common_script_dir=${THIRDPART_PATH}/common
+. ${common_script_dir}/sample_common.sh
 
 function main()
 {
@@ -16,4 +17,3 @@ function main()
     fi
 }
 main
-

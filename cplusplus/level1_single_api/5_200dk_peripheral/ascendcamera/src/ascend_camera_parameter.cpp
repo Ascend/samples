@@ -30,17 +30,14 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * ============================================================================
  */
-
-#include "ascend_camera_parameter.h"
-
 #include <regex>
 #include <iostream>
-
 #include <getopt.h>
 #include <stdlib.h>
 #include <unistd.h>
 
 #include "ascend_camera_common.h"
+#include "ascend_camera_parameter.h"
 
 using namespace std;
 
@@ -59,8 +56,6 @@ const int kParamHasValue = 1;
 
 // slash string length
 const int kSlashStrLength = 1;
-
-
 
 // long options for getopt_long function
 const struct option kLongOptions[] = {
@@ -241,7 +236,6 @@ bool AscendCameraParameter::ParseInputParams(int argc, char* const argv[]) {
   while ((opt = getopt_long_only(argc, argv, kShortOptions, kLongOptions,
                                  nullptr)) != kInvalidValue) {
     printf("opt=%c\n",opt);
-//    if(opt =! 'N')
     {
       switch (opt) {
         case 'c':  // handle parameter -c, camera channel
@@ -299,22 +293,14 @@ bool AscendCameraParameter::ParseInputParams(int argc, char* const argv[]) {
         is_initialize_fail);
         break;
 
-
-
         default:  // handle parameter can not be recognized or missing value
         if (optind > opt_index_last) {
           is_initialize_fail = true;
           invalid_params_.push_back(argv[optind - kIndexSecond]);
         }
-//        printf("H-opt=%c\n",opt);
         break;
       }
     }
-//    else
-//    {
-//      printf("H-opt=%c\n",opt);
-//    }
-
 
     opt_index_last = optind;
   }
@@ -365,15 +351,15 @@ void AscendCameraParameter::DisplayValidParams() const {
   // traverse all valid parameters
   for (map<string, string>::const_iterator iter = valid_params_.begin();
       iter != valid_params_.end(); iter++) {
-    valid_params_info += iter->first;
+        valid_params_info += iter->first;
 
-    // ignore empty parameter value
-    if (iter->second.compare(string("")) != kCompareEqual) {
-      valid_params_info += " = ";
-      valid_params_info += iter->second;
-    }
+        // ignore empty parameter value
+        if (iter->second.compare(string("")) != kCompareEqual) {
+          valid_params_info += " = ";
+          valid_params_info += iter->second;
+        }
 
-    valid_params_info += "; ";
+        valid_params_info += "; ";
   }
 
   ASC_LOG_INFO("%s", valid_params_info.c_str());

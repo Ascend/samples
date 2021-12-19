@@ -24,7 +24,7 @@
 #include <vector>
 #include <unistd.h>
 #include <sys/timeb.h>
-#include "atlas_type.h"
+#include "AclLiteType.h"
 
 using namespace std;
 

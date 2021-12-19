@@ -1,16 +1,11 @@
 #!/bin/bash
 app_script_path="$( cd "$(dirname ${BASH_SOURCE})" ; pwd -P )"
-echo ${app_script_path}
 app_path=$app_script_path/..
 app_name="display"
-
 presenter_connect_ip=""
 presenter_view_ip=""
-
 function check_ip_addr()
 {
-    echo "check ip $1"
-
     ip_addr=$1
     ip_addr=$(echo "$ip_addr" | grep "^[0-9]\{1,3\}\.\([0-9]\{1,3\}\.\)\{2\}[0-9]\{1,3\}$")
     if [ -z "$ip_addr" ]
@@ -28,7 +23,6 @@ function check_ip_addr()
    done
    return 0
 }
-
 function check_python3_lib()
 {
     echo "Check python3 libs ......"
@@ -84,7 +78,6 @@ function check_python3_lib()
     fi
     echo "python3 libs have benn prepared."
 }
-
 function check_ip()
 {
     #check format of remost_host ip
@@ -113,7 +106,6 @@ function check_ip()
     fi
 
 }
-
 function main()
 {
     stop_pid=`ps -ef | grep "presenter_server\.py" | grep "${app_name}" | awk -F ' ' '{print $2}'`
@@ -141,6 +133,5 @@ function main()
 
     return 0
 }
-
 main
 

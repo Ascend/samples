@@ -35,7 +35,7 @@ bool Utils::WriteToFile(FILE *fileFp, void *dataDev, uint32_t dataSize)
             return false;
         }
         aclRet = aclrtMemcpy(data, dataSize, dataDev, dataSize, ACL_MEMCPY_DEVICE_TO_HOST);
-        if (aclRet != ACL_ERROR_NONE) {
+        if (aclRet != ACL_SUCCESS) {
             ERROR_LOG("acl memcpy data to host failed, dataSize=%u, ret=%d.\n", dataSize, aclRet);
             free(data);
             return false;

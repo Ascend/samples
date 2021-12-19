@@ -18,7 +18,7 @@ import acl
 
 from constant import ACL_MEMCPY_HOST_TO_DEVICE, \
     ACL_MEM_MALLOC_NORMAL_ONLY, ACL_FORMAT_ND, \
-    acl_dtype, NPY_INT, ACL_ERROR_NONE
+    acl_dtype, NPY_INT, ACL_SUCCESS
 
 
 def check_ret(message, ret):
@@ -27,7 +27,7 @@ def check_ret(message, ret):
     参数：ret，pyACL函数返回值
     返回值：无
     """
-    if ret != ACL_ERROR_NONE:
+    if ret != ACL_SUCCESS:
         raise Exception("{} failed ret={}"
                         .format(message, ret))
 

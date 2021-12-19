@@ -22,25 +22,25 @@
 #include <mutex>
 #include <unistd.h>
 #include "acl/acl.h"
-#include "atlas_error.h"
-#include "dvpp_process.h"
-#include "atlas_thread.h"
+#include "AclLiteError.h"
+#include "AclLiteImageProc.h"
+#include "AclLiteThread.h"
 
 using namespace std;
 
-class Postprocess: public AtlasThread {
+class Postprocess: public AclLiteThread {
 public:
     Postprocess(uint32_t modelWidth, uint32_t modelHeight);
     ~Postprocess();
 
-    AtlasError Init();
-    AtlasError Process(int msgId, shared_ptr<void> data); 
+    AclLiteError Init();
+    AclLiteError Process(int msgId, shared_ptr<void> data); 
 
 private:
-    AtlasError AnalyzeInferenceOutput(vector<BBox>& detectResults,
+    AclLiteError AnalyzeInferenceOutput(vector<BBox>& detectResults,
                                       uint32_t imageWidth, uint32_t imageHeight,
                                       vector<InferenceOutput>& modelOutput);
-    AtlasError InferOutputProcess(shared_ptr<InferOutputMsg> data);
+    AclLiteError InferOutputProcess(shared_ptr<InferOutputMsg> data);
     void PrintDetectResults(vector<BBox>& detectResults, 
                             uint32_t channelId);
 

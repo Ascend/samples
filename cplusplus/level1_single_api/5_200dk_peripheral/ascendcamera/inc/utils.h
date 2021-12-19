@@ -37,8 +37,8 @@ using namespace std;
 #define ALIGN_UP16(num) ALIGN_UP(num, 16)
 #define ALIGN_UP128(num) ALIGN_UP(num, 128)
 
-#define SHARED_PRT_DVPP_BUF(buf) (shared_ptr<uint8_t>((uint8_t *)(buf), [](uint8_t* p) { acldvppFree(p); }))
-#define SHARED_PRT_U8_BUF(buf) (shared_ptr<uint8_t>((uint8_t *)(buf), [](uint8_t* p) { delete[](p); }))
+#define SHARED_PTR_DVPP_BUF(buf) (shared_ptr<uint8_t>((uint8_t *)(buf), [](uint8_t* p) { acldvppFree(p); }))
+#define SHARED_PTR_U8_BUF(buf) (shared_ptr<uint8_t>((uint8_t *)(buf), [](uint8_t* p) { delete[](p); }))
 
 
 template<class Type>
@@ -93,7 +93,6 @@ struct BBox {
  */
 class Utils {
 public:
-
     /**
     * @brief create device buffer of pic
     * @param [in] picDesc: pic desc
@@ -101,13 +100,9 @@ public:
     * @return device buffer of pic
     */
     static bool IsDirectory(const std::string &path);
-
     static bool IsPathExist(const std::string &path);
-
     static void SplitPath(const std::string &path, std::vector<std::string> &path_vec);
-
     static void GetAllFiles(const std::string &path, std::vector<std::string> &file_vec);
-
     static void GetPathFiles(const std::string &path, std::vector<std::string> &file_vec);
     static void* CopyDataToDevice(void* data, uint32_t dataSize, aclrtMemcpyKind policy);
     static void* CopyDataDeviceToLocal(void* deviceData, uint32_t dataSize);

@@ -39,12 +39,12 @@ void callback(acldvppStreamDesc *input, acldvppPicDesc *output, void *userdata)
         void *vdecInBufferDev = acldvppGetStreamDescData(input);
         if (vdecInBufferDev != nullptr) {
             aclError ret = acldvppFree(vdecInBufferDev);
-            if (ret != ACL_ERROR_NONE) {
+            if (ret != ACL_SUCCESS) {
                 ERROR_LOG("fail to free input stream desc data, errorCode = %d", static_cast<int32_t>(ret));
             }
         }
         aclError ret = acldvppDestroyStreamDesc(input);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("fail to destroy input stream desc, errorCode = %d", static_cast<int32_t>(ret));
         }
     }
@@ -59,12 +59,12 @@ void callback(acldvppStreamDesc *input, acldvppPicDesc *output, void *userdata)
             ERROR_LOG("vdec decode frame failed, retCode = %d.", retCode);
             if (vdecOutBufferDev != nullptr) {
                 aclError ret = acldvppFree(vdecOutBufferDev);
-                if (ret != ACL_ERROR_NONE) {
+                if (ret != ACL_SUCCESS) {
                     ERROR_LOG("fail to free output pic desc data, errorCode = %d", static_cast<int32_t>(ret));
                 }
             }
             aclError ret = acldvppDestroyPicDesc(output);
-            if (ret != ACL_ERROR_NONE) {
+            if (ret != ACL_SUCCESS) {
                 ERROR_LOG("fail to destroy output pic desc, errorCode = %d", static_cast<int32_t>(ret));
             }
             return;
@@ -79,12 +79,12 @@ void callback(acldvppStreamDesc *input, acldvppPicDesc *output, void *userdata)
             }
 
             aclError ret = acldvppFree(vdecOutBufferDev);
-            if (ret != ACL_ERROR_NONE) {
+            if (ret != ACL_SUCCESS) {
                 ERROR_LOG("fail to free output pic desc data, errorCode = %d", static_cast<int32_t>(ret));
             }
         }
         aclError ret = acldvppDestroyPicDesc(output);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("fail to destroy output pic desc, errorCode = %d", static_cast<int32_t>(ret));
         }
     }
@@ -106,39 +106,39 @@ Result VdecProcess::InitResource(uint64_t threadId, acldvppStreamFormat enType, 
 
     // channelId: 0-15
     aclError ret = aclvdecSetChannelDescChannelId(vdecChannelDesc_, 10);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("fail to set vdec ChannelId, errorCode = %d", static_cast<int32_t>(ret));
         return FAILED;
     }
 
     ret = aclvdecSetChannelDescThreadId(vdecChannelDesc_, threadId_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("fail to create threadId, errorCode = %d", static_cast<int32_t>(ret));
         return FAILED;
     }
 
     // callback func
     ret = aclvdecSetChannelDescCallback(vdecChannelDesc_, callback);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("fail to set vdec Callback, errorCode = %d", static_cast<int32_t>(ret));
         return FAILED;
     }
 
     ret = aclvdecSetChannelDescEnType(vdecChannelDesc_, enType_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("fail to set vdec EnType, errorCode = %d", static_cast<int32_t>(ret));
         return FAILED;
     }
 
     ret = aclvdecSetChannelDescOutPicFormat(vdecChannelDesc_, format_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("fail to set vdec OutPicFormat, errorCode = %d", static_cast<int32_t>(ret));
         return FAILED;
     }
 
     // create vdec channel
     ret = aclvdecCreateChannel(vdecChannelDesc_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("fail to create vdec channel, errorCode = %d", static_cast<int32_t>(ret));
         return FAILED;
     }
@@ -166,13 +166,13 @@ Result VdecProcess::CreateStreamDesc()
     }
 
     aclError ret = acldvppSetStreamDescData(streamInputDesc_, inBufferDev_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("fail to set data for stream desc, errorCode = %d", static_cast<int32_t>(ret));
         return FAILED;
     }
     // set size for dvpp stream desc
     ret = acldvppSetStreamDescSize(streamInputDesc_, inBufferSize_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("fail to set size for stream desc, errorCode = %d", static_cast<int32_t>(ret));
         return FAILED;
     }
@@ -195,7 +195,7 @@ Result VdecProcess::CreatePicDesc(size_t size)
 {
     // Malloc output device memory
     aclError ret = acldvppMalloc(&picOutBufferDev_, size);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("aclrtMalloc failed, ret=%d", ret);
         return FAILED;
     }
@@ -205,17 +205,17 @@ Result VdecProcess::CreatePicDesc(size_t size)
         return FAILED;
     }
     ret = acldvppSetPicDescData(picOutputDesc_, picOutBufferDev_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("fail to set PicDescData, errorCode = %d", static_cast<int32_t>(ret));
         return FAILED;
     }
     ret = acldvppSetPicDescSize(picOutputDesc_, size);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("fail to set PicDescSize, errorCode = %d", static_cast<int32_t>(ret));
         return FAILED;
     }
     ret = acldvppSetPicDescFormat(picOutputDesc_, format_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("fail to set PicDescHeight, errorCode = %d", static_cast<int32_t>(ret));
         return FAILED;
     }
@@ -261,7 +261,7 @@ Result VdecProcess::Process()
     // send vdec frame
     aclError ret = aclvdecSendFrame(vdecChannelDesc_, streamInputDesc_,
                                     picOutputDesc_, nullptr, static_cast<void *>(frameIndex));
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("fail to send frame, ret=%u", ret);
         DestroyStreamDesc();
         DestroyPicDesc();
@@ -283,7 +283,7 @@ Result VdecProcess::SendVdecEos()
         return FAILED;
     }
     aclError ret = acldvppSetStreamDescEos(streamInputDesc, 1);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("fail to set eos for stream desc, errorCode = %d", static_cast<int32_t>(ret));
         (void)acldvppDestroyStreamDesc(streamInputDesc);
         return FAILED;
@@ -291,7 +291,7 @@ Result VdecProcess::SendVdecEos()
 
     // send vdec eos frame. when all vdec callback are completed, aclvdecSendFrame can be returned.
     ret = aclvdecSendFrame(vdecChannelDesc_, streamInputDesc, nullptr, nullptr, nullptr);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("fail to send eos frame, ret=%u", ret);
         (void)acldvppDestroyStreamDesc(streamInputDesc);
         return FAILED;
@@ -305,7 +305,7 @@ void VdecProcess::DestroyResource()
 {
     if (vdecChannelDesc_ != nullptr) {
         aclError ret = aclvdecDestroyChannel(vdecChannelDesc_);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("acldvppDestroyChannel failed, , errorCode = %d", static_cast<int32_t>(ret));
         }
         (void)aclvdecDestroyChannelDesc(vdecChannelDesc_);

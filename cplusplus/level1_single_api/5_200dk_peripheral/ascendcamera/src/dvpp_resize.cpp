@@ -23,8 +23,6 @@
 #include "dvpp_resize.h"
 using namespace std;
 
-
-
 DvppResize::DvppResize(aclrtStream& stream, acldvppChannelDesc *dvppChannelDesc,
                        uint32_t width, uint32_t height)
 : stream_(stream), dvppChannelDesc_(dvppChannelDesc),
@@ -88,7 +86,7 @@ Result DvppResize::InitResizeOutputDesc()
 
     vpcOutBufferSize_ = YUV420SP_SIZE(resizeOutWidthStride, resizeOutHeightStride);
     aclError aclRet = acldvppMalloc(&vpcOutBufferDev_, vpcOutBufferSize_);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("acldvppMalloc vpcOutBufferDev_ failed, aclRet = %d\n", aclRet);
         return FAILED;
     }
@@ -136,13 +134,13 @@ Result DvppResize::Process(ImageData& resizedImage, ImageData& srcImage)
     // resize pic
     aclError aclRet = acldvppVpcResizeAsync(dvppChannelDesc_, vpcInputDesc_,
         vpcOutputDesc_, resizeConfig_, stream_);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("acldvppVpcResizeAsync failed, aclRet = %d\n", aclRet);
         return FAILED;
     }
 
     aclRet = aclrtSynchronizeStream(stream_);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("resize aclrtSynchronizeStream failed, aclRet = %d\n", aclRet);
         return FAILED;
     }
@@ -152,7 +150,7 @@ Result DvppResize::Process(ImageData& resizedImage, ImageData& srcImage)
     resizedImage.alignWidth = ALIGN_UP16(size_.width);
     resizedImage.alignHeight = ALIGN_UP2(size_.height);
     resizedImage.size = vpcOutBufferSize_;
-    resizedImage.data = SHARED_PRT_DVPP_BUF(vpcOutBufferDev_);
+    resizedImage.data = SHARED_PTR_DVPP_BUF(vpcOutBufferDev_);
     DestroyResizeResource();
 
     return SUCCESS;

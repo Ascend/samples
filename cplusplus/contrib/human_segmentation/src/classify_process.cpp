@@ -22,12 +22,12 @@
 #include "image_net_classes.h"
 #include <fstream>
 #include <opencv2/imgcodecs.hpp>
-#include "opencv2/imgcodecs/legacy/constants_c.h"
+
 #include "opencv2/imgproc/types_c.h"
 
-#include "atlasutil/atlas_model.h"
-#include "atlasutil/atlas_utils.h"
-#include "atlasutil/acl_device.h"
+#include "acllite/AclLiteModel.h"
+#include "acllite/AclLiteUtils.h"
+#include "acllite/AclLiteResource.h"
 
 using namespace std;
 using namespace ascend::presenter;
@@ -51,77 +51,77 @@ ClassifyProcess::~ClassifyProcess() {
     DestroyResource();
 }
 
-AtlasError ClassifyProcess::InitModel() {
+AclLiteError ClassifyProcess::InitModel() {
 
-    AtlasError atlRet;
+    AclLiteError atlRet;
     atlRet = model_.Init();
     if (atlRet) {
-        ATLAS_LOG_ERROR("Model init failed, error %d", atlRet);
-        return ATLAS_ERROR;
+        ACLLITE_LOG_ERROR("Model init failed, error %d", atlRet);
+        return ACLLITE_ERROR;
     }
 
     aclError ret = aclrtGetRunMode(&runMode_);
-    if (ret != ACL_ERROR_NONE) {
-        ATLAS_LOG_ERROR("acl get run mode failed");
-        return ATLAS_ERROR;
+    if (ret != ACL_SUCCESS) {
+        ACLLITE_LOG_ERROR("acl get run mode failed");
+        return ACLLITE_ERROR;
     }
 
     //申请模型输入内存空间.因为本应用推理实现使用的是单线程,所以该内存可以复用
     aclrtMalloc(&inputBuf_, (size_t)(inputDataSize_),
                 ACL_MEM_MALLOC_HUGE_FIRST);
     if (inputBuf_ == nullptr) {
-        ATLAS_LOG_ERROR("Acl malloc image buffer failed.");
-        return ATLAS_ERROR;
+        ACLLITE_LOG_ERROR("Acl malloc image buffer failed.");
+        return ACLLITE_ERROR;
     }
 
     atlRet = model_.CreateInput(inputBuf_, inputDataSize_);
-    if (atlRet != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Create mode input dataset failed");
-        return ATLAS_ERROR;
+    if (atlRet != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Create mode input dataset failed");
+        return ACLLITE_ERROR;
     }
 
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
-AtlasError ClassifyProcess::OpenPresenterChannel() {
+AclLiteError ClassifyProcess::OpenPresenterChannel() {
     PresenterErrorCode openChannelret = OpenChannelByConfig(channel_, "./human_segmentation.conf");
     if (openChannelret != PresenterErrorCode::kNone) {
-        ATLAS_LOG_ERROR("Open channel failed, error %d\n", (int)openChannelret);
+        ACLLITE_LOG_ERROR("Open channel failed, error %d\n", (int)openChannelret);
     }
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
-AtlasError ClassifyProcess::Init() {
+AclLiteError ClassifyProcess::Init() {
     //如果已经初始化,则直接返回
     if (isInited_) {
-        ATLAS_LOG_INFO("Classify instance is initied already!");
-        return ATLAS_OK;
+        ACLLITE_LOG_INFO("Classify instance is initied already!");
+        return ACLLITE_OK;
     }
 
     //初始化模型管理实例
-    AtlasError ret = InitModel();
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Init model failed");
-        return ATLAS_ERROR;
+    AclLiteError ret = InitModel();
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Init model failed");
+        return ACLLITE_ERROR;
     }
     //连接presenter server
     ret = OpenPresenterChannel();
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Open presenter channel failed");
-        return ATLAS_ERROR;
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Open presenter channel failed");
+        return ACLLITE_ERROR;
     }
 
     isInited_ = true;
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
-AtlasError ClassifyProcess::Preprocess(cv::Mat& frame) {
+AclLiteError ClassifyProcess::Preprocess(cv::Mat& frame) {
     //resize
     cv::Mat reiszeMat;
     cv::resize(frame, reiszeMat, cv::Size(modelWidth_, modelHeight_));
     if (reiszeMat.empty()) {
-        ATLAS_LOG_ERROR("Resize image failed");
-        return ATLAS_ERROR;
+        ACLLITE_LOG_ERROR("Resize image failed");
+        return ACLLITE_ERROR;
     }
 
     if (runMode_ == ACL_HOST) {
@@ -129,9 +129,9 @@ AtlasError ClassifyProcess::Preprocess(cv::Mat& frame) {
         aclError ret = aclrtMemcpy(inputBuf_, inputDataSize_, 
                                    reiszeMat.ptr<uint8_t>(), inputDataSize_,
                                    ACL_MEMCPY_HOST_TO_DEVICE);
-        if (ret != ACL_ERROR_NONE) {
-            ATLAS_LOG_ERROR("Copy resized image data to device failed.");
-            return ATLAS_ERROR;
+        if (ret != ACL_SUCCESS) {
+            ACLLITE_LOG_ERROR("Copy resized image data to device failed.");
+            return ACLLITE_ERROR;
         }
     } else {
         //Atals200DK上运行时,数据拷贝到本地即可.
@@ -139,28 +139,28 @@ AtlasError ClassifyProcess::Preprocess(cv::Mat& frame) {
         memcpy(inputBuf_, reiszeMat.ptr<void>(), inputDataSize_);
     }
 
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
-AtlasError ClassifyProcess::Inference(std::vector<InferenceOutput>& inferOutputs) {
+AclLiteError ClassifyProcess::Inference(std::vector<InferenceOutput>& inferOutputs) {
     //执行推理
-    AtlasError ret = model_.Execute(inferOutputs);
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Execute model inference failed");
-        return ATLAS_ERROR;
+    AclLiteError ret = model_.Execute(inferOutputs);
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Execute model inference failed");
+        return ACLLITE_ERROR;
     }
 
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
-AtlasError ClassifyProcess::Postprocess(cv::Mat& frame,
+AclLiteError ClassifyProcess::Postprocess(cv::Mat& frame,
 std::vector<InferenceOutput>& modelOutput){
     float* buff = (float *)modelOutput[0].data.get();
     uint32_t databuff_size = modelOutput[0].size;
     //float* buff = (float*)aclGetDataBufferAddr(databuff);
     if (buff == nullptr) {
-        ATLAS_LOG_ERROR("Get the  dataset buffer address from model inference output failed");
-        return ATLAS_ERROR;
+        ACLLITE_LOG_ERROR("Get the  dataset buffer address from model inference output failed");
+        return ACLLITE_ERROR;
     }
 
     cv::Mat mask(modelHeight_,modelWidth_, CV_32FC1, buff);
@@ -185,7 +185,7 @@ std::vector<InferenceOutput>& modelOutput){
     //将推理结果和图像发给presenter server显示
     SendImage(detectionResults, frame);
 
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
 void ClassifyProcess::EncodeImage(vector<uint8_t>& encodeImg,
@@ -197,7 +197,7 @@ void ClassifyProcess::EncodeImage(vector<uint8_t>& encodeImg,
     cv::imencode(".jpg", origImg, encodeImg, param);
 }
 
-AtlasError ClassifyProcess::SendImage(vector<DetectionResult>& detectionResults,
+AclLiteError ClassifyProcess::SendImage(vector<DetectionResult>& detectionResults,
                                   cv::Mat& origImg) {
     vector<uint8_t> encodeImg;
     EncodeImage(encodeImg, origImg);
@@ -212,11 +212,11 @@ AtlasError ClassifyProcess::SendImage(vector<DetectionResult>& detectionResults,
 
     PresenterErrorCode errorCode = PresentImage(channel_, imageParam);
     if (errorCode != PresenterErrorCode::kNone) {
-        ATLAS_LOG_ERROR("PresentImage failed %d", static_cast<int>(errorCode));
-        return ATLAS_ERROR;
+        ACLLITE_LOG_ERROR("PresentImage failed %d", static_cast<int>(errorCode));
+        return ACLLITE_ERROR;
     }
 
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
 void ClassifyProcess::ConstructClassifyResult(vector<DetectionResult>& result, 
@@ -251,6 +251,6 @@ void ClassifyProcess::DestroyResource()
         model_.DestroyResource();
         isReleased_ = true;
     }
-    ATLAS_LOG_INFO("end to finalize acl");
+    ACLLITE_LOG_INFO("end to finalize acl");
 
 }

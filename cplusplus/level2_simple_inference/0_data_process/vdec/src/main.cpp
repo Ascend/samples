@@ -124,10 +124,8 @@ bool WriteToFile(const char *fileName, const void *dataDev, uint32_t dataSize)
     return ret;
 }
 
-//3.创建回调函数
 void callback(acldvppStreamDesc *input, acldvppPicDesc *output, void *userdata)
 {
-
     /*Get the output memory decoded by VDEC, call the custom function WriteToFile to write 
 	the data in the output memory to the file, and then call the acldvppFree interface to release
 	 the output memory*/
@@ -143,7 +141,6 @@ void callback(acldvppStreamDesc *input, acldvppPicDesc *output, void *userdata)
     // Release acldvppPicDesc type data, representing output picture description data after decoding
     ret = acldvppDestroyPicDesc(output);
 
-    //......
     count++;
 }
 

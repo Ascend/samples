@@ -1573,6 +1573,13 @@ void *jpegd_get_pic_performance(void *pArgs)
     hi_vdec_supplement_info stSupplement{};
     VDEC_THREAD_PARAM_S *pstJpegdThreadParam = (VDEC_THREAD_PARAM_S *)pArgs;
 
+    if (g_run_mode == ACL_HOST) {
+        if (aclrtSetCurrentContext(g_context)) {
+            SAMPLE_PRT("set context error");
+            return (void *)(HI_FAILURE);
+        }
+    }
+
     std::ostringstream pthreadName;
     pthreadName << "JpegGetPerf_" << pstJpegdThreadParam->s32ChnId;
     prctl(PR_SET_NAME, pthreadName.str().c_str(), 0, 0, 0);

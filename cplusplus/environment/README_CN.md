@@ -1,33 +1,27 @@
 中文|[English](README.md)
 
-# c++环境准备和依赖安装
+## 第三方依赖安装指导（C++样例）
 
-### 介绍
-运行samples仓中的c++样例之前，请根据本文指导安装第三方依赖并配置好环境。 
+### 前置条件
+**按照官方指导文档完成CANN包安装。**   
 
+### 安装须知
+samples仓中的部分c++样例使用到opencv，ffmpeg等第三方依赖进行图像等处理，所以需要在运行之前，根据本文指导安装第三方依赖并进行环境配置。 
+- **开发环境：** 主要用于代码开发、编译、调测等开发活动。    
+    （场景一）在昇腾AI设备上安装开发环境，同时可以作为运行环境，运行应用程序或进行训练脚本的迁移、开发&调试。     
+    （场景二）在非昇腾AI设备上安装开发环境，仅能用于代码开发、编译等不依赖于昇腾设备的开发活动（例如ATC模型转换、算子和推理应用程序的纯代码开发）。    
+- **运行环境：** 在昇腾AI设备上运行用户开发的应用程序或进行训练脚本的迁移、开发&调试。   
 
-### 步骤
-请根据设备形态，依次执行以下四步，点击对应的链接进行安装。
+### 场景选择
+请根据以下描述，选择对应场景进行安装。
 
-- for_atlas200dk  
+- [昇腾AI设备安装开发环境，同时作为运行环境场景下的第三方依赖安装](./catenation_environmental_guidance_CN.md) **（推荐）**。   
+    **优点：** 不涉及交叉编译，第三方依赖安装方式较为简单，编译和运行在一起，无需拷贝编译后的可执行文件等至运行环境。   
+    **缺点：** 运行设备上的CPU可能比较弱，会导致编译速度比较慢。
 
-    [1.基础环境配置](./prepare_ENV/README_200DK_CN.md)： sudo权限配置、apt源配置、环境变量配置、开发者板联网、部署Media模块
-
-    [2.安装ffmpeg和opencv](./opencv_install/README_200DK_CN.md)： 编译安装ffmpeg和opencv
-
-    [3.安装atlasutil库](./atlasutil_install/README_200DK_CN.md)： 编译安装atlasutil库，atlasutil库对acl部分接口进行了进一步的封装
- 
-    [4.安装Presenter Agent](./presenteragent_install/README_200DK_CN.md)： 编译安装Presenter Agent，Presenter Agent提供一系列API，用户可以调用这些API向Presenter Server推送媒体消息
-
-- for_atlas300  
-
-    [1.基础环境配置](./prepare_ENV/README_300_CN.md)： sudo权限配置、apt源配置、环境变量配置  
-
-    [2.安装ffmpeg和opencv](./opencv_install/README_300_CN.md)： 编译安装ffmpeg和opencv  
-
-    [3.安装atlasutil库](./atlasutil_install/README_300_CN.md)： 编译安装atlasutil库，atlasutil库对acl部分接口进行了进一步的封装 
- 
-    [4.安装Presenter Agent](./presenteragent_install/README_300_CN.md)： 编译安装Presenter Agent，Presenter Agent提供一系列API，用户可以调用这些API向Presenter Server推送媒体消息
+- [非昇腾AI设备上安装开发环境场景下的第三方依赖安装](./separate_environmental_guidance_CN.md)。     
+    **优点：** 针对运行环境为arm架构的场景，使用x86架构的开发环境编译大型样例时速度较快。   
+    **缺点：** 涉及交叉编译，第三方依赖安装及样例运行较为复杂。 
 
 
 

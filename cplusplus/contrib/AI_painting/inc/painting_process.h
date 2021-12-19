@@ -22,7 +22,7 @@
 #include "model_process.h"
 #include "data_receiver.h"
 #include <memory>
-#include "ascenddk/presenter/agent/presenter_channel.h"
+#include "presenter/agent/presenter_channel.h"
 
 using namespace std;
 using namespace ascend::presenter;

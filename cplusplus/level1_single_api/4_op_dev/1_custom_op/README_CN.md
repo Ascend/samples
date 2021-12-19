@@ -33,6 +33,9 @@ Caffe与TensorFlow共存的自定义算子样例工程的目录结构如下所�
 │   ├── tf_plugin    //TensorFlow算子适配插件实现代码及CMakeList文件所在目录
 │       ├── CMakeLists.txt 
 │       ├── xx_plugin.cc 
+│   ├── onnx_plugin    //ONNX算子适配插件实现代码及CMakeList文件所在目录
+│       ├── CMakeLists.txt 
+│       ├── xx_plugin.cc 
 │   ├── tf_scope_fusion_pass    //Scope融合规则实现代码及CMakeList文件所在目录
 │       └── xx_pass.h      //融合规则头文件
 │       └── xx_pass.cc    //融合规则实现
@@ -95,9 +98,37 @@ Caffe与TensorFlow共存的自定义算子样例工程的目录结构如下所�
 
 ## 环境要求
 
--   操作系统及架构：CentOS x86_64、CentOS aarch64、Ubuntu 18.04 x86_64、EulerOS x86、EulerOS aarch64
--   python及依赖的库：python3.7.5
+-   操作系统及架构：CentOS x86_64、CentOS aarch64、Ubuntu 18.04 x86_64、Ubuntu 18.04 aarch64、EulerOS x86、EulerOS aarch64
+-   python及依赖的库：Python3.7.x（3.7.0 ~ 3.7.11）、Python3.8.x（3.8.0 ~ 3.8.11）
 -   已完成昇腾AI软件栈的部署。
+
+## 配置CANN软件基础环境变量
+-  CANN组合包提供进程级环境变量设置脚本，供用户在进程中引用，以自动完成环境变量设置。执行命令参考如下，以下示例均为非root用户默认安装路径，请以实际安装的CANN包及实际安装路径为准。
+   
+     ```
+      # 安装toolkit包时配置
+      . ${HOME}/Ascend/ascend-toolkit/set_env.sh 
+        
+      # 安装nnrt包时配置
+      . ${HOME}/Ascend/nnrt/set_env.sh 
+      
+      # 安装nnae包时配置
+      . ${HOME}/Ascend/nnae/set_env.sh 
+      
+      # 安装tfplugin包时配置
+      . /${HOME}/Ascend/tfplugin/set_env.sh
+      
+     ```
+    
+-  算子编译依赖Python，以Python3.7.5为例，请以运行用户执行如下命令设置Python3.7.5的相关环境变量。
+   
+      ```
+      #用于设置python3.7.5库文件路径
+      export LD_LIBRARY_PATH=/usr/local/python3.7.5/lib:$LD_LIBRARY_PATH
+      #如果用户环境存在多个python3版本，则指定使用python3.7.5版本
+      export PATH=/usr/local/python3.7.5/bin:$PATH
+      ```
+    Python3.7.5安装路径请根据实际情况进行替换，您也可以将以上命令写入~/.bashrc文件中，然后执行source ~/.bashrc命令使其立即生效。
 
 ## 算子工程编译
 
@@ -139,57 +170,40 @@ Caffe与TensorFlow共存的自定义算子样例工程的目录结构如下所�
     Parameter的类型（粗斜体部分）建议保持唯一，不与内置caffe.proto（“atc/include/proto/caffe.proto”）定义重复。
     样例代码的custom.proto文件中已包含样例中样例中的自定义Caffe算子的定义，若有其他自定义算子，请基于此文件追加。
     ```
+    
+2. 修改build.sh脚本，根据实际开发环境信息修改相关环境变量配置。
 
-2.  修改build.sh脚本，根据实际开发环境信息修改相关环境变量配置。
+   修改buid.sh脚本头部的如下环境变量。
 
-    修改buid.sh脚本头部的如下环境变量。
+   - ASCEND\_TENSOR\_COMPILER\_INCLUDE：CANN软件头文件所在路径。
 
-    -   ASCEND\_OPP\_PATH：OPP组件的安装路径。
+     请取消此环境变量的注释，并修改为CANN软件头文件所在路径，例如：
 
-        请取消此环境变量的注释，并修改为实际的OPP组件的安装路径，例如：
+     ```
+     export ASCEND_TENSOR_COMPILER_INCLUDE=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/include
+     ```
 
-        ```
-        export ASCEND_OPP_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/opp
-        
-        ```
-    -   ASCEND\_AICPU_PATH：AI CPU组件的安装路径。
+   -   TOOLCHAIN\_DIR：HCC编译器所在路径，无默认值，此编译器用于对样例中的AI CPU算子进行编译。
 
-        请取消此环境变量的注释，并修改为实际AI CPU组件的安装路径，例如：
+       请取消此环境变量的注释，并修改为实际的HCC编译器所在，例如：
 
-        ```
-        export ASCEND_AICPU_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest
+       ```
+       export TOOLCHAIN_DIR=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/toolkit/toolchain/hcc
+       ```
 
-        ```
+   -   AICPU\_KERNEL\_TARGET：AI CPU算子实现文件编译生成的动态库文件名称。
+       -   若不配置此环境变量，使用默认值：cust\_aicpu\_kernels。
 
-    -   ASCEND\_TENSOR\_COMPILER\_INCLUDE：ATC组件的头文件所在路径。
-        -   若不配置此环境变量，默认使用路径：“/usr/local/Ascend/atc/include”。
-        -   若实际ATC安装路径不为默认路径，请取消此环境变量的注释，并修改为实际的ATC组件的头文件所在路径，例如：
+           **注意**：AI CPU算子信息库（cpukernel/op\_info\_cfg/aicpu\_kernel/xx.ini）中的“opInfo.kernelSo”字段需要配置为生成的动态库文件的名称，例如若“AICPU\_KERNEL\_TARGET”的值为“cust\_aicpu\_kernels”，则生成的动态库文件的名称为“libcust\_aicpu\_kernels.so”。
+           
+       -   若用户需要自定义此动态库文件的名字，请取消此环境变量的注释，并自行修改，例如：
 
-            ```
-            export ASCEND_TENSOR_COMPILER_INCLUDE=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/atc/include
-            ```
-
-    -   TOOLCHAIN\_DIR：Toolkit组件中HCC编译器所在路径，无默认值，此编译器用于对样例中的AI CPU算子进行编译。
-
-        请取消此环境变量的注释，并修改为实际的HCC编译器所在，例如：
-
-        ```
-        export TOOLCHAIN_DIR=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/toolkit/toolchain/hcc
-        ```
-
-    -   AICPU\_KERNEL\_TARGET：AI CPU算子实现文件编译生成的动态库文件名称。
-        -   若不配置此环境变量，使用默认值：cust\_aicpu\_kernels。
-
-            **注意**：AI CPU算子信息库（cpukernel/op\_info\_cfg/aicpu\_kernel/xx.ini）中的“opInfo.kernelSo”字段需要配置为生成的动态库文件的名称，例如若“AICPU\_KERNEL\_TARGET”的值为“cust\_aicpu\_kernels”，则生成的动态库文件的名称为“libcust\_aicpu\_kernels.so”。
-            
-        -   若用户需要自定义此动态库文件的名字，请取消此环境变量的注释，并自行修改，例如：
-
-            ```
-            export AICPU_KERNEL_TARGET=xxx
-            ```
+           ```
+           export AICPU_KERNEL_TARGET=xxx
+           ```
 
 
-    -    AICPU\_SOC\_VERSION：昇腾AI处理器的类型，请配置为AI CPU组件安装路径中“opp/op_impl/built-in/aicpu/aicpu_kernel/lib”路径下的文件夹名称，即“libcpu_kernels_context.a”与“libcpu_kernels_v1.0.1.so”所在文件夹的名称。
+   -    AICPU\_SOC\_VERSION：昇腾AI处理器的类型，请配置为AI CPU组件安装路径中“opp/op_impl/built-in/aicpu/aicpu_kernel/lib”路径下的文件夹名称，即“libcpu_kernels_context.a”与“libcpu_kernels_v1.0.1.so”所在文件夹的名称。
 
 
 3.  执行算子工程编译。
@@ -209,17 +223,7 @@ Caffe与TensorFlow共存的自定义算子样例工程的目录结构如下所�
 
 1.  训练场景下，您需要将算子工程编译生成的自定义算子安装包**custom\_opp\__<target os\>\_<target architecture\>_.run**以运行用户拷贝到运行环境任一路径，如果您的 开发环境即为运行环境，此操作可跳过；推理场景下无需执行此操作，自定义算子部署到开发环境的OPP算子库即可。
 
-2.  设置环境变量。
-
-    以HwHiAiUser用户执行如下命令，在当前终端下声明环境变量，关闭Shell终端失效。
-
-    ```
-    export ASCEND_OPP_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/opp
-    ```
-
-    /home/HwHiAiUser/Ascend/ascend-toolkit/latest表示OPP组件安装路径，请根据实际路径修改。
-
-3.  在编译生成的自定义算子安装包所在路径下，执行如下命令，安装自定义算子包。
+2.  在编译生成的自定义算子安装包所在路径下，执行如下命令，安装自定义算子包。
 
     **./custom\_opp\__<target os\>\_<target architecture\>_.run**
 
@@ -250,6 +254,8 @@ Caffe与TensorFlow共存的自定义算子样例工程的目录结构如下所�
     │           ├── caffe       //存放Caffe框架的自定义算子插件库
     │               ├── libcust_caffe_parsers.so      //算子插件库文件，包含了自定义算子的插件解析函数
     │               ├── custom.proto  //自定义算子的原始定义，算子编译过程中会读取此文件自动解析算子原始定义
+    │           ├── onnx       //存放ONNX框架的自定义算子插件库
+    │               ├── libcust_onnx_parsers.so      //算子插件库文件，包含了自定义算子的插件解析函数
     │           ├── tensorflow         //存放TensorFlow框架的自定义算子插件库及npu对相关自定义算子支持度的配置文件
     │               ├── libcust_tf_parsers.so         //算子插件库文件
     │               ├── libcust_tf_scope_fusion.so    //scope融合规则定义库文件
@@ -257,9 +263,9 @@ Caffe与TensorFlow共存的自定义算子样例工程的目录结构如下所�
     │   ├── op_proto
     │       ├── built-in
     │       ├── custom
-    │           ├── libcust_op_proto.so    //自定义算子原型库文件
+│           ├── libcust_op_proto.so    //自定义算子原型库文件
     ```
-
+    
     注：其他目录与文件，自定义算子部署无需关注。
 
 
@@ -281,28 +287,13 @@ TBE算子：Add、ScatterNdAdd，单算子网络验证文件可参见“tbe/test
 
 1.  设置环境变量。
 
-    利用export命令，在当前终端下声明环境变量，关闭Shell终端失效。
+    完成CANN软件基础环境变量配置后，还需要利用export命令，在当前终端下声明如下环境变量，关闭Shell终端失效。
 
     ```
-    export install_path=/home/HwHiAiUser/Ascend/nnae/latest
     export ASCEND_DEVICE_ID=0
-    # FwkACLlib包依赖
-    export PYTHONPATH=${install_path}/fwkacllib/python/site-packages:$PYTHONPATH
-    export LD_LIBRARY_PATH=${install_path}/fwkacllib/lib64:$LD_LIBRARY_PATH
-    export PATH=/usr/local/python3.7.5/bin:${install_path}/fwkacllib/ccec_compiler/bin:${install_path}/fwkacllib/bin:$PATH  # 如果用户环境存在多个python3版本，则指定使用的python3.7.5版本，python3.7.5安装路径请根据实际情况替换
-    # Driver包依赖
-    export LD_LIBRARY_PATH=/usr/local/Ascend/driver/lib64/common/:/usr/local/Ascend/driver/lib64/driver:$LD_LIBRARY_PATH # 仅容器训练场景配置
-    # TFPlugin包依赖
-    export PYTHONPATH=${install_path}/tfplugin/python/site-packages:$PYTHONPATH
-    # OPP包依赖
-    export ASCEND_OPP_PATH=${install_path}/opp
     ```
 
-
-    -   **install\_path**为Fwkacllib组件、Driver组件及OPP组件的安装目录。
-    -   **ASCEND\_DEVICE\_ID**为昇腾AI处理器的逻辑ID。
-    
-        取值范围\[0,N-1\]，默认为0。其中N为当前物理机/虚拟机/容器内的设备总数。
+​        **ASCEND\_DEVICE\_ID**为昇腾AI处理器的逻辑ID。 取值范围\[0,N-1\]，默认为0。其中N为当前物理机/虚拟机/容器内的设备总数。
 
 
 2.  运行单算子网络测试脚本。
@@ -390,22 +381,20 @@ TBE算子：Add、ScatterNdAdd，单算子网络验证文件可参见“tbe/test
 2.  下面我们通过ATC工具编译验证scope融合效果。
     1.  设置环境变量。
 
+        完成CANN软件基础环境变量配置后，还需要额外配置如下环境变量。
+        
         ```
-        export install_path=/home/HwHiAiUser/Ascend/ascend-toolkit/latest   # 开发套件包Ascend-cann-toolkit的安装路径  
-        # PATH请配置为ATC组件的安装路径
-        export PATH=/usr/local/python3.7.5/bin:${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH  # 如果用户环境存在多个python3版本，则指定使用的python3.7.5版本，python3.7.5安装路径请根据实际情况替换
-        export ASCEND_OPP_PATH=${install_path}/opp
         export DUMP_GE_GRAPH=3     # 控制dump图的内容多少，配置为3表示仅dump显示节点关系的精简版图文件
         export DUMP_GRAPH_LEVEL=3  # 控制dump图的个数，配置为3表示仅dump最后的生成的build图
         ```
+        
+    2. 进行模型转换时，此时通过--enable\_scope\_fusion\_passes指定规则名称。
 
-    2.  进行模型转换时，此时通过--enable\_scope\_fusion\_passes指定规则名称。
+       **atc --model=decode\_bbox\_v2.pb --framework=3 --output=mymodel --soc\_version=$\{soc\_version\} --enable\_scope\_fusion\_passes=DecodeBboxV2ScopeFusionPass --log=info**
 
-        **atc --model=decode\_bbox\_v2.pb --framework=3 --output=mymodel --soc\_version=$\{soc\_version\} --enable\_scope\_fusion\_passes=DecodeBboxV2ScopeFusionPass --log=info**
+       其中，soc\_version：昇腾AI处理器的型号，请根据实际情况替换。
 
-        其中，soc\_version：昇腾AI处理器的型号，请根据实际情况替换。
-
-        可从ATC安装路径下的“atc/data/platform\_config”目录下查看支持的昇腾AI处理器的类型，对应“\*.ini”文件的名字即为{soc\_version\}。
+       可从ATC安装路径下的“atc/data/platform\_config”目录下查看支持的昇腾AI处理器的类型，对应“\*.ini”文件的名字即为{soc\_version\}。
 
 3.  结果验证。
     1.  在INFO日志中可以看到pass的设置情况：

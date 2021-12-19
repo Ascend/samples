@@ -21,7 +21,7 @@ Before deploying this sample, ensure that:
 
 - The development environment and operating environment of the corresponding product have been installed.
 
-- The atlasutils have been installed.
+- The acllite have been installed.
 
 ### Preparing Software
 

@@ -16,15 +16,14 @@ sys.path.append(os.path.join(path, ".."))
 sys.path.append(os.path.join(path, "../../../common/"))
 
 import acl
-import atlas_utils.utils as utils
-import atlas_utils.constants as const
-from atlas_utils.acl_dvpp import Dvpp
-from atlas_utils.acl_model import Model
-from atlas_utils.acl_image import AclImage
-from atlas_utils.acl_resource import AclResource
+import utils
+import constants as const
+from acllite_model import AclLiteModel
+from acllite_image import AclLiteImage
+from acllite_resource import AclLiteResource
 
 currentPath = os.path.join(path, "..")
-OUTPUT_DIR = os.path.join(currentPath, 'outputs/')
+OUTPUT_DIR = os.path.join(currentPath, 'out/')
 MODEL_PATH = os.path.join(currentPath, "model/rcf.om")
 MODEL_WIDTH = 512
 MODEL_HEIGHT = 512
@@ -46,7 +45,7 @@ class EdgeDetection(object):
         Initialize
         """
         # Load model
-        self._model = Model(self._model_path)
+        self._model = AclLiteModel(self._model_path)
 
         return const.SUCCESS
 
@@ -102,8 +101,7 @@ class EdgeDetection(object):
         final_edge = self.sigmoid(final_edge)
         resultimage = Image.fromarray(np.uint8((1 - final_edge)*255))
         resultimage = resultimage.resize((self._img_width, self._img_height))
-        resultimage.save('../outputs/out_' + image_name)
-
+        resultimage.save('../out/out' + image_name)
 
 def main():
     """
@@ -115,7 +113,7 @@ def main():
                    for img in os.listdir(image_dir)
                    if os.path.splitext(img)[1] in const.IMG_EXT]
 
-    acl_resource = AclResource()
+    acl_resource = AclLiteResource()
     acl_resource.init()
 
     edge_detection = EdgeDetection(MODEL_PATH, MODEL_WIDTH, MODEL_HEIGHT)
@@ -144,7 +142,6 @@ def main():
 
         # # Post-processing
         edge_detection.post_process(result, image_name)
-         
 
 if __name__ == '__main__':
     main()

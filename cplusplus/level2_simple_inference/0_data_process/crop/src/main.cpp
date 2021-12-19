@@ -23,7 +23,6 @@
 #include "main.h"
 using namespace std;
 
-
 /* Run managed resource applications, including Device, Context, and Stream*/
 Result Initparam(int argc, char *argv[])
 {
@@ -108,7 +107,7 @@ void DestroyResource()
     aclError ret;
     if (stream_ != nullptr) {
         ret = aclrtDestroyStream(stream_);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("destroy stream failed");
         }
         stream_ = nullptr;
@@ -117,7 +116,7 @@ void DestroyResource()
 
     if (context_ != nullptr) {
         ret = aclrtDestroyContext(context_);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("destroy context failed");
         }
         context_ = nullptr;
@@ -125,13 +124,13 @@ void DestroyResource()
     INFO_LOG("end to destroy context");
 
     ret = aclrtResetDevice(deviceId_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("reset device failed");
     }
     INFO_LOG("end to reset device is %d", deviceId_);
 
     ret = aclFinalize();
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("finalize acl failed");
     }
     INFO_LOG("end to finalize acl");

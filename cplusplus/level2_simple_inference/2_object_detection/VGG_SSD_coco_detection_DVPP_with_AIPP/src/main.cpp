@@ -32,16 +32,15 @@ const char* kModelPath = "../model/vgg_ssd.om";
 }
 
 int main(int argc, char *argv[]) {
-    //实例化目标检测对象,参数为分类模型路径,模型输入要求的宽和高
+    //init 
     ObjectDetect detect(kModelPath, kModelWidth, kModelHeight);
-    //初始化分类推理的acl资源, 模型和内存
     Result ret = detect.Init();
     if (ret != SUCCESS) {
         ERROR_LOG("Classification Init resource failed");
         return FAILED;
     }
 
-    //获取图片目录下所有的图片文件名
+    //get data
     string inputImageDir = "../data";
     vector<string> fileVec;
     Utils::GetAllFiles(inputImageDir, fileVec);
@@ -50,7 +49,7 @@ int main(int argc, char *argv[]) {
         return FAILED;
     }
 
-    //逐张图片推理
+    //infer
     ImageData image;
     for (string imageFile : fileVec) {
         Utils::ReadImageFile(image, imageFile);
@@ -59,7 +58,7 @@ int main(int argc, char *argv[]) {
             return FAILED;
         }
 
-        //预处理图片:读取图片,讲图片缩放到模型输入要求的尺寸
+        //preprocess
         ImageData resizedImage;
         Result ret = detect.Preprocess(resizedImage, image);
         if (ret != SUCCESS) {
@@ -68,20 +67,19 @@ int main(int argc, char *argv[]) {
             continue;
         }
 
-        //将预处理的图片送入模型推理,并获取推理结果
+        //model excute
         aclmdlDataset* inferenceOutput = nullptr;
         ret = detect.Inference(inferenceOutput, resizedImage);
         if ((ret != SUCCESS) || (inferenceOutput == nullptr)) {
             ERROR_LOG("Inference model inference output data failed");
             return FAILED;
         }
-        //解析推理输出,并将推理得到的物体类别和位置标记到图片上
+        //postprocess
         ret = detect.Postprocess(inferenceOutput, imageFile);
         if (ret != SUCCESS) {
             ERROR_LOG("Process model inference output data failed");
             return FAILED;
         }
-
     }
     
     INFO_LOG("Execute sample success");

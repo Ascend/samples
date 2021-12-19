@@ -40,10 +40,9 @@ Result ModelProcess::LoadModelFromFile(const char *modelPath)
         return FAILED;
     }
 
-    // TODO:
     // load model and get modelID.
     aclError ret = aclmdlLoadFromFile(modelPath, &modelId_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("load model from file failed, model file is %s", modelPath);
         return FAILED;
     }
@@ -60,10 +59,9 @@ Result ModelProcess::CreateDesc()
         ERROR_LOG("create model description failed");
         return FAILED;
     }
-    //TODO:
     // get modelDesc(model description) by modelID
     aclError ret = aclmdlGetDesc(modelDesc_, modelId_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("get model description failed");
         return FAILED;
     }
@@ -82,7 +80,6 @@ void ModelProcess::DestroyDesc()
 
 Result ModelProcess::CreateInput(void *inputDataBuffer, size_t bufferSize)
 {
-    // TODO:
     input_ = aclmdlCreateDataset();
     if (input_ == nullptr) {
         ERROR_LOG("can't create dataset, create input failed");
@@ -127,7 +124,6 @@ Result ModelProcess::CreateOutput()
         return FAILED;
     }
 
-    //TODO:
     output_ = aclmdlCreateDataset();
     if (output_ == nullptr) {
         ERROR_LOG("can't create dataset, create output failed");
@@ -136,25 +132,24 @@ Result ModelProcess::CreateOutput()
     size_t outputSize = aclmdlGetNumOutputs(modelDesc_);
 
     for (size_t i = 0; i < outputSize; ++i) {
-        //TODO:
         size_t buffer_size = aclmdlGetOutputSizeByIndex(modelDesc_, i);
 
         void *outputBuffer = nullptr;
         aclError ret = aclrtMalloc(&outputBuffer, buffer_size, ACL_MEM_MALLOC_NORMAL_ONLY);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("can't malloc buffer, size is %zu, create output failed", buffer_size);
             return FAILED;
         }
 
         aclDataBuffer* outputData = aclCreateDataBuffer(outputBuffer, buffer_size);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("can't create data buffer, create output failed");
             aclrtFree(outputBuffer);
             return FAILED;
         }
 
         ret = aclmdlAddDatasetBuffer(output_, outputData);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("can't add data buffer, create output failed");
             aclrtFree(outputBuffer);
             aclDestroyDataBuffer(outputData);
@@ -185,9 +180,8 @@ void ModelProcess::DestroyOutput()
 
 Result ModelProcess::Execute()
 {
-    //TODO:
     aclError ret = aclmdlExecute(modelId_, input_, output_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("execute model failed, modelId is %u", modelId_);
         return FAILED;
     }
@@ -198,15 +192,13 @@ Result ModelProcess::Execute()
 
 void ModelProcess::Unload()
 {
-
     if (!loadFlag_) {
         WARN_LOG("no model had been loaded, unload failed");
         return;
     }
 
-    //TODO:
     aclError ret = aclmdlUnload(modelId_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("unload model failed, modelId is %u", modelId_);
     }
 
@@ -228,6 +220,3 @@ aclmdlDesc *ModelProcess::GetModelDesc()
 {
     return modelDesc_;
 }
-
-
-

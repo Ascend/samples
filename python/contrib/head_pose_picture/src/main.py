@@ -19,8 +19,8 @@ import argparse
 import sys
 sys.path.append("../../../common/")
 
-from atlas_utils.acl_model import Model
-from atlas_utils.acl_resource import AclResource 
+from acllite_model import AclLiteModel
+from acllite_resource import AclLiteResource 
 
 import yolov3.yolov3 as YOLOV3
 import whenet.whenet as WHENET
@@ -62,7 +62,7 @@ def main():
     print("WHENet MODEL_PATH:", WHENet_MODEL_PATH)
 
     #initialize acl runtime 
-    acl_resource = AclResource()
+    acl_resource = AclLiteResource()
     acl_resource.init()
 
     #read image
@@ -70,10 +70,10 @@ def main():
     image_height, image_width = image.shape[0], image.shape[1]
     
     # loading and initializing models
-    yolo_model = Model(YOLO_PATH)
+    yolo_model = AclLiteModel(YOLO_PATH)
 
     yolo_v3 = YOLOV3.YOLOV3(image_height, image_width, yolo_model)
-    whenet_model = Model(WHENet_MODEL_PATH)
+    whenet_model = AclLiteModel(WHENet_MODEL_PATH)
     whenet = WHENET.WHENet(image_height, image_width, whenet_model)
     
     # convert image to RGB 

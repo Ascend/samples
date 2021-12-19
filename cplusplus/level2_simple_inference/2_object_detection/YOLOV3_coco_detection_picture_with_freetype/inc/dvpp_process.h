@@ -29,7 +29,6 @@
 class DvppProcess {
 public:
     DvppProcess();
-
     ~DvppProcess();
 
     Result CropAndPaste(ImageData& src, ImageData& dest,
@@ -42,4 +41,3 @@ protected:
     aclrtStream stream_;
     acldvppChannelDesc *dvppChannelDesc_;
 };
-

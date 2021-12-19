@@ -61,7 +61,6 @@ public:
     */
     Result MainProcess(std::string input_path);
 
-
 private:
     void DestroyResource();
 

@@ -37,4 +37,3 @@ typedef struct PicDesc {
 }PicDesc;
 
 aclrtRunMode runMode;
-

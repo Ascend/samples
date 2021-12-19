@@ -19,10 +19,10 @@
 #pragma once
 #include <memory>
 #include "acl/acl.h"
-#include "atlasutil/atlas_model.h"
-#include "atlasutil/atlas_utils.h"
+#include "acllite/AclLiteModel.h"
+#include "acllite/AclLiteUtils.h"
 #include <opencv2/opencv.hpp>
-#include "opencv2/imgcodecs/legacy/constants_c.h"
+
 #include "opencv2/imgproc/types_c.h"
 
 /**
@@ -35,16 +35,16 @@ class ObjectDetect {
 
     ~ObjectDetect();
 
-    AtlasError Init();
+    AclLiteError Init();
 
-    AtlasError Inference(std::vector<InferenceOutput>& inferenceOutput, cv::Mat& reiszeMat);
+    AclLiteError Inference(std::vector<InferenceOutput>& inferenceOutput, cv::Mat& reiszeMat);
 
     void DestroyResource();
 
     private:
-    AtlasError CreateInput();
+    AclLiteError CreateInput();
 
-    AtlasModel model_;
+    AclLiteModel model_;
     const char* modelPath_;
     uint32_t modelWidth_;
     uint32_t modelHeight_;

@@ -33,7 +33,7 @@ Result ModelProcess::LoadModel(const char *modelPath)
     }
 
     aclError ret = aclmdlQuerySize(modelPath, &modelWorkSize_, &modelWeightSize_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("query model failed, model file is %s, errorCode is %d", modelPath, static_cast<int32_t>(ret));
         return FAILED;
     }
@@ -41,7 +41,7 @@ Result ModelProcess::LoadModel(const char *modelPath)
     // using ACL_MEM_MALLOC_HUGE_FIRST to malloc memory, huge memory is preferred to use
     // and huge memory can improve performance.
     ret = aclrtMalloc(&modelWorkPtr_, modelWorkSize_, ACL_MEM_MALLOC_HUGE_FIRST);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("malloc buffer for model work space failed, require size is %zu, errorCode is %d",
             modelWorkSize_, static_cast<int32_t>(ret));
         return FAILED;
@@ -50,7 +50,7 @@ Result ModelProcess::LoadModel(const char *modelPath)
     // using ACL_MEM_MALLOC_HUGE_FIRST to malloc memory, huge memory is preferred to use
     // and huge memory can improve performance.
     ret = aclrtMalloc(&modelWeightPtr_, modelWeightSize_, ACL_MEM_MALLOC_HUGE_FIRST);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("malloc buffer for model weight failed, require size is %zu, errorCode is %d",
             modelWeightSize_, static_cast<int32_t>(ret));
         return FAILED;
@@ -58,7 +58,7 @@ Result ModelProcess::LoadModel(const char *modelPath)
 
     ret = aclmdlLoadFromFileWithMem(modelPath, &modelId_, modelWorkPtr_,
         modelWorkSize_, modelWeightPtr_, modelWeightSize_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("load model from file failed, model file is %s, errorCode is %d",
             modelPath, static_cast<int32_t>(ret));
         return FAILED;
@@ -78,7 +78,7 @@ Result ModelProcess::CreateDesc()
     }
 
     aclError ret = aclmdlGetDesc(modelDesc_, modelId_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("get model description failed, errorCode is %d", static_cast<int32_t>(ret));
         return FAILED;
     }
@@ -123,7 +123,7 @@ Result ModelProcess::CreateInput(void *inputDataBuffer, size_t bufferSize)
     }
 
     aclError ret = aclmdlAddDatasetBuffer(input_, inputData);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("can't add data buffer, create input failed, errorCode is %d", static_cast<int32_t>(ret));
         (void)aclDestroyDataBuffer(inputData);
         inputData = nullptr;
@@ -168,7 +168,7 @@ Result ModelProcess::CreateOutput()
         void *outputBuffer = nullptr;
         aclError ret = aclrtMalloc(&outputBuffer, modelOutputSize,
                                    ACL_MEM_MALLOC_NORMAL_ONLY);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("can't malloc buffer, size is %zu, create output failed, errorCode is %d",
                       modelOutputSize, static_cast<int32_t>(ret));
             return FAILED;
@@ -182,7 +182,7 @@ Result ModelProcess::CreateOutput()
         }
 
         ret = aclmdlAddDatasetBuffer(output_, data);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("can't add data buffer, create output failed, errorCode is %d", static_cast<int32_t>(ret));
             (void)aclrtFree(outputBuffer);
             (void)aclDestroyDataBuffer(data);
@@ -215,7 +215,7 @@ void ModelProcess::DestroyOutput()
 Result ModelProcess::Execute()
 {
     aclError ret = aclmdlExecute(modelId_, input_, output_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("execute model failed, modelId is %u, errorCode is %d", modelId_, static_cast<int32_t>(ret));
         return FAILED;
     }
@@ -232,7 +232,7 @@ void ModelProcess::UnloadModel()
     }
 
     aclError ret = aclmdlUnload(modelId_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("unload model failed, modelId is %u, errorCode is %d", modelId_, static_cast<int32_t>(ret));
     }
 
@@ -273,7 +273,7 @@ Result ModelProcess::GetModelInputWH(int &width, int &height)
     aclmdlIODims dims;
     // om used in this app has only one input
     aclError ret = aclmdlGetInputDims(modelDesc_, 0, &dims);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("get model input dims failed, errorCode is %d", static_cast<int32_t>(ret));
         return FAILED;
     }

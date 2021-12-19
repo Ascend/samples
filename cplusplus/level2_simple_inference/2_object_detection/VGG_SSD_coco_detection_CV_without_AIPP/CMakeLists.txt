@@ -4,6 +4,6 @@
 cmake_minimum_required(VERSION 3.5.1)
 
 # project information
-project(sample-objectdetection)
+project(VGG_SSD_coco_detection_CV_without_AIPP)
 
 add_subdirectory("./src")

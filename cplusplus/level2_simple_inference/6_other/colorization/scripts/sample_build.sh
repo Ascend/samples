@@ -1,7 +1,8 @@
-#!/bin/bash
+#/bin/bash
 ScriptPath="$( cd "$(dirname "$BASH_SOURCE")" ; pwd -P )"
 ModelPath="${ScriptPath}/../model"
-. ${ScriptPath}/../../../../../common/sample_common.sh
+common_script_dir=${THIRDPART_PATH}/common
+. ${common_script_dir}/sample_common.sh
 
 function main()
 {
@@ -11,9 +12,11 @@ function main()
   if [ $? -ne 0 ];then
     return 1
   fi
-
-  wget -O ${ModelPath}/../data/dog.png https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/colorization/dog.png --no-check-certificate
   
+  if [ ! -f "${ModelPath}/../data/dog.png" ];then
+    wget -O ${ModelPath}/../data/dog.png https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/colorization/dog.png --no-check-certificate
+  fi
+
   find_model colorization.om
   if [ $? -ne 0 ];then
     return 1

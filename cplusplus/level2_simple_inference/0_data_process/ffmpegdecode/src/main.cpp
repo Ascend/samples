@@ -85,7 +85,7 @@ int GetVideoIndex(AVFormatContext* avFormatContext) {
 }
 
 void SetDictForRtsp(AVDictionary*& avdic) {
-    ATLAS_LOG_INFO("Set parameters for %s", streamName_.c_str());
+    ACLLITE_LOG_INFO("Set parameters for %s", streamName_.c_str());
     av_dict_set(&avdic, kRtspTransport.c_str(), rtspTransport_.c_str(), kNoFlag);
     av_dict_set(&avdic, kBufferSize.c_str(), kMaxBufferSize.c_str(), kNoFlag);
     av_dict_set(&avdic, kMaxDelayStr.c_str(), kMaxDelayValue.c_str(), kNoFlag);
@@ -93,14 +93,14 @@ void SetDictForRtsp(AVDictionary*& avdic) {
     av_dict_set(&avdic, kReorderQueueSize.c_str(),
                 kReorderQueueSizeValue.c_str(), kNoFlag);
     av_dict_set(&avdic, kPktSize.c_str(), kPktSizeValue.c_str(), kNoFlag);
-    ATLAS_LOG_INFO("Set parameters for %s end", streamName_.c_str());
+    ACLLITE_LOG_INFO("Set parameters for %s end", streamName_.c_str());
 }
 
 bool OpenVideo(AVFormatContext*& avFormatContext) {
     bool ret = true;
     AVDictionary* avdic = nullptr;
     av_log_set_level(AV_LOG_DEBUG);
-    ATLAS_LOG_INFO("Open video %s ...", streamName_.c_str());
+    ACLLITE_LOG_INFO("Open video %s ...", streamName_.c_str());
     SetDictForRtsp(avdic);
     int openRet = avformat_open_input(&avFormatContext,
                                        streamName_.c_str(), nullptr,
@@ -108,7 +108,7 @@ bool OpenVideo(AVFormatContext*& avFormatContext) {
     if (openRet < 0) { // check open video result
         char buf_error[kErrorBufferSize];
         av_strerror(openRet, buf_error, kErrorBufferSize);
-        ATLAS_LOG_ERROR("Could not open video:%s, return :%d, error info:%s",
+        ACLLITE_LOG_ERROR("Could not open video:%s, return :%d, error info:%s",
                       streamName_.c_str(), openRet, buf_error);
         ret = false;
     }
@@ -123,18 +123,18 @@ void GetVideoInfo() {
     AVFormatContext* avFormatContext = avformat_alloc_context();
     bool ret = OpenVideo(avFormatContext);
     if (ret == false) {
-        ATLAS_LOG_ERROR("Open %s failed", streamName_.c_str());
+        ACLLITE_LOG_ERROR("Open %s failed", streamName_.c_str());
         return;
     }
 
     if (avformat_find_stream_info(avFormatContext,NULL)<0) {
-        ATLAS_LOG_ERROR("Get stream info of %s failed", streamName_.c_str());
+        ACLLITE_LOG_ERROR("Get stream info of %s failed", streamName_.c_str());
         return;
     }
 
     int videoIndex = GetVideoIndex(avFormatContext);
     if (videoIndex == kInvalidVideoIndex) { // check video index is valid
-        ATLAS_LOG_ERROR("Video index is %d, current media stream has no "
+        ACLLITE_LOG_ERROR("Video index is %d, current media stream has no "
                         "video info:%s",
                         kInvalidVideoIndex, streamName_.c_str());
 
@@ -155,7 +155,7 @@ void GetVideoInfo() {
     videoType_ = inStream->codecpar->codec_id;
     profile_ = inStream->codecpar->profile;
     avformat_close_input(&avFormatContext);
-    ATLAS_LOG_INFO("Video %s, type %d, profile %d, width:%d, height:%d, fps:%d",
+    ACLLITE_LOG_INFO("Video %s, type %d, profile %d, width:%d, height:%d, fps:%d",
                  streamName_.c_str(), videoType_, profile_, frameWidth_, frameHeight_, fps_);
     return;
 }
@@ -192,30 +192,30 @@ int GetVdecType() {
                 streamFormat_ = H264_HIGH_LEVEL;
                 break;
             default:
-                ATLAS_LOG_INFO("Not support h264 profile %d, use as mp", profile_);
+                ACLLITE_LOG_INFO("Not support h264 profile %d, use as mp", profile_);
                 streamFormat_ = H264_MAIN_LEVEL; 
                 break;
         }
     } else {
         streamFormat_ = kInvalidTpye;
-        ATLAS_LOG_ERROR("Not support stream, type %d,  profile %d", videoType_, profile_);
+        ACLLITE_LOG_ERROR("Not support stream, type %d,  profile %d", videoType_, profile_);
     }
 
     return streamFormat_;
 }
 
-AtlasError FrameDecodeCallback(void* frameData, int frameSize) {
+AclLiteError FrameDecodeCallback(void* frameData, int frameSize) {
     if ((frameData == NULL) || (frameSize == 0)) {
-        ATLAS_LOG_ERROR("Frame data is null");
-        return ATLAS_ERROR_H26X_FRAME;
+        ACLLITE_LOG_ERROR("Frame data is null");
+        return ACLLITE_ERROR_H26X_FRAME;
     }
 
     //将ffmpeg解码得到的h26x数据拷贝到dvpp内存
     void* buffer = CopyDataToDevice(frameData, frameSize,
                                     runMode_, MEMORY_DVPP);  
     if (buffer == nullptr) {
-        ATLAS_LOG_ERROR("Copy frame h26x data to dvpp failed");
-        return ATLAS_ERROR_COPY_DATA;
+        ACLLITE_LOG_ERROR("Copy frame h26x data to dvpp failed");
+        return ACLLITE_ERROR_COPY_DATA;
     }
 
     shared_ptr<FrameData> videoFrame = make_shared<FrameData>();
@@ -223,7 +223,7 @@ AtlasError FrameDecodeCallback(void* frameData, int frameSize) {
     videoFrame->size = frameSize;
 
     usleep(kOutputJamWait);
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
 void InitVideoStreamFilter(const AVBitStreamFilter*& videoFilter) {
@@ -241,20 +241,20 @@ bool InitVideoParams(int videoIndex,
     const AVBitStreamFilter* videoFilter;
     InitVideoStreamFilter(videoFilter);
     if (videoFilter == nullptr) { // check video fileter is nullptr
-        ATLAS_LOG_ERROR("Unkonw bitstream filter, videoFilter is nullptr!");
+        ACLLITE_LOG_ERROR("Unkonw bitstream filter, videoFilter is nullptr!");
         return false;
     }
 
     // checke alloc bsf context result
     if (av_bsf_alloc(videoFilter, &bsfCtx) < 0) {
-        ATLAS_LOG_ERROR("Fail to call av_bsf_alloc!");
+        ACLLITE_LOG_ERROR("Fail to call av_bsf_alloc!");
         return false;
     }
 
     // check copy parameters result
     if (avcodec_parameters_copy(bsfCtx->par_in,
         avFormatContext->streams[videoIndex]->codecpar) < 0) {
-        ATLAS_LOG_ERROR("Fail to call avcodec_parameters_copy!");
+        ACLLITE_LOG_ERROR("Fail to call avcodec_parameters_copy!");
         return false;
     }
 
@@ -262,7 +262,7 @@ bool InitVideoParams(int videoIndex,
 
     // check initialize bsf contextreult
     if (av_bsf_init(bsfCtx) < 0) {
-        ATLAS_LOG_ERROR("Fail to call av_bsf_init!");
+        ACLLITE_LOG_ERROR("Fail to call av_bsf_init!");
         return false;
     }
 
@@ -270,7 +270,7 @@ bool InitVideoParams(int videoIndex,
 }
 
 void Decode() {
-    ATLAS_LOG_INFO("Start ffmpeg decode video %s ...", streamName_.c_str());
+    ACLLITE_LOG_INFO("Start ffmpeg decode video %s ...", streamName_.c_str());
     avformat_network_init(); // init network
     AVFormatContext* avFormatContext = avformat_alloc_context();
 
@@ -281,7 +281,7 @@ void Decode() {
 
     int videoIndex = GetVideoIndex(avFormatContext);
     if (videoIndex == kInvalidVideoIndex) { // check video index is valid
-        ATLAS_LOG_ERROR("Rtsp %s index is -1", streamName_.c_str());
+        ACLLITE_LOG_ERROR("Rtsp %s index is -1", streamName_.c_str());
         return;
     }
 
@@ -291,7 +291,7 @@ void Decode() {
         return;
     }
 
-    ATLAS_LOG_INFO("Start decode frame of video %s ...", streamName_.c_str());
+    ACLLITE_LOG_INFO("Start decode frame of video %s ...", streamName_.c_str());
 
     AVPacket avPacket;
     int processOk = true;
@@ -300,7 +300,7 @@ void Decode() {
         if (avPacket.stream_index == videoIndex) { // check current stream is video
           // send video packet to ffmpeg
             if (av_bsf_send_packet(bsfCtx, &avPacket)) {
-                ATLAS_LOG_ERROR("Fail to call av_bsf_send_packet, channel id:%s",
+                ACLLITE_LOG_ERROR("Fail to call av_bsf_send_packet, channel id:%s",
                     streamName_.c_str());
             }
 
@@ -320,22 +320,22 @@ void Decode() {
     avformat_close_input(&avFormatContext); // close input video
 
     isFinished_ = true;
-    ATLAS_LOG_INFO("Ffmpeg decoder %s finished", streamName_.c_str());
+    ACLLITE_LOG_INFO("Ffmpeg decoder %s finished", streamName_.c_str());
 }
 
 int main(int argc, char *argv[]) {
     //Check the input when the application executes, which takes the path to the input video file
     if((argc < 2) || (argv[1] == nullptr)){
-        ATLAS_LOG_ERROR("Please input: ./main <image_dir>");
+        ACLLITE_LOG_ERROR("Please input: ./main <image_dir>");
         return FAILED;
     }
 
     streamName_ = string(argv[1]);
-    AclDevice aclDev;
-    AtlasError ret = aclDev.Init();
+    AclLiteResource aclDev;
+    AclLiteError ret = aclDev.Init();
     if (ret) {
-        ATLAS_LOG_ERROR("Init resource failed, error %d", ret);
-        return ATLAS_ERROR;
+        ACLLITE_LOG_ERROR("Init resource failed, error %d", ret);
+        return ACLLITE_ERROR;
     } 
     runMode_ = aclDev.GetRunMode();  
 
@@ -343,13 +343,13 @@ int main(int argc, char *argv[]) {
     FFmpegDecoder();
     //verify video type
     if (kInvalidTpye == GetVdecType()) {      
-        ATLAS_LOG_ERROR("Video %s type is invalid", streamName_.c_str());
+        ACLLITE_LOG_ERROR("Video %s type is invalid", streamName_.c_str());
     } 
 
     //Get video fps, if no fps, use 1 as default
     if (fps_ == 0) {
         fps_ = kDefaultFps;
-        ATLAS_LOG_INFO("Video %s fps is 0, change to %d", 
+        ACLLITE_LOG_INFO("Video %s fps is 0, change to %d", 
                        streamName_.c_str(), fps_);
     }
     //Call the frame interval time(us)

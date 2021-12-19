@@ -4,21 +4,21 @@ Copyright (R) @huawei.com, all rights reserved
 CREATED:  2021-01-20 20:12:13
 MODIFIED: 2021-01-29 14:04:45
 """
-
 import sys
 import os
 
 path = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.join(path, ".."))
 sys.path.append(os.path.join(path, "../../../common/"))
+sys.path.append(os.path.join(path, "../../../common/acllite"))
 
 import acl
-import atlas_utils.utils as utils
-import atlas_utils.constants as const
-from atlas_utils.acl_dvpp import Dvpp
-from atlas_utils.acl_model import Model
-from atlas_utils.acl_image import AclImage
-from acl_resource import AclResource
+import utils
+import constants as const
+from acllite_imageproc import AclLiteImageProc
+from acllite_model import AclLiteModel
+from acllite_image import AclLiteImage
+from acllite_resource import AclLiteResource
 from gesture_categories import get_gesture_categories
 from PIL import Image, ImageDraw, ImageFont
 
@@ -42,10 +42,10 @@ class Gesture(object):
         Initialize
         """
         # Initialize dvpp
-        self._dvpp = Dvpp()
+        self._dvpp = AclLiteImageProc()
 
         # Load model
-        self._model = Model(self._model_path)
+        self._model = AclLiteModel(self._model_path)
 
         return const.SUCCESS
 
@@ -79,23 +79,20 @@ class Gesture(object):
         for n in top_k:
             object_class = get_gesture_categories(n)
             print("label:%d  confidence: %f, class: %s" % (n, vals[n], object_class))
-        
        
         if len(top_k):
             object_class = get_gesture_categories(top_k[0])
-            output_path = os.path.join(os.path.join(SRC_PATH, "../outputs"), os.path.basename(image_file))
+            output_path = os.path.join(os.path.join(SRC_PATH, "../out"), os.path.basename(image_file))
             origin_img = Image.open(image_file)
             draw = ImageDraw.Draw(origin_img)
-            font = ImageFont.load_default()
+            font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", size=20)
             draw.text((10, 50), object_class, font=font, fill=255)
             origin_img.save(output_path)
-
 
 SRC_PATH = os.path.realpath(__file__).rsplit("/", 1)[0]
 MODEL_PATH = os.path.join(SRC_PATH, "../model/gesture_yuv.om")
 MODEL_WIDTH = 256
 MODEL_HEIGHT = 224
-
 
 def main():
     """
@@ -105,7 +102,7 @@ def main():
         print("The App arg is invalid")
         exit(1)
     
-    acl_resource = AclResource()
+    acl_resource = AclLiteResource()
     acl_resource.init()
     
     gesture = Gesture(MODEL_PATH, MODEL_WIDTH, MODEL_HEIGHT)
@@ -119,13 +116,12 @@ def main():
                    for img in os.listdir(image_dir)
                    if os.path.splitext(img)[1] in const.IMG_EXT]
     
-    
-    if not os.path.isdir(os.path.join(SRC_PATH, "../outputs")):
-        os.mkdir(os.path.join(SRC_PATH, "../outputs"))
+    if not os.path.isdir(os.path.join(SRC_PATH, "../out")):
+        os.mkdir(os.path.join(SRC_PATH, "../out"))
 
     for image_file in images_list:
         
-        image = AclImage(image_file)
+        image = AclLiteImage(image_file)
         
         resized_image = gesture.pre_process(image)
         print("pre process end")
@@ -137,4 +133,3 @@ def main():
 if __name__ == '__main__':
     main()
  
-

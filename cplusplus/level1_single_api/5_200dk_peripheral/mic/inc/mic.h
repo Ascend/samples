@@ -17,7 +17,7 @@
 #define MIC_H_
 
 extern "C" {
-#include "driver/peripheral_api.h"
+#include "peripheral_api.h"
 }
 
 #define INFO_LOG(fmt, args...) fprintf(stdout, "[INFO]  " fmt "\n", ##args)

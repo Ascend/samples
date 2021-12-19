@@ -18,11 +18,9 @@
 */
 #pragma once
 #include <cstdint>
-
 #include "acl/acl.h"
 #include "acl/ops/acl_dvpp.h"
 #include "utils.h"
-
 
 /**
  * DvppProcess
@@ -83,10 +81,8 @@ private:
     aclrtStream stream_;
     acldvppChannelDesc *dvppChannelDesc_;
 
-
     void* decodeOutBufferDev_; // decode output buffer
     acldvppPicDesc *decodeOutputDesc_; //decode output desc
-
 
     uint8_t *inDevBuffer_;  // input pic dev buffer
     uint32_t inDevBufferSizeD_; // input pic size for decode

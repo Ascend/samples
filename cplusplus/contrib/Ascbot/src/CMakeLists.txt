@@ -37,9 +37,9 @@ include_directories(
     ../inc/
     $ENV{HOME}/ascend_ddk/include/third_party/
     ${INC_PATH}/acllib/include/
-    $ENV{HOME}/ascend_ddk/include/ascenddk/
+    $ENV{HOME}/ascend_ddk/include/
     $ENV{HOME}/Ascend/
-    $ENV{HOME}/Ascend/ascenddk/
+    $ENV{HOME}/Ascend/
 )
 
 if(target STREQUAL "Simulator_Function")

@@ -82,4 +82,3 @@ private:
     float yScale_;
     std::string originImage_;
 };
-

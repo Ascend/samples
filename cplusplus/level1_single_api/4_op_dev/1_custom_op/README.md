@@ -33,6 +33,9 @@ The directory of a Caffe or TensorFlow custom operator sample project is organiz
 │   ├── tf_plugin    // Directory of the TensorFlow operator plug-in implementation code and the CMakeList file
 │       ├── CMakeLists.txt 
 │       ├── xx_plugin.cc 
+│   ├── onnx_plugin    //Directory of the ONNX operator plug-in implementation code and the CMakeList file录
+│       ├── CMakeLists.txt 
+│       ├── xx_plugin.cc 
 │   ├── tf_scope_fusion_pass    // Directory of the scope fusion pattern implementation code and the CMakeList file
 │       └── xx_pass.h      // Fusion pattern header file
 │       └── xx_pass.cc    // Fusion pattern implementation
@@ -92,9 +95,38 @@ The directory of a Caffe or TensorFlow custom operator sample project is organiz
 
 ## Environment Requirements
 
--   OS and architecture: CentOS x86\_64, CentOS AArch64, Ubuntu 18.04 x86\_64, EulerOS x86, EulerOS AArch64
--   Python version and dependency library: Python 3.7.5
+-   OS and architecture: CentOS x86\_64, CentOS AArch64, Ubuntu 18.04 x86\_64, Ubuntu 18.04 aarch64, EulerOS x86, EulerOS AArch64
+-   Python version and dependency library: Python 3.7.*x* (3.7.0 to 3.7.11) and Python 3.8.*x* (3.8.0 to 3.8.11).
 -   Ascend AI Software Stack deployed
+
+## Configuring Basic Environment Variables of the CANN Software
+
+- The CANN portfolio provides a process-level environment variable setting script to automatically set environment variables. The following commands are used as examples, in which the default installation paths are under the  non-root user. Replace them with actual installation paths.
+
+  ```
+   # Configure environment variables when installing the cann-toolkit package.
+   . ${HOME}/Ascend/ascend-toolkit/set_env.sh 
+      
+   # Configure environment variables when installing the nnrt package.
+   . ${HOME}/Ascend/nnrt/set_env.sh 
+   
+   # Configure environment variables when installing the nnae package.
+   . ${HOME}/Ascend/nnae/set_env.sh 
+   
+   # Configure environment variables when installing the tfplugin package.
+   . /${HOME}/Ascend/tfplugin/set_env.sh
+   
+  ```
+
+- Operator building requires Python installation. The following takes Python 3.7.5 as an example. Run the following commands as a running user to set the environment variables related to Python 3.7.5:
+
+  ```
+  # Set tje Python3.7.5 library path.
+  export LD_LIBRARY_PATH=/usr/local/python3.7.5/lib:$LD_LIBRARY_PATH
+  # If multiple Python 3 versions exist in the user environment, specify Python 3.7.5.
+  export PATH=/usr/local/python3.7.5/bin:$PATH
+  ```
+  Replace the Python 3.7.5 installation path as required. You can also write the preceding commands to the ~/.bashrc file and run the source ~/.bashrc command to make the modification take effect immediately.
 
 ## Operator Project Building
 
@@ -137,56 +169,36 @@ The directory of a Caffe or TensorFlow custom operator sample project is organiz
     The custom.proto file in the sample code contains the definition of the Caffe custom operator. If there are other custom operators, add their definitions to this file.
     ```
 
-2.  Configure the environment variables and build settings in the  **build.sh**  script based on the actual development environment:
+2. Configure the environment variables and build settings in the  **build.sh**  script based on the actual development environment:
 
-    Configure the following environment variables in the header of the  **build.sh**  script:
+   Configure the following environment variables in the header of the  **build.sh**  script:
 
-    -   **ASCEND\_OPP\_PATH**: specifies the installation path of the OPP component.
+   - **ASCEND\_TENSOR\_COMPILER\_INCLUDE**  specifies the path of the header files of CANN software.
 
-        Uncomment this environment variable and change it to the actual OPP installation path. For example:
+     Uncomment this environment variable and change it to the path of the header file of CANN software. For example:
 
-        ```
-        export ASCEND_OPP_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/opp
-        ```
+     ```
+     export ASCEND_TENSOR_COMPILER_INCLUDE=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/include
+     ```
+     
+   - **TOOLCHAIN\_DIR**  specifies the directory of the HCC cross-compiler in the Toolkit component, without default value specified. This compiler is used to build the AI CPU operator in the sample.
+     
+      Uncomment this environment variable and change it to the actual path of the HCC compiler. For example:
+      
+      ```
+      export TOOLCHAIN_DIR=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/toolkit/toolchain/hcc
+      ```
+      
+   - **AICPU\_KERNEL\_TARGET**  specifies the name of the dynamic library file generated after the implementation file of the AI CPU operator is built.
+         - If this environment variable is not configured, the default value  **cust\_aicpu\_kernels**  is used.
 
-    -   **ASCEND\_AICPU\_PATH**: specifies the installation path of the AI CPU component.
+           **Note**: The  **opInfo.kernelSo**  field in the AI CPU operator information library \(**cpukernel/op\_info\_cfg/aicpu\_kernel/xx.ini**\) must be set to the name of the generated dynamic library file. For example, if the value of  **AICPU\_KERNEL\_TARGET**  is  **cust\_aicpu\_kernels**, the name of the generated dynamic library file is  **libcust\_aicpu\_kernels.so**.
 
-        ```
-        export ASCEND_AICPU_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest
-        ```
+         - If you need to customize the name of the dynamic library file, uncomment the environment variable and modify the name as follows:
 
-        Uncomment this environment variable and change it to the actual AI CPU installation path.
+              export AICPU_KERNEL_TARGET=xxx
 
-    -   **ASCEND\_TENSOR\_COMPILER\_INCLUDE**  specifies the path of the ATC header files.
-        -   If it is not set, the default path  **/usr/local/Ascend/atc/include**  is used.
-        -   If the actual ATC installation path is not the default path, uncomment this environment variable and change it to the actual path of the ATC  header files. For example:
-
-            ```
-            export ASCEND_TENSOR_COMPILER_INCLUDE=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/atc/include
-            ```
-
-
-    -   **TOOLCHAIN\_DIR**  specifies the directory of the HCC cross-compiler in the Toolkit component, without default value specified. This compiler is used to build the AI CPU operator in the sample.
-    
-        Uncomment this environment variable and change it to the actual path of the HCC compiler. For example:
-    
-        ```
-        export TOOLCHAIN_DIR=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/toolkit/toolchain/hcc
-        ```
-    
-    -   **AICPU\_KERNEL\_TARGET**  specifies the name of the dynamic library file generated after the implementation file of the AI CPU operator is built.
-        -   If this environment variable is not configured, the default value  **cust\_aicpu\_kernels**  is used.
-    
-            **Note**: The  **opInfo.kernelSo**  field in the AI CPU operator information library \(**cpukernel/op\_info\_cfg/aicpu\_kernel/xx.ini**\) must be set to the name of the generated dynamic library file. For example, if the value of  **AICPU\_KERNEL\_TARGET**  is  **cust\_aicpu\_kernels**, the name of the generated dynamic library file is  **libcust\_aicpu\_kernels.so**.
-    
-        -   If you need to customize the name of the dynamic library file, uncomment the environment variable and modify the name as follows:
-    
-            ```
-            export AICPU_KERNEL_TARGET=xxx
-            ```
-
-
-    -   **AICPU\_SOC\_VERSION** : Ascend AI ProcessorHiSilicon SoC  version. Set it to the folder name of the corresponding product in  **opp/op\_impl/built-in/aicpu/aicpu\_kernel/lib**  under the AI CPU installation directory, that is, the name of the folder where  **libcpu\_kernels\_context.a**  and  **libcpu\_kernels\_v1.0.1.so**  are located.
+   - **AICPU\_SOC\_VERSION** : Ascend AI ProcessorHiSilicon SoC  version. Set it to the folder name of the corresponding product in  **opp/op\_impl/built-in/aicpu/aicpu\_kernel/lib**  under the AI CPU installation directory, that is, the name of the folder where  **libcpu\_kernels\_context.a**  and  **libcpu\_kernels\_v1.0.1.so**  are located.
 
 
 3.  Build the operator project.
@@ -204,58 +216,50 @@ The directory of a Caffe or TensorFlow custom operator sample project is organiz
 
 ## Operator Deployment
 
-1.  Set the environment variables.
+1.  In the training scenario, copy the custom OPP runfile **custom_opp__<target os>_<target architecture>.run** to any path of the operating environment as the running user. If the development and operating environments are set up on the same server, you can safely skip this step.
 
-    Run the following command as the  **HwHiAiUser**  user to declare the environment variable on the current terminal. The variable becomes invalid when the shell terminal is closed.
+2. In the path of the built custom OPP, run the following command to install the custom OPP.
 
-    ```
-    export ASCEND_OPP_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/opp
-    ```
+   **./custom\_opp\__<target os\>\_<target architecture\>_.run**
 
-    /home/HwHiAiUser/Ascend/ascend-toolkit/latest  specifies the installation path of the OPP component. Change it to the actual path.
+   After the command is executed successfully, the custom operator files generated after build are deployed in the custom directory of the OPP directory as follows:
 
-2.  In the path of the built custom OPP, run the following command to install the custom OPP.
+   ```
+   ├── opp      // OPP directory
+   │   ├── op_impl
+   │       ├── built-in
+   │       ├── custom
+   │           ├── ai_core
+   │               ├── tbe
+   │                   ├── config
+   ${soc_version} // Ascend AI Processor model
+   │                           ├── aic-${sos_version}-ops-info.json     // Custom TBE operator info library file
+   │                   ├── custom_impl               // Custom TBE operator implementation code
+   │                       ├── xx.py
+   │           ├── vector_core   // Reserved directory, which can be ignored
+   │           ├── cpu          // Directory of AI CPU custom operator implementation file and information library.
+   │                ├── aicpu_kernel
+   │                    ├── custom_impl
+   │                        ├── libcust_aicpu_kernels.so   //Custom AI CPU operator implementation library file
+   │                ├── config
+   │                    ├── cust_aicpu_kernel.json         //Custom AI CPU operator information library file
+   │   ├── framework
+   │       ├── built-in
+   │       ├── custom
+   │           ├── caffe       // Directory of the plug-in library of the Caffe custom operator
+   │               ├── libcust_caffe_parsers.so      // Operator plug-in library file, including the parsing functions of custom operator plug-in
+   │               ├── custom.proto  // Original definition file of the custom operator. This file is read during the operator building to obtain the operator original definition.
+   │           ├── tensorflow         // Directory for storing the plug-in library of the TensorFlow custom operator and the configuration file for configuring the NPU's support for the custom operator
+   │               ├── libcust_tf_parsers.so         // Operator plug-in library file
+   │               ├── libcust_tf_scope_fusion.so    // Scope fusion pattern definition library file
+   │               ├── npu_supported_ops.json   // File applicable to Ascend 910
+   │   ├── op_proto
+   │       ├── built-in
+   │       ├── custom
+   │           ├── libcust_op_proto.so    // Prototype library file of the custom operator
+   ```
 
-    **./custom\_opp\__<target os\>\_<target architecture\>_.run**
-
-    After the command is executed successfully, the custom operator files generated after build are deployed in the custom directory of the OPP directory as follows:
-
-    ```
-    ├── opp      // OPP directory
-    │   ├── op_impl
-    │       ├── built-in
-    │       ├── custom
-    │           ├── ai_core
-    │               ├── tbe
-    │                   ├── config
-    ${soc_version} // Ascend AI Processor model
-    │                           ├── aic-${sos_version}-ops-info.json     // Custom TBE operator info library file
-    │                   ├── custom_impl               // Custom TBE operator implementation code
-    │                       ├── xx.py
-    │           ├── vector_core   // Reserved directory, which can be ignored
-    │           ├── cpu          // Directory of AI CPU custom operator implementation file and information library.
-    │                ├── aicpu_kernel
-    │                    ├── custom_impl
-    │                        ├── libcust_aicpu_kernels.so   //Custom AI CPU operator implementation library file
-    │                ├── config
-    │                    ├── cust_aicpu_kernel.json         //Custom AI CPU operator information library file
-    │   ├── framework
-    │       ├── built-in
-    │       ├── custom
-    │           ├── caffe       // Directory of the plug-in library of the Caffe custom operator
-    │               ├── libcust_caffe_parsers.so      // Operator plug-in library file, including the parsing functions of custom operator plug-in
-    │               ├── custom.proto  // Original definition file of the custom operator. This file is read during the operator building to obtain the operator original definition.
-    │           ├── tensorflow         // Directory for storing the plug-in library of the TensorFlow custom operator and the configuration file for configuring the NPU's support for the custom operator
-    │               ├── libcust_tf_parsers.so         // Operator plug-in library file
-    │               ├── libcust_tf_scope_fusion.so    // Scope fusion pattern definition library file
-    │               ├── npu_supported_ops.json   // File applicable to Ascend 910
-    │   ├── op_proto
-    │       ├── built-in
-    │       ├── custom
-    │           ├── libcust_op_proto.so    // Prototype library file of the custom operator
-    ```
-
-    Note: You do not need to pay attention to other directories and files during the custom operator deployment.
+   Note: You do not need to pay attention to other directories and files during the custom operator deployment.
 
 
 ## Operator ST Verification
@@ -275,29 +279,17 @@ TBE operators: Add and ScatterNdAdd. For details about the network verification 
 
 To execute a single-operator network test file, perform the following operations:
 
-1.  Set the environment variables.
+1. Set the environment variables.
 
-    Run the  **export**  command to declare environment variables on the current terminal. The environment variables become invalid when the shell terminal is closed.
+   After configuring the basic environment variables of the CANN software, run the export command to declare the following environment variables on the current terminal. The environment variables become invalid when the shell terminal is closed.
 
-    ```
-    export install_path=/home/HwHiAiUser/Ascend/nnae/latest
-    export ASCEND_DEVICE_ID=0
-    # FwkACLlib Package Dependency
-    export PYTHONPATH=${install_path}/fwkacllib/python/site-packages:$PYTHONPATH
-    export LD_LIBRARY_PATH=${install_path}/fwkacllib/lib64:$LD_LIBRARY_PATH
-    export PATH=${install_path}/fwkacllib/ccec_compiler/bin:${install_path}/fwkacllib/bin:$PATH
-    # Driver Package Dependency
-    export LD_LIBRARY_PATH=/usr/local/Ascend/driver/lib64/common/:/usr/local/Ascend/driver/lib64/driver:$LD_LIBRARY_PATH # Required only in the container-based training scenario
-    # TFPlugin Package Dependency
-    export PYTHONPATH=${install_path}/tfplugin/python/site-packages:$PYTHONPATH
-    # OPP Package Dependency
-    export ASCEND_OPP_PATH=${install_path}/opp
-    ```
+   ```
+   export ASCEND_DEVICE_ID=0
+   ```
 
-    -   **install\_path**  specifies the installation path of the FwkACLlib, Driver, and OPP components.
-    -   **ASCEND\_DEVICE\_ID**  specifies the logical ID of the Ascend AI Processor.
+   **ASCEND\_DEVICE\_ID**  specifies the logical ID of the Ascend AI Processor.
 
-        The value range is \[0,  _N_  – 1\] and the default value is  **0**.  _N_  specifies the device count in the physical machine, VM, or container.
+   The value range is \[0,  _N_  – 1\] and the default value is  **0**.  _N_  specifies the device count in the physical machine, VM, or container.
 
 
 2.  Run the single-operator network test script.
@@ -381,24 +373,22 @@ In the inference scenario, you can use the command parameter  **enable\_scope\_f
     4.  Find the generated .pb file in the  **_<work\_dir\>_/results/**  directory.
 
 2.  Build and verify the scope fusion result.
-    1.  Set the environment variables.
+    1. Set the environment variables.
 
-        ```
-        export install_path=/home/HwHiAiUser/Ascend/ascend-toolkit/latest   # Installation path of the Ascend-cann-toolkit toolkit
-        # PATH: Select the ATC installation path based on the site requirements.
-        export PATH=${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
-        export ASCEND_OPP_PATH=${install_path}/opp
-        export DUMP_GE_GRAPH=3     # Set the graph dump mode. In this case, only the node relationships are dumped.
-        export DUMP_GRAPH_LEVEL=3  # Set the graph to dump. Only the generated built graph is dumped.
-        ```
+       After configuring the basic environment variables of the CANN software, run the export command to declare the following environment variables on the current terminal.
+    
+       ```
+       export DUMP_GE_GRAPH=3     # Set the graph dump mode. In this case, only the node relationships are dumped.
+       export DUMP_GRAPH_LEVEL=3  # Set the graph to dump. Only the generated built graph is dumped.
+       ```
+    
+    2. During model conversion,  **--enable\_scope\_fusion\_passes**  is used to specify the pattern name.
 
-    2.  During model conversion,  **--enable\_scope\_fusion\_passes**  is used to specify the pattern name.
+       **atc --model=decode\_bbox\_v2.pb --framework=3 --output=mymodel --soc\_version=$\{soc\_version\} --enable\_scope\_fusion\_passes=DecodeBboxV2ScopeFusionPass --log=info**
 
-        **atc --model=decode\_bbox\_v2.pb --framework=3 --output=mymodel --soc\_version=$\{soc\_version\} --enable\_scope\_fusion\_passes=DecodeBboxV2ScopeFusionPass --log=info**
+       In the preceding command,  **soc\_version**  specifies the model of the Ascend AI Processor. Replace it with the actual version.
 
-        In the preceding command,  **soc\_version**  specifies the model of the Ascend AI Processor. Replace it with the actual version.
-
-        It is the exact name of the .ini file in  **atc/data/platform\_config**  in the ATC installation path. 
+       It is the exact name of the .ini file in  **atc/data/platform\_config**  in the ATC installation path. 
 
 3.  Verify the result.
     1.  You can view the pattern setting in the INFO log.

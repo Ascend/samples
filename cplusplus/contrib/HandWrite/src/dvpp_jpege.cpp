@@ -80,14 +80,14 @@ Result DvppJpegE::InitJpegEResource(ImageData& inputImage) {
     }
 
     aclError aclRet = acldvppJpegPredictEncSize(encodeInputDesc_, jpegeConfig_, &encodeOutBufferSize_);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("Dvpp jpege init failed for predict memory size error(%d)\n", aclRet);
         return FAILED;
     }
 
     INFO_LOG("predict size %d", encodeOutBufferSize_);
     aclRet = acldvppMalloc(&encodeOutBufferDev_, encodeOutBufferSize_);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("Dvpp jpege init failed for malloc dvpp memory error(%d)\n", aclRet);
         return FAILED;
     }
@@ -107,13 +107,13 @@ Result DvppJpegE::Process(ImageData& destJpegImage, ImageData& srcYuvImage)
     aclError aclRet = acldvppJpegEncodeAsync(dvppChannelDesc_, encodeInputDesc_, 
                                              encodeOutBufferDev_, &tempLen,
                                              jpegeConfig_, stream_);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("acldvppJpegEncodeAsync failed, aclRet = %d\n", aclRet);
         return FAILED;
     }
 
     aclRet = aclrtSynchronizeStream(stream_);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("encode aclrtSynchronizeStream failed, aclRet = %d\n", aclRet);
         return FAILED;
     }
@@ -123,7 +123,7 @@ Result DvppJpegE::Process(ImageData& destJpegImage, ImageData& srcYuvImage)
     destJpegImage.size = encodeOutBufferSize_;
 
     INFO_LOG("jpeg convert ok, size %d,tempLen %d", encodeOutBufferSize_,tempLen);
-    destJpegImage.data = SHARED_PRT_DVPP_BUF(encodeOutBufferDev_);
+    destJpegImage.data = SHARED_PTR_DVPP_BUF(encodeOutBufferDev_);
     return SUCCESS;
 }
 

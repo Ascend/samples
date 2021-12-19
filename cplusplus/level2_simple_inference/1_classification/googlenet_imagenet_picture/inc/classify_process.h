@@ -25,7 +25,7 @@
 #include <stdlib.h>
 #include <dirent.h>
 #include "acl/acl.h"
-#include "atlasutil/atlas_model.h"
+#include "acllite/AclLiteModel.h"
 
 /**
 * ClassifyProcess
@@ -35,19 +35,19 @@ public:
     ClassifyProcess();
     ~ClassifyProcess();
 
-    AtlasError Init();
-    AtlasError Process(std::vector<std::string>& fileVec, aclrtRunMode RunMode);
+    AclLiteError Init();
+    AclLiteError Process(std::vector<std::string>& fileVec, aclrtRunMode RunMode);
     void LabelClassToImage(int classIdx, const std::string& origImagePath);
     void DestroyResource();
 
 private:
-    AtlasError Preprocess(const std::string& imageFile);
-    AtlasError Inference(std::vector<InferenceOutput>& inferOutputs);
-    AtlasError Postprocess(const std::string& origImageFile,
+    AclLiteError Preprocess(const std::string& imageFile);
+    AclLiteError Inference(std::vector<InferenceOutput>& inferOutputs);
+    AclLiteError Postprocess(const std::string& origImageFile,
                        std::vector<InferenceOutput>& inferOutputs);
 
 private:
-    AtlasModel model_;
+    AclLiteModel model_;
     uint32_t inputDataSize_;
     void* inputData_;
     bool isInited_;

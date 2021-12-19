@@ -2,7 +2,8 @@
 ScriptPath="$( cd "$(dirname "$BASH_SOURCE")" ; pwd -P )"
 ModelPath="${ScriptPath}/../model"
 conf_file_name="face_detection.conf"
-. ${ScriptPath}/../../../../../common/sample_common.sh
+common_script_dir=${THIRDPART_PATH}/common
+. ${common_script_dir}/sample_common.sh
 
 function main()
 {
@@ -15,7 +16,7 @@ function main()
     return 1
   fi
 
-  running_video
+  running_presenter
   if [ $? -ne 0 ];then
     return 1
   fi

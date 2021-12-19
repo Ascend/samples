@@ -4,6 +4,6 @@
 cmake_minimum_required(VERSION 3.5.1)
 
 # project information
-project(testdecode)
+project(yolov3_coco_detection_multi_thread)
 
 add_subdirectory("./src")

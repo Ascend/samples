@@ -110,7 +110,7 @@ void SetPixel(ImageData& image, int x, int y, const YUVColor &color) {
     uv_offset[1] = color.v;
 }
 
-// TODO: cache glyphs
+//cache glyphs
 void RenderText(ImageData& image, int x, int y, const std::string &text, const YUVColor *color) {
     auto &ctx = GlpyhContext::GetInstance();
     std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> cvt;

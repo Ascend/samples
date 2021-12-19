@@ -13,13 +13,13 @@
 #include <dirent.h>
 #include <fstream>
 #include <cstring>
+#include <cstdint>
 #include <vector>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <map>
 #include "acl/acl.h"
 #include "acl/ops/acl_dvpp.h"
-#include <cstdint>
 
 
 typedef struct PicDesc {
@@ -33,7 +33,6 @@ const uint32_t inputHeight_ = 576;
 const uint32_t cameraFps_ = 15;
 
 int32_t vencflag = 0;
-
 int32_t deviceId_ = 0;
 aclrtContext context_;
 aclrtStream stream_;
@@ -53,8 +52,6 @@ aclvencChannelDesc *vencChannelDesc_;
 aclvencFrameConfig *vencFrameConfig_;
 acldvppPicDesc *encodeInputDesc_;
 static bool runFlag = true;
-
-
 
 uint32_t AlignmentHelper(uint32_t origSize, uint32_t alignment)
 {
@@ -132,10 +129,10 @@ bool WriteToFile(FILE *outFileFp_, const void *dataDev, uint32_t dataSize)
     return ret;
 }
 
-//3.创建回调函数
+//create callback func 
 void callback(acldvppPicDesc *input, acldvppStreamDesc *output, void *userdata)
 {
-    //获取VENC编码的输出内存，调用自定义函数WriteToFile将输出内存中的数据写入文件
+    //create vdec output buffer
     void *vdecOutBufferDev = acldvppGetStreamDescData(output);
     uint32_t size = acldvppGetStreamDescSize(output);
 
@@ -149,27 +146,24 @@ void callback(acldvppPicDesc *input, acldvppStreamDesc *output, void *userdata)
 bool setupVencDesc(int inputWidth, int inputHeight)
 {
     aclError ret;
-    //4.创建视频码流处理通道时的通道描述信息，设置视频处理通道描述信息的属性，其中callback回调函数需要用户提前创建。
-    //vencChannelDesc_是aclvencChannelDesc类型
+    //create and set channel desc    
     vencChannelDesc_ = aclvencCreateChannelDesc();
-
     ret = aclvencSetChannelDescThreadId(vencChannelDesc_, threadId_);
-    /* 设置回调函数 callback*/
+    //set callback
     ret = aclvencSetChannelDescCallback(vencChannelDesc_, callback);
 
-    //示例中使用的是H265_MAIN_LEVEL视频编码协议
+    //use H265_MAIN_LEVEL
     ret = aclvencSetChannelDescEnType(vencChannelDesc_, static_cast<acldvppStreamFormat>(enType_));
-    //示例中使用的是PIXEL_FORMAT_YVU_SEMIPLANAR_420
+    //use PIXEL_FORMAT_YVU_SEMIPLANAR_420
     ret = aclvencSetChannelDescPicFormat(vencChannelDesc_, format_);
     ret = aclvencSetChannelDescPicWidth(vencChannelDesc_, inputWidth);
     ret = aclvencSetChannelDescPicHeight(vencChannelDesc_, inputHeight);
     ret = aclvencSetChannelDescKeyFrameInterval(vencChannelDesc_, 1);
 
-    /* 5.创建视频码流处理的通道 */
+    //create channel
     ret = aclvencCreateChannel(vencChannelDesc_);
 
-    //6. 创建编码输入图片的描述信息，并设置各属性值
-    //encodeInputDesc_是acldvppPicDesc类型
+    //create pic desc and set attr
     uint32_t widthAlignment = 16;
     uint32_t heightAlignment = 2;
     uint32_t encodeInHeightStride = AlignmentHelper(inputHeight, heightAlignment);
@@ -191,7 +185,7 @@ bool setupVencDesc(int inputWidth, int inputHeight)
     acldvppSetPicDescWidthStride(encodeInputDesc_, encodeInWidthStride);
     acldvppSetPicDescHeightStride(encodeInputDesc_, encodeInHeightStride);
 
-    //创建aclvencFrameConfig类型的数据，创建VENC编码时的单帧编码配置参数。
+    //create config param for venc
     vencFrameConfig_ = aclvencCreateFrameConfig();
     aclvencSetFrameConfigForceIFrame(vencFrameConfig_, 0);
 

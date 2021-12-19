@@ -119,7 +119,7 @@ void DestroyResource()
     aclError ret;
     if (stream_ != nullptr) {
         ret = aclrtDestroyStream(stream_);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("destroy stream failed");
         }
         stream_ = nullptr;
@@ -128,7 +128,7 @@ void DestroyResource()
 
     if (context_ != nullptr) {
         ret = aclrtDestroyContext(context_);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("destroy context failed");
         }
         context_ = nullptr;
@@ -136,13 +136,13 @@ void DestroyResource()
     INFO_LOG("end to destroy context");
 
     ret = aclrtResetDevice(deviceId_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("reset device failed");
     }
     INFO_LOG("end to reset device is %d", deviceId_);
 
     ret = aclFinalize();
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("finalize acl failed");
     }
     INFO_LOG("end to finalize acl");
@@ -225,13 +225,13 @@ int main(int argc, char *argv[])
 
     aclError ret = acldvppVpcResizeAsync(dvppChannelDesc_, vpcInputDesc_,
         vpcOutputDesc_, resizeConfig_, stream_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("acldvppVpcResizeAsync failed, ret = %d", ret);
         return FAILED;
     }
     
     aclrtSynchronizeStream(stream_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("aclrtSynchronizeStream failed");
         return FAILED;
     }

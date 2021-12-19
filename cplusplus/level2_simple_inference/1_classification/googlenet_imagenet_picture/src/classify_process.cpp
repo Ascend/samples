@@ -20,7 +20,6 @@
 #include <iostream>
 #include <vector>
 #include "opencv2/opencv.hpp"
-#include "opencv2/imgcodecs/legacy/constants_c.h"
 #include "opencv2/imgproc/types_c.h"
 
 #include "acl/acl.h"
@@ -54,94 +53,94 @@ ClassifyProcess::~ClassifyProcess() {
     DestroyResource();
 }
 
-AtlasError ClassifyProcess::Init() {
+AclLiteError ClassifyProcess::Init() {
     if (isInited_) {
-        ATLAS_LOG_INFO("Classify process is initied already");
-        return ATLAS_OK;
+        ACLLITE_LOG_INFO("Classify process is initied already");
+        return ACLLITE_OK;
     }
 
-    AtlasError atlRet = model_.Init();
+    AclLiteError atlRet = model_.Init();
     if (atlRet) {
-        ATLAS_LOG_ERROR("Model init failed, error %d", atlRet);
-        return ATLAS_ERROR;
+        ACLLITE_LOG_ERROR("Model init failed, error %d", atlRet);
+        return ACLLITE_ERROR;
     }
 
     isInited_ = true;
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
-AtlasError ClassifyProcess::Process(std::vector<std::string>& fileVec, aclrtRunMode RunMode){
+AclLiteError ClassifyProcess::Process(std::vector<std::string>& fileVec, aclrtRunMode RunMode){
     RunMode_ = RunMode;
     for (string imageFile : fileVec) {
-        AtlasError ret = Preprocess(imageFile);
-        if (ret != ATLAS_OK) {
-            ATLAS_LOG_ERROR("Read file %s failed, continue to read next",
+        AclLiteError ret = Preprocess(imageFile);
+        if (ret != ACLLITE_OK) {
+            ACLLITE_LOG_ERROR("Read file %s failed, continue to read next",
                         imageFile.c_str());                
             continue;
         }
         std::vector<InferenceOutput> inferOutputs;
         ret = Inference(inferOutputs);
-        if (ret != ATLAS_OK) {
-            ATLAS_LOG_ERROR("Inference model inference output data failed");
-            return ATLAS_ERROR;
+        if (ret != ACLLITE_OK) {
+            ACLLITE_LOG_ERROR("Inference model inference output data failed");
+            return ACLLITE_ERROR;
         }
 
         ret = Postprocess(imageFile, inferOutputs);
-        if (ret != ATLAS_OK) {
-            ATLAS_LOG_ERROR("Process model inference output data failed");
-            return ATLAS_ERROR;
+        if (ret != ACLLITE_OK) {
+            ACLLITE_LOG_ERROR("Process model inference output data failed");
+            return ACLLITE_ERROR;
         }
     }
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
-AtlasError ClassifyProcess::Preprocess(const string& imageFile) {
-    ATLAS_LOG_INFO("Read image %s", imageFile.c_str());
+AclLiteError ClassifyProcess::Preprocess(const string& imageFile) {
+    ACLLITE_LOG_INFO("Read image %s", imageFile.c_str());
     cv::Mat origMat = cv::imread(imageFile, CV_LOAD_IMAGE_COLOR);
     if (origMat.empty()) {
-        ATLAS_LOG_ERROR("Read image failed");
-        return ATLAS_ERROR;
+        ACLLITE_LOG_ERROR("Read image failed");
+        return ACLLITE_ERROR;
     }
 
-    ATLAS_LOG_INFO("Resize image %s", imageFile.c_str());
+    ACLLITE_LOG_INFO("Resize image %s", imageFile.c_str());
     cv::Mat reiszeMat;
     cv::resize(origMat, reiszeMat, cv::Size(kModelWidth, kModelHeight));
     if (reiszeMat.empty()) {
-        ATLAS_LOG_ERROR("Resize image failed");
-        return ATLAS_ERROR;
+        ACLLITE_LOG_ERROR("Resize image failed");
+        return ACLLITE_ERROR;
     }
     
     inputData_ = CopyDataToDevice(reiszeMat.ptr<uint8_t>(), inputDataSize_, RunMode_, MEMORY_DEVICE);
     if (inputData_ == nullptr) {
-        ATLAS_LOG_ERROR("Copy data to device failed");
-        return ATLAS_ERROR;
+        ACLLITE_LOG_ERROR("Copy data to device failed");
+        return ACLLITE_ERROR;
     }
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
-AtlasError ClassifyProcess::Inference(std::vector<InferenceOutput>& inferOutputs) {
-    AtlasError ret = model_.CreateInput(inputData_,
+AclLiteError ClassifyProcess::Inference(std::vector<InferenceOutput>& inferOutputs) {
+    AclLiteError ret = model_.CreateInput(inputData_,
                                        inputDataSize_);
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Create mode input dataset failed\n");
-        return ATLAS_ERROR;
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Create mode input dataset failed\n");
+        return ACLLITE_ERROR;
     }
 
     ret = model_.Execute(inferOutputs);
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Execute model inference failed\n");
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Execute model inference failed\n");
     }
     model_.DestroyInput();
 
     return ret;
 }
 
-AtlasError ClassifyProcess::Postprocess(const string& origImageFile, 
+AclLiteError ClassifyProcess::Postprocess(const string& origImageFile, 
                                     std::vector<InferenceOutput>& inferOutputs){
     uint32_t dataSize = inferOutputs[kOutputDataBufId].size;
     void* data = (void *)inferOutputs[kOutputDataBufId].data.get();
     if (data == nullptr) {
-        return ATLAS_ERROR;
+        return ACLLITE_ERROR;
     }
     float* outData = NULL;
     outData = reinterpret_cast<float*>(data);
@@ -159,7 +158,7 @@ AtlasError ClassifyProcess::Postprocess(const string& origImageFile,
         if (++cnt > kTopNConfidenceLevels) {
             break;
         }
-        ATLAS_LOG_INFO("top %d: index[%d] value[%lf]", cnt, it->second, it->first);
+        ACLLITE_LOG_INFO("top %d: index[%d] value[%lf]", cnt, it->second, it->first);
 
         if (it->first > maxScore) {
             maxScore = it->first;
@@ -168,7 +167,7 @@ AtlasError ClassifyProcess::Postprocess(const string& origImageFile,
     }
     LabelClassToImage(maxScoreCls, origImageFile);
 
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
 void ClassifyProcess::LabelClassToImage(int classIdx, const string& origImagePath) {

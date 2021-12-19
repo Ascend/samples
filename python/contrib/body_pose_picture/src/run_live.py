@@ -22,10 +22,10 @@ import sys
 sys.path.append("../../../common/")
 
 from utils.model_processor import ModelProcessor
-from atlas_utils.camera import Camera
-from atlas_utils.presenteragent import presenter_channel
-from atlas_utils.acl_image import AclImage
-from atlas_utils.acl_resource import AclResource
+from cameracapture import CameraCapture
+from presenteragent import presenter_channel
+from acllite_image import AclLiteImage
+from acllite_resource import AclLiteResource
 
 SRC_PATH = os.path.realpath(__file__).rsplit("/", 1)[0]
 MODEL_PATH = os.path.join(SRC_PATH, "../model/" + "OpenPose_light.om")
@@ -37,7 +37,7 @@ def main(model_path):
     """main"""
     ## Initialization ##
     #initialize acl runtime 
-    acl_resource = AclResource()
+    acl_resource = AclLiteResource()
     acl_resource.init()
 
     ## Prepare Model ##
@@ -53,7 +53,7 @@ def main(model_path):
     
     ## Get Input ##
     # Initialize Camera
-    cap = Camera(camera_id = 0, fps = 10)
+    cap = CameraCapture(camera_id = 0, fps = 10)
 
     ## Set Output ##
     # open the presenter channel
@@ -84,8 +84,8 @@ def main(model_path):
         ## Present Result ##
         # convert to jpeg image for presenter server display
         _, jpeg_image = cv2.imencode('.jpg', canvas)
-        # construct AclImage object for presenter server
-        jpeg_image = AclImage(jpeg_image, img_original.shape[0], img_original.shape[1], jpeg_image.size)
+        # construct AclLiteImage object for presenter server
+        jpeg_image = AclLiteImage(jpeg_image, img_original.shape[0], img_original.shape[1], jpeg_image.size)
         # send to presenter server
         chan.send_detection_data(img_original.shape[0], img_original.shape[1], jpeg_image, [])
 

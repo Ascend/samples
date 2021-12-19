@@ -19,12 +19,11 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include <memory>
 #include "opencv2/opencv.hpp"
-#include "opencv2/imgcodecs/legacy/constants_c.h"
 #include "opencv2/imgproc/types_c.h"
 #include "acl/acl.h"
-#include "atlasutil/atlas_model.h"
-#include <memory>
+#include "acllite/AclLiteModel.h"
 
 /**
 * ColorizeProcess
@@ -35,13 +34,13 @@ public:
                     uint32_t modelWidth, uint32_t modelHeight);
     ~ColorizeProcess();
 
-    AtlasError init();
-    AtlasError preprocess(const std::string& imageFile);
-    AtlasError inference(std::vector<InferenceOutput>& inferOutputs);
-    AtlasError postprocess(const std::string& imageFile, std::vector<InferenceOutput>& modelOutput);
+    AclLiteError init();
+    AclLiteError preprocess(const std::string& imageFile);
+    AclLiteError inference(std::vector<InferenceOutput>& inferOutputs);
+    AclLiteError postprocess(const std::string& imageFile, std::vector<InferenceOutput>& modelOutput);
 private:
-    AtlasError init_resource();
-    AtlasError create_input(size_t inputDataSize);
+    AclLiteError init_resource();
+    AclLiteError create_input(size_t inputDataSize);
     void save_image(const std::string& origImageFile, cv::Mat& image);
     void destroy_resource();
 
@@ -49,7 +48,7 @@ private:
     int32_t deviceId_;
     aclrtContext context_;
     aclrtStream stream_;
-    AtlasModel model_;
+    AclLiteModel model_;
 
     const char* modelPath_;
     uint32_t modelWidth_;

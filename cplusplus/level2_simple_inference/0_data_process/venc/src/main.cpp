@@ -22,7 +22,7 @@
 #include <dirent.h>
 #include <unistd.h>
 #include "acl/acl.h"
-#include "opencv2/imgcodecs/legacy/constants_c.h"
+
 #include "opencv2/opencv.hpp"
 #include "acl/ops/acl_dvpp.h"
 #include "main.h"
@@ -99,21 +99,21 @@ void callback(acldvppPicDesc *input, acldvppStreamDesc *outputStreamDesc, void *
 Result InitResource(){
     const char *aclConfigPath = "../src/acl.json";
     aclError ret = aclInit(aclConfigPath);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("Acl init failed");
         return FAILED;
     }
     INFO_LOG("Acl init success");
 
     ret = aclrtSetDevice(deviceId);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("Acl open device %d failed", deviceId);
         return FAILED;
     }
     INFO_LOG("Open device %d success", deviceId);
 
     ret = aclrtCreateContext(&context, deviceId);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("acl create context failed");
         return FAILED;
     }
@@ -121,7 +121,7 @@ Result InitResource(){
 
     //Gets whether the current application is running on host or Device
     ret = aclrtGetRunMode(&runMode);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("acl get run mode failed");
         return FAILED;
     }
@@ -202,7 +202,7 @@ void DestroyAclResource(){
     aclError ret;
     if (context != nullptr) {
         ret = aclrtDestroyContext(context);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("destroy context failed");
         }
         context = nullptr;
@@ -210,13 +210,13 @@ void DestroyAclResource(){
     INFO_LOG("end to destroy context");
 
     ret = aclrtResetDevice(deviceId);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("reset device failed");
     }
     INFO_LOG("end to reset device is %d", deviceId);
 
     ret = aclFinalize();
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("finalize acl failed");
     }
     INFO_LOG("end to finalize acl");
@@ -251,7 +251,7 @@ void DestroyResource(){
     aclError aclRet;
     if (vencChannelDesc != nullptr) {
         aclRet = aclvencDestroyChannel(vencChannelDesc);
-        if (aclRet != ACL_ERROR_NONE) {
+        if (aclRet != ACL_SUCCESS) {
             ERROR_LOG("aclvencDestroyChannel failed, aclRet = %d", aclRet);
         }
         (void)aclvencDestroyChannelDesc(vencChannelDesc);

@@ -22,7 +22,7 @@
 #include "acl/acl.h"
 
 #include "opencv2/opencv.hpp"
-#include "opencv2/imgcodecs/legacy/constants_c.h"
+
 #include "opencv2/imgproc/types_c.h"
 
 #define INFO_LOG(fmt, args...) fprintf(stdout, "[INFO]  " fmt "\n", ##args)
@@ -41,47 +41,17 @@ struct ImageData {
     int32_t size = 0;
     void* data;
 };
-/*
-typedef enum DynamicType {
-    DYNAMIC_BATCH = 0,
-    DYNAMIC_HW = 1
-} DynamicType;
 
-typedef struct DynamicInfo {
-    uint64_t dynamicArr[2] = {0};
-    DynamicType dynamicType = DYNAMIC_BATCH;
-} DynamicInfo;
-*/
 /**
  * Utils
  */
 class Utils {
 public:
-
-    /**
-    * @brief create device buffer of pic
-    * @param [in] picDesc: pic desc
-    * @param [in] PicBufferSize: aligned pic size
-    * @return device buffer of pic
-    */
     static bool is_directory(const std::string &path);
-
     static bool is_path_exist(const std::string &path);
-
     static void split_path(const std::string &path, std::vector<std::string> &path_vec);
-
     static void get_all_files(const std::string &path, std::vector<std::string> &file_vec);
-
     static void get_path_files(const std::string &path, std::vector<std::string> &file_vec);
-
     static void* copy_data_device_to_local(void* deviceData, uint32_t dataSize);
-
-    /**
-     * @brief create buffer of file
-     * @param [in] fileName: file name
-     * @param [out] fileSize: size of file
-     * @return buffer of pic
-     */
-
 };
 

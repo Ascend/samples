@@ -7,12 +7,11 @@ import acl
 import cv2 as cv
 from PIL import Image
 
-import atlas_utils.constants as const
-from atlas_utils.acl_model import Model
-from atlas_utils.acl_resource import AclResource
+import constants as const
+from acllite_model import AclLiteModel
+from acllite_resource import AclLiteResource
 
 labels = ["face", "person", "mask"]
-
 INPUT_DIR = '../data/'
 OUTPUT_DIR = '../out/'
 MODEL_PATH = "../model/mask_detection.om"
@@ -70,7 +69,6 @@ def cal_iou(box, truth):
 
 def apply_nms(all_boxes, thres):
     res = []
-
     for cls in range(class_num):
         cls_bboxes = all_boxes[cls]
         sorted_boxes = sorted(cls_bboxes, key=lambda d: d[5])[::-1]
@@ -79,7 +77,6 @@ def apply_nms(all_boxes, thres):
         for i in range(len(sorted_boxes)):
             if i in p:
                 continue
-
             truth = sorted_boxes[i]
             for j in range(i + 1, len(sorted_boxes)):
                 if j in p:
@@ -88,7 +85,6 @@ def apply_nms(all_boxes, thres):
                 iou = cal_iou(box, truth)
                 if iou >= thres:
                     p[j] = 1
-
         for i in range(len(sorted_boxes)):
             if i not in p:
                 res.append(sorted_boxes[i])
@@ -100,9 +96,7 @@ def decode_bbox(conv_output, anchors, img_w, img_h, x_scale, y_scale, shift_x_ra
         return s
 
     h, w, _ = conv_output.shape
-    
     pred = conv_output.reshape((h * w, 3, 5 + class_num))
-
     pred[..., 4:] = _sigmoid(pred[..., 4:])
     pred[..., 0] = (_sigmoid(pred[..., 0]) + np.tile(range(w), (3, h)).transpose((1, 0))) / w
     pred[..., 1] = (_sigmoid(pred[..., 1]) + np.tile(np.repeat(range(h), w), (3, 1)).transpose((1, 0))) / h
@@ -176,30 +170,26 @@ def post_process(infer_output, origin_img):
         return result_return
 
 def main():
-
     if not os.path.exists(OUTPUT_DIR):
         os.mkdir(OUTPUT_DIR)
     #ACL resource initialization
-    acl_resource = AclResource()
+    acl_resource = AclLiteResource()
     acl_resource.init()
     #load model
-    model = Model(MODEL_PATH)
+    model = AclLiteModel(MODEL_PATH)
     images_list = [os.path.join(INPUT_DIR, img)
                    for img in os.listdir(INPUT_DIR)
                    if os.path.splitext(img)[1] in const.IMG_EXT]
     #Read images from the data directory one by one for reasoning
     for pic in images_list:
         #read image
-        
         bgr_img = cv.imread(pic)
         #preprocess
         data, orig = preprocess(pic)
-        #data, orig = preprocess(bgr_img)
         #Send into model inference
         result_list = model.execute([data,])    
         #Process inference results
         result_return = post_process(result_list, orig)
-
         print("result = ", result_return)
 
         for i in range(len(result_return['detection_classes'])):

@@ -122,7 +122,7 @@ void* Utils::CopyDataDeviceToLocal(void* deviceData, uint32_t dataSize) {
     }
 
     aclError aclRet = aclrtMemcpy(buffer, dataSize, deviceData, dataSize, ACL_MEMCPY_DEVICE_TO_DEVICE);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("Copy device data to local failed, aclRet is %d\n", aclRet);
         delete[](buffer);
         return nullptr;
@@ -134,13 +134,13 @@ void* Utils::CopyDataDeviceToLocal(void* deviceData, uint32_t dataSize) {
 void* Utils::CopyDataToDevice(void* data, uint32_t dataSize, aclrtMemcpyKind policy) {
     void* buffer = nullptr;
     aclError aclRet = aclrtMalloc(&buffer, dataSize, ACL_MEM_MALLOC_HUGE_FIRST);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("malloc device data buffer failed, aclRet is %d\n", aclRet);
         return nullptr;
     }
 
     aclRet = aclrtMemcpy(buffer, dataSize, data, dataSize, policy);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("Copy data to device failed, aclRet is %d\n", aclRet);
         (void)aclrtFree(buffer);
         return nullptr;
@@ -174,13 +174,13 @@ void* Utils::SaveJpegImage(ImageData& image)
 void* Utils::CopyDataToDVPP(void* data, uint32_t dataSize) {
     void* buffer = nullptr;
     aclError aclRet = acldvppMalloc(&buffer, dataSize);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("malloc device data buffer failed, aclRet is %d\n", aclRet);
         return nullptr;
     }
 
     aclRet = aclrtMemcpy(buffer, dataSize, data, dataSize, ACL_MEMCPY_DEVICE_TO_DEVICE);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("Copy data to device failed, aclRet is %d\n", aclRet);
         (void)aclrtFree(buffer);
         return nullptr;

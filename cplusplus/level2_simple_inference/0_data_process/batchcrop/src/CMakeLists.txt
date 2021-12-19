@@ -54,7 +54,6 @@ link_directories(
     ${LIB_PATH}
 )
 
-
 add_executable(main
         utils.cpp
         dvpp_process.cpp

@@ -21,13 +21,13 @@
 #include <iostream>
 
 #include "acl/acl.h"
-#include "atlasutil/atlas_model.h"
-#include "atlasutil/atlas_utils.h"
+#include "acllite/AclLiteModel.h"
+#include "acllite/AclLiteUtils.h"
 #include <cmath>
 #include "eigen3/Eigen/Core"
 #include "eigen3/Eigen/Dense"
 #include "opencv2/opencv.hpp"
-#include "opencv2/imgcodecs/legacy/constants_c.h"
+
 #include "opencv2/imgproc/types_c.h"
 #include "opencv2/core/hal/interface.h"
 #include "opencv2/core/types.hpp"
@@ -67,58 +67,58 @@ GestureDetect::~GestureDetect() {
     DestroyResource();
 }
 
-AtlasError GestureDetect::InitModel(const char* omModelPathOpenPose, const char* omModelPathGesture) {
+AclLiteError GestureDetect::InitModel(const char* omModelPathOpenPose, const char* omModelPathGesture) {
     // Load model files
-    AtlasError ret = modelOpenPose_.Init(omModelPathOpenPose);
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("execute LoadModelFromFileWithMem failed, model openpose");
-        return ATLAS_ERROR;
+    AclLiteError ret = modelOpenPose_.Init(omModelPathOpenPose);
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("execute LoadModelFromFileWithMem failed, model openpose");
+        return ACLLITE_ERROR;
     }
 
     ret = modelGesture_.Init(omModelPathGesture);
 
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("execute LoadModelFromFileWithMem failed, model gesture");
-        return ATLAS_ERROR;
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("execute LoadModelFromFileWithMem failed, model gesture");
+        return ACLLITE_ERROR;
     }
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
-AtlasError GestureDetect::Init() {
+AclLiteError GestureDetect::Init() {
     if (isInited_) {
-        ATLAS_LOG_INFO("Classify instance is initied already!");
-        return ATLAS_OK;
+        ACLLITE_LOG_INFO("Classify instance is initied already!");
+        return ACLLITE_OK;
     }
 
-    AtlasError ret = aclrtGetRunMode(&runMode_);
-    if (ret != ACL_ERROR_NONE) {
-        ATLAS_LOG_ERROR("acl get run mode failed");
-        return ATLAS_ERROR;
+    AclLiteError ret = aclrtGetRunMode(&runMode_);
+    if (ret != ACL_SUCCESS) {
+        ACLLITE_LOG_ERROR("acl get run mode failed");
+        return ACLLITE_ERROR;
     }
 
     ret = InitModel(modelPathOpenPose_, modelPathGesture_);
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Init model failed");
-        return ATLAS_ERROR;
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Init model failed");
+        return ACLLITE_ERROR;
     }
 
     ret = dvpp_.Init();
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Init dvpp failed");
-        return ATLAS_ERROR;
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Init dvpp failed");
+        return ACLLITE_ERROR;
     }
 
     isInited_ = true;
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
-AtlasError GestureDetect::Preprocess(ImageData& resizedImage, ImageData& srcImage) {
+AclLiteError GestureDetect::Preprocess(ImageData& resizedImage, ImageData& srcImage) {
  
     ImageData imageDevice;
     void* buffer = CopyDataToDevice(srcImage.data.get(), srcImage.size,
-                                runMode_, MEMORY_DEVICE);
+                                runMode_, MEMORY_DVPP);
     if (buffer == nullptr) {
-        return ATLAS_ERROR_COPY_DATA;
+        return ACLLITE_ERROR_COPY_DATA;
     }
 
     imageDevice.width = srcImage.width;
@@ -127,43 +127,43 @@ AtlasError GestureDetect::Preprocess(ImageData& resizedImage, ImageData& srcImag
     imageDevice.data.reset((uint8_t*)buffer, [](uint8_t* p) { aclrtFree((void *)p); });
   
     ImageData yuvImage;
-    AtlasError ret = dvpp_.JpegD(yuvImage, imageDevice);
-    if (ret == ATLAS_ERROR) {
-        ATLAS_LOG_ERROR("Convert jpeg to yuv failed");
-        return ATLAS_ERROR;
+    AclLiteError ret = dvpp_.JpegD(yuvImage, imageDevice);
+    if (ret == ACLLITE_ERROR) {
+        ACLLITE_LOG_ERROR("Convert jpeg to yuv failed");
+        return ACLLITE_ERROR;
     }
 
     //resize
     ret = dvpp_.Resize(resizedImage, yuvImage, modelWidth_, modelHeight_);
-    if (ret == ATLAS_ERROR) {
-        ATLAS_LOG_ERROR("Resize image failed");
-        return ATLAS_ERROR;
+    if (ret == ACLLITE_ERROR) {
+        ACLLITE_LOG_ERROR("Resize image failed");
+        return ACLLITE_ERROR;
     }
     
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
 // OpenPose inference function
-AtlasError GestureDetect::OpenPoseInference(std::vector<InferenceOutput>& inferOutputs, ImageData& resizedImage) {
-    AtlasError ret = modelOpenPose_.CreateInput(resizedImage.data.get(), resizedImage.size);
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Create mode input dataset failed");
-        return ATLAS_ERROR;
+AclLiteError GestureDetect::OpenPoseInference(std::vector<InferenceOutput>& inferOutputs, ImageData& resizedImage) {
+    AclLiteError ret = modelOpenPose_.CreateInput(resizedImage.data.get(), resizedImage.size);
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Create mode input dataset failed");
+        return ACLLITE_ERROR;
     }
 
     ret = modelOpenPose_.Execute(inferOutputs);
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Execute model inference failed");
-        return ATLAS_ERROR;
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Execute model inference failed");
+        return ACLLITE_ERROR;
     }
 
     modelOpenPose_.DestroyInput();
 
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
 // gesture inference function
-AtlasError GestureDetect::GestureInference(std::vector<InferenceOutput>& inferOutputs,
+AclLiteError GestureDetect::GestureInference(std::vector<InferenceOutput>& inferOutputs,
                                         std::shared_ptr<EngineTransNewT> motionDataNew){
 
     motionDataNew->bufferSize = 2 * FRAME_LENGTH * 14 * sizeof(float);
@@ -171,25 +171,25 @@ AtlasError GestureDetect::GestureInference(std::vector<InferenceOutput>& inferOu
     imageInfoBuf_ = CopyDataToDevice((void*) motionDataNew->data,
                                         motionDataNew->bufferSize, runMode_, MEMORY_DEVICE);
     if (imageInfoBuf_ == nullptr) {
-        ATLAS_LOG_ERROR("Copy image info to device failed");
-        return ATLAS_ERROR;
+        ACLLITE_LOG_ERROR("Copy image info to device failed");
+        return ACLLITE_ERROR;
     }
 
-    AtlasError ret = modelGesture_.CreateInput((void*) imageInfoBuf_, motionDataNew->bufferSize);
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Create mode input dataset failed");
-        return ATLAS_ERROR;
+    AclLiteError ret = modelGesture_.CreateInput((void*) imageInfoBuf_, motionDataNew->bufferSize);
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Create mode input dataset failed");
+        return ACLLITE_ERROR;
     }
 
     ret = modelGesture_.Execute(inferOutputs);
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Execute model inference failed");
-        return ATLAS_ERROR;
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Execute model inference failed");
+        return ACLLITE_ERROR;
     }
 
     modelGesture_.DestroyInput();
 
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
 int find_index(vector<int>::iterator begin, vector<int>::iterator end, int element){
@@ -209,7 +209,7 @@ bool cmp2(connectionT a,connectionT b) {
 }
 
 // Process the results of the output
-AtlasError GestureDetect::Postprocess(ImageData& image, vector<InferenceOutput>& modelOutput, 
+AclLiteError GestureDetect::Postprocess(ImageData& image, vector<InferenceOutput>& modelOutput, 
                                         std::shared_ptr<EngineTransNewT> motionDataNew, int &successNum) {
 
     uint32_t dataSize = 0;
@@ -316,7 +316,7 @@ AtlasError GestureDetect::Postprocess(ImageData& image, vector<InferenceOutput>&
 
         // If you don't find a point in one part of the body, the body is missing a key point, and you don't need to go on looking
         if(onePicKeyPoints.size() == 0){
-            return ATLAS_ERROR;
+            return ACLLITE_ERROR;
         }
         // The calculated keypoints for each graph are stored in a vector, which then stores the total keypoints
         allKeyPoints.push_back(onePicKeyPoints);
@@ -326,7 +326,7 @@ AtlasError GestureDetect::Postprocess(ImageData& image, vector<InferenceOutput>&
 
     if(!ifValid){
         cout << "invalid image!!" << endl;
-        return ATLAS_ERROR;
+        return ACLLITE_ERROR;
     }
 
     // =======================================================================
@@ -425,7 +425,7 @@ AtlasError GestureDetect::Postprocess(ImageData& image, vector<InferenceOutput>&
 
             // If there is a set of key points that cannot be connected to each other, it is considered invalid
             if(connectionCandidate.size() == 0){
-                return ATLAS_ERROR;
+                return ACLLITE_ERROR;
             }
             // In order of likelihood of connection, from most to least
             sort(connectionCandidate.begin(), connectionCandidate.end(), cmp2);
@@ -486,7 +486,7 @@ AtlasError GestureDetect::Postprocess(ImageData& image, vector<InferenceOutput>&
         int index_A = gLimbSeq[aa][0] - 1;
         int index_B = gLimbSeq[aa][1] - 1;
         if(tempIndex[index_A] == -1){
-            return ATLAS_ERROR;
+            return ACLLITE_ERROR;
         }
 
         for (int bb = 0; bb < connectionAll[aa].size(); bb++){
@@ -496,7 +496,7 @@ AtlasError GestureDetect::Postprocess(ImageData& image, vector<InferenceOutput>&
         }
         // If one connection point is not found, the image is deemed invalid and returned directly
         if(tempIndex[index_B] == -1){
-            return ATLAS_ERROR;
+            return ACLLITE_ERROR;
         }
     }
 
@@ -564,7 +564,7 @@ AtlasError GestureDetect::Postprocess(ImageData& image, vector<InferenceOutput>&
         }
     }
     successNum++;
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
 void GestureDetect::DestroyResource() {
@@ -574,7 +574,7 @@ void GestureDetect::DestroyResource() {
     aclrtFree(imageInfoBuf_);
 }
 
-AtlasError GestureDetect::PostGestureProcess(vector<InferenceOutput>& modelOutput){
+AclLiteError GestureDetect::PostGestureProcess(vector<InferenceOutput>& modelOutput){
     uint32_t dataSize = 0;
     float* newResult = (float *)modelOutput[0].data.get();
     int maxPosition = max_element(newResult, newResult+5) - newResult;
@@ -667,6 +667,6 @@ AtlasError GestureDetect::PostGestureProcess(vector<InferenceOutput>& modelOutpu
                 break;
         }
     }
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 

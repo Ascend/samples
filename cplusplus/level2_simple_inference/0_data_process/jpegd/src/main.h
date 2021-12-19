@@ -58,4 +58,3 @@ uint32_t inDevBufferSize_; // dvpp input buffer size
 uint32_t inputWidth_; // input pic width
 uint32_t inputHeight_; // input pic height
 aclrtRunMode runMode;
-

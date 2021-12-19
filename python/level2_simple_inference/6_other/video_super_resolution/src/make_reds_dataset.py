@@ -5,7 +5,6 @@ import os
 import json
 import sys
 
-
 def split_sets(set_path, meta, meta4):
     """
     get frame's meta file
@@ -22,7 +21,6 @@ def split_sets(set_path, meta, meta4):
 
     with open(os.path.join(set_path, 'test.json'), 'w') as fid:
         json.dump(dict(videos = val_meta), fid)
-
 
 def get_videos_meta(frame_width, frame_height, total_frames):
     """

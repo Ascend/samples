@@ -389,7 +389,7 @@ atc --model=./googlenet.air --framework=1 --output=./googlenet --soc_version=Asc
             output_path = os.path.join(os.path.join(SRC_PATH, "../outputs"), os.path.basename(image_file))
             origin_img = Image.open(image_file)
             draw = ImageDraw.Draw(origin_img)
-            font = ImageFont.load_default()
+            font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", size=20)
             draw.text((10, 50), object_class, font=font, fill=255)
             origin_img.save(output_path)
 ```

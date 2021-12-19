@@ -19,12 +19,9 @@
 #include "object_detect.h"
 #include <iostream>
 #include <cmath>
-
 #include "acl/acl.h"
 #include "opencv2/opencv.hpp"
-#include "opencv2/imgcodecs/legacy/constants_c.h"
 #include "opencv2/imgproc/types_c.h"
-
 
 using namespace std;
 
@@ -94,73 +91,73 @@ ObjectDetect::~ObjectDetect() {
     DestroyResource();
 }
 
-AtlasError ObjectDetect::Init() {
+AclLiteError ObjectDetect::Init() {
     if (isInited_) {
-        ATLAS_LOG_INFO("Face detection is initied already");
-        return ATLAS_OK;
+        ACLLITE_LOG_INFO("Face detection is initied already");
+        return ACLLITE_OK;
     }
 
-    AtlasError atlRet = dvpp_.Init();
+    AclLiteError atlRet = dvpp_.Init();
     if (atlRet) {
-        ATLAS_LOG_ERROR("Dvpp init failed, error %d", atlRet);
-        return ATLAS_ERROR;
+        ACLLITE_LOG_ERROR("Dvpp init failed, error %d", atlRet);
+        return ACLLITE_ERROR;
     }
 
     atlRet = model_.Init();
     if (atlRet) {
-        ATLAS_LOG_ERROR("Model init failed, error %d", atlRet);
-        return ATLAS_ERROR;
+        ACLLITE_LOG_ERROR("Model init failed, error %d", atlRet);
+        return ACLLITE_ERROR;
     }
 
     isInited_ = true;
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
-AtlasError ObjectDetect::Preprocess(ImageData& resizedImage, ImageData& srcImage, aclrtRunMode RunMode) {
+AclLiteError ObjectDetect::Preprocess(ImageData& resizedImage, ImageData& srcImage, aclrtRunMode RunMode) {
     ImageData imageDevice;
 
-    AtlasError ret = CopyImageToDevice(imageDevice, srcImage, RunMode, MEMORY_DVPP);
-    if (ret == ATLAS_ERROR) {
-        ATLAS_LOG_ERROR("Copy image to device failed");
-        return ATLAS_ERROR;
+    AclLiteError ret = CopyImageToDevice(imageDevice, srcImage, RunMode, MEMORY_DVPP);
+    if (ret == ACLLITE_ERROR) {
+        ACLLITE_LOG_ERROR("Copy image to device failed");
+        return ACLLITE_ERROR;
     }
 
     ImageData yuvImage;
     ret = dvpp_.JpegD(yuvImage, imageDevice);
-    if (ret == ATLAS_ERROR) {
-        ATLAS_LOG_ERROR("Convert jpeg to yuv failed");
-        return ATLAS_ERROR;
+    if (ret == ACLLITE_ERROR) {
+        ACLLITE_LOG_ERROR("Convert jpeg to yuv failed");
+        return ACLLITE_ERROR;
     }
 
     //resize
     ret = dvpp_.Resize(resizedImage, yuvImage, kModelWidth, kModelHeight);
-    if (ret == ATLAS_ERROR) {
-        ATLAS_LOG_ERROR("Resize image failed");
-        return ATLAS_ERROR;
+    if (ret == ACLLITE_ERROR) {
+        ACLLITE_LOG_ERROR("Resize image failed");
+        return ACLLITE_ERROR;
     }
     
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
-AtlasError ObjectDetect::Inference(std::vector<InferenceOutput>& inferenceOutput,
+AclLiteError ObjectDetect::Inference(std::vector<InferenceOutput>& inferenceOutput,
                                ImageData& resizedImage) {
-    AtlasError ret = model_.CreateInput(resizedImage.data.get(),
+    AclLiteError ret = model_.CreateInput(resizedImage.data.get(),
                                     resizedImage.size);
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Create mode input dataset failed");
-        return ATLAS_ERROR;
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Create mode input dataset failed");
+        return ACLLITE_ERROR;
     }
 
     ret = model_.Execute(inferenceOutput);
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Execute model inference failed");
-        return ATLAS_ERROR;
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Execute model inference failed");
+        return ACLLITE_ERROR;
     }
     model_.DestroyInput();
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
-AtlasError ObjectDetect::Postprocess(ImageData& image, std::vector<InferenceOutput>& modelOutput,
+AclLiteError ObjectDetect::Postprocess(ImageData& image, std::vector<InferenceOutput>& modelOutput,
                                  const string& origImagePath) {
     std::vector<BoundingBox> binfo;
 
@@ -168,8 +165,6 @@ AtlasError ObjectDetect::Postprocess(ImageData& image, std::vector<InferenceOutp
         uint gridSize = kGridSize[ImgIndex];
         uint32_t dataSize = 0;
         float* detectData = (float *)modelOutput[kOutputTensorSize - ImgIndex - 1].data.get();
-        // float* detectData = (float *)GetInferenceOutputItem(dataSize, modelOutput,
-        // (kOutputTensorSize - ImgIndex - 1));
         for (uint cx = 0; cx < gridSize; cx++)
         {
             for(uint cy = 0; cy < gridSize; cy++)
@@ -276,7 +271,7 @@ AtlasError ObjectDetect::Postprocess(ImageData& image, std::vector<InferenceOutp
     }
     DrawBoundBoxToImage(detectResults, origImagePath);
 
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 void ObjectDetect::DrawBoundBoxToImage(vector<BBox>& detectionResults,
                                        const string& origImagePath) {

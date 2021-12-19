@@ -7,14 +7,14 @@ import os
 SRC_PATH = os.path.realpath(__file__).rsplit("/", 1)[0]
 sys.path.append(os.path.join(SRC_PATH, ".."))
 sys.path.append(os.path.join(SRC_PATH, "../../../common/"))
-sys.path.append(os.path.join(SRC_PATH, "../../../common/atlas_utils"))
+sys.path.append(os.path.join(SRC_PATH, "../../../common/acllite"))
 
 import cv2
 import mmcv
 import numpy as np
-import atlas_utils.constants as const
-from atlas_utils.acl_model import Model
-from atlas_utils.acl_resource import AclResource
+import constants as const
+from acllite_model import AclLiteModel
+from acllite_resource import AclLiteResource
 import output_process
 from config import config
 import image_inpainting
@@ -24,7 +24,6 @@ MODEL_PATH = os.path.join(SRC_PATH, "../model/maskrcnn_mindspore_rgb.om")
 DATA_PATH = os.path.join(SRC_PATH, '../data/')
 MASK_PATH =  os.path.join(SRC_PATH, '../mask/')
 OUTPUT_PATH =  os.path.join(SRC_PATH, '../output/')
-
 
 def get_img_metas(file_name):
     """get_img_metas"""
@@ -39,7 +38,6 @@ def get_img_metas(file_name):
     img_metas = np.array([img_size[1], img_size[0]] +
                          [resize_ratio, resize_ratio])
     return img_metas
-
 
 def process_img(img_file):
     """process_img"""
@@ -56,7 +54,6 @@ def process_img(img_file):
     pad_img.astype(np.float16)
     return orig_shape, pad_img
 
-
 def preprocess(picPath):
     """preprocess"""
     orig_shape, pad_img = process_img(picPath)
@@ -69,7 +66,6 @@ def preprocess(picPath):
 
     return orig_shape, pad_img, img_metas
 
-
 def postprocess(result_list, pic, coordinate, output_path):
     """postprocess"""
     org_mask, dilate_mask = output_process.get_eval_result(result_list, pic, coordinate, output_path)
@@ -81,16 +77,15 @@ def postprocess(result_list, pic, coordinate, output_path):
         cv2.imwrite(dilate_mask_pic, org_mask) 
         image_inpainting.image_inpaint(DATA_PATH, MASK_PATH, output_path)
 
-
 def main():
     """main"""
     #acl init
     if (len(sys.argv) != 3):
         print("The App arg is invalid")
         exit(1)
-    acl_resource = AclResource()
+    acl_resource = AclLiteResource()
     acl_resource.init()
-    model = Model(MODEL_PATH)
+    model = AclLiteModel(MODEL_PATH)
     #x=296
     #y=330
     #x=410
@@ -112,7 +107,6 @@ def main():
     images_list = [os.path.join(DATA_PATH, img)
                    for img in os.listdir(DATA_PATH)
                    if os.path.splitext(img)[1] in const.IMG_EXT]
-        
     #infer picture
     for pic in images_list:
         #get pic data

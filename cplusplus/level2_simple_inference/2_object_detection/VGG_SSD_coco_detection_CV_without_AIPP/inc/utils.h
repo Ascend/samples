@@ -19,17 +19,16 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include <memory>
 #include "acl/acl.h"
 #include <opencv2/opencv.hpp>
 #include <opencv2/imgproc.hpp>
-#include "opencv2/imgcodecs/legacy/constants_c.h"
+
 #include "opencv2/imgproc/types_c.h"
 
 #define INFO_LOG(fmt, args...) fprintf(stdout, "[INFO]  " fmt "\n", ##args)
 #define WARN_LOG(fmt, args...) fprintf(stdout, "[WARN]  " fmt "\n", ##args)
 #define ERROR_LOG(fmt, args...) fprintf(stdout, "[ERROR]  " fmt "\n", ##args)
-
-
 
 #define MODEL_INPUT_WIDTH	300
 #define MODEL_INPUT_HEIGHT	300
@@ -100,4 +99,3 @@ public:
 
     static void ImageNchw(shared_ptr<ImageDesc>& imageData, std::vector<cv::Mat>& nhwcImageChs, uint32_t size);
 };
-

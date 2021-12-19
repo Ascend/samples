@@ -20,9 +20,8 @@
 #include <iostream>
 #include <vector>
 #include "acl/acl.h"
-
+#include <memory>
 #include "opencv2/opencv.hpp"
-#include "opencv2/imgcodecs/legacy/constants_c.h"
 #include "opencv2/imgproc/types_c.h"
 
 #define INFO_LOG(fmt, args...) fprintf(stdout, "[INFO]  " fmt "\n", ##args)
@@ -70,15 +69,10 @@ public:
     * @return device buffer of pic
     */
     static bool IsDirectory(const std::string &path);
-
     static bool IsPathExist(const std::string &path);
-
     static void SplitPath(const std::string &path, std::vector<std::string> &path_vec);
-
     static void GetAllFiles(const std::string &path, std::vector<std::string> &file_vec);
-
     static void GetPathFiles(const std::string &path, std::vector<std::string> &file_vec);
-
     static void* CopyDataDeviceToLocal(void* deviceData, uint32_t dataSize);
 };
 

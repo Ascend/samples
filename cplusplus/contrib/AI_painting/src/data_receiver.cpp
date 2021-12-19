@@ -82,15 +82,15 @@ Result DataReceiver::DoReceiverProcess(void* objectData, void* layoutData) {
         PaintingMessage::ModelInputData object_input = model_input_data_package->objectdata();
         std::string object_input_name = object_input.name();
         std::string object_input_data = object_input.data();
-        INFO_LOG("object_input_name: %s", object_input_name.c_str());
-        INFO_LOG("object_input_data size: %ld", object_input_data.size());
+        //INFO_LOG("object_input_name: %s", object_input_name.c_str());
+        //INFO_LOG("object_input_data size: %ld", object_input_data.size());
 
 
         PaintingMessage::ModelInputData layout_input = model_input_data_package->layoutdata();
         std::string layout_input_name = layout_input.name();
         std::string layout_input_data = layout_input.data();
-        INFO_LOG("layout_input_name: %s", layout_input_name.c_str());
-        INFO_LOG("layout_input_data size: %ld", layout_input_data.size());
+        //INFO_LOG("layout_input_name: %s", layout_input_name.c_str());
+        //INFO_LOG("layout_input_data size: %ld", layout_input_data.size());
 
         aclrtRunMode runMode;
         aclrtGetRunMode (& runMode);
@@ -101,7 +101,7 @@ Result DataReceiver::DoReceiverProcess(void* objectData, void* layoutData) {
         object_input_data.c_str(), object_input_data.size(), policy);
         ret = aclrtMemcpy(layoutData, layout_input_data.size(),
         layout_input_data.c_str(), layout_input_data.size(), policy);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("Copy resized image data to device failed.");
             return FAILED;
         }

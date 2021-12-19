@@ -8,12 +8,11 @@ sys.path.append(os.path.join(path, ".."))
 sys.path.append(os.path.join(path, "../../../../common/"))
 
 import acl
-import atlas_utils.utils as utils
-import atlas_utils.constants as const
-from atlas_utils.acl_model import Model
-from atlas_utils.acl_image import AclImage
-from atlas_utils.acl_resource import AclResource
-
+import utils
+import constants as const
+from acllite_model import AclLiteModel
+from acllite_image import AclLiteImage
+from acllite_resource import AclLiteResource
 
 class Cartoonization(object):
     """
@@ -31,7 +30,7 @@ class Cartoonization(object):
         Initialize
         """
         # Load model
-        self._model = Model(self._model_path)
+        self._model = AclLiteModel(self._model_path)
 
         return const.SUCCESS
 
@@ -66,12 +65,11 @@ class Cartoonization(object):
         image = np.clip(image, 0, 255).astype(np.uint8)
         image = cv2.resize(image, (w, h))
 
-        output_path = os.path.join("../outputs", os.path.basename(image_file))
+        output_path = os.path.join("../out", os.path.basename(image_file))
         cv2.imwrite(output_path, cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
 
-
 currentPath = os.path.join(path, "..")
-OUTPUT_DIR = os.path.join(currentPath, 'outputs')
+OUTPUT_DIR = os.path.join(currentPath, 'out')
 MODEL_PATH = os.path.join(currentPath, "model/AnimeGANv2.om")
 MODEL_WIDTH = 512
 MODEL_HEIGHT = 512
@@ -81,36 +79,31 @@ def main():
     if (len(sys.argv) != 2):
         print("The App arg is invalid")
         exit(1)
-
     # get all pictures
     image_dir = sys.argv[1]
     images_list = [os.path.join(image_dir, img)
                    for img in os.listdir(image_dir)
                    if os.path.splitext(img)[1] in const.IMG_EXT]
 
-    acl_resource = AclResource()
+    acl_resource = AclLiteResource()
     acl_resource.init()
-    
+
     # instantiation Cartoonization object
     cartoonization = Cartoonization(MODEL_PATH, MODEL_WIDTH, MODEL_HEIGHT)
-    
-    # init
     ret = cartoonization.init()
     utils.check_ret("Cartoonization.init ", ret)
     
     # create dir to save result
-    if not os.path.isdir('../outputs'):
-        os.mkdir('../outputs')
+    if not os.path.isdir('../out'):
+        os.mkdir('../out')
 
     for image_file in images_list:
         # preprocess
         test_img = cartoonization.pre_process(image_file)
         # inference
         y_pred = cartoonization.inference([test_img, ])
-
         # postprocess
         cartoonization.post_process(y_pred, image_file)
-
 
 if __name__ == '__main__':
     main()

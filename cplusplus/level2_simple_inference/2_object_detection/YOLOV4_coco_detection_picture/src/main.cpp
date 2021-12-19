@@ -76,12 +76,12 @@ void ProcessOutput(const aclmdlDataset *output, const char *originImage, float x
         } else {
             void *outHostData = nullptr;
             aclError ret = aclrtMallocHost(&outHostData, len);
-            if (ret != ACL_ERROR_NONE) {
+            if (ret != ACL_SUCCESS) {
                 cout << "aclrtMallocHost failed, result code is " << ret << endl;
                 break;
             }
             ret = aclrtMemcpy(outHostData, len, data, len, ACL_MEMCPY_DEVICE_TO_HOST);
-            if (ret != ACL_ERROR_NONE) {
+            if (ret != ACL_SUCCESS) {
                 cout << "aclrtMemcpy failed, result code is " << ret << endl;
                 (void) aclrtFree(outHostData);
                 break;
@@ -121,7 +121,7 @@ Result GetImageResizeBuffer(const char *imageFile, int resizeWidth, int resizeHe
                             float &xScale, float &yScale) {
     aclrtStream stream = nullptr;
     aclError ret = aclrtCreateStream(&stream);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("create stream failed, error code is %d", static_cast<int32_t>(ret));
         return FAILED;
     }
@@ -173,7 +173,6 @@ Result GetImageResizeBuffer(const char *imageFile, int resizeWidth, int resizeHe
 
     return SUCCESS;
 }
-
 
 /**
 * @brief main

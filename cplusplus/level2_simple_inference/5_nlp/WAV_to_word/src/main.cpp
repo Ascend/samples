@@ -9,24 +9,24 @@
 */
 #include <iostream>
 #include "sample_process.h"
-#include "atlasutil/atlas_utils.h"
+#include "acllite/AclLiteUtils.h"
 using namespace std;
 
 int main()
 {
     SampleProcess processSample;
-    AtlasError ret = processSample.InitResource();
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("sample init resource failed");
+    AclLiteError ret = processSample.InitResource();
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("sample init resource failed");
         return 1;
     }
 
     ret = processSample.Process();
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("sample process failed");
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("sample process failed");
         return 1;
     }
 
-    ATLAS_LOG_INFO("execute sample success");
-    return ATLAS_OK;
+    ACLLITE_LOG_INFO("execute sample success");
+    return ACLLITE_OK;
 }

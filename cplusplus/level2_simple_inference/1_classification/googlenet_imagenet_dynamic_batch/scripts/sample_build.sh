@@ -2,7 +2,8 @@
 ScriptPath="$( cd "$(dirname "$BASH_SOURCE")" ; pwd -P )"
 ModelPath="${ScriptPath}/../model"
 
-. ${ScriptPath}/../../../../../common/sample_common.sh
+common_script_dir=${THIRDPART_PATH}/common
+. ${common_script_dir}/sample_common.sh
 
 function main()
 {
@@ -14,6 +15,7 @@ function main()
   fi
 
   wget -O ${ModelPath}/../data/dog1_1024_683.bin https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_imagenet_dynamic_batch/dog1_1024_683.bin --no-check-certificate
+  wget -O ${ModelPath}/../data/dog2_1024_683.bin https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_imagenet_dynamic_batch/test_image/test2.bin --no-check-certificate
   
   find_model googlenet_dynamicbatch.om
   if [ $? -ne 0 ];then

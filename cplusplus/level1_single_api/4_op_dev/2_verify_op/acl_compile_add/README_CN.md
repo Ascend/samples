@@ -37,120 +37,79 @@
         -   运行环境操作系统架构为arm64时，编译器为aarch64-linux-gnu-g++
 
 -   芯片：Ascend 710、Ascend 910
--   python及依赖的库：python3.7.5
+-   python及依赖的库：Python3.7.*x*（3.7.0 ~ 3.7.11）、Python3.8.*x*（3.8.0 ~ 3.8.11）
 -   已完成昇腾AI软件栈的部署。
 -   已参考[custom\_op](../../1_custom_op)完成自定义算子的编译部署。
 
-## 配置环境变量<a name="section053142383519"></a>
-
--   Ascend 910
-    1.  开发环境上，设置生成单算子离线模型的环境变量。
-
-        环境变量配置示例如下：
-
-        ```
-        export install_path=$HOME/Ascend/ascend-toolkit/latest
-        export PATH=/usr/local/python3.7.5/bin:${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH  # 如果用户环境存在多个python3版本，则指定使用的python3.7.5版本，python3.7.5安装路径请根据实际情况替换；同时设定ATC工具可执行文件所在路径
-        export ASCEND_OPP_PATH=${install_path}/opp
-        ```
-
-        “$HOME/Ascend”请替换“Ascend-cann-toolkit”包的实际安装路径。
-
-    2.  开发环境上，设置环境变量，配置AscendCL单算子验证程序编译依赖的头文件与库文件路径。
-
-        编译脚本会按环境变量指向的路径查找编译依赖的头文件和库文件，“$HOME/Ascend”请替换“Ascend-cann-toolkit”包的实际安装路径。
-
-        -   当运行环境操作系统架构是x86时，配置示例如下所示：
-
-            ```
-            export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux
-            export NPU_HOST_LIB=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux/fwkacllib/lib64/stub
-            ```
-
-        -   当运行环境操作系统架构时arm64时，配置示例如下所示：
-
-            ```
-            export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux
-            export NPU_HOST_LIB=$HOME/Ascend/ascend-toolkit/latest/arm64-linux/fwkacllib/lib64/stub
-            ```
 
 
-        ```
-        说明：
-        使用FwkACLlib组件安装路径下“lib64/stub”目录下的*.so库，是为了编译基于AscendCL接口的代码逻辑时，不依赖其它组件的任何*.so库。编译通过后，在Host上运行应用时，会根据“LD_LIBRARY_PATH”环境变量链接到“fwkacllib/lib64”或者“acllib/lib64”目录下的*.so库，并自动链接到其他组件依赖的*.so库。
-        ```
-    
-    3.  运行环境上，设置运行应用时依赖AscendCL库文件的环境变量。
-    
-        -   若运行环境上安装的“Ascend-cann-toolkit”包，环境变量设置如下：
-    
-            ```
-            export LD_LIBRARY_PATH=$HOME/Ascend/ascend-toolkit/latest/fwkacllib/lib64
-            ```
-    
-        -   若运行环境上安装的“Ascend-cann-nnrt”包，环境变量设置如下：
-    
-            ```
-            export LD_LIBRARY_PATH=$HOME/Ascend/nnrt/latest/acllib/lib64
-            ```
-    
-        -   若运行环境上安装的“Ascend-cann-nnae”包，环境变量设置如下：
-    
-            ```
-            export LD_LIBRARY_PATH=$HOME/Ascend/nnae/latest/fwkacllib/lib64
-            ```
+## 配置环境变量
+
+- 开发环境上环境变量配置
+
+  1. CANN-Toolkit包提供进程级环境变量配置脚本，供用户在进程中引用，以自动完成CANN基础环境变量的配置，配置示例如下所示
+
+     ```
+     . ${HOME}/Ascend/ascend-toolkit/set_env.sh
+     ```
+
+     “$HOME/Ascend”请替换“Ascend-cann-toolkit”包的实际安装路径。
+
+  2. 算子编译依赖Python，以Python3.7.5为例，请以运行用户执行如下命令设置Python3.7.5的相关环境变量。
+
+     ```
+     #用于设置python3.7.5库文件路径
+     export LD_LIBRARY_PATH=/usr/local/python3.7.5/lib:$LD_LIBRARY_PATH
+     #如果用户环境存在多个python3版本，则指定使用python3.7.5版本
+     export PATH=/usr/local/python3.7.5/bin:$PATH
+     ```
+
+     Python3.7.5安装路径请根据实际情况进行替换，您也可以将以上命令写入~/.bashrc文件中，然后执行source ~/.bashrc命令使其立即生效。
+
+  3. 开发环境上，设置环境变量，配置AscendCL单算子验证程序编译依赖的头文件与库文件路径。
+
+   编译脚本会按环境变量指向的路径查找编译依赖的头文件和库文件，“$HOME/Ascend”请替换“Ascend-cann-toolkit”包的实际安装路径。
+
+   - 当运行环境操作系统架构是x86时，配置示例如下所示：
+
+     ```
+     export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux
+     export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
+     ```
+
+   - 当运行环境操作系统架构时AArch64时，配置示例如下所示：
+
+       ```
+       export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux
+       export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
+       ```
+
+- 运行环境上环境变量配置
+
+  - 若运行环境上安装的“Ascend-cann-toolkit”包，环境变量设置如下：
+
+    ```
+    . ${HOME}/Ascend/ascend-toolkit/set_env.sh
+    ```
+
+  - 若运行环境上安装的“Ascend-cann-nnrt”包，环境变量设置如下：
+
+    ```
+    . ${HOME}/Ascend/nnrt/set_env.sh
+    ```
+
+  - 若运行环境上安装的“Ascend-cann-nnae”包，环境变量设置如下：
+
+    ```
+    . ${HOME}/Ascend/nnae/set_env.sh
+    ```
+
+    “$HOME/Ascend”请替换相关软件包的实际安装路径。
 
 
-        “$HOME/Ascend”请替换相关软件包的实际安装路径。
 
 
--   Ascend 710
-    1.  开发环境上，设置生成单算子离线模型的环境变量。
-
-        环境变量配置示例如下：
-
-        ```
-        export install_path=$HOME/Ascend/ascend-toolkit/latest
-        export PATH=/usr/local/python3.7.5/bin:${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH  # 如果用户环境存在多个python3版本，则指定使用的python3.7.5版本，python3.7.5安装路径请根据实际情况替换；同时设定ATC工具可执行文件所在路径
-        export ASCEND_OPP_PATH=${install_path}/opp
-        ```
-
-        “$HOME/Ascend”请替换“Ascend-cann-toolkit”包的实际安装路径。
-
-    2.  开发环境上，设置环境变量，配置AscendCL单算子验证程序编译依赖的头文件与库文件路径。
-
-        编译脚本会按环境变量指向的路径查找编译依赖的头文件和库文件，“$HOME/Ascend”请替换“Ascend-cann-toolkit”包的实际安装路径。
-
-        -   当运行环境操作系统架构是x86时，配置示例如下所示：
-
-            ```
-            export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux
-            export NPU_HOST_LIB=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux/acllib/lib64/stub
-            ```
-
-        -   当运行环境操作系统架构时arm64时，配置示例如下所示：
-
-            ```
-            export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux
-            export NPU_HOST_LIB=$HOME/Ascend/ascend-toolkit/latest/arm64-linux/acllib/lib64/stub
-            ```
-
-
-        ```
-        说明：
-        使用ACLlib组件安装路径下“lib64/stub”目录下的*.so库，是为了编译基于AscendCL接口的代码逻辑时，不依赖其它组件的任何*.so库。编译通过后，在Host上运行应用时，会根据“LD_LIBRARY_PATH”环境变量链接到“acllib/lib64”目录下的*.so库，并自动链接到其他组件依赖的*.so库。
-        ```
-    
-    3.  运行环境上，设置运行应用时依赖AscendCL库文件的环境变量。
-    
-        如下为设置环境变量的示例，请将$HOME/Ascend/nnrt/latest替换为Ascend-cann-nnrt包的实际安装路径。
-    
-        ```
-        export LD_LIBRARY_PATH=$HOME/Ascend/nnrt/latest/acllib/lib64
-        ```
-
-
-## 编译运行（Ascend 710/Ascend 910）<a name="section170442411445"></a>
+## 编译运行（Ascend 710/Ascend 910）
 
 1.  生成Add算子的单算子离线模型文件。
     以运行用户（例如HwHiAiUser）登录开发环境，并进入样例工程的“acl\_execute\_add/run/out“目录。
@@ -184,17 +143,16 @@
             
             **cmake ../../../src -DCMAKE\_CXX\_COMPILER=aarch64-linux-gnu-g++ -DCMAKE\_SKIP\_RPATH=TRUE**
 
-
         参数说明如下：
-    
-        -   “../../../src”表示CMakeLists.txt文件所在的目录，请根据实际目录层级修改。
-        -   DCMAKE\_CXX\_COMPILER：编译应用程序所用的编译器。
-        -   DCMAKE\_SKIP\_RPATH：**设置为TRUE**，代表不会将rpath信息（即NPU\_HOST\_LIB配置的路径）添加到编译生成的可执行文件中去。可执行文件运行时会自动搜索实际设置的LD\_LIBRARY\_PATH（“xxx/acllib/lib64”或“xxx/fwkacllib/lib64”）中的动态链接库。
-    
+
+        -  “../../../src”表示CMakeLists.txt文件所在的目录，请根据实际目录层级修改。
+        -  DCMAKE\_CXX\_COMPILER：编译应用程序所用的编译器。
+        -  DCMAKE\_SKIP\_RPATH：**设置为TRUE**，代表不会将rpath信息（即NPU\_HOST\_LIB配置的路径）添加到编译生成的可执行文件中去。可执行文件运行时会自动搜索实际设置的LD\_LIBRARY\_PATH（“xxx/acllib/lib64”或“xxx/fwkacllib/lib64”）中的动态链接库。
+
     3.  执行如下命令，生成可执行文件。
-    
+
         **make**
-    
+
         会在工程目录的“run/out“目录下生成可执行文件**execute\_add\_op**。
 
 

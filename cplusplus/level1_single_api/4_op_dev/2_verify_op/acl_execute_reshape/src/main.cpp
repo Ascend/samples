@@ -140,21 +140,21 @@ int main()
     }
 
     // init acl json
-    if (aclInit("test_data/config/acl.json") != ACL_ERROR_NONE) {
+    if (aclInit("test_data/config/acl.json") != ACL_SUCCESS) {
         ERROR_LOG("Init acl failed");
         return FAILED;
     }
 
     // set model path
     int deviceId = 0;
-    if (aclopSetModelDir("op_models") != ACL_ERROR_NONE) {
+    if (aclopSetModelDir("op_models") != ACL_SUCCESS) {
         std::cerr << "Load single op model failed" << std::endl;
         (void) aclFinalize();
         return FAILED;
     }
 
     // set device id
-    if (aclrtSetDevice(deviceId) != ACL_ERROR_NONE) {
+    if (aclrtSetDevice(deviceId) != ACL_SUCCESS) {
         std::cerr << "Open device failed. device id = " << deviceId << std::endl;
         (void) aclFinalize();
         return FAILED;
@@ -162,7 +162,7 @@ int main()
     INFO_LOG("Open device[%d] success", deviceId);
 
     aclrtRunMode runMode;
-    if (aclrtGetRunMode(&runMode) != ACL_ERROR_NONE) {
+    if (aclrtGetRunMode(&runMode) != ACL_SUCCESS) {
         ERROR_LOG("Acl get run mode failed");
         (void) aclrtResetDevice(deviceId);
         (void) aclFinalize();
@@ -178,7 +178,7 @@ int main()
 
     (void) aclrtResetDevice(deviceId);
 
-    if (aclFinalize() != ACL_ERROR_NONE) {
+    if (aclFinalize() != ACL_SUCCESS) {
         ERROR_LOG("Finalize acl failed");
         return FAILED;
     }

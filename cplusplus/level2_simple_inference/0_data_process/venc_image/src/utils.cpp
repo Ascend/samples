@@ -39,7 +39,7 @@ bool Utils::ReadFileToDeviceMem(const char *fileName, void *&dataDev, uint32_t &
     size_t readSize;
     // Malloc input device memory
     auto aclRet = acldvppMalloc(&dataDev, dataSize);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("acl malloc dvpp data failed, dataSize = %u, errorCode = %d.",
             dataSize, static_cast<int32_t>(aclRet));
         fclose(fp);
@@ -70,7 +70,7 @@ bool Utils::ReadFileToDeviceMem(const char *fileName, void *&dataDev, uint32_t &
 
         // copy input to device memory
         aclRet = aclrtMemcpy(dataDev, dataSize, dataHost, fileLen, ACL_MEMCPY_HOST_TO_DEVICE);
-        if (aclRet != ACL_ERROR_NONE) {
+        if (aclRet != ACL_SUCCESS) {
             ERROR_LOG("acl memcpy data to dev failed, fileLen = %u, errorCode = %d.",
                 fileLen, static_cast<int32_t>(aclRet));
             (void)aclrtFreeHost(dataHost);
@@ -118,7 +118,7 @@ bool Utils::WriteToFile(FILE *fileFp, void *dataDev, uint32_t dataSize)
             return false;
         }
         aclRet = aclrtMemcpy(data, dataSize, dataDev, dataSize, ACL_MEMCPY_DEVICE_TO_HOST);
-        if (aclRet != ACL_ERROR_NONE) {
+        if (aclRet != ACL_SUCCESS) {
             ERROR_LOG("acl memcpy data to host failed, dataSize = %u, errorCode = %d.",
                 dataSize, static_cast<int32_t>(aclRet));
             (void)aclrtFreeHost(data);

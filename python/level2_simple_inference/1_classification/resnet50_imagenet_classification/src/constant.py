@@ -13,7 +13,7 @@
 # limitations under the License.
 
 # error code
-ACL_ERROR_NONE = 0
+ACL_SUCCESS = 0
 
 # rule for mem
 ACL_MEM_MALLOC_HUGE_FIRST = 0

@@ -1,7 +1,6 @@
 import numpy as np
-
-from acl_dvpp import Dvpp
-from atlas_utils.presenteragent import presenter_datatype
+from acllite_imageproc import AclLiteImageProc
+from presenteragent import presenter_datatype
 
 LABEL = 1
 SCORE = 2
@@ -11,7 +10,6 @@ BOTTOM_RIGHT_X = 5
 BOTTOM_RIGHT_Y = 6
 MODEL_WIDTH = 640
 MODEL_HEIGHT = 352
-
 labels = ["face","person", "mask"]
 
 INPUT_DIR = './data/'
@@ -25,19 +23,16 @@ anchors_1 = np.array([[10, 13], [16, 30], [33, 23]]) / stride_list[0]
 anchors_2 = np.array([[30, 61], [62, 45], [59, 119]]) / stride_list[1]
 anchors_3 = np.array([[116, 90], [156, 198], [163, 326]]) / stride_list[2]
 anchor_list = [anchors_1, anchors_2, anchors_3]
-
 conf_threshold = 0.2
 iou_threshold = 0.3
-
 colors = [(255, 0, 0), (0, 255, 0), (0, 0, 255), (0, 255, 255), (255, 0, 255), (255, 255, 0)]
-
 
 class VggSsd(object):
     def __init__(self, acl_resource, model_width, model_height):
         self._acl_resource = acl_resource
         self._model_width = model_width
         self._model_height = model_height
-        self._dvpp = Dvpp(acl_resource)
+        self._dvpp = AclLiteImageProc(acl_resource)
 
     def __del__(self):
         print("Release yolov3 resource finished")
@@ -87,7 +82,6 @@ class VggSsd(object):
         apply_nms
         """
         res = []
-    
         for cls in range(class_num):
             cls_bboxes = all_boxes[cls]
             sorted_boxes = sorted(cls_bboxes, key=lambda d: d[5])[::-1]
@@ -96,7 +90,6 @@ class VggSsd(object):
             for i in range(len(sorted_boxes)):
                 if i in p:
                     continue
-    
                 truth = sorted_boxes[i]
                 for j in range(i + 1, len(sorted_boxes)):
                     if j in p:
@@ -105,7 +98,6 @@ class VggSsd(object):
                     iou = self.cal_iou(box, truth)
                     if iou >= thres:
                         p[j] = 1
-    
             for i in range(len(sorted_boxes)):
                 if i not in p:
                     res.append(sorted_boxes[i])
@@ -120,7 +112,6 @@ class VggSsd(object):
             return s
     
         h, w, _ = conv_output.shape
-        
         pred = conv_output.reshape((h * w, 3, 5 + class_num))
     
         pred[..., 4:] = _sigmoid(pred[..., 4:])

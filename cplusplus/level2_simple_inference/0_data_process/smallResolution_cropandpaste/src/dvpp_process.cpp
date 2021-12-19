@@ -53,7 +53,7 @@ Result DvppProcess::InitResource()
     }
 
     aclError aclRet = acldvppCreateChannel(dvppChannelDesc_);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("acldvppCreateChannel failed, errorCode = %d", static_cast<int32_t>(aclRet));
         return FAILED;
     }
@@ -66,7 +66,7 @@ void DvppProcess::DestroyResource()
 {
     if (dvppChannelDesc_ != nullptr) {
         aclError aclRet = acldvppDestroyChannel(dvppChannelDesc_);
-        if (aclRet != ACL_ERROR_NONE) {
+        if (aclRet != ACL_SUCCESS) {
             ERROR_LOG("acldvppDestroyChannel failed, errorCode = %d", static_cast<int32_t>(aclRet));
         }
 
@@ -280,7 +280,7 @@ Result DvppProcess::InitCropAndPasteOutputDesc()
     uint32_t sizeNum = 2;
     vpcOutBufferSize_ = vpcOutWidthStride * vpcOutHeightStride * sizeAlignment / sizeNum;
     aclError aclRet = acldvppMalloc(&vpcOutBufferDev_, vpcOutBufferSize_);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("malloc output image buffer failed, vpcOutBufferSize = %u, errorCode = %d",
             vpcOutBufferSize_, static_cast<int32_t>(aclRet));
         return FAILED;
@@ -530,7 +530,7 @@ Result DvppProcess::SplitProcessCropAndPasteFirst(CropAndPaste cropAndPasteFirst
     uint32_t vpcOutHeightStrideFirst = AlignSize(cropAndPasteFirstInfo.pasteHeight, 2); // 2-byte alignment
     uint32_t vpcOutBufferSizeFirst = vpcOutWidthStrideFirst * vpcOutHeightStrideFirst * 3 / 2; // yuv420 image size
     aclError aclRet = acldvppMalloc(&vpcOutBufferDevFirst_, vpcOutBufferSizeFirst);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("malloc first output image buffer failed, vpcOutBufferSize = %u, errorCode = %d",
             vpcOutBufferSizeFirst, static_cast<int32_t>(aclRet));
         (void)acldvppDestroyRoiConfig(pasteAreaFirst);
@@ -554,7 +554,7 @@ Result DvppProcess::SplitProcessCropAndPasteFirst(CropAndPaste cropAndPasteFirst
 
     aclRet = acldvppVpcCropAndPasteAsync(dvppChannelDesc_, vpcInputDesc_,
         vpcOutputDescFirst_, cropArea_, pasteAreaFirst, stream_);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("first acldvppVpcCropAndPasteAsync failed, errorCode = %d", static_cast<int32_t>(aclRet));
         (void)acldvppDestroyRoiConfig(pasteAreaFirst);
         (void)acldvppFree(vpcOutBufferDevFirst_);
@@ -563,7 +563,7 @@ Result DvppProcess::SplitProcessCropAndPasteFirst(CropAndPaste cropAndPasteFirst
     }
 
     aclRet = aclrtSynchronizeStream(stream_);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("first stream synchronize of crop and paste failed, errorCode = %d", static_cast<int32_t>(aclRet));
         (void)acldvppDestroyRoiConfig(pasteAreaFirst);
         (void)acldvppFree(vpcOutBufferDevFirst_);
@@ -643,7 +643,7 @@ Result DvppProcess::SplitProcessCropAndPasteSecond(CropAndPaste cropAndPasteFirs
     // output of first step as input of second step
     aclError aclRet = acldvppVpcCropAndPasteAsync(dvppChannelDesc_, vpcOutputDescFirst_,
         vpcOutputDesc_, cropAreaSecond, pasteArea_, stream_);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("second acldvppVpcCropAndPasteAsync failed, errorCode = %d", static_cast<int32_t>(aclRet));
         (void)acldvppDestroyRoiConfig(cropAreaSecond);
         (void)acldvppFree(vpcOutBufferDevFirst_);
@@ -652,7 +652,7 @@ Result DvppProcess::SplitProcessCropAndPasteSecond(CropAndPaste cropAndPasteFirs
     }
 
     aclRet = aclrtSynchronizeStream(stream_);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("second stream synchronize of crop and paste failed, errorCode = %d", static_cast<int32_t>(aclRet));
         (void)acldvppDestroyRoiConfig(cropAreaSecond);
         (void)acldvppFree(vpcOutBufferDevFirst_);
@@ -702,13 +702,13 @@ Result DvppProcess::ProcessCropAndPaste()
     // crop and patse pic
     aclError aclRet = acldvppVpcCropAndPasteAsync(dvppChannelDesc_, vpcInputDesc_,
         vpcOutputDesc_, cropArea_, pasteArea_, stream_);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("acldvppVpcCropAndPasteAsync failed, errorCode = %d", static_cast<int32_t>(aclRet));
         return FAILED;
     }
 
     aclRet = aclrtSynchronizeStream(stream_);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("crop and paste aclrtSynchronizeStream failed, errorCode = %d", static_cast<int32_t>(aclRet));
         return FAILED;
     }

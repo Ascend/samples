@@ -54,7 +54,7 @@ Result DvppProcess::InitResource()
     }
 
     aclError aclRet = acldvppCreateChannel(dvppChannelDesc_);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("acldvppCreateChannel failed, errorCode = %d", static_cast<int32_t>(aclRet));
         return FAILED;
     }
@@ -67,7 +67,7 @@ void DvppProcess::DestroyResource()
 {
     if (dvppChannelDesc_ != nullptr) {
         aclError aclRet = acldvppDestroyChannel(dvppChannelDesc_);
-        if (aclRet != ACL_ERROR_NONE) {
+        if (aclRet != ACL_SUCCESS) {
             ERROR_LOG("acldvppDestroyChannel failed, errorCode = %d", static_cast<int32_t>(aclRet));
         }
 
@@ -114,7 +114,7 @@ void DvppProcess::DestroyDvppOutputPara()
 Result DvppProcess::InitDecodeOutputDesc()
 {
     aclError aclRet = acldvppMalloc(&decodeOutBufferDev_, jpegDecodeOutputSize_);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("acldvppMalloc decodeOutBufferDev_ failed, errorCode = %d", static_cast<int32_t>(aclRet));
         return FAILED;
     }
@@ -141,13 +141,13 @@ Result DvppProcess::ProcessDecode()
 
     aclError aclRet = acldvppJpegDecodeAsync(dvppChannelDesc_, reinterpret_cast<void *>(inDevBuffer_),
         inDevBufferSizeD_, decodeOutputDesc_, stream_);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("acldvppJpegDecodeAsync failed, errorCode = %d", static_cast<int32_t>(aclRet));
         return FAILED;
     }
 
     aclRet = aclrtSynchronizeStream(stream_);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("decode aclrtSynchronizeStream failed, errorCode = %d", static_cast<int32_t>(aclRet));
         return FAILED;
     }
@@ -211,7 +211,7 @@ Result DvppProcess::InitResizeOutputDesc()
     }
     vpcOutBufferSize_ = resizeOutWidthStride * resizeOutHeightStride * sizeAlignment / sizeNum;
     aclError aclRet = acldvppMalloc(&vpcOutBufferDev_, vpcOutBufferSize_);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("acldvppMalloc vpcOutBufferDev_ failed, errorCode = %d", static_cast<int32_t>(aclRet));
         return FAILED;
     }
@@ -273,7 +273,7 @@ Result DvppProcess::Init8kResizeOutputDesc()
 
     vpcOutBufferSize_ = resizeOutWidthStride * resizeOutHeightStride * sizeAlignment / sizeNum;
     aclError aclRet = acldvppMalloc(&vpcOutBufferDev_, vpcOutBufferSize_);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("acldvppMalloc vpcOutBufferDev_ failed, errorCode = %d", static_cast<int32_t>(aclRet));
         return FAILED;
     }
@@ -323,13 +323,13 @@ Result DvppProcess::ProcessResize()
     // resize pic
     aclError aclRet = acldvppVpcResizeAsync(dvppChannelDesc_, vpcInputDesc_,
         vpcOutputDesc_, resizeConfig_, stream_);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("acldvppVpcResizeAsync failed, errorCode = %d", static_cast<int32_t>(aclRet));
         return FAILED;
     }
 
     aclRet = aclrtSynchronizeStream(stream_);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("resize aclrtSynchronizeStream failed, errorCode = %d", static_cast<int32_t>(aclRet));
         return FAILED;
     }
@@ -400,7 +400,7 @@ Result DvppProcess::InitCropOutputDesc()
     int dvppOutHeightStride = modelInputHeight_;
     vpcOutBufferSize_ = dvppOutWidthStride * dvppOutHeightStride * sizeAlignment / sizeNum;
     aclError aclRet = acldvppMalloc(&vpcOutBufferDev_, vpcOutBufferSize_);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("acldvppMalloc vpcOutBufferDev_ failed, errorCode = %d", static_cast<int32_t>(aclRet));
         return FAILED;
     }
@@ -459,13 +459,13 @@ Result DvppProcess::ProcessCrop()
     aclError aclRet = acldvppSetResizeConfigInterpolation(resizeConfig_, 0);
     aclRet = acldvppVpcCropResizeAsync(dvppChannelDesc_, vpcInputDesc_,
         vpcOutputDesc_, cropArea_, resizeConfig_, stream_);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("acldvppVpcCropAsync failed, errorCode = %d", static_cast<int32_t>(aclRet));
         return FAILED;
     }
 
     aclRet = aclrtSynchronizeStream(stream_);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("crop aclrtSynchronizeStream failed, errorCode = %d", static_cast<int32_t>(aclRet));
         return FAILED;
     }
@@ -538,7 +538,7 @@ Result DvppProcess::InitCropAndPasteOutputDesc()
     vpcOutBufferSize_ =
         dvppOutWidthStride * dvppOutHeightStride * sizeAlignment / sizeNum;
     aclError aclRet = acldvppMalloc(&vpcOutBufferDev_, vpcOutBufferSize_);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("acldvppMalloc vpcOutBufferDev_ failed, errorCode = %d", static_cast<int32_t>(aclRet));
         return FAILED;
     }
@@ -610,13 +610,13 @@ Result DvppProcess::ProcessCropAndPaste()
                                             vpcOutputDesc_, cropArea_, pasteArea_,
                                             resizeConfig_, stream_);
 
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("acldvppVpcCropAndPasteAsync failed, errorCode = %d", static_cast<int32_t>(aclRet));
         return FAILED;
     }
 
     aclRet = aclrtSynchronizeStream(stream_);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("crop and paste aclrtSynchronizeStream failed, errorCode = %d", static_cast<int32_t>(aclRet));
         return FAILED;
     }
@@ -708,13 +708,13 @@ Result DvppProcess::InitEncodeResource()
     (void)acldvppSetJpegeConfigLevel(jpegeConfig_, encodeLevel);
 
     aclError aclRet = acldvppJpegPredictEncSize(encodeInputDesc_, jpegeConfig_, &encodeOutBufferSize_);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("predict encodeOutBufferSize_ failed, errorCode = %d", static_cast<int32_t>(aclRet));
         return FAILED;
     }
 
     aclRet = acldvppMalloc(&encodeOutBufferDev_, encodeOutBufferSize_);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("malloc encodeOutBufferDev_ failed, errorCode = %d", static_cast<int32_t>(aclRet));
         return FAILED;
     }
@@ -757,14 +757,14 @@ Result DvppProcess::ProcessJpegE()
 
         aclError aclRet = acldvppJpegEncodeAsync(dvppChannelDesc_, encodeInputDesc_, encodeOutBufferDev_,
             &encodeOutBufferSize_, jpegeConfig_, stream_);
-        if (aclRet != ACL_ERROR_NONE) {
+        if (aclRet != ACL_SUCCESS) {
             ERROR_LOG("acldvppJpegEncodeAsync failed, errorCode = %d", static_cast<int32_t>(aclRet));
             DestroyEncodeResource();
             return FAILED;
         }
 
         aclRet = aclrtSynchronizeStream(stream_);
-        if (aclRet != ACL_ERROR_NONE) {
+        if (aclRet != ACL_SUCCESS) {
             ERROR_LOG("encode aclrtSynchronizeStream failed, errorCode = %d", static_cast<int32_t>(aclRet));
             DestroyEncodeResource();
             return FAILED;

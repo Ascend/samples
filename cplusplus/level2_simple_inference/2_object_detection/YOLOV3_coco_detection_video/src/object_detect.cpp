@@ -16,8 +16,8 @@
 * File sample_process.cpp
 * Description: handle acl resource
 */
-#include "object_detect.h"
 #include <iostream>
+#include "object_detect.h"
 #include "model_process.h"
 #include "acl/acl.h"
 #include "utils.h"
@@ -71,7 +71,7 @@ Result ObjectDetect::InitResource() {
     // ACL init
     const char *aclConfigPath = "../src/acl.json";
     aclError ret = aclInit(aclConfigPath);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("Acl init failed");
         return FAILED;
     }
@@ -79,14 +79,14 @@ Result ObjectDetect::InitResource() {
 
     // open device
     ret = aclrtSetDevice(deviceId_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("Acl open device %d failed", deviceId_);
         return FAILED;
     }
     INFO_LOG("Open device %d success", deviceId_);
     //Gets whether the current application is running on host or Device
     ret = aclrtGetRunMode(&runMode_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("acl get run mode failed");
         return FAILED;
     }
@@ -121,7 +121,7 @@ Result ObjectDetect::CreateModelInputdDataset()
 {
     //Request image data memory for input model
     aclError aclRet = aclrtMalloc(&imageDataBuf_, imageDataSize_, ACL_MEM_MALLOC_HUGE_FIRST);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("malloc device data buffer failed, aclRet is %d", aclRet);
         return FAILED;
     }
@@ -190,7 +190,7 @@ Result ObjectDetect::Preprocess(cv::Mat& frame) {
                              ACL_MEMCPY_HOST_TO_DEVICE:ACL_MEMCPY_DEVICE_TO_DEVICE;
     aclError ret = aclrtMemcpy(imageDataBuf_, imageDataSize_,
                                reiszeMat.ptr<uint8_t>(), imageDataSize_, policy);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("Copy resized image data to device failed.");
         return FAILED;
     }
@@ -343,13 +343,13 @@ void ObjectDetect::DestroyResource()
 
     aclError ret;
     ret = aclrtResetDevice(deviceId_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("reset device failed");
     }
     INFO_LOG("end to reset device is %d", deviceId_);
 
     ret = aclFinalize();
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("finalize acl failed");
     }
     INFO_LOG("end to finalize acl");

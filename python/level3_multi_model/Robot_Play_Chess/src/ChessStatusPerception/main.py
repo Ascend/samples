@@ -18,7 +18,7 @@ import numpy as np
 import cv2
 import socket
 
-from atlas_utils.acl_resource import AclResource
+from acllite_resource import AclLiteResource
 from ChessStatusPerception import ChessStatusPerception
 
 MODEL_PATH = "../../model/chess_ckpt_0804_vgg_99.om"
@@ -45,7 +45,7 @@ class TcpServer:
 
 
 def main():
-    acl_resource = AclResource()
+    acl_resource = AclLiteResource()
     acl_resource.init()
     server = TcpServer()
     perception = ChessStatusPerception(MODEL_PATH)

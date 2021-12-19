@@ -44,7 +44,7 @@
 using namespace std;
 
 extern "C" {
-#include "driver/peripheral_api.h"
+#include "peripheral_api.h"
 #include "camera.h"
 
 Camera::Camera(uint32_t id, uint32_t fps, uint32_t width, 

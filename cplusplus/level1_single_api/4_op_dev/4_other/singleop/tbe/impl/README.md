@@ -1,19 +1,18 @@
-# BatchNorm实现样例<a name="ZH-CN_TOPIC_0303868527"></a>
+# BatchNorm实现样例
 
-## 功能描述<a name="section5991635141815"></a>
+## 功能描述
 
 此样例通过TIK方式实现了BatchNorm算子，BatchNorm算子是对输入进行归一化处理，x<sub>norm</sub>=（x−μ）/σ，其中， μ和 σ是计算的均值和方差。
 
 此样例针对不同的shape范围，制定不同的Tiling策略，从而形成多个算子实现文件，再将算子实现文件编译成二进制文件（.o）。后续可参考[BatchNorm](https://github.com/Ascend/samples/tree/master/cplusplus/level1_single_api/4_op_dev/2_verify_op/acl_execute_batchnorm)运行sample执行对应shape的算子。
 
-## 环境要求<a name="section3833348101215"></a>
+## 环境要求
 
--   操作系统及架构：CentOS x86系统、CentOS aarch64系统
--   版本：3.2.0
--   python及依赖的库：python3.7.5
+-   操作系统及架构：CentOS x86系统、CentOS aarch64系统、Ubuntu 18.04 x86_64
+-   python及依赖的库：Python3.7.*x*（3.7.0~3.7.11）、Python3.8.*x*（3.8.0~3.8.11）
 -   已完成昇腾AI软件栈在开发环境、运行环境上的部署。
 
-## 算子编译<a name="section2501928153120"></a>
+## 算子编译
 
 编译BatchNorm算子，生成算子二进制文件（\*.o）及算子描述文件（\*.json）。
 
@@ -21,17 +20,24 @@
 
 2. 设置环境变量。
 
-   利用export命令，在当前终端下声明环境变量，关闭Shell终端失效。
+   1. CANN-Toolkit包提供进程级环境变量配置脚本，供用户在进程中引用，以自动完成CANN基础环境变量的配置，配置示例如下所示
 
-   ```
-   export install_path=/home/HwHiAiUser/Ascend/ascend-toolkit/latest  
-   export PATH=${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
-   export LD_LIBRARY_PATH=${install_path}/atc/lib64:$LD_LIBRARY_PATH
-   export PYTHONPATH=${install_path}/atc/python/site-packages:$PYTHONPATH
-   export ASCEND_OPP_PATH=${install_path}/opp
-   ```
+      ```
+      . ${HOME}/Ascend/ascend-toolkit/set_env.sh
+      ```
 
-   请将install\_path替换为ATC的实际安装路径。
+       “$HOME/Ascend”请替换“Ascend-cann-toolkit”包的实际安装路径。
+
+   2. 算子编译依赖Python，以Python3.7.5为例，请以运行用户执行如下命令设置Python3.7.5的相关环境变量。
+
+      ```
+      #用于设置python3.7.5库文件路径
+      export LD_LIBRARY_PATH=/usr/local/python3.7.5/lib:$LD_LIBRARY_PATH
+      #如果用户环境存在多个python3版本，则指定使用python3.7.5版本
+      export PATH=/usr/local/python3.7.5/bin:$PATH
+      ```
+
+      Python3.7.5安装路径请根据实际情况进行替换，您也可以将以上命令写入~/.bashrc文件中，然后执行source ~/.bashrc命令使其立即生效。
 
 3. 单算子编译。
 

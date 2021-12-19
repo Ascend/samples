@@ -13,7 +13,7 @@
 # limitations under the License.
 
 # error code
-ACL_ERROR_NONE = 0
+ACL_SUCCESS = 0
 
 NPY_BOOL = 0
 NPY_BYTE = 1

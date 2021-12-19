@@ -54,25 +54,25 @@ Result ClassifyProcess::OpenPresentAgentChannel(){
 }
 
 Result ClassifyProcess::InitResource() {
-    // ACL init
+    //ACL init
     const char *aclConfigPath = "../src/acl.json";
     aclError ret = aclInit(aclConfigPath);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("Acl init failed");
         return FAILED;
     }
     INFO_LOG("Acl init success");
 
-    // open device
+    //open device
     ret = aclrtSetDevice(deviceId_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("Acl open device %d failed", deviceId_);
         return FAILED;
     }
     INFO_LOG("Open device %d success", deviceId_);
-    //获取当前应用程序运行在host还是device
+    //get runmode
     ret = aclrtGetRunMode(&runMode_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("acl get run mode failed");
         return FAILED;
     }
@@ -98,7 +98,7 @@ Result ClassifyProcess::InitModel(const char* omModelPath) {
         ERROR_LOG("execute CreateOutput failed");
         return FAILED;
     }
-    //申请模型输入内存空间.因为本应用推理实现使用的是单线程,所以该内存可以复用
+    //malloc input mem
     aclrtMalloc(&inputBuf_, (size_t)(inputDataSize_),
                 ACL_MEM_MALLOC_HUGE_FIRST);
     if (inputBuf_ == nullptr) {
@@ -116,24 +116,24 @@ Result ClassifyProcess::InitModel(const char* omModelPath) {
 }
 
 Result ClassifyProcess::Init() {
-    //如果已经初始化,则直接返回
+    //check init flag
     if (isInited_) {
         INFO_LOG("Classify instance is initied already!");
         return SUCCESS;
     }
-    //打开presentagent channel
+    //open presentagent channel
     Result ret = OpenPresentAgentChannel();
     if (ret != SUCCESS) {
         ERROR_LOG("Open present agent channel failed");
         return FAILED;
     }
-    //初始化ACL资源
+    //init ACL resource
     ret = InitResource();
     if (ret != SUCCESS) {
         ERROR_LOG("Init acl resource failed");
         return FAILED;
     }
-    //初始化模型管理实例
+    //init model resource
     ret = InitModel(modelPath_);
     if (ret != SUCCESS) {
         ERROR_LOG("Init model failed");
@@ -154,17 +154,16 @@ Result ClassifyProcess::Preprocess(cv::Mat& frame) {
     }
     
     if (runMode_ == ACL_HOST) {     
-        //AI1上运行时,需要将图片数据拷贝到device侧   
+        //copy to device   
         aclError ret = aclrtMemcpy(inputBuf_, inputDataSize_, 
                                    reiszeMat.ptr<uint8_t>(), inputDataSize_,
                                    ACL_MEMCPY_HOST_TO_DEVICE);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("Copy resized image data to device failed.");
             return FAILED;
         }
     } else {
-        //Atals200DK上运行时,数据拷贝到本地即可.
-        //reiszeMat是局部变量,数据无法传出函数,需要拷贝一份
+        //copy to host
         memcpy(inputBuf_, reiszeMat.ptr<void>(), inputDataSize_);
     }
 
@@ -172,13 +171,13 @@ Result ClassifyProcess::Preprocess(cv::Mat& frame) {
 }
 
 Result ClassifyProcess::Inference(aclmdlDataset*& inferenceOutput) {
-    //执行推理
+    //execute inference
     Result ret = model_.Execute();
     if (ret != SUCCESS) {
         ERROR_LOG("Execute model inference failed");
         return FAILED;
     }
-    //获取推理输出
+    //get output
     inferenceOutput = model_.GetModelOutputData();
 
     return SUCCESS;
@@ -186,11 +185,11 @@ Result ClassifyProcess::Inference(aclmdlDataset*& inferenceOutput) {
 
 Result ClassifyProcess::Postprocess(cv::Mat& frame,
                                     aclmdlDataset* modelOutput){
-    //从模型推理输出中获取推理数据
+    //get data from output dataset
     uint32_t dataSize = 0;
     void* data = GetInferenceOutputItem(dataSize, modelOutput);
     if (data == nullptr) return FAILED;
-    //解析每种类别的置信度
+    //get confidence
     float* outData = reinterpret_cast<float*>(data);
     map<float, uint32_t, greater<float> > resultMap;
     for (unsigned int j = 0; j < dataSize / sizeof(float); ++j) {
@@ -198,7 +197,7 @@ Result ClassifyProcess::Postprocess(cv::Mat& frame,
         outData++;
     }
 
-    //在前五的置信度中选取最高置信度的类别
+    //choose highest confidence
     int maxScoreCls = INVALID_IMAGE_NET_CLASS_ID;
     float maxScore = 0;
     int cnt = 0;
@@ -214,7 +213,7 @@ Result ClassifyProcess::Postprocess(cv::Mat& frame,
             maxScoreCls = it->second;
         }
     }
-    //将最高置信度数据构造为presenter agent要求的结构
+    //construct dst structure 
     std::vector<DetectionResult> detectionResults;
     ConstructClassifyResult(detectionResults, maxScoreCls, maxScore);
 
@@ -222,7 +221,7 @@ Result ClassifyProcess::Postprocess(cv::Mat& frame,
         delete[]((uint8_t*)data);
         data = nullptr;
     }
-    //将推理结果和图像发给presenter server显示
+    //send data
     SendImage(detectionResults, frame);
 
     return SUCCESS;
@@ -230,7 +229,6 @@ Result ClassifyProcess::Postprocess(cv::Mat& frame,
 
 void* ClassifyProcess::GetInferenceOutputItem(uint32_t& itemDataSize,
                                               aclmdlDataset* inferenceOutput) {
-    //resnet50只有一个输出,是推理输出dataset的第一个单元
     aclDataBuffer* dataBuffer = aclmdlGetDatasetBuffer(inferenceOutput, 0);
     if (dataBuffer == nullptr) {
         ERROR_LOG("Get the dataset buffer from model "
@@ -254,14 +252,12 @@ void* ClassifyProcess::GetInferenceOutputItem(uint32_t& itemDataSize,
 
     void* data = nullptr;
     if (runMode_ == ACL_HOST) {
-        //如果是(AI1),需要将数据从device拷贝到本地(host)
         data = Utils::CopyDataDeviceToLocal(dataBufferDev, bufferSize);
         if (data == nullptr) {
             ERROR_LOG("Copy inference output to host failed");
             return nullptr;
         }
     } else {
-        //如果是atlas200dk,可以直接读取数据
         data = dataBufferDev;
     }
 
@@ -333,13 +329,13 @@ void ClassifyProcess::DestroyResource()
 	
     aclError ret;
     ret = aclrtResetDevice(deviceId_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("reset device failed");
     }
     INFO_LOG("end to reset device is %d", deviceId_);
 
     ret = aclFinalize();
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("finalize acl failed");
     }
     INFO_LOG("end to finalize acl");

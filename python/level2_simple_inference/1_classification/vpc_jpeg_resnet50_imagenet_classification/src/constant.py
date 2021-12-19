@@ -14,7 +14,7 @@
 # limitations under the License.
 from enum import Enum
 # error code
-ACL_ERROR_NONE = 0
+ACL_SUCCESS = 0
 
 # data format
 ACL_FORMAT_UNDEFINED = -1

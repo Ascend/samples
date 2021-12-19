@@ -11,23 +11,22 @@ import os
 import time
 
 path = os.path.dirname(os.path.abspath(__file__))
-
 sys.path.append(os.path.join(path, ".."))
 sys.path.append(os.path.join(path, "../../../common/"))
+sys.path.append(os.path.join(path, "../../../common/acllite"))
 
-import atlas_utils.utils as utils
-import atlas_utils.constants as constants
-from atlas_utils.acl_model import Model
-from atlas_utils.acl_resource import AclResource
+import utils
+import constants as constants
+from acllite_model import AclLiteModel
+from acllite_resource import AclLiteResource
 
 out_w = 512
 out_h = 512
 
 SRC_PATH = os.path.realpath(__file__).rsplit("/", 1)[0]
 INPUT_DIR = os.path.join(SRC_PATH, '../data/')
-OUTPUT_DIR = os.path.join(SRC_PATH, '../output/')
+OUTPUT_DIR = os.path.join(SRC_PATH, '../out/')
 model_path = os.path.join(SRC_PATH, "../model/image_HDR_enhance.om")
-
 
 def pre_process(dir_name):
     """
@@ -42,7 +41,6 @@ def pre_process(dir_name):
     RGB = cv2.cvtColor(BGR, cv2.COLOR_BGR2RGB)
     return RGB, h, w
 
-
 def post_process(result_list, pic, o_h, o_w):
     """
     Post Process
@@ -54,7 +52,6 @@ def post_process(result_list, pic, o_h, o_w):
     file_name = os.path.join(OUTPUT_DIR, pic)
     cv2.imwrite(file_name, BGR_U8)
 
-
 def main():
     """
     Program execution
@@ -62,10 +59,10 @@ def main():
     if not os.path.exists(OUTPUT_DIR):
         os.mkdir(OUTPUT_DIR)
 
-    acl_resource = AclResource()  # acl intialize
+    acl_resource = AclLiteResource()  # acl intialize
     acl_resource.init()
 
-    model = Model(model_path)  # load model
+    model = AclLiteModel(model_path)  # load model
 
     src_dir = os.listdir(INPUT_DIR)
     for pic in src_dir:
@@ -84,7 +81,6 @@ def main():
         print('\n')
         post_process(result_list, pic, o_h, o_w)  # postprocess
     print('task over')
-
 
 if __name__ == '__main__':
     main()

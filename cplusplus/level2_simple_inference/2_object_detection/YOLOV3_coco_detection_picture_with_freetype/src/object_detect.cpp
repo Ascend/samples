@@ -47,9 +47,7 @@ namespace {
 
     const uint32_t kBBoxDataBufId = 0;
     const uint32_t kBoxNumDataBufId = 1;
-
     enum BBoxIndex { TOPLEFTX = 0, TOPLEFTY, BOTTOMRIGHTX, BOTTOMRIGHTY, SCORE, LABEL };
-
     const uint32_t kLabelOffset = 11;
 }
 
@@ -70,7 +68,7 @@ Result ObjectDetect::InitResource() {
     // ACL init
     const char *aclConfigPath = "../src/acl.json";
     aclError ret = aclInit(aclConfigPath);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("acl init failed");
         return FAILED;
     }
@@ -78,7 +76,7 @@ Result ObjectDetect::InitResource() {
 
     // open device
     ret = aclrtSetDevice(deviceId_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("acl open device %d failed", deviceId_);
         return FAILED;
     }
@@ -87,7 +85,7 @@ Result ObjectDetect::InitResource() {
 
     // create context (set current)
     ret = aclrtCreateContext(&context_, deviceId_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("acl create context failed");
         return FAILED;
     }
@@ -95,14 +93,14 @@ Result ObjectDetect::InitResource() {
 
     // create stream
     ret = aclrtCreateStream(&stream_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("acl create stream failed");
         return FAILED;
     }
     INFO_LOG("create stream success");
 
     ret = aclrtGetRunMode(&runMode_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("acl get run mode failed");
         return FAILED;
     }
@@ -242,7 +240,6 @@ const string& origImagePath) {
     for (uint32_t i = 0; i < totalBox; i++) {
         BBox boundBox;
         uint32_t score = uint32_t(detectData[totalBox * SCORE + i] * 100);
-        //if (score < 90) continue;
 
         boundBox.rect.ltX = detectData[totalBox * TOPLEFTX + i] * widthScale;
         boundBox.rect.ltY = detectData[totalBox * TOPLEFTY + i] * heightScale;
@@ -336,7 +333,7 @@ void ObjectDetect::DestroyResource(){
     aclError ret;
     if (stream_ != nullptr) {
         ret = aclrtDestroyStream(stream_);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("destroy stream failed");
         }
         stream_ = nullptr;
@@ -345,7 +342,7 @@ void ObjectDetect::DestroyResource(){
 
     if (context_ != nullptr) {
         ret = aclrtDestroyContext(context_);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("destroy context failed");
         }
         context_ = nullptr;
@@ -354,14 +351,14 @@ void ObjectDetect::DestroyResource(){
 
     if (isDeviceSet_) {
         ret = aclrtResetDevice(deviceId_);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("reset device failed");
         }
         INFO_LOG("end to reset device is %d", deviceId_);
     }
 
     ret = aclFinalize();
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("finalize acl failed");
     }
     INFO_LOG("end to finalize acl");

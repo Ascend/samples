@@ -2,169 +2,98 @@
 
 **本样例为大家学习昇腾软件栈提供参考，非商业目的！**
 
-**本样例适配3.1.0及以上版本，支持产品为Atlas200DK。**
-
 **本README只提供命令行方式运行样例的指导，如需在Mindstudio下运行样例，请参考[Mindstudio运行视频样例wiki](https://github.com/Ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E8%A7%86%E9%A2%91%E6%A0%B7%E4%BE%8B?sort_id=3170138)。**
 
-## 摄像头检测样例
+## 摄像头检测样例   
+功能：使用人脸检测模型对树莓摄像头中的即时视频进行人脸检测。  
+样例输入：摄像头视频。   
+样例输出：presenter server web页面展示检测结果。  
 
-功能：使用人脸检测模型对树莓摄像头中的即时视频进行人脸检测。
-
-样例输入：摄像头视频。
-
-样例输出：presenter server web页面现检测结果。
-
-**注意事项：**    
-**1. 树莓派V1.3版本Camera，暂时只支持到15fps；树莓派V2.1版本Camera，暂时只支持到20fps。**     
-**2. 若Atlas200 DK主板为IT21DMDA，使用树莓派摄像头时需要额外购买黄色的15pin树莓派专用排线。**
-
-### 前提条件
-
-部署此Sample前，需要准备好以下环境：
-
-- 请确认已按照[环境准备和依赖安装](../../../environment)准备好环境。
-
-- 已完成对应产品的开发环境和运行环境安装。
+### 适配要求    
+本产品的适配要求如下表，如不符合适配要求，样例可能运行失败。
+| 适配项 | 适配条件 | 备注 |
+|---|---|---|
+| 适配版本 | >=5.0.4 | 已完成版本安装，版本信息请参考[版本说明](https://ascend.huawei.com/zh/#/software/cann/notice) |
+| 适配硬件 | Atlas200DK/Atlas300([ai1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366))  | 当前已在Atlas200DK和Atlas300测试通过，产品说明请参考[硬件平台](https://ascend.huawei.com/zh/#/hardware/product) |
+| 第三方依赖 | presentagent,ffmpeg+acllite| 请参考[第三方依赖安装指导（C++样例）](../../../environment)完成对应安装 |
 
 ### 软件准备
 
 1. 获取源码包。
 
-   可以使用以下两种方式下载，请选择其中一种进行源码准备。
-
-    - 命令行方式下载（下载时间较长，但步骤简单）。 开发环境，非root用户命令行中执行以下命令下载源码仓。   
-      
-       ```
-       cd $HOME
-       git clone https://github.com/Ascend/samples.git       
-       ```
-       
+   可以使用以下两种方式下载，请选择其中一种进行源码准备。   
+    - 命令行方式下载（下载时间较长，但步骤简单）。
+       ```    
+       # 开发环境，非root用户命令行中执行以下命令下载源码仓。    
+       cd ${HOME}     
+       git clone https://github.com/Ascend/samples.git
+       ```   
     - 压缩包方式下载（下载时间较短，但步骤稍微复杂）。   
-        1. samples仓右上角选择 **克隆/下载** 下拉框并选择 **下载ZIP**。   
-        
-        2. 将ZIP包上传到开发环境中的普通用户home目录中，例如 **$HOME/ascend-samples-master.zip**。   
-        
-        3. 开发环境中，执行以下命令，解压zip包。   
-           
-            ```
-            cd $HOME
-            unzip ascend-samples-master.zip
-            
-            ```
-            
-
-2. 获取此应用中所需要的原始网络模型。
-
-    参考下表获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到开发环境普通用户下的工程目录所在的model文件夹下，例如：$HOME/samples/cplusplus/level2_simple_inference/2_object_detection/face_detection_camera/model。
-
+       ``` 
+        # 1. samples仓右上角选择 【克隆/下载】 下拉框并选择 【下载ZIP】。    
+        # 2. 将ZIP包上传到开发环境中的普通用户家目录中，【例如：${HOME}/ascend-samples-master.zip】。     
+        # 3. 开发环境中，执行以下命令，解压zip包。     
+        cd ${HOME}    
+        unzip ascend-samples-master.zip
+        ```
+2. 模型转换。
+   
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
-    |  face_detection| 图片人脸检测推理模型。是基于Caffe的resnet ssd模型。 |  请参考[https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/facedetection/ATC_resnet10-SSD_caffe_AE](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/facedetection/ATC_resnet10-SSD_caffe_AE)目录中README.md下载原始模型章节下载模型和权重文件。 |
-
-    ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
-
-    > - modelzoo中提供了转换好的om模型，但此模型不匹配当前样例，所以需要下载原始模型和权重文件后重新进行模型转换。
-
-3. 将原始模型转换为Davinci模型。
-   
-    **注：请确认环境变量已经在[环境准备和依赖安装](../../../environment)中配置完成**
-
-    1. 设置LD_LIBRARY_PATH环境变量。由于LD_LIBRARY_PATH环境变量在转使用atc工具和运行样例时会产生冲突，所以需要在命令行单独设置此环境变量，方便修改。
-
-        ```
-        export install\_path=$HOME/Ascend/ascend-toolkit/latest
-        export LD_LIBRARY_PATH=${install_path}/atc/lib64
-        ```
-
-    2. 执行以下命令下载aipp配置文件并使用atc命令进行模型转换。
-
-        ```
-        cd $HOME/samples/cplusplus/level2_simple_inference/2_object_detection/face_detection_camera/model
-        
-        wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/face_detection_camera/insert_op.cfg  
-        
-        atc --output_type=FP32 --input_shape="data:1,3,300,300" --weight=./face_detection_fp32.caffemodel --input_format=NCHW --output=./face_detection --soc_version=Ascend310 --insert_op_conf=./insert_op.cfg --framework=0 --save_original_model=false --model=./face_detection.prototxt
-        ```
-        
-        ​    
+    |  face_detection|  图片人脸检测推理模型。是基于Caffe的resnet ssd模型。 |  请参考[https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/facedetection/ATC_resnet10-SSD_caffe_AE](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/facedetection/ATC_resnet10-SSD_caffe_AE)目录中README.md下载原始模型章节下载模型和权重文件。 |
+    ```
+    # 为了方便下载，在这里直接给出原始模型下载及模型转换命令,可以直接拷贝执行。也可以参照上表在modelzoo中下载并手工转换，以了解更多细节。     
+    
+    cd ${HOME}/samples/cplusplus/level2_simple_inference/2_object_detection/face_detection_camera/model    
+    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/facedection/face_detection_fp32.caffemodel   
+    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/facedection/face_detection.prototxt
+    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/face_detection_camera/insert_op.cfg
+    atc --output_type=FP32 --input_shape="data:1,3,300,300" --weight=./face_detection_fp32.caffemodel --input_format=NCHW --output=./face_detection --soc_version=Ascend310 --insert_op_conf=./insert_op.cfg --framework=0 --save_original_model=false --model=./face_detection.prototxt
+    ```
 
 ### 样例部署
 
-1. 修改样例配置文件scripts/face_detection.conf
-
-    ```
-    [baseconf]
-    # A socket server address to communicate with presenter agent
-    presenter_server_ip=127.0.0.1
-    
-    # The port of presenter agent and server communicate with
-    presenter_server_port=7006
-    
-    #the ip in presenter server view web url
-    presenter_view_ip=127.0.0.1
-    
-    #view entry label in presenter server view web
-    channel_name=person
-    
-    #the data type that send to presenter server from agent, 0:image, 1:video
-    content_type=1
-    ```
-
-    在开发环境上使用ifconfig查看ip；如果是在PC服务器上启动presenter server，将配置项presenter_server_ip、presenter_view_ip 修改为开发环境中可以ping通运行环境的ip地址，例如192.168.1.223; 如果是直接在Atlas200DK上启动persenter server，则这两项都使用Atlas200DK的固定IP，例如192.168.1.2；
-    
-
-
-2. 2. 执行以下命令，执行编译脚本，开始样例编译。
-
-    cd $HOME/samples/cplusplus/level2_simple_inference/2_object_detection/face_detection_camera/scripts
-
-    bash sample_build.sh
-
-    
+执行以下命令，执行编译脚本，开始样例编译。   
+```
+cd ${HOME}/samples/cplusplus/level2_simple_inference/2_object_detection/face_detection_camera/scripts    
+bash sample_build.sh
+```
 
 ### 样例运行
 
-![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
-> - 以下出现的**xxx.xxx.xxx.xxx**为运行环境ip，Atlas200DK在USB连接时一般为192.168.1.2。
+**注：开发环境与运行环境合一部署，请跳过步骤1，直接执行[步骤2](#step_2)即可。**   
 
-1. 启动presenterserver。执行下述命令启动presenter server。注意：如果是在开发板上直接运行presenter server，则下面的命令在开发板上执行；如果是在PC服务器上运行presenter server，则是在PC服务器上执行下面的命令。
-
+1. 执行以下命令,将开发环境的 **face_detection_camera** 目录上传到运行环境中，例如 **/home/HwHiAiUser**，并以HwHiAiUser（运行用户）登录运行环境（Host）。    
     ```
-    cd $HOME/samples/common/  
-    bash run_presenter_server.sh ../cplusplus/level2_simple_inference/2_object_detection/face_detection_camera/scripts/face_detection.conf   
+    # 【xxx.xxx.xxx.xxx】为运行环境ip，200DK在USB连接时一般为192.168.1.2，300（ai1s）为对应的公网ip。
+    scp -r ${HOME}/samples/cplusplus/level2_simple_inference/2_object_detection/face_detection_camera HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser    
+    ssh HwHiAiUser@xxx.xxx.xxx.xxx     
+    cd ${HOME}/face_detection_camera/scripts
+    ```    
+
+2. <a name="step_2"></a>执行运行脚本，开始样例运行。         
     ```
-
-    
-
-2. 如果是在PC服务器上编译样例，则需要将编译完成的 face_detection_camera 目录上传到Atlas200DK开发板，例如 /home/HwHiAiUser目录下 
-
-    ```
-     scp -r $HOME/samples/cplusplus/level2_simple_inference/2_object_detection/face_detection_camera HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser
-    ```
-
-    直接在Atlas200DK上编译的场景不需要拷贝
-
-    
-
-3. 如果是在PC服务器上编译样例，则ssh登录开发板
-
-    ```
-    ssh HwHiAiUser@xxx.xxx.xxx.xxx
-    ```
-
-    
-4. 执行运行脚本，开始样例运行。
-
-bash sample_run.sh
-
-
-  
+    bash sample_run.sh
+    ```      
 
 ### 查看结果
 
-1. 打开presenter server网页界面,打开启动Presenter Server服务时提示的URL即可。
+1. 打开presentserver网页界面。
 
-2. 单击网页“Refresh“刷新，页面的“person”链接变为绿色，表示页面已经和应用程序链接成功。
+   - 使用产品为200DK开发者板。
 
-3. 单击“person”链接，查看结果。
+      打开启动Presenter Server服务时提示的URL即可。
+      
+   - 使用产品为300加速卡（ai1s云端推理环境）。
 
+      **以300加速卡（ai1s）内网ip为192.168.0.194，公网ip为124.70.8.192举例说明。**
+
+      启动Presenter Server服务时提示为Please visit http://192.168.0.194:7009 for display server。
+
+      只需要将URL中的内网ip：192.168.0.194替换为公网ip：124.70.8.192，则URL为 http://124.70.8.192:7009。
+
+      然后在windows下的浏览器中打开URL即可。
+
+2. 等待Presenter Agent传输数据给服务端，单击“Refresh“刷新，当有数据时相应的Channel 的Status变成绿色。
+
+3. 单击右侧对应的View Name链接，查看结果。

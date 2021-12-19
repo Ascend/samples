@@ -52,7 +52,6 @@ private:
     aclrtContext context_;
     aclrtStream stream_;
     ModelProcess model_;
-
     const char* modelPath_;
     uint32_t modelWidth_;
     uint32_t modelHeight_;
@@ -63,7 +62,6 @@ private:
     uint32_t inputDataSize_;
     void*    inputBuf_;
     aclrtRunMode runMode_;
-
     bool isInited_;
 };
 

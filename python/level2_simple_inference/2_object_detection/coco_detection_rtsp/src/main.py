@@ -7,21 +7,18 @@ import sys
 import os
 
 cur_file_dir = os.path.dirname(os.path.abspath(__file__))
- 
 sys.path.append(cur_file_dir + "/../../../../common")
-sys.path.append("../")
 
-import atlas_utils.video as video
-from atlas_utils.constants import *
-from atlas_utils.utils import *
-from atlas_utils.acl_resource import AclResource
-from atlas_utils.acl_image import AclImage
-from atlas_utils.acl_logger import log_error, log_info
+import videocapture as video
+from constants import *
+from utils import *
+from acllite_resource import AclLiteResource
+from acllite_image import AclLiteImage
+from acllite_logger import log_error, log_info
 
 from yolov3 import Yolov3
 from preprocess import Preprocess
 from postprocess import DetectData, Postprocess
-
 
 MODEL_PATH = "../model/yolov3_yuv.om"
 MODEL_WIDTH = 416
@@ -49,13 +46,12 @@ def create_threads(detector):
 
     return video_decoders, postprocessor
 
-
 def main():
     """
     Function description:
         Main function
     """
-    acl_resource = AclResource()
+    acl_resource = AclLiteResource()
     acl_resource.init()   
 
     detector = Yolov3(acl_resource, MODEL_PATH, MODEL_WIDTH, MODEL_HEIGHT)
@@ -84,7 +80,6 @@ def main():
     postprocessor.exit()
 
     log_info("sample execute end")  
-
 
 if __name__ == '__main__':
     main()

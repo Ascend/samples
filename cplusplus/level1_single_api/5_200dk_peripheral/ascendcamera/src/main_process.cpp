@@ -359,7 +359,7 @@ Result MainProcess::InitResource() {
     // ACL init
     const char* aclConfigPath = "../src/acl.json";
     aclError ret = aclInit(aclConfigPath);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("acl init failed\n");
         return FAILED;
     }
@@ -367,7 +367,7 @@ Result MainProcess::InitResource() {
 
     // open device
     ret = aclrtSetDevice(deviceId_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("acl open device %d failed\n", deviceId_);
         return FAILED;
     }
@@ -375,7 +375,7 @@ Result MainProcess::InitResource() {
 
     // create context (set current)
     ret = aclrtCreateContext(&context_, deviceId_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("acl create context failed\n");
         return FAILED;
     }
@@ -383,13 +383,13 @@ Result MainProcess::InitResource() {
 
     // create stream
     ret = aclrtCreateStream(&stream_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("acl create stream failed\n");
         return FAILED;
     }
     INFO_LOG("create stream success");
     ret = aclrtGetRunMode(&runMode_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("acl get run mode failed\n");
         return FAILED;
     }
@@ -398,13 +398,13 @@ Result MainProcess::InitResource() {
 void MainProcess::DestroyResource()
 {
     aclError ret = aclrtResetDevice(deviceId_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("reset device failed\n");
     }
     INFO_LOG("end to reset device is %d\n", deviceId_);
 
     ret = aclFinalize();
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("finalize acl failed\n");
     }
     INFO_LOG("end to finalize acl");

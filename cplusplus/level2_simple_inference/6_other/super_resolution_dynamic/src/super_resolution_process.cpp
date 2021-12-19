@@ -1,37 +1,17 @@
 /**
-
 * Copyright 2020 Huawei Technologies Co., Ltd
-
 *
-
 * Licensed under the Apache License, Version 2.0 (the "License");
-
 * you may not use this file except in compliance with the License.
-
 * You may obtain a copy of the License at
-
-
-
 * http://www.apache.org/licenses/LICENSE-2.0
-
-
-
 * Unless required by applicable law or agreed to in writing, software
-
 * distributed under the License is distributed on an "AS IS" BASIS,
-
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-
 * See the License for the specific language governing permissions and
-
 * limitations under the License.
-
-
-
 * File sample_process.cpp
-
 * Description: handle acl resource
-
 */
 
 #include "super_resolution_process.h"
@@ -73,20 +53,20 @@ Result SuperResolutionProcess::init_resource() {
     // ACL init
     const char *aclConfigPath = "../src/acl.json";
     aclError ret = aclInit(aclConfigPath);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("Acl init failed");
         return FAILED;
     }
     INFO_LOG("Acl init success");
     // open device
     ret = aclrtSetDevice(deviceId_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("Acl open device %d failed", deviceId_);
         return FAILED;
     }
     INFO_LOG("Open device %d success", deviceId_);
     ret = aclrtGetRunMode(&runMode_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("acl get run mode failed");
         return FAILED;
     }
@@ -163,7 +143,7 @@ Result SuperResolutionProcess::preprocess(const string& imageFile) {
         aclError ret = aclrtMemcpy(inputBuf_, inputDataSize_,
                                    mat.ptr<uint8_t>(), inputDataSize_,
                                    ACL_MEMCPY_HOST_TO_DEVICE);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("Copy resized image data to device failed.");
             return FAILED;
         }
@@ -205,14 +185,11 @@ Result SuperResolutionProcess::postprocess(const string& imageFile, aclmdlDatase
         return FAILED;
     }
     // get result data
-    //data 指向用户数据的指针。矩阵构造器将会取数据和步长参数不分配矩阵数据。取而代之的是，仅仅初始化矩阵的头去指向具体的数据，这意味数据不会被拷贝。这个操作将会非常高效，并且可以用opencv的函数来处理外部的数据。值得注意的是，这些外部的数据不会被自动释放。
-    //指定类型和大小的二维数组，具有预先存在的数据
     cv::Mat mat_y(outputHeight_, outputWidth_, CV_32FC1, const_cast<float*>((float*)data));
     mat_y.convertTo(mat_y, CV_8U, 255); // SRCNN, FSRCNN, ESPCN, VDSR
  
     // original image
     cv::Mat mat = cv::imread(imageFile, CV_LOAD_IMAGE_COLOR);
-   // cv::resize(mat, mat,cv::Size(512,512));
     cv::resize(mat, mat,cv::Size(modelWidth_,modelHeight_));
     // bicubic
     cv::Mat mat_bicubic; 
@@ -224,7 +201,6 @@ Result SuperResolutionProcess::postprocess(const string& imageFile, aclmdlDatase
     // replace Y channel
     std::vector<cv::Mat> channels;
     cv::split(resultImage, channels);
-   // cout << channels[0]<<endl;
     channels[0] = mat_y;
     cv::merge(channels, resultImage);
     // YCrCb2BGR
@@ -245,9 +221,7 @@ void SuperResolutionProcess::save_image(const string& origImageFile,
     string imageName = origImageFile.substr(pos1 + 1, pos2 - pos1 - 1);
     string bicubicName = "./output/" + imageName + "_bicubic.png";
     string SRName = "./output/" + imageName  + "_" + DYNAMIC_LIST[modelType_] + "_" + ".png";
-    //cv::imwrite(bicubicName, imageBicubic);
     cv::imwrite(SRName, imageSR);
-
 }
 
 void* SuperResolutionProcess::get_inference_output_item(uint32_t& itemDataSize,
@@ -255,7 +229,6 @@ void* SuperResolutionProcess::get_inference_output_item(uint32_t& itemDataSize,
     aclDataBuffer* dataBuffer = aclmdlGetDatasetBuffer(inferenceOutput, 0);
     if (dataBuffer == nullptr) {
         ERROR_LOG("Get the dataset buffer from model "
-
             "inference output failed");
         return nullptr;
     }
@@ -290,7 +263,7 @@ void SuperResolutionProcess::destroy_resource()
     aclError ret;
     if (stream_ != nullptr) {
         ret = aclrtDestroyStream(stream_);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("destroy stream failed");
         }
         stream_ = nullptr;
@@ -299,7 +272,7 @@ void SuperResolutionProcess::destroy_resource()
     INFO_LOG("end to destroy stream");
     if (context_ != nullptr) {
         ret = aclrtDestroyContext(context_);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("destroy context failed");
         }
         context_ = nullptr;
@@ -307,17 +280,13 @@ void SuperResolutionProcess::destroy_resource()
     INFO_LOG("end to destroy context");
 
     ret = aclrtResetDevice(deviceId_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("reset device failed");
     }
     INFO_LOG("end to reset device is %d", deviceId_);
     ret = aclFinalize();
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("finalize acl failed");
     }
     INFO_LOG("end to finalize acl");
 }
-
-
-
-

@@ -10,7 +10,6 @@
 #include "post_process.h"
 #include <algorithm>
 #include "opencv2/opencv.hpp"
-#include "opencv2/imgcodecs/legacy/constants_c.h"
 #include "opencv2/imgproc/types_c.h"
 
 using namespace std;
@@ -42,7 +41,6 @@ namespace {
     const double kFountScale = 0.5;
     const cv::Scalar kFontColor(0, 0, 255);
     const uint32_t kLabelOffset = 11;
-
     const size_t kClassNum = 80;
     const size_t kModelOutputBoxNum = 10647;
     const float kNMSThreshold = 0.8;

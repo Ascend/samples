@@ -11,7 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 import sys
 import socket
 import time
@@ -24,7 +23,6 @@ from RobotController.RobotController import RobotController
 # mapping list of chess classes in different modules
 map_list = [0, 1, 2, 3, 4, 5, 6, 13, 8, 9, 10, 11, 7, 12]
 
-
 def EncodeBoard(chessBoard: list) -> str:
     """
     param:
@@ -35,7 +33,6 @@ def EncodeBoard(chessBoard: list) -> str:
     """
     boardInfo = '#'.join([str(item) for item in chessBoard])
     return boardInfo
-
 
 def EncodeAImv(chessBoard: list, AI_mv: str, winner: str, is_mate: str) -> str:
     """
@@ -64,7 +61,6 @@ def EncodeAImv(chessBoard: list, AI_mv: str, winner: str, is_mate: str) -> str:
     AI_mv_info = '#' + part_1 + '#' + part_2 + '#' + part_3
     return AI_mv_info
 
-
 def DecodeHumanMv(Human_mv: str) -> str:
     """
     param:
@@ -82,7 +78,6 @@ def DecodeHumanMv(Human_mv: str) -> str:
     print("检查Human move：", mv)
     return mv
 
-
 def IsKillStep(chessboard: list, mv: list) -> bool:
     """
     chessboard: current chessboard info [[x, y, class], [], []...]
@@ -99,7 +94,6 @@ def IsKillStep(chessboard: list, mv: list) -> bool:
 
     return False
 
-
 def MoveStr2List(mv: str) -> list:
     """
     param:
@@ -113,7 +107,6 @@ def MoveStr2List(mv: str) -> list:
         mv_list = list(map(int, mv[1:-1].split(",")))
     return mv_list
 
-
 def WrapInfo(info: str) -> str:
     """
     param:
@@ -123,7 +116,6 @@ def WrapInfo(info: str) -> str:
     """
     wrapped_info = "<" + info + ">"
     return wrapped_info
-
 
 class CentralControl:
     def __init__(self):
@@ -160,7 +152,6 @@ class CentralControl:
                             switch[1] is for chess engine module, and
                             switch[2] is for webserver module.
         """
-
         # perception module
         if switch[0] == "1":
             try:
@@ -441,7 +432,6 @@ class CentralControl:
         # length of "Human VS AI" is 11
         self.gameMode = central.socket_web.recv(11 + 2).decode('utf-8')[1:-1].strip()
         print("当前对弈模式：", self.gameMode)
-
 
 if __name__ == '__main__':
     # instantiate

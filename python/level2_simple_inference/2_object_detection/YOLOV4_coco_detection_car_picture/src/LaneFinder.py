@@ -20,7 +20,6 @@ def get_center_shift(coeffs, img_size, pixels_per_meter):
     """
     return np.polyval(coeffs, img_size[1] / pixels_per_meter[1]) - (img_size[0] // 2) / pixels_per_meter[0]
 
-
 def get_curvature(coeffs, img_size, pixels_per_meter):
     """
     get curvature
@@ -28,12 +27,10 @@ def get_curvature(coeffs, img_size, pixels_per_meter):
     return ((1 + (2 * coeffs[0] * img_size[1] / pixels_per_meter[1] + coeffs[1]) ** 2) ** 1.5) / np.absolute(
         2 * coeffs[0])
 
-
 class LaneLineFinder(object):
     """
     LaneLineFinder
     """
-
     def __init__(self, img_size, pixels_per_meter, center_shift):
         """
         init
@@ -190,7 +187,6 @@ class LaneFinder(object):
     """
     class that finds the whole lane
     """
-
     def __init__(self, img_size, warped_size, cam_matrix, dist_coeffs, transform_matrix, pixels_per_meter):
         """
         __init__

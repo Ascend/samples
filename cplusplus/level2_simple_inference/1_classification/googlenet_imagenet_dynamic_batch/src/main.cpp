@@ -29,8 +29,8 @@ int32_t deviceId_ = 0;
 
 void* pictureData = nullptr;
 void* pictureDeviceData = nullptr;
-uint32_t pictureDataSize = 0;
 
+uint32_t pictureDataSize = 0;
 uint32_t totalDataSize = 0;
 
 void* outputHostData = nullptr;
@@ -51,7 +51,7 @@ void ReadPicture(const string &picturePath)
     pictureDataSize = binFile.tellg();
     binFile.seekg(0, binFile.beg);
     if (runMode == ACL_HOST) {
-    aclError ret = aclrtMallocHost(&pictureData, pictureDataSize);
+        aclError ret = aclrtMallocHost(&pictureData, pictureDataSize);
     }
     else{
         aclError ret = aclrtMalloc(&pictureData, pictureDataSize, ACL_MEM_MALLOC_HUGE_FIRST);

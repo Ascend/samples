@@ -19,7 +19,7 @@
 #include <iostream>
 #include "acl/acl.h"
 #include "business_imp.h"
-#include "atlasutil/atlas_model.h"
+#include "acllite/AclLiteModel.h"
 
 using namespace std;
 
@@ -39,85 +39,85 @@ BusinessImp::~BusinessImp() {
     destroy_resource();
 }
 
-AtlasError BusinessImp::init_resource() {
+AclLiteError BusinessImp::init_resource() {
     // ACL init
     string aclConfigPath = workPath_ + "/../src/acl.json";
-    AtlasError ret = aclInit(aclConfigPath.c_str());
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Acl init failed");
-        return ATLAS_ERROR;
+    AclLiteError ret = aclInit(aclConfigPath.c_str());
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Acl init failed");
+        return ACLLITE_ERROR;
     }
-    ATLAS_LOG_INFO("Acl init success");
+    ACLLITE_LOG_INFO("Acl init success");
 
     // open device
     ret = aclrtSetDevice(deviceId_);
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Acl open device %d failed", deviceId_);
-        return ATLAS_ERROR;
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Acl open device %d failed", deviceId_);
+        return ACLLITE_ERROR;
     }
-    ATLAS_LOG_INFO("Open device %d success", deviceId_);
+    ACLLITE_LOG_INFO("Open device %d success", deviceId_);
 
     ret = aclrtGetRunMode(&runMode_);
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("acl get run mode failed");
-        return ATLAS_ERROR;
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("acl get run mode failed");
+        return ACLLITE_ERROR;
     }
 
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
-AtlasError BusinessImp::create_input() {
+AclLiteError BusinessImp::create_input() {
     aclrtMalloc(&inputBuf_, (size_t)(inputDataSize_), ACL_MEM_MALLOC_HUGE_FIRST);
     if (inputBuf_ == nullptr) {
-        ATLAS_LOG_ERROR("Acl malloc image buffer failed.");
-        return ATLAS_ERROR;
+        ACLLITE_LOG_ERROR("Acl malloc image buffer failed.");
+        return ACLLITE_ERROR;
     }
 
-    AtlasError ret = model_.CreateInput(inputBuf_, inputDataSize_);
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Create mode input dataset failed");
-        return ATLAS_ERROR;
+    AclLiteError ret = model_.CreateInput(inputBuf_, inputDataSize_);
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Create mode input dataset failed");
+        return ACLLITE_ERROR;
     }
 
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
-AtlasError BusinessImp::init() {
+AclLiteError BusinessImp::init() {
     if (isInited_) {
-        ATLAS_LOG_INFO("Classify instance is initied already!");
-        return ATLAS_OK;
+        ACLLITE_LOG_INFO("Classify instance is initied already!");
+        return ACLLITE_OK;
     }
 
-    AtlasError ret = init_resource();
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Init acl resource failed");
-        return ATLAS_ERROR;
+    AclLiteError ret = init_resource();
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Init acl resource failed");
+        return ACLLITE_ERROR;
     }
 
     ret = model_.Init(modelPath_);
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Init model failed");
-        return ATLAS_ERROR;
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Init model failed");
+        return ACLLITE_ERROR;
     }
 
     inputDataSize_ = model_.GetModelInputSize(0);
 
     ret = create_input();
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Create model input failed");
-        return ATLAS_ERROR;
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Create model input failed");
+        return ACLLITE_ERROR;
     }
 
     isInited_ = true;
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
-AtlasError BusinessImp::preprocess(const string& imageFile) {
+AclLiteError BusinessImp::preprocess(const string& imageFile) {
     // read image using OPENCV
     cv::Mat mat = cv::imread(imageFile, CV_LOAD_IMAGE_COLOR);
     if (mat.empty()) {
-        ATLAS_LOG_ERROR("read image failed");
-        return ATLAS_ERROR;
+        ACLLITE_LOG_ERROR("read image failed");
+        return ACLLITE_ERROR;
     }
     //resize
     cv::Mat resizedMat;
@@ -126,43 +126,43 @@ AtlasError BusinessImp::preprocess(const string& imageFile) {
     // deal image
     resizedMat.convertTo(resizedMat, CV_32FC3);
         
-    ATLAS_LOG_INFO("resizedMat size = %d", (int)resizedMat.elemSize());
+    ACLLITE_LOG_INFO("resizedMat size = %d", (int)resizedMat.elemSize());
 
     if (runMode_ == ACL_HOST) {
         //EP mode: need to copy the image data to the device side   
-        AtlasError ret = aclrtMemcpy(inputBuf_, inputDataSize_,
+        AclLiteError ret = aclrtMemcpy(inputBuf_, inputDataSize_,
                                    resizedMat.ptr<float>(), inputDataSize_,
                                    ACL_MEMCPY_HOST_TO_DEVICE);
 
-        ATLAS_LOG_INFO("inputDataSize_ = %u", inputDataSize_);
-        ATLAS_LOG_INFO("inputBuf size = %d", (int)sizeof(inputBuf_));
+        ACLLITE_LOG_INFO("inputDataSize_ = %u", inputDataSize_);
+        ACLLITE_LOG_INFO("inputBuf size = %d", (int)sizeof(inputBuf_));
 
-        if (ret != ATLAS_OK) {
-            ATLAS_LOG_ERROR("Copy resized image data to device failed.");
-            return ATLAS_ERROR;
+        if (ret != ACLLITE_OK) {
+            ACLLITE_LOG_ERROR("Copy resized image data to device failed.");
+            return ACLLITE_ERROR;
         }
     } else {
         //RC mode: no need to copy to device. But resizedMat is local Variable, need to copy the data to inputBuf_.
         memcpy(inputBuf_, resizedMat.ptr<float>(), inputDataSize_);
     }
 
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
-AtlasError BusinessImp::inference(std::vector<InferenceOutput>& inferOutputs) {
-    AtlasError ret = model_.Execute(inferOutputs);
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Execute model inference failed");
-        return ATLAS_ERROR;
+AclLiteError BusinessImp::inference(std::vector<InferenceOutput>& inferOutputs) {
+    AclLiteError ret = model_.Execute(inferOutputs);
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Execute model inference failed");
+        return ACLLITE_ERROR;
     }
 }
 
-AtlasError BusinessImp::postprocess(const string& imageFile, vector<InferenceOutput>& modelOutput)
+AclLiteError BusinessImp::postprocess(const string& imageFile, vector<InferenceOutput>& modelOutput)
 {
     uint32_t dataSize = 0;
     void* data = modelOutput[0].data.get();
     if (data == nullptr){
-        return ATLAS_ERROR;
+        return ACLLITE_ERROR;
     }
 
     dataSize = modelOutput[0].size;
@@ -187,7 +187,7 @@ AtlasError BusinessImp::postprocess(const string& imageFile, vector<InferenceOut
      
     save_image(imageFile, mat_result);
 
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
 void BusinessImp::save_image(const string& origImageFile, cv::Mat& image) {
@@ -209,34 +209,34 @@ void BusinessImp::destroy_resource()
     aclrtFree(inputBuf_);
     inputBuf_ = nullptr;
 
-    AtlasError ret;
+    AclLiteError ret;
     if (stream_ != nullptr) {
         ret = aclrtDestroyStream(stream_);
-        if (ret != ATLAS_OK) {
-            ATLAS_LOG_ERROR("destroy stream failed");
+        if (ret != ACLLITE_OK) {
+            ACLLITE_LOG_ERROR("destroy stream failed");
         }
         stream_ = nullptr;
     }
-    ATLAS_LOG_INFO("end to destroy stream");
+    ACLLITE_LOG_INFO("end to destroy stream");
 
     if (context_ != nullptr) {
         ret = aclrtDestroyContext(context_);
-        if (ret != ATLAS_OK) {
-            ATLAS_LOG_ERROR("destroy context failed");
+        if (ret != ACLLITE_OK) {
+            ACLLITE_LOG_ERROR("destroy context failed");
         }
         context_ = nullptr;
     }
-    ATLAS_LOG_INFO("end to destroy context");
+    ACLLITE_LOG_INFO("end to destroy context");
 
     ret = aclrtResetDevice(deviceId_);
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("reset device failed");
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("reset device failed");
     }
-    ATLAS_LOG_INFO("end to reset device is %d", deviceId_);
+    ACLLITE_LOG_INFO("end to reset device is %d", deviceId_);
 
     ret = aclFinalize();
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("finalize acl failed");
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("finalize acl failed");
     }
-    ATLAS_LOG_INFO("end to finalize acl");
+    ACLLITE_LOG_INFO("end to finalize acl");
 }

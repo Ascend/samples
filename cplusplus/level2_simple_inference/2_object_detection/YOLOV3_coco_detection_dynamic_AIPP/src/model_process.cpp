@@ -48,26 +48,26 @@ Result ModelProcess::LoadModelFromFileWithMem(const char *modelPath){
     }
 
     aclError ret = aclmdlQuerySize(modelPath, &modelMemSize_, &modelWeightSize_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("query model failed, model file is %s", modelPath);
         return FAILED;
     }
 
     ret = aclrtMalloc(&modelMemPtr_, modelMemSize_, ACL_MEM_MALLOC_HUGE_FIRST);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("malloc buffer for mem failed, require size is %zu", modelMemSize_);
         return FAILED;
     }
 
     ret = aclrtMalloc(&modelWeightPtr_, modelWeightSize_, ACL_MEM_MALLOC_HUGE_FIRST);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("malloc buffer for weight failed, require size is %zu", modelWeightSize_);
         return FAILED;
     }
 
     ret = aclmdlLoadFromFileWithMem(modelPath, &modelId_, modelMemPtr_,
     modelMemSize_, modelWeightPtr_, modelWeightSize_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("load model from file failed, model file is %s", modelPath);
         return FAILED;
     }
@@ -85,7 +85,7 @@ Result ModelProcess::CreateDesc(){
     }
 
     aclError ret = aclmdlGetDesc(modelDesc_, modelId_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("get model description failed");
         return FAILED;
     }
@@ -97,7 +97,7 @@ Result ModelProcess::CreateDesc(){
     }
     inputAIPPSize_ = aclmdlGetInputSizeByIndex(modelDesc_, aipp_index_);
     ret = aclrtMalloc(&inputAIPP_, inputAIPPSize_, ACL_MEM_MALLOC_HUGE_FIRST);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("malloc device data input3 failed, result is %d", ret);
         return FAILED;
     }
@@ -122,7 +122,7 @@ Result ModelProcess::AddDatasetBuffer(aclmdlDataset *dataset,
     }
 
     aclError ret = aclmdlAddDatasetBuffer(dataset, dataBuf);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("Add dataset buffer error %d", ret);
         aclDestroyDataBuffer(dataBuf);
         return FAILED;
@@ -296,13 +296,13 @@ Result ModelProcess::CreateInput(void* input1, uint32_t input1size,
     uint64_t batch_num = 1 ;
     aclmdlAIPP* aippParamTensor = SetAIPPTensor(batch_num);
     aclError aclret = aclmdlSetInputAIPP(modelId_, input_, aipp_index_, aippParamTensor);
-    if (aclret != ACL_ERROR_NONE) {
+    if (aclret != ACL_SUCCESS) {
         ERROR_LOG("call aclmdlSetInputAIPP failed");
         return FAILED;
     }
 
     aclret = aclmdlDestroyAIPP(aippParamTensor);
-    if (aclret != ACL_ERROR_NONE) {
+    if (aclret != ACL_SUCCESS) {
         ERROR_LOG("call aclmdlDestroyAIPP failed");
         return FAILED;
     }
@@ -348,13 +348,13 @@ Result ModelProcess::CreateInputOpenCV(void* input1, uint32_t input1size,
     uint64_t batch_num = 1 ;
     aclmdlAIPP* aippParamTensor = SetAIPPTensorOpenCV(batch_num);
     aclError aclret = aclmdlSetInputAIPP(modelId_, input_, aipp_index_, aippParamTensor);
-    if (aclret != ACL_ERROR_NONE) {
+    if (aclret != ACL_SUCCESS) {
         ERROR_LOG("call aclmdlSetInputAIPP failed");
         return FAILED;
     }
 
     aclret = aclmdlDestroyAIPP(aippParamTensor);
-    if (aclret != ACL_ERROR_NONE) {
+    if (aclret != ACL_SUCCESS) {
         ERROR_LOG("call aclmdlDestroyAIPP failed");
         return FAILED;
     }
@@ -392,20 +392,20 @@ Result ModelProcess::CreateOutput(){
 
         void *outputBuffer = nullptr;
         aclError ret = aclrtMalloc(&outputBuffer, buffer_size, ACL_MEM_MALLOC_NORMAL_ONLY);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("can't malloc buffer, size is %zu, create output failed", buffer_size);
             return FAILED;
         }
 
         aclDataBuffer* outputData = aclCreateDataBuffer(outputBuffer, buffer_size);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("can't create data buffer, create output failed");
             aclrtFree(outputBuffer);
             return FAILED;
         }
 
         ret = aclmdlAddDatasetBuffer(output_, outputData);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("can't add data buffer, create output failed");
             aclrtFree(outputBuffer);
             aclDestroyDataBuffer(outputData);
@@ -435,7 +435,7 @@ void ModelProcess::DestroyOutput(){
 
 Result ModelProcess::Execute(){
     aclError ret = aclmdlExecute(modelId_, input_, output_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("execute model failed, modelId is %u", modelId_);
         return FAILED;
     }
@@ -452,7 +452,7 @@ void ModelProcess::Unload()
     }
 
     aclError ret = aclmdlUnload(modelId_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("unload model failed, modelId is %u", modelId_);
     }
 
@@ -480,5 +480,3 @@ void ModelProcess::Unload()
 aclmdlDataset *ModelProcess::GetModelOutputData(){
     return output_;
 }
-
-

@@ -1,4 +1,4 @@
-from constant import ACL_ERROR_NONE
+from constant import ACL_SUCCESS
 
 
 def check_ret(message, ret):
@@ -7,5 +7,5 @@ def check_ret(message, ret):
     参数：ret，pyACL函数返回值
     返回值：无
     """
-    if ret != ACL_ERROR_NONE:
+    if ret != ACL_SUCCESS:
         raise Exception("{} failed ret={}".format(message, ret))

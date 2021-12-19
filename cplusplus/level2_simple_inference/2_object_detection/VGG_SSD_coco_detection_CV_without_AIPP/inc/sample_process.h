@@ -61,13 +61,10 @@ public:
     */
     Result MainProcess(std::string input_path);
 
-
 private:
     void DestroyResource();
 
     int32_t deviceId_;
     aclrtContext context_;
     aclrtStream stream_;
-
 };
-

@@ -13,12 +13,12 @@ path = os.path.dirname(os.path.abspath(__file__))
 
 sys.path.append(os.path.join(path, ".."))
 sys.path.append(os.path.join(path, "../../../../common/"))
-sys.path.append(os.path.join(path, "../../../../common/atlas_utils"))
+sys.path.append(os.path.join(path, "../../../../common/acllite"))
 
 from constants import ACL_MEM_MALLOC_HUGE_FIRST, ACL_MEMCPY_DEVICE_TO_DEVICE, IMG_EXT
-from acl_model import Model
-from acl_image import AclImage
-from acl_resource import AclResource
+from acllite_model import AclLiteModel
+from acllite_image import AclLiteImage
+from acllite_resource import AclLiteResource
 import numpy as np
 import cv2 
 
@@ -76,7 +76,7 @@ def postprocess(infer_output, image_file):
 SRC_PATH = os.path.realpath(__file__).rsplit("/", 1)[0]
 MODEL_PATH = os.path.join(SRC_PATH, "../model/mnist.om")
 INPUT_DIR = os.path.join(SRC_PATH, "../data/")
-OUTPUT_DIR = os.path.join(SRC_PATH, "../out/")
+OUTPUT_DIR = os.path.join(SRC_PATH, "../outputs/")
 MODEL_WIDTH = 32
 MODEL_HEIGHT = 32
 
@@ -91,11 +91,11 @@ def main():
         os.mkdir(OUTPUT_DIR)
 
     #acl init
-    acl_resource = AclResource()
+    acl_resource = AclLiteResource()
     acl_resource.init()
 
     #load model
-    model = Model(MODEL_PATH)
+    model = AclLiteModel(MODEL_PATH)
     src_dir = os.listdir(INPUT_DIR)
     #infer picture
     for pic in src_dir:

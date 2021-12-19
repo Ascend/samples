@@ -50,7 +50,7 @@ Result CartoonProcess::InitResource() {
     // ACL init
     const char *aclConfigPath = "../src/acl.json";
     aclError ret = aclInit(aclConfigPath);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("Acl init failed");
         return FAILED;
     }
@@ -58,14 +58,14 @@ Result CartoonProcess::InitResource() {
 
     // open device
     ret = aclrtSetDevice(deviceId_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("Acl open device %d failed", deviceId_);
         return FAILED;
     }
     INFO_LOG("Open device %d success", deviceId_);
 
     ret = aclrtGetRunMode(&runMode_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("acl get run mode failed");
         return FAILED;
     }
@@ -148,7 +148,7 @@ Result CartoonProcess::Preprocess(const string& imageFile) {
         //AI1上运行时,需要将图片数据拷贝到device侧
         aclError ret = aclrtMemcpy(inputBuf_, inputDataSize_, resizeMat.ptr<uint8_t>(), inputDataSize_,
                                    ACL_MEMCPY_HOST_TO_DEVICE);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("Copy resized image data to device failed.");
             return FAILED;
         }
@@ -264,7 +264,7 @@ void CartoonProcess::DestroyResource()
     aclError ret;
     if (stream_ != nullptr) {
         ret = aclrtDestroyStream(stream_);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("destroy stream failed");
         }
         stream_ = nullptr;
@@ -273,7 +273,7 @@ void CartoonProcess::DestroyResource()
 
     if (context_ != nullptr) {
         ret = aclrtDestroyContext(context_);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("destroy context failed");
         }
         context_ = nullptr;
@@ -281,13 +281,13 @@ void CartoonProcess::DestroyResource()
     INFO_LOG("end to destroy context");
 
     ret = aclrtResetDevice(deviceId_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("reset device failed");
     }
     INFO_LOG("end to reset device is %d", deviceId_);
 
     ret = aclFinalize();
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("finalize acl failed");
     }
     INFO_LOG("end to finalize acl");

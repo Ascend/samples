@@ -41,9 +41,9 @@
 #include <cstdint>
 #include "utils.h"
 
-#include "ascenddk/presenter/agent/presenter_types.h"
-#include "ascenddk/presenter/agent/channel.h"
-#include "ascenddk/presenter/agent/presenter_channel.h"
+#include "presenter/agent/presenter_types.h"
+#include "presenter/agent/channel.h"
+#include "presenter/agent/presenter_channel.h"
 
 struct PresenterServerParams {
   // ip of presenter server

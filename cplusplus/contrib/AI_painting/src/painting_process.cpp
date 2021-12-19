@@ -54,7 +54,7 @@ Result PaintingProcess::InitResource() {
     // ACL init
     const char *aclConfigPath = "../src/acl.json";
     aclError ret = aclInit(aclConfigPath);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("Acl init failed");
         return FAILED;
     }
@@ -62,14 +62,14 @@ Result PaintingProcess::InitResource() {
 
     // open device
     ret = aclrtSetDevice(deviceId_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("Acl open device %d failed", deviceId_);
         return FAILED;
     }
     INFO_LOG("Open device %d success", deviceId_);
 
     ret = aclrtGetRunMode(&runMode_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("acl get run mode failed");
         return FAILED;
     }
@@ -179,7 +179,7 @@ Result PaintingProcess::Preprocess() {
 
     Result ret = dataReceiver_.DoReceiverProcess(objectInfoBuffer_, layoutDataBuffer_);
     if (ret != SUCCESS) {
-        INFO_LOG("No message received");
+        //INFO_LOG("No message received");
         return FAILED;
     }
 
@@ -206,17 +206,17 @@ Result PaintingProcess::Postprocess(aclmdlDataset* modelOutput){
         uint32_t len = aclGetDataBufferSize(dataBuffer);
 
         void *outHostData = NULL;
-        aclError ret = ACL_ERROR_NONE;
+        aclError ret = ACL_SUCCESS;
         float *outData = NULL;
         if (!g_isDevice) {
             aclError ret = aclrtMallocHost(&outHostData, len);
-            if (ret != ACL_ERROR_NONE) {
+            if (ret != ACL_SUCCESS) {
                 ERROR_LOG("aclrtMallocHost failed, ret[%d]", ret);
                 return FAILED;
             }
 
             ret = aclrtMemcpy(outHostData, len, data, len, ACL_MEMCPY_DEVICE_TO_HOST);
-            if (ret != ACL_ERROR_NONE) {
+            if (ret != ACL_SUCCESS) {
                 ERROR_LOG("aclrtMemcpy failed, ret[%d]", ret);
                 return FAILED;
             }
@@ -228,34 +228,34 @@ Result PaintingProcess::Postprocess(aclmdlDataset* modelOutput){
 
         if(layoutMap == index){
             uint32_t size = static_cast<uint32_t>(len) / sizeof(float);
-            INFO_LOG("The size of layoutMap: %d", size);
+            //INFO_LOG("The size of layoutMap: %d", size);
             cv::Mat layoutMap(256, 256, CV_32FC3, const_cast<float_t*>((float_t*)outData));
             cv::cvtColor(layoutMap, layoutMap, CV_RGB2BGR);
             SendImage(layoutMap);
-            INFO_LOG("Sending layoutMap...");
+            //INFO_LOG("Sending layoutMap...");
         }
 
         if(resultImg == index){
             uint32_t size = static_cast<uint32_t>(len) / sizeof(float);
-            INFO_LOG("The size of resultImg: %d", size);
+            //INFO_LOG("The size of resultImg: %d", size);
             cv::Mat resultImg(448, 448, CV_32FC3, const_cast<float*>((float*)outData));
             cv::cvtColor(resultImg, resultImg, CV_RGB2BGR);
             resultImg = (resultImg * 0.5 + 0.5) * 255;
             SendImage(resultImg);
-            INFO_LOG("Sending resultImg...");
+            //INFO_LOG("Sending resultImg...");
         }
 
         if (!g_isDevice) {
             ret = aclrtFreeHost(outHostData);
-            if (ret != ACL_ERROR_NONE) {
+            if (ret != ACL_SUCCESS) {
                 ERROR_LOG("aclrtFreeHost failed, ret[%d]", ret);
                 return FAILED;
             }
         }
     }
 
-    INFO_LOG("output data success");
-    INFO_LOG("---------------------------------");
+    //INFO_LOG("output data success");
+    //INFO_LOG("---------------------------------");
     return SUCCESS;
 }
 
@@ -330,7 +330,7 @@ Result PaintingProcess::SendImage(cv::Mat& image) {
     std::vector<DetectionResult> detectionResults;
     imageParam.detection_results = detectionResults;
 
-    INFO_LOG("The width of the image is %d, the height of the image is %d", imageParam.width, imageParam.height);
+    //INFO_LOG("The width of the image is %d, the height of the image is %d", imageParam.width, imageParam.height);
     PresenterErrorCode errorCode = PresentImage(channel_, imageParam);
     if (errorCode != PresenterErrorCode::kNone) {
         ERROR_LOG("PresentImage failed %d", static_cast<int>(errorCode));
@@ -354,7 +354,7 @@ void PaintingProcess::DestroyResource()
     aclError ret;
     if (stream_ != nullptr) {
         ret = aclrtDestroyStream(stream_);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("destroy stream failed");
         }
         stream_ = nullptr;
@@ -363,7 +363,7 @@ void PaintingProcess::DestroyResource()
 
     if (context_ != nullptr) {
         ret = aclrtDestroyContext(context_);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("destroy context failed");
         }
         context_ = nullptr;
@@ -371,13 +371,13 @@ void PaintingProcess::DestroyResource()
     INFO_LOG("end to destroy context");
 
     ret = aclrtResetDevice(deviceId_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("reset device failed");
     }
     INFO_LOG("end to reset device is %d", deviceId_);
 
     ret = aclFinalize();
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("finalize acl failed");
     }
     INFO_LOG("end to finalize acl");

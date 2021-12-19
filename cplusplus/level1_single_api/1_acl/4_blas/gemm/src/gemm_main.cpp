@@ -57,11 +57,11 @@ bool RunOp(int m, int n, int k, aclFloat16 alpha, aclFloat16 beta)
 void DestoryResource()
 {
     bool flag = false;
-    if (aclrtResetDevice(deviceId) != ACL_ERROR_NONE) {
+    if (aclrtResetDevice(deviceId) != ACL_SUCCESS) {
         ERROR_LOG("Reset device %d failed", deviceId);
         flag = true;
     }
-    if (aclFinalize() != ACL_ERROR_NONE) {
+    if (aclFinalize() != ACL_SUCCESS) {
         ERROR_LOG("Finalize acl failed");
         flag = true;
     }
@@ -87,12 +87,12 @@ bool InitResource()
     }
 
     // acl.json is dump or profiling config file
-    if (aclInit("test_data/config/acl.json") != ACL_ERROR_NONE) {
+    if (aclInit("test_data/config/acl.json") != ACL_SUCCESS) {
         ERROR_LOG("Init acl failed");
         return false;
     }
 
-    if (aclrtSetDevice(deviceId) != ACL_ERROR_NONE) {
+    if (aclrtSetDevice(deviceId) != ACL_SUCCESS) {
         ERROR_LOG("Set device[%d] failed.", deviceId);
         (void)aclFinalize();
         return false;
@@ -102,14 +102,14 @@ bool InitResource()
     aclrtRunMode runMode;
     // runMode is ACL_HOST which represents app is running in host
     // runMode is ACL_DEVICE which represents app is running in device
-    if (aclrtGetRunMode(&runMode) != ACL_ERROR_NONE) {
+    if (aclrtGetRunMode(&runMode) != ACL_SUCCESS) {
         ERROR_LOG("Get run mode failed");
         DestoryResource();
         return false;
     }
     g_isDevice = (runMode == ACL_DEVICE);
 
-    if (aclopSetModelDir("op_models") != ACL_ERROR_NONE) {
+    if (aclopSetModelDir("op_models") != ACL_SUCCESS) {
         ERROR_LOG("Load single op model failed");
         DestoryResource();
         return false;

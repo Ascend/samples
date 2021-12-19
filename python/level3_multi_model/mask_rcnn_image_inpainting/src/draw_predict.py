@@ -12,8 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ============================================================================
-
-
 import argparse
 import json
 import logging
@@ -57,7 +55,6 @@ _COLORS = np.array([
     1.000, 1.000
 ]).astype(np.float32).reshape(-1, 3)
 
-
 # fmt: on
 def random_color(rgb=False, maximum=255):
     """
@@ -73,7 +70,6 @@ def random_color(rgb=False, maximum=255):
     if not rgb:
         ret = ret[::-1]
     return ret
-
 
 class GenericMask:
     """
@@ -131,7 +127,6 @@ class GenericMask:
     def area(self):
         return self.mask.sum()
 
-
 def draw_sem_seg(ax, boxes, img_shape, default_font_size):
     for box in boxes:
         im_mask = np.zeros(img_shape, dtype=np.uint8)
@@ -150,7 +145,6 @@ def draw_sem_seg(ax, boxes, img_shape, default_font_size):
                 linewidth=max(default_font_size // 15, 1),
             )
             ax.add_patch(polygon)
-
 
 def draw_bbox_and_label(ax, boxes, default_font_size):
     # draw bbox and label
@@ -189,7 +183,6 @@ def draw_bbox_and_label(ax, boxes, default_font_size):
             rotation=0
         )
 
-
 def draw_box(boxes, img_path, label_img_dir):
     img = mpi.imread(img_path)
     boxes = np.array(boxes)
@@ -210,7 +203,6 @@ def draw_box(boxes, img_path, label_img_dir):
     _, file_name = os.path.split(img_path)
     label_path = os.path.join(label_img_dir, file_name)
     fig.savefig(label_path)
-
 
 def draw_label(img_path, label_img_dir, mask_pred, det_bboxes, det_labels, coordinate, img_meta, coco_classes, num_classes):
     bound_boxes = list()
@@ -279,7 +271,6 @@ def draw_label(img_path, label_img_dir, mask_pred, det_bboxes, det_labels, coord
             ret_dilate_mask = dilate_mask
     draw_box(bound_boxes, img_path, label_img_dir)
     return ret_org_mask, ret_dilate_mask
-
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Draw inference result on the image.")

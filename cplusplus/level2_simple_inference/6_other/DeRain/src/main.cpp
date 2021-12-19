@@ -20,7 +20,6 @@
 #include <iostream>
 #include <stdlib.h>
 #include <dirent.h>
-
 #include "classify_process.h"
 #include "utils.h"
 #include "ctime"
@@ -29,27 +28,19 @@ using namespace std;
 namespace {
 uint32_t kModelWidth = 256;
 uint32_t kModelHeight = 256;
-//const char* kModelPath = "../model/frozen_graph_noDWT_V2_20200916.om";
 const char* kModelPath = "../model/DeRain.om";
-//const char* kModelPath = "../model/model3_20201006.om";
 }
 
 int main(int argc, char *argv[]) {
-    //检查应用程序执行时的输入,程序执行要求输入图片目录参数
-//    if((argc < 2) || (argv[1] == nullptr)){
-//        ERROR_LOG("Please input: ./main <image_dir>");
-//        return FAILED;
-//    }
-    //实例化Derain推理对象,参数为Derain模型路径,模型输入要求的宽和高
+    //init instance
     ClassifyProcess classify(kModelPath, kModelWidth, kModelHeight);
-    //初始化分类推理的acl资源, 模型和内存
+    //init acl resource
     Result ret = classify.Init();
     if (ret != SUCCESS) {
         ERROR_LOG("Classification Init resource failed");
         return FAILED;
     }
-    //获取图片目录下所有的图片文件名
-    //string inputImageDir = string(argv[1]);
+    //get file name
     string inputImageDir = string("../data");
     vector<string> fileVec;
     Utils::GetAllFiles(inputImageDir, fileVec);
@@ -57,14 +48,12 @@ int main(int argc, char *argv[]) {
         ERROR_LOG("Failed to deal all empty path=%s.", inputImageDir.c_str());
         return FAILED;
     }
-    //逐张图片推理
+    //process pic one by one
     for (string imageFile : fileVec) {
-        //add by cz,20200928
         int posofPoint = imageFile.find_last_of(".");
         int posofUnderline = imageFile.find_last_of("_");
         if(posofPoint-posofUnderline-1>0){
             string PicType(imageFile.substr(posofUnderline + 1,posofPoint-posofUnderline-1));
-            //cout << "PicType:" << PicType << endl;
             if(PicType == "GT"){
                 continue;
             }
@@ -72,7 +61,7 @@ int main(int argc, char *argv[]) {
 
         clock_t Begin,End;
         Begin = clock();
-        //预处理图片:读取图片,讲图片缩放到模型输入要求的尺寸
+        //preprocess:read pic, resize to dst size
         Result ret = classify.Preprocess(imageFile);
         if (ret != SUCCESS) {
             ERROR_LOG("Read file %s failed, continue to read next",
@@ -80,7 +69,7 @@ int main(int argc, char *argv[]) {
             continue;
         }
 
-        //将预处理的图片送入模型推理,并获取推理结果
+        //inference && get infer result
         aclmdlDataset* inferenceOutput = nullptr;
         ret = classify.Inference(inferenceOutput);
         if ((ret != SUCCESS) || (inferenceOutput == nullptr)) {
@@ -88,7 +77,7 @@ int main(int argc, char *argv[]) {
             return FAILED;
         }
 
-        //解析推理输出,并将推理得到的物体类别标记到图片上
+        //postprocess:analyse result and paste label to pic
         ret = classify.Postprocess(imageFile, inferenceOutput);
         if (ret != SUCCESS) {
             ERROR_LOG("Process model inference output data failed");

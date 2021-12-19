@@ -1,7 +1,8 @@
 #!/bin/bash
 ScriptPath="$( cd "$(dirname "$BASH_SOURCE")" ; pwd -P )"
-ModelPath="${ScriptPath}/../model"
-. ${ScriptPath}/../../../../../common/sample_common.sh
+DataPath="${ScriptPath}/../data"
+common_script_dir=${THIRDPART_PATH}/common
+. ${common_script_dir}/sample_common.sh
 
 function main()
 {
@@ -12,8 +13,10 @@ function main()
     return 1
   fi
 
-  wget -O ${ModelPath}/../data/dog1_1024_683.jpg https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/jpegd/dog1_1024_683.jpg --no-check-certificate
-  
+  if [ ! -f "${DataPath}/dog1_1024_683.jpg" ];then
+    wget -O ${DataPath}/dog1_1024_683.jpg https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/jpegd/dog1_1024_683.jpg --no-check-certificate
+  fi
+
   build
   if [ $? -ne 0 ];then
     return 1

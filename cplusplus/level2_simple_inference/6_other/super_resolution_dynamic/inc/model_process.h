@@ -78,7 +78,6 @@ public:
     */
     Result create_output();
     Result set_dynamic_hw_size(uint64_t height, uint64_t width);
-    
 
     /**
     * @brief destroy output resource

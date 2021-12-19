@@ -29,7 +29,6 @@
 class DvppProcess {
 public:
     DvppProcess();
-
     ~DvppProcess();
 
     Result Resize(ImageData& src, ImageData& dest,

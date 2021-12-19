@@ -23,7 +23,6 @@
 #include "acl/ops/acl_dvpp.h"
 #include "utils.h"
 
-
 class DvppResize {
 public:
     /**
@@ -51,8 +50,7 @@ public:
     * @return result
     */
     Result InitOutputPara(int modelInputWidth, int modelInputHeight);
-
-   
+ 
     /**
     * @brief gett dvpp output
     * @param [in] outputBuffer: pointer which points to dvpp output buffer
@@ -75,16 +73,12 @@ private:
     void DestroyResource();
     void DestroyOutputPara();
 
-
     aclrtStream stream_;
     acldvppChannelDesc *dvppChannelDesc_;
-
     acldvppResizeConfig *resizeConfig_;
-
     acldvppPicDesc *vpcInputDesc_; // vpc input desc
     acldvppPicDesc *vpcOutputDesc_; // vpc output desc
-
-    uint8_t *inDevBuffer_;  // input pic dev buffer
+    uint8_t *inDevBuffer_; // input pic dev buffer
     void *vpcOutBufferDev_; // vpc output buffer
     uint32_t vpcOutBufferSize_;  // vpc output size
     Resolution size_;

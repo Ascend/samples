@@ -113,4 +113,3 @@ private:
 
     bool isReleased_;
 };
-

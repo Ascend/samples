@@ -23,10 +23,9 @@
 #include <unistd.h>
 
 #include "acl/acl.h"
-#include "atlas_model.h"
-#include "dvpp_process.h"
+#include "acllite/AclLiteModel.h"
+#include "acllite/AclLiteImageProc.h"
 #include "video_encode.h"
-
 
 using namespace std;
 
@@ -35,18 +34,18 @@ public:
     DoProcess();
     ~DoProcess();
 
-    AtlasError Init();
-    AtlasError Set(uint32_t width, uint32_t height);
-    AtlasError Process(ImageData& image);
+    AclLiteError Init();
+    AclLiteError Set(uint32_t width, uint32_t height);
+    AclLiteError Process(ImageData& image);
 private:
-    AtlasError InitResource();
+    AclLiteError InitResource();
     void DestroyResource();
 private:
     int32_t deviceId_;
     aclrtContext context_;
     aclrtStream stream_;
 
-    DvppProcess dvpp_;
+    AclLiteImageProc dvpp_;
     VideoEncode encoder_;
     aclrtRunMode runMode_;
 

@@ -32,8 +32,8 @@ from multitracker import JDETracker
 from utils.timer import Timer
 from utils import visualization as vis
 
-from atlas_utils.acl_model import Model
-from atlas_utils.acl_resource import AclResource 
+from acllite_model import AclLiteModel
+from acllite_resource import AclLiteResource 
 
 def mkdir_if_missing(d):
     """
@@ -46,13 +46,13 @@ def mkdir_if_missing(d):
 def main(args):
     """main"""
     # Step 1: initialize ACL and ACL runtime 
-    acl_resource = AclResource()
+    acl_resource = AclLiteResource()
 
-    # 1.2: one line of code, call the 'init' function of the AclResource object, to initilize ACL and ACL runtime 
+    # 1.2: one line of code, call the 'init' function of the AclLiteResource object, to initilize ACL and ACL runtime 
     acl_resource.init()
 
     # Step 2: Load models 
-    mot_model = Model('../model/mot_v2.om')
+    mot_model = AclLiteModel('../model/mot_v2.om')
 
     # Create output dir if not exist; default outputs
     result_root = args.output_root if args.output_root != '' else '.'

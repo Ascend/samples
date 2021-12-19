@@ -81,7 +81,7 @@ Result MemoryPool::CreateInput(void *inputDataBuffer, size_t bufferSize, aclmdlD
     }
 
     aclError ret = aclmdlAddDatasetBuffer(input, inputData);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("add input dataset buffer failed, errorCode is %d", static_cast<int32_t>(ret));
         (void)aclDestroyDataBuffer(inputData);
         inputData = nullptr;
@@ -111,7 +111,7 @@ Result MemoryPool::CreateOutput(aclmdlDataset *&output, aclmdlDesc *modelDesc)
 
         void *outputBuffer = nullptr;
         aclError ret = aclrtMalloc(&outputBuffer, modelOutputSize, ACL_MEM_MALLOC_NORMAL_ONLY);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("can't malloc buffer, create output failed, size is %zu, errorCode is %d",
                 modelOutputSize, static_cast<int32_t>(ret));
             DestroyDataset(output);
@@ -126,7 +126,7 @@ Result MemoryPool::CreateOutput(aclmdlDataset *&output, aclmdlDesc *modelDesc)
             return FAILED;
         }
         ret = aclmdlAddDatasetBuffer(output, outputData);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("can't add data buffer, create output failed");
             DestroyDataset(output);
             (void)aclrtFree(outputBuffer);

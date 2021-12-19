@@ -48,11 +48,11 @@
 
 int main(int argc, char *argv[]) {
 
-  //根据输入参数，若无参数，则开始以H265格式录制视频，存到本地
-  if((argc < 2) || (argv[1] == nullptr)) {
-
-    bool bSetChannelId = false;
-    int channelId = 1;  //camera port
+  if(argc <= 2) {
+    int channelId = 0;  //camera port
+    bool bSetChannelId = true;
+    if((argc < 2) || (argv[1] == nullptr))
+      bool bSetChannelId = false;
 
     //获取camera channel id
     if(bSetChannelId)

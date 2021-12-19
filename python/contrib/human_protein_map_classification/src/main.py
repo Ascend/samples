@@ -14,20 +14,20 @@ import struct
 path = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.join(path, ".."))
 sys.path.append(os.path.join(path, "../../../common/"))
+sys.path.append(os.path.join(path, "../../../common/acllite"))
 
 import acl
-import atlas_utils.utils as utils
-import atlas_utils.constants as constants
-from atlas_utils.acl_model import Model
-from atlas_utils.acl_image import AclImage
-from acl_resource import AclResource
+import utils
+import constants as constants
+from acllite_model import AclLiteModel
+from acllite_image import AclLiteImage
+from acllite_resource import AclLiteResource
 
 currentPath = os.path.join(path, "..")
-OUTPUT_DIR = os.path.join(currentPath, 'outputs/')
+OUTPUT_DIR = os.path.join(currentPath, 'out/')
 MODEL_PATH = os.path.join(currentPath, "model/deploy_vel.om")
 MODEL_WIDTH = 224
 MODEL_HEIGHT = 224
-
 
 class Hpa(object):
     """
@@ -46,7 +46,7 @@ class Hpa(object):
         Initialize
         """
         # Load model
-        self._model = Model(self._model_path)
+        self._model = AclLiteModel(self._model_path)
 
         return constants.SUCCESS
 
@@ -114,7 +114,7 @@ class Hpa(object):
         draw.text(xy = (20, 80), text = label, font=setFont, fill=fillColor)
  
     # save photo
-        im.save("../outputs/out_" + os.path.basename(file_name))  
+        im.save("../out/out_" + os.path.basename(file_name))  
 
     def post_process(self, result, image_name):  
         """
@@ -127,7 +127,6 @@ class Hpa(object):
         # visualize
         self.visualize(image_name, pred)
 
-
 def main():
     """
     main
@@ -138,7 +137,7 @@ def main():
                    for img in os.listdir(image_dir)
                    if os.path.splitext(img)[1] in constants.IMG_EXT]
 
-    acl_resource = AclResource()
+    acl_resource = AclLiteResource()
     acl_resource.init()
 
     hpa = Hpa(MODEL_PATH, MODEL_WIDTH, MODEL_HEIGHT)
@@ -167,7 +166,6 @@ def main():
 
         # # Post-processing
         hpa.post_process(result, image_name)
-         
 
 if __name__ == '__main__':
     main()

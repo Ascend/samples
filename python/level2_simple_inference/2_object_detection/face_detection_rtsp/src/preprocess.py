@@ -7,11 +7,11 @@ import numpy as np
 import sys
 
 import acl
-from atlas_utils.acl_dvpp import Dvpp
-import atlas_utils.video as video
-import atlas_utils.utils as utils
-import atlas_utils.constants as const
-from atlas_utils.acl_logger import log_error, log_info
+from acllite_imageproc import AclLiteImageProc
+import videocapture as video
+import utils
+import constants as const
+from acllite_logger import log_error, log_info
 
 STATUS_PREPROC_INIT = 1
 STATUS_PREPROC_RUNNING = 2
@@ -60,8 +60,8 @@ class Preprocess():
     def _thread_entry(self, args_list):     
         self._context, ret = acl.rt.create_context(0)
         utils.check_ret("acl.rt.create_context", ret)
-        self._cap = video.AclVideo(self._stream_name)
-        self._dvpp = Dvpp() 
+        self._cap = video.VideoCapture(self._stream_name)
+        self._dvpp = AclLiteImageProc() 
         self._status = STATUS_PREPROC_RUNNING
         frame_cnt = 0
         while self._status == STATUS_PREPROC_RUNNING: 

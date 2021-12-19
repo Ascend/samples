@@ -10,7 +10,7 @@
 #pragma once
 #include "utils.h"
 #include "acl/acl.h"
-#include "atlas_model.h"
+#include "acllite/AclLiteModel.h"
 #include "venc_process.h"
 
 /**
@@ -54,7 +54,8 @@ private:
     char *outFolder_;
     // 1：YUV420 semi-planner（nv12）; 2：YVU420 semi-planner（nv21）
     acldvppPixelFormat format_;
-    /* 0：H265 main level
+    /* 
+    * 0：H265 main level
     * 1：H264 baseline level
     * 2：H264 main level
     * 3：H264 high level

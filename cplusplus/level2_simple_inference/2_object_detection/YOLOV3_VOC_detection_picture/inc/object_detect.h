@@ -19,8 +19,8 @@
 #pragma once
 #include "acl/acl.h"
 #include <memory>
-#include "atlasutil/atlas_model.h"
-#include "atlasutil/dvpp_process.h"
+#include "acllite/AclLiteModel.h"
+#include "acllite/AclLiteImageProc.h"
 
 /**
 * ClassifyProcess
@@ -39,10 +39,10 @@ class ObjectDetect {
 public:
     ObjectDetect();
     ~ObjectDetect();
-    AtlasError Init();
-    AtlasError Preprocess(ImageData& resizedImage, ImageData& srcImage, aclrtRunMode RunMode);
-    AtlasError Inference(std::vector<InferenceOutput>& inferenceOutput, ImageData& resizedImage);
-    AtlasError Postprocess(ImageData& image, std::vector<InferenceOutput>& modelOutput,
+    AclLiteError Init();
+    AclLiteError Preprocess(ImageData& resizedImage, ImageData& srcImage, aclrtRunMode RunMode);
+    AclLiteError Inference(std::vector<InferenceOutput>& inferenceOutput, ImageData& resizedImage);
+    AclLiteError Postprocess(ImageData& image, std::vector<InferenceOutput>& modelOutput,
                        const std::string& origImagePath);
 private:
     void DrawBoundBoxToImage(std::vector<BBox>& detectionResults,
@@ -51,14 +51,11 @@ private:
 
 private:
     uint32_t imageInfoSize_;
-    AtlasModel model_;
-
+    AclLiteModel model_;
     const char* modelPath_;
     uint32_t inputDataSize_;
-    DvppProcess dvpp_;
+    AclLiteImageProc dvpp_;
     aclrtRunMode runMode_;
-
     bool isInited_;
     bool isReleased_;
 };
-

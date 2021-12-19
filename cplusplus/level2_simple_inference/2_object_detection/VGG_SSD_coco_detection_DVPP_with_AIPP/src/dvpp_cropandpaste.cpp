@@ -78,7 +78,7 @@ Result DvppCropAndPaste::InitCropAndPasteOutputDesc()
 
     vpcOutBufferSize_ = YUV420SP_SIZE(resizeOutWidthStride, resizeOutHeightStride);
     aclError aclRet = acldvppMalloc(&vpcOutBufferDev_, vpcOutBufferSize_);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("acldvppMalloc vpcOutBufferDev_ failed, aclRet = %d", aclRet);
         return FAILED;
     }
@@ -156,16 +156,15 @@ Result DvppCropAndPaste::Process(ImageData& resizedImage, ImageData& srcImage)
     }
 
     // crop and patse pic
-    //TODO:
     aclError aclRet = acldvppVpcCropAndPasteAsync(dvppChannelDesc_, vpcInputDesc_,
     vpcOutputDesc_, cropArea_, pasteArea_, stream_);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("acldvppVpcCropAndPasteAsync failed, aclRet = %d", aclRet);
         return FAILED;
     }
 
     aclRet = aclrtSynchronizeStream(stream_);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("crop and paste aclrtSynchronizeStream failed, aclRet = %d", aclRet);
         return FAILED;
     }
@@ -175,7 +174,7 @@ Result DvppCropAndPaste::Process(ImageData& resizedImage, ImageData& srcImage)
     resizedImage.alignWidth = ALIGN_UP16(size_.width);
     resizedImage.alignHeight = ALIGN_UP2(size_.height);
     resizedImage.size = vpcOutBufferSize_;
-    resizedImage.data = SHARED_PRT_DVPP_BUF(vpcOutBufferDev_);
+    resizedImage.data = SHARED_PTR_DVPP_BUF(vpcOutBufferDev_);
 
     DestroyCropAndPasteResource();
 

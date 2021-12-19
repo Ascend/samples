@@ -19,7 +19,7 @@
 #include <iostream>
 
 #include "acl/acl.h"
-#include "atlasutil/atlas_model.h"
+#include "acllite/AclLiteModel.h"
 #include "face_detect.h"
 
 using namespace std;
@@ -50,49 +50,49 @@ FaceDetect::~FaceDetect() {
     DestroyResource();
 }
 
-AtlasError FaceDetect::Init() {
+AclLiteError FaceDetect::Init() {
     if (isInited_) {
-        ATLAS_LOG_INFO("Face detection is initied already");
-        return ATLAS_OK;
+        ACLLITE_LOG_INFO("Face detection is initied already");
+        return ACLLITE_OK;
     }
 
     PresenterErrorCode ret = OpenChannelByConfig(presenterChannel_, 
                                                  kConfigFile.c_str());
     if (ret != PresenterErrorCode::kNone) {
-        ATLAS_LOG_ERROR("Open channel failed, error %d", (int)ret);
-        return ATLAS_ERROR;
+        ACLLITE_LOG_ERROR("Open channel failed, error %d", (int)ret);
+        return ACLLITE_ERROR;
     }
 
-    AtlasError atlRet = dvpp_.Init();
+    AclLiteError atlRet = dvpp_.Init();
     if (atlRet) {
-        ATLAS_LOG_ERROR("Dvpp init failed, error %d", atlRet);
-        return ATLAS_ERROR;
+        ACLLITE_LOG_ERROR("Dvpp init failed, error %d", atlRet);
+        return ACLLITE_ERROR;
     }
 
     atlRet = model_.Init();
     if (atlRet) {
-        ATLAS_LOG_ERROR("Model init failed, error %d", atlRet);
-        return ATLAS_ERROR;
+        ACLLITE_LOG_ERROR("Model init failed, error %d", atlRet);
+        return ACLLITE_ERROR;
     }
 
     isInited_ = true;
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
-AtlasError FaceDetect::Process(ImageData& image) {
+AclLiteError FaceDetect::Process(ImageData& image) {
     ImageData resizedImage;
-    AtlasError ret = dvpp_.Resize(resizedImage, image, 
+    AclLiteError ret = dvpp_.Resize(resizedImage, image, 
                                   kModelWidth, kModelHeight);
-    if (ret == ATLAS_ERROR) {
-        ATLAS_LOG_ERROR("Resize image failed");
-        return ATLAS_ERROR;
+    if (ret == ACLLITE_ERROR) {
+        ACLLITE_LOG_ERROR("Resize image failed");
+        return ACLLITE_ERROR;
     }
 
     std::vector<InferenceOutput> inferOutputs;
     ret = Inference(inferOutputs, resizedImage);
     if (ret) {
-        ATLAS_LOG_ERROR("Inference image failed");
-        return ATLAS_ERROR;        
+        ACLLITE_LOG_ERROR("Inference image failed");
+        return ACLLITE_ERROR;        
     }
 
     vector<DetectionResult> detectResults;
@@ -101,25 +101,25 @@ AtlasError FaceDetect::Process(ImageData& image) {
     ImageData jpg;
     ret = dvpp_.JpegE(jpg, image);
     if (ret) {
-        ATLAS_LOG_ERROR("Convert image to jpeg failed");
+        ACLLITE_LOG_ERROR("Convert image to jpeg failed");
         return ret;
     }
 
     return SendImage(jpg, detectResults); 
 }
 
-AtlasError FaceDetect::Inference(std::vector<InferenceOutput>& inferOutputs,
+AclLiteError FaceDetect::Inference(std::vector<InferenceOutput>& inferOutputs,
                                  ImageData& resizedImage) {
-    AtlasError ret = model_.CreateInput(resizedImage.data.get(),
+    AclLiteError ret = model_.CreateInput(resizedImage.data.get(),
                                        resizedImage.size);
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Create mode input dataset failed\n");
-        return ATLAS_ERROR;
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Create mode input dataset failed\n");
+        return ACLLITE_ERROR;
     }
 
     ret = model_.Execute(inferOutputs);
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Execute model inference failed\n");
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Execute model inference failed\n");
     }
     model_.DestroyInput();
 
@@ -156,7 +156,7 @@ void FaceDetect::PostProcess(vector<DetectionResult>& detectResults,
     }
 }
 
-AtlasError FaceDetect::SendImage(ImageData& jpegImage,
+AclLiteError FaceDetect::SendImage(ImageData& jpegImage,
                                  vector<DetectionResult>& detRes) {
     ImageFrame frame;
     frame.format = ImageFormat::kJpeg;
@@ -168,11 +168,11 @@ AtlasError FaceDetect::SendImage(ImageData& jpegImage,
 
     PresenterErrorCode ret = PresentImage(presenterChannel_, frame);
     if (ret != PresenterErrorCode::kNone) {
-        ATLAS_LOG_ERROR("Send to presenter server failed, error %d", (int)ret);
-        return ATLAS_ERROR;
+        ACLLITE_LOG_ERROR("Send to presenter server failed, error %d", (int)ret);
+        return ACLLITE_ERROR;
     }
 
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
 void FaceDetect::DestroyResource() {

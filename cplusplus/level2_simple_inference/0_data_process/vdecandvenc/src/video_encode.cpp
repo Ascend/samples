@@ -30,7 +30,7 @@ void *ThreadFunc(void *arg)
     int deviceId = 0;
     aclrtContext context = nullptr;
     aclError ret = aclrtCreateContext(&context, deviceId);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("aclrtCreateContext failed, ret=%d.", ret);
         return ((void*)(-1));
     }
@@ -42,7 +42,7 @@ void *ThreadFunc(void *arg)
     }
 
     ret = aclrtDestroyContext(context);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("aclrtDestroyContext failed, ret=%d.", ret);
     }
 
@@ -54,7 +54,7 @@ Result VideoEncode::InitResource(uint32_t width, uint32_t height)
     // get run mode
     aclrtRunMode runMode;
     aclError ret = aclrtGetRunMode(&runMode);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("acl get run mode failed");
         return FAILED;
     }
@@ -92,7 +92,7 @@ bool VideoEncode::ReadImageToDeviceMem(ImageData& image, void *&dataDev, uint32_
     dataSize = image.size;
     // Malloc input device memory
     auto aclRet = acldvppMalloc(&dataDev, dataSize);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("acl malloc dvpp data failed, dataSize=%u, ret=%d.\n", dataSize, aclRet);
         return false;
     }
@@ -100,7 +100,7 @@ bool VideoEncode::ReadImageToDeviceMem(ImageData& image, void *&dataDev, uint32_
     if (!(isDivece)) {
         // copy input to device memory
         aclRet = aclrtMemcpy(dataDev, dataSize, image.data.get(), image.size, ACL_MEMCPY_HOST_TO_DEVICE);
-        if (aclRet != ACL_ERROR_NONE) {
+        if (aclRet != ACL_SUCCESS) {
             ERROR_LOG("acl memcpy data to dev failed, image.size=%u, ret=%d.\n", image.size, aclRet);
             (void)acldvppFree(dataDev);
             dataDev = nullptr;
@@ -108,7 +108,7 @@ bool VideoEncode::ReadImageToDeviceMem(ImageData& image, void *&dataDev, uint32_
         }
     } else {
         aclRet = aclrtMemcpy(dataDev, dataSize, image.data.get(), image.size, ACL_MEMCPY_DEVICE_TO_DEVICE);
-        if (aclRet != ACL_ERROR_NONE) {
+        if (aclRet != ACL_SUCCESS) {
             ERROR_LOG("acl memcpy data to dev failed, image.size=%u, ret=%d.\n", image.size, aclRet);
             (void)acldvppFree(dataDev);
             dataDev = nullptr;

@@ -3,7 +3,6 @@ Tokenizer
 """
 # coding=utf-8
 import unicodedata
-
 TOKEN_PAD = ''  # Token for padding
 TOKEN_UNK = '[UNK]'  # Token for unknown words
 TOKEN_CLS = '[CLS]'  # Token for classification
@@ -42,7 +41,6 @@ class Tokenizer(object):
     def _truncate(first_tokens, second_tokens=None, max_len=None):
         if max_len is None:
             return
-
         if second_tokens is not None:
             while True:
                 total_len = len(first_tokens) + len(second_tokens)

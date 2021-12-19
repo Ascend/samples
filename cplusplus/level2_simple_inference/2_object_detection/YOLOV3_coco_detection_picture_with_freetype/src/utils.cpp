@@ -122,7 +122,7 @@ void* Utils::CopyDataHostToDvpp(void* data, int size) {
     void* buffer = nullptr;
 
     auto aclRet = acldvppMalloc(&buffer, size);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("acl malloc dvpp data failed, dataSize=%u, ret=%d",
         size, aclRet);
         return nullptr;
@@ -130,7 +130,7 @@ void* Utils::CopyDataHostToDvpp(void* data, int size) {
     INFO_LOG("malloc dvpp memory size %d ok", size);
     // copy input to device memory
     aclRet = aclrtMemcpy(buffer, size, data, size, ACL_MEMCPY_HOST_TO_DEVICE);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("acl memcpy data to dvpp failed, size %u, error %d", size, aclRet);
         acldvppFree(buffer);
         return nullptr;
@@ -144,7 +144,7 @@ void* Utils::CopyDataDeviceToDvpp(void* data, int size) {
     void* buffer = nullptr;
 
     auto aclRet = acldvppMalloc(&buffer, size);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("acl malloc dvpp data failed, dataSize=%u, ret=%d",
         size, aclRet);
         return nullptr;
@@ -152,7 +152,7 @@ void* Utils::CopyDataDeviceToDvpp(void* data, int size) {
     INFO_LOG("malloc dvpp memory size %d ok", size);
     // copy input to device memory
     aclRet = aclrtMemcpy(buffer, size, data, size, ACL_MEMCPY_DEVICE_TO_DEVICE);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("acl memcpy data to dvpp failed, size %u, error %d", size, aclRet);
         acldvppFree(buffer);
         return nullptr;
@@ -165,7 +165,7 @@ void* Utils::CopyDataDeviceToDvpp(void* data, int size) {
 Result Utils::CopyImageDataToDvpp(ImageData& imageDevice, ImageData srcImage) {
     aclrtRunMode runMode_;
     aclError ret = aclrtGetRunMode(&runMode_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("acl get run mode failed");
         return FAILED;
     }
@@ -201,7 +201,7 @@ void* Utils::CopyDataDeviceToLocal(void* deviceData, uint32_t dataSize) {
     }
 
     aclError aclRet = aclrtMemcpy(buffer, dataSize, deviceData, dataSize, ACL_MEMCPY_DEVICE_TO_DEVICE);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("Copy device data to local failed, aclRet is %d\n", aclRet);
         delete[](buffer);
         return nullptr;
@@ -237,13 +237,13 @@ Result Utils::CopyDeviceToLocal(ImageData& imageout, ImageData srcImage, aclrtRu
 void* Utils::CopyDataToDevice(void* data, uint32_t dataSize, aclrtMemcpyKind policy) {
     void* buffer = nullptr;
     aclError aclRet = aclrtMalloc(&buffer, dataSize, ACL_MEM_MALLOC_HUGE_FIRST);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("malloc device data buffer failed, aclRet is %d", aclRet);
         return nullptr;
     }
 
     aclRet = aclrtMemcpy(buffer, dataSize, data, dataSize, policy);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("Copy data to device failed, aclRet is %d", aclRet);
         (void)aclrtFree(buffer);
         return nullptr;

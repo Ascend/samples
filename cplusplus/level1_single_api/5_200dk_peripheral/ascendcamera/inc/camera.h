@@ -38,7 +38,7 @@
 #include <memory>
 #include "utils.h"
 extern "C" {
-#include "driver/peripheral_api.h"
+#include "peripheral_api.h"
 }
 
 namespace ascend {
@@ -153,11 +153,8 @@ class Camera {
   CameraPara camera_instance_para_;
 };
 
-
-
-
-
 }
+
 }
 
 class Camera_265 {
@@ -178,7 +175,6 @@ class Camera_265 {
     Result SetProperty(int channelID);
     bool isAlign_;
     bool isOpened_[2];
-
     void* outBuf_ = nullptr ;
 };
 

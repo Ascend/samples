@@ -4,6 +4,6 @@
 cmake_minimum_required(VERSION 3.5.1)
 
 # project information
-project(classification_video)
+project(YOLOV3_coco_detection_multi_thread_VENC)
 
 add_subdirectory("./src")

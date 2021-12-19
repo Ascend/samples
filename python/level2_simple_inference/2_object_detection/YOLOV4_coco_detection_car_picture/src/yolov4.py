@@ -9,9 +9,9 @@ import cv2 as cv
 from PIL import Image
 import pickle
 import LaneFinder
-import atlas_utils.constants as const
-from atlas_utils.acl_model import Model
-from atlas_utils.acl_resource import AclResource
+import constants as const
+from acllite_model import AclLiteModel
+from acllite_resource import AclLiteResource
 
 labels = ["person",
         "bicycle", "car", "motorbike", "aeroplane",
@@ -38,8 +38,6 @@ anchors_3 = np.array([[12, 16], [19, 36], [40, 28]]) / stride_list[2]
 anchors_2 = np.array([[36, 75], [76, 55], [72, 146]]) / stride_list[1]
 anchors_1 = np.array([[142, 110], [192, 243], [459, 401]]) / stride_list[0]
 anchor_list = [anchors_1, anchors_2, anchors_3]
-
-conf_threshold = 0.8
 iou_threshold = 0.3
 
 colors = [(255, 0, 0), (0, 255, 0), (0, 0, 255), (0, 255, 255), (255, 0, 255), (255, 255, 0)]
@@ -85,7 +83,6 @@ def cal_iou(box, truth):
 
 def apply_nms(all_boxes, thres):
     res = []
-
     for cls in range(class_num):
         cls_bboxes = all_boxes[cls]
         sorted_boxes = sorted(cls_bboxes, key=lambda d: d[5])[::-1]
@@ -94,7 +91,6 @@ def apply_nms(all_boxes, thres):
         for i in range(len(sorted_boxes)):
             if i in p:
                 continue
-
             truth = sorted_boxes[i]
             for j in range(i + 1, len(sorted_boxes)):
                 if j in p:
@@ -103,7 +99,6 @@ def apply_nms(all_boxes, thres):
                 iou = cal_iou(box, truth)
                 if iou >= thres:
                     p[j] = 1
-
         for i in range(len(sorted_boxes)):
             if i not in p:
                 res.append(sorted_boxes[i])
@@ -215,10 +210,10 @@ def main():
     if not os.path.exists(OUTPUT_DIR):
         os.mkdir(OUTPUT_DIR)
     #ACL resource initialization
-    acl_resource = AclResource()
+    acl_resource = AclLiteResource()
     acl_resource.init()
     #load model
-    model = Model(MODEL_PATH)
+    model = AclLiteModel(MODEL_PATH)
     images_list = [os.path.join(INPUT_DIR, img)
                    for img in os.listdir(INPUT_DIR)
                    if os.path.splitext(img)[1] in const.IMG_EXT]

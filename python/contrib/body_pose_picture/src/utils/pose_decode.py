@@ -11,8 +11,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 """
-
-
 import cv2
 import numpy as np
 import math
@@ -21,8 +19,6 @@ import sys
 
 heatmap_width = 92
 heatmap_height = 92
-
-
 # Joints Explained
 # 14 joints:
 # 0-right shoulder, 1-right elbow, 2-right wrist, 3-left shoulder, 4-left elbow, 5-left wrist, 
@@ -42,7 +38,6 @@ heatmap_height = 92
 #                  |       |
 #                  8       11
 
-
 JOINT_LIMB = [[0, 1], [1, 2], [3, 4], [4, 5], 
               [6, 7], [7, 8], [9, 10], [10, 11], 
               [12, 13], [13, 0], [13, 3], [13, 6], [13, 9]]
@@ -57,7 +52,6 @@ def decode_pose(heatmaps, scale, image_original):
     # the i'th joint (refer to the 'Joints Explained' in this file, e.g., 0th joint is right shoulder)  
     joint_list = [peak_index_to_coords(heatmap) * scale for heatmap in heatmaps]
     
-
     # plot the pose on original image
     canvas = image_original
     for idx, limb in enumerate(JOINT_LIMB):
@@ -65,7 +59,6 @@ def decode_pose(heatmaps, scale, image_original):
         canvas = cv2.line(canvas, tuple(joint_from.astype(int)), 
                           tuple(joint_to.astype(int)), color=COLOR[idx], thickness=4)
     return canvas  
-
 
 def peak_index_to_coords(peak_index):
     """

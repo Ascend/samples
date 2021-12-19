@@ -55,7 +55,7 @@ Result ModelProcess::LoadModel(const char *modelPath)
     }
 
     aclError ret = aclmdlQuerySize(modelPath, &modelWorkSize_, &modelWeightSize_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("query model failed, model file is %s, errorCode is %d",
             modelPath, static_cast<int32_t>(ret));
         return FAILED;
@@ -64,7 +64,7 @@ Result ModelProcess::LoadModel(const char *modelPath)
     // using ACL_MEM_MALLOC_HUGE_FIRST to malloc memory, huge memory is preferred to use
     // and huge memory can improve performance.
     ret = aclrtMalloc(&modelWorkPtr_, modelWorkSize_, ACL_MEM_MALLOC_HUGE_FIRST);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("malloc buffer for work failed, require size is %zu, errorCode is %d",
             modelWorkSize_, static_cast<int32_t>(ret));
         return FAILED;
@@ -73,7 +73,7 @@ Result ModelProcess::LoadModel(const char *modelPath)
     // using ACL_MEM_MALLOC_HUGE_FIRST to malloc memory, huge memory is preferred to use
     // and huge memory can improve performance.
     ret = aclrtMalloc(&modelWeightPtr_, modelWeightSize_, ACL_MEM_MALLOC_HUGE_FIRST);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("malloc buffer for weight failed, require size is %zu, errorCode is %d",
             modelWeightSize_, static_cast<int32_t>(ret));
         return FAILED;
@@ -81,7 +81,7 @@ Result ModelProcess::LoadModel(const char *modelPath)
 
     ret = aclmdlLoadFromFileWithMem(modelPath, &modelId_, modelWorkPtr_,
         modelWorkSize_, modelWeightPtr_, modelWeightSize_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("load model from file failed, model file is %s, errorCode is %d",
             modelPath, static_cast<int32_t>(ret));
         return FAILED;
@@ -101,7 +101,7 @@ Result ModelProcess::CreateModelDesc()
     }
 
     aclError ret = aclmdlGetDesc(modelDesc_, modelId_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("get model description failed, modelId is %u, errorCode is %d",
             modelId_, static_cast<int32_t>(ret));
         return FAILED;
@@ -137,10 +137,10 @@ void ModelProcess::DumpModelOutputResult(aclmdlDataset *output)
             uint32_t len = aclGetDataBufferSizeV2(dataBuffer);
 
             void *outHostData = nullptr;
-            aclError ret = ACL_ERROR_NONE;
+            aclError ret = ACL_SUCCESS;
             if (!g_isDevice) {
                 ret = aclrtMallocHost(&outHostData, len);
-                if (ret != ACL_ERROR_NONE) {
+                if (ret != ACL_SUCCESS) {
                     ERROR_LOG("aclrtMallocHost failed, malloc len[%u], errorCode[%d]",
                         len, static_cast<int32_t>(ret));
                     fclose(outputFile);
@@ -148,7 +148,7 @@ void ModelProcess::DumpModelOutputResult(aclmdlDataset *output)
                 }
                 // if app is running in host, need copy model output data from device to host
                 ret = aclrtMemcpy(outHostData, len, data, len, ACL_MEMCPY_DEVICE_TO_HOST);
-                if (ret != ACL_ERROR_NONE) {
+                if (ret != ACL_SUCCESS) {
                     ERROR_LOG("aclrtMemcpy failed, errorCode[%d]", static_cast<int32_t>(ret));
                     (void)aclrtFreeHost(outHostData);
                     fclose(outputFile);
@@ -158,7 +158,7 @@ void ModelProcess::DumpModelOutputResult(aclmdlDataset *output)
                 fwrite(outHostData, len, sizeof(char), outputFile);
 
                 ret = aclrtFreeHost(outHostData);
-                if (ret != ACL_ERROR_NONE) {
+                if (ret != ACL_SUCCESS) {
                     ERROR_LOG("aclrtFreeHost failed, errorCode[%d]", static_cast<int32_t>(ret));
                     fclose(outputFile);
                     return;
@@ -188,11 +188,11 @@ void ModelProcess::OutputModelResult(aclmdlDataset *output)
         uint32_t len = aclGetDataBufferSizeV2(dataBuffer);
 
         void *outHostData = nullptr;
-        aclError ret = ACL_ERROR_NONE;
+        aclError ret = ACL_SUCCESS;
         float *outData = nullptr;
         if (!g_isDevice) {
             aclError ret = aclrtMallocHost(&outHostData, len);
-            if (ret != ACL_ERROR_NONE) {
+            if (ret != ACL_SUCCESS) {
                 ERROR_LOG("aclrtMallocHost failed, malloc len[%u], errorCode[%d]",
                     len, static_cast<int32_t>(ret));
                 return;
@@ -200,7 +200,7 @@ void ModelProcess::OutputModelResult(aclmdlDataset *output)
 
             // if app is running in host, need copy model output data from device to host
             ret = aclrtMemcpy(outHostData, len, data, len, ACL_MEMCPY_DEVICE_TO_HOST);
-            if (ret != ACL_ERROR_NONE) {
+            if (ret != ACL_SUCCESS) {
                 ERROR_LOG("aclrtMemcpy failed, errorCode[%d]", static_cast<int32_t>(ret));
                 (void)aclrtFreeHost(outHostData);
                 return;
@@ -227,7 +227,7 @@ void ModelProcess::OutputModelResult(aclmdlDataset *output)
         }
         if (!g_isDevice) {
             ret = aclrtFreeHost(outHostData);
-            if (ret != ACL_ERROR_NONE) {
+            if (ret != ACL_SUCCESS) {
                 ERROR_LOG("aclrtFreeHost failed, ret[%d]", ret);
                 return;
             }
@@ -269,7 +269,7 @@ Result ModelProcess::ExecuteAsync()
             return FAILED;
         }
         aclError ret = aclmdlExecuteAsync(modelId_, input, output, stream_);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("execute model async failed, modelId is %u, errorCode is %d",
                 modelId_, static_cast<int32_t>(ret));
             memPool->FreeMemory(input, output);
@@ -291,7 +291,7 @@ Result ModelProcess::ExecuteAsync()
                 // launch callback is to process all output data of model async execute
                 // which are prior to this callback
                 ret = aclrtLaunchCallback(CallBackFunc, (void *)dataMap, ACL_CALLBACK_BLOCK, stream_);
-                if (ret != ACL_ERROR_NONE) {
+                if (ret != ACL_SUCCESS) {
                     ERROR_LOG("launch callback failed, index=%zu, errorCode is %d",
                         cnt, static_cast<int32_t>(ret));
                     memPool->FreeMemory(input, output);
@@ -314,7 +314,7 @@ Result ModelProcess::ExecuteAsync()
 Result ModelProcess::SynchronizeStream()
 {
     aclError ret = aclrtSynchronizeStream(stream_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("aclrtSynchronizeStream failed, errorCode is %d", static_cast<int32_t>(ret));
         return FAILED;
     }
@@ -330,7 +330,7 @@ void ModelProcess::UnloadModel()
     }
 
     aclError ret = aclmdlUnload(modelId_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("unload model failed, modelId is %u, errorCode is %d",
             modelId_, static_cast<int32_t>(ret));
     }

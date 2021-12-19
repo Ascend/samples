@@ -92,7 +92,7 @@ Run the following commands to go to the **data** folder of the sample and downlo
 1. Run the following commands to upload the **human_protein_map_classification** directory in the development environment to any directory in the operating environment, for example, **/home/HwHiAiUser**, and log in to the operating environment (host) as the running user (**HwHiAiUser**):
       ```
          scp -r $HOME/samples/python/contrib/human_protein_map_classification/  HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser
-         scp -r $HOME/samples/python/common/atlas_utils/   HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser
+         scp -r $HOME/samples/python/common/acllite/   HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser
          ssh HwHiAiUser@xxx.xxx.xxx.xxx
       ```
 

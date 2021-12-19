@@ -93,7 +93,6 @@ int Camera::InitCamera() {
     return kCameraSetFpsError;
   }
 
-
   // set image resolution .
   ret = SetCameraProperty(camera_instance_para_.channel_id,
                           CAMERA_PROP_RESOLUTION,
@@ -123,9 +122,6 @@ int Camera::CaptureCameraInfo(CameraOutputPara *output_para) {
   int ret = kCameraReturnValid;
   int result = kCameraRunOk;
   int size = image_size_;
-
-  //shared_ptr<ImageData> g_imagedata = make_shared<ImageData>();
-  //shared_ptr<char> data(new char[size], default_delete<char[]>());
 
   cout << "image_size_ = " << image_size_ << endl;
   void * buffer = nullptr;
@@ -188,7 +184,7 @@ void Camera::PrintErrorInfo(int code) const {
 }
 
 extern "C" {
-#include "driver/peripheral_api.h"
+#include "peripheral_api.h"
 #include "camera.h"
 
 Camera_265::Camera_265(uint32_t id, uint32_t fps, uint32_t width,
@@ -203,25 +199,6 @@ Camera_265::~Camera_265(){
     free(outBuf_);
     outBuf_ = nullptr;
 }
-
-
-/*Result Camera::Process(int msgId, shared_ptr<void> msgData) {
-    Result  ret = FAILED;
-     if(false == isOpened())
-     {
-         if(STATUS_OK != Open()){
-             ASC_LOG_ERROR("Open camera %d failed", id_);
-             return FAILED;
-         }
-     }
-
-    if (msgId == MSG_START_READ_VIDEO) {
-         ret = ReadMsgProcess();
-    }
-
-    return SUCCESS;
-}*/
-
 
 Result Camera_265::SetProperty(int channelID) {
     int ret = SetCameraProperty(channelID, CAMERA_PROP_FPS, &(fps_));
@@ -283,7 +260,6 @@ Result Camera_265::Open(int channelID ) {
     isOpened_[channelID]=true;
     return SUCCESS;
 }
-
 
 bool Camera_265::IsOpened(int channelID){
     if(1 < channelID)

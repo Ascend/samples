@@ -6,16 +6,15 @@ import queue
 import numpy as np
 import sys
 import acl
-import atlas_utils.utils as utils
-import atlas_utils.constants as const
-from atlas_utils.acl_logger import log_error, log_info
+import utils
+import constants as const
+from acllite_logger import log_error, log_info
 
 class DetectData(object):
     """detecdata"""
     def __init__(self, frame_data, detect_results):
         self.frame_data = frame_data
         self.detect_results = detect_results
-
 
 class Postprocess(object): 
     """post"""
@@ -64,6 +63,3 @@ class Postprocess(object):
         while self._exit == False:
             time.sleep(0.001)
        
-
-
-

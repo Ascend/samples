@@ -18,9 +18,9 @@ import numpy as np
 import cv2
 
 sys.path.append("../../../common")
-from atlas_utils.acl_resource import AclResource
-from atlas_utils.acl_model import Model
-from atlas_utils.acl_image import AclImage
+from acllite_resource import AclLiteResource
+from acllite_model import AclLiteModel
+from acllite_image import AclLiteImage
 
 from ChessStatusPerception.ChessStatusPerception import ChessStatusPerception
 
@@ -32,7 +32,7 @@ def test_200dk():
     """
     Test the output of ChessStatusPerception module.
     """
-    acl_resource = AclResource()
+    acl_resource = AclLiteResource()
     acl_resource.init()
     perception = ChessStatusPerception(MODEL_PATH)
     perception.Init()

@@ -19,9 +19,8 @@
 #pragma once
 #include <memory>
 #include "acl/acl.h"
-#include "atlasutil/atlas_model.h"
+#include "acllite/AclLiteModel.h"
 #include "opencv2/opencv.hpp"
-#include "opencv2/imgcodecs/legacy/constants_c.h"
 #include "opencv2/imgproc/types_c.h"
 
 typedef enum Result {
@@ -37,14 +36,14 @@ public:
     BusinessImp(const char* modelPath, uint32_t modelWidth, uint32_t modelHeight, std::string workPath);
     ~BusinessImp();
 
-    AtlasError init();
-    AtlasError preprocess(const std::string& imageFile);
-    AtlasError inference(std::vector<InferenceOutput>& inferOutputs);
-    AtlasError postprocess(const std::string& imageFile, 
+    AclLiteError init();
+    AclLiteError preprocess(const std::string& imageFile);
+    AclLiteError inference(std::vector<InferenceOutput>& inferOutputs);
+    AclLiteError postprocess(const std::string& imageFile, 
                             std::vector<InferenceOutput>& modelOutput);
 private:
-    AtlasError init_resource();
-    AtlasError create_input();
+    AclLiteError init_resource();
+    AclLiteError create_input();
     void save_image(const std::string& origImageFile, cv::Mat& image);
     void destroy_resource();
 
@@ -52,7 +51,7 @@ private:
     int32_t deviceId_;
     aclrtContext context_;
     aclrtStream stream_;
-    AtlasModel  model_;
+    AclLiteModel  model_;
 
     const char* modelPath_;
     uint32_t modelWidth_;

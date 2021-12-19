@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # error code
-ACL_ERROR_NONE = 0
+ACL_SUCCESS = 0
 
 # numpy data type
 NPY_FLOAT32 = 11

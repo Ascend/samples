@@ -23,7 +23,6 @@
 #include <memory>
 #include <sstream>
 #include "opencv2/opencv.hpp"
-#include "opencv2/imgcodecs/legacy/constants_c.h"
 #include "opencv2/imgproc/types_c.h"
 
 using namespace std;
@@ -40,9 +39,8 @@ using namespace std;
 #define ALIGN_UP16(num) ALIGN_UP(num, 16)
 #define ALIGN_UP128(num) ALIGN_UP(num, 128)
 
-#define SHARED_PRT_DVPP_BUF(buf) (shared_ptr<uint8_t>((uint8_t *)(buf), [](uint8_t* p) { acldvppFree(p); }))
-#define SHARED_PRT_U8_BUF(buf) (shared_ptr<uint8_t>((uint8_t *)(buf), [](uint8_t* p) { delete[](p); }))
-
+#define SHARED_PTR_DVPP_BUF(buf) (shared_ptr<uint8_t>((uint8_t *)(buf), [](uint8_t* p) { acldvppFree(p); }))
+#define SHARED_PTR_U8_BUF(buf) (shared_ptr<uint8_t>((uint8_t *)(buf), [](uint8_t* p) { delete[](p); }))
 
 template<class Type>
 std::shared_ptr<Type> MakeSharedNoThrow() {
@@ -122,4 +120,3 @@ public:
     static void* CopyDataHostToDvpp(void* data, int size);
     static void* CopyDataDeviceToDvpp(void* data, int size);
 };
-

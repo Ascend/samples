@@ -27,7 +27,7 @@ Result SingleOpProcess::Init(const int64_t inputShape)
 {
     inputShape_ = inputShape;
     aclError ret = aclopSetModelDir("op_models");
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("set op model dir failed, errorCode is %d", static_cast<int32_t>(ret));
         return FAILED;
     }
@@ -81,7 +81,7 @@ Result SingleOpProcess::RunSigleOpCast()
     // prepare cast output buffer
     tensorSizeCast_ = aclGetTensorDescSize(outputDescCast[0]);
     aclError ret = aclrtMalloc(&devBufferCast_, tensorSizeCast_, ACL_MEM_MALLOC_NORMAL_ONLY);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("malloc cast output data buffer failed, errorCode is %d", static_cast<int32_t>(ret));
         aclDestroyTensorDesc(inputDescCast[0]);
         aclDestroyTensorDesc(outputDescCast[0]);
@@ -96,7 +96,7 @@ Result SingleOpProcess::RunSigleOpCast()
     }
 
     ret = aclopCast(inputDescCast[0], inputBuffer_[0], outputDescCast[0], outputBufferCast_[0], 0, stream_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("execute singleOp Cast failed, errorCode is %d", static_cast<int32_t>(ret));
         aclDestroyTensorDesc(inputDescCast[0]);
         aclDestroyTensorDesc(outputDescCast[0]);
@@ -104,7 +104,7 @@ Result SingleOpProcess::RunSigleOpCast()
     }
 
     ret = aclrtSynchronizeStream(stream_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("singleOp Cast synchronize stream failed, errorCode is %d", static_cast<int32_t>(ret));
         aclDestroyTensorDesc(inputDescCast[0]);
         aclDestroyTensorDesc(outputDescCast[0]);
@@ -137,7 +137,7 @@ Result SingleOpProcess::RunSigleOpArgMaxD()
         return FAILED;
     }
     aclError ret = aclopSetAttrInt(opAttr, "dimension", 0);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("singleOp set attr failed");
         aclopDestroyAttr(opAttr);
         return FAILED;
@@ -167,7 +167,7 @@ Result SingleOpProcess::RunSigleOpArgMaxD()
     // prepare argmaxD output buffer
     tensorSizeArgMaxD_ = aclGetTensorDescSize(outputDescArgMaxD[0]);
     ret = aclrtMalloc(&devBufferArgMaxD_, tensorSizeArgMaxD_, ACL_MEM_MALLOC_NORMAL_ONLY);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("malloc argMaxD output data buffer failed, errorCode is %d", static_cast<int32_t>(ret));
         aclDestroyTensorDesc(inputDescArgMaxD[0]);
         aclDestroyTensorDesc(outputDescArgMaxD[0]);
@@ -187,7 +187,7 @@ Result SingleOpProcess::RunSigleOpArgMaxD()
     inputBufferArgMaxD[0] = outputBufferCast_[0];
     ret = aclopExecuteV2(opTypeArgMaxD.c_str(), inputNumArgMaxD, inputDescArgMaxD, inputBufferArgMaxD,
         outputNumArgMaxD, outputDescArgMaxD, outputBufferArgMaxD_, opAttr, stream_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("execute singleOp argMaxD failed, errorCode is %d", static_cast<int32_t>(ret));
         aclDestroyTensorDesc(inputDescArgMaxD[0]);
         aclDestroyTensorDesc(outputDescArgMaxD[0]);
@@ -196,7 +196,7 @@ Result SingleOpProcess::RunSigleOpArgMaxD()
     }
 
     ret = aclrtSynchronizeStream(stream_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("singleOp argMaxD synchronize stream failed, errorCode is %d", static_cast<int32_t>(ret));
         aclDestroyTensorDesc(inputDescArgMaxD[0]);
         aclDestroyTensorDesc(outputDescArgMaxD[0]);
@@ -239,14 +239,14 @@ void SingleOpProcess::PrintResult()
     }
     void* hostBuffer = nullptr;
     aclError ret = aclrtMallocHost(&hostBuffer, tensorSizeArgMaxD_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("fail to print result, malloc host failed");
         return;
     }
 
     ret = aclrtMemcpy(hostBuffer, tensorSizeArgMaxD_, devBufferArgMaxD_,
         tensorSizeArgMaxD_, ACL_MEMCPY_DEVICE_TO_HOST);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("fail to print result, memcpy device to host failed, errorCode is %d", static_cast<int32_t>(ret));
         aclrtFreeHost(hostBuffer);
         return;

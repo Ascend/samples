@@ -31,8 +31,6 @@
  * ============================================================================
  */
 
-#include "output_info_process.h"
-
 #include <cstdio>
 #include <fcntl.h>
 #include <sys/types.h>
@@ -40,9 +38,9 @@
 #include <stddef.h>
 #include <unistd.h>
 #include <sys/statfs.h>
-
 #include <iostream>
 
+#include "output_info_process.h"
 #include "ascend_camera_common.h"
 
 using namespace std;
@@ -136,11 +134,9 @@ int OutputInfoProcess::FreeDiskIsEnough() const {
   unsigned long long free_size = disk_info.f_bavail * disk_info.f_bsize;
   // check free disk is enough
   if (free_size <= kMinFreeDiskSpace) {
-    //ASC_LOG_ERROR
-      /* printf(
-       "Failed to write file,Disk space is less than 100M."
-        "free size of disk is %d", free_size);*/
-      cout << "Failed to write file,Disk space is less than 100M." << "free size of disk is " << free_size << endl;
+    ASC_LOG_ERROR(
+        "Failed to write file,Disk space is less than 100M." 
+        "free size of disk is %lld", free_size);
     return kOutputLocalFreeDiskNotEnough;
   }
 

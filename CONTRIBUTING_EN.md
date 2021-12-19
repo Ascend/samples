@@ -20,25 +20,29 @@ Sign the contribution license agreement (CLA) before your submission. [Link](htt
     
     - The project directory has a **src** folder for storing the source code.   
     - The project directory has a readme file (in .md format).   
-    - The project directory has a **scripts** folder which contains the **testcase*.sh** entry script of your project.
-    - The project directory has a **scripts** folder which contains the **host_version.conf** configuration file that describes the product form and version mapping of your project.
+    - Place the user testcase test script in the st folder under the samples directory, place the test script of the C++ project under cplusplus, and place the test script of the python project under the python folder. The naming rule is required to be testcase_ + "project name" + .sh, where the project name is the upper-level directory name of the src folder of the corresponding project.     
+      **Take the C++ YOLOV3_coco_detection_picture example as an example:**    
+      **The sample src directory is:** samples/cplusplus/level2_simple_inference/2_object_detection/YOLOV3_coco_detection_picture/src    
+      **So the script of the sample testcase is:** st/cplusplus/testcase_YOLOV3_coco_detection_picture.sh
     
-    > **Note:** Each entry script corresponds to a product form. Your project shall provide support to at least one product form. Fill the versions mapped to each product form in the **host_version.conf** file in the corresponding directory.
-    >- testcase_200dk.sh: Atlas 200 DK   
-    >- testcase_300.sh: Atlas 300   
-   
-    > **Note:** Each product form maps to at least one version. Your project shall provide support to at least one version. The following provides a sample **host_version.conf** file.
-    >- Atlas300 = c75,c73        The project adapts to C73 and C75 of Atlas 300.
-    >- Atlas200dk = c73,c75        The project adapts to C73 and C75 of Atlas 200 DK.
+    > **Description:**
+    >- Each entry script corresponds to two device forms, and the current project is required to adapt to these two device forms: Atlas200dk, A300-3010.
+    >- Each device form corresponds to one or more versions, and the current project is required to adapt to at least one version. 
+    >- The current test environment: 1. Atlas200dk and A300-3010 of CANN 5.0.3.alpha005. 2. Atlas200dk and A300-3010 of CANN 5.0.4.alpha002.
+    >- Note: The content in blacklist_version.conf is the blacklist version, that is, the testcase will not be run on this version. Such as testcase_YOLOV3_coco_detection_picture: 5.0.3.alpha005
 
 
 4. For code migrated from other open-source software, add the license declaration.
 
- **II. License Rules**
 
-The source code files (.cpp, .py, and .hpp files) must support the Apache License 2.0. Add a statement at the beginning of each source code file as follows:
+**II. License Rules**
+
+**You need to declare according to the type of CLA you have signed:**    
+**CLA signing website: https://clasign.osinfra.cn/sign/Z2l0ZWUlMkZhc2NlbmQ=**    
+**CLA includes three types: enterprise signature, employee signature, and individual signature. Non-Huawei employees sign the individual and declare the corresponding copyright according to the type signed by themselves.**    
+**All newly created source files (cpp, py, h, etc.) need to support the Apache 2.0 License, and add the following statement to the head of the source file, replace [yyyy] with the 4-digit year of the code creation, and replace [ name of the copyright owner] is replaced with the name of the organization (all individuals signing the CLA shall declare Huawei Technologies Co., Ltd), please remove the square brackets:**   
 ```
-# Copyright 2020 Huawei Technologies Co., Ltd.
+# Copyright [yyyy] [name of copyright owner]
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # You may not use this file except in compliance with the License.
@@ -52,9 +56,10 @@ The source code files (.cpp, .py, and .hpp files) must support the Apache Licens
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ```
-If the source code contains the copyright of other companies, add a line of Huawei's copyright as follows:
+**All the code modified from other source code, do not change the LICENSE type in the source code. If the source code has the copyright of other company, the original copyright statement remains unchanged, add a line of Copyright above, and change [yyyy] Replace with the 4-digit year of the modified code, replace [name of the copyright owner] with the name of your organization (all individuals signing the CLA shall declare Huawei Technologies Co., Ltd), and remove the square brackets.**   
+E.g:
 ```
-# Copyright 2020 Huawei Technologies Co., Ltd.
+# Copyright [yyyy] [name of copyright owner]
 # Copyright 2018 HiSillion Technologies Co., Ltd.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -102,17 +107,15 @@ A submitted PR sample must contain the required items, project test cases, and a
 
         1. The project directory has a **src** folder for storing the source code.   
         2. The project directory has a readme file (in .md format).   
-        3. The project directory has a **scripts** folder which contains the **testcase*.sh** entry script of your project.
-        4. The project directory has a **scripts** folder which contains the **host_version.conf** configuration file.   
+        3. There is testcase*.sh in the st directory (sample function test script).
 
-   - After the PR is submitted, the pipe of checking the required items is triggered, which build your project by using the shell entry script (**scripts/testcase*.sh** in the project directory). Note the following points:
+   - After the PR is submitted, the access control pipeline will be automatically triggered, and the background will be compiled according to the use case entry shell (the testcase*.sh in the programming language folder under the st directory). Note the following points:
 
         1. The PR shall not contain the **rm** command.   
         2. The PR shall not upload the original model and converted Da Vinci model.   
         3. The PR shall not upload the test dataset and validation dataset.   
 
-2. The **scripts/testcase*.sh** script must provide the following functions:   
-    Inference and post-inference validation. 
+2. The testcase*.sh in the corresponding programming language folder under the st directory should contain the function of reasoning and verifying the result of the reasoning. The specific definition is as follows:
   
     The inference phase shall include the following actions:   
     - Download the test dataset and validation dataset.    
@@ -123,7 +126,7 @@ A submitted PR sample must contain the required items, project test cases, and a
     - Set the environment variables required for running the application.  
     - Run the application.    
 
-    The post-inference validation method can be provided in the script. The validation phase shall consider the following validation results:   
+    Verify the result of the inference (provide different methods of verifying the inference result according to different projects, the verification method can be written in the script):  
     - If an error occurs in the inference phase, **inferenceError** is returned.     
     - If an error occurs in the validation phase, **verifyResError** is returned.    
     - If both phases are successful, a success message is returned.   

@@ -20,7 +20,6 @@
 #ifndef AIPAINTING_ATLAS200DK_V2_DATA_RECEIVER_H
 #define AIPAINTING_ATLAS200DK_V2_DATA_RECEIVER_H
 
-
 #include <iostream>
 #include <string>
 #include <dirent.h>
@@ -47,7 +46,6 @@ public:
     Result Init();
 
     Result DoReceiverProcess(void* objectData, void* layoutData);
-
 
 };
 

@@ -23,7 +23,6 @@
 #include "main.h"
 using namespace std;
 
-
 /* Run managed resource applications, including Device, Context, and Stream*/
 Result Initparam(int argc, char *argv[])
 {
@@ -223,7 +222,6 @@ int main(int argc, char *argv[])
 
     aclFinalize();
     INFO_LOG("end to finalize acl");
-
 
     return SUCCESS;
 }

@@ -59,8 +59,6 @@ private:
     uint32_t inputDataSize_;
     aclrtRunMode runMode_;
     DvppProcess dvpp_;
-
-
     bool isInited_;
 };
 

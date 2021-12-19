@@ -19,7 +19,6 @@
 #pragma once
 #include "utils.h"
 #include "acl/acl.h"
-#include "opencv2/imgcodecs/legacy/constants_c.h"
 #include "opencv2/opencv.hpp"
 #include "model_process.h"
 #include "dvpp_process.h"

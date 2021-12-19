@@ -15,9 +15,7 @@
 #if defined(_MSC_VER)
 #include <windows.h>
 #else
-
 #include <sys/stat.h>
-
 #endif
 
 #include "acl/acl.h"
@@ -58,7 +56,7 @@ Result Utils::ReadBinFile(PicDesc &picDesc, void *&inputBuff, uint32_t &fileSize
         }
     } else { // app is running in device
         ret = acldvppMalloc(&inputBuff, binFileBufferLen);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("malloc device buffer failed. size is %u, errorCode is %d",
                       binFileBufferLen, static_cast<int32_t>(ret));
             binFile.close();
@@ -71,7 +69,7 @@ Result Utils::ReadBinFile(PicDesc &picDesc, void *&inputBuff, uint32_t &fileSize
 
     int32_t components = 0;
     ret = acldvppJpegGetImageInfo(inputBuff, binFileBufferLen, &picDesc.width, &picDesc.height, &components);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("acldvppJpegGetImageInfo failed, errorCode is %d", static_cast<int32_t>(ret));
         return FAILED;
     }
@@ -95,7 +93,7 @@ Result Utils::GetDeviceBufferOfPicture(PicDesc &picDesc, void *&picDevBuffer, ui
         return FAILED;
     }
     aclError aclRet = acldvppJpegGetImageInfo(inputBuff, inputBuffSize, &picDesc.width, &picDesc.height, nullptr);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("get jpeg image info failed, errorCode is %d", static_cast<int32_t>(aclRet));
         if (!(RunStatus::GetDeviceStatus())) {
             (void) aclrtFreeHost(inputBuff);
@@ -106,7 +104,7 @@ Result Utils::GetDeviceBufferOfPicture(PicDesc &picDesc, void *&picDevBuffer, ui
     }
     aclRet = acldvppJpegPredictDecSize(inputBuff, inputBuffSize, PIXEL_FORMAT_YUV_SEMIPLANAR_420,
                                        &picDesc.jpegDecodeSize);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("get jpeg decode size failed, errorCode is %d", static_cast<int32_t>(aclRet));
         if (!(RunStatus::GetDeviceStatus())) {
             (void) aclrtFreeHost(inputBuff);
@@ -118,7 +116,7 @@ Result Utils::GetDeviceBufferOfPicture(PicDesc &picDesc, void *&picDevBuffer, ui
 
     if (!(RunStatus::GetDeviceStatus())) { // app is running in host
         aclRet = acldvppMalloc(&picDevBuffer, inputBuffSize);
-        if (aclRet != ACL_ERROR_NONE) {
+        if (aclRet != ACL_SUCCESS) {
             ERROR_LOG("malloc device buffer failed. size is %u, errorCode is %d",
                       inputBuffSize, static_cast<int32_t>(aclRet));
             (void) aclrtFreeHost(inputBuff);
@@ -127,7 +125,7 @@ Result Utils::GetDeviceBufferOfPicture(PicDesc &picDesc, void *&picDevBuffer, ui
 
         // if app is running in host, need copy data from host to device
         aclRet = aclrtMemcpy(picDevBuffer, inputBuffSize, inputBuff, inputBuffSize, ACL_MEMCPY_HOST_TO_DEVICE);
-        if (aclRet != ACL_ERROR_NONE) {
+        if (aclRet != ACL_SUCCESS) {
             ERROR_LOG("memcpy failed. device buffer size is %u, input host buffer size is %u, errorCode is %d",
                       inputBuffSize, inputBuffSize, static_cast<int32_t>(aclRet));
             (void) acldvppFree(picDevBuffer);

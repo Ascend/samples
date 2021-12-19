@@ -88,7 +88,7 @@ DvppProcess::~DvppProcess(){
 Result DvppProcess::InitResource(aclrtStream& stream, int imgWidth, int imgHeight){
     stream_ = stream;
     aclError ret = aclrtGetRunMode(&runMode);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("acl get run mode failed");
         }
     int createThreadErr = pthread_create(&threadId_, nullptr, ThreadFunc, nullptr);
@@ -105,7 +105,7 @@ Result DvppProcess::InitResource(aclrtStream& stream, int imgWidth, int imgHeigh
     //Allocate a large enough memory
     inputBufferSize = YUV420SP_SIZE(alignWidth, alignHeight);
     ret = acldvppMalloc(&codeInputBufferDev_, inputBufferSize);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("acldvppMalloc failed");
         }
 
@@ -149,13 +149,13 @@ Result DvppProcess::Venc(cv::Mat& srcImage) {
     aclError ret;
     if(runMode == ACL_HOST) {
         ret = aclrtMemcpy(codeInputBufferDev_, inputBufferSize, srcImage.data, inputBufferSize, ACL_MEMCPY_HOST_TO_DEVICE);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             //ERROR_LOG("aclrtMemcpy failed");
             }
     }
     else {
         ret = aclrtMemcpy(codeInputBufferDev_, inputBufferSize, srcImage.data, inputBufferSize, ACL_MEMCPY_DEVICE_TO_DEVICE);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             //ERROR_LOG("aclrtMemcpy failed");
             }
     }
@@ -165,7 +165,7 @@ Result DvppProcess::Venc(cv::Mat& srcImage) {
 
     ret = aclvencSendFrame(vencChannelDesc_, vpcInputDesc_,
     static_cast<void *>(outputStreamDesc), vencFrameConfig_, nullptr);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("aclvencSendFrame failed");
         }
     return SUCCESS;
@@ -200,7 +200,7 @@ void DvppProcess::DestroyResource(){
     aclError aclRet;
     if (vencChannelDesc_ != nullptr) {
         aclRet = aclvencDestroyChannel(vencChannelDesc_);
-        if (aclRet != ACL_ERROR_NONE) {
+        if (aclRet != ACL_SUCCESS) {
             ERROR_LOG("aclvencDestroyChannel failed, aclRet = %d", aclRet);
         }
         (void)aclvencDestroyChannelDesc(vencChannelDesc_);

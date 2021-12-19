@@ -4,6 +4,6 @@
 cmake_minimum_required(VERSION 3.5.1)
 
 # project information
-project(classification)
+project(YOLOV3_VOC_detection_picture)
 
 add_subdirectory("./src")

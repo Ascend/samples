@@ -4,6 +4,6 @@
 cmake_minimum_required(VERSION 3.5.1)
 
 # project information
-project(yolov4_demo)
+project(YOLOV4_coco_detection_picture)
 
 add_subdirectory("./src")

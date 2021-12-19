@@ -9,12 +9,12 @@ path = os.path.dirname(os.path.abspath(__file__))
 
 sys.path.append(os.path.join(path, ".."))
 sys.path.append(os.path.join(path, "../../../../common/"))
-sys.path.append(os.path.join(path, "../../../../common/atlas_utils"))
+sys.path.append(os.path.join(path, "../../../../common/acllite"))
 
 from dataloader import build_test_dataloader
-from acl_model import Model
-from acl_image import AclImage
-from acl_resource import AclResource
+from acllite_model import AclLiteModel
+from acllite_image import AclLiteImage
+from acllite_resource import AclLiteResource
 
 import numpy as np
 import imageio
@@ -24,7 +24,6 @@ import shutil
 import make_reds_dataset
 
 FPS_MUL = 2
-
 MODEL_PATH = "../model/EDVR_180_320.om"
 MODEL_WIDTH = 320
 MODEL_HEIGHT = 180
@@ -44,7 +43,7 @@ class VideoSuperResolution(object):
         self._model_path = model_path
         self._model_width = model_width
         self._model_height = model_height
-        self._model = Model(model_path)
+        self._model = AclLiteModel(model_path)
 
         self.scale = scale
         self.num_frames = num_frames
@@ -150,7 +149,7 @@ def main():
     video super resolution inference
     """
 
-    acl_resource = AclResource()
+    acl_resource = AclLiteResource()
     acl_resource.init()
     input_video_name = 'low_resolution.mp4'
     input_dir = '../data'
@@ -158,7 +157,7 @@ def main():
     num_frames = 5
     set_file = 'test.json'
     batch_size = 1
-    output_dir = '../output'
+    output_dir = '../out'
     output_video_name = "high_resolution.mp4"
 
     classify = VideoSuperResolution(MODEL_PATH, MODEL_WIDTH, MODEL_HEIGHT,

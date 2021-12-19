@@ -57,7 +57,7 @@ bool OpRunner::Init()
     for (size_t i = 0; i < numInputs_; ++i) {
         auto size = GetInputSize(i);
         void *devMem = nullptr;
-        if (aclrtMalloc(&devMem, size, ACL_MEM_MALLOC_NORMAL_ONLY) != ACL_ERROR_NONE) {
+        if (aclrtMalloc(&devMem, size, ACL_MEM_MALLOC_NORMAL_ONLY) != ACL_SUCCESS) {
             ERROR_LOG("Malloc device memory for input[%zu] failed", i);
             return false;
         }
@@ -66,12 +66,12 @@ bool OpRunner::Init()
 
         void *hostMem = nullptr;
         if (isDevice_) {
-            if (aclrtMalloc(&hostMem, size, ACL_MEM_MALLOC_NORMAL_ONLY)!= ACL_ERROR_NONE) {
+            if (aclrtMalloc(&hostMem, size, ACL_MEM_MALLOC_NORMAL_ONLY)!= ACL_SUCCESS) {
                 ERROR_LOG("Malloc device memory for input[%zu] failed", i);
                 return false;
             }
         } else {
-            if (aclrtMallocHost(&hostMem, size) != ACL_ERROR_NONE) {
+            if (aclrtMallocHost(&hostMem, size) != ACL_SUCCESS) {
                 ERROR_LOG("Malloc device memory for input[%zu] failed", i);
                 return false;
             }
@@ -86,7 +86,7 @@ bool OpRunner::Init()
     for (size_t i = 0; i < numOutputs_; ++i) {
         auto size = GetOutputSize(i);
         void *devMem = nullptr;
-        if (aclrtMalloc(&devMem, size, ACL_MEM_MALLOC_NORMAL_ONLY) != ACL_ERROR_NONE) {
+        if (aclrtMalloc(&devMem, size, ACL_MEM_MALLOC_NORMAL_ONLY) != ACL_SUCCESS) {
             ERROR_LOG("Malloc device memory for output[%zu] failed", i);
             return false;
         }
@@ -95,12 +95,12 @@ bool OpRunner::Init()
 
         void *hostOutput = nullptr;
         if (isDevice_) {
-            if (aclrtMalloc(&hostOutput, size, ACL_MEM_MALLOC_NORMAL_ONLY)!= ACL_ERROR_NONE) {
+            if (aclrtMalloc(&hostOutput, size, ACL_MEM_MALLOC_NORMAL_ONLY)!= ACL_SUCCESS) {
                 ERROR_LOG("Malloc device memory for output[%zu] failed", i);
                 return false;
             }
         } else {
-            if (aclrtMallocHost(&hostOutput, size) != ACL_ERROR_NONE) {
+            if (aclrtMallocHost(&hostOutput, size) != ACL_SUCCESS) {
                 ERROR_LOG("Malloc device memory for output[%zu] failed", i);
                 return false;
             }
@@ -216,7 +216,7 @@ bool OpRunner::RunOp()
         if (isDevice_) {
             kind = ACL_MEMCPY_DEVICE_TO_DEVICE;
         }
-        if (aclrtMemcpy(devInputs_[i], size, hostInputs_[i], size, kind) != ACL_ERROR_NONE) {
+        if (aclrtMemcpy(devInputs_[i], size, hostInputs_[i], size, kind) != ACL_SUCCESS) {
             ERROR_LOG("Copy input[%zu] failed", i);
             return false;
         }
@@ -224,7 +224,7 @@ bool OpRunner::RunOp()
     }
 
     aclrtStream stream = nullptr;
-    if (aclrtCreateStream(&stream) != ACL_ERROR_NONE) {
+    if (aclrtCreateStream(&stream) != ACL_SUCCESS) {
         ERROR_LOG("Create stream failed");
         return false;
     }
@@ -244,14 +244,14 @@ bool OpRunner::RunOp()
         ERROR_LOG("[%s] op with the given description is not compiled. Please run atc first", opDesc_->opType.c_str());
         (void) aclrtDestroyStream(stream);
         return false;
-    } else if (ret != ACL_ERROR_NONE) {
+    } else if (ret != ACL_SUCCESS) {
         ERROR_LOG("Execute %s failed. ret = %d", opDesc_->opType.c_str(), ret);
         (void) aclrtDestroyStream(stream);
         return false;
     }
     INFO_LOG("Execute %s success", opDesc_->opType.c_str());
 
-    if (aclrtSynchronizeStream(stream) != ACL_ERROR_NONE) {
+    if (aclrtSynchronizeStream(stream) != ACL_SUCCESS) {
         (void) aclrtDestroyStream(stream);
         ERROR_LOG("Synchronize stream failed");
         return false;
@@ -265,7 +265,7 @@ bool OpRunner::RunOp()
         if (isDevice_) {
             kind = ACL_MEMCPY_DEVICE_TO_DEVICE;
         }
-        if (aclrtMemcpy(hostOutputs_[i], size, devOutputs_[i], size, kind) != ACL_ERROR_NONE) {
+        if (aclrtMemcpy(hostOutputs_[i], size, devOutputs_[i], size, kind) != ACL_SUCCESS) {
             ERROR_LOG("Copy output[%zu] failed", i);
             return false;
         }

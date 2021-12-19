@@ -10,13 +10,12 @@ import json
 import sys
 
 path = os.path.dirname(os.path.abspath(__file__))
-
 sys.path.append(os.path.join(path, ".."))
 sys.path.append(os.path.join(path, "../../../../common/"))
-sys.path.append(os.path.join(path, "../../../../common/atlas_utils"))
+sys.path.append(os.path.join(path, "../../../../common/acllite"))
 
-from acl_resource import AclResource
-from acl_model import Model
+from acllite_resource import AclLiteResource
+from acllite_model import AclLiteModel
 from utils import display_time
 
 model_path = '../model/bert_text_classification.om'
@@ -25,9 +24,7 @@ label_path = '../scripts/label.json'
 sample_path = '../data/sample.txt'
 output_dir = '../out/'
 maxlen = 298
-
 token_dict = {}
-
 
 class OurTokenizer(Tokenizer):
     """
@@ -42,7 +39,6 @@ class OurTokenizer(Tokenizer):
                 R.append('[UNK]')   # The remaining characters are [UNK]
         return R
 
-
 def save_to_file(file_name, contents):
     """
     save prediction label to file
@@ -50,7 +46,6 @@ def save_to_file(file_name, contents):
     fh = open(file_name, 'w')
     fh.write(contents)
     fh.close()
-
 
 def preprocess(text):
     """
@@ -61,11 +56,9 @@ def preprocess(text):
     # tokenize
     text = text[:maxlen]
     x1, x2 = tokenizer.encode(first=text)
-
     X1 = x1 + [0] * (maxlen - len(x1)) if len(x1) < maxlen else x1
     X2 = x2 + [0] * (maxlen - len(x2)) if len(x2) < maxlen else x2
     return X1, X2
-
 
 def postprocess(result_list):
     """
@@ -75,16 +68,14 @@ def postprocess(result_list):
     y = np.argmax(result_list[0])
     return y
     
-    
 def main():
     """
     acl resource initialization
     """
-      
-    acl_resource = AclResource()
+    acl_resource = AclLiteResource()
     acl_resource.init()
     
-    model = Model(model_path)
+    model = AclLiteModel(model_path)
 
     with codecs.open(dict_path, 'r', 'utf-8') as reader:
         for line in reader:
@@ -98,7 +89,6 @@ def main():
         label_dict = json.loads(f.read())
                
     X1, X2 = preprocess(text)
-    
     X1 = np.ascontiguousarray(X1, dtype='float32')
     X2 = np.ascontiguousarray(X2, dtype='float32')
 
@@ -116,10 +106,8 @@ def main():
     save_to_file(output_dir + 'prediction_label.txt', label_dict[str(y)])
     print("Original text: %s" % text)
     print("Prediction label: %s" % label_dict[str(y)])
-    
     print("Cost time:", e_time - s_time)
     print("Execute end")
 
-  
 if __name__ == '__main__':
     main()

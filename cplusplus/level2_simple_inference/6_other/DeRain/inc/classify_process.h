@@ -21,14 +21,9 @@
 #include "acl/acl.h"
 #include "model_process.h"
 #include <memory>
-
 #include <numeric>
 #include <algorithm>
 #include <vector>
-//using namespace std;
-
-//Whether to calculate psnr
-//#define CalcuPSNR
 
 /**
 * ClassifyProcess
@@ -62,16 +57,13 @@ private:
     aclrtContext context_;
     aclrtStream stream_;
     ModelProcess model_;
-
     const char* modelPath_;
     uint32_t modelWidth_;
     uint32_t modelHeight_;
     uint32_t inputDataSize_;
     void*    inputBuf_;
     aclrtRunMode runMode_;
-
     std::vector<double> dPSNRs,dSSIMs;
-
     bool isInited_;
 };
 

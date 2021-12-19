@@ -8,7 +8,6 @@
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 #pragma once
-
 #include <map>
 #include "model_process.h"
 #include "utils.h"
@@ -58,4 +57,3 @@ private:
     aclrtContext context_;
     aclrtStream stream_;
 };
-

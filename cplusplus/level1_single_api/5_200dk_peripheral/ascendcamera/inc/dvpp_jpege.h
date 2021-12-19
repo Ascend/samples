@@ -59,9 +59,7 @@ private:
 
     aclrtStream stream_;
     acldvppChannelDesc* dvppChannelDesc_;
-
     acldvppJpegeConfig* jpegeConfig_;
-
     uint32_t encodeOutBufferSize_;
     void* encodeOutBufferDev_; // encode output buffer
     acldvppPicDesc* encodeInputDesc_; //encode input desc

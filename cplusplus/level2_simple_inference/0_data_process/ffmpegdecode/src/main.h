@@ -20,9 +20,9 @@
 #include <string>
 #include <memory>
 #include <thread>
-#include "atlasutil/atlas_utils.h"
-#include "atlasutil/atlas_error.h"
-#include "atlasutil/acl_device.h"
+#include "acllite/AclLiteUtils.h"
+#include "acllite/AclLiteError.h"
+#include "acllite/AclLiteResource.h"
 
 #define INVALID_STREAM_FORMAT -1
 #define RTSP_TRANSPORT_UDP "udp"

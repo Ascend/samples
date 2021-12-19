@@ -22,7 +22,7 @@ sys.path.append("../../../common/")
 SRC_PATH = os.path.realpath(__file__).rsplit("/", 1)[0]
 print(SRC_PATH)
 from utils.model_processor import ModelProcessor
-from atlas_utils.acl_resource import AclResource 
+from acllite_resource import AclLiteResource 
 
 
 MODEL_PATH = os.path.join(SRC_PATH, "../model/" + "OpenPose_light.om")
@@ -33,7 +33,7 @@ Output_PATH = os.path.join(SRC_PATH, "../output/")
 def main(model_path, frames_input_src, output_dir):
     """main"""
     #initialize acl runtime 
-    acl_resource = AclResource()
+    acl_resource = AclLiteResource()
     acl_resource.init()
     
     ## Prepare Model ##

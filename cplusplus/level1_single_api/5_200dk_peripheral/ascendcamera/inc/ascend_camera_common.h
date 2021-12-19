@@ -42,7 +42,6 @@ namespace ascend {
 
 namespace ascendcamera {
 
-
 #define ASC_LOG_INFO(fmt, args...) fprintf(stdout, "[INFO]  " fmt "\n", ##args)
 #define ASC_LOG_WARN(fmt, args...) fprintf(stdout, "[WARN]  " fmt "\n", ##args)
 #define ASC_LOG_ERROR(fmt, args...) fprintf(stdout, "[ERROR]  " fmt "\n", ##args)

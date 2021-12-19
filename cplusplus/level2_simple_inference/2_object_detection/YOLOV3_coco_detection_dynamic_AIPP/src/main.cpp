@@ -20,8 +20,6 @@
 #include <iostream>
 #include <stdlib.h>
 #include <dirent.h>
-
-#include "opencv2/imgcodecs/legacy/constants_c.h"
 #include "opencv2/opencv.hpp"
 #include "object_detect.h"
 #include "utils.h"

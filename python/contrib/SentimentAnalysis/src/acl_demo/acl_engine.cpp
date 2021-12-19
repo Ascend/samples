@@ -223,10 +223,10 @@ char *AclEngine::ReadBinFile(const std::string &file_name,
 
 aclError AclEngine::InitAclDeviceContext() {
 
-    aclError ret = ACL_ERROR_NONE;
+    aclError ret = ACL_SUCCESS;
     uint32_t device_count = 1;
     ret = aclrtGetDeviceCount(&device_count);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         printf("[ERROR]aclrtGetDeviceCount failed, ret %d\n", ret);
         return ret;
     }
@@ -248,14 +248,14 @@ aclError AclEngine::InitAclDeviceContext() {
     for (uint32_t devIndex = device_start_id;
          devIndex < kDeviceNum + device_start_id; devIndex++) {
         ret = aclrtSetDevice(devIndex);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             printf("[ERROR]aclrtSetDevice failed, ret %d\n", ret);
             return ret;
         }
         used_devices_.push_back(devIndex);
         aclrtContext context;
         ret = aclrtCreateContext(&context, devIndex);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             printf("[ERROR]aclrtCreateContext failed, ret %d\n", ret);
             return ret;
         }
@@ -269,13 +269,13 @@ void AclEngine::DestroyAclModelDesc(uint32_t modelId, aclmdlDesc *modelDesc) {
     aclError ret;
 
     ret = aclmdlUnload(modelId);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         printf("aclmdlUnload  failed, ret[%d]\n", ret);
     }
     printf("[step 10] unload model success\n");
 
     ret = aclmdlDestroyDesc(modelDesc);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         printf("aclmdlDestroyDesc  failed, ret[%d]\n", ret);
     }
 }
@@ -330,13 +330,13 @@ bool AclEngine::Init() {
     }
 
     int ret = aclInit(configPath.c_str());
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         printf("aclInit failed, ret[%d]\n", ret);
         return false;
     }
 
     ret = InitAclDeviceContext();
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         printf("aclDeviceContexInit failed, ret[%d]\n", ret);
         return true;
     }
@@ -400,7 +400,7 @@ int AclEngine::LoadModel() {
         input_buffer_sizes_.push_back(buff_size);
         void *p_imgBuf = nullptr;
         auto ret = aclrtMallocHost(&p_imgBuf, buff_size);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             printf("p_imgBuf aclrtMallocHost failed[%d]\n", ret);
             ReleaseAllAclModelResource(model_id_, model_desc_ptr_, contexts_);
             return 1;
@@ -425,7 +425,7 @@ aclmdlDesc *AclEngine::aclModelLoadAndIOGet(const void *model,
     aclError ret =
         aclmdlLoadFromMemWithMem(model, model_size, model_id, dev_ptr, mem_size,
                                  weight_ptr, weight_size);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         printf("aclmdlLoadFromMemWithMem failed, ret[%d]\n", ret);
         return nullptr;
     }
@@ -501,7 +501,7 @@ int AclEngine::ReadInputFiles(const vector<vector<string>> &inputs) {
         void *pbatchDst;
         auto ret =
             aclrtMalloc(&pbatchDst, fileSize, ACL_MEM_MALLOC_NORMAL_ONLY);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             printf("aclrtMalloc failed, ret[%d]\n", ret);
             ReleaseAllAclModelResource(model_id_, model_desc_ptr_, contexts_);
             return 1;
@@ -509,7 +509,7 @@ int AclEngine::ReadInputFiles(const vector<vector<string>> &inputs) {
 
         ret = aclrtMemcpy(pbatchDst, fileSize, p_imgBuf, fileSize,
                           ACL_MEMCPY_HOST_TO_DEVICE);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             printf("aclrtMemcpy failed, ret[%d] line : %d\n", ret, __LINE__);
             aclrtFree(pbatchDst);
             ReleaseAllAclModelResource(model_id_, model_desc_ptr_, contexts_);
@@ -555,7 +555,7 @@ int AclEngine::AclInferenceProcess(uint32_t model_id,
         }
 
         ret = aclmdlAddDatasetBuffer(input.get(), inputData);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             printf("ACL_ModelInputDataAdd failed, ret[%d]\n", ret);
             return 1;
         }
@@ -563,13 +563,13 @@ int AclEngine::AclInferenceProcess(uint32_t model_id,
     /*
     size_t index;
     ret = aclmdlGetInputIndexByName(model_desc_ptr_, ACL_DYNAMIC_TENSOR_NAME,
-    &index); if (ret != ACL_ERROR_NONE) { printf("aclmdlGetInputIndexByName
+    &index); if (ret != ACL_SUCCESS) { printf("aclmdlGetInputIndexByName
     failed, maybe static model\n");
     }
     size_t buffer_size = aclmdlGetInputSizeByIndex(model_desc_ptr_, index);
     void* inputBuffer = NULL;
     ret = aclrtMalloc(&inputBuffer, buffer_size , ACL_MEM_MALLOC_NORMAL_ONLY);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         printf("aclrtMalloc failed, ret[%d]", ret);
     }
     aclDataBuffer* inputData = aclCreateDataBuffer(inputBuffer, buffer_size);
@@ -577,7 +577,7 @@ int AclEngine::AclInferenceProcess(uint32_t model_id,
         printf("aclCreateDataBuffer failed");
     }
     ret = aclmdlAddDatasetBuffer(input.get(), inputData);
-    if(ret != ACL_ERROR_NONE) {
+    if(ret != ACL_SUCCESS) {
         printf("ACL_ModelInputDataAdd failed, ret[%d]", ret);
     }
     //aclDataBuffer* buffer = aclmdlGetDatasetBuffer(input, index);
@@ -595,7 +595,7 @@ int AclEngine::AclInferenceProcess(uint32_t model_id,
     //  printf("fail to get data mem size with dynamic\n");
     //}
     ret = aclmdlSetDynamicHWSize(model_id, input.get(), index, 32, 64);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
       printf("aclmdlSetDynamicHWSize failed");
     }
     printf("aclmdlSetDynamicHWSize success");
@@ -612,7 +612,7 @@ int AclEngine::AclInferenceProcess(uint32_t model_id,
         void *outputBuffer = nullptr;
         ret =
             aclrtMalloc(&outputBuffer, buffer_size, ACL_MEM_MALLOC_NORMAL_ONLY);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             printf("aclrtMallocHost failed, ret[%d]\n", ret);
             return 1;
         }
@@ -625,7 +625,7 @@ int AclEngine::AclInferenceProcess(uint32_t model_id,
         }
 
         ret = aclmdlAddDatasetBuffer(output.get(), outputData);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             printf("ACL_ModelOutputDataAdd failed, ret[%d]\n", ret);
             return 1;
         }
@@ -639,7 +639,7 @@ int AclEngine::AclInferenceProcess(uint32_t model_id,
         start = chrono::steady_clock::now();
         ret = aclmdlExecute(model_id, input.get(), output.get());
         end = chrono::steady_clock::now();
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             printf("aclmdlExecute failed, ret[%d]\n", ret);
             return 1;
         }
@@ -660,14 +660,14 @@ int AclEngine::AclInferenceProcess(uint32_t model_id,
 
         void *outHostData = nullptr;
         ret = aclrtMallocHost(&outHostData, len);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             printf("aclrtMallocHost failed, ret[%d]\n", ret);
             return 1;
         }
 
         ret =
             aclrtMemcpy(outHostData, len, data, len, ACL_MEMCPY_DEVICE_TO_HOST);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             printf("aclrtMemcpy failed, ret[%d] line: %d\n", ret, __LINE__);
             return 1;
         }
@@ -698,7 +698,7 @@ int AclEngine::AclInferenceProcess(uint32_t model_id,
 
         // save inter result end
         ret = aclrtFreeHost(outHostData);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             printf("aclrtFreeHost failed, ret[%d]\n", ret);
             return 1;
         }

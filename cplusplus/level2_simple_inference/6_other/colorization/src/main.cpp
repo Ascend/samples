@@ -21,8 +21,8 @@
 #include <stdlib.h>
 #include <dirent.h>
 #include "colorize_process.h"
-#include "atlasutil/atlas_utils.h"
-#include "atlasutil/atlas_error.h"
+#include "acllite/AclLiteUtils.h"
+#include "acllite/AclLiteError.h"
 using namespace std;
 
 namespace {
@@ -32,51 +32,52 @@ const char* kModelPath = "../model/colorization.om";
 }
 
 int main(int argc, char *argv[]) {
-    //检查应用程序执行时的输入,程序执行要求输入图片目录参数
+    //check input param
     if((argc < 2) || (argv[1] == nullptr)){
-        ATLAS_LOG_ERROR("Please input: ./main <image_dir>");
+        ACLLITE_LOG_ERROR("Please input: ./main <image_dir>");
         return 1;
     }
-    //实例化分类推理对象,参数为分类模型路径,模型输入要求的宽和高
+    //init instance
     ColorizeProcess colorize(kModelPath, kModelWidth, kModelHeight);
-    //初始化分类推理的acl资源, 模型和内存
-    AtlasError ret = colorize.init();
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Classification Init resource failed");
+    //init resource
+    AclLiteError ret = colorize.init();
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Classification Init resource failed");
         return 1;
     }
-    //获取图片目录下所有的图片文件名
+    //get file
     string inputImageDir = string(argv[1]);
     vector<string> fileVec;
     GetAllFiles(inputImageDir, fileVec);
     if (fileVec.empty()) {
-        ATLAS_LOG_ERROR("Failed to deal all empty path=%s.", inputImageDir.c_str());
+        ACLLITE_LOG_ERROR("Failed to deal all empty path=%s.", inputImageDir.c_str());
         return 1;
     }
-    //逐张图片推理
+
     for (string imageFile : fileVec) {
-        //预处理图片:读取图片,讲图片缩放到模型输入要求的尺寸
+        //preprocess
         ret = colorize.preprocess(imageFile);
-        if (ret != ATLAS_OK) {
-            ATLAS_LOG_ERROR("Read file %s failed, continue to read next",
+        if (ret != ACLLITE_OK) {
+            ACLLITE_LOG_ERROR("Read file %s failed, continue to read next",
                       imageFile.c_str());                
             continue;
         }
-        //将预处理的图片送入模型推理,并获取推理结果
+        //inference
         std::vector<InferenceOutput> inferenceOutput;
         ret = colorize.inference(inferenceOutput);
-        if (ret != ATLAS_OK) {
-            ATLAS_LOG_ERROR("Inference model inference output data failed");
+        if (ret != ACLLITE_OK) {
+            ACLLITE_LOG_ERROR("Inference model inference output data failed");
             return 1;
         }
-        //解析推理输出,并将推理得到的物体类别标记到图片上
+        //postprocess
         ret = colorize.postprocess(imageFile, inferenceOutput);
-        if (ret != ATLAS_OK) {
-            ATLAS_LOG_ERROR("Process model inference output data failed");
+        if (ret != ACLLITE_OK) {
+            ACLLITE_LOG_ERROR("Process model inference output data failed");
             return 1;
         }
     }
 
-    ATLAS_LOG_INFO("Execute sample success");
+    ACLLITE_LOG_INFO("Execute sample success");
     return 0;
 }
+

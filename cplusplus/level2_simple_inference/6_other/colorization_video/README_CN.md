@@ -2,139 +2,77 @@
 
 **本样例为大家学习昇腾软件栈提供参考，非商业目的！**
 
-**本样例适配3.0.0及以上版本，支持产品为Atlas200DK、Atlas300([ai1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366))。**
-
 **本README只提供命令行方式运行样例的指导，如需在Mindstudio下运行样例，请参考[Mindstudio运行视频样例wiki](https://github.com/Ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E8%A7%86%E9%A2%91%E6%A0%B7%E4%BE%8B?sort_id=3170138)。**
 
 ## 视频黑白图像上色样例
-
-功能：使用黑白图像上色模型对输入的黑白视频进行推理。。
-
-样例输入：黑白mp4视频。
-
+功能：使用黑白图像上色模型对输入的黑白视频进行推理。   
+样例输入：黑白mp4视频。    
 样例输出：presenter界面展现推理结果。
 
-### 前提条件
+### 适配要求
 
-部署此Sample前，需要准备好以下环境：
-
-- 请确认已按照[环境准备和依赖安装](../../../environment)准备好环境。
-
-- 已完成对应产品的开发环境和运行环境安装。
+本产品的适配要求如下表，如不符合适配要求，样例可能运行失败。
+| 适配项 | 适配条件 | 备注 |
+|---|---|---|
+| 适配版本 | >=5.0.4 | 已完成版本安装，版本信息请参考[版本说明](https://ascend.huawei.com/zh/#/software/cann/notice) |
+| 适配硬件 | Atlas200DK/Atlas300([ai1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366))  | 当前已在Atlas200DK和Atlas300测试通过，产品说明请参考[硬件平台](https://ascend.huawei.com/zh/#/hardware/product) |
+| 第三方依赖 | presentagent, opencv, ffmpeg+acllite| 请参考[第三方依赖安装指导（C++样例）](../../../environment)完成对应安装 |
 
 ### 软件准备
 
 1. 获取源码包。
 
-   可以使用以下两种方式下载，请选择其中一种进行源码准备。
-
-    - 命令行方式下载（下载时间较长，但步骤简单）。   
-        开发环境，非root用户命令行中执行以下命令下载源码仓。   
-       **cd $HOME**   
-       **git clone https://github.com/Ascend/samples.git**
-
+   可以使用以下两种方式下载，请选择其中一种进行源码准备。   
+    - 命令行方式下载（下载时间较长，但步骤简单）。
+       ```    
+       # 开发环境，非root用户命令行中执行以下命令下载源码仓。    
+       cd ${HOME}     
+       git clone https://github.com/Ascend/samples.git
+       ```   
     - 压缩包方式下载（下载时间较短，但步骤稍微复杂）。   
-        1. samples仓右上角选择 **克隆/下载** 下拉框并选择 **下载ZIP**。   
-        2. 将ZIP包上传到开发环境中的普通用户家目录中，例如 **$HOME/ascend-samples-master.zip**。   
-        3. 开发环境中，执行以下命令，解压zip包。   
-            **cd $HOME**   
-            **unzip ascend-samples-master.zip**
+       ``` 
+        # 1. samples仓右上角选择 【克隆/下载】 下拉框并选择 【下载ZIP】。    
+        # 2. 将ZIP包上传到开发环境中的普通用户家目录中，【例如：${HOME}/ascend-samples-master.zip】。     
+        # 3. 开发环境中，执行以下命令，解压zip包。     
+        cd ${HOME}    
+        unzip ascend-samples-master.zip
+       ```
 
-2. 获取此应用中所需要的原始网络模型。
-
-    参考下表获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到开发环境普通用户下该样例的model文件夹中，本例为：$HOME/samples/cplusplus/level2_simple_inference/6_other/colorization_video/model。
-    
+2. 获取此应用中所需要的原始网络模型。  
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
     |  colorization| 黑白视频上色推理模型。是基于Caffe的colorization模型。  |  请参考[https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/colorization/ATC_colorization_caffe_AE](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/colorization/ATC_colorization_caffe_AE)目录中README.md下载原始模型章节下载模型和权重文件。 |
 
-    ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
-    > - modelzoo中提供了转换好的om模型，但此模型不匹配当前样例，所以需要下载原始模型和权重文件后重新进行模型转换。
-
-3. 将原始模型转换为Davinci模型。
-    
-    **注：请确认环境变量已经在[环境准备和依赖安装](../../../environment)中配置完成**
-
-    1. 设置LD_LIBRARY_PATH环境变量。
-
-        由于LD_LIBRARY_PATH环境变量在转使用atc工具和运行样例时会产生冲突，所以需要在命令行单独设置此环境变量，方便修改。
-
-        **export install_path=$HOME/Ascend/ascend-toolkit/latest**
-
-        **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64**  
-
-    2. 执行以下atc命令进行模型转换。
-
-        **cd $HOME/samples/cplusplus/level2_simple_inference/6_other/colorization_video/model**  
-
-        **atc --input_shape="data_l:1,1,224,224" --weight="./colorization.caffemodel" --input_format=NCHW --output=colorization --soc_version=Ascend310 --framework=0 --model="./colorization.prototxt"**
-
-
-4. 获取样例需要的测试文件。
-
-    执行以下命令，进入样例的data文件夹中，下载对应的测试文件，完成后返回样例文件夹。
-
-    **cd $HOME/samples/cplusplus/level2_simple_inference/6_other/colorization_video/data**
-
-    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/colorization_video/black-white_video.mp4**
-
+    ```
+    # 为了方便下载，在这里直接给出原始模型下载及模型转换命令,可以直接拷贝执行。也可以参照上表在modelzoo中下载并手工转换，以了解更多细节。 
+    cd ${HOME}/samples/python/level2_simple_inference/6_other/colorization_video/model
+    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/colorization/colorization.caffemodel
+    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/colorization/colorization.prototxt
+    atc --input_shape="data_l:1,1,224,224" --weight="./colorization.caffemodel" --input_format=NCHW --output=colorization --soc_version=Ascend310 --framework=0 --model="./colorization.prototxt"
+    ```
 
 ### 样例部署
-
-1. 修改present相关配置文件。
-
-    将样例目录下**scripts/colorization.conf**中的 presenter_server_ip、presenter_view_ip 修改为开发环境中可以ping通运行环境的ip地址，使用以下两种情况举例说明。
-
-     - 使用产品为200DK开发者板。   
-        1. 开发环境中使用ifconfig查看可用ip。   
-        2. 在开发环境中将**scripts/colorization.conf**中的 presenter_server_ip、presenter_view_ip 修改为该ip地址。   
-        ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
-        > - 1.开发环境和运行环境分离部署，一般使用配置的虚拟网卡ip，例如192.168.1.223。
-        > - 2.开发环境和运行环境合一部署，一般使用200dk固定ip，例如192.168.1.2。
-
-    - 使用产品为300加速卡（ai1s云端推理环境）。   
-        1. ECS弹性云服务器控制台中查看ai1s云端环境可用内网ip，例如192.168.0.198。   
-        2. 在开发环境中将**scripts/colorization.conf**中的 presenter_server_ip、presenter_view_ip 修改为该ip地址。   
-        ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
-        > - 也可以在ai1s云端环境中使用ifconfig查看内网ip。
-        > - 登录ai1s云端环境时的ip地址为此环境的公网ip，ai1s云端环境中ifconfig查看到的ip为此环境的内网ip。
- 
-
-
-2. 执行以下命令，执行编译脚本，开始样例编译。
-
-    cd $HOME/samples/cplusplus/level2_simple_inference/6_other/colorization_video /scripts
-
-    bash sample_build.sh
-
+执行以下命令，执行编译脚本，开始样例编译。
+```
+cd $HOME/samples/cplusplus/level2_simple_inference/6_other/colorization_video /scripts
+bash sample_build.sh
+```
 
 ### 样例运行
 
-![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
-> - 以下出现的**xxx.xxx.xxx.xxx**为运行环境ip，200DK在USB连接时一般为192.168.1.2，300（ai1s）为对应的公网ip。
+**注：开发环境与运行环境合一部署，请跳过步骤1，直接执行[步骤2](#step_2)即可。**   
 
-1. 执行以下命令,将开发环境的 **colorization_video** 目录上传到运行环境中，例如 **/home/HwHiAiUser**。   
-
-    **开发环境与运行环境合一部署，请跳过此步骤！**   
-
-    **scp -r $HOME/samples/cplusplus/level2_simple_inference/6_other/colorization_video HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
-
-2. 登录运行环境。
-
-    - 使用产品为200DK开发者板。   
-        1. 执行以下命令登录运行环境。   
-            **开发环境与运行环境合一部署，请跳过此步骤！**   
-            **ssh HwHiAiUser@xxx.xxx.xxx.xxx** 
-
-    - 使用产品为300加速卡（ai1s云端推理环境）。   
-        1. 执行以下命令登录运行环境。   
-           **开发环境与运行环境合一部署，请跳过此步骤！**   
-           **ssh HwHiAiUser@xxx.xxx.xxx.xxx**    
-
-3. 执行运行脚本，开始样例运行。
-
-bash sample_run.sh
-
+1. 执行以下命令,将开发环境的 **colorization_video** 目录上传到运行环境中，例如 **/home/HwHiAiUser**，并以HwHiAiUser（运行用户）登录运行环境（Host）。      
+    ```
+    # 【xxx.xxx.xxx.xxx】为运行环境ip，200DK在USB连接时一般为192.168.1.2，300（ai1s）为对应的公网ip。
+    scp -r ${HOME}/samples/cplusplus/level2_simple_inference/6_other/colorization_video HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser    
+    ssh HwHiAiUser@xxx.xxx.xxx.xxx     
+    cd ${HOME}/colorization_video/scripts
+    ```    
+2. 执行运行脚本，开始样例运行。
+    ```
+    bash sample_run.sh
+    ```
 ### 查看结果
 
 1. 打开presentserver网页界面。

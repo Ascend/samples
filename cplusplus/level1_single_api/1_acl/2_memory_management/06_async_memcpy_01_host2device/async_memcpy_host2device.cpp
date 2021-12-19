@@ -37,17 +37,17 @@ aclError init_fromwork()
 {
 	aclError ret = 0;
 	// 初始化acl框架 set device和创建ctx
-	ret = aclInit("./acl.json");					if (ret != ACL_ERROR_NONE){printf("acl init failed %d\n",ret);return -1;}					else{printf("acl init success \n");}
-	ret = aclrtSetDevice(device_id);				if(ret!=ACL_ERROR_NONE){printf("aclrtSetDevice fail! %d \n",ret);return -1;}				else{printf("set device success \n");}
-	ret = aclrtCreateContext(&context, device_id);	if(ret!=ACL_ERROR_NONE){printf("create ctx fail! %d \n",ret);return -1;}					else{printf("create context success \n");}
-	ret = aclrtSetCurrentContext(context);			if(ret!=ACL_ERROR_NONE){printf("set thread to current context fail! \n");return -1;}		else{printf("set contex success \n");}
-	ret = aclrtCreateStream(&stream);				if(ret!=ACL_ERROR_NONE){printf("create stream fail! \n");return -1;}						else{printf("create stream success \n");}
+	ret = aclInit("./acl.json");					if (ret != ACL_SUCCESS){printf("acl init failed %d\n",ret);return -1;}					else{printf("acl init success \n");}
+	ret = aclrtSetDevice(device_id);				if(ret!=ACL_SUCCESS){printf("aclrtSetDevice fail! %d \n",ret);return -1;}				else{printf("set device success \n");}
+	ret = aclrtCreateContext(&context, device_id);	if(ret!=ACL_SUCCESS){printf("create ctx fail! %d \n",ret);return -1;}					else{printf("create context success \n");}
+	ret = aclrtSetCurrentContext(context);			if(ret!=ACL_SUCCESS){printf("set thread to current context fail! \n");return -1;}		else{printf("set contex success \n");}
+	ret = aclrtCreateStream(&stream);				if(ret!=ACL_SUCCESS){printf("create stream fail! \n");return -1;}						else{printf("create stream success \n");}
 	
 	// 申请主机和device的内存
-	ret = aclrtMallocHost(&src_buffer, copy_len);	if(ret!=ACL_ERROR_NONE){printf("rt malloc host fail! \n");return -1;}						else{printf("malloc host success \n");}
+	ret = aclrtMallocHost(&src_buffer, copy_len);	if(ret!=ACL_SUCCESS){printf("rt malloc host fail! \n");return -1;}						else{printf("malloc host success \n");}
 	ret = aclrtMalloc(&dst_buffer, copy_len,ACL_MEM_MALLOC_HUGE_FIRST);	    
-													if(ret!=ACL_ERROR_NONE){printf("rt malloc device fail! \n");return -1;}						else{printf("malloc device success \n");}
-	return ACL_ERROR_NONE;
+													if(ret!=ACL_SUCCESS){printf("rt malloc device fail! \n");return -1;}						else{printf("malloc device success \n");}
+	return ACL_SUCCESS;
 }
 
 aclError uninit_formwork()
@@ -55,33 +55,33 @@ aclError uninit_formwork()
 	//释放主机上的内存
 	if(src_buffer != nullptr){aclrtFreeHost(src_buffer);}
 	if(dst_buffer != nullptr){aclrtFree(dst_buffer);}
-	ret = aclrtDestroyStream(stream);				if(ret!=ACL_ERROR_NONE){printf("destroy stream fail! \n");}									else{printf("destroy stream success \n");}
-	ret = aclrtDestroyContext(context);				if(ret!=ACL_ERROR_NONE){printf("destroy context fail! \n");}								else{printf("destroy context success \n");}
-	ret = aclrtResetDevice(device_id);				if(ret!=ACL_ERROR_NONE){printf("reset device fail! \n");}									else{printf("reset device success \n");}
-	ret = aclFinalize();							if(ret!=ACL_ERROR_NONE){printf("aclFinalize fail! \n");}					    			else{printf("aclFinalize success \n");}
-	return ACL_ERROR_NONE;
+	ret = aclrtDestroyStream(stream);				if(ret!=ACL_SUCCESS){printf("destroy stream fail! \n");}									else{printf("destroy stream success \n");}
+	ret = aclrtDestroyContext(context);				if(ret!=ACL_SUCCESS){printf("destroy context fail! \n");}								else{printf("destroy context success \n");}
+	ret = aclrtResetDevice(device_id);				if(ret!=ACL_SUCCESS){printf("reset device fail! \n");}									else{printf("reset device success \n");}
+	ret = aclFinalize();							if(ret!=ACL_SUCCESS){printf("aclFinalize fail! \n");}					    			else{printf("aclFinalize success \n");}
+	return ACL_SUCCESS;
 }
 
 aclError copy_to_device()
 {
 	ret = aclrtMemcpyAsync(dst_buffer, copy_len, src_buffer, copy_len, ACL_MEMCPY_HOST_TO_DEVICE, stream);
-	if(ret != ACL_ERROR_NONE){printf("Memcpy Async  fail! \n");return -1;} 																		else{printf("destroy stream success \n");};
+	if(ret != ACL_SUCCESS){printf("Memcpy Async  fail! \n");return -1;} 																		else{printf("destroy stream success \n");};
 	
-	ret = aclrtSynchronizeStream(stream);			if(ret!=ACL_ERROR_NONE){printf("sync stream fail! %d \n",ret);return -1;}					else{printf("sync stream success \n");};
-	return ACL_ERROR_NONE;
+	ret = aclrtSynchronizeStream(stream);			if(ret!=ACL_SUCCESS){printf("sync stream fail! %d \n",ret);return -1;}					else{printf("sync stream success \n");};
+	return ACL_SUCCESS;
 }
 
 // l1 用例设计尽量简单,单个文件 解释清楚, 如果使用公共函数需要在头文件出写注释.
 // 根本用例描述如何使用异步拷贝功能将数据拷贝到到device上
 aclError main(int argc,char *argv[]){
 	// 准备工作 封装到函数中 明确准备内容
-	if(init_fromwork() != ACL_ERROR_NONE){printf("main init_fromwork failed !\n");return ACL_ERROR_UNINITIALIZE;}								else{printf("main init_fromwork success \n");}
+	if(init_fromwork() != ACL_SUCCESS){printf("main init_fromwork failed !\n");return ACL_ERROR_UNINITIALIZE;}								else{printf("main init_fromwork success \n");}
 
 	// 要展示的功能可以封装函数也可以直接放到main函数中直接写突出展示内容和返回效果.
 	//展示拷贝功能
-	if(copy_to_device() != ACL_ERROR_NONE){printf("copy_to_device failed !\n");return ACL_ERROR_UNINITIALIZE;}									else{printf("memcopy to device success \n");}
+	if(copy_to_device() != ACL_SUCCESS){printf("copy_to_device failed !\n");return ACL_ERROR_UNINITIALIZE;}									else{printf("memcopy to device success \n");}
 
 	// 收尾工作 封装到函数中 明确资源回收和其他动作
-	if(uninit_formwork() !=ACL_ERROR_NONE){printf("uninit_formwork fail! \n");return -1;}														else{printf("uninit_formwork success\n");}
-	return ACL_ERROR_NONE;
+	if(uninit_formwork() !=ACL_SUCCESS){printf("uninit_formwork fail! \n");return -1;}														else{printf("uninit_formwork success\n");}
+	return ACL_SUCCESS;
 }

@@ -26,8 +26,8 @@ import cv2
 import datetime
 import argparse
 
-from atlas_utils.acl_model import Model
-from atlas_utils.acl_resource import AclResource 
+from acllite_model import AclLiteModel
+from acllite_resource import AclLiteResource 
 
 
 def PostProcessing(image, resultList, threshold=0.6):
@@ -90,7 +90,7 @@ if __name__ == '__main__':
 	img_file = args.input_image
 
 	# initialize acl resource
-	acl_resource = AclResource()
+	acl_resource = AclLiteResource()
 	acl_resource.init()
 
 	#load model
@@ -98,10 +98,10 @@ if __name__ == '__main__':
 	MODEL_PATH = os.path.join(PROJECT_SRC_PATH, "../model/" + model_name + ".om")
 	print("MODEL_PATH:", MODEL_PATH)
 	try:
-		model = Model(MODEL_PATH)
-		# model = Model(acl_resource, MODEL_PATH)
+		model = AclLiteModel(MODEL_PATH)
+		# model = AclLiteModel(acl_resource, MODEL_PATH)
 	except Exception as e:
-		print("Model loads error from", MODEL_PATH)
+		print("AclLiteModel loads error from", MODEL_PATH)
 
 	# load image file 
 	img_path = os.path.join(path, args.input_image)

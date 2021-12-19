@@ -27,9 +27,9 @@
 #include <unistd.h>
 
 #include "gesture_detect.h"
-#include "atlasutil/atlas_utils.h"
-#include "atlasutil/atlas_error.h"
-#include "atlasutil/acl_device.h"
+#include "acllite/AclLiteUtils.h"
+#include "acllite/AclLiteError.h"
+#include "acllite/AclLiteResource.h"
 using namespace std;
 int gSuccessNum = -4;
 namespace {
@@ -43,7 +43,7 @@ std::shared_ptr<EngineTransNewT> gMotionDataNew = std::make_shared<EngineTransNe
 int gImageNum = 0;
 
 // Standardized bone key point sequence
-AtlasError ProcessOpenPoseData(){
+AclLiteError ProcessOpenPoseData(){
     float tempLeft = 128;
     float tempRight = 0;
     float tempTop = 128;
@@ -66,11 +66,11 @@ AtlasError ProcessOpenPoseData(){
             gMotionDataNew->data[0][1][picNum][key_num] /= totalBottom;
         }
     }
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
 // Save the data of input action recognition models
-AtlasError SaveData(){
+AclLiteError SaveData(){
     string fileName = "./data/" + to_string(gImageNum) + "_raw_data.txt";
     ofstream file;
     file.open(fileName.c_str(), ios::trunc);
@@ -82,24 +82,24 @@ AtlasError SaveData(){
         }
     }
     file.close();
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
 int main(int argc, char *argv[]) {
 
     //init acl resource
-    AclDevice aclDev;
-    AtlasError ret = aclDev.Init();
+    AclLiteResource aclDev;
+    AclLiteError ret = aclDev.Init();
     if (ret) {
-        ATLAS_LOG_ERROR("Init resource failed, error %d", ret);
-        return ATLAS_ERROR;
+        ACLLITE_LOG_ERROR("Init resource failed, error %d", ret);
+        return ACLLITE_ERROR;
     }  
     
     GestureDetect detect(kOpenPoseModelPath, kGestureModelPath, 
                          kOpenPoseModelWidth, kOpenPoseModelHeight);
     ret = detect.Init();
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Classification Init resource failed");
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Classification Init resource failed");
         return 1;
     }
 
@@ -115,31 +115,31 @@ int main(int argc, char *argv[]) {
         }
 
         ret = ReadJpeg(image, imageFile);
-        if (ret != ATLAS_OK){
+        if (ret != ACLLITE_OK){
             continue;
         }
         if (image.data == nullptr) {
-            ATLAS_LOG_ERROR("Read image %s failed", imageFile.c_str());
+            ACLLITE_LOG_ERROR("Read image %s failed", imageFile.c_str());
             return 1;
         }
         //Preprocessing image: read the image and zoom it to the size required by the model input
         ImageData resizedImage;
         ret = detect.Preprocess(resizedImage, image);
-        if (ret != ATLAS_OK) {
-            ATLAS_LOG_ERROR("Read file %s failed, continue to read next", imageFile.c_str());
+        if (ret != ACLLITE_OK) {
+            ACLLITE_LOG_ERROR("Read file %s failed, continue to read next", imageFile.c_str());
             continue;
         }
         //The preprocessed images are sent to the openpose model for inference, and the openpose inference results are obtained
         std::vector<InferenceOutput> inferenceOutput;
         ret = detect.OpenPoseInference(inferenceOutput, resizedImage);
-        if (ret != ATLAS_OK) {
-            ATLAS_LOG_ERROR("Inference model inference output data failed");
+        if (ret != ACLLITE_OK) {
+            ACLLITE_LOG_ERROR("Inference model inference output data failed");
             return 1;
         }
 
         // Analysis of openpose inference output
         ret = detect.Postprocess(image, inferenceOutput, gMotionDataNew, gSuccessNum);
-        if (ret != ATLAS_OK) {
+        if (ret != ACLLITE_OK) {
             continue;
         }
         // Every five frames are updated for action recognition
@@ -150,14 +150,14 @@ int main(int argc, char *argv[]) {
             std::vector<InferenceOutput> gestureOutput;
 
             ret = detect.GestureInference(gestureOutput, gMotionDataNew);
-            if (ret != ATLAS_OK) {
-                ATLAS_LOG_ERROR("Inference model inference output data failed");
+            if (ret != ACLLITE_OK) {
+                ACLLITE_LOG_ERROR("Inference model inference output data failed");
                 return 1;
             }
             // post processing
             ret = detect.PostGestureProcess(gestureOutput);
-            if (ret != ATLAS_OK) {
-                ATLAS_LOG_ERROR("Process model inference output data failed");
+            if (ret != ACLLITE_OK) {
+                ACLLITE_LOG_ERROR("Process model inference output data failed");
                 break;
             }
         }

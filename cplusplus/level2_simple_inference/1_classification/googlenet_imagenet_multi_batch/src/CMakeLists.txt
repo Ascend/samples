@@ -4,7 +4,7 @@
 cmake_minimum_required(VERSION 3.5.1)
 
 # project information
-project(MultiBatch)
+project(googlenet_imagenet_multi_batch)
 
 # Compile options
 add_compile_options(-std=c++11)
@@ -14,20 +14,44 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY  "../../../out")
 set(CMAKE_CXX_FLAGS_DEBUG "-fPIC -O0 -g -Wall")
 set(CMAKE_CXX_FLAGS_RELEASE "-fPIC -O2 -Wall")
 
+if (NOT DEFINED ENV{INSTALL_DIR})
+    message(FATAL_ERROR "Not Defined INSTALL_DIR")
+endif()
+
+if (NOT DEFINED ENV{THIRDPART_PATH})
+    message(FATAL_ERROR "Not Defined THIRDPART_PATH")
+endif()
+
+if (NOT DEFINED ENV{CPU_ARCH})
+    message(FATAL_ERROR "Not Defined CPU_ARCH")
+endif()
+
+if($ENV{CPU_ARCH} MATCHES "aarch64")
+    message("arm architecture detected")
+    if(EXISTS "$ENV{INSTALL_DIR}/driver/libmedia_mini.so")
+        message("target aarch64 200dk")
+    else()
+        message("target aarch64 300")
+    endif()
+else()
+    message("x86 architecture detected")
+    message("target x86 300")
+endif()
+
 # Header path
 include_directories(
-$ENV{DDK_PATH}/acllib/include/
+    $ENV{INSTALL_DIR}/acllib/include/
     ../inc/
-)
+    )
 
 if(target STREQUAL "Simulator_Function")
     add_compile_options(-DFUNC_SIM)
 endif()
 
 # add host lib path
-link_directories($ENV{NPU_HOST_LIB})
-
-SET(CMAKE_EXE_LINKER_FLAGS "-Wl,-rpath-link,$ENV{NPU_HOST_LIB}")
+link_directories(
+    $ENV{INSTALL_DIR}/runtime/lib64/stub
+    )
 
 add_executable(main main.cpp)
 

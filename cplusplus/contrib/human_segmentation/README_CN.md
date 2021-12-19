@@ -14,90 +14,81 @@
 
 样例输出：presenter界面展现推理结果。
 
-### 前提条件
+## 适配要求
 
-部署此Sample前，需要准备好以下环境：
+本产品的适配要求如下表，如不符合适配要求，样例可能运行失败。
 
-- 请确认已按照[环境准备和依赖安装](../../../environment)准备好环境。
-
-- 已完成对应产品的开发环境和运行环境安装。
+| 适配项     | 适配条件                                                     | 备注                                                         |
+| ---------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| 适配版本   | >=5.0.4                                                    | 已完成版本安装，版本信息请参考[版本说明](https://ascend.huawei.com/zh/#/software/cann/notice) |
+| 适配硬件   | Atlas200DK/Atlas300([ai1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366)) | 当前已在Atlas200DK和Atlas300测试通过，产品说明请参考[硬件平台](https://ascend.huawei.com/zh/#/hardware/product) |
+| 第三方依赖 | presentagent, opencv, ffmpeg+acllite                         | 请参考[第三方依赖安装指导（C++样例）](../../../environment)完成对应安装 |
 
 ### 软件准备
 
 1. 获取源码包。
 
-   可以使用以下两种方式下载，请选择其中一种进行源码准备。
+   可以使用以下两种方式下载，请选择其中一种进行源码准备。   
 
-    - 命令行方式下载（下载时间较长，但步骤简单）。   
-        开发环境，非root用户命令行中执行以下命令下载源码仓。   
-       **cd $HOME**   
-       **git clone https://github.com/Ascend/samples.git**
+    - 命令行方式下载（下载时间较长，但步骤简单）。
+
+      ```    
+      # 开发环境，非root用户命令行中执行以下命令下载源码仓。    
+      cd ${HOME}     
+      git clone https://github.com/Ascend/samples.git
+      ```
 
     - 压缩包方式下载（下载时间较短，但步骤稍微复杂）。   
-        1. samples仓右上角选择 **克隆/下载** 下拉框并选择 **下载ZIP**。   
-        2. 将ZIP包上传到开发环境中的普通用户家目录中，例如 **$HOME/ascend-samples-master.zip**。   
-        3. 开发环境中，执行以下命令，解压zip包。   
-            **cd $HOME**   
-            **unzip ascend-samples-master.zip**
 
-2. 获取此应用中所需要的原始网络模型。
+      ``` 
+       # 1. samples仓右上角选择 【克隆/下载】 下拉框并选择 【下载ZIP】。    
+       # 2. 将ZIP包上传到开发环境中的普通用户家目录中，【例如：${HOME}/ascend-samples-master.zip】。     
+       # 3. 开发环境中，执行以下命令，解压zip包。     
+       cd ${HOME}    
+       unzip ascend-samples-master.zip
+      ```
 
-    参考下表获取此应用中所用到的原始网络模型和权重文件，并将其存放到开发环境普通用户下该样例的model文件夹中，本例为：$HOME/samples/samples/cplusplus/contrib/human_segmentation/model。
-    
+2. 模型转换。
+
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
     |  human_segmentation| 人体语义分割推理模型。是基于Tensorflow的语义分割模型。  |  请参考[https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/human_segmentation/ATC_human_segmentation_tf_AE](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/human_segmentation/ATC_human_segmentation_tf_AE)目录中README.md下载原始模型章节下载模型和权重文件配置文件。 |
 
-    ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
-    > - modelzoo中提供了转换好的om模型，但此模型不匹配当前样例，所以需要下载原始模型和权重文件后重新进行模型转换。
-
-3. 将原始模型转换为Davinci模型。
+    ```
+    # 为了方便下载，在这里直接给出原始模型下载及模型转换命令,可以直接拷贝执行。也可以参照上表在modelzoo中下载并手工转换，以了解更多细节。     
     
-    **注：请确认环境变量已经在[环境准备和依赖安装](../../../environment)中配置完成**
-
-    1. 设置LD_LIBRARY_PATH环境变量。
-
-        由于LD_LIBRARY_PATH环境变量在转使用atc工具和运行样例时会产生冲突，所以需要在命令行单独设置此环境变量，方便修改。
-
-        **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64**  
-
-    2. 执行以下atc命令进行模型转换。
-
-        **cd $HOME/samples/cplusplus/contrib/human_segmentation/model**  
-
-        **atc --input_shape="input_rgb:1,512,512,3" --input_format=NHWC --output=human_segmentation --soc_version=Ascend310 --insert_op_conf=./insert_op.cfg --framework=3 --model=./human_segmentation.pb**
-
-
+    cd $HOME/samples/cplusplus/contrib/human_segmentation/model    
+    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/human_segmentation/human_segmentation.pb   
+    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/human_segmentation/insert_op.cfg
+    atc --input_shape="input_rgb:1,512,512,3" --input_format=NHWC --output=human_segmentation --soc_version=Ascend310 --insert_op_conf=./insert_op.cfg --framework=3 --model=./human_segmentation.pb
+    ```
 
 
 ### 样例部署
 
-1. 执行以下命令，执行编译脚本，开始样例编译。
+执行以下命令，执行编译脚本，开始样例编译。   
 
-cd $HOME/samples/cplusplus/contrib/human_segmentation/scripts
-
+```
+cd  $HOME/samples/cplusplus/contrib/human_segmentation/scripts    
 bash sample_build.sh
-
-
+```
 
 ### 样例运行
 
-![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
-> - 以下出现的**xxx.xxx.xxx.xxx**为运行环境ip，200DK在USB连接时一般为192.168.1.2，300（ai1s）为对应的公网ip。
+1. 执行以下命令,将开发环境的 **human_segmentation** 目录上传到运行环境中，例如 **/home/HwHiAiUser**，并以HwHiAiUser（运行用户）登录运行环境（Host）。    
 
-1. 执行以下命令,将开发环境的 **human_segmentation** 目录上传到运行环境中，例如 **/home/HwHiAiUser**。   
+   ```
+   # 【xxx.xxx.xxx.xxx】为运行环境ip，200DK在USB连接时一般为192.168.1.2，300（ai1s）为对应的公网ip。
+   scp -r $HOME/samples/cplusplus/contrib/human_segmentation HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser    
+   ssh HwHiAiUser@xxx.xxx.xxx.xxx     
+   cd $HOME/samples/cplusplus/contrib/human_segmentation/scripts
+   ```
 
-    **开发环境与运行环境合一部署，请跳过此步骤！**   
+2. <a name="step_2"></a>执行运行脚本，开始样例运行。         
 
-    **scp -r $HOME/samples/cplusplus/contrib/human_segmentation HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
-
-
-
-2.执行运行脚本，开始样例运行。
-
-bash sample_run.sh
-
-  
+   ```
+   bash sample_run.sh
+   ```
 
 ### 查看结果
 
@@ -105,17 +96,17 @@ bash sample_run.sh
 
    - 使用产品为200DK开发者板。
 
-      打开启动Presenter Server服务时提示的URL即可。
-      
+     打开启动Presenter Server服务时提示的URL即可。
+   
    - 使用产品为300加速卡（ai1s云端推理环境）。
 
-      **以300加速卡（ai1s）内网ip为192.168.0.194，公网ip为124.70.8.192举例说明。**
+     **以300加速卡（ai1s）内网ip为192.168.0.194，公网ip为124.70.8.192举例说明。**
 
-      启动Presenter Server服务时提示为Please visit http://192.168.0.194:7009 for display server。
+     启动Presenter Server服务时提示为Please visit http://192.168.0.194:7009 for display server。
 
-      只需要将URL中的内网ip：192.168.0.194替换为公网ip：124.70.8.192，则URL为 http://124.70.8.192:7009。
+     只需要将URL中的内网ip：192.168.0.194替换为公网ip：124.70.8.192，则URL为 http://124.70.8.192:7009。
 
-      然后在windows下的浏览器中打开URL即可。
+     然后在windows下的浏览器中打开URL即可。
 
 2. 等待Presenter Agent传输数据给服务端，单击“Refresh“刷新，当有数据时相应的Channel 的Status变成绿色。
 

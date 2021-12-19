@@ -26,7 +26,7 @@ Result Utils::ReadFile(uint32_t fileLen, FILE *fp, aclrtRunMode &runMode, void *
         }
     } else {
         auto aclRet = acldvppMalloc(&dataHost, fileLen);
-        if (aclRet != ACL_ERROR_NONE) {
+        if (aclRet != ACL_SUCCESS) {
             ERROR_LOG("acl malloc dvpp data failed, dataSize = %u, errorCode = %d.",
                 fileLen, static_cast<int32_t>(aclRet));
             return FAILED;
@@ -75,7 +75,7 @@ Result Utils::VpcReadFileToDeviceMem(const char *fileName, void *&dataDev, uint3
     // runMode is ACL_HOST which represents app is running in host
     // runMode is ACL_DEVICE which represents app is running in device
     auto aclRet = aclrtGetRunMode(&runMode);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("aclrtGetRunMode failed, errorCode = %d", static_cast<int32_t>(aclRet));
         return FAILED;
     }
@@ -91,7 +91,7 @@ Result Utils::VpcReadFileToDeviceMem(const char *fileName, void *&dataDev, uint3
     dataSize = fileLen;
     // Malloc input device memory
     aclRet = acldvppMalloc(&dataDev, dataSize);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("acl malloc dvpp data failed, dataSize = %u, errorCode = %d.",
             dataSize, static_cast<int32_t>(aclRet));
         if (runMode == ACL_HOST) {
@@ -103,7 +103,7 @@ Result Utils::VpcReadFileToDeviceMem(const char *fileName, void *&dataDev, uint3
     }
     // copy input to device memory
     aclRet = aclrtMemcpy(dataDev, dataSize, dataHost, fileLen, copyKind);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("acl memcpy data to dev failed, fileLen = %u, errorCode = %d.",
             fileLen, static_cast<int32_t>(aclRet));
         if (runMode == ACL_HOST) {
@@ -128,7 +128,7 @@ Result Utils::WriteToFile(const char *fileName, const void *dataDev, uint32_t da
 {
     aclrtRunMode runMode;
     auto aclRet = aclrtGetRunMode(&runMode);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("aclrtGetRunMode failed.");
         return FAILED;
     }
@@ -141,7 +141,7 @@ Result Utils::WriteToFile(const char *fileName, const void *dataDev, uint32_t da
     } else {
         aclRet = acldvppMalloc(&dataHost, dataSize);
     }
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("acl malloc data failed, dataSize = %u, errorCode = %d.",
             dataSize, static_cast<int32_t>(aclRet));
         return FAILED;
@@ -154,7 +154,7 @@ Result Utils::WriteToFile(const char *fileName, const void *dataDev, uint32_t da
 
     // copy output to host memory
     aclRet = aclrtMemcpy(dataHost, dataSize, dataDev, dataSize, copyKind);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("acl memcpy data to host failed, dataSize=%u, errorCode = %d.",
             dataSize, static_cast<int32_t>(aclRet));
         if (runMode == ACL_HOST) {

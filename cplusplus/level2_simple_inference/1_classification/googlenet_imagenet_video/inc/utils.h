@@ -17,13 +17,11 @@
 * Description: handle file operations
 */
 #pragma once
+#include <memory>
 #include <iostream>
 #include <vector>
 #include "acl/acl.h"
 #include <opencv2/opencv.hpp>
-#include "opencv2/imgcodecs/legacy/constants_c.h"
-#include "opencv2/imgproc/types_c.h"
-
 
 #define INFO_LOG(fmt, args...) fprintf(stdout, "[INFO]  " fmt "\n", ##args)
 #define WARN_LOG(fmt, args...) fprintf(stdout, "[WARN]  " fmt "\n", ##args)

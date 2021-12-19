@@ -20,10 +20,10 @@
 #include <pthread.h>
 #include "acl/acl.h"
 #include <time.h>
-#include "atlasutil/atlas_model.h"
+#include "acllite/AclLiteModel.h"
 #include "object_detect.h"
 #include "opencv2/opencv.hpp"
-#include "opencv2/imgcodecs/legacy/constants_c.h"
+
 
 using namespace std;
 
@@ -39,12 +39,12 @@ ObjectDetect::~ObjectDetect() {
     DestroyResource();
 }
 
-AtlasError ObjectDetect::CreateInput() {
+AclLiteError ObjectDetect::CreateInput() {
     //Request image data memory for input model
     aclError aclRet = aclrtMalloc(&imageDataBuf_, (size_t)(imageDataSize_), ACL_MEM_MALLOC_HUGE_FIRST);
-    if (aclRet != ACL_ERROR_NONE) {
-        ATLAS_LOG_ERROR("malloc device data buffer failed, aclRet is %d", aclRet);
-        return ATLAS_ERROR;
+    if (aclRet != ACL_SUCCESS) {
+        ACLLITE_LOG_ERROR("malloc device data buffer failed, aclRet is %d", aclRet);
+        return ACLLITE_ERROR;
     }
 
     //The second input to Yolov3 is the input image width and height parameter
@@ -54,71 +54,71 @@ AtlasError ObjectDetect::CreateInput() {
     imageInfoBuf_ = CopyDataToDevice((void *)imageInfo, imageInfoSize_,
                                         runMode_, MEMORY_DEVICE);
     if (imageInfoBuf_ == nullptr) {
-        ATLAS_LOG_ERROR("Copy image info to device failed");
-        return ATLAS_ERROR;
+        ACLLITE_LOG_ERROR("Copy image info to device failed");
+        return ACLLITE_ERROR;
     }
 
-    AtlasError ret = model_.CreateInput(imageDataBuf_, imageDataSize_, 
+    AclLiteError ret = model_.CreateInput(imageDataBuf_, imageDataSize_, 
                                         imageInfoBuf_, imageInfoSize_);
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Create mode input dataset failed");
-        return ATLAS_ERROR;
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Create mode input dataset failed");
+        return ACLLITE_ERROR;
     }
 
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
-AtlasError ObjectDetect::Init() {
+AclLiteError ObjectDetect::Init() {
     //If it is already initialized, it is returned
     if (isInited_) {
-        ATLAS_LOG_INFO("Classify instance is initied already!");
-        return ATLAS_OK;
+        ACLLITE_LOG_INFO("Classify instance is initied already!");
+        return ACLLITE_OK;
     }
 
     //Gets whether the current application is running on host or Device
-    AtlasError ret = aclrtGetRunMode(&runMode_);
-    if (ret != ACL_ERROR_NONE) {
-        ATLAS_LOG_ERROR("acl get run mode failed");
-        return ATLAS_ERROR;
+    AclLiteError ret = aclrtGetRunMode(&runMode_);
+    if (ret != ACL_SUCCESS) {
+        ACLLITE_LOG_ERROR("acl get run mode failed");
+        return ACLLITE_ERROR;
     }
 
     //Initializes the model management instance
     ret = model_.Init(modelPath_);
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Init model failed");
-        return ATLAS_ERROR;
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Init model failed");
+        return ACLLITE_ERROR;
     }
 
     imageDataSize_ = model_.GetModelInputSize(0);
 
     ret = CreateInput();
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Create model input failed");
-        return ATLAS_ERROR;
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Create model input failed");
+        return ACLLITE_ERROR;
     }
 
     isInited_ = true;
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
-AtlasError ObjectDetect::Inference(std::vector<InferenceOutput>& inferenceOutput, cv::Mat& reiszeMat) {
+AclLiteError ObjectDetect::Inference(std::vector<InferenceOutput>& inferenceOutput, cv::Mat& reiszeMat) {
 
-    AtlasError ret = CopyDataToDeviceEx(imageDataBuf_, imageDataSize_, 
+    AclLiteError ret = CopyDataToDeviceEx(imageDataBuf_, imageDataSize_, 
                               reiszeMat.ptr<uint8_t>(), imageDataSize_, 
                               runMode_);
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Copy resized image data to device failed.");
-        return ATLAS_ERROR;
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Copy resized image data to device failed.");
+        return ACLLITE_ERROR;
     }
     //Perform reasoning
     ret = model_.Execute(inferenceOutput);
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Execute model inference failed");
-        return ATLAS_ERROR;
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Execute model inference failed");
+        return ACLLITE_ERROR;
     }
-    ATLAS_LOG_INFO("Execute model inference success");
+    ACLLITE_LOG_INFO("Execute model inference success");
 
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
 void ObjectDetect::DestroyResource()

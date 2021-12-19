@@ -42,7 +42,7 @@ bool Utils::ReadFileToDeviceMem(const char *fileName, void *&dataDev, uint32_t &
     size_t readSize;
     // Malloc input device memory
     auto aclRet = acldvppMalloc(&dataDev, dataSize);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("acl malloc dvpp data failed, dataSize = %u, errorCode = %d.",
             dataSize, static_cast<int32_t>(aclRet));
         fclose(fp);
@@ -73,7 +73,7 @@ bool Utils::ReadFileToDeviceMem(const char *fileName, void *&dataDev, uint32_t &
 
         // copy input to device memory
         aclRet = aclrtMemcpy(dataDev, dataSize, dataHost, fileLen, ACL_MEMCPY_HOST_TO_DEVICE);
-        if (aclRet != ACL_ERROR_NONE) {
+        if (aclRet != ACL_SUCCESS) {
             ERROR_LOG("acl memcpy data to dev failed, fileLen = %u, errorCode = %d.",
                 fileLen, static_cast<int32_t>(aclRet));
             (void)aclrtFreeHost(dataHost);
@@ -116,7 +116,7 @@ bool Utils::WriteDeviceMemoryToFile(const char *fileName, void *dataDev, uint32_
             return false;
         }
         aclRet = aclrtMemcpy(data, dataSize, dataDev, dataSize, ACL_MEMCPY_DEVICE_TO_HOST);
-        if (aclRet != ACL_ERROR_NONE) {
+        if (aclRet != ACL_SUCCESS) {
             ERROR_LOG("acl memcpy data to host failed, dataSize=%u, ret=%d.", dataSize, aclRet);
             (void)aclrtFreeHost(data);
             return false;
@@ -180,14 +180,14 @@ Result Utils::PullModelOutputData(aclmdlDataset *modelOutput, const char *fileNa
         aclError ret;
         if (!(RunStatus::GetDeviceStatus())) { // app is running in host
             ret = aclrtMallocHost(&dataPtr, bufferSize);
-            if (ret !=  ACL_ERROR_NONE) {
+            if (ret !=  ACL_SUCCESS) {
                 ERROR_LOG("malloc host data buffer failed, errorCode = %d.", static_cast<int32_t>(ret));
                 fclose(outputFile);
                 return FAILED;
             }
             // if app is running in host, need copy model output data from device to host
             ret = aclrtMemcpy(dataPtr, bufferSize, data, bufferSize, ACL_MEMCPY_DEVICE_TO_HOST);
-            if (ret != ACL_ERROR_NONE) {
+            if (ret != ACL_SUCCESS) {
                 (void)aclrtFreeHost(dataPtr);
                 ERROR_LOG("memcpy device to host failed, errorCode = %d.", static_cast<int32_t>(ret));
             }

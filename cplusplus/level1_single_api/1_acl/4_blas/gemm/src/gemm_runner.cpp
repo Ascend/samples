@@ -56,27 +56,27 @@ GemmRunner::~GemmRunner()
 
 bool GemmRunner::Init()
 {
-    if (aclrtMalloc((void **) &devMatrixA_, sizeA_, ACL_MEM_MALLOC_NORMAL_ONLY) != ACL_ERROR_NONE) {
+    if (aclrtMalloc((void **) &devMatrixA_, sizeA_, ACL_MEM_MALLOC_NORMAL_ONLY) != ACL_SUCCESS) {
         ERROR_LOG("malloc device memory for matrix A failed");
         return false;
     }
 
-    if (aclrtMalloc((void **) &devMatrixB_, sizeB_, ACL_MEM_MALLOC_NORMAL_ONLY) != ACL_ERROR_NONE) {
+    if (aclrtMalloc((void **) &devMatrixB_, sizeB_, ACL_MEM_MALLOC_NORMAL_ONLY) != ACL_SUCCESS) {
         ERROR_LOG("malloc device memory for matrix B failed");
         return false;
     }
 
-    if (aclrtMalloc((void **) &devMatrixC_, sizeC_, ACL_MEM_MALLOC_NORMAL_ONLY) != ACL_ERROR_NONE) {
+    if (aclrtMalloc((void **) &devMatrixC_, sizeC_, ACL_MEM_MALLOC_NORMAL_ONLY) != ACL_SUCCESS) {
         ERROR_LOG("malloc device memory for matrix C failed");
         return false;
     }
 
-    if (aclrtMalloc((void **) &devAlpha_, sizeAlphaBeta_, ACL_MEM_MALLOC_NORMAL_ONLY) != ACL_ERROR_NONE) {
+    if (aclrtMalloc((void **) &devAlpha_, sizeAlphaBeta_, ACL_MEM_MALLOC_NORMAL_ONLY) != ACL_SUCCESS) {
         ERROR_LOG("malloc device memory for alpha failed");
         return false;
     }
 
-    if (aclrtMalloc((void **) &devBeta_, sizeAlphaBeta_, ACL_MEM_MALLOC_NORMAL_ONLY) != ACL_ERROR_NONE) {
+    if (aclrtMalloc((void **) &devBeta_, sizeAlphaBeta_, ACL_MEM_MALLOC_NORMAL_ONLY) != ACL_SUCCESS) {
         ERROR_LOG("malloc device memory for beta failed");
         return false;
     }
@@ -86,17 +86,17 @@ bool GemmRunner::Init()
         hostMatrixB_ = devMatrixB_;
         hostMatrixC_ = devMatrixC_;
     } else {
-        if (aclrtMallocHost((void **) &hostMatrixA_, sizeA_) != ACL_ERROR_NONE) {
+        if (aclrtMallocHost((void **) &hostMatrixA_, sizeA_) != ACL_SUCCESS) {
             ERROR_LOG("malloc host memory for matrix A failed");
             return false;
         }
 
-        if (aclrtMallocHost((void **) &hostMatrixB_, sizeB_) != ACL_ERROR_NONE) {
+        if (aclrtMallocHost((void **) &hostMatrixB_, sizeB_) != ACL_SUCCESS) {
             ERROR_LOG("malloc host memory for matrix B failed");
             return false;
         }
 
-        if (aclrtMallocHost((void **) &hostMatrixC_, sizeC_) != ACL_ERROR_NONE) {
+        if (aclrtMallocHost((void **) &hostMatrixC_, sizeC_) != ACL_SUCCESS) {
             ERROR_LOG("malloc host memory for matrix C failed");
             return false;
         }
@@ -133,11 +133,11 @@ bool GemmRunner::PrepareInputs()
 
 bool GemmRunner::CopyInput()
 {
-    aclError ret = ACL_ERROR_NONE;
+    aclError ret = ACL_SUCCESS;
     if (!g_isDevice) {
         ret = aclrtMemcpy(devMatrixA_, sizeA_, hostMatrixA_, sizeA_,
                           ACL_MEMCPY_HOST_TO_DEVICE);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("Copy matrix A from host to device failed, errorCode[%d]",
                 static_cast<int32_t>(ret));
             return false;
@@ -145,7 +145,7 @@ bool GemmRunner::CopyInput()
 
         ret = aclrtMemcpy(devMatrixB_, sizeB_, hostMatrixB_, sizeB_,
                           ACL_MEMCPY_HOST_TO_DEVICE);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("Copy matrix B from host to device failed, errorCode[%d]",
                 static_cast<int32_t>(ret));
             return false;
@@ -153,7 +153,7 @@ bool GemmRunner::CopyInput()
 
         ret = aclrtMemcpy(devMatrixC_, sizeC_, hostMatrixC_, sizeC_,
                           ACL_MEMCPY_HOST_TO_DEVICE);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("Copy matrix C from host to device failed, errorCode[%d]",
                 static_cast<int32_t>(ret));
             return false;
@@ -162,14 +162,14 @@ bool GemmRunner::CopyInput()
 
     aclrtMemcpyKind kind = g_isDevice ? ACL_MEMCPY_DEVICE_TO_DEVICE : ACL_MEMCPY_HOST_TO_DEVICE;
     ret = aclrtMemcpy(devAlpha_, sizeAlphaBeta_, hostAlpha_, sizeAlphaBeta_, kind);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("Copy alpha from host to device failed, errorCode[%d]",
             static_cast<int32_t>(ret));
         return false;
     }
 
     ret = aclrtMemcpy(devBeta_, sizeAlphaBeta_, hostBeta_, sizeAlphaBeta_, kind);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("Copy beta from host to device failed, errorCode[%d]",
             static_cast<int32_t>(ret));
         return false;
@@ -182,7 +182,7 @@ bool GemmRunner::CopyOutput()
 {
     if (!g_isDevice) {
         auto ret = aclrtMemcpy(hostMatrixC_, sizeC_, devMatrixC_, sizeC_, ACL_MEMCPY_DEVICE_TO_HOST);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("Copy output from device to host failed, errorCode[%d]",
                 static_cast<int32_t>(ret));
             return false;
@@ -195,7 +195,7 @@ bool GemmRunner::RunOp()
 {
     // 1. Create stream
     aclrtStream stream = nullptr;
-    if (aclrtCreateStream(&stream) != ACL_ERROR_NONE) {
+    if (aclrtCreateStream(&stream) != ACL_SUCCESS) {
         ERROR_LOG("Create stream failed");
         return false;
     }
@@ -213,7 +213,7 @@ bool GemmRunner::RunOp()
     if (aclblasGemmEx(ACL_TRANS_N, ACL_TRANS_N, ACL_TRANS_N, m_, n_, k_,
                       devAlpha_, devMatrixA_, -1, inputType_, devMatrixB_, -1, inputType_,
                       devBeta_, devMatrixC_, -1, outputType_, ACL_COMPUTE_HIGH_PRECISION,
-                      stream) != ACL_ERROR_NONE) {
+                      stream) != ACL_SUCCESS) {
         ERROR_LOG("Launch Gemm kernel failed");
         (void)aclrtDestroyStream(stream);
         return false;
@@ -221,7 +221,7 @@ bool GemmRunner::RunOp()
     INFO_LOG("Launch Gemm kernel success");
 
     // 4. Synchronize stream
-    if (aclrtSynchronizeStream(stream) != ACL_ERROR_NONE) {
+    if (aclrtSynchronizeStream(stream) != ACL_SUCCESS) {
         ERROR_LOG("Synchronize stream failed");
         (void)aclrtDestroyStream(stream);
         return false;

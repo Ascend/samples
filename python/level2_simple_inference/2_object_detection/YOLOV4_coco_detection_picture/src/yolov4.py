@@ -6,10 +6,9 @@ import numpy as np
 import acl
 import cv2 as cv
 from PIL import Image
-
-import atlas_utils.constants as const
-from atlas_utils.acl_model import Model
-from atlas_utils.acl_resource import AclResource
+import constants as const
+from acllite_model import AclLiteModel
+from acllite_resource import AclLiteResource
 
 labels =["person",  "bicycle", "car", "motorbike", "aeroplane",
         "bus", "train", "truck", "boat", "traffic light",
@@ -36,10 +35,7 @@ anchors_3 = np.array([[12, 16], [19, 36], [40, 28]]) / stride_list[2]
 anchors_2 = np.array([[36, 75], [76, 55], [72, 146]]) / stride_list[1]
 anchors_1 = np.array([[142, 110], [192, 243], [459, 401]]) / stride_list[0]
 anchor_list = [anchors_1, anchors_2, anchors_3]
-
-conf_threshold = 0.8
 iou_threshold = 0.3
-
 colors = [(255, 0, 0), (0, 255, 0), (0, 0, 255), (0, 255, 255), (255, 0, 255), (255, 255, 0)]
 
 def preprocess(img_path):
@@ -83,16 +79,13 @@ def cal_iou(box, truth):
 
 def apply_nms(all_boxes, thres):
     res = []
-
     for cls in range(class_num):
         cls_bboxes = all_boxes[cls]
         sorted_boxes = sorted(cls_bboxes, key=lambda d: d[5])[::-1]
-
         p = dict()
         for i in range(len(sorted_boxes)):
             if i in p:
                 continue
-
             truth = sorted_boxes[i]
             for j in range(i + 1, len(sorted_boxes)):
                 if j in p:
@@ -101,7 +94,6 @@ def apply_nms(all_boxes, thres):
                 iou = cal_iou(box, truth)
                 if iou >= thres:
                     p[j] = 1
-
         for i in range(len(sorted_boxes)):
             if i not in p:
                 res.append(sorted_boxes[i])
@@ -126,16 +118,13 @@ def decode_bbox(conv_output, anchors, img_w, img_h, x_scale, y_scale, shift_x_ra
     bbox[..., 1] = np.maximum((pred[..., 1] - pred[..., 3] / 2.0 - shift_y_ratio) * y_scale * img_h, 0)  # y_min
     bbox[..., 2] = np.minimum((pred[..., 0] + pred[..., 2] / 2.0 - shift_x_ratio) * x_scale * img_w, img_w)  # x_max
     bbox[..., 3] = np.minimum((pred[..., 1] + pred[..., 3] / 2.0 - shift_y_ratio) * y_scale * img_h, img_h)  # y_max
-    #print('bbox', bbox)
     pred[..., :4] = bbox
     pred = pred.reshape((-1, 5 + class_num))
-    #pred[:, 4] = np.max(pred[:, 5:], axis=-1)
     pred[:, 4] = pred[:, 4] * pred[:, 5:].max(1)
     pred[:, 5] = np.argmax(pred[:, 5:], axis=-1)    
     pred = pred[pred[:, 4] >= 0.2]
     print('pred[:, 5]', pred[:, 5])
     print('pred[:, 5] shape', pred[:, 5].shape)
-    #pred = pred[pred[:, 4] >= conf_threshold]
 
     all_boxes = [[] for ix in range(class_num)]
     for ix in range(pred.shape[0]):
@@ -143,7 +132,6 @@ def decode_bbox(conv_output, anchors, img_w, img_h, x_scale, y_scale, shift_x_ra
         box.append(int(pred[ix, 5]))
         box.append(pred[ix, 4])
         all_boxes[box[4] - 1].append(box)
-    #print('all_boxes', all_boxes)
     return all_boxes
 
 def convert_labels(label_list):
@@ -198,17 +186,16 @@ def main():
     if not os.path.exists(OUTPUT_DIR):
         os.mkdir(OUTPUT_DIR)
     #ACL resource initialization
-    acl_resource = AclResource()
+    acl_resource = AclLiteResource()
     acl_resource.init()
     #load model
-    model = Model(MODEL_PATH)
+    model = AclLiteModel(MODEL_PATH)
     images_list = [os.path.join(INPUT_DIR, img)
                    for img in os.listdir(INPUT_DIR)
                    if os.path.splitext(img)[1] in const.IMG_EXT]
     #Read images from the data directory one by one for reasoning
     for pic in images_list:
         #read image
-        
         bgr_img = cv.imread(pic)
         #preprocess
         data, orig = preprocess(pic)

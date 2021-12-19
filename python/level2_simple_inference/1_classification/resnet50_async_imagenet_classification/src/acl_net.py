@@ -19,7 +19,7 @@ import acl
 from PIL import Image
 from constant import ACL_MEMCPY_HOST_TO_DEVICE, \
     ACL_MEMCPY_DEVICE_TO_HOST, ACL_MEM_MALLOC_NORMAL_ONLY, \
-    ACL_ERROR_NONE, IMG_EXT, NPY_FLOAT32
+    ACL_SUCCESS, IMG_EXT, NPY_FLOAT32
 
 
 def check_ret(message, ret):
@@ -28,7 +28,7 @@ def check_ret(message, ret):
     参数：ret，pyACL函数返回值
     返回值：无
     """
-    if ret != ACL_ERROR_NONE:
+    if ret != ACL_SUCCESS:
         raise Exception("{} failed ret={}"
                         .format(message, ret))
 
@@ -138,7 +138,7 @@ class Net(object):
             raise Exception("can't create data buffer, create input failed!!!")
 
         _, ret = acl.mdl.add_dataset_buffer(img_dataset, img_data_buffer)
-        if ret != ACL_ERROR_NONE:
+        if ret != ACL_SUCCESS:
             ret = acl.destroy_data_buffer(img_data_buffer)
             check_ret("acl.destroy_data_buffer", ret)
         return img_dataset
@@ -155,7 +155,7 @@ class Net(object):
 
             data_buf = acl.create_data_buffer(temp_buffer, temp_buffer_size)
             _, ret = acl.mdl.add_dataset_buffer(output_data, data_buf)
-            if ret != ACL_ERROR_NONE:
+            if ret != ACL_SUCCESS:
                 ret = acl.destroy_data_buffer(data_buf)
                 check_ret("acl.destroy_data_buffer", ret)
         return output_data

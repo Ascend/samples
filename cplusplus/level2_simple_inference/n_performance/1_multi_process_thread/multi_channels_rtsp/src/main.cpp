@@ -23,12 +23,12 @@
 #include <sys/time.h>
 #include <regex>
 
-#include "acl_device.h"
-#include "atlas_app.h"
-#include "atlas_thread.h"
-#include "atlas_type.h"
-#include "atlas_videocapture.h"
-#include "parse_config.h"
+#include "AclLiteResource.h"
+#include "AclLiteApp.h"
+#include "AclLiteThread.h"
+#include "AclLiteType.h"
+#include "AclLiteVideoProc.h"
+#include "AclLiteUtils.h"
 #include "face_detection.h"
 #include "preprocess/preprocess.h"
 #include "inference/inference.h"
@@ -47,18 +47,18 @@ const string kRegexRtsp = "^rtsp_[0-9]+$";
 int MainThreadProcess(uint32_t msgId, 
                       shared_ptr<void> msgData, void* userData) {
     if (msgId == MSG_APP_EXIT) {
-        AtlasApp& app = GetAtlasAppInstance();
+        AclLiteApp& app = GetAclLiteAppInstance();
         app.WaitEnd();
-        ATLAS_LOG_INFO("Receive exit message, exit now");
+        ACLLITE_LOG_INFO("Receive exit message, exit now");
     }
 
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
-AtlasError ParseConfig(vector<string>& rtspList, int& displayChannel) {
+AclLiteError ParseConfig(vector<string>& rtspList, int& displayChannel) {
     map<string, string> config;
     if(!ReadConfig(config, kConfigFile)) {
-        return ATLAS_ERROR;
+        return ACLLITE_ERROR;
     }
 
     regex rtspAddrRegex(kRegexRtsp.c_str());
@@ -67,21 +67,21 @@ AtlasError ParseConfig(vector<string>& rtspList, int& displayChannel) {
         printf("config item: %s=%s\n", mIter->first.c_str(), mIter->second.c_str());
 		if (regex_match(mIter->first, rtspAddrRegex)) {
             rtspList.push_back(mIter->second);
-            ATLAS_LOG_INFO("Rtsp config item: %s=%s", 
-                           mIter->first.c_str(), mIter->second.c_str());
+            ACLLITE_LOG_INFO("Rtsp config item: %s=%s", 
+                             mIter->first.c_str(), mIter->second.c_str());
         } else if (mIter->first == "display_channel") {
             displayChannel = atoi(mIter->second.c_str());
-            ATLAS_LOG_INFO("Display channel: %d", displayChannel);
+            ACLLITE_LOG_INFO("Display channel: %d", displayChannel);
         }
 	}
 
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
-void CreatePreprocessInstances(vector<AtlasThreadParam>& threadTbl,
+void CreatePreprocessInstances(vector<AclLiteThreadParam>& threadTbl,
                                vector<string>& rtspList,
                                int displayChannel) {
-    AtlasThreadParam param;
+    AclLiteThreadParam param;
     for (int i = 0; i < rtspList.size(); i++) {  
         bool display =  (displayChannel == i);
         param.threadInst = new Preprocess(rtspList[i], kModelWidth,
@@ -90,8 +90,8 @@ void CreatePreprocessInstances(vector<AtlasThreadParam>& threadTbl,
     }    
 }
 
-void CreateInferenceInstance(vector<AtlasThreadParam>& threadTbl) {
-    AtlasThreadParam param;
+void CreateInferenceInstance(vector<AclLiteThreadParam>& threadTbl) {
+    AclLiteThreadParam param;
 
     param.threadInst = new Inference(kModelPath, kModelWidth, 
                                             kModelHeight);
@@ -99,11 +99,11 @@ void CreateInferenceInstance(vector<AtlasThreadParam>& threadTbl) {
     threadTbl.push_back(param);
 }
 
-void CreatePostprocessInstances(vector<AtlasThreadParam>& threadTbl,
+void CreatePostprocessInstances(vector<AclLiteThreadParam>& threadTbl,
                                int rtspNum,
                                int displayChannel) {
     bool display = (displayChannel >= 0) && (displayChannel < rtspNum);
-    AtlasThreadParam param;
+    AclLiteThreadParam param;
     param.threadInst = new Postprocess(kConfigFile, display);
     param.threadInstName.assign(kPostprocName.c_str());    
     threadTbl.push_back(param);
@@ -115,11 +115,11 @@ void CreatePostprocessInstances(vector<AtlasThreadParam>& threadTbl,
     }
 }
 
-void CreateThreadInstance(vector<AtlasThreadParam>& threadTbl, AclDevice& aclDev) {
+void CreateThreadInstance(vector<AclLiteThreadParam>& threadTbl, AclLiteResource& aclDev) {
     vector<string> rtspList;
     int displayChannel = -1;
-    AtlasError ret = ParseConfig(rtspList, displayChannel);
-    if (ret != ATLAS_OK) {
+    AclLiteError ret = ParseConfig(rtspList, displayChannel);
+    if (ret != ACLLITE_OK) {
         return;
     }
 
@@ -133,7 +133,7 @@ void CreateThreadInstance(vector<AtlasThreadParam>& threadTbl, AclDevice& aclDev
     }
 }
 
-void ExitApp(AtlasApp& app, vector<AtlasThreadParam>& threadTbl) {
+void ExitApp(AclLiteApp& app, vector<AclLiteThreadParam>& threadTbl) {
     for (int i = 0; i < threadTbl.size(); i++) {
         delete threadTbl[i].threadInst;
     }  
@@ -141,14 +141,14 @@ void ExitApp(AtlasApp& app, vector<AtlasThreadParam>& threadTbl) {
     app.Exit();
 }
 
-void StartApp(AclDevice& aclDev) {
-    vector<AtlasThreadParam> threadTbl;
+void StartApp(AclLiteResource& aclDev) {
+    vector<AclLiteThreadParam> threadTbl;
     CreateThreadInstance(threadTbl, aclDev);
 
-    AtlasApp& app = CreateAtlasAppInstance(); 
-    AtlasError ret = app.Start(threadTbl);
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Start app failed, error %d", ret);
+    AclLiteApp& app = CreateAclLiteAppInstance(); 
+    AclLiteError ret = app.Start(threadTbl);
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Start app failed, error %d", ret);
         ExitApp(app, threadTbl);
         return;
     }
@@ -165,14 +165,14 @@ void StartApp(AclDevice& aclDev) {
 
 
 int main(int argc, char *argv[]) {
-    AclDevice aclDev = AclDevice();
-    AtlasError ret = aclDev.Init();
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Init app failed");
-        return ATLAS_ERROR;
+    AclLiteResource aclDev = AclLiteResource();
+    AclLiteError ret = aclDev.Init();
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Init app failed");
+        return ACLLITE_ERROR;
     }    
  
     StartApp(aclDev);
 
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }

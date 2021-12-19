@@ -18,8 +18,6 @@
 */
 #include "object_detect.h"
 #include <iostream>
-
-#include "opencv2/imgcodecs/legacy/constants_c.h"
 #include "opencv2/opencv.hpp"
 #include "acl/acl.h"
 #include "model_process.h"
@@ -55,7 +53,7 @@ Result ObjectDetect::InitResource() {
     // ACL init
     const char *aclConfigPath = "../src/acl.json";
     aclError ret = aclInit(aclConfigPath);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("acl init failed");
         return FAILED;
     }
@@ -63,7 +61,7 @@ Result ObjectDetect::InitResource() {
 
     // open device
     ret = aclrtSetDevice(deviceId_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("acl open device %d failed", deviceId_);
         return FAILED;
     }
@@ -71,7 +69,7 @@ Result ObjectDetect::InitResource() {
 
     // create context (set current)
     ret = aclrtCreateContext(&context_, deviceId_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("acl create context failed");
         return FAILED;
     }
@@ -79,14 +77,14 @@ Result ObjectDetect::InitResource() {
 
     // create stream
     ret = aclrtCreateStream(&stream_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("acl create stream failed");
         return FAILED;
     }
     INFO_LOG("create stream success");
 
     ret = aclrtGetRunMode(&runMode_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("acl get run mode failed");
         return FAILED;
     }
@@ -228,17 +226,16 @@ Result ObjectDetect::Postprocess(aclmdlDataset* modelOutput, const string& path)
         return FAILED;
     }
 
-    //    uint32_t BBOX_MAX;
     if (runMode_ == ACL_HOST) {
         aclError ret = aclrtMemcpy(ptr, DATE_TYPE_SIZE, data, DATE_TYPE_SIZE, ACL_MEMCPY_DEVICE_TO_HOST);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("box num aclrtMemcpy failed!");
             return FAILED;
         }
     }
     else {
         aclError ret = aclrtMemcpy(ptr, DATE_TYPE_SIZE, data, DATE_TYPE_SIZE, ACL_MEMCPY_DEVICE_TO_DEVICE);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("box num aclrtMemcpy failed!");
             return FAILED;
         }
@@ -253,8 +250,6 @@ Result ObjectDetect::Postprocess(aclmdlDataset* modelOutput, const string& path)
     else {
         return FAILED;
     }
-
-
 
     dataBuffer = aclmdlGetDatasetBuffer(modelOutput, 1);
     if (dataBuffer == nullptr) {
@@ -272,14 +267,14 @@ Result ObjectDetect::Postprocess(aclmdlDataset* modelOutput, const string& path)
 
     if (runMode_ == ACL_HOST) {
         aclError ret = aclrtMemcpy(outInfo, sizeof(outInfo), data, sizeof(outInfo), ACL_MEMCPY_DEVICE_TO_HOST);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("box outInfo aclrtMemcpy failed!");
             return FAILED;
         }
     }
     else {
         aclError ret = aclrtMemcpy(outInfo, sizeof(outInfo), data, sizeof(outInfo), ACL_MEMCPY_DEVICE_TO_DEVICE);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("box outInfo aclrtMemcpy failed!");
             return FAILED;
         }
@@ -293,18 +288,13 @@ Result ObjectDetect::Postprocess(aclmdlDataset* modelOutput, const string& path)
 
     for(uint32_t b=0;b<boxNum;b++) {
         uint32_t score=uint32_t(outInfo[SCORE+BOXINFOSIZE*b]*100);
-        if(score<85) continue;
+        if(score < 85 || score > 100) continue;
 
-        //TODO:
         rect.x=outInfo[TOPLEFTX+BOXINFOSIZE*b]*resultImage.cols;
         rect.y=outInfo[TOPLEFTY+BOXINFOSIZE*b]*resultImage.rows;
         rect.width=outInfo[BOTTOMRIGHTX+BOXINFOSIZE*b]*resultImage.cols-rect.x;
         rect.height=outInfo[BOTTOMRIGHTY+BOXINFOSIZE*b]*resultImage.rows-rect.y;
-
-        cout << "+++++++++++++++++++++++" << endl;
         cout << "score = " << score << endl;
-        cout << rect.x << " " << rect.y << " " << rect.width << " " << rect.height << endl;
-
         uint32_t objIndex = (uint32_t)outInfo[LABEL+BOXINFOSIZE*b];
         string text = vggssdLabel[objIndex]+":"+std::to_string(score)+"\%";
         cv::Point origin;
@@ -321,7 +311,6 @@ Result ObjectDetect::Postprocess(aclmdlDataset* modelOutput, const string& path)
     sstream.str("");
     sstream << "./output" << kFileSperator
     << kOutputFilePrefix << file_name;
-
 
     string outputPath = sstream.str();
     cv::imwrite(outputPath, resultImage);
@@ -389,7 +378,7 @@ void ObjectDetect::DestroyResource()
     aclError ret;
     if (stream_ != nullptr) {
         ret = aclrtDestroyStream(stream_);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("destroy stream failed");
         }
         stream_ = nullptr;
@@ -398,7 +387,7 @@ void ObjectDetect::DestroyResource()
 
     if (context_ != nullptr) {
         ret = aclrtDestroyContext(context_);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("destroy context failed");
         }
         context_ = nullptr;
@@ -407,13 +396,13 @@ void ObjectDetect::DestroyResource()
 
 
     ret = aclrtResetDevice(deviceId_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("reset device failed");
     }
     INFO_LOG("end to reset device is %d", deviceId_);
 
     ret = aclFinalize();
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("finalize acl failed");
     }
 

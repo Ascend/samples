@@ -59,12 +59,12 @@ int ModelProcess::ModelInference(std::vector<void *> &inputBufs, std::vector<siz
     if (dynamicBatchSize != 0) {
         size_t index = 0;
         ret = aclmdlGetInputIndexByName(modelDesc_.get(), ACL_DYNAMIC_TENSOR_NAME, &index);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             LogError << "aclmdlGetInputIndexByName failed, maybe static model";
             return APP_ERR_COMM_CONNECTION_FAILURE;
         }
         ret = aclmdlSetDynamicBatchSize(modelId_, input, index, dynamicBatchSize);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             LogError << "dynamic batch set failed, modelId_=" << modelId_ << ", input=" << input << ", index=" << index
                      << ", dynamicBatchSize=" << dynamicBatchSize;
             return APP_ERR_COMM_CONNECTION_FAILURE;
@@ -102,12 +102,12 @@ int ModelProcess::ModelInferDynamicHW(const std::vector<void *> &inputBufs, cons
     }
     size_t index = 0;
     APP_ERROR ret = aclmdlGetInputIndexByName(modelDesc_.get(), ACL_DYNAMIC_TENSOR_NAME, &index);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         LogError << "Failed to execute aclmdlGetInputIndexByName, maybe static model.";
         return APP_ERR_COMM_CONNECTION_FAILURE;
     }
     ret = aclmdlSetDynamicHWSize(modelId_, input, index, modelHeight_, modelWidth_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         LogError << "Failed to set dynamic HW, modelId_=" << modelId_ << ", input=" << input << ", index=" \
                  << index << ", dynamicW=" << modelWidth_ << ", dynamicH=" << modelHeight_;
         return APP_ERR_COMM_CONNECTION_FAILURE;

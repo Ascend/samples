@@ -8,7 +8,6 @@
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 #pragma once
-
 #include "utils.h"
 #include "acl/acl.h"
 

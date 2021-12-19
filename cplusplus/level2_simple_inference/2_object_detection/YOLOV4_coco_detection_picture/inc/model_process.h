@@ -97,9 +97,7 @@ private:
     aclmdlDesc *modelDesc_;
     aclmdlDataset *input_;
     aclmdlDataset *output_;
-
     int deviceId_;
     aclrtContext context_;
     bool initFlag_;
 };
-

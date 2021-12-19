@@ -11,10 +11,9 @@ import time
 import collections
 
 path = os.path.dirname(os.path.abspath(__file__))
-
 sys.path.append(os.path.join(path, ".."))
 sys.path.append(os.path.join(path, "../../../common/"))
-sys.path.append(os.path.join(path, "../../../common/atlas_utils"))
+sys.path.append(os.path.join(path, "../../../common/acllite"))
 
 import acl_model
 from utils import display_time  
@@ -24,21 +23,14 @@ currentPath= os.path.abspath(os.path.dirname(path) + os.path.sep + ".")
 MODEL_PATH = os.path.join(currentPath, "model/hifill.om")
 MODEL_MATMUL_PATH =os.path.join(currentPath, 
      "model/0_BatchMatMul_0_0_1_1_1024_1024_0_0_1_1_1024_27648_0_0_1_1_1024_27648.om")
-
-MODEL_WIDTH = 512
-MODEL_HEIGHT = 512
-
 INPUT_SIZE = 512  
 ATTENTION_SIZE = 32 
 MULTIPLE = 6
-
 NPTYPE_FLOAT32 = np.float32
-
 
 def sort(str_lst):
     """sort"""
     return [s for s in sorted(str_lst)]
-
 
 def reconstruct_residual_from_patches(residual, multiple):
     """
@@ -48,8 +40,6 @@ def reconstruct_residual_from_patches(residual, multiple):
     residual = np.transpose(residual, [0, 2, 1, 3, 4])
     return np.reshape(residual, [ATTENTION_SIZE * multiple, ATTENTION_SIZE * multiple, 3])
 
-
-# extract image patches
 def extract_image_patches(img, multiple):
     """
     extract image patch
@@ -58,7 +48,6 @@ def extract_image_patches(img, multiple):
     img = np.reshape(img, [h // multiple, multiple, w // multiple, multiple, c])
     img = np.transpose(img, [0, 2, 1, 3, 4])
     return img
-
 
 @display_time
 def pre_process(raw_img, raw_mask): 
@@ -90,7 +79,6 @@ def pre_process(raw_img, raw_mask):
     pre_process_img["mask_512_chw"] = mask_512_chw
     return pre_process_img
 
-
 def get_imgs_masks_file_list(images, masks):
     """get_imgs_masks_file_list"""
     paths_img = glob.glob(images + '/*.*[gG]')
@@ -98,7 +86,6 @@ def get_imgs_masks_file_list(images, masks):
     paths_img = sort(paths_img)
     paths_mask = sort(paths_mask)
     return paths_img, paths_mask
-
 
 @display_time
 def matmul_om_large(matmul_model, attention, residual):
@@ -110,7 +97,6 @@ def matmul_om_large(matmul_model, attention, residual):
     matmul_ret = matmul_model.execute([attention_reshape, residual_reshape])
     return matmul_ret[0].reshape(ATTENTION_SIZE, ATTENTION_SIZE, 3072 * 9)
 
-
 def residual_aggregate(model, residual, attention):
     """
     MULTIPLE * INPUT_SIZE//ATTENTION_SIZE = 6*512/32 = 96
@@ -118,10 +104,8 @@ def residual_aggregate(model, residual, attention):
     residual = extract_image_patches(residual, MULTIPLE * INPUT_SIZE // ATTENTION_SIZE)
     residual = np.reshape(residual, [1, residual.shape[0] * residual.shape[1], -1])
     residual = matmul_om_large(model, attention, residual)
-    #residual = np.matmul(attention, residual)
     residual = reconstruct_residual_from_patches(residual, MULTIPLE * INPUT_SIZE // ATTENTION_SIZE)
     return residual
-
 
 @display_time
 def post_process(model, raw_img, large_img, large_mask, inpainted_512, img_512, mask_512, attention):
@@ -152,7 +136,6 @@ def post_process(model, raw_img, large_img, large_mask, inpainted_512, img_512, 
     res_raw = res_raw * mask + raw_img * (1. - mask)
     return res_raw.astype(np.uint8)
 
-
 @display_time
 def readimages(img_path, mask_path):    
     """
@@ -161,7 +144,6 @@ def readimages(img_path, mask_path):
     raw_img = cv2.imread(img_path) 
     raw_mask = cv2.imread(mask_path) 
     return raw_img, raw_mask
-
 
 @display_time
 def inference(model, input_data):
@@ -176,13 +158,11 @@ def inference(model, input_data):
 
     return inpainted_512, attention, mask_512_new
 
-
 @display_time
 def image_inpaint(image_dirs, masks_dirs, output_dir):    
     """
     image inpainting interface
     """
-
     #load model
     model = acl_model.Model(MODEL_PATH)
     matmul_om = acl_model.Model(MODEL_MATMUL_PATH)

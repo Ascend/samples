@@ -20,10 +20,10 @@
 #include <iostream>
 #include <stdlib.h>
 #include <dirent.h>
+#include <opencv2/opencv.hpp>
 #include "colorize_process.h"
-#include "atlasutil/atlas_utils.h"
-#include "atlasutil/atlas_error.h"
-#include<opencv2/opencv.hpp>
+#include "acllite/AclLiteUtils.h"
+#include "acllite/AclLiteError.h"
 
 using namespace std;
 
@@ -39,15 +39,15 @@ namespace {
 int main(int argc, char *argv[]) {
     //Check inputs and parameters
     if((argc < 2) || (argv[1] == nullptr)){
-        ATLAS_LOG_ERROR("Please input: ./main <image_dir>");
+        ACLLITE_LOG_ERROR("Please input: ./main <image_dir>");
         return 1;
     }
     //Instantiation
     ColorizeProcess colorize(kModelPath, kModelWidth, kModelHeight);
     //acl init
-    AtlasError ret = colorize.Init();
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Classification Init resource failed");
+    AclLiteError ret = colorize.Init();
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Classification Init resource failed");
         return 1;
     }
 
@@ -56,21 +56,21 @@ int main(int argc, char *argv[]) {
     cv::VideoCapture capture(videoFile);
     if (!capture.isOpened())
     {
-        ATLAS_LOG_ERROR("Movie open Error");
+        ACLLITE_LOG_ERROR("Movie open Error");
         return 1;
     }
 
     int totalFrames = capture.get(7);
     int currentFrames = 0;
 
-    ATLAS_LOG_INFO("The sample starts to run");
+    ACLLITE_LOG_INFO("The sample starts to run");
 
     while(1) {
         //preprocess
         cv::Mat frame;
         if (!capture.read(frame))
         {
-            ATLAS_LOG_INFO("Video capture return false");
+            ACLLITE_LOG_INFO("Video capture return false");
             break;
         }
 
@@ -83,26 +83,26 @@ int main(int argc, char *argv[]) {
         currentFrames++;
 
         ret = colorize.Preprocess(frame);
-        if (ret != ATLAS_OK) {
-            ATLAS_LOG_ERROR("Read file %s failed, continue to read next",
+        if (ret != ACLLITE_OK) {
+            ACLLITE_LOG_ERROR("Read file %s failed, continue to read next",
             videoFile.c_str());
             continue;
         }
         //inference
         std::vector<InferenceOutput> inferenceOutput;
         ret = colorize.Inference(inferenceOutput);
-        if (ret != ATLAS_OK) {
-            ATLAS_LOG_ERROR("Inference model inference output data failed");
+        if (ret != ACLLITE_OK) {
+            ACLLITE_LOG_ERROR("Inference model inference output data failed");
             return 1;
         }
         //postprocess
         ret = colorize.Postprocess(frame, inferenceOutput);
-        if (ret != ATLAS_OK) {
-            ATLAS_LOG_ERROR("Process model inference output data failed");
+        if (ret != ACLLITE_OK) {
+            ACLLITE_LOG_ERROR("Process model inference output data failed");
             return 1;
         }
     }
 
-    ATLAS_LOG_INFO("Execute sample success");
-    return ATLAS_OK;
+    ACLLITE_LOG_INFO("Execute sample success");
+    return ACLLITE_OK;
 }

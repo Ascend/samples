@@ -24,7 +24,7 @@
 #include <mutex>
 #include <unistd.h>
 #include <vector>
-#include "atlasutil/atlas_utils.h"
+
 #include "acl/acl.h"
 
 using namespace std;
@@ -41,9 +41,8 @@ using namespace std;
 #define ALIGN_UP16(num) ALIGN_UP(num, 16)
 #define ALIGN_UP128(num) ALIGN_UP(num, 128)
 
-#define SHARED_PRT_DVPP_BUF(buf) (shared_ptr<uint8_t>((uint8_t *)(buf), [](uint8_t* p) { acldvppFree(p); }))
-#define SHARED_PRT_U8_BUF(buf) (shared_ptr<uint8_t>((uint8_t *)(buf), [](uint8_t* p) { delete[](p); }))
-
+#define SHARED_PTR_DVPP_BUF(buf) (shared_ptr<uint8_t>((uint8_t *)(buf), [](uint8_t* p) { acldvppFree(p); }))
+#define SHARED_PTR_U8_BUF(buf) (shared_ptr<uint8_t>((uint8_t *)(buf), [](uint8_t* p) { delete[](p); }))
 
 template<class Type>
 std::shared_ptr<Type> MakeSharedNoThrow() {
@@ -65,6 +64,33 @@ typedef enum Result {
     FAILED = 1
 }Result;
 
+struct Resolution {
+    uint32_t width = 0;
+    uint32_t height = 0;
+};
+
+struct ImageData {
+    uint32_t width = 0;
+    uint32_t height = 0;
+    uint32_t alignWidth = 0;
+    uint32_t alignHeight = 0;
+    uint32_t size = 0;
+    std::shared_ptr<uint8_t> data;
+};
+
+struct Rect {
+    uint32_t ltX = 0;
+    uint32_t ltY = 0;
+    uint32_t rbX = 0;
+    uint32_t rbY = 0;
+};
+
+struct BBox {
+    Rect rect;
+    uint32_t score;
+    string text;
+};
+
 /**
  * Utils
  */
@@ -78,13 +104,9 @@ public:
     * @return device buffer of pic
     */
     static bool IsDirectory(const std::string &path);
-
     static bool IsPathExist(const std::string &path);
-
     static void SplitPath(const std::string &path, std::vector<std::string> &path_vec);
-
     static void GetAllFiles(const std::string &path, std::vector<std::string> &file_vec);
-
     static void GetPathFiles(const std::string &path, std::vector<std::string> &file_vec);
     static void* CopyDataToDevice(void* data, uint32_t dataSize, aclrtMemcpyKind policy);
     static void* CopyDataDeviceToLocal(void* deviceData, uint32_t dataSize);

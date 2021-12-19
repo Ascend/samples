@@ -42,7 +42,7 @@ Result Utils::ReadBinFile(const std::string &fileName, void *&inputBuff, uint32_
     }
     binFile.seekg(0, binFile.beg);
 
-    aclError ret = ACL_ERROR_NONE;
+    aclError ret = ACL_SUCCESS;
     if (!g_isDevice) { // app is running in host
         ret = aclrtMallocHost(&inputBuff, binFileBufferLen);
         if (inputBuff == nullptr) {
@@ -53,7 +53,7 @@ Result Utils::ReadBinFile(const std::string &fileName, void *&inputBuff, uint32_
         }
     } else { // app is running in device
         ret = aclrtMalloc(&inputBuff, binFileBufferLen, ACL_MEM_MALLOC_NORMAL_ONLY);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("malloc device buffer failed. size is %u, errorCode is %d",
                 binFileBufferLen, static_cast<int32_t>(ret));
             binFile.close();
@@ -87,7 +87,7 @@ Result Utils::MemcpyFileToDeviceBuffer(const std::string &fileName, void *&picDe
     if (!g_isDevice) {
         // if app is running in host, need copy data from host to device
         aclError aclRet = aclrtMemcpy(picDevBuffer, inputBuffSize, inputBuff, inputBuffSize, ACL_MEMCPY_HOST_TO_DEVICE);
-        if (aclRet != ACL_ERROR_NONE) {
+        if (aclRet != ACL_SUCCESS) {
             ERROR_LOG("memcpy failed. buffer size is %zu, errorCode is %d", inputBuffSize, static_cast<int32_t>(aclRet));
             (void)aclrtFreeHost(inputBuff);
             return FAILED;
@@ -95,7 +95,7 @@ Result Utils::MemcpyFileToDeviceBuffer(const std::string &fileName, void *&picDe
         (void)aclrtFreeHost(inputBuff);
     } else { // app is running in device
         aclError aclRet = aclrtMemcpy(picDevBuffer, inputBuffSize, inputBuff, inputBuffSize, ACL_MEMCPY_DEVICE_TO_DEVICE);
-        if (aclRet != ACL_ERROR_NONE) {
+        if (aclRet != ACL_SUCCESS) {
             ERROR_LOG("memcpy d2d failed. buffer size is %zu, errorCode is %d", inputBuffSize, static_cast<int32_t>(aclRet));
             (void)aclrtFree(inputBuff);
             return FAILED;

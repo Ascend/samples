@@ -73,4 +73,3 @@ public:
     */
     static Result CheckPathIsFile(const std::string &fileName);
 };
-

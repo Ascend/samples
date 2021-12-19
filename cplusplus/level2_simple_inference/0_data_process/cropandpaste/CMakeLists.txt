@@ -4,6 +4,6 @@
 cmake_minimum_required(VERSION 3.5.1)
 
 # project information
-project(ACL_DVPP_RESNET50)
+project(CROPANDPASTE)
 
 add_subdirectory("./src")

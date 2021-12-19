@@ -20,8 +20,8 @@
 #include "acl/acl.h"
 #include "object_detection.h"
 #include "postprocess.h"
-#include "atlas_utils.h"
-#include "atlas_app.h"
+#include "AclLiteUtils.h"
+#include "AclLiteApp.h"
 
 using namespace std;
 
@@ -57,12 +57,12 @@ modelWidth_(modelWidth), modelHeight_(modelHeight){
 Postprocess::~Postprocess() {
 }
 
-AtlasError Postprocess::Init() {
-    return ATLAS_OK;
+AclLiteError Postprocess::Init() {
+    return ACLLITE_OK;
 }
 
-AtlasError Postprocess::Process(int msgId, shared_ptr<void> data) {
-    AtlasError ret = ATLAS_OK;
+AclLiteError Postprocess::Process(int msgId, shared_ptr<void> data) {
+    AclLiteError ret = ACLLITE_OK;
     shared_ptr<InferOutputMsg> inferMsg = static_pointer_cast<InferOutputMsg>(data);
     
     switch(msgId) {
@@ -73,38 +73,38 @@ AtlasError Postprocess::Process(int msgId, shared_ptr<void> data) {
             SendMessage(kMainThreadId, MSG_APP_EXIT, nullptr);
             break;
         default:
-            ATLAS_LOG_INFO("Postprocess thread ignore msg %d", msgId);
+            ACLLITE_LOG_INFO("Postprocess thread ignore msg %d", msgId);
             break;
     }
 
     return ret;
 }
 
-AtlasError Postprocess::InferOutputProcess(shared_ptr<InferOutputMsg> data) {
+AclLiteError Postprocess::InferOutputProcess(shared_ptr<InferOutputMsg> data) {
     vector<BBox> detectResults;
-    AtlasError ret = AnalyzeInferenceOutput(detectResults, data->frameWidth,
+    AclLiteError ret = AnalyzeInferenceOutput(detectResults, data->frameWidth,
                                             data->frameHeight, data->inferData);
-    if(ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Covert image failed, error %d", ret);
+    if(ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Covert image failed, error %d", ret);
         return ret;
     }
 
     PrintDetectResults(detectResults, data->channelId);
 
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
 void Postprocess::PrintDetectResults(vector<BBox>& detectResults,
                                      uint32_t channelId) {
     for (size_t i = 0; i < detectResults.size(); i++) {
-        ATLAS_LOG_INFO("channel%d:%d %d %d %d  %s", 
+        ACLLITE_LOG_INFO("channel%d:%d %d %d %d  %s", 
                        channelId, detectResults[i].rect.ltX, detectResults[i].rect.ltY,
                        detectResults[i].rect.rbX, detectResults[i].rect.rbY, 
                        detectResults[i].text.c_str());
     }
 }
 
-AtlasError Postprocess::AnalyzeInferenceOutput(vector<BBox>& detectResults, 
+AclLiteError Postprocess::AnalyzeInferenceOutput(vector<BBox>& detectResults, 
                                                uint32_t imageWidth, uint32_t imageHeight,
                                                vector<InferenceOutput>& modelOutput) {
     uint32_t dataSize = 0;
@@ -130,6 +130,6 @@ AtlasError Postprocess::AnalyzeInferenceOutput(vector<BBox>& detectResults,
         detectResults.emplace_back(boundBox);
     }
 
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 

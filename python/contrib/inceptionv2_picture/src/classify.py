@@ -14,12 +14,12 @@ path = os.path.dirname(os.path.abspath(__file__))
 
 sys.path.append(os.path.join(path, ".."))
 sys.path.append(os.path.join(path, "../../../common/"))
-sys.path.append(os.path.join(path, "../../../common/atlas_utils"))
+sys.path.append(os.path.join(path, "../../../common/acllite"))
 
 from constants import ACL_MEM_MALLOC_HUGE_FIRST, ACL_MEMCPY_DEVICE_TO_DEVICE, IMG_EXT
-from acl_model import Model
-from acl_image import AclImage
-from acl_resource import AclResource
+from acllite_model import AclLiteModel
+from acllite_image import AclLiteImage
+from acllite_resource import AclLiteResource
 from image_net_classes import get_image_net_class
 from PIL import Image, ImageDraw, ImageFont
 from utils import display_time 
@@ -32,7 +32,7 @@ class Classify(object):
         self._model_path = model_path
         self._model_width = model_width
         self._model_height = model_height
-        self._model = Model(model_path)
+        self._model = AclLiteModel(model_path)
 
     @display_time
     def pre_process(self, image):
@@ -70,18 +70,15 @@ class Classify(object):
         if len(top_k):
             object_class = get_image_net_class(top_k[0])
             object_value = vals[top_k[0]]
-            output_path = os.path.join(os.path.join(SRC_PATH, "../outputs"), os.path.basename(image_file))
+            output_path = os.path.join(os.path.join(SRC_PATH, "../out"), os.path.basename(image_file))
             origin_img = cv2.imread(image_file)
             font = cv2.FONT_HERSHEY_SIMPLEX
             origin_img = cv2.putText(origin_img, object_class, (10, 100), font, 3, (255, 255, 255), 3)
             origin_img = cv2.putText(origin_img, str(object_value), (10, 200), font, 2, (255, 255, 255), 3)
             cv2.imwrite(output_path, origin_img)
     
-
-
 SRC_PATH = os.path.realpath(__file__).rsplit("/", 1)[0]
 MODEL_PATH = os.path.join(SRC_PATH, "../model/frozen_graph-inception-resnet-test1.om")
-
 MODEL_WIDTH = 299
 MODEL_HEIGHT = 299
 
@@ -94,7 +91,7 @@ def main():
     if (len(sys.argv) != 2):
         print("The App arg is invalid")
         exit(1)
-    acl_resource = AclResource()
+    acl_resource = AclLiteResource()
     acl_resource.init()
     #Instantiation classification detection, incoming om model path, model input width and height parameters
     classify = Classify(MODEL_PATH, MODEL_WIDTH, MODEL_HEIGHT)
@@ -106,8 +103,8 @@ def main():
                    if os.path.splitext(img)[1] in IMG_EXT]
     
     #Create a directory and save the infer results
-    if not os.path.isdir(os.path.join(SRC_PATH, "../outputs")):
-        os.mkdir(os.path.join(SRC_PATH, "../outputs"))
+    if not os.path.isdir(os.path.join(SRC_PATH, "../out")):
+        os.mkdir(os.path.join(SRC_PATH, "../out"))
 
     for image_file in images_list:
         #preprocess image

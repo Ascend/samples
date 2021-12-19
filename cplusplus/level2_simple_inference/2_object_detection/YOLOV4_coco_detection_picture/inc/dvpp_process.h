@@ -84,27 +84,20 @@ private:
     acldvppChannelDesc *dvppChannelDesc_;
     aclrtStream stream_;
     acldvppResizeConfig *resizeConfig_;
-
     void *decodeOutDevBuffer_; // decode output buffer
     acldvppPicDesc *decodeOutputDesc_; //decode output desc
-
     acldvppPicDesc *resizeInputDesc_; // resize input desc
     acldvppPicDesc *resizeOutputDesc_; // resize output desc
-
     void *inDevBuffer_;  // decode input buffer
     uint32_t inDevBufferSize_; // dvpp input buffer size
     uint32_t jpegDecodeOutputSize_; // jpeg decode output size
-
     uint32_t decodeOutputWidth_; // decode output width
     uint32_t decodeOutputWidthStride_; // decode output width aligned
     uint32_t decodeOutputHeight_; // decode output height
-
     void *resizeOutBufferDev_; // resize output buffer
     uint32_t resizeOutBufferSize_;  // resize output size
-
     uint32_t modelInputWidth_; // model input width
     uint32_t modelInputHeight_; // model input height
     uint32_t resizeOutWidthStride_; // resize output width aligned
     uint32_t resizeOutHeightStride_; // resize output height aligned
 };
-

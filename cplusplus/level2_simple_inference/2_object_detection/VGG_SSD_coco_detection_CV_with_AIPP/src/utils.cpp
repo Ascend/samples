@@ -30,7 +30,6 @@
 #include "acl/acl.h"
 #include "model_process.h"
 
-
 using namespace std;
 
 namespace {
@@ -71,7 +70,6 @@ Result Utils::PostProcess(const string &path, aclmdlDataset *modelOutput, aclmdl
         }
     }
 
-
     aclDataBuffer* dataBuffer = aclmdlGetDatasetBuffer(modelOutput, 0);
     if (dataBuffer == nullptr) {
         ERROR_LOG("get model output aclmdlGetDatasetBuffer failed");
@@ -98,17 +96,16 @@ Result Utils::PostProcess(const string &path, aclmdlDataset *modelOutput, aclmdl
         return FAILED;
     }
 
-    //    uint32_t BBOX_MAX;
     if (runMode_ == ACL_HOST) {
         aclError ret = aclrtMemcpy(ptr, DATE_TYPE_SIZE, data, DATE_TYPE_SIZE, ACL_MEMCPY_DEVICE_TO_HOST);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("box num aclrtMemcpy failed!");
             return FAILED;
         }
     }
     else {
         aclError ret = aclrtMemcpy(ptr, DATE_TYPE_SIZE, data, DATE_TYPE_SIZE, ACL_MEMCPY_DEVICE_TO_DEVICE);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("box num aclrtMemcpy failed!");
             return FAILED;
         }
@@ -142,14 +139,14 @@ Result Utils::PostProcess(const string &path, aclmdlDataset *modelOutput, aclmdl
 
     if (runMode_ == ACL_HOST) {
         aclError ret = aclrtMemcpy(outInfo, sizeof(outInfo), data, sizeof(outInfo), ACL_MEMCPY_DEVICE_TO_HOST);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("box outInfo aclrtMemcpy failed!");
             return FAILED;
         }
     }
     else {
         aclError ret = aclrtMemcpy(outInfo, sizeof(outInfo), data, sizeof(outInfo), ACL_MEMCPY_DEVICE_TO_DEVICE);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("box outInfo aclrtMemcpy failed!");
             return FAILED;
         }
@@ -163,18 +160,14 @@ Result Utils::PostProcess(const string &path, aclmdlDataset *modelOutput, aclmdl
 
     for(uint32_t b=0;b<boxNum;b++) {
         uint32_t score=uint32_t(outInfo[SCORE+BOXINFOSIZE*b]*100);
-        if(score<99) continue;
+        if(score < 99 || score > 100) continue;
 
-        //TODO:
         rect.x=outInfo[TOPLEFTX+BOXINFOSIZE*b]*resultImage.cols;
         rect.y=outInfo[TOPLEFTY+BOXINFOSIZE*b]*resultImage.rows;
         rect.width=outInfo[BOTTOMRIGHTX+BOXINFOSIZE*b]*resultImage.cols-rect.x;
         rect.height=outInfo[BOTTOMRIGHTY+BOXINFOSIZE*b]*resultImage.rows-rect.y;
 
-        cout << "+++++++++++++++++++++++" << endl;
         cout << "score = " << score << endl;
-        cout << rect.x << " " << rect.y << " " << rect.width << " " << rect.height << endl;
-
         uint32_t objIndex = (uint32_t)outInfo[LABEL+BOXINFOSIZE*b];
         string text = vggssdLabel[objIndex]+":"+std::to_string(score)+"\%";
         cv::Point origin;
@@ -191,8 +184,7 @@ Result Utils::PostProcess(const string &path, aclmdlDataset *modelOutput, aclmdl
     sstream.str("");
     sstream << "./output" << kFileSperator
     << kOutputFilePrefix << file_name;
-
-
+    
     string outputPath = sstream.str();
     cv::imwrite(outputPath, resultImage);
 
@@ -287,13 +279,13 @@ void Utils::GetPathFiles(const string &path, vector<string> &file_vec) {
 void* Utils::CopyDataToDevice(void* data, uint32_t dataSize, aclrtMemcpyKind policy) {
     void* buffer = nullptr;
     aclError aclRet = aclrtMalloc(&buffer, dataSize, ACL_MEM_MALLOC_HUGE_FIRST);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("malloc device data buffer failed, aclRet is %d", aclRet);
         return nullptr;
     }
 
     aclRet = aclrtMemcpy(buffer, dataSize, data, dataSize, policy);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("Copy data to device failed, aclRet is %d", aclRet);
         (void)aclrtFree(buffer);
         return nullptr;
@@ -326,8 +318,6 @@ void Utils::ImageNchw(shared_ptr<ImageDesc>& imageData, std::vector<cv::Mat>& nh
 }
 
 bool Utils::PreProcess(shared_ptr<ImageDesc>& imageData, const string& imageFile) {
-
-    //TODO:
     //Read image using opencv
     cv::Mat image = cv::imread(imageFile, CV_LOAD_IMAGE_COLOR);
     if (image.empty()) {
@@ -341,7 +331,7 @@ bool Utils::PreProcess(shared_ptr<ImageDesc>& imageData, const string& imageFile
     uint32_t size = IMAGE_CHAN_SIZE_U8(MODEL_INPUT_WIDTH, MODEL_INPUT_HEIGHT);
 
     aclError ret = aclrtGetRunMode(&runMode_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("acl get run mode failed");
     }
 
@@ -368,5 +358,3 @@ bool Utils::PreProcess(shared_ptr<ImageDesc>& imageData, const string& imageFile
 
     return true;
 }
-
-

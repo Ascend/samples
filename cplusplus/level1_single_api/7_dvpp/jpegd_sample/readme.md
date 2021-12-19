@@ -143,7 +143,7 @@ DVPP中的JPEGD功能模块，实现.jpg、.jpeg、.JPG、.JPEG图片的解码�
 ./jpegd_demo --performance_mode 1 --in_image_file dvpp_jpegd_decode_1920x1080.jpg --img_width 1920 --img_height 1080 --pixel_mode 2 --chn_num 18 --send_circle 1000 --delay_time 20
 ```
 
--   示例描述：以性能模式从通道号16开始测试18个通道的JPEGD解码器，将dvpp\_jpegd\_decode\_1920x1080.jpg解码为宽高为YVU420文件1000次，获取性能数据。
+-   示例描述：以性能模式测试18个通道的JPEGD解码器，将dvpp\_jpegd\_decode\_1920x1080.jpg解码为宽高为YVU420文件1000次，获取性能数据。
 -   输入图像：宽1920像素、高1080像素、名称为“dvpp\_jpegd\_decode\_1920x1080.jpg”的JPEG图片。
 -   输出图像：无。性能模式下文件不会被保存，待jpegd_demo运行结束后会将18个通道的解码性能数据打印出来。
 -   Host端与Device端配置参数相同。

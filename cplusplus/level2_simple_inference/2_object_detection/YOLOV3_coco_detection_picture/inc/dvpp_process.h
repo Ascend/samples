@@ -18,7 +18,6 @@
 */
 #pragma once
 #include <cstdint>
-
 #include "acl/acl.h"
 #include "acl/ops/acl_dvpp.h"
 #include "utils.h"
@@ -29,7 +28,6 @@
 class DvppProcess {
 public:
     DvppProcess();
-
     ~DvppProcess();
 
     Result Resize(ImageData& src, ImageData& dest,

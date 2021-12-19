@@ -11,18 +11,17 @@ import os
 path = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.join(path, ".."))
 sys.path.append(os.path.join(path, "../../../common/"))
-sys.path.append(os.path.join(path, "../../../common/atlas_utils"))
+sys.path.append(os.path.join(path, "../../../common/acllite"))
 
 import numpy as np
 import acl
 import base64
-import atlas_utils.utils as utils
+import utils
 from PIL import Image, ImageDraw, ImageFont
-from atlas_utils.acl_dvpp import Dvpp
-import atlas_utils.constants as const
-from atlas_utils.acl_model import Model
-from atlas_utils.acl_image import AclImage
-from atlas_utils.acl_resource import AclResource
+import constants as const
+from acllite_model import AclLiteModel
+from acllite_image import AclLiteImage
+from acllite_resource import AclLiteResource
 
 import cv2 
 SRC_PATH = os.path.realpath(__file__).rsplit("/", 1)[0]
@@ -30,7 +29,7 @@ MODEL_PATH = os.path.join(SRC_PATH, "../model/vessel.om")
 MODEL_WIDTH = 512
 MODEL_HEIGHT = 512
 INPUT_DIR = os.path.join(SRC_PATH, "../data/")
-OUTPUT_DIR = os.path.join(SRC_PATH, "../outputs/")
+OUTPUT_DIR = os.path.join(SRC_PATH, "../out/")
 def pre_process(bgr_img):
     """
     preprocess
@@ -49,7 +48,6 @@ def pre_process(bgr_img):
 
     return orig_shape, test_img
 
-
 def post_process(infer_output, image_file):
     """
     post_process
@@ -66,7 +64,6 @@ def post_process(infer_output, image_file):
     print("result save success")    
     return 
 
-
 def main():   
     """
     main
@@ -76,11 +73,11 @@ def main():
         os.mkdir(OUTPUT_DIR)
 
     #acl init
-    acl_resource = AclResource()
+    acl_resource = AclLiteResource()
     acl_resource.init()
 
     #load model
-    model = Model(MODEL_PATH)
+    model = AclLiteModel(MODEL_PATH)
     src_dir = os.listdir(INPUT_DIR)
     #infer picture
     for pic in src_dir:
@@ -103,6 +100,3 @@ def main():
         post_process(result_list, pic)
 if __name__ == '__main__':
     main()
-
-
-

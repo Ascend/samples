@@ -14,9 +14,13 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY  "../../../out")
 set(CMAKE_CXX_FLAGS_DEBUG "-fPIC -O0 -g -Wall")
 set(CMAKE_CXX_FLAGS_RELEASE "-fPIC -O2 -Wall")
 
+if (NOT DEFINED ENV{INSTALL_DIR})
+    MESSAGE(FATAL_ERROR "Not Defined INSTALL_DIR")
+endif()
+
 # Header path
 include_directories(
-$ENV{DDK_PATH}/acllib/include/
+    $ENV{INSTALL_DIR}/acllib/include/
     ../inc/
 )
 
@@ -25,9 +29,9 @@ if(target STREQUAL "Simulator_Function")
 endif()
 
 # add host lib path
-link_directories($ENV{NPU_HOST_LIB})
+link_directories($ENV{INSTALL_DIR}/runtime/lib64/stub)
 
-SET(CMAKE_EXE_LINKER_FLAGS "-Wl,-rpath-link,$ENV{NPU_HOST_LIB}")
+SET(CMAKE_EXE_LINKER_FLAGS "-Wl,-rpath-link,$ENV{INSTALL_DIR}/runtime/lib64/stub")
 
 add_executable(main
 main.cpp

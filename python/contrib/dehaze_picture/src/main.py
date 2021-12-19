@@ -13,12 +13,11 @@ import struct
 sys.path.append("../../../common/")
 sys.path.append("../")
 import acl
-import atlas_utils.utils as utils
-import atlas_utils.constants as constants
-from atlas_utils.acl_dvpp import Dvpp
-from atlas_utils.acl_model import Model
-from atlas_utils.acl_image import AclImage
-from atlas_utils.acl_resource import AclResource
+import utils
+import constants as constants
+from acllite_model import AclLiteModel
+from acllite_image import AclLiteImage
+from acllite_resource import AclLiteResource
 
 
 class SingleImageDehaze(object):
@@ -38,7 +37,7 @@ class SingleImageDehaze(object):
         Initialize
         """
         # Load model
-        self._model = Model(self._model_path)
+        self._model = AclLiteModel(self._model_path)
 
         return constants.SUCCESS
 
@@ -81,7 +80,7 @@ class SingleImageDehaze(object):
         resultimage = np.clip(((resultimage)+1.) / 2. * 255., 0, 255).astype(np.uint8)
         resultimage = Image.fromarray(resultimage)
         resultimage = resultimage.resize((self._img_width, self._img_height))
-        resultimage.save('../outputs/out_' + image_name)
+        resultimage.save('../out/out_' + image_name)
 
 
 def main():
@@ -98,7 +97,7 @@ def main():
         print("The App arg is invalid")
         exit(1)
 
-    acl_resource = AclResource()
+    acl_resource = AclLiteResource()
     acl_resource.init()
 
     single_image_dehaze = SingleImageDehaze(MODEL_PATH, MODEL_WIDTH, MODEL_HEIGHT)
@@ -111,8 +110,8 @@ def main():
                    if os.path.splitext(img)[1] in constants.IMG_EXT]
 
     # Create a directory to save inference results
-    if not os.path.isdir(os.path.join(SRC_PATH, "../outputs")):
-        os.mkdir(os.path.join(SRC_PATH, "../outputs"))
+    if not os.path.isdir(os.path.join(SRC_PATH, "../out")):
+        os.mkdir(os.path.join(SRC_PATH, "../out"))
 
     for image_file in images_list:
         image_name = image_file.split('/')[-1]

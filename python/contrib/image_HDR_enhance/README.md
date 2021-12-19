@@ -87,7 +87,7 @@ Before deploying this sample, ensure that:
 1. Run the following commands to upload the **cartoonGAN_picture** directory in the development environment to any directory in the operating environment, for example, **/home/HwHiAiUser**, and log in to the operating environment (host) as the **HwHiAiUser** user:
 
     **scp -r $HOME/samples/python/contrib/image_HDR_enhance/  HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
-    **scp -r $HOME/samples/python/common/atlas_utils/   HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
+    **scp -r $HOME/samples/python/common/acllite/   HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
 
     **ssh HwHiAiUser@xxx.xxx.xxx.xxx**    
 

@@ -1,24 +1,25 @@
-ifndef DDK_PATH
-$(error "Can not find DDK_PATH env, please set it in environment!.")
+ifndef CPU_ARCH
+$(error "Can not find CPU_ARCH env, please set it in environment!.")
+endif
+
+ifndef INSTALL_DIR
+$(error "Can not find INSTALL_DIR env, please set it in environment!.")
+endif
+
+ifndef THIRDPART_PATH
+$(error "Can not find THIRDPART_PATH env, please set it in environment!.")
 endif
 
 ifeq ($(mode),)
 mode=AtlasDK
 endif
 
-ifeq ($(mode), AtlasDK)
+ifeq ($(CPU_ARCH), aarch64)
     CC := aarch64-linux-gnu-g++
-    ARCH := arm
-else ifeq ($(mode), ASIC)
+else ifeq ($(CPU_ARCH), x86_64)
     CC := g++
-    arch_local=$(shell arch)
-    ifeq ($(arch_local), aarch64)
-        ARCH := arm
-    else
-        ARCH := x86
-    endif
 else
-    $(error "Unsupported mode: "$(mode)", please input: AtlasDK or ASIC.")
+    $(error "Unsupported param: "$(CPU_ARCH))
 endif
 
 
@@ -34,9 +35,9 @@ OUT_INC_DIR = $(OUT_DIR)/include
 INC_DIR := \
 	-I$(LOCAL_DIR) \
 	-I$(LOCAL_DIR)/include \
-	-I$(DDK_PATH)/acllib/include \
-	-I$(HOME)/ascend_ddk/$(ARCH)/include \
-        -I$(DDK_PATH)/atc/include/protobuf \
+	-I$(INSTALL_DIR)/runtime/include \
+	-I$(THIRDPART_PATH)/include \
+    -I$(INSTALL_DIR)/atc/include/protobuf \
 	-I/usr/local/include \
 	-I$(LOCAL_DIR)/src \
 
@@ -52,12 +53,12 @@ ALL_OBJS := $(OBJS) \
 CC_FLAGS := $(INC_DIR) -std=c++11 -Wall -fPIC -O2
 
 LNK_FLAGS := \
-	-Wl,-rpath-link=$(DDK_PATH)/atc/lib64 \
-        -L$(DDK_PATH)/atc/lib64 \
-        -L$(DDK_PATH)/acllib/lib64 \
-	-L$(HOME)/ascend_ddk/$(ARCH)/lib \
+	-Wl,-rpath-link=$(INSTALL_DIR)/atc/lib64 \
+    -L$(INSTALL_DIR)/atc/lib64 \
+    -L$(INSTALL_DIR)/acllib/lib64 \
+	-L$(THIRDPART_PATH)/lib \
 	-lprotobuf \
-        -lascendcl \
+    -lascendcl \
 	-shared
 
 all: do_pre_build do_build
@@ -88,11 +89,12 @@ $(PROTO_OBJS) : proto/presenter_message.pb.cc | do_pre_build
 
 install: all
 	$(Q)echo [INSTALL] $@
-	$(Q)mkdir -p $(HOME)/ascend_ddk/$(ARCH)/include
-	$(Q)mkdir -p $(HOME)/ascend_ddk/$(ARCH)/lib
-	$(Q)cp -R $(OUT_INC_DIR)/ascenddk* $(HOME)/ascend_ddk/$(ARCH)/include/
-	$(Q)cp -R $(OUT_DIR)/lib*.so $(HOME)/ascend_ddk/$(ARCH)/lib/
+	$(Q)mkdir -p $(THIRDPART_PATH)/include
+	$(Q)mkdir -p $(THIRDPART_PATH)/lib
+	$(Q)cp -R $(OUT_INC_DIR)/* $(THIRDPART_PATH)/include
+	$(Q)cp -R $(OUT_DIR)/lib*.so $(THIRDPART_PATH)/lib/
 
 install pcie: 
 
 clean:
+

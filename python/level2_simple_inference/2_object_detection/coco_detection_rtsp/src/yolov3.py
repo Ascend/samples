@@ -5,9 +5,7 @@ from io import BytesIO
 import os
 import sys
 
-from atlas_utils.acl_dvpp import Dvpp
-#from atlas_utils.presenteragent import presenter_datatype
-from atlas_utils.acl_model import Model
+from acllite_model import AclLiteModel
 
 LABEL = 1
 SCORE = 2
@@ -15,7 +13,6 @@ TOP_LEFT_X = 3
 TOP_LEFT_Y = 4
 BOTTOM_RIGHT_X = 5
 BOTTOM_RIGHT_Y = 6
-
 labels = ["person",
         "bicycle", "car", "motorbike", "aeroplane",
         "bus", "train", "truck", "boat", "traffic light",
@@ -31,15 +28,13 @@ labels = ["person",
         "microwave", "oven", "toaster", "sink", "refrigerator", "book", "clock", "vase",
         "scissors", "teddy bear", "hair drier", "toothbrush"]
 
-
-
 class Yolov3(object):
     """yolov3"""
     def __init__(self, acl_resource, model_path, model_width, model_height):
         self._acl_resource = acl_resource
         self._model_width = model_width
         self._model_height = model_height
-        self._model = Model(model_path)
+        self._model = AclLiteModel(model_path)
 
     def __del__(self):
         if self._model:

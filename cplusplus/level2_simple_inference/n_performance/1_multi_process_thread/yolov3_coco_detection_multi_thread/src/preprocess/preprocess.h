@@ -22,32 +22,31 @@
 #include <mutex>
 #include <unistd.h>
 #include "acl/acl.h"
-#include "atlas_thread.h"
-#include "atlas_videocapture.h"
-#include "dvpp_process.h"
-#include "venc_process.h"
+#include "AclLiteThread.h"
+#include "AclLiteVideoProc.h"
+#include "AclLiteImageProc.h"
 
-class Preprocess : public AtlasThread {
+class Preprocess : public AclLiteThread {
 public:
     Preprocess(string& streamName, uint32_t modelWidth, 
                uint32_t modelHeight, uint32_t channelId);
     ~Preprocess();
 
-    AtlasError Init();
-    AtlasError Process(int msgId, shared_ptr<void> msgData);
+    AclLiteError Init();
+    AclLiteError Process(int msgId, shared_ptr<void> msgData);
     
 private:
-    AtlasError AppStartMsgProcess();
-    AtlasError ReadFrameMsgProcess();
-    AtlasError OpenVideoCapture();
-    AtlasError GetThreadInstanceId();
+    AclLiteError AppStartMsgProcess();
+    AclLiteError ReadFrameMsgProcess();
+    AclLiteError OpenVideoCapture();
+    AclLiteError GetThreadInstanceId();
     void ProcessImage(ImageData image);
 
 private:
     string streamName_;
-    AtlasVideoCapture* cap_;
+    AclLiteVideoProc* cap_;
     aclrtStream stream_;
-    DvppProcess dvpp_;
+    AclLiteImageProc dvpp_;
 
     uint32_t modelWidth_;
     uint32_t modelHeight_;

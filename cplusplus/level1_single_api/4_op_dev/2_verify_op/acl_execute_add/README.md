@@ -1,12 +1,12 @@
-# Operator Verification on Network: Add<a name="EN-US_TOPIC_0302083215"></a>
+# Operator Verification on Network: Add
 
-## Overview<a name="section1421916179418"></a>
+## Overview
 
 This sample verifies the function of the  [custom operator Add](../../1_custom_op/doc/Add_EN.md)  by converting the custom operator file into a single-operator offline model file and loading the file using AscendCL for execution.
 
 Note: The generation of a single-operator model file depends only on the operator code implementation file, operator prototype definition, and operator information library, but does not depend on the operator adaptation plugin.
 
-## Directory Structure<a name="section8733528154320"></a>
+## Directory Structure
 
 ```
 ├── inc                           // Header file directory
@@ -29,168 +29,89 @@ Note: The generation of a single-operator model file depends only on the operato
 │   ├── op_runner.cpp   // Function implementation file for building and running a single-operator
 ```
 
-## Environment Requirements<a name="en-us_topic_0230709958_section1256019267915"></a>
+## Environment Requirements
 
--   OS and architecture: CentOS x86\_64, CentOS AArch64, Ubuntu 18.04 x86\_64, EulerOS x86, EulerOS AArch64
+-   OS and architecture: CentOS x86\_64, CentOS AArch64, Ubuntu 18.04 x86\_64, Ubuntu 18.04 aarch64,  EulerOS x86, EulerOS AArch64
 -   SoC: Ascend 310, Ascend 710, or Ascend 910
--   Python version and dependency library: Python 3.7.5
+-   Python version and dependency library: Python 3.7.*x* (3.7.0 to 3.7.11) and Python 3.8.*x* (3.8.0 to 3.8.11).
 -   Ascend AI Software Stack deployed
 -   Custom operator built and deployed by referring to  [custom\_op](../../1_custom_op)
 
-## Environment Variables<a name="section053142383519"></a>
+## Environment Variables
 
--   Ascend 310 EP or Ascend 910
-    1.  In the development environment, set the environment variables for generating a single-operator offline model.
+- Configuring Environment Variables in the Development Environment
 
-        The following is an example:
+  1. The CANN portfolio provides a process-level environment variable setting script to automatically set environment variables. The following commands are used as examples
 
-        ```
-        export install_path=$HOME/Ascend/ascend-toolkit/latest
-        export PATH=/usr/local/python3.7.5/bin:${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH # Specify Python 3.7.5 to use if multiple versions of Python 3 exist, and specify your Python 3.7.5 installation path. Set the path of the ATC executable file.
-        export ASCEND_OPP_PATH=${install_path}/opp
-        ```
+     ```
+     . ${HOME}/Ascend/ascend-toolkit/set_env.sh
+     ```
 
-        Replace  **$HOME/Ascend**  with the actual Ascend-CANN-Toolkit installation path.
+     Replace  **$HOME/Ascend**  with the actual Ascend-CANN-Toolkit installation path.
 
-    2.  In the development environment, set environment variables and configure the header search path and library search path on which the build of the AscendCL single-operator verification program depends.
+  2. Operator building requires Python installation. The following takes Python 3.7.5 as an example. Run the following commands as a running user to set the environment variables related to Python 3.7.5.
 
-        The build script searches for the required header files and libraries through the paths specified by the environment variables. Replace  **$HOME/Ascend**  with the actual Ascend-CANN-Toolkit installation path.
+     ```
+     # Set tje Python3.7.5 library path.
+     export LD_LIBRARY_PATH=/usr/local/python3.7.5/lib:$LD_LIBRARY_PATH
+     # If multiple Python 3 versions exist in the user environment, specify Python 3.7.5.
+     export PATH=/usr/local/python3.7.5/bin:$PATH
+     ```
 
-        -   In the x86 operating environment
+     Replace the Python 3.7.5 installation path as required. You can also write the preceding commands to the ~/.bashrc file and run the source ~/.bashrc command to make the modification take effect immediately.
 
-            ```
-            export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux
-            export NPU_HOST_LIB=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux/fwkacllib/lib64/stub
-            ```
+  3. In the development environment, set environment variables and configure the header search path and library search path on which the build of the AscendCL single-operator verification program depends.
 
-        -   In the ARM64 operating environment
+     The build script searches for the required header files and libraries through the paths specified by the environment variables. Replace  **$HOME/Ascend**  with the actual Ascend-CANN-Toolkit installation path.
 
-            ```
-            export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux
-            export NPU_HOST_LIB=$HOME/Ascend/ascend-toolkit/latest/arm64-linux/fwkacllib/lib64/stub
-            ```
+     - If the development environment operating system architecture is x86, the configuration example is as follows:
 
+       ```
+        export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux
+        export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
+       ```
 
-        ```
-        Note:
-        Dependency on the *.so libraries in the lib64/stub directory of the FwkACLlib installation path is to avoid dependency on any *.so library of other components during building the code logic based on the AscendCL API. After the build is complete, an app that runs on the host will be linked to the *.so libraries in the fwkacllib/lib64 or acllib/lib64 directory included in the LD_LIBRARY_PATH environment variable, and be automatically linked to the *.so libraries on which other components depend.
-        ```
-    
-    3.  In the operating environment, set the environment variable of the ACLlib path on which app execution depends.
-    
-        -   If Ascend-CANN-Toolkit is installed in the operating environment, set the environment variable as follows:
-    
-            ```
-            export LD_LIBRARY_PATH=$HOME/Ascend/ascend-toolkit/latest/fwkacllib/lib64
-            ```
-    
-        -   If Ascend-CANN-NNRT is installed in the operating environment, set the environment variable as follows:
-    
-            ```
-            export LD_LIBRARY_PATH=$HOME/Ascend/nnrt/latest/acllib/lib64
-            ```
-    
-        -   If Ascend-CANN-NNAE is installed in the operating environment, set the environment variable as follows:
-    
-            ```
-            export LD_LIBRARY_PATH=$HOME/Ascend/nnae/latest/fwkacllib/lib64
-            ```
+     - If the running environment operating system architecture is AArch64, the configuration example is as follows:
 
-
-        Replace  **$HOME/Ascend**  with the actual component installation path.
-
-
--   Ascend 710
-    1.  In the development environment, set the environment variables for generating a single-operator offline model.
-
-        The following is an example:
-
-        ```
-        export install_path=$HOME/Ascend/ascend-toolkit/latest
-        export PATH=/usr/local/python3.7.5/bin:${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH # Specify Python 3.7.5 to use if multiple versions of Python 3 exist, and specify your Python 3.7.5 installation path. Set the path of the ATC executable file.
-        export ASCEND_OPP_PATH=${install_path}/opp
-        ```
-
-        Replace  **$HOME/Ascend**  with the actual Ascend-CANN-Toolkit installation path.
-
-    2.  In the development environment, set environment variables and configure the header search path and library search path on which the build of the AscendCL single-operator verification program depends.
-
-        The build script searches for the required header files and libraries through the paths specified by the environment variables. Replace  **$HOME/Ascend**  with the actual Ascend-CANN-Toolkit installation path.
-
-        -   In the x86 operating environment
-
-            ```
-            export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux
-            export NPU_HOST_LIB=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux/acllib/lib64/stub
-            ```
-
-        -   In the ARM64 operating environment
-
-            ```
-            export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux
-            export NPU_HOST_LIB=$HOME/Ascend/ascend-toolkit/latest/arm64-linux/acllib/lib64/stub
-            ```
-
-
-        ```
-        Note:
-        Dependency on the *.so libraries in the lib64/stub directory of the ACLlib installation path is to avoid dependency on any *.so library of other components during building the code logic based on the AscendCL API. After the build is complete, an app that runs on the host will be linked to the *.so libraries in the acllib/lib64 directory included in the LD_LIBRARY_PATH environment variable, and be automatically linked to the *.so libraries on which other components depend.
-        ```
-    
-    3.  In the operating environment, set the environment variable of the ACLlib path on which app execution depends.
-    
-        The following is an example only. Replace  **_$HOME/Ascend_**_**/nnrt/latest**_  with the actual Ascend-CANN-NNRT installation path.
-    
-        ```
-        export LD_LIBRARY_PATH=$HOME/Ascend/nnrt/latest/acllib/lib64
-        ```
-
-
--   Atlas 200 DK
-    1.  In the development environment, set the environment variables for generating a single-operator offline model.
-
-        The following is an example:
-
-        ```
-        export install_path=$HOME/Ascend/ascend-toolkit/latest
-        export PATH=/usr/local/python3.7.5/bin:${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH # Specify Python 3.7.5 to use if multiple versions of Python 3 exist, and specify your Python 3.7.5 installation path. Set the path of the ATC executable file.
-        export ASCEND_OPP_PATH=${install_path}/opp
-        ```
-
-        Replace  **$HOME/Ascend**  with the actual Ascend-CANN-Toolkit installation path.
-
-    2.  In the development environment, set environment variables and configure the header search path and library search path on which the build of the AscendCL single-operator verification program depends.
-
-        The following is an example. Replace  **$HOME/Ascend**  with the actual Ascend-CANN-Toolkit installation path.
-
-        ```
+       ```
         export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux
-        export NPU_HOST_LIB=$HOME/Ascend/ascend-toolkit/latest/arm64-linux/acllib/lib64/stub
-        ```
+        export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
+       ```
 
-        ```
-        Note:
-        Dependency on the *.so libraries in the lib64/stub directory of the ACLlib installation path is to avoid dependency on any *.so library of other components during building the code logic based on the AscendCL API. After the build is complete, an app that runs on the board will be linked to the *.so libraries in the acllib/lib64 directory included in the LD_LIBRARY_PATH environment variable, and be automatically linked to the *.so libraries on which other components depend.
-        ```
+- Configuring Environment Variables in the Running Environment
 
-        The environment variable  **LD\_LIBRARY\_PATH**  on which AscendCL depends has been configured in the bootable SD card preparation phase. You do not need to configure it separately.
+  - If Ascend-CANN-Toolkit is installed in the running environment, set the environment variable as follows:
 
+    ```
+    . ${HOME}/Ascend/ascend-toolkit/set_env.sh
+    ```
 
+  - If Ascend-CANN-NNRT is installed in the running environment, set the environment variable as follows:
 
-## Build and Run \(Ascend 310 EP/Ascend 710/Ascend 910\)<a name="section170442411445"></a>
+    ```
+    . ${HOME}/Ascend/nnrt/set_env.sh
+    ```
+
+  - If Ascend-CANN-NNAE is installed in the running environment, set the environment variable as follows:
+
+    ```
+    . ${HOME}/Ascend/nnae/set_env.sh
+    ```
+
+    Replace  **$HOME/Ascend**  with the actual component installation path.
+
+## Build and Run 
 
 1.  Generate the single-operator offline model file of the Add operator.
     1.  Log in to the development environment as a running user \(for example,  **HwHiAiUser**\) and go to the  **acl\_execute\_add/run/out**  directory of the sample project.
     2.  Run the following command in the  **out**  directory to generate a single-operator model file:
 
-        **atc --singleop=test\_data/config/add\_op.json  --soc\_version=_$\{soc\_version\}_  --output=op\_models**
+        **atc --singleop=test\_data/config/add\_op.json  --soc\_version=*Ascend310*  --output=op\_models**
 
         Specifically,
 
         -   **singleop**: operator description file \(.json\).
         -   **soc\_version**: Ascend AI Processor version. Replace it with the actual version.
-
-            It is the exact name of the .ini file in  **atc/data/platform\_config**  in the ATC installation path.
 
         -   **--output=op\_models**: indicates that the generated model file is stored in the  **op\_models**  folder in the current directory.
 
@@ -198,7 +119,7 @@ Note: The generation of a single-operator model file depends only on the operato
 
         The single-operator model file  **0\_Add\_3\_2\_8\_16\_3\_2\_8\_16\_3\_2\_8\_16.om**  is generated in the  **op\_models**  subdirectory of the current directory. The file is named in the format of "No.+opType+input description \(dataType\_format\_shape\)+output description".
 
-        View the enumerated values of  **dataType**  and format in the  **atc/include/graph/types.h**  file. The enumerated values start from 0 and increase in ascending order.
+        View the enumerated values of  **dataType**  and format in the  **include/graph/types.h**  file. The enumerated values start from 0 and increase in ascending order.
 
         **Note:**  During model conversion, operators in the custom OPP are preferentially searched to match the operators in the model file.
 
@@ -211,49 +132,38 @@ Note: The generation of a single-operator model file depends only on the operato
 
     Two data files  **input\_0.bin**  and  **input\_1.bin**  with shape \(8, 16\) and data type int32 are generated in the current directory for verifying the Add operator.
 
-3.  Build the sample project to generate an executable for single-operator verification.
-    1.  For Ascend 310 and Ascend 910, change  **acllib**  to  **fwkacllib**  in the  **src/CMakeLists.txt**  file. Skip this step for Ascend 710.
+3. Build the sample project to generate an executable for single-operator verification.
+   1.  Go to the  **acl\_execute\_add**  directory of the sample project and run the following command in this directory to create a directory for storing the generated executable, for example,  **build/intermediates/host**.
 
-        ```
-        # Header path
-        include_directories(
-            ${INC_PATH}/acllib/include/
-            ../inc/
-        )
-        ```
+       **mkdir -p build/intermediates/host**
 
-    2.  Go to the  **acl\_execute\_add**  directory of the sample project and run the following command in this directory to create a directory for storing the generated executable, for example,  **build/intermediates/host**.
+   2.  Go to the  **build/intermediates/host**  directory and run the  **cmake**  command.
 
-        **mkdir -p build/intermediates/host**
+       -   If the operating system architecture of the  development environment is the same as that of the running environment, run the following command:
 
-    3.  Go to the  **build/intermediates/host**  directory and run the  **cmake**  command.
+           **cd build/intermediates/host**
 
-        -   If the operating system architecture of the  development environment is the same as that of the running environment, run the following command:
+           **cmake ../../../src -DCMAKE\_CXX\_COMPILER=g++ -DCMAKE\_SKIP\_RPATH=TRUE**
 
-            **cd build/intermediates/host**
+       -   If the operating system architecture of the  development environment is different from that of the running environment, a cross compiler is requird.
 
-            **cmake ../../../src -DCMAKE\_CXX\_COMPILER=g++ -DCMAKE\_SKIP\_RPATH=TRUE**
+           For example, if the development environment is x86 and the running environment is AArch64 , run the following command:
 
-        -   If the operating system architecture of the  development environment is different from that of the running environment, a cross compiler is requird.
+           **cd build/intermediates/host**
+           
+           **cmake ../../../src -DCMAKE\_CXX\_COMPILER=aarch64-linux-gnu-g++ -DCMAKE\_SKIP\_RPATH=TRUE**
 
-            For example, if the development environment is x86 and the running environment is AArch64 , run the following command:
+      The parameters are described as follows:
 
-            **cd build/intermediates/host**
-            
-            **cmake ../../../src -DCMAKE\_CXX\_COMPILER=aarch64-linux-gnu-g++ -DCMAKE\_SKIP\_RPATH=TRUE**
+      - Replace  **../../../src**  with the actual directory of  **CMakeLists.txt**.
+      - **DCMAKE\_CXX\_COMPILER**: compiler used to build the app.
+      - **DCMAKE\_SKIP\_RPATH**: If it is set to  **TRUE**,  **rpath**  \(path specified by  **NPU\_HOST\_LIB**\) is not added to the executable generated after build. The executable automatically looks up for dynamic libraries in the path  included in  **LD\_LIBRARY\_PATH**.
 
+   3.  Run the following command to generate an executable:
 
-        The parameters are described as follows:
-    
-        -   Replace  **../../../src**  with the actual directory of  **CMakeLists.txt**.
-        -   **DCMAKE\_CXX\_COMPILER**: compiler used to build the app.
-        -   **DCMAKE\_SKIP\_RPATH**: If it is set to  **TRUE**,  **rpath**  \(path specified by  **NPU\_HOST\_LIB**\) is not added to the executable generated after build. The executable automatically looks up for dynamic libraries in the path \(**_xxx_/acllib/lib64**  or  **_xxx_/fwkacllib/lib64**\) included in  **LD\_LIBRARY\_PATH**.
-    
-    4.  Run the following command to generate an executable:
-    
-        **make**
-    
-        The executable  **execute\_add\_op**  is generated in the  **run/out**  directory of the project.
+       **make**
+
+       The executable  **execute\_add\_op**  is generated in the  **run/out**  directory of the project.
 
 
 4.  Execute the single-operator verification file on the host of the hardware device.
@@ -309,115 +219,3 @@ Note: The generation of a single-operator model file depends only on the operato
         As shown above, the output result is the sum of input 1 and input 2. The Add operator has passed the verification.
 
         **result\_files/output\_0.bin**: result binary file.
-
-
-
-## Build and Run \(Atlas 200 DK\)<a name="section205496819282"></a>
-
-1.  Generate the single-operator offline model file of the Add operator.
-    1.  Log in to the development environment as a running user \(for example,  **HwHiAiUser**\) and go to the  **acl\_execute\_add/run/out**  directory of the sample project.
-    2.  Run the following command in the  **out**  directory to generate a single-operator model file:
-
-        **atc --singleop=test\_data/config/add\_op.json  --soc\_version=Ascend310 --output=op\_models**
-
-        Specifically,
-
-        -   **singleop**: operator description file \(.json\).
-        -   **soc\_version**: Ascend AI Processor version.
-        -   **--output=op\_models**: indicates that the generated model file is stored in the  **op\_models**  folder in the current directory.
-
-        After the model conversion is successful, the following files are generated:
-
-        The single-operator model file  **0\_Add\_3\_2\_8\_16\_3\_2\_8\_16\_3\_2\_8\_16.om**  is generated in the  **op\_models**  subdirectory of the current directory. The file is named in the format of "No.+opType+input description \(dataType\_format\_shape\)+output description".
-
-        View the enumerated values of  **dataType **and format in the  **atc/include/graph/types.h**  file. The enumerated values start from 0 and increase in ascending order.
-
-        **Note:**  During model conversion, operators in the custom OPP are preferentially searched to match the operators in the model file.
-
-
-2.  Generate test data.
-
-    Go to the  **run/out/test\_data/data**  directory of the sample project and run the following command:
-
-    **python3.7.5 generate\_data.py**
-
-    Two data files  **input\_0.bin**  and  **input\_1.bin**  with shape \(8, 16\) and data type int32 are generated in the current directory for verifying the Add operator.
-
-3.  Build the sample project to generate an executable for single-operator verification.
-    1.  Go to the  **acl\_execute\_add**  directory of the sample project and run the following command in this directory to create a directory for storing the generated executable, for example,  **build/intermediates/host**.
-
-        **mkdir -p build/intermediates/host**
-
-    2.  Go to the  **build/intermediates/host**  directory and run the  **cmake**  command.
-
-        **cd build/intermediates/host**
-
-        **cmake ../../../src -DCMAKE\_CXX\_COMPILER=aarch64-linux-gnu-g++ -DCMAKE\_SKIP\_RPATH=TRUE**
-
-        -   Replace  **../../../src**  with the actual directory of  **CMakeLists.txt**.
-        -   **DCMAKE\_CXX\_COMPILER**: compiler used to build the app.
-        -   **DCMAKE\_SKIP\_RPATH**: If it is set to  **TRUE**,  **rpath**  \(path specified by  **NPU\_HOST\_LIB**\) is not added to the executable generated after build.
-
-            The executable automatically looks up for dynamic libraries in the path \(**_xxx_/acllib/lib64**\) included in  **LD\_LIBRARY\_PATH**.
-
-
-    3.  Run the following command to generate an executable:
-    
-        **make**
-    
-        The executable  **execute\_add\_op**  is generated in the  **run/out**  directory of the project.
-
-
-4.  Execute the single-operator verification file in the operating environment.
-    1.  As a running user \(for example,  **HwHiAiUser**\), copy the  **out**  folder in the  **acl\_execute\_add/run/**  directory of the sample project in the development environment to any directory in the board environment, for example,  **/home/HwHiAiUser/HIAI\_PROJECTS/run\_add/**.
-    2.  Execute the  **execute\_add\_op**  file in the  board environment  to verify the single-operator model file.
-
-        Run the following commands in  **/home/HwHiAiUser/HIAI\_PROJECTS/run\_add/out**:
-
-        **chmod +x execute\_add\_op**
-
-        **./execute\_add\_op**
-
-        The following information is displayed. \(Note: The data file is randomly generated by the data generation script, so the displayed data may be different.\)
-
-        ```
-        [INFO]  Input[0]:
-                -4        -4        -1         7         0         9        -4         5        -9        -9        -3         7                                                                                                -6         1         8         3
-                -6        -9         8        -3        -9         0         0         4        -3         7        -6        -9                                                                                                 6         6         1        -8
-                -7         7        -3         5         8        -3         6        -4         6         9         8       -10                                                                                                 7         3         3         9
-                -4         6         5         6        -5         3        -1         1         1        -8        -4         9                                                                                                -6        -9         6        -8
-                 5         8         5         2        -9         5        -8        -2        -1       -10        -5         5                                                                                                 7       -10        -8       -10
-                 0         3        -7         8         3         3       -10         5        -7         6        -3         2                                                                                                 7       -10        -8         0
-                -2        -5         8        -4         1         8         4        -5        -7         1        -9         8                                                                                                 2         3        -3         5
-                 8        -6        -8        -5         8       -10         5        -4        -5        -1         0       -10                                                                                                 8         6        -6        -3
-        [INFO]  Set input[1] from test_data/data/input_1.bin success.
-        [INFO]  Input[1]:
-                -8        -1        -3         9        -2         8        -9         7        -7         7        -5         4                                                                                                 9         6        -2         9
-                -6         1        -3         9        -5         5         4        -4        -8        -7        -1         9                                                                                                 6         0         9       -10
-                -6         6        -1        -2        -3         5         1         3        -4         0         6         4                                                                                                -4       -10        -2         7
-                 9         2         2         6        -7        -8         9         6        -2        -5        -8         5                                                                                                 9        -5         1         7
-                -9        -3        -9        -4         6         0         5        -4        -4         1        -1         2                                                                                                 1         7         8       -10
-                 1         3        -5        -8       -10        -3        -7         7         8        -3        -9         5                                                                                                -7        -6        -6        -4
-                -3         3         4        -5         5         4        -9         0        -8         2        -3        -6                                                                                                 5         4        -6        -8
-                 0         8         9        -2         4         1         8        -6        -8         1        -1        -9                                                                                                -2         0       -10         7
-           ......
-           ......
-        [INFO]  Output[0]:
-               -12        -5        -4        16        -2        17       -13        12       -16        -2        -8        11                                                                                                 3         7         6        12
-               -12        -8         5         6       -14         5         4         0       -11         0        -7         0                                                                                                12         6        10       -18
-               -13        13        -4         3         5         2         7        -1         2         9        14        -6                                                                                                 3        -7         1        16
-                 5         8         7        12       -12        -5         8         7        -1       -13       -12        14                                                                                                 3       -14         7        -1
-                -4         5        -4        -2        -3         5        -3        -6        -5        -9        -6         7                                                                                                 8        -3         0       -20
-                 1         6       -12         0        -7         0       -17        12         1         3       -12         7                                                                                                 0       -16       -14        -4
-                -5        -2        12        -9         6        12        -5        -5       -15         3       -12         2                                                                                                 7         7        -9        -3
-                 8         2         1        -7        12        -9        13       -10       -13         0        -1       -19                                                                                                 6         6       -16         4
-        [INFO]  Write output[0] success. output file = result_files/output_0.bin
-        [INFO]  Run op success
-        ```
-
-        As shown above, the output result is the sum of input 1 and input 2. The Add operator has passed the verification.
-
-        **result\_files/output\_0.bin**: result binary file.
-
-
-

@@ -4,13 +4,13 @@ sys.path.append("../")
 import os
 import numpy as np
 import acl
-import atlas_utils.utils as utils
+import utils
 from PIL import Image, ImageDraw, ImageFont
-from atlas_utils.acl_dvpp import Dvpp
-import atlas_utils.constants as const
-from atlas_utils.acl_model import Model
-from atlas_utils.acl_image import AclImage
-from atlas_utils.acl_resource import AclResource
+from acllite_imageproc import AclLiteImageProc
+import constants as const
+from acllite_model import AclLiteModel
+from acllite_image import AclLiteImage
+from acllite_resource import AclLiteResource
 
 labels = ["person",
         "bicycle", "car", "motorbike", "aeroplane",
@@ -40,7 +40,6 @@ def pre_process(image, dvpp):
     print("resize yuv end")
     return resized_image
 
-
 def post_process(infer_output, origin_img, image_file):
     """postprocess"""
     print("post process")
@@ -54,10 +53,10 @@ def post_process(infer_output, origin_img, image_file):
     scaley = origin_img.height / MODEL_HEIGHT
     if scalex > scaley:
         scaley =  scalex
-    output_path = os.path.join("../outputs", os.path.basename(image_file))
+    output_path = os.path.join("../out", os.path.basename(image_file))
     origin_image = Image.open(image_file)
     draw = ImageDraw.Draw(origin_image)
-    font = ImageFont.load_default()
+    font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", size=20)
     print("images:{}".format(image_file))
     print("======== inference results: =============")
     for n in range(int(box_num)):
@@ -76,7 +75,6 @@ def post_process(infer_output, origin_img, image_file):
         draw.text((top_left_x, top_left_y), label, font=font, fill=255)
     origin_image.save(output_path)
 
-
 def construct_image_info():
     """construct image info"""
     image_info = np.array([MODEL_WIDTH, MODEL_HEIGHT, 
@@ -84,20 +82,18 @@ def construct_image_info():
                            dtype = np.float32) 
     return image_info
 
-
 def main():
     """
     Program execution with picture directory parameters
     """
-    
     if (len(sys.argv) != 2):
         print("The App arg is invalid")
         exit(1)
     
-    acl_resource = AclResource()
+    acl_resource = AclLiteResource()
     acl_resource.init()
-    model = Model(MODEL_PATH)
-    dvpp = Dvpp(acl_resource)
+    model = AclLiteModel(MODEL_PATH)
+    dvpp = AclLiteImageProc(acl_resource)
     
     #From the parameters of the picture storage directory, reasoning by a picture
     image_dir = sys.argv[1]
@@ -105,14 +101,14 @@ def main():
                    for img in os.listdir(image_dir)
                    if os.path.splitext(img)[1] in const.IMG_EXT]
     #Create a directory to store the inference results
-    if not os.path.isdir('../outputs'):
-        os.mkdir('../outputs')
+    if not os.path.isdir('../out'):
+        os.mkdir('../out')
 
     image_info = construct_image_info()
 
     for image_file in images_list:
         #read picture
-        image = AclImage(image_file)
+        image = AclLiteImage(image_file)
         #preprocess image
         resized_image = pre_process(image, dvpp)
         print("pre process end")

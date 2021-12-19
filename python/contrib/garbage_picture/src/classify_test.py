@@ -5,18 +5,18 @@ import os
 path = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.join(path, ".."))
 sys.path.append(os.path.join(path, "../../../common/"))
-sys.path.append(os.path.join(path, "../../../common/atlas_utils"))
+sys.path.append(os.path.join(path, "../../../common/acllite"))
 
 import numpy as np
 import acl
 import base64
-import atlas_utils.utils as utils
+import utils
 from PIL import Image, ImageDraw, ImageFont
-from atlas_utils.acl_dvpp import Dvpp
-import atlas_utils.constants as const
-from atlas_utils.acl_model import Model
-from atlas_utils.acl_image import AclImage
-from atlas_utils.acl_resource import AclResource
+from acllite_imageproc import AclLiteImageProc
+import constants as const
+from acllite_model import AclLiteModel
+from acllite_image import AclLiteImage
+from acllite_resource import AclLiteResource
 
 SRC_PATH = os.path.realpath(__file__).rsplit("/", 1)[0]
 MODEL_PATH = os.path.join(SRC_PATH, "../model/garbage_yuv.om")
@@ -27,7 +27,6 @@ image_net_classes = [
      "Newspaper", "Glassware", "Basketball", "Plastic Bottle", "Cardboard","Glass Bottle", "Metalware", "Hats", "Cans", "Paper",
       "Vegetable Leaf","Orange Peel", "Eggshell","Banana Peel",
     "Battery", "Tablet capsules","Fluorescent lamp", "Paint bucket"]
-
 
 def get_image_net_class(class_id):
     if class_id >= len(image_net_classes):
@@ -53,10 +52,10 @@ def post_process(infer_output, image_file):
     vals = data.flatten()
     top_k = vals.argsort()[-1:-6:-1]
     object_class = get_image_net_class(top_k[0])
-    output_path = os.path.join(os.path.join(SRC_PATH, "../outputs"), os.path.basename(image_file))
+    output_path = os.path.join(os.path.join(SRC_PATH, "../out"), os.path.basename(image_file))
     origin_image = Image.open(image_file)
     draw = ImageDraw.Draw(origin_image)
-    font = ImageFont.load_default()
+    font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", size=20)
     font.size =50
     draw.text((10, 50), object_class, font=font, fill=255)
     origin_image.save(output_path)
@@ -75,10 +74,10 @@ def main():
         print("The App arg is invalid")
         exit(1)
 
-    acl_resource = AclResource()
+    acl_resource = AclLiteResource()
     acl_resource.init()
-    model = Model(MODEL_PATH)
-    dvpp = Dvpp(acl_resource)
+    model = AclLiteModel(MODEL_PATH)
+    dvpp = AclLiteImageProc(acl_resource)
             
     image_dir = sys.argv[1]
     images_list = [os.path.join(image_dir, img)
@@ -86,12 +85,12 @@ def main():
                    if os.path.splitext(img)[1] in const.IMG_EXT]
 
     #Create a directory to store the inference results
-    if not os.path.isdir(os.path.join(SRC_PATH, "../outputs")):
-        os.mkdir(os.path.join(SRC_PATH, "../outputs"))
+    if not os.path.isdir(os.path.join(SRC_PATH, "../out")):
+        os.mkdir(os.path.join(SRC_PATH, "../out"))
 
     image_info = construct_image_info()
     for image_file in images_list:        
-        image = AclImage(image_file)            
+        image = AclLiteImage(image_file)            
         resized_image = pre_process(image, dvpp)
         print("pre process end")
               
@@ -101,6 +100,3 @@ def main():
         print("process "+image_file+" end")
 if __name__ == '__main__':
     main()
-
-
-

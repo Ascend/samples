@@ -25,7 +25,7 @@
 #include <unistd.h>
 #include <sys/timeb.h>
 
-#include "atlas_type.h"
+#include "AclLiteType.h"
 
 using namespace std;
 
@@ -35,6 +35,7 @@ const int MSG_READ_FRAME = 2;
 const int MSG_PREPROC_DATA = 3;
 const int MSG_INFER_OUTPUT = 4;
 const int MSG_DECODE_FINISH = 5;
+const int MSG_PREPROC_END = 6;
 const int MSG_APP_EXIT = 10;
 
 const string kInferName = "inference_0";

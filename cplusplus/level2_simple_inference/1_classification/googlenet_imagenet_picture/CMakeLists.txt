@@ -4,6 +4,6 @@
 cmake_minimum_required(VERSION 3.5.1)
 
 # project information
-project(classification)
+project(googlenet_imagenet_picture)
 
 add_subdirectory("./src")

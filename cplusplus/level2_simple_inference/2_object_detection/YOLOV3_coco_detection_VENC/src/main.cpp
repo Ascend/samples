@@ -23,7 +23,7 @@
 #include <unistd.h>
 #include "object_detect.h"
 #include "opencv2/opencv.hpp"
-#include "opencv2/imgcodecs/legacy/constants_c.h"
+
 #include "opencv2/imgproc/types_c.h"
 #include "utils.h"
 using namespace std;

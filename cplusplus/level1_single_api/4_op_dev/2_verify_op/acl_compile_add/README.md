@@ -1,12 +1,12 @@
-# Operator Verification on Network: Add<a name="EN-US_TOPIC_0302083215"></a>
+# Operator Verification on Network: Add
 
-## Overview<a name="section1421916179418"></a>
+## Overview
 
 This sample verifies the function of the  [custom operator Add](../../1_custom_op/doc/Add_EN.md)  by using AscendCL online compile for execution.
 
 Note: The generation of a single-operator model file depends only on the operator code implementation file, operator prototype definition, and operator information library, but does not depend on the operator adaptation plugin.
 
-## Directory Structure<a name="section8733528154320"></a>
+## Directory Structure
 
 ```
 ├── inc                           // Header file directory
@@ -28,104 +28,79 @@ Note: The generation of a single-operator model file depends only on the operato
 │   ├── op_runner.cpp   // Function implementation file for building and running a single-operator
 ```
 
-## Environment Requirements<a name="en-us_topic_0230709958_section1256019267915"></a>
+## Environment Requirements
 
--   OS and architecture: CentOS x86\_64, CentOS AArch64, Ubuntu 18.04 x86\_64, EulerOS x86, EulerOS AArch64
--   Compiler:
-    -   For Ascend 710, or Ascend 910:
-        -   g++ in the x86 operating environment
-        -   g++-aarch64-linux-gnu in the ARM64 operating environment
-
+-   OS and architecture: CentOS x86\_64, CentOS AArch64, Ubuntu 18.04 x86\_64, Ubuntu 18.04 aarch64,  EulerOS x86, EulerOS AArch64
 -   SoC: Ascend 710, or Ascend 910
--   Python version and dependency library: Python 3.7.5
+-   Python version and dependency library: Python 3.7.*x* (3.7.0 to 3.7.11) and Python 3.8.*x* (3.8.0 to 3.8.11).
 -   Ascend AI Software Stack deployed
 -   Custom operator built and deployed by referring to  [custom\_op](../../1_custom_op)
 
-## Environment Variables<a name="section053142383519"></a>
+## Environment Variables
 
--   Ascend 910
-    1.  In the development environment, set environment variables and configure the header search path and library search path on which the build of the AscendCL single-operator verification program depends.
+- Configuring Environment Variables in the Development Environment
 
-        The build script searches for the required header files and libraries through the paths specified by the environment variables. Replace  **$HOME/Ascend**  with the actual Ascend-CANN-Toolkit installation path.
+  1. The CANN portfolio provides a process-level environment variable setting script to automatically set environment variables. The following commands are used as examples
 
-        -   In the x86 operating environment
+     ```
+     . ${HOME}/Ascend/ascend-toolkit/set_env.sh
+     ```
 
-            ```
-            export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux
-            export NPU_HOST_LIB=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux/fwkacllib/lib64/stub
-            ```
+     Replace  **$HOME/Ascend**  with the actual Ascend-CANN-Toolkit installation path.
 
-        -   In the ARM64 operating environment
+  2. Operator building requires Python installation. The following takes Python 3.7.5 as an example. Run the following commands as a running user to set the environment variables related to Python 3.7.5.
 
-            ```
-            export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux
-            export NPU_HOST_LIB=$HOME/Ascend/ascend-toolkit/latest/arm64-linux/fwkacllib/lib64/stub
-            ```
+     ```
+     # Set tje Python3.7.5 library path.
+     export LD_LIBRARY_PATH=/usr/local/python3.7.5/lib:$LD_LIBRARY_PATH
+     # If multiple Python 3 versions exist in the user environment, specify Python 3.7.5.
+     export PATH=/usr/local/python3.7.5/bin:$PATH
+     ```
 
+     Replace the Python 3.7.5 installation path as required. You can also write the preceding commands to the ~/.bashrc file and run the source ~/.bashrc command to make the modification take effect immediately.
 
-        ```
-        Note:
-        Dependency on the *.so libraries in the lib64/stub directory of the FwkACLlib installation path is to avoid dependency on any *.so library of other components during building the code logic based on the AscendCL API. After the build is complete, an app that runs on the host will be linked to the *.so libraries in the fwkacllib/lib64 or acllib/lib64 directory included in the LD_LIBRARY_PATH environment variable, and be automatically linked to the *.so libraries on which other components depend.
-        ```
-    
-    2.  In the operating environment, set the environment variable of the ACLlib path on which app execution depends.
-    
-        -   If Ascend-CANN-Toolkit is installed in the operating environment, set the environment variable as follows:
-    
-            ```
-            export LD_LIBRARY_PATH=$HOME/Ascend/ascend-toolkit/latest/fwkacllib/lib64
-            ```
-    
-        -   If Ascend-CANN-NNRT is installed in the operating environment, set the environment variable as follows:
-    
-            ```
-            export LD_LIBRARY_PATH=$HOME/Ascend/nnrt/latest/acllib/lib64
-            ```
-    
-        -   If Ascend-CANN-NNAE is installed in the operating environment, set the environment variable as follows:
-    
-            ```
-            export LD_LIBRARY_PATH=$HOME/Ascend/nnae/latest/fwkacllib/lib64
-            ```
+  3. In the development environment, set environment variables and configure the header search path and library search path on which the build of the AscendCL single-operator verification program depends.
 
+     The build script searches for the required header files and libraries through the paths specified by the environment variables. Replace  **$HOME/Ascend**  with the actual Ascend-CANN-Toolkit installation path.
 
-        Replace  **$HOME/Ascend**  with the actual component installation path.
+     - If the development environment operating system architecture is x86, the configuration example is as follows:
 
+       ```
+        export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux
+        export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
+       ```
 
--   Ascend 710
-    1.  In the development environment, set environment variables and configure the header search path and library search path on which the build of the AscendCL single-operator verification program depends.
+     - If the running environment operating system architecture is AArch64, the configuration example is as follows:
 
-        The build script searches for the required header files and libraries through the paths specified by the environment variables. Replace  **$HOME/Ascend**  with the actual Ascend-CANN-Toolkit installation path.
+       ```
+        export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux
+        export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
+       ```
 
-        -   In the x86 operating environment
+- Configuring Environment Variables in the Running Environment
 
-            ```
-            export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux
-            export NPU_HOST_LIB=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux/acllib/lib64/stub
-            ```
+  - If Ascend-CANN-Toolkit is installed in the running environment, set the environment variable as follows:
 
-        -   In the ARM64 operating environment
+    ```
+    . ${HOME}/Ascend/ascend-toolkit/set_env.sh
+    ```
 
-            ```
-            export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux
-            export NPU_HOST_LIB=$HOME/Ascend/ascend-toolkit/latest/arm64-linux/acllib/lib64/stub
-            ```
+  - If Ascend-CANN-NNRT is installed in the running environment, set the environment variable as follows:
+
+    ```
+    . ${HOME}/Ascend/nnrt/set_env.sh
+    ```
+
+  - If Ascend-CANN-NNAE is installed in the running environment, set the environment variable as follows:
+
+    ```
+    . ${HOME}/Ascend/nnae/set_env.sh
+    ```
+
+    Replace  **$HOME/Ascend**  with the actual component installation path.
 
 
-        ```
-        Note:
-        Dependency on the *.so libraries in the lib64/stub directory of the ACLlib installation path is to avoid dependency on any *.so library of other components during building the code logic based on the AscendCL API. After the build is complete, an app that runs on the host will be linked to the *.so libraries in the acllib/lib64 directory included in the LD_LIBRARY_PATH environment variable, and be automatically linked to the *.so libraries on which other components depend.
-        ```
-    
-    2.  In the operating environment, set the environment variable of the ACLlib path on which app execution depends.
-    
-        The following is an example only. Replace  **_$HOME/Ascend_**_**/nnrt/latest**_  with the actual Ascend-CANN-NNRT installation path.
-    
-        ```
-        export LD_LIBRARY_PATH=$HOME/Ascend/nnrt/latest/acllib/lib64
-        ```
-
-## Build and Run \(Ascend 710/Ascend 910\)<a name="section170442411445"></a>
+## Build and Run \(Ascend 710/Ascend 910\)
 1.  Generate test data.
 
     Go to the  **run/out/test\_data/data**  directory of the sample project and run the following command:
@@ -134,48 +109,37 @@ Note: The generation of a single-operator model file depends only on the operato
 
     Two data files  **input\_0.bin**  and  **input\_1.bin**  with shape \(8, 16\) and data type int32 are generated in the current directory for verifying the Add operator.
 
-2.  Build the sample project to generate an executable for single-operator verification.
-    1.  For Ascend 310 and Ascend 910, change  **acllib**  to  **fwkacllib**  in the  **src/CMakeLists.txt**  file. Skip this step for Ascend 710.
+2. Build the sample project to generate an executable for single-operator verification.
+    1.  Go to the  **acl\_execute\_add**  directory of the sample project and run the following command in this directory to create a directory for storing the generated executable, for example,  **build/intermediates/host**.
 
-        ```
-        # Header path
-        include_directories(
-            ${INC_PATH}/acllib/include/
-            ../inc/
-        )
-        ```
+       **mkdir -p build/intermediates/host**
 
-    2.  Go to the  **acl\_execute\_add**  directory of the sample project and run the following command in this directory to create a directory for storing the generated executable, for example,  **build/intermediates/host**.
+    2.  Go to the  **build/intermediates/host**  directory and run the  **cmake**  command.
 
-        **mkdir -p build/intermediates/host**
+       -   If the operating system architecture of the  development environment is the same as that of the running environment, run the following command:
 
-    3.  Go to the  **build/intermediates/host**  directory and run the  **cmake**  command.
+           **cd build/intermediates/host**
 
-        -   If the operating system architecture of the  development environment is the same as that of the running environment, run the following command:
+           **cmake ../../../src -DCMAKE\_CXX\_COMPILER=g++ -DCMAKE\_SKIP\_RPATH=TRUE**
 
-            **cd build/intermediates/host**
+       -   If the operating system architecture of the  development environment is different from that of the running environment, a cross compiler is requird.
 
-            **cmake ../../../src -DCMAKE\_CXX\_COMPILER=g++ -DCMAKE\_SKIP\_RPATH=TRUE**
+           For example, if the development environment is x86 and the running environment is AArch64 , run the following command:
 
-        -   If the operating system architecture of the  development environment is different from that of the running environment, a cross compiler is requird.
+           **cd build/intermediates/host**
+           
+           **cmake ../../../src -DCMAKE\_CXX\_COMPILER=aarch64-linux-gnu-g++ -DCMAKE\_SKIP\_RPATH=TRUE**
 
-            For example, if the development environment is x86 and the running environment is AArch64 , run the following command:
+         The parameters are described as follows:
 
-            **cd build/intermediates/host**
-            
-            **cmake ../../../src -DCMAKE\_CXX\_COMPILER=aarch64-linux-gnu-g++ -DCMAKE\_SKIP\_RPATH=TRUE**
+         - Replace  **../../../src**  with the actual directory of  **CMakeLists.txt**.
+         - **DCMAKE\_CXX\_COMPILER**: compiler used to build the app.
+         - **DCMAKE\_SKIP\_RPATH**: If it is set to  **TRUE**,  **rpath**  \(path specified by  **NPU\_HOST\_LIB**\) is not added to the executable generated after build. The executable automatically looks up for dynamic libraries in the path included in  **LD\_LIBRARY\_PATH**.
 
+    3.  Run the following command to generate an executable:
 
-        The parameters are described as follows:
-    
-        -   Replace  **../../../src**  with the actual directory of  **CMakeLists.txt**.
-        -   **DCMAKE\_CXX\_COMPILER**: compiler used to build the app.
-        -   **DCMAKE\_SKIP\_RPATH**: If it is set to  **TRUE**,  **rpath**  \(path specified by  **NPU\_HOST\_LIB**\) is not added to the executable generated after build. The executable automatically looks up for dynamic libraries in the path \(**_xxx_/acllib/lib64**  or  **_xxx_/fwkacllib/lib64**\) included in  **LD\_LIBRARY\_PATH**.
-    
-    4.  Run the following command to generate an executable:
-    
         **make**
-    
+
         The executable  **execute\_add\_op**  is generated in the  **run/out**  directory of the project.
 
 

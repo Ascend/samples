@@ -37,7 +37,7 @@
 #include <stdio.h>
 #include <string>
 
-#include "ascenddk/presenter/agent/presenter_channel.h"
+#include "presenter/agent/presenter_channel.h"
 
 namespace ascend {
 namespace ascendcamera {
@@ -72,10 +72,6 @@ struct OutputInfoPara {
   int height;  // resolution height
   ascend::presenter::OpenChannelParam presenter_para;  // presenter data
 };
-
-/*
- *
- */
 
 class OutputInfoProcess {
  public:

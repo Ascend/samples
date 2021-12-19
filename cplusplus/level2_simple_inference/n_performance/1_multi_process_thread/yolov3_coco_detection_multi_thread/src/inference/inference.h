@@ -22,9 +22,9 @@
 #include <mutex>
 #include <unistd.h>
 #include "acl/acl.h"
-#include "atlas_model.h"
-#include "dvpp_process.h"
-#include "atlas_thread.h"
+#include "AclLiteModel.h"
+#include "AclLiteImageProc.h"
+#include "AclLiteThread.h"
 #include "object_detection.h"
 
 using namespace std;
@@ -32,23 +32,23 @@ using namespace std;
 /**
 * ClassifyProcess
 */
-class Inference : public AtlasThread {
+class Inference : public AclLiteThread {
 public:
     Inference(const string& modelPath,
               uint32_t modelWidth, uint32_t modelHeight);
     ~Inference();
 
-    AtlasError Init();
-    AtlasError Process(int msgId, shared_ptr<void> data);
+    AclLiteError Init();
+    AclLiteError Process(int msgId, shared_ptr<void> data);
 private:
-    AtlasError CreateImageInfoBuffer();
-    AtlasError FrameImageProcess(shared_ptr<PreprocDataMsg> preprocData);
-    AtlasError Execute(vector<InferenceOutput>& inferenceOutput,
+    AclLiteError CreateImageInfoBuffer();
+    AclLiteError FrameImageProcess(shared_ptr<PreprocDataMsg> preprocData);
+    AclLiteError Execute(vector<InferenceOutput>& inferenceOutput,
                        ImageData& image);
 
     void DestroyResource();
 private:   
-    AtlasModel model_;
+    AclLiteModel model_;
     uint32_t modelWidth_;
     uint32_t modelHeight_;
     uint32_t imageInfoSize_;

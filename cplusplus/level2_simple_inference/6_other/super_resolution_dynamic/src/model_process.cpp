@@ -27,22 +27,7 @@ modelWeightPtr_(nullptr),modelWeightSize_(0), modelDesc_(nullptr), input_(nullpt
 }
 
 ModelProcess::~ModelProcess() {
-    // Unload();
-    // DestroyDesc();
-    // DestroyInput();
-    // DestroyOutput();
 }
-/*
-Result ModelProcess::LoadModelFromFile(const char *modelPath)
-{
-    aclError ret = aclmdlLoadFromFile(modelPath, &modelId_);
-    if (ret != ACL_SUCCESS) {
-        ERROR_LOG("load model from file failed, model file is %s", modelPath);
-        return FAILED;
-    }
-    return SUCCESS;
-}
-*/
 
 Result ModelProcess::load_model_from_file_with_mem(const char *modelPath) {
     if (loadFlag_) {
@@ -51,26 +36,26 @@ Result ModelProcess::load_model_from_file_with_mem(const char *modelPath) {
     }
 
     aclError ret = aclmdlQuerySize(modelPath, &modelMemSize_, &modelWeightSize_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("query model failed, model file is %s", modelPath);
         return FAILED;
     }
 
     ret = aclrtMalloc(&modelMemPtr_, modelMemSize_, ACL_MEM_MALLOC_HUGE_FIRST);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("malloc buffer for mem failed, require size is %zu", modelMemSize_);
         return FAILED;
     }
 
     ret = aclrtMalloc(&modelWeightPtr_, modelWeightSize_, ACL_MEM_MALLOC_HUGE_FIRST);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("malloc buffer for weight failed, require size is %zu", modelWeightSize_);
         return FAILED;
     }
 
     ret = aclmdlLoadFromFileWithMem(modelPath, &modelId_, modelMemPtr_,
         modelMemSize_, modelWeightPtr_, modelWeightSize_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("load model from file failed, model file is %s", modelPath);
         return FAILED;
     }
@@ -88,7 +73,7 @@ Result ModelProcess::create_desc() {
     }
 
     aclError ret = aclmdlGetDesc(modelDesc_, modelId_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("get model description failed");
         return FAILED;
     }
@@ -121,7 +106,7 @@ Result ModelProcess::create_input(void *inputDataBuffer, size_t bufferSize) {
         if (strcmp(name, ACL_DYNAMIC_TENSOR_NAME) == 0) {
             void *data = nullptr;
             auto ret = aclrtMalloc(&data, inputLen, ACL_MEM_MALLOC_HUGE_FIRST);
-            if (ret != ACL_ERROR_NONE) {
+            if (ret != ACL_SUCCESS) {
                 ERROR_LOG("malloc device memory failed, errorCode = %d.", static_cast<int32_t>(ret));
                 return FAILED;
             }
@@ -135,7 +120,7 @@ Result ModelProcess::create_input(void *inputDataBuffer, size_t bufferSize) {
             }
 
             ret = aclmdlAddDatasetBuffer(input_, dataBuffer);
-            if (ret != ACL_ERROR_NONE) {
+            if (ret != ACL_SUCCESS) {
                 ERROR_LOG("add user input dataset buffer failed, errorCode = %d.", static_cast<int32_t>(ret));
                 (void)aclrtFree(data);
                 data = nullptr;
@@ -153,7 +138,7 @@ Result ModelProcess::create_input(void *inputDataBuffer, size_t bufferSize) {
             }
 
             aclError ret = aclmdlAddDatasetBuffer(input_, inputData);
-            if (ret != ACL_ERROR_NONE) {
+            if (ret != ACL_SUCCESS) {
                 ERROR_LOG("add input dataset buffer failed, errorCode = %d.", static_cast<int32_t>(ret));
                 aclDestroyDataBuffer(inputData);
                 inputData = nullptr;
@@ -196,20 +181,20 @@ Result ModelProcess::create_output() {
         size_t buffer_size = aclmdlGetOutputSizeByIndex(modelDesc_, i);
         void *outputBuffer = nullptr;
         aclError ret = aclrtMalloc(&outputBuffer, buffer_size, ACL_MEM_MALLOC_NORMAL_ONLY);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("can't malloc buffer, size is %zu, create output failed", buffer_size);
             return FAILED;
         }
 
         aclDataBuffer* outputData = aclCreateDataBuffer(outputBuffer, buffer_size);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("can't create data buffer, create output failed");
             aclrtFree(outputBuffer);
             return FAILED;
         }
 
         ret = aclmdlAddDatasetBuffer(output_, outputData);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("can't add data buffer, create output failed");
             aclrtFree(outputBuffer);
             aclDestroyDataBuffer(outputData);
@@ -241,14 +226,14 @@ Result ModelProcess::set_dynamic_hw_size(uint64_t height, uint64_t width)
 {
     size_t index = 0;
     aclError ret = aclmdlGetInputIndexByName(modelDesc_, ACL_DYNAMIC_TENSOR_NAME, &index);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("get input index by name[%s] failed, errorCode = %d.",
             ACL_DYNAMIC_TENSOR_NAME, static_cast<int32_t>(ret));
         return FAILED;
     }
 
     ret = aclmdlSetDynamicHWSize(modelId_, input_, index, height, width);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("set dynamic hw[%lu, %lu] failed, errorCode = %d.",
             height, width, static_cast<int32_t>(ret));
         return FAILED;
@@ -258,7 +243,7 @@ Result ModelProcess::set_dynamic_hw_size(uint64_t height, uint64_t width)
 
 Result ModelProcess::execute() {
     aclError ret = aclmdlExecute(modelId_, input_, output_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("execute model failed, modelId is %u", modelId_);
         return FAILED;
     }
@@ -274,7 +259,7 @@ void ModelProcess::unload() {
     }
 
     aclError ret = aclmdlUnload(modelId_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("unload model failed, modelId is %u", modelId_);
     }
 
@@ -302,5 +287,3 @@ void ModelProcess::unload() {
 aclmdlDataset *ModelProcess::get_model_output_data() {
     return output_;
 }
-
-

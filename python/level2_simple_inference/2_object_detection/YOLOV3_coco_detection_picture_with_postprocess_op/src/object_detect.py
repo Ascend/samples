@@ -1,4 +1,3 @@
-"""main""" 
 import sys
 sys.path.append("../../../../common")
 sys.path.append("../")
@@ -6,13 +5,13 @@ import os
 import numpy as np
 import cv2 as cv
 import acl
-import atlas_utils.utils as utils
-from atlas_utils.acl_dvpp import Dvpp
-import atlas_utils.constants as const
-from atlas_utils.acl_model import Model
-from atlas_utils.utils import display_time 
-from atlas_utils.acl_image import AclImage
-from atlas_utils.acl_resource import AclResource
+import utils
+from acllite_imageproc import AclLiteImageProc
+import constants as const
+from acllite_model import AclLiteModel
+from utils import display_time 
+from acllite_image import AclLiteImage
+from acllite_resource import AclLiteResource
 
 labels = ["person",
         "bicycle", "car", "motorbike", "aeroplane",
@@ -46,7 +45,6 @@ def pre_process(image, dvpp):
     print("resize yuv end")
     return resized_image
 
-
 @display_time
 def post_process(infer_output, bgr_img, image_file):
     """postprocess"""
@@ -57,7 +55,7 @@ def post_process(infer_output, bgr_img, image_file):
     scaley = bgr_img.shape[0] / MODEL_HEIGHT
     if scalex > scaley:
         scaley =  scalex
-    output_path = os.path.join("../outputs", os.path.basename(image_file))
+    output_path = os.path.join("../out", os.path.basename(image_file))
     print("image file = ", image_file)
     for n in range(int(box_num)):
         ids = int(box_info[5 * int(box_num) + n])
@@ -75,11 +73,10 @@ def post_process(infer_output, bgr_img, image_file):
         p3 = (max(int(top_left_x), 15), max(int(top_left_y), 15))
         cv.putText(bgr_img, label, p3, cv.FONT_ITALIC, 0.6, colors[n % 6], 1)
 
-    output_file = os.path.join("../outputs", "out_" + os.path.basename(image_file))
+    output_file = os.path.join("../out", "out_" + os.path.basename(image_file))
     print("output:%s" % output_file)
     cv.imwrite(output_file, bgr_img)
     print("success!")
-
 
 @display_time
 def yolo_detectionoutput_inference(model, result_list0, result_list1, result_list2, image_info):    
@@ -89,14 +86,12 @@ def yolo_detectionoutput_inference(model, result_list0, result_list1, result_lis
     result_list2 = result_list2.transpose(0, 3, 1, 2).copy()
     return model.execute([result_list0, result_list1, result_list2, image_info])
 
-
 def construct_image_info():
     """construct image info"""
     image_info = np.array([MODEL_WIDTH, MODEL_HEIGHT, 
                            MODEL_WIDTH, MODEL_HEIGHT], 
                            dtype = np.float32) 
     return image_info
-
 
 def main():
     """
@@ -107,11 +102,11 @@ def main():
         print("The App arg is invalid")
         exit(1)
     
-    acl_resource = AclResource()
+    acl_resource = AclLiteResource()
     acl_resource.init()
-    model = Model(MODEL_PATH)
-    model2 = Model(MODEL_PATH2)
-    dvpp = Dvpp(acl_resource)
+    model = AclLiteModel(MODEL_PATH)
+    model2 = AclLiteModel(MODEL_PATH2)
+    dvpp = AclLiteImageProc(acl_resource)
     
     #From the parameters of the picture storage directory, reasoning by a picture
     image_dir = sys.argv[1]
@@ -119,15 +114,15 @@ def main():
                    for img in os.listdir(image_dir)
                    if os.path.splitext(img)[1] in const.IMG_EXT]
     #Create a directory to store the inference results
-    if not os.path.isdir('../outputs'):
-        os.mkdir('../outputs')
+    if not os.path.isdir('../out'):
+        os.mkdir('../out')
 
     image_info = construct_image_info()
 
     for image_file in images_list:
         print("======== using dvpp preprocess begin: =============")
         #read picture
-        image = AclImage(image_file)
+        image = AclLiteImage(image_file)
         bgr_img = cv.imread(image_file)
         #preprocess image
         resized_image = pre_process(image, dvpp)
@@ -142,4 +137,3 @@ def main():
 
 if __name__ == '__main__':
     main()
- 

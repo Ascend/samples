@@ -25,29 +25,29 @@
 #include "presenter/agent/presenter_types.h"
 
 #include "acl/acl.h"
-#include "atlas_error.h"
-#include "dvpp_process.h"
-#include "atlas_thread.h"
+#include "AclLiteError.h"
+#include "AclLiteImageProc.h"
+#include "AclLiteThread.h"
 
 using namespace std;
 using namespace ascend::presenter;
 
-class Postprocess: public AtlasThread {
+class Postprocess: public AclLiteThread {
 public:
     Postprocess(const string& configFile, bool display = false);
     ~Postprocess();
 
-    AtlasError Init();
-    AtlasError Process(int msgId, shared_ptr<void> data);
+    AclLiteError Init();
+    AclLiteError Process(int msgId, shared_ptr<void> data);
 
     void SetDisplay() { display_ = true; }    
 
 private:
-    AtlasError AnalyzeInferenceOutput(vector<DetectionResult>& detectResults,
+    AclLiteError AnalyzeInferenceOutput(vector<DetectionResult>& detectResults,
                                       uint32_t imageWidth, uint32_t imageHeight,
                                       vector<InferenceOutput>& modelOutput);
-    AtlasError InferOutputProcess(shared_ptr<InferOutputMsg> data);
-    AtlasError SendImage(Channel* channel,
+    AclLiteError InferOutputProcess(shared_ptr<InferOutputMsg> data);
+    AclLiteError SendImage(Channel* channel,
                          ImageData& jpegImage,vector<DetectionResult>& detRes);
     void PrintDetectResults(vector<DetectionResult>& detectResults, 
                             uint32_t channelId);

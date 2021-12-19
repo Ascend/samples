@@ -22,54 +22,54 @@
 #include <dirent.h>
 
 #include "classify_process.h"
-#include "atlasutil/atlas_utils.h"
-#include "atlasutil/atlas_error.h"
-#include "atlasutil/acl_device.h"
+#include "acllite/AclLiteUtils.h"
+#include "acllite/AclLiteError.h"
+#include "acllite/AclLiteResource.h"
 using namespace std;
 
 int main(int argc, char *argv[]) {
 
     if((argc < 2) || (argv[1] == nullptr)){
-        ATLAS_LOG_ERROR("Please input: ./main <image_dir>");
-        return ATLAS_ERROR;
+        ACLLITE_LOG_ERROR("Please input: ./main <image_dir>");
+        return ACLLITE_ERROR;
     }
 
-    AclDevice aclDev;
-    AtlasError ret = aclDev.Init();
+    AclLiteResource aclDev;
+    AclLiteError ret = aclDev.Init();
     if (ret) {
-        ATLAS_LOG_ERROR("Init resource failed, error %d", ret);
-        return ATLAS_ERROR;
+        ACLLITE_LOG_ERROR("Init resource failed, error %d", ret);
+        return ACLLITE_ERROR;
     }  
     aclrtRunMode RunMode = aclDev.GetRunMode();  
 
     ClassifyProcess classify;
     ret = classify.Init();
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Classification Init resource failed");
-        return ATLAS_ERROR;
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Classification Init resource failed");
+        return ACLLITE_ERROR;
     }
 
     string inputImageDir = string(argv[1]);
     vector<string> fileVec;
     GetAllFiles(inputImageDir, fileVec);
     if (fileVec.empty()) {
-        ATLAS_LOG_ERROR("Failed to deal all empty path=%s.", inputImageDir.c_str());
-        return ATLAS_ERROR;
+        ACLLITE_LOG_ERROR("Failed to deal all empty path=%s.", inputImageDir.c_str());
+        return ACLLITE_ERROR;
     }
 
     ret = classify.Process(fileVec, RunMode);
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Classification Excute Inference failed");
-        return ATLAS_ERROR;
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Classification Excute Inference failed");
+        return ACLLITE_ERROR;
     }
     else{
-        ATLAS_LOG_INFO("Classification Excute Inference success");
+        ACLLITE_LOG_INFO("Classification Excute Inference success");
     }
 
-    ATLAS_LOG_INFO("Execute sample finish");
+    ACLLITE_LOG_INFO("Execute sample finish");
     
     classify.DestroyResource();
     aclDev.Release();
     
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }

@@ -387,7 +387,7 @@ tf.train.write_graph(min_graph, "model", "vgg16_cat_dog.pb", as_text=False)
 1. 执行以下命令,将开发环境的 **vgg16_cat_dog_picture** 目录上传到运行环境中，例如 **/home/HwHiAiUser**，并以HwHiAiUser（运行用户）登录运行环境（Host）。
   ```
 scp -r $HOME/samples/python/level2_simple_inference/1_classification/vgg16_cat_dog_picture/  HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser
-scp -r $HOME/samples/python/common/atlas_utils/   HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser
+scp -r $HOME/samples/python/common/acllite/   HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser
 ssh HwHiAiUser@xxx.xxx.xxx.xxx
   ```
 

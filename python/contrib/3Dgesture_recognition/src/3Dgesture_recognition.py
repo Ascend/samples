@@ -12,18 +12,17 @@ import struct
 path = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.join(path, ".."))
 sys.path.append(os.path.join(path, "../../../common/"))
-sys.path.append(os.path.join(path, "../../../common/atlas_utils"))
+sys.path.append(os.path.join(path, "../../../common/acllite"))
 
 import numpy as np
 import acl
 import base64
-import atlas_utils.utils as utils
+import utils
 from PIL import Image, ImageDraw, ImageFont
-from atlas_utils.acl_dvpp import Dvpp
-import atlas_utils.constants as const
-from atlas_utils.acl_model import Model
-from atlas_utils.acl_image import AclImage
-from atlas_utils.acl_resource import AclResource
+import constants as const
+from acllite_model import AclLiteModel
+from acllite_image import AclLiteImage
+from acllite_resource import AclLiteResource
 
 SRC_PATH = os.path.realpath(__file__).rsplit("/", 1)[0]
 MODEL_PATH = os.path.join(SRC_PATH, "../model/3d_gesture_recognition.om")
@@ -42,7 +41,6 @@ def get_image_net_class(class_id):
     else:
         return image_net_classes[class_id]
 
-
 def post_process(infer_output, data_file):
     """
     post_process
@@ -59,12 +57,11 @@ def post_process(infer_output, data_file):
     (filepath, tempfilename) = os.path.split(data_file)
     (filename, extension) = os.path.splitext(tempfilename)
     object_class = get_image_net_class(top_k[0])
-    output_path = os.path.join(os.path.join(SRC_PATH, "../outputs"), filename + ".txt")
+    output_path = os.path.join(os.path.join(SRC_PATH, "../out"), filename + ".txt")
     with open(output_path, "w", encoding="utf-8") as fp:
         fp.write(object_class)
        
     return 
-
 
 def main():    
     """
@@ -74,9 +71,9 @@ def main():
         print("The App arg is invalid")
         exit(1)
 
-    acl_resource = AclResource()
+    acl_resource = AclLiteResource()
     acl_resource.init()
-    model = Model(MODEL_PATH)             
+    model = AclLiteModel(MODEL_PATH)             
 
     data_dir = sys.argv[1]  
     data_list = [os.path.join(data_dir, testdata)
@@ -84,8 +81,8 @@ def main():
                    if os.path.splitext(testdata)[1] in ['.bin']]
 
     #Create a directory to store the inference results
-    if not os.path.isdir(os.path.join(SRC_PATH, "../outputs")):
-        os.mkdir(os.path.join(SRC_PATH, "../outputs"))
+    if not os.path.isdir(os.path.join(SRC_PATH, "../out")):
+        os.mkdir(os.path.join(SRC_PATH, "../out"))
 
     for data_file in data_list:     
         data_raw = np.fromfile(data_file, dtype = np.float32)

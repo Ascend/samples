@@ -21,11 +21,10 @@
 #include <stdlib.h>
 #include <dirent.h>
 #include <vector>
-
 #include "object_detect.h"
-#include "atlasutil/atlas_utils.h"
-#include "atlasutil/atlas_error.h"
-#include "atlasutil/acl_device.h"
+#include "acllite/AclLiteUtils.h"
+#include "acllite/AclLiteError.h"
+#include "acllite/AclLiteResource.h"
 using namespace std;
 
 namespace {
@@ -37,60 +36,60 @@ const char* kModelPath = "../model/yolov3.om";
 int main(int argc, char *argv[]) {
 
     if((argc < 2) || (argv[1] == nullptr)){
-        ATLAS_LOG_ERROR("Please input: ./main <image_dir>");
-        return ATLAS_ERROR;
+        ACLLITE_LOG_ERROR("Please input: ./main <image_dir>");
+        return ACLLITE_ERROR;
     }
-    AclDevice aclDev;
-    AtlasError ret = aclDev.Init();
+    AclLiteResource aclDev;
+    AclLiteError ret = aclDev.Init();
     if (ret) {
-        ATLAS_LOG_ERROR("Init resource failed, error %d", ret);
-        return ATLAS_ERROR;
+        ACLLITE_LOG_ERROR("Init resource failed, error %d", ret);
+        return ACLLITE_ERROR;
     }  
     aclrtRunMode RunMode = aclDev.GetRunMode();  
 
     ObjectDetect detect;
     ret = detect.Init();
     if (ret) {
-        ATLAS_LOG_ERROR("Init resource failed, error %d", ret);
-        return ATLAS_ERROR;
+        ACLLITE_LOG_ERROR("Init resource failed, error %d", ret);
+        return ACLLITE_ERROR;
     }
 
     string inputImageDir = string(argv[1]);
     vector<string> fileVec;
     GetAllFiles(inputImageDir, fileVec);
     if (fileVec.empty()) {
-        ATLAS_LOG_ERROR("Failed to deal all empty path=%s.", inputImageDir.c_str());
-        return ATLAS_ERROR;
+        ACLLITE_LOG_ERROR("Failed to deal all empty path=%s.", inputImageDir.c_str());
+        return ACLLITE_ERROR;
     }
 
     ImageData image;
     for (string imageFile : fileVec) {
         ReadJpeg(image, imageFile);
         if (image.data == nullptr) {
-            ATLAS_LOG_ERROR("Read image %s failed", imageFile.c_str());
-            return ATLAS_ERROR;
+            ACLLITE_LOG_ERROR("Read image %s failed", imageFile.c_str());
+            return ACLLITE_ERROR;
         }
 
         ImageData resizedImage;
         ret = detect.Preprocess(resizedImage, image, RunMode);
-        if (ret != ATLAS_OK) {
-            ATLAS_LOG_ERROR("Read file %s failed, continue to read next",
+        if (ret != ACLLITE_OK) {
+            ACLLITE_LOG_ERROR("Read file %s failed, continue to read next",
                       imageFile.c_str());                
             continue;
         }
         std::vector<InferenceOutput> inferenceOutput;
         ret = detect.Inference(inferenceOutput, resizedImage);
-        if (ret != ATLAS_OK) {
-            ATLAS_LOG_ERROR("Inference model inference output data failed");
-            return ATLAS_ERROR;
+        if (ret != ACLLITE_OK) {
+            ACLLITE_LOG_ERROR("Inference model inference output data failed");
+            return ACLLITE_ERROR;
         }
  
         ret = detect.Postprocess(image, inferenceOutput, imageFile);
-        if (ret != ATLAS_OK) {
-            ATLAS_LOG_ERROR("Process model inference output data failed");
-            return ATLAS_ERROR;
+        if (ret != ACLLITE_OK) {
+            ACLLITE_LOG_ERROR("Process model inference output data failed");
+            return ACLLITE_ERROR;
         }
     }
-    ATLAS_LOG_INFO("Execute sample success");
-    return ATLAS_OK;
+    ACLLITE_LOG_INFO("Execute sample success");
+    return ACLLITE_OK;
 }

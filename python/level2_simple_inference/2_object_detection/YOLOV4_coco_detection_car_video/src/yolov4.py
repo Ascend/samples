@@ -9,9 +9,9 @@ import cv2 as cv
 from PIL import Image
 import pickle
 import LaneFinder
-import atlas_utils.constants as const
-from atlas_utils.acl_model import Model
-from atlas_utils.acl_resource import AclResource
+import constants as const
+from acllite_model import AclLiteModel
+from acllite_resource import AclLiteResource
 
 labels = ["person",
         "bicycle", "car", "motorbike", "aeroplane",
@@ -27,7 +27,6 @@ labels = ["person",
         "toilet", "TV monitor", "laptop", "mouse", "remote", "keyboard", "cell phone",
         "microwave", "oven", "toaster", "sink", "refrigerator", "book", "clock", "vase",
         "scissors", "teddy bear", "hair drier", "toothbrush"]
-INPUT_DIR = '../data/'
 OUTPUT_DIR = '../out/'
 MODEL_PATH = "../model/yolov4_bs1.om"
 MODEL_WIDTH = 608
@@ -38,16 +37,11 @@ anchors_3 = np.array([[12, 16], [19, 36], [40, 28]]) / stride_list[2]
 anchors_2 = np.array([[36, 75], [76, 55], [72, 146]]) / stride_list[1]
 anchors_1 = np.array([[142, 110], [192, 243], [459, 401]]) / stride_list[0]
 anchor_list = [anchors_1, anchors_2, anchors_3]
-
-conf_threshold = 0.8
 iou_threshold = 0.3
-
 colors = [(255, 0, 0), (0, 255, 0), (0, 0, 255), (0, 255, 255), (255, 0, 255), (255, 255, 0)]
 
 def preprocess(frame):
-
     image = Image.fromarray(cv.cvtColor(frame, cv.COLOR_BGR2RGB))
-    #image = Image.open(img_path)
     img_h = image.size[1]
     img_w = image.size[0]
     net_h = MODEL_HEIGHT
@@ -91,12 +85,10 @@ def apply_nms(all_boxes, thres):
     for cls in range(class_num):
         cls_bboxes = all_boxes[cls]
         sorted_boxes = sorted(cls_bboxes, key=lambda d: d[5])[::-1]
-
         p = dict()
         for i in range(len(sorted_boxes)):
             if i in p:
                 continue
-
             truth = sorted_boxes[i]
             for j in range(i + 1, len(sorted_boxes)):
                 if j in p:
@@ -105,7 +97,6 @@ def apply_nms(all_boxes, thres):
                 iou = cal_iou(box, truth)
                 if iou >= thres:
                     p[j] = 1
-
         for i in range(len(sorted_boxes)):
             if i not in p:
                 res.append(sorted_boxes[i])
@@ -198,7 +189,6 @@ def preprocess_frame(bgr_img):
     bgr_img = bgr_img[:, :, ::-1]
     image = bgr_img
     image = LaneFinder.Image.fromarray(image.astype('uint8'), 'RGB')
-
     fframe = np.array(image)
     fframe = lf.process_image(fframe, False)
     frame = LaneFinder.Image.fromarray(fframe)
@@ -217,13 +207,11 @@ def main():
     if (len(sys.argv) != 2):
         print("Please input video path")
         exit(1)
-
     #ACL resource initialization
-    acl_resource = AclResource()
+    acl_resource = AclLiteResource()
     acl_resource.init()
     #load model
-    model = Model(MODEL_PATH)
-
+    model = AclLiteModel(MODEL_PATH)
     #open video
     video_path = sys.argv[1]
     print("open video ", video_path)

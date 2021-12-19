@@ -16,9 +16,8 @@
 * File sample_process.cpp
 * Description: handle acl resource
 */
-#include "classify_process.h"
 #include <iostream>
-
+#include "classify_process.h"
 #include "acl/acl.h"
 #include "model_process.h"
 #include "image_net_classes.h"
@@ -46,7 +45,7 @@ Result ClassifyProcess::InitResource() {
     // ACL init
     const char *aclConfigPath = "../src/acl.json";
     aclError ret = aclInit(aclConfigPath);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("Acl init failed");
         return FAILED;
     }
@@ -54,14 +53,14 @@ Result ClassifyProcess::InitResource() {
 
     // open device
     ret = aclrtSetDevice(deviceId_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("Acl open device %d failed", deviceId_);
         return FAILED;
     }
     INFO_LOG("Open device %d success", deviceId_);
 
     ret = aclrtGetRunMode(&runMode_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("acl get run mode failed");
         return FAILED;
     }
@@ -211,17 +210,16 @@ Result ClassifyProcess::Preprocess(const string& imageFile) {
     cv::cvtColor(resizeMat, resizeMat, cv::COLOR_BGR2RGB);
 
     if (runMode_ == ACL_HOST) {
-        //AI1上运行时,需要将图片数据拷贝到device侧
+        //copy data to device when run on ai1s
         aclError ret = aclrtMemcpy(inputBuf_, inputDataSize_,
         resizeMat.ptr<uint8_t>(), inputDataSize_,
         ACL_MEMCPY_HOST_TO_DEVICE);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("Copy resized image data to device failed.");
             return FAILED;
         }
     } else {
-        //Atals200DK上运行时,数据拷贝到本地即可.
-        //reiszeMat是局部变量,数据无法传出函数,需要拷贝一份
+        //copy data to host when run on 200dk
         memcpy(inputBuf_, resizeMat.ptr<void>(), inputDataSize_);
     }
 
@@ -234,8 +232,6 @@ Result ClassifyProcess::Inference(aclmdlDataset*& inferenceOutput) {
         ERROR_LOG("Execute model inference failed");
         return FAILED;
     }
-    //Release model input buffer
-    //model_.DestroyInput();
 
     inferenceOutput = model_.GetModelOutputData();
 
@@ -244,8 +240,6 @@ Result ClassifyProcess::Inference(aclmdlDataset*& inferenceOutput) {
 
 Result ClassifyProcess::Postprocess(const string& origImageFile,
 aclmdlDataset* modelOutput){
-    //INFO_LOG("Postprocess image");
-
     uint32_t dataSize = 0;
     void* data = GetInferenceOutputItem(dataSize, modelOutput);
     if (data == nullptr) {
@@ -268,46 +262,31 @@ aclmdlDataset* modelOutput){
 
     cv::Mat inputImage = cv::imread(origImageFile, CV_LOAD_IMAGE_COLOR);
     cv::Mat yuvImgIn,yuvImgOut;
-    //cv::cvtColor(inputImage,yuvImgIn,cv::COLOR_BGR2YUV_YV12 );
-    //cv::cvtColor(inputImage,yuvImgIn,cv::COLOR_BGR2YUV_I420);
     cv::cvtColor(inputImage,yuvImgIn,cv::COLOR_BGR2YCrCb);
 
     yuvImgOut = yuvImgIn.clone();
 
     INFO_LOG("YCrCb channel: %d", yuvImgIn.channels());
 
-//    cv::Mat tempYCrCb;
-//    cv::cvtColor(yuvImgIn,tempYCrCb,cv::COLOR_YCrCb2BGR);
-//    cv::imwrite(outputPath, tempYCrCb);
-
     for (uint32_t i = 0; i < 256; i++){
         for(uint32_t j = 0; j < 256; j++){
-            //把outData中的数据拷贝至yuvImg.data[k];
-            if(i*256+j<100)
-            {
-                //cout<<"result"<<k<<"="<<(float)(outData[k])<<endl;  //调试时打印输出
-            }
+            //copy data from outData to yuvImg.data[k];
             outData[i*256+j] *= 0.92;
             if(outData[i*256+j]<0.0)
             {
-                //yuvImgOut.data[i*256+j] = 0;
                 yuvImgOut.at<cv::Vec3b>(i,j)[0] = 0;
             }
             else if(outData[i*256+j]>1.0)
             {
-                //yuvImgOut.data[i*256+j] = 255;
                 yuvImgOut.at<cv::Vec3b>(i,j)[0] = 255;
             }
             else
             {
-                //yuvImgOut.data[i*256+j] = (unsigned char)(outData[i*256+j]*255*1.0); //强制类型转换
                 yuvImgOut.at<cv::Vec3b>(i,j)[0] = (unsigned char)(outData[i*256+j]*255);
             }
         }
     }
     cv::Mat outputImage;
-    //cv::cvtColor(yuvImgOut,outputImage,cv::COLOR_YUV2BGR_YV12 );
-    //cv::cvtColor(yuvImgOut,outputImage, cv::COLOR_YUV2BGR_I420 );
     cv::cvtColor(yuvImgOut,outputImage, cv::COLOR_YCrCb2BGR);
     cv::imwrite(outputPath, outputImage);
 
@@ -327,29 +306,8 @@ aclmdlDataset* modelOutput){
     double dPSNR = getPSNR(GTImage,outputImage);
     double dSSIM = getSSIM(GTImage,outputImage);
 
-    //R/G/B channel
-//    std::vector<cv::Mat> GTImageChannels,outputImageChannels;
-//    cv::split(GTImage, GTImageChannels);
-//    cv::split(outputImage, outputImageChannels);
-//    double dPSNR = getPSNR(GTImageChannels[0],outputImageChannels[0]);
-//    double dSSIM = getSSIM(GTImageChannels[0],outputImageChannels[0]);
-
-    //YUV channel
-//    double dPSNR = getPSNR(yuvImgIn,yuvImgOut);
-//    double dSSIM = getSSIM(yuvImgIn,yuvImgOut);
-
-    //Y channel
-//    cv::Mat grayImgIn,grayImgOut;
-//    cv::cvtColor(yuvImgIn,grayImgIn,cv::COLOR_YUV2GRAY_YV12 );
-//    cv::cvtColor(yuvImgOut,grayImgOut,cv::COLOR_YUV2GRAY_YV12 );
-//    double dPSNR = getPSNR(grayImgIn,grayImgOut);
-//    double dSSIM = getSSIM(grayImgIn,grayImgOut);
-
-    //INFO_LOG("PSNR: %.2lf , SSIM: %.2lf. ",dPSNR, dSSIM);
-
     dPSNRs.push_back(dPSNR);
     dSSIMs.push_back(dSSIM);
-    //=============================================================================
 #endif
     return SUCCESS;
 }
@@ -421,7 +379,6 @@ void ClassifyProcess::LabelClassToImage(int classIdx, const string& origImagePat
     int fontFace = 0;
     double fontScale = 1;
     int thickness = 2;
-  //  int baseline = 0;
     cv::Point origin;
     origin.x = 10;
     origin.y = 50;
@@ -435,7 +392,7 @@ void ClassifyProcess::DestroyResource()
     aclError ret;
     if (stream_ != nullptr) {
         ret = aclrtDestroyStream(stream_);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("destroy stream failed");
         }
         stream_ = nullptr;
@@ -444,7 +401,7 @@ void ClassifyProcess::DestroyResource()
 
     if (context_ != nullptr) {
         ret = aclrtDestroyContext(context_);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("destroy context failed");
         }
         context_ = nullptr;
@@ -452,13 +409,13 @@ void ClassifyProcess::DestroyResource()
     INFO_LOG("end to destroy context");
 
     ret = aclrtResetDevice(deviceId_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("reset device failed");
     }
     INFO_LOG("end to reset device is %d", deviceId_);
 
     ret = aclFinalize();
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("finalize acl failed");
     }
     INFO_LOG("end to finalize acl");

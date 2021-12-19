@@ -33,7 +33,7 @@ void *ThreadFunc(void *arg)
     int deviceId = 0;
     aclrtContext context = nullptr;
     aclError ret = aclrtCreateContext(&context, deviceId);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("aclrtCreateContext failed, errorCode = %d.", static_cast<int32_t>(ret));
         return ((void*)(-1));
     }
@@ -45,7 +45,7 @@ void *ThreadFunc(void *arg)
     }
 
     ret = aclrtDestroyContext(context);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("aclrtDestroyContext failed, errorCode = %d.", static_cast<int32_t>(ret));
         return ((void*)(-1));
     }
@@ -58,7 +58,7 @@ Result SampleProcess::InitResource()
     // ACL init
     const char *aclConfigPath = "../src/acl.json";
     aclError ret = aclInit(aclConfigPath);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("acl init failed, errorCode = %d", static_cast<int32_t>(ret));
         return FAILED;
     }
@@ -66,7 +66,7 @@ Result SampleProcess::InitResource()
 
     // set device
     ret = aclrtSetDevice(deviceId_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("acl set device %d failed, errorCode = %d", deviceId_, static_cast<int32_t>(ret));
         return FAILED;
     }
@@ -74,7 +74,7 @@ Result SampleProcess::InitResource()
 
     // create context (set current)
     ret = aclrtCreateContext(&context_, deviceId_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("acl create context failed, deviceId = %d, errorCode = %d",
             deviceId_, static_cast<int32_t>(ret));
         return FAILED;
@@ -86,7 +86,7 @@ Result SampleProcess::InitResource()
     // runMode is ACL_DEVICE which represents app is running in device
     aclrtRunMode runMode;
     ret = aclrtGetRunMode(&runMode);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("acl get run mode failed, errorCode = %d.", static_cast<int32_t>(ret));
         return FAILED;
     }
@@ -153,7 +153,7 @@ void SampleProcess::DestroyResource()
 
     if (context_ != nullptr) {
         ret = aclrtDestroyContext(context_);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("destroy context failed, errorCode = %d", static_cast<int32_t>(ret));
         }
         context_ = nullptr;
@@ -161,13 +161,13 @@ void SampleProcess::DestroyResource()
     INFO_LOG("end to destroy context");
 
     ret = aclrtResetDevice(deviceId_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("reset device %d failed, errorCode = %d", deviceId_, static_cast<int32_t>(ret));
     }
     INFO_LOG("end to reset device %d", deviceId_);
 
     ret = aclFinalize();
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("finalize acl failed, errorCode = %d", static_cast<int32_t>(ret));
     }
     INFO_LOG("end to finalize acl");

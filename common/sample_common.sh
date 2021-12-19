@@ -99,11 +99,9 @@ function build()
   if [[ ${TargetKernel} = "x86" ]] || [[ ${TargetKernel} = "X86" ]];then
     TargetCompiler="g++"
     TargetKernel="x86"
-    #export DDK_PATH=${HOME}/Ascend/ascend-toolkit/latest
   else
     TargetCompiler="aarch64-linux-gnu-g++"
     TargetKernel="arm"
-    #export DDK_PATH=${HOME}/Ascend/ascend-toolkit/latest/arm64-linux
   fi
 
   if [ -d ${ScriptPath}/../build/intermediates/host ];then
@@ -114,7 +112,6 @@ function build()
   cd ${ScriptPath}/../build/intermediates/host
 
   # Start compiling
-  export NPU_HOST_LIB=${DDK_PATH}/acllib/lib64/stub
   cmake ../../../src -DCMAKE_CXX_COMPILER=${TargetCompiler} -DCMAKE_SKIP_RPATH=TRUE
   if [ $? -ne 0 ];then
     echo "[ERROR] cmake error, Please check your environment!"
@@ -170,8 +167,7 @@ function parse_presenter_view_ip()
   fi
 }
 
-
-function running_video()
+function running_presenter()
 {
   Kernel=`uname -m`
   if [[ ${Kernel} = "x86_64" ]];then
@@ -201,7 +197,6 @@ function running_video()
 
   sleep 2
 
-  export LD_LIBRARY_PATH=${HOME}/ascend_ddk/${Targetkernel}/lib:${HOME}/Ascend/acllib/lib64:$LD_LIBRARY_PATH
   cd ${ScriptPath}/../out
   ${running_command} ${data_command} &
   sleep 1
@@ -212,13 +207,52 @@ function running_video()
     kill_run "only_presenter"
     return 1
   else
+    sleep 3
     echo "[INFO] The program runs successfully, Please visit http://${presenter_view_ip}:7007 for display server!"
     read -p "Enter any command to stop the application:" presenter_view_ip
     kill_run "all"
     return 0
   fi
 }
-function running_picture()
+function running_presenter_python()
+{
+  sed -i "s/presenter_server_ip=[0-9.]*/presenter_server_ip=${presenter_view_ip}/g" ${ScriptPath}/${conf_file_name}
+  sed -i "s/presenter_view_ip=[0-9.]*/presenter_view_ip=${presenter_view_ip}/g" ${ScriptPath}/${conf_file_name}
+
+  if [[ ! -n "${common_script_dir}"  ]];then
+        cd ${ScriptPath}/../../../../../common
+  else
+        cd ${common_script_dir}
+  fi
+
+  bash run_presenter_server.sh ${ScriptPath}/${conf_file_name} > /dev/null
+  if [ $? -ne 0 ];then
+    echo "[ERROR] The program failed to run, please check the environmoent!"
+    cd ${ScriptPath}
+    kill_run
+    return 1
+  fi
+
+  sleep 2
+
+  cd ${ScriptPath}/../src
+  ${running_command} ${data_command} &
+  sleep 1
+
+  project_pid=`ps -ef | grep "${running_command}" | grep "${data_command}" | awk -F ' ' '{print $2}'`
+  if [[ ${project_pid}"X" = "X" ]];then
+    echo "[ERROR] The program failed to run, please check the log in the /var/log/npu/slog/host-0 directory!"
+    kill_run "only_presenter"
+    return 1
+  else
+    sleep 3
+    echo "[INFO] The program runs successfully, Please visit http://${presenter_view_ip}:7007 for display server!"
+    read -p "Enter any command to stop the application:" presenter_view_ip
+    kill_run "all"
+    return 0
+  fi
+}
+function running()
 {
     Kernel=`uname -m`
    if [[ ${Kernel} = "x86_64" ]];then
@@ -226,7 +260,6 @@ function running_picture()
     else
         Targetkernel="arm"
     fi
-    export LD_LIBRARY_PATH=${HOME}/ascend_ddk/${Targetkernel}/lib:${HOME}/Ascend/acllib/lib64:$LD_LIBRARY_PATH
     cd ${ScriptPath}/../out
     rm -rf output
     mkdir output

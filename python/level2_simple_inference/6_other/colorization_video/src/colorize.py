@@ -12,13 +12,13 @@ path = os.path.dirname(os.path.abspath(__file__))
 
 sys.path.append(os.path.join(path, ".."))
 sys.path.append(os.path.join(path, "../../../../common/"))
-sys.path.append(os.path.join(path, "../../../../common/atlas_utils"))
+sys.path.append(os.path.join(path, "../../../../common/acllite"))
 
-from acl_model import Model
-from acl_image import AclImage
-from acl_resource import AclResource
-from atlas_utils import presenteragent
-import atlas_utils.presenteragent.presenter_channel as presenter_channel
+from acllite_model import AclLiteModel
+from acllite_image import AclLiteImage
+from acllite_resource import AclLiteResource
+from acllite import presenteragent
+import presenteragent.presenter_channel as presenter_channel
 
 MODEL_WIDTH = 224
 MODEL_HEIGHT = 224
@@ -31,16 +31,12 @@ def preprocess(frame):
     """
     #Read the image
     bgr_img = frame.astype(np.float32)
-
     #Opencv reads the picture as (N) HWC to get the HW value
     orig_shape = bgr_img.shape[:2]
-
     #Normalize the picture
     bgr_img = bgr_img / 255.0
-
     #Convert the picture to Lab space
     lab_img = cv.cvtColor(bgr_img, cv.COLOR_BGR2Lab)
-
     #Gets the L
     orig_l = lab_img[:, :, 0]
 
@@ -59,35 +55,28 @@ def preprocess(frame):
 
     return orig_shape, orig_l, l_data
 
-
 def postprocess(result_list, orig_shape, orig_l):
     """
     Post process the images after model reasoning
     """
     result_list[0] = result_list[0].reshape(1, 2, 56, 56).transpose(0, 2, 3, 1)
     result_array = result_list[0][0]
-
     #Scales the predicted ab channel value to the original picture size
     ab_data = cv.resize(result_array, orig_shape[::-1])
-
     #get the Lab value of the predicted image
     result_lab = np.concatenate((orig_l[:, :, np.newaxis], ab_data), axis = 2)
-
     #Convert Lab to RGBU888
     result_bgr = (255 * np.clip(cv.cvtColor(result_lab, cv.COLOR_Lab2BGR), 0, 1)).astype('uint8')
-
     return cv.imencode('.jpg', result_bgr)[1]
-
 
 def main():
     """
     acl resource initialization
     """
-    acl_resource = AclResource()
+    acl_resource = AclLiteResource()
     acl_resource.init()
-
     #load model
-    model = Model(model_path)
+    model = AclLiteModel(model_path)
     chan = presenter_channel.open_channel(COLORIZATION_CONF)
     if chan is None:
         print("Open presenter channel failed")
@@ -110,7 +99,6 @@ def main():
         exit()
 
     cap = cv.VideoCapture(URL)
-
     #Gets the total frames
     frames_num = cap.get(7)
     currentFrames = 0
@@ -118,7 +106,6 @@ def main():
     while True:
         #read image
         ret, frame = cap.read()
-
         if ret is not True:
             print("read None image, break")
             break
@@ -128,7 +115,6 @@ def main():
             cap.set(1, 0)
 
         currentFrames += 1
-
         #Gets the L channel value
         orig_shape, orig_l, l_data = preprocess(frame)
         result_list = model.execute([l_data,])

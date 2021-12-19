@@ -19,7 +19,7 @@ Result Utils::AlignSpImage(const PictureDesc &picDesc, uint8_t *inBuffer, uint8_
     for (auto i = 0; i < picDesc.height; i++) {
         aclRet = aclrtMemcpy(inBuffer + i * picDesc.widthStride, picDesc.width,
             imageBuffer + i * picDesc.width, picDesc.width, memcpyType);
-        if (aclRet != ACL_ERROR_NONE) {
+        if (aclRet != ACL_SUCCESS) {
             ERROR_LOG("memcpy failed, errorCode = %d", static_cast<int32_t>(aclRet));
             return FAILED;
         }
@@ -53,7 +53,7 @@ Result Utils::AlignSpImage(const PictureDesc &picDesc, uint8_t *inBuffer, uint8_
     for (auto i = 0; i < uvHigh; i++) {
         aclRet = aclrtMemcpy(uvSrcData + i * picDesc.widthStride * uvWidthCoefficient, picDesc.width * uvWidthCoefficient,
             uvDstData + i * picDesc.width * uvWidthCoefficient, picDesc.width * uvWidthCoefficient, memcpyType);
-        if (aclRet != ACL_ERROR_NONE) {
+        if (aclRet != ACL_SUCCESS) {
             ERROR_LOG("memcpy failed, errorCode = %d", static_cast<int32_t>(aclRet));
             return FAILED;
         }
@@ -91,7 +91,7 @@ Result Utils::AlignPackedImage(const PictureDesc &picDesc, uint8_t *inBuffer, ui
     for (auto i = 0; i < picDesc.height; i++) {
         aclError aclRet = aclrtMemcpy(inBuffer + i * picDesc.widthStride, picDesc.width * coefficient,
             imageBuffer + i * picDesc.width * coefficient, picDesc.width * coefficient, memcpyType);
-        if (aclRet != ACL_ERROR_NONE) {
+        if (aclRet != ACL_SUCCESS) {
             ERROR_LOG("memcpy failed, errorCode = %d", static_cast<int32_t>(aclRet));
             return FAILED;
         }
@@ -117,7 +117,7 @@ void *Utils::GetPicDevBuffer(const PictureDesc &picDesc)
 
     void *picDevBuff = nullptr;
     aclError aclRet = acldvppMalloc(&picDevBuff, picDesc.bufferSize);
-    if (aclRet !=  ACL_ERROR_NONE) {
+    if (aclRet !=  ACL_SUCCESS) {
         ERROR_LOG("malloc device data buffer failed, errorCode = %d", static_cast<int32_t>(aclRet));
         fclose(fp);
         return nullptr;
@@ -137,7 +137,7 @@ void *Utils::GetPicDevBuffer(const PictureDesc &picDesc)
     if (!(RunStatus::GetDeviceStatus())) { // app is running in host
         void *inHostBuff = nullptr;
         aclRet = aclrtMallocHost(&inHostBuff, picDesc.bufferSize);
-        if (aclRet !=  ACL_ERROR_NONE) {
+        if (aclRet !=  ACL_SUCCESS) {
             ERROR_LOG("malloc host data buffer failed, errorCode = %d", static_cast<int32_t>(aclRet));
             (void)acldvppFree(picDevBuff);
             free(imageBuffer);
@@ -160,7 +160,7 @@ void *Utils::GetPicDevBuffer(const PictureDesc &picDesc)
         // if app is running in host, need copy model output data from host to device
         aclRet = aclrtMemcpy(picDevBuff, picDesc.bufferSize, inHostBuff,
             picDesc.bufferSize, ACL_MEMCPY_HOST_TO_DEVICE);
-        if (aclRet != ACL_ERROR_NONE) {
+        if (aclRet != ACL_SUCCESS) {
             ERROR_LOG("memcpy from host to device failed, errorCode = %d", static_cast<int32_t>(aclRet));
             (void)acldvppFree(picDevBuff);
             (void)aclrtFreeHost(inHostBuff);
@@ -195,13 +195,13 @@ Result Utils::SaveDvppOutputData(const char *fileName, void *devPtr, uint32_t da
     aclError aclRet;
     if (!(RunStatus::GetDeviceStatus())) {
         aclRet = aclrtMallocHost(&dataPtr, dataSize);
-        if (aclRet != ACL_ERROR_NONE) {
+        if (aclRet != ACL_SUCCESS) {
             ERROR_LOG("malloc host data buffer failed, errorCode = %d", static_cast<int32_t>(aclRet));
             return FAILED;
         }
 
         aclRet = aclrtMemcpy(dataPtr, dataSize, devPtr, dataSize, ACL_MEMCPY_DEVICE_TO_HOST);
-        if (aclRet != ACL_ERROR_NONE) {
+        if (aclRet != ACL_SUCCESS) {
             ERROR_LOG("dvpp output memcpy to host failed, errorCode = %d", static_cast<int32_t>(aclRet));
             (void)aclrtFreeHost(dataPtr);
             return FAILED;

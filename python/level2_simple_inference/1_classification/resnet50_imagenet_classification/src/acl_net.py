@@ -18,7 +18,7 @@ import os
 from PIL import Image
 from constant import ACL_MEM_MALLOC_HUGE_FIRST, \
     ACL_MEMCPY_HOST_TO_DEVICE, ACL_MEMCPY_DEVICE_TO_HOST, \
-    ACL_ERROR_NONE, IMG_EXT, NPY_FLOAT32
+    ACL_SUCCESS, IMG_EXT, NPY_FLOAT32
 
 buffer_method = {
     "in": acl.mdl.get_input_size_by_index,
@@ -27,7 +27,7 @@ buffer_method = {
 
 
 def check_ret(message, ret):
-    if ret != ACL_ERROR_NONE:
+    if ret != ACL_SUCCESS:
         raise Exception("{} failed ret={}"
                         .format(message, ret))
 
@@ -164,7 +164,7 @@ class Net(object):
             data = acl.create_data_buffer(item["buffer"], item["size"])
             _, ret = acl.mdl.add_dataset_buffer(dataset, data)
 
-            if ret != ACL_ERROR_NONE:
+            if ret != ACL_SUCCESS:
                 ret = acl.destroy_data_buffer(data)
                 check_ret("acl.destroy_data_buffer", ret)
 

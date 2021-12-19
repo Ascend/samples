@@ -23,8 +23,8 @@
 #include <stdio.h>
 #include <unistd.h>
 #include "business_imp.h"
-#include "atlasutil/atlas_utils.h"
-#include "atlasutil/atlas_error.h"
+#include "acllite/AclLiteUtils.h"
+#include "acllite/AclLiteError.h"
 using namespace std;
 
 namespace {
@@ -36,27 +36,27 @@ const char* kModelPath = "../model/blurtosharp_pad_1280_720.om";
 int main(int argc, char *argv[]) {
     //check the input, need the picture directory.
     if((argc < 2) || (argv[1] == nullptr)){
-        ATLAS_LOG_ERROR("Please input: ./main <image_dir>");
+        ACLLITE_LOG_ERROR("Please input: ./main <image_dir>");
         return FAILED;
     }
 
     // according argv[0], get the work directory.
     char work_file[200];
-    ATLAS_LOG_INFO("argv[0]:%s", argv[0]);
+    ACLLITE_LOG_INFO("argv[0]:%s", argv[0]);
     
     realpath(argv[0], work_file);
-    // ATLAS_LOG_INFO("work_path = %s", work_file); 
+    // ACLLITE_LOG_INFO("work_path = %s", work_file); 
     string work_file_tmp = work_file;
 
     string work_path = work_file_tmp.substr(0, work_file_tmp.find_last_of("/"));
-    ATLAS_LOG_INFO("work_path = %s", work_path.c_str()); 
+    ACLLITE_LOG_INFO("work_path = %s", work_path.c_str()); 
 
     //Business implementation, need model path, model input image widht and height
     BusinessImp businessImp(kModelPath, kModelWidth, kModelHeight, work_path);
     //Initialization of ACL resource, model and memory
-    AtlasError ret = businessImp.init();
+    AclLiteError ret = businessImp.init();
     if (ret != SUCCESS) {
-        ATLAS_LOG_ERROR("Classification Init resource failed");
+        ACLLITE_LOG_ERROR("Classification Init resource failed");
         return FAILED;
     }
     //Get all the image file names in the image directory
@@ -64,7 +64,7 @@ int main(int argc, char *argv[]) {
     vector<string> fileVec;
     GetAllFiles(inputImageDir, fileVec);
     if (fileVec.empty()) {
-        ATLAS_LOG_ERROR("Failed to deal all empty path=%s.", inputImageDir.c_str());
+        ACLLITE_LOG_ERROR("Failed to deal all empty path=%s.", inputImageDir.c_str());
         return FAILED;
     }
     
@@ -72,7 +72,7 @@ int main(int argc, char *argv[]) {
         //Preprocessing image: read the image and zoom it to the size required by the model input
         ret = businessImp.preprocess(imageFile);
         if (ret != SUCCESS) {
-            ATLAS_LOG_ERROR("Read file %s failed, continue to read next",
+            ACLLITE_LOG_ERROR("Read file %s failed, continue to read next",
                       imageFile.c_str());                
             continue;
         }
@@ -80,18 +80,18 @@ int main(int argc, char *argv[]) {
         std::vector<InferenceOutput> inferenceOutput;
         ret = businessImp.inference(inferenceOutput);
         if (ret != SUCCESS) {
-            ATLAS_LOG_ERROR("Inference model inference output data failed");
+            ACLLITE_LOG_ERROR("Inference model inference output data failed");
             return FAILED;
         }
 
         //Get inference output, and resize to the original size.
         ret = businessImp.postprocess(imageFile, inferenceOutput);
         if (ret != SUCCESS) {
-            ATLAS_LOG_ERROR("Process model inference output data failed");
+            ACLLITE_LOG_ERROR("Process model inference output data failed");
             return FAILED;
         }
     }
 
-    ATLAS_LOG_INFO("Execute sample success");
+    ACLLITE_LOG_INFO("Execute sample success");
     return SUCCESS;
 }

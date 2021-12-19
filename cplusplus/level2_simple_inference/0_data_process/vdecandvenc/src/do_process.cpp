@@ -19,7 +19,7 @@
 #include <iostream>
 
 #include "acl/acl.h"
-#include "atlas_model.h"
+#include "acllite/AclLiteModel.h"
 #include "do_process.h"
 using namespace std;
 
@@ -30,7 +30,7 @@ DoProcess::~DoProcess() {
     DestroyResource();
 }
 
-AtlasError DoProcess::InitResource() {
+AclLiteError DoProcess::InitResource() {
     /* 1. ACL初始化 */
     char aclConfigPath[32] = {'\0'};
     aclInit(aclConfigPath);
@@ -39,57 +39,57 @@ AtlasError DoProcess::InitResource() {
     aclrtSetDevice(0);
     // create stream
     aclError ret = aclrtCreateStream(&stream_);
-    if (ret != ACL_ERROR_NONE) {
-        ATLAS_LOG_ERROR("acl create stream failed\n");
-        return ATLAS_ERROR_CREATE_STREAM;
+    if (ret != ACL_SUCCESS) {
+        ACLLITE_LOG_ERROR("acl create stream failed\n");
+        return ACLLITE_ERROR_CREATE_STREAM;
     }
-    ATLAS_LOG_INFO("create stream success");
+    ACLLITE_LOG_INFO("create stream success");
 
     ret = aclrtGetRunMode(&runMode_);
-    if (ret != ACL_ERROR_NONE) {
-        ATLAS_LOG_ERROR("acl get run mode failed\n");
-        return ATLAS_ERROR_GET_RUM_MODE;
+    if (ret != ACL_SUCCESS) {
+        ACLLITE_LOG_ERROR("acl get run mode failed\n");
+        return ACLLITE_ERROR_GET_RUM_MODE;
     }
 
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
-AtlasError DoProcess::Init() {
+AclLiteError DoProcess::Init() {
     if (isInited_) {
-        ATLAS_LOG_INFO("instance is initied already!\n");
-        return ATLAS_OK;
+        ACLLITE_LOG_INFO("instance is initied already!\n");
+        return ACLLITE_OK;
     }
-    AtlasError ret = InitResource();
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Init acl resource failed, error: %d", ret);
+    AclLiteError ret = InitResource();
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Init acl resource failed, error: %d", ret);
         return ret;
     }
 
-    ret = dvpp_.InitResource(stream_);
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Init dvpp failed\n");
+    ret = dvpp_.Init();
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Init dvpp failed\n");
         return ret;
     }
 
     isInited_ = true;
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
-AtlasError DoProcess::Process(ImageData& image) {
-    AtlasError ret = encoder_.DoVencProcess(image);
-    if(ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("video encode failed\n");
-        return ATLAS_ERROR;
+AclLiteError DoProcess::Process(ImageData& image) {
+    AclLiteError ret = encoder_.DoVencProcess(image);
+    if(ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("video encode failed\n");
+        return ACLLITE_ERROR;
     }
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
-AtlasError DoProcess::Set(uint32_t width, uint32_t height) {
-    AtlasError ret = encoder_.InitResource(width, height);
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Init video_encoder failed\n");
+AclLiteError DoProcess::Set(uint32_t width, uint32_t height) {
+    AclLiteError ret = encoder_.InitResource(width, height);
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Init video_encoder failed\n");
         return ret;
     }
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
 void DoProcess::DestroyResource()
@@ -100,23 +100,23 @@ void DoProcess::DestroyResource()
     aclError ret;
     if (stream_ != nullptr) {
         ret = aclrtDestroyStream(stream_);
-        if (ret != ACL_ERROR_NONE) {
-            ATLAS_LOG_ERROR("destroy stream failed");
+        if (ret != ACL_SUCCESS) {
+            ACLLITE_LOG_ERROR("destroy stream failed");
         }
         stream_ = nullptr;
     }
 
     ret = aclrtResetDevice(deviceId_);
-    if (ret != ACL_ERROR_NONE) {
-        ATLAS_LOG_ERROR("reset device failed\n");
+    if (ret != ACL_SUCCESS) {
+        ACLLITE_LOG_ERROR("reset device failed\n");
     }
-    ATLAS_LOG_INFO("end to reset device is %d\n", deviceId_);
+    ACLLITE_LOG_INFO("end to reset device is %d\n", deviceId_);
 
     ret = aclFinalize();
-    if (ret != ACL_ERROR_NONE) {
-        ATLAS_LOG_ERROR("finalize acl failed\n");
+    if (ret != ACL_SUCCESS) {
+        ACLLITE_LOG_ERROR("finalize acl failed\n");
     }
-    ATLAS_LOG_INFO("end to finalize acl");
+    ACLLITE_LOG_INFO("end to finalize acl");
 
 }
 

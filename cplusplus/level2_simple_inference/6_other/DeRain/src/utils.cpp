@@ -16,7 +16,6 @@
 * File utils.cpp
 * Description: handle file operations
 */
-#include "utils.h"
 #include <map>
 #include <iostream>
 #include <fstream>
@@ -28,6 +27,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include "acl/acl.h"
+#include "utils.h"
 
 using namespace std;
 
@@ -126,7 +126,7 @@ void* Utils::CopyDataDeviceToLocal(void* deviceData, uint32_t dataSize) {
 
     aclError aclRet = aclrtMemcpy(hostPtr, dataSize, deviceData,
                                   dataSize, ACL_MEMCPY_DEVICE_TO_HOST);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("aclrtMemcpy device to host failed, aclRet is %d", aclRet);
         delete[](hostPtr);
         return nullptr;

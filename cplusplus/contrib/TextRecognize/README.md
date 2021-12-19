@@ -96,9 +96,9 @@ Before deploying this sample, ensure that:
     
       **sudo apt-get install libjsoncpp-dev**
 
-6. compile atlasutil
+6. compile acllite
     
-    refer to [atlasutil库使用说明](https://github.com/Ascend/samples/tree/master/cplusplus/common/atlasutil)，get atlasutil
+    refer to [acllite库使用说明](https://github.com/Ascend/samples/tree/master/cplusplus/common/acllite)，get acllite
 
 
 ### Sample Deployment

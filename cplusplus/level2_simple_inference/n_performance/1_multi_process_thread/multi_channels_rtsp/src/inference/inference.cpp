@@ -20,8 +20,8 @@
 #include <sys/timeb.h>
 
 #include "acl/acl.h"
-#include "atlas_app.h"
-#include "atlas_model.h"
+#include "AclLiteApp.h"
+#include "AclLiteModel.h"
 #include "inference.h"
 #include "face_detection.h"
 
@@ -37,45 +37,45 @@ Inference::~Inference() {
     model_.DestroyResource();
 }
 
-AtlasError Inference::Init() {
-    AtlasError ret = model_.Init();
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Model init failed, error:%d", ret);
+AclLiteError Inference::Init() {
+    AclLiteError ret = model_.Init();
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Model init failed, error:%d", ret);
         return ret;
     }
 
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
-AtlasError Inference::Execute(vector<InferenceOutput>& inferenceOutput,
+AclLiteError Inference::Execute(vector<InferenceOutput>& inferenceOutput,
                                        ImageData& resizedImage) {
-    AtlasError ret = model_.CreateInput(resizedImage.data.get(), 
+    AclLiteError ret = model_.CreateInput(resizedImage.data.get(), 
                                         resizedImage.size);
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Create mode input dataset failed, error:%d", ret);
-        return ATLAS_ERROR;
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Create mode input dataset failed, error:%d", ret);
+        return ACLLITE_ERROR;
     }
 
     ret = model_.Execute(inferenceOutput);
-    if (ret != ATLAS_OK) {
+    if (ret != ACLLITE_OK) {
         model_.DestroyInput();
-        ATLAS_LOG_ERROR("Execute model inference failed, error: %d", ret);
-        return ATLAS_ERROR;
+        ACLLITE_LOG_ERROR("Execute model inference failed, error: %d", ret);
+        return ACLLITE_ERROR;
     }
 
     model_.DestroyInput();
 
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
 int execCnt = 0;
 
-AtlasError Inference::FrameImageProcess(
+AclLiteError Inference::FrameImageProcess(
     shared_ptr<PreprocDataMsg> preprocData) {
     shared_ptr<InferOutputMsg> inferMsg = make_shared<InferOutputMsg>();
-    AtlasError ret = Execute(inferMsg->inferData, preprocData->resizedImage);
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Inference frame failed, error %d", ret);
+    AclLiteError ret = Execute(inferMsg->inferData, preprocData->resizedImage);
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Inference frame failed, error %d", ret);
         return ret;
     }   
 
@@ -87,19 +87,22 @@ AtlasError Inference::FrameImageProcess(
 
     SendMessage(preprocData->postprocThreadId, MSG_INFER_OUTPUT, inferMsg);
 
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
-AtlasError Inference::Process(int msgId, shared_ptr<void> data) {
+AclLiteError Inference::Process(int msgId, shared_ptr<void> data) {
+    shared_ptr<PreprocDataMsg> tmp = static_pointer_cast<PreprocDataMsg>(data);
     switch(msgId) {
         case MSG_PREPROC_DATA:
             FrameImageProcess(static_pointer_cast<PreprocDataMsg>(data));
             break;
+        case MSG_PREPROC_END:
+            SendMessage(tmp->postprocThreadId, MSG_DECODE_FINISH, nullptr);
         default:
-            ATLAS_LOG_INFO("Inference thread ignore msg %d", msgId);
+            ACLLITE_LOG_INFO("Inference thread ignore msg %d", msgId);
             break;
     }
 
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 

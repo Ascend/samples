@@ -319,7 +319,7 @@ APP_ERROR TextRecognition::PrepareModelBuffer(std::vector<void *> &inputBuffers,
         void *buffer = nullptr;
         size_t size = aclmdlGetInputSizeByIndex(modelDesc, i);
         APP_ERROR ret = aclrtMalloc(&buffer, size, ACL_MEM_MALLOC_NORMAL_ONLY);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             LogError << "TextRecognition[" << instanceId_ << "]: Failed to malloc model input buffer, ret = " \
                      << ret << ".";
             // inputBuffers[0] will be freed by shared point, just set it to nullptr here

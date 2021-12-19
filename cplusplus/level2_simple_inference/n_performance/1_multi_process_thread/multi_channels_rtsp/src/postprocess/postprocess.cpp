@@ -21,8 +21,8 @@
 #include "acl/acl.h"
 #include "face_detection.h"
 #include "postprocess.h"
-#include "atlas_utils.h"
-#include "atlas_app.h"
+#include "AclLiteUtils.h"
+#include "AclLiteApp.h"
 
 using namespace std;
 
@@ -47,20 +47,20 @@ Postprocess::~Postprocess() {
 }
 
 
-AtlasError Postprocess::Init() {
+AclLiteError Postprocess::Init() {
     if (display_) {
         PresenterErrorCode ret = OpenChannelByConfig(presenterChan_, configFile_.c_str());
         if (ret != PresenterErrorCode::kNone) {
-            ATLAS_LOG_ERROR("Open channel failed, error %d\n", (int)ret);
-            return ATLAS_ERROR;
+            ACLLITE_LOG_ERROR("Open channel failed, error %d\n", (int)ret);
+            return ACLLITE_ERROR;
         }
     }
 
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
-AtlasError Postprocess::Process(int msgId, shared_ptr<void> data) {
-    AtlasError ret = ATLAS_OK;
+AclLiteError Postprocess::Process(int msgId, shared_ptr<void> data) {
+    AclLiteError ret = ACLLITE_OK;
     shared_ptr<InferOutputMsg> inferMsg = static_pointer_cast<InferOutputMsg>(data);
     
     switch(msgId) {
@@ -71,42 +71,40 @@ AtlasError Postprocess::Process(int msgId, shared_ptr<void> data) {
             SendMessage(kMainThreadId, MSG_APP_EXIT, nullptr);
             break;
         default:
-            ATLAS_LOG_INFO("Postprocess thread ignore msg %d", msgId);
+            ACLLITE_LOG_INFO("Postprocess thread ignore msg %d", msgId);
             break;
     }
 
     return ret;
 }
 
-AtlasError Postprocess::InferOutputProcess(shared_ptr<InferOutputMsg> data) {
+AclLiteError Postprocess::InferOutputProcess(shared_ptr<InferOutputMsg> data) {
     vector<DetectionResult> detectResults;
-    AtlasError ret = AnalyzeInferenceOutput(detectResults, data->frameWidth,
+    AclLiteError ret = AnalyzeInferenceOutput(detectResults, data->frameWidth,
                                             data->frameHeight, data->inferData);
-    if(ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Covert image failed, error %d", ret);
+    if(ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Covert image failed, error %d", ret);
         return ret;
     }
-
-    PrintDetectResults(detectResults, data->channelId);
 
     if (display_) {
         SendImage(presenterChan_, data->jpgImage, detectResults);                  
     }
 
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
 void Postprocess::PrintDetectResults(vector<DetectionResult>& detectResults,
                                      uint32_t channelId) {
     for (size_t i = 0; i < detectResults.size(); i++) {
-        ATLAS_LOG_INFO("channel%d:%d %d %d %d  %s", 
+        ACLLITE_LOG_INFO("channel%d:%d %d %d %d  %s", 
                        channelId, detectResults[i].lt.x, detectResults[i].lt.y,
                        detectResults[i].rb.x, detectResults[i].rb.y, 
                        detectResults[i].result_text.c_str());
     }
 }
 
-AtlasError Postprocess::AnalyzeInferenceOutput(vector<DetectionResult>& detectResults, 
+AclLiteError Postprocess::AnalyzeInferenceOutput(vector<DetectionResult>& detectResults, 
                                                uint32_t imageWidth, uint32_t imageHeight,
                                                vector<InferenceOutput>& modelOutput) {
     uint32_t dataSize = 0;
@@ -134,11 +132,11 @@ AtlasError Postprocess::AnalyzeInferenceOutput(vector<DetectionResult>& detectRe
         detectResults.emplace_back(oneResult);
     }
 
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
 
-AtlasError Postprocess::SendImage(Channel* channel, 
+AclLiteError Postprocess::SendImage(Channel* channel, 
                                   ImageData& jpegImage,
                                   vector<DetectionResult>& detRes) {
     ImageFrame frame;
@@ -151,11 +149,11 @@ AtlasError Postprocess::SendImage(Channel* channel,
 
     PresenterErrorCode ret = PresentImage(channel, frame);
     if (ret != PresenterErrorCode::kNone) {
-        ATLAS_LOG_ERROR("Send JPEG image to presenter failed, error %d", (int)ret);
-        return ATLAS_ERROR;
+        ACLLITE_LOG_ERROR("Send JPEG image to presenter failed, error %d", (int)ret);
+        return ACLLITE_ERROR;
     }
 
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
 

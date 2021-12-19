@@ -19,7 +19,7 @@
 #include <iostream>
 #include <fstream>
 #include "acl/acl.h"
-#include "atlasutil/atlas_model.h"
+#include "acllite/AclLiteModel.h"
 #include "opencv2/imgproc/imgproc_c.h"
 #include "TextRecongnize.h"
 
@@ -53,115 +53,115 @@ TextRecongnize::~TextRecongnize() {
     DestroyResource();
 }
 
-AtlasError TextRecongnize::Init() {
+AclLiteError TextRecongnize::Init() {
     if (isInited_) {
-        ATLAS_LOG_INFO("Text Recongnize is initied already");
-        return ATLAS_OK;
+        ACLLITE_LOG_INFO("Text Recongnize is initied already");
+        return ACLLITE_OK;
     }
-    ATLAS_LOG_INFO("Text Recongnize start initied ");
+    ACLLITE_LOG_INFO("Text Recongnize start initied ");
 
     PresenterErrorCode ret = OpenChannelByConfig(presenterChannel_, 
                                                  kConfigFile.c_str());
     if (ret != PresenterErrorCode::kNone) {
-        ATLAS_LOG_ERROR("Open channel failed, error %d", (int)ret);
-        return ATLAS_ERROR;
+        ACLLITE_LOG_ERROR("Open channel failed, error %d", (int)ret);
+        return ACLLITE_ERROR;
     }
-    ATLAS_LOG_INFO("Text Recongnize Open Channel ");
+    ACLLITE_LOG_INFO("Text Recongnize Open Channel ");
 
-    AtlasError atlRet = dvpp_.Init();
+    AclLiteError atlRet = dvpp_.Init();
     if (atlRet) {
-        ATLAS_LOG_ERROR("Dvpp init failed, error %d", atlRet);
-        return ATLAS_ERROR;
+        ACLLITE_LOG_ERROR("Dvpp init failed, error %d", atlRet);
+        return ACLLITE_ERROR;
     }
-    ATLAS_LOG_INFO("dvpp intialiaze ");
+    ACLLITE_LOG_INFO("dvpp intialiaze ");
 
     atlRet = FirstModel_.Init();
     if (atlRet) {
-        ATLAS_LOG_ERROR("Model dbnet init failed, error %d", atlRet);
-        return ATLAS_ERROR;
+        ACLLITE_LOG_ERROR("Model dbnet init failed, error %d", atlRet);
+        return ACLLITE_ERROR;
     }
-    ATLAS_LOG_INFO("Model dbnet intialiaze ");
+    ACLLITE_LOG_INFO("Model dbnet intialiaze ");
 
     atlRet = SecondModel_.Init();
     if (atlRet) {
-        ATLAS_LOG_ERROR("Model crnn_static init failed, error %d", atlRet);
-        return ATLAS_ERROR;
+        ACLLITE_LOG_ERROR("Model crnn_static init failed, error %d", atlRet);
+        return ACLLITE_ERROR;
     }
-    ATLAS_LOG_INFO("Model crnn_static intialiaze ");
+    ACLLITE_LOG_INFO("Model crnn_static intialiaze ");
 
     isInited_ = true;
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
-AtlasError TextRecongnize::Process(ImageData& image, aclrtRunMode runMode) {
+AclLiteError TextRecongnize::Process(ImageData& image, aclrtRunMode runMode) {
     cv::Mat firstModelInputMat;
-    AtlasError ret = CopyImageToDvpp(image, runMode);
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Copy Image To Dvpp failed");
-        return ATLAS_ERROR;
+    AclLiteError ret = CopyImageToDvpp(image, runMode);
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Copy Image To Dvpp failed");
+        return ACLLITE_ERROR;
     }
     ret = FirstModelPreprocess(frame_rgb, image, firstModelInputMat, runMode);
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("First model preprocess failed, continue to read next\n");
-        return ATLAS_ERROR;
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("First model preprocess failed, continue to read next\n");
+        return ACLLITE_ERROR;
     }
 
     CopyMatToDevice(firstModelInputMat, runMode);
     std::vector<InferenceOutput> firstModelInferOutputs;
     ret = FirstModelInference(firstModelInferOutputs, firstModelInputMat);
     if (ret) {
-        ATLAS_LOG_ERROR("First model inference image failed");
-        return ATLAS_ERROR;        
+        ACLLITE_LOG_ERROR("First model inference image failed");
+        return ACLLITE_ERROR;        
     }
     
     ret = FirstModelPostprocess(firstModelInferOutputs, frame_rgb, detectResImg, cropAreas, boxes, hMatrix);
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Process first model inference output data failed");
-        return ATLAS_ERROR;
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Process first model inference output data failed");
+        return ACLLITE_ERROR;
     }
     for (int index = 0; index < cropAreas.size(); index++) {
         cv::Mat secondModelInputMat;
         ret = SecondModelPreprocess(cropAreas[index], secondModelInputMat);
-        if (ret != ATLAS_OK) {
-            ATLAS_LOG_ERROR("SecondModelPreprocess failed, continue to process next");
-            return ATLAS_ERROR;
+        if (ret != ACLLITE_OK) {
+            ACLLITE_LOG_ERROR("SecondModelPreprocess failed, continue to process next");
+            return ACLLITE_ERROR;
         }
         CopyMatToDevice(secondModelInputMat, runMode);
         std::vector<InferenceOutput> secondModelInferOutputs;
         ret = SecondModelInference(secondModelInferOutputs, secondModelInputMat); 
-        if (ret != ATLAS_OK) {
-            ATLAS_LOG_ERROR("Inference second model failed");
-            return ATLAS_ERROR;
+        if (ret != ACLLITE_OK) {
+            ACLLITE_LOG_ERROR("Inference second model failed");
+            return ACLLITE_ERROR;
         }
         ret = SecondModelPostprocess(secondModelInferOutputs, textRes, detectResImg, boxes[index]);
-        if (ret != ATLAS_OK) {
-            ATLAS_LOG_ERROR("Process second model inference output data failed");
-            return ATLAS_ERROR;
+        if (ret != ACLLITE_OK) {
+            ACLLITE_LOG_ERROR("Process second model inference output data failed");
+            return ACLLITE_ERROR;
         }
     }
     ret = SendImage(detectResImg);
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("SendImage failed");
-        return ATLAS_ERROR;
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("SendImage failed");
+        return ACLLITE_ERROR;
     }
     cropAreas.clear();
     boxes.clear();
     hMatrix.clear();
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
-AtlasError TextRecongnize::FirstModelPreprocess(cv::Mat &camera_rgb, ImageData &srcImage, 
+AclLiteError TextRecongnize::FirstModelPreprocess(cv::Mat &camera_rgb, ImageData &srcImage, 
                                             cv::Mat &modelInputMat, aclrtRunMode runMode) {
     ImageData resizedImage;
-    AtlasError ret = dvpp_.Resize(resizedImage, srcImage, firstModelWidth_, firstModelHeight_);
-    if (ret == ATLAS_ERROR) {
-        ATLAS_LOG_ERROR("Resize image failed\n");
-        return ATLAS_ERROR;
+    AclLiteError ret = dvpp_.Resize(resizedImage, srcImage, firstModelWidth_, firstModelHeight_);
+    if (ret == ACLLITE_ERROR) {
+        ACLLITE_LOG_ERROR("Resize image failed\n");
+        return ACLLITE_ERROR;
     }
     ret = CopyImageFromDvpp(resizedImage, runMode);
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Execute model inference failed");
-        return ATLAS_ERROR;
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Execute model inference failed");
+        return ACLLITE_ERROR;
     }
     cv::Mat yuvImg(resizedImage.height * 3 / 2, resizedImage.width, CV_8UC1, resizedImage.data.get());
     cv::Mat rgbImg;
@@ -177,28 +177,28 @@ AtlasError TextRecongnize::FirstModelPreprocess(cv::Mat &camera_rgb, ImageData &
         bgrChannels[i].convertTo(bgrChannels[i], CV_32FC1, 1.0 / std_value[i], (0.0 - mean_value[i]) / std_value[i]);
     }
     cv::merge(bgrChannels, modelInputMat);
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
-AtlasError TextRecongnize::FirstModelInference(std::vector<InferenceOutput>& inferOutputs,
+AclLiteError TextRecongnize::FirstModelInference(std::vector<InferenceOutput>& inferOutputs,
                                  cv::Mat &modelInputMat) {
-    AtlasError ret = FirstModel_.CreateInput(modelInputMat.data,
+    AclLiteError ret = FirstModel_.CreateInput(modelInputMat.data,
                                          modelInputMat.rows * modelInputMat.cols * 
                                          (int) modelInputMat.elemSize());
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Create mode input dataset failed\n");
-        return ATLAS_ERROR;
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Create mode input dataset failed\n");
+        return ACLLITE_ERROR;
     }
 
     ret = FirstModel_.Execute(inferOutputs);
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Execute model inference failed\n");
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Execute model inference failed\n");
     }
     FirstModel_.DestroyInput();
     return ret;
 }
 
-AtlasError TextRecongnize::FirstModelPostprocess(std::vector<InferenceOutput>& firstmodelinferOutputs, 
+AclLiteError TextRecongnize::FirstModelPostprocess(std::vector<InferenceOutput>& firstmodelinferOutputs, 
                                              Mat rgbImg, Mat &detectResImg,
                                              vector<Mat> &cropAreas, vector<vector<Point2f>> &boxes,
                                              vector<Mat> &hMatrix) {
@@ -223,14 +223,14 @@ AtlasError TextRecongnize::FirstModelPostprocess(std::vector<InferenceOutput>& f
             cout << "ERROR" << endl;
         }
     }
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
-AtlasError TextRecongnize::SecondModelPreprocess(cv::Mat &srcImage, cv::Mat &modelInputMat) {
-    AtlasError ret = srcImage.empty() ? ATLAS_ERROR : ATLAS_OK;
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Source image is empty!");
-        return ATLAS_ERROR;
+AclLiteError TextRecongnize::SecondModelPreprocess(cv::Mat &srcImage, cv::Mat &modelInputMat) {
+    AclLiteError ret = srcImage.empty() ? ACLLITE_ERROR : ACLLITE_OK;
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Source image is empty!");
+        return ACLLITE_ERROR;
     }
 
     cv::Mat resizedImg;
@@ -239,28 +239,28 @@ AtlasError TextRecongnize::SecondModelPreprocess(cv::Mat &srcImage, cv::Mat &mod
     cv::cvtColor(resizedImg, bgr8Img, COLOR_RGB2BGR);
     bgr8Img.convertTo(tempImg, CV_32FC3);
     modelInputMat = tempImg / 127.5 - 1;
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
 
 // recognize推理函数
-AtlasError TextRecongnize::SecondModelInference(std::vector<InferenceOutput>& inferOutputs, Mat &secondModelInputMat) {
-    AtlasError ret = SecondModel_.CreateInput(secondModelInputMat.data,
+AclLiteError TextRecongnize::SecondModelInference(std::vector<InferenceOutput>& inferOutputs, Mat &secondModelInputMat) {
+    AclLiteError ret = SecondModel_.CreateInput(secondModelInputMat.data,
                                           secondModelInputMat.rows * secondModelInputMat.cols *
                                           (int) secondModelInputMat.elemSize());
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Create mode input dataset failed");
-        return ATLAS_ERROR;
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Create mode input dataset failed");
+        return ACLLITE_ERROR;
     }
     ret = SecondModel_.Execute(inferOutputs);
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("Execute model inference failed");
-        return ATLAS_ERROR;
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Execute model inference failed");
+        return ACLLITE_ERROR;
     }
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
-AtlasError TextRecongnize::SecondModelPostprocess(std::vector<InferenceOutput>& inferOutputs, string &textRes, 
+AclLiteError TextRecongnize::SecondModelPostprocess(std::vector<InferenceOutput>& inferOutputs, string &textRes, 
                                                 cv::Mat &detectResImg, vector<cv::Point2f> &box) {
     size_t outputnum = inferOutputs.size();
     for (size_t index = 0; index < outputnum; ++index) {
@@ -304,7 +304,7 @@ AtlasError TextRecongnize::SecondModelPostprocess(std::vector<InferenceOutput>& 
                         2, LINE_8);
         }
     }
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
 void TextRecongnize::PostProcessDBNet(float *outData, Mat rgbImg, vector<vector<Point2f>> &boxes) {
@@ -437,7 +437,7 @@ void TextRecongnize::fourPointsTransform(const Mat &frame, Point2f *vertices, Ma
     warpPerspective(frame, result, rotationMatrix, outputSize);
 }
 
-AtlasError TextRecongnize::SendImage(cv::Mat &image) {
+AclLiteError TextRecongnize::SendImage(cv::Mat &image) {
     //add
     vector<uint8_t> encodeImg;
     EncodeImage(encodeImg, image);
@@ -452,65 +452,65 @@ AtlasError TextRecongnize::SendImage(cv::Mat &image) {
     ascend::presenter::PresenterErrorCode ret = PresentImage(presenterChannel_, imageParam);
     // send to presenter failed
     if (ret != PresenterErrorCode::kNone) {
-        ATLAS_LOG_ERROR("Send JPEG image to presenter failed, error %d\n", (int) ret);
-        return ATLAS_ERROR;
+        ACLLITE_LOG_ERROR("Send JPEG image to presenter failed, error %d\n", (int) ret);
+        return ACLLITE_ERROR;
     }
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }
 
-AtlasError TextRecongnize::CopyImageToDvpp(ImageData &srcImage, 
+AclLiteError TextRecongnize::CopyImageToDvpp(ImageData &srcImage, 
                             aclrtRunMode runMode) {
     if (runMode == ACL_HOST) {
         void * buffer = nullptr;
         aclError ret = acldvppMalloc(&buffer, srcImage.size);
-        if (ret != ACL_ERROR_NONE) {
-            ATLAS_LOG_ERROR("Malloc dvpp memory failed, error No:%d", ret);
-            return ATLAS_ERROR;
+        if (ret != ACL_SUCCESS) {
+            ACLLITE_LOG_ERROR("Malloc dvpp memory failed, error No:%d", ret);
+            return ACLLITE_ERROR;
         }
         ret = aclrtMemcpy(buffer, srcImage.size, srcImage.data.get(), 
                         srcImage.size, ACL_MEMCPY_HOST_TO_DEVICE);
-        if (ret != ACL_ERROR_NONE) {
-            ATLAS_LOG_ERROR("Copy data to device failed, aclRet is %d", ret);
-            return ATLAS_ERROR;
+        if (ret != ACL_SUCCESS) {
+            ACLLITE_LOG_ERROR("Copy data to device failed, aclRet is %d", ret);
+            return ACLLITE_ERROR;
         }
-        srcImage.data = SHARED_PRT_DVPP_BUF(buffer);
+        srcImage.data = SHARED_PTR_DVPP_BUF(buffer);
     }
-    return ATLAS_OK;                            
+    return ACLLITE_OK;                            
 }
 
-AtlasError TextRecongnize::CopyImageFromDvpp(ImageData &srcImage, 
+AclLiteError TextRecongnize::CopyImageFromDvpp(ImageData &srcImage, 
                             aclrtRunMode runMode) {
     if (runMode == ACL_HOST) {
         void * buffer = new uint8_t[srcImage.size];
         aclError ret = aclrtMemcpy(buffer, srcImage.size, srcImage.data.get(), 
                                     srcImage.size, ACL_MEMCPY_DEVICE_TO_HOST);
-        if (ret != ACL_ERROR_NONE) {
-            ATLAS_LOG_ERROR("Copy data from dvpp to host failed, aclRet is %d", ret);
-            return ATLAS_ERROR;
+        if (ret != ACL_SUCCESS) {
+            ACLLITE_LOG_ERROR("Copy data from dvpp to host failed, aclRet is %d", ret);
+            return ACLLITE_ERROR;
         }
-        srcImage.data = SHARED_PRT_U8_BUF(buffer);
+        srcImage.data = SHARED_PTR_U8_BUF(buffer);
     }
-    return ATLAS_OK;                            
+    return ACLLITE_OK;                            
 }
 
-AtlasError TextRecongnize::CopyMatToDevice(cv::Mat &srcMat, 
+AclLiteError TextRecongnize::CopyMatToDevice(cv::Mat &srcMat, 
                             aclrtRunMode runMode) {
     if (runMode == ACL_HOST) {
         void * buffer = nullptr;
         size_t bufferSize = srcMat.rows * srcMat.cols * (int) srcMat.elemSize();
         aclError ret = aclrtMalloc(&buffer, bufferSize, ACL_MEM_MALLOC_HUGE_FIRST);
-        if (ret != ACL_ERROR_NONE) {
-            ATLAS_LOG_ERROR("Malloc device memory failed, error No:%d", ret);
-            return ATLAS_ERROR;
+        if (ret != ACL_SUCCESS) {
+            ACLLITE_LOG_ERROR("Malloc device memory failed, error No:%d", ret);
+            return ACLLITE_ERROR;
         }
         ret = aclrtMemcpy(buffer, bufferSize, srcMat.data, bufferSize, ACL_MEMCPY_HOST_TO_DEVICE);
-        if (ret != ACL_ERROR_NONE) {
-            ATLAS_LOG_ERROR("Copy data to device failed, aclRet is %d", ret);
-            return ATLAS_ERROR;
+        if (ret != ACL_SUCCESS) {
+            ACLLITE_LOG_ERROR("Copy data to device failed, aclRet is %d", ret);
+            return ACLLITE_ERROR;
         }
         srcMat.data = (uchar*)buffer;
     }
-    return ATLAS_OK;                            
+    return ACLLITE_OK;                            
 }
 
 void TextRecongnize::EncodeImage(vector<uint8_t> &encodeImg, cv::Mat &origImg) {

@@ -108,4 +108,3 @@ private:
     aclmdlDataset *input_;
     aclmdlDataset *output_;
 };
-

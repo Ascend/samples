@@ -87,7 +87,7 @@ char* get_picdevbuffer4_jpege(const PicDesc &picDesc, uint32_t &PicBufferSize)
 
     void *inputDevBuff = nullptr;
     aclError aclRet = acldvppMalloc(&inputDevBuff, PicBufferSize);
-    if (aclRet !=  ACL_ERROR_NONE) {
+    if (aclRet !=  ACL_SUCCESS) {
         delete[] inputBuff;
         ERROR_LOG("malloc device data buffer failed, aclRet is %d", aclRet);
         fclose(fp);
@@ -99,7 +99,7 @@ char* get_picdevbuffer4_jpege(const PicDesc &picDesc, uint32_t &PicBufferSize)
     else {
         aclRet = aclrtMemcpy(inputDevBuff, PicBufferSize, inputBuff, PicBufferSize, ACL_MEMCPY_DEVICE_TO_DEVICE);
     }
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("memcpy from host to device failed, aclRet is %d", aclRet);
         (void)acldvppFree(inputDevBuff);
         delete[] inputBuff;
@@ -129,14 +129,14 @@ Result save_dvpp_outputdata(const char *fileName, const void *devPtr, uint32_t d
     if (runMode == ACL_HOST) {
         void* hostPtr = nullptr;
         aclError aclRet = aclrtMallocHost(&hostPtr, dataSize);
-        if (aclRet != ACL_ERROR_NONE) {
+        if (aclRet != ACL_SUCCESS) {
             ERROR_LOG("malloc host data buffer failed, aclRet is %d", aclRet);
             fclose(outFileFp);
             return FAILED;
         }
 
         aclRet = aclrtMemcpy(hostPtr, dataSize, devPtr, dataSize, ACL_MEMCPY_DEVICE_TO_HOST);
-        if (aclRet != ACL_ERROR_NONE) {
+        if (aclRet != ACL_SUCCESS) {
             ERROR_LOG("dvpp output memcpy to host failed, aclRet is %d", aclRet);
             (void)aclrtFreeHost(hostPtr);
             fclose(outFileFp);
@@ -174,7 +174,7 @@ void destroy_resource()
     aclError ret;
     if (stream_ != nullptr) {
         ret = aclrtDestroyStream(stream_);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("destroy stream failed");
         }
         stream_ = nullptr;
@@ -183,7 +183,7 @@ void destroy_resource()
 
     if (context_ != nullptr) {
         ret = aclrtDestroyContext(context_);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("destroy context failed");
         }
         context_ = nullptr;
@@ -191,13 +191,13 @@ void destroy_resource()
     INFO_LOG("End to destroy context");
 
     ret = aclrtResetDevice(deviceId_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("reset device failed");
     }
     INFO_LOG("End to reset device is %d", deviceId_);
 
     ret = aclFinalize();
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("finalize acl failed");
     }
     INFO_LOG("End to finalize acl");
@@ -224,11 +224,11 @@ void destroy_encode_resource()
 
 int main()
 {
-    //1.ACL初始化
+    //ACL Init
     const char *aclConfigPath = "../src/acl.json";
     aclInit(aclConfigPath);
     INFO_LOG("Acl init success");
-    //2.运行管理资源申请,包括Device、Context、Stream，stream_是aclrtStream类型
+    //resource manage
     aclrtSetDevice(deviceId_);
     INFO_LOG("Open device %d success", deviceId_);
     aclrtCreateContext(&context_, deviceId_);
@@ -248,7 +248,7 @@ int main()
         system("mkdir ./output");
     }
         
-    //4.创建图片数据处理的通道
+    //create dvpp channel
     dvppChannelDesc_ = acldvppCreateChannelDesc();
     INFO_LOG("Call acldvppCreateChannelDesc success");
     acldvppCreateChannel(dvppChannelDesc_);
@@ -257,19 +257,14 @@ int main()
 
     uint32_t jpegInBufferSize;
     jpegInBufferSize = compute_encode_inputsize(testPic.width, testPic.height);
-    //5.申请内存
-    //5.1 输入内存
-    //申请Host内存inputHostBuff，存放YUV格式的图片数据
-    //申请Device内存inputDevBuff
-    //将通过aclrtMemcpy接口将Host的图片数据传输到Device，数据传输完成后，需及时调用aclrtFreeHost接口释放Host内存
+    //input mem malloc
     char* picDevBuffer = get_picdevbuffer4_jpege(testPic, jpegInBufferSize);
     if (nullptr == picDevBuffer) {
         ERROR_LOG("get picDevBuffer failed, index is %d", 0);
         return FAILED;
     }
     set_input4_jpege(*picDevBuffer, jpegInBufferSize, testPic.width, testPic.height);
-    //6. 创建编码输入图片的描述信息，并设置各属性值
-    //encodeInputDesc_是acldvppPicDesc类型
+    //create pic desc & set pic attrs
     uint32_t widthAlignment = 16;
     uint32_t heightAlignment = 2;
     uint32_t encodeInWidthStride = alignment_helper(inputWidth_, widthAlignment);
@@ -297,41 +292,37 @@ int main()
     INFO_LOG("Call acldvppCreateJpegeConfig success");
     acldvppSetJpegeConfigLevel(jpegeConfig_, encodeLevel);
 
-    //5.2 输出内存，申请Device内存encodeOutBufferDev_,存放编码后的输出数据
-    //  uint32_t outBufferSize = jpegInBufferSize + jpegInBufferSize; // malloc enough size
-
+    //output mem malloc
     acldvppJpegPredictEncSize(encodeInputDesc_, jpegeConfig_, &encode_outbuffer_size_);
     aclError aclRet = acldvppMalloc(&encode_out_buffer_dev_, encode_outbuffer_size_);
 
-    //aclError aclRet = acldvppMalloc(&encodeOutBufferDev_, outBufferSize);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("malloc encodeOutBufferDev_ failed, aclRet is %d", aclRet);
         return FAILED;
     }
 
-    //8. 执行异步编码，再调用aclrtSynchronizeStream接口阻塞Host运行，直到指定Stream中的所有任务都完成
+    //call Asynchronous api
     aclRet = acldvppJpegEncodeAsync(dvppChannelDesc_, encodeInputDesc_, encode_out_buffer_dev_,
     &encode_outbuffer_size_, jpegeConfig_, stream_);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("acldvppJpegEncodeAsync failed, aclRet = %d", aclRet);
         return FAILED;
     }
     INFO_LOG("Call acldvppJpegEncodeAsync success");
     aclRet = aclrtSynchronizeStream(stream_);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("encode aclrtSynchronizeStream failed, aclRet = %d", aclRet);
         return FAILED;
     }
 
-    //9.申请Host内存hostPtr，将编码后的输出图片回传到Host，再将Host内存中的数据写入文件,写完文件后，需及时调用aclrtFreeHost接口释放Host内存
+    //malloc host mem & save pic
     encodeOutFileName = encodeOutFileName + ".jpg";
     Result ret = save_dvpp_outputdata(encodeOutFileName.c_str(), encode_out_buffer_dev_, encode_outbuffer_size_);
     if (ret != SUCCESS) {
         ERROR_LOG("save encode output data failed.");
         return FAILED;
     }
+    
     destroy_encode_resource();
-
     destroy_resource();
-
 }

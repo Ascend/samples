@@ -41,7 +41,7 @@ void DvppProcess::DestroyResource()
     aclError aclRet;
     if (dvppChannelDesc_ != nullptr) {
         aclRet = acldvppDestroyChannel(dvppChannelDesc_);
-        if (aclRet != ACL_ERROR_NONE) {
+        if (aclRet != ACL_SUCCESS) {
             ERROR_LOG("acldvppDestroyChannel failed, aclRet = %d\n", aclRet);
         }
 
@@ -62,7 +62,7 @@ Result DvppProcess::InitResource(aclrtStream& stream)
     }
 
     aclRet = acldvppCreateChannel(dvppChannelDesc_);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("acldvppCreateChannel failed, aclRet = %d\n", aclRet);
         return FAILED;
     }

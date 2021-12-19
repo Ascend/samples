@@ -60,7 +60,6 @@ class TestMinibatch(object):
         lrlist = [self.lrcliplist[idx] for idx in self.index[self.cur:self.cur + self.batch_size]]
         lr_names = [self.lrcliplist[idx][self.num_frames // 2] 
                           for idx in self.index[self.cur:self.cur + self.batch_size]]
-        #lr = [np.array([imageio.imread(perimg)[..., :3] / 255. for perimg in pervid]).astype(np.float32) for pervid in lrlist]
         for pervid in lrlist:
             lr = [np.array([imageio.imread(perimg)[..., :3] / 255. for perimg in pervid]).astype(np.float32)]
         lr = np.array(lr)
@@ -68,7 +67,6 @@ class TestMinibatch(object):
         self.cur += self.batch_size
 
         return lr_names, lr
-
 
 def build_test_dataloader(batch_size, scale, set_file, num_frames, data_config):
     """

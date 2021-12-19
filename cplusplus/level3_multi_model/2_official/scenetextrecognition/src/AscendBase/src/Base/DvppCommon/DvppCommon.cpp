@@ -77,39 +77,39 @@ APP_ERROR DvppCommon::InitVdec()
 
     // channelId: 0-15
     aclError ret = aclvdecSetChannelDescChannelId(vdecChannelDesc_, vdecConfig_.channelId);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         LogError << "Failed to set vdec channel id, ret = " << ret << ".";
         return APP_ERR_ACL_FAILURE;
     }
 
     ret = aclvdecSetChannelDescThreadId(vdecChannelDesc_, vdecConfig_.threadId);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         LogError << "Failed to set thread id, ret = " << ret << ".";
         return APP_ERR_ACL_FAILURE;
     }
 
     // callback func
     ret = aclvdecSetChannelDescCallback(vdecChannelDesc_, vdecConfig_.callback);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         LogError << "Failed to set vdec callback function, ret = " << ret << ".";
         return APP_ERR_ACL_FAILURE;
     }
 
     ret = aclvdecSetChannelDescEnType(vdecChannelDesc_, vdecConfig_.inFormat);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         LogError << "Failed to set encoded type of input video, ret = " << ret << ".";
         return APP_ERR_ACL_FAILURE;
     }
 
     ret = aclvdecSetChannelDescOutPicFormat(vdecChannelDesc_, vdecConfig_.outFormat);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         LogError << "Failed to set vdec output format, ret = " << ret << ".";
         return APP_ERR_ACL_FAILURE;
     }
 
     // create vdec channel
     ret = aclvdecCreateChannel(vdecChannelDesc_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         LogError << "Failed to create vdec channel, ret = " << ret << ".";
         return APP_ERR_ACL_FAILURE;
     }

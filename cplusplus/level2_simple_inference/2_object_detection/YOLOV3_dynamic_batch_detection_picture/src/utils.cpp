@@ -7,15 +7,15 @@
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
-#include "utils.h"
 #include <fstream>
+#include "utils.h"
+#include "acl/acl.h"
+
 #if defined(_MSC_VER)
 #include <windows.h>
 #else
 #include <sys/stat.h>
 #endif
-
-#include "acl/acl.h"
 
 extern bool g_isDevice;
 
@@ -29,7 +29,7 @@ void *Utils::GetDeviceBufferOfFile(std::string &fileName, uint32_t &fileSize)
     if (!g_isDevice) {
         void *inBufferDev = nullptr;
         aclError ret = aclrtMalloc(&inBufferDev, inputBuffSize, ACL_MEM_MALLOC_NORMAL_ONLY);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("malloc device buffer failed. size is %u, errorCode = %d.",
                 inputBuffSize, static_cast<int32_t>(ret));
             aclrtFreeHost(inputBuff);
@@ -38,7 +38,7 @@ void *Utils::GetDeviceBufferOfFile(std::string &fileName, uint32_t &fileSize)
         }
 
         ret = aclrtMemcpy(inBufferDev, inputBuffSize, inputBuff, inputBuffSize, ACL_MEMCPY_HOST_TO_DEVICE);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("memcpy failed. device buffer size is %u, input host buffer size is %u, errorCode = %d.",
                 inputBuffSize, inputBuffSize, static_cast<int32_t>(ret));
             (void)aclrtFree(inBufferDev);
@@ -78,9 +78,8 @@ void *Utils::ReadBinFile(std::string &fileName, uint32_t &fileSize)
         return nullptr;
     }
     binFile.seekg(0, binFile.beg);
-
     void *binFileBufferData = nullptr;
-    aclError ret = ACL_ERROR_NONE;
+    aclError ret = ACL_SUCCESS;
     if (!g_isDevice) {
         ret = aclrtMallocHost(&binFileBufferData, binFileBufferLen);
         if (binFileBufferData == nullptr) {
@@ -90,7 +89,7 @@ void *Utils::ReadBinFile(std::string &fileName, uint32_t &fileSize)
         }
     } else {
         ret = aclrtMalloc(&binFileBufferData, binFileBufferLen, ACL_MEM_MALLOC_NORMAL_ONLY);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("malloc device buffer failed. size is %u, errorCode = %d.",
                 binFileBufferLen, static_cast<int32_t>(ret));
             binFile.close();
@@ -126,4 +125,3 @@ Result Utils::CheckPathIsFile(const std::string &fileName)
 
     return SUCCESS;
 }
-

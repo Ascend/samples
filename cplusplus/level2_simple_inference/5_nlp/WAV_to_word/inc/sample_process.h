@@ -8,8 +8,8 @@
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 #pragma once
-#include "atlasutil/atlas_utils.h"
-#include "atlasutil/atlas_model.h"
+#include "acllite/AclLiteUtils.h"
+#include "acllite/AclLiteModel.h"
 #include "acl/acl.h"
 #include <memory>
 
@@ -32,29 +32,29 @@ public:
     * @brief init reousce
     * @return result
     */
-    AtlasError InitResource();
+    AclLiteError InitResource();
 
     /**
     * @brief sample process
     * @return result
     */
-    AtlasError Process();
+    AclLiteError Process();
 
     /**
     * @brief dump model output result to file
     */
-    AtlasError DumpModelOutputResult(std::vector<InferenceOutput>& modelOutput);
+    AclLiteError DumpModelOutputResult(std::vector<InferenceOutput>& modelOutput);
 
 private:
     void DestroyResource();
-    AtlasError CreateInput();
+    AclLiteError CreateInput();
 
     int32_t deviceId_;
     aclrtContext context_;
     aclrtStream stream_;
     uint32_t inputDataSize_;
     void*    inputBuf_;
-    AtlasModel model_;
+    AclLiteModel model_;
     aclrtRunMode runMode_;
 };
 

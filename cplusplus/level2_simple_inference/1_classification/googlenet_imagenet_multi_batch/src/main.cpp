@@ -148,7 +148,6 @@ void PrintResult(int batchSize)
             {
                 break;
             }
-
             printf("top %d: index[%d] value[%lf] \n", cnt, it->second, it->first);
         }
     }

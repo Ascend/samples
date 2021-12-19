@@ -22,40 +22,40 @@
 #include <dirent.h>
 #include <sys/time.h>
 
-#include "atlas_videocapture.h"
+#include "acllite/AclLiteVideoProc.h"
 #include "do_process.h"
 
 using namespace std;
 
-AtlasVideoCapture* OpenVideoCapture(int argc, char *argv[]) {
+AclLiteVideoProc* OpenVideoCapture(int argc, char *argv[]) {
     if (argc > 2) {
-        ATLAS_LOG_ERROR("Too many arg, only allow no arg or one arg, "
+        ACLLITE_LOG_ERROR("Too many arg, only allow no arg or one arg, "
                         "which is carmera id, video file or rtsp address");
         return nullptr;
     }
     if (argc == 1) {
-        return new AtlasVideoCapture();
+        return new AclLiteVideoProc();
     }
 
     string param = string(argv[1]);
     if (IsDigitStr(param)) {
         int cameraId = atoi(param.c_str());
         if ((cameraId < 0) || (cameraId >= CAMERA_ID_INVALID)) {
-            ATLAS_LOG_ERROR("Invalid camera id arg %s, only allow %d and %d",
+            ACLLITE_LOG_ERROR("Invalid camera id arg %s, only allow %d and %d",
                             param.c_str(), CAMERA_ID_0, CAMERA_ID_1);
             return nullptr;
         }
-        return new AtlasVideoCapture(cameraId);
+        return new AclLiteVideoProc(cameraId);
     } else if (IsRtspAddr(param)) {
-        return new AtlasVideoCapture(param);
+        return new AclLiteVideoProc(param);
     } else if (IsVideoFile(param)) {
         if (!IsPathExist(param)) {
-            ATLAS_LOG_ERROR("The %s is inaccessible", param.c_str());
+            ACLLITE_LOG_ERROR("The %s is inaccessible", param.c_str());
             return nullptr;
         }
-        return new AtlasVideoCapture(param);
+        return new AclLiteVideoProc(param);
     } else {
-        ATLAS_LOG_ERROR("Invalid param. The arg should be accessible rtsp,"
+        ACLLITE_LOG_ERROR("Invalid param. The arg should be accessible rtsp,"
                         " video file or camera id, or not input arg");
     }
 
@@ -65,18 +65,18 @@ AtlasVideoCapture* OpenVideoCapture(int argc, char *argv[]) {
 int main(int argc, char *argv[]) {  
     DoProcess detect;
 
-    if (ATLAS_OK != detect.Init()) {
-        ATLAS_LOG_ERROR("init failed");
-        return ATLAS_ERROR;
+    if (ACLLITE_OK != detect.Init()) {
+        ACLLITE_LOG_ERROR("init failed");
+        return ACLLITE_ERROR;
     }
 
-    AtlasVideoCapture* cap = OpenVideoCapture(argc, argv);
-    if (cap == nullptr) return ATLAS_ERROR;
+    AclLiteVideoProc* cap = OpenVideoCapture(argc, argv);
+    if (cap == nullptr) return ACLLITE_ERROR;
 
     if(!cap->IsOpened()) {
         delete cap;
-        ATLAS_LOG_ERROR("Failed to open video");
-        return ATLAS_ERROR;
+        ACLLITE_LOG_ERROR("Failed to open video");
+        return ACLLITE_ERROR;
     }
 
     uint32_t frame_width = cap->Get(FRAME_WIDTH);
@@ -86,20 +86,16 @@ int main(int argc, char *argv[]) {
     int i = 0;
     while(1) {
         ImageData image;
-        AtlasError ret = cap->Read(image);
-        if (ret != ATLAS_OK) {
+        AclLiteError ret = cap->Read(image);
+        if (ret != ACLLITE_OK) {
             break;
         }
-
         ret = detect.Process(image);
-        if (ret != ATLAS_OK) {
-            ATLAS_LOG_ERROR("process failed, return %d", ret);
+        if (ret != ACLLITE_OK) {
+            ACLLITE_LOG_ERROR("process failed, return %d", ret);
             break;
         }
     }
-    delete cap;
-
-    ATLAS_LOG_INFO("Execute sample success");
-
-    return ATLAS_OK;
+    ACLLITE_LOG_INFO("Execute sample success");
+    return ACLLITE_OK;
 }

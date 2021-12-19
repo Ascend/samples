@@ -62,56 +62,56 @@ Result VencProcess::InitResource(pthread_t threadId, acldvppPixelFormat format, 
 
     // set process callback thread
     auto ret = aclvencSetChannelDescThreadId(vencChannelDesc_, threadId_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("fail to create threadId");
         return FAILED;
     }
 
     // set callback func
     ret = aclvencSetChannelDescCallback(vencChannelDesc_, callback);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("fail to set venc Callback");
         return FAILED;
     }
 
     // set output stream type
     ret = aclvencSetChannelDescEnType(vencChannelDesc_, enType_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("fail to set venc EnType");
         return FAILED;
     }
 
     // set input picture type
     ret = aclvencSetChannelDescPicFormat(vencChannelDesc_, format_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("fail to set venc PicFormat");
         return FAILED;
     }
 
     // set input picture width 
     ret = aclvencSetChannelDescPicWidth(vencChannelDesc_, width);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("fail to set venc PicWidth");
         return FAILED;
     }
 
     // set input picture height
     ret = aclvencSetChannelDescPicHeight(vencChannelDesc_, height);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("fail to set venc PicWidth");
         return FAILED;
     }
 
     // set key frame interval
     ret = aclvencSetChannelDescKeyFrameInterval(vencChannelDesc_, 16);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("fail to set venc FrameInterval");
         return FAILED;
     }
 
     // create vdec channel
     ret = aclvencCreateChannel(vencChannelDesc_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("fail to create venc channel");
         return FAILED;
     }
@@ -155,12 +155,12 @@ Result VencProcess::CreatePicDesc()
         return FAILED;
     }
     auto ret = acldvppSetPicDescData(inputPicputDesc_, inBufferDev_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("fail to set PicDescData");
         return FAILED;
     }
     ret = acldvppSetPicDescSize(inputPicputDesc_, inBufferSize_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("fail to set PicDescSize");
         return FAILED;
     }
@@ -171,13 +171,13 @@ Result VencProcess::SetFrameConfig(uint8_t eos, uint8_t forceIFrame)
 {
     // set eos
     aclError ret = aclvencSetFrameConfigEos(vencFrameConfig_, eos);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("fail to set eos, ret = %d", ret);
         return FAILED;
     }
 
     ret = aclvencSetFrameConfigForceIFrame(vencFrameConfig_, forceIFrame);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("fail to set venc ForceIFrame");
         return FAILED;
     }
@@ -202,7 +202,7 @@ Result VencProcess::Process()
 
     ret = aclvencSendFrame(vencChannelDesc_, inputPicputDesc_,
         static_cast<void *>(outputStreamDesc), vencFrameConfig_, nullptr);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         fclose(g_outFileFp);
         g_outFileFp = nullptr;
         ERROR_LOG("fail to send frame, ret=%u", ret);
@@ -225,7 +225,7 @@ Result VencProcess::SendEosFrame()
     // send eos frame
     aclError ret = aclvencSendFrame(vencChannelDesc_, nullptr,
     nullptr, vencFrameConfig_, nullptr);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         fclose(g_outFileFp);
         g_outFileFp = nullptr;
         ERROR_LOG("fail to send eos frame, ret=%u", ret);

@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # error code
-ACL_ERROR_NONE = 0
+ACL_SUCCESS = 0
 
 # rule for memory copy
 ACL_MEMCPY_HOST_TO_HOST = 0

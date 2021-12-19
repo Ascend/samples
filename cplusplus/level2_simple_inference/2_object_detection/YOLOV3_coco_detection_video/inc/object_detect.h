@@ -18,15 +18,13 @@
 */
 #pragma once
 
+#include <memory>
 #include <opencv2/opencv.hpp>
-#include "opencv2/imgcodecs/legacy/constants_c.h"
 #include "opencv2/imgproc/types_c.h"
-
 #include "utils.h"
 #include "acl/acl.h"
 #include "model_process.h"
-#include <memory>
-#include "ascenddk/presenter/agent/presenter_channel.h"
+#include "presenter/agent/presenter_channel.h"
 
 using namespace std;
 using namespace ascend::presenter;

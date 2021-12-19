@@ -111,7 +111,6 @@ private:
     aclmdlDesc *modelDesc_;
     aclmdlDataset *input_;
     aclmdlDataset *output_;
-
     bool isReleased_;
 };
 

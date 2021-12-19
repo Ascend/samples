@@ -23,7 +23,6 @@
 #include "acl/ops/acl_dvpp.h"
 #include "utils.h"
 
-
 class DvppCropAndPaste {
 public:
     /**
@@ -67,7 +66,6 @@ private:
 
     aclrtStream stream_;
     acldvppChannelDesc *dvppChannelDesc_;
-
 
     // IN/OUT Desc
     acldvppPicDesc *vpcInputDesc_;

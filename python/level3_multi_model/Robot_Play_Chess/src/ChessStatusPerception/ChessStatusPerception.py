@@ -14,8 +14,8 @@
 
 import numpy as np
 import cv2
-from atlas_utils.acl_model import Model
-import atlas_utils.constants as const
+from acllite_model import AclLiteModel
+import constants as const
 
 CLS = ['b_jiang','b_ju', 'b_ma', 'b_pao', 'b_shi', 'b_xiang', 'b_zu',
         'r_bing', 'r_ju', 'r_ma', 'r_pao', 'r_shi', 'r_shuai', 'r_xiang']
@@ -188,7 +188,7 @@ class Classify(object):
         Initialize
         """
         # Load model
-        self._model = Model(self._model_path)
+        self._model = AclLiteModel(self._model_path)
 
         return const.SUCCESS
 

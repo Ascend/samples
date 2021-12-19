@@ -45,7 +45,7 @@ Result DvppJpegD::InitDecodeOutputDesc(ImageData& inputImage){
 	    YUV420SP_SIZE(decodeOutWidthStride, decodeOutHeightStride) * 4;
 
     aclError aclRet = acldvppMalloc(&decodeOutBufferDev_, decodeOutBufferSize);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("acldvppMalloc decodeOutBufferDev_ failed, aclRet = %d", aclRet);
         return FAILED;
     }
@@ -77,13 +77,13 @@ Result DvppJpegD::Process(ImageData& dest, ImageData& src){
     Utils::CopyImageDataToDvpp(imageDevice, src);
     aclError aclRet = acldvppJpegDecodeAsync(dvppChannelDesc_, reinterpret_cast<void *>(imageDevice.data.get()),
     imageDevice.size, decodeOutputDesc_, stream_);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("acldvppJpegDecodeAsync failed, aclRet = %d", aclRet);
         return FAILED;
     }
 
     aclRet = aclrtSynchronizeStream(stream_);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("decode aclrtSynchronizeStream failed, aclRet = %d", aclRet);
         return FAILED;
     }
@@ -93,7 +93,7 @@ Result DvppJpegD::Process(ImageData& dest, ImageData& src){
     dest.alignWidth = ALIGN_UP128(imageDevice.width);
     dest.alignHeight = ALIGN_UP16(imageDevice.height);
     dest.size = YUV420SP_SIZE(dest.alignWidth, dest.alignHeight);
-    dest.data = SHARED_PRT_DVPP_BUF(decodeOutBufferDev_);
+    dest.data = SHARED_PTR_DVPP_BUF(decodeOutBufferDev_);
     INFO_LOG("convert image success");
 
     return SUCCESS;

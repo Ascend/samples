@@ -6,16 +6,15 @@ import numpy as np
 import sys
 
 import acl
-import atlas_utils.utils as utils
-import atlas_utils.constants as const
-from atlas_utils.acl_logger import log_error, log_info
-from atlas_utils.presenteragent import presenter_channel
+import utils
+import constants as const
+from acllite_logger import log_error, log_info
+from presenteragent import presenter_channel
 
 class DetectData():
     def __init__(self, frame_data, detect_results):
         self.frame_data = frame_data
         self.detect_results = detect_results
-
 
 class Postprocess(): 
     def __init__(self, detect_model):

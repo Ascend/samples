@@ -12,18 +12,20 @@ import cv2
 path = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.join(path, ".."))
 sys.path.append(os.path.join(path, "../../../common/"))
+sys.path.append(os.path.join(path, "../../../common/acllite"))
 
 import acl
-import atlas_utils.utils as utils
-import atlas_utils.constants as const
-from atlas_utils.acl_dvpp import Dvpp
-from atlas_utils.acl_model import Model
-from atlas_utils.acl_image import AclImage
-from atlas_utils.acl_resource import AclResource
+import utils
+import constants as const
+from acllite_imageproc import AclLiteImageProc
+from acllite_model import AclLiteModel
+from acllite_image import AclLiteImage
+from acllite_resource import AclLiteResource
 
 currentPath = os.path.join(path, "..")
-OUTPUT_DIR = os.path.join(currentPath, 'outputs/result')
-MASK_DIR = os.path.join(currentPath, 'outputs/mask')
+OUT_DIR = os.path.join(currentPath, 'out')
+OUTPUT_DIR = os.path.join(currentPath, 'out/result')
+MASK_DIR = os.path.join(currentPath, 'out/mask')
 MODEL_PATH = os.path.join(currentPath,"model/portrait.om")
 MODEL_WIDTH = 224
 MODEL_HEIGHT = 224
@@ -45,10 +47,10 @@ class Seg(object):
         Initialize
         """
         # Initialize dvpp
-        self._dvpp = Dvpp()
+        self._dvpp = AclLiteImageProc()
 
         # Load model
-        self._model = Model(self._model_path)
+        self._model = AclLiteModel(self._model_path)
 
         return const.SUCCESS
 
@@ -97,19 +99,20 @@ def background_replace(bg_path, ori_path, mask_path):
     result = np.uint8(background * mask_bg + ori_img * (1 - mask_bg))
     cv2.imwrite(os.path.join(OUTPUT_DIR, os.path.basename(mask_path)), result)
 
-
 def main():
     """
     main
     """
     image_dir = os.path.join(currentPath, "data" )
 
+    if not os.path.exists(OUT_DIR):
+        os.mkdir(OUT_DIR)
     if not os.path.exists(OUTPUT_DIR):
         os.mkdir(OUTPUT_DIR)
     if not os.path.exists(MASK_DIR):
         os.mkdir(MASK_DIR)
 
-    acl_resource = AclResource()
+    acl_resource = AclLiteResource()
     acl_resource.init()
 
     seg = Seg(MODEL_PATH, MODEL_WIDTH, MODEL_HEIGHT)
@@ -125,7 +128,7 @@ def main():
         if image_name != 'background.jpg':
             print('====' + image_name + '====')
             # read image
-            image = AclImage(image_file)
+            image = AclLiteImage(image_file)
             # Preprocess the picture
             resized_image = seg.pre_process(image)
             # Inference
@@ -135,7 +138,6 @@ def main():
             # Fusion of segmented portrait and background image
             background_replace(os.path.join(image_dir, 'background.jpg'), \
                                         image_file, os.path.join(MASK_DIR, image_name))
-
 
 if __name__ == '__main__':
     main()

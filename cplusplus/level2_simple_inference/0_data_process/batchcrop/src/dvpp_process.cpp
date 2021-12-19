@@ -85,7 +85,7 @@ Result DvppProcess::InitResource()
 
     // create vpc channel
     aclError aclRet = acldvppCreateChannel(dvppChannelDesc_);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("acldvppCreateChannel failed, errorCode = %d", static_cast<int32_t>(aclRet));
         return FAILED;
     }
@@ -269,7 +269,7 @@ Result DvppProcess::InitBatchCropOutputDesc()
     for (uint32_t i = 0; i < outputBatchSize_; i++) {
         void *vpcBatchOutputBufferDev = nullptr;
         auto ret = acldvppMalloc(&vpcBatchOutputBufferDev, outputBufferSize);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("acldvppMalloc failed, size = %u, errorCode = %d.",
                 outputBufferSize, static_cast<int32_t>(ret));
             return FAILED;
@@ -346,13 +346,13 @@ Result DvppProcess::ProcessBatchCrop()
     aclRet = acldvppVpcBatchCropResizeAsync(dvppChannelDesc_, inputBatchPicDesc_,
                                                roiNums.get(), inputBatchSize_,
                                                outputBatchPicDesc_, cropArea.get(), resizeConfig_, stream_);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("acldvppVpcBatchCropAsync failed, errorCode = %d", static_cast<int32_t>(aclRet));
         return FAILED;
     }
 
     aclRet = aclrtSynchronizeStream(stream_);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("crop aclrtSynchronizeStream failed, errorCode = %d", static_cast<int32_t>(aclRet));
         return FAILED;
     }
@@ -395,7 +395,7 @@ void DvppProcess::DestroyBatchCropResource()
     }
     if (dvppChannelDesc_ != nullptr) {
         aclError aclRet = acldvppDestroyChannel(dvppChannelDesc_);
-        if (aclRet != ACL_ERROR_NONE) {
+        if (aclRet != ACL_SUCCESS) {
             ERROR_LOG("acldvppDestroyChannel failed, errorCode = %d", static_cast<int32_t>(aclRet));
         }
         (void)acldvppDestroyChannelDesc(dvppChannelDesc_);

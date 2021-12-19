@@ -56,7 +56,7 @@ void* GetDeviceBufferOfPicture(const PicDesc &picDesc, uint32_t &devPicBufferSiz
 
     void *inBufferDev = nullptr;
     aclError ret = acldvppMalloc(&inBufferDev, inputBuffSize);
-    if (ret !=  ACL_ERROR_NONE) {
+    if (ret !=  ACL_SUCCESS) {
         delete[] inputBuff;
         ERROR_LOG("malloc device data buffer failed, aclRet is %d", ret);
 		fclose(fp); 
@@ -69,7 +69,7 @@ void* GetDeviceBufferOfPicture(const PicDesc &picDesc, uint32_t &devPicBufferSiz
     else {
         ret = aclrtMemcpy(inBufferDev, inputBuffSize, inputBuff, inputBuffSize, ACL_MEMCPY_DEVICE_TO_DEVICE);
     }
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("memcpy failed. Input host buffer size is %u",
         inputBuffSize);
         acldvppFree(inBufferDev);
@@ -110,14 +110,14 @@ Result SaveDvppOutputData(const char *fileName, const void *devPtr, uint32_t dat
     if (runMode == ACL_HOST) {
         void* hostPtr = nullptr;
         aclError aclRet = aclrtMallocHost(&hostPtr, dataSize);
-        if (aclRet != ACL_ERROR_NONE) {
+        if (aclRet != ACL_SUCCESS) {
             ERROR_LOG("malloc host data buffer failed, aclRet is %d", aclRet);
 			fclose(outFileFp); 
             return FAILED;
         }
 
         aclRet = aclrtMemcpy(hostPtr, dataSize, devPtr, dataSize, ACL_MEMCPY_DEVICE_TO_HOST);
-        if (aclRet != ACL_ERROR_NONE) {
+        if (aclRet != ACL_SUCCESS) {
             ERROR_LOG("dvpp output memcpy to host failed, aclRet is %d", aclRet);
             (void)aclrtFreeHost(hostPtr);
 			fclose(outFileFp); 
@@ -160,7 +160,7 @@ void DestroyResource()
     aclError ret;
     if (stream_ != nullptr) {
         ret = aclrtDestroyStream(stream_);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("destroy stream failed");
         }
         stream_ = nullptr;
@@ -169,7 +169,7 @@ void DestroyResource()
 
     if (context_ != nullptr) {
         ret = aclrtDestroyContext(context_);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("destroy context failed");
         }
         context_ = nullptr;
@@ -177,13 +177,13 @@ void DestroyResource()
     INFO_LOG("end to destroy context");
 
     ret = aclrtResetDevice(deviceId_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("reset device failed");
     }
     INFO_LOG("end to reset device is %d", deviceId_);
 
     ret = aclFinalize();
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("finalize acl failed");
     }
     INFO_LOG("end to finalize acl");
@@ -235,7 +235,7 @@ int main()
     uint32_t decodeOutHeightStride = (inputHeight_ + 15) / 16 * 16; // 16-byte alignment
     uint32_t decodeOutBufferSize = decodeOutWidthStride * decodeOutHeightStride * 3 / 2; // yuv format size
     aclError ret = acldvppMalloc(&decodeOutDevBuffer_, decodeOutBufferSize);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("acldvppMalloc jpegOutBufferDev failed, ret = %d", ret);
         return FAILED;
     }
@@ -256,13 +256,13 @@ int main()
 
     ret = acldvppJpegDecodeAsync(dvppChannelDesc_, inDevBuffer_, inDevBufferSize_,
     decodeOutputDesc_, stream_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("acldvppJpegDecodeAsync failed, ret = %d", ret);
         return FAILED;
     }
 
     ret = aclrtSynchronizeStream(stream_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("aclrtSynchronizeStream failed");
         return FAILED;
     }

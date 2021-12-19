@@ -14,13 +14,11 @@ import cv2
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 
-
 def get_center_shift(coeffs, img_size, pixels_per_meter):
     """
     get_center_shift
     """
     return np.polyval(coeffs, img_size[1] / pixels_per_meter[1]) - (img_size[0] // 2) / pixels_per_meter[0]
-
 
 def get_curvature(coeffs, img_size, pixels_per_meter):
     """
@@ -29,12 +27,10 @@ def get_curvature(coeffs, img_size, pixels_per_meter):
     return ((1 + (2 * coeffs[0] * img_size[1] / pixels_per_meter[1] + coeffs[1]) ** 2) ** 1.5) / np.absolute(
         2 * coeffs[0])
 
-
 class LaneLineFinder(object):
     """
     LaneLineFinder
     """
-    
     def __init__(self, img_size, pixels_per_meter, center_shift):
         """
         __init__
@@ -186,12 +182,10 @@ class LaneLineFinder(object):
         self.other_line_mask[:] = 0
         cv2.polylines(self.other_line_mask, [points], 0, 1, thickness=int(5 * window_width))
 
-
 class LaneFinder(object):
     """
     class that finds the whole lane
     """
-    
     def __init__(self, img_size, warped_size, cam_matrix, dist_coeffs, transform_matrix, pixels_per_meter):
         """
         __init__
@@ -266,7 +260,8 @@ class LaneFinder(object):
         road_mask = cv2.dilate(road_mask, big_kernel)
 
         version = cv2.__version__
-        str1 = version.split('.')
+        version_str = version.split('-')[0]
+        str1 = version_str.split('.')
         str2 = "".join(str1)
         ver = int(str2)
         if ver < 400:

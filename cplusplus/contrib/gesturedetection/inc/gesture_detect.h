@@ -18,8 +18,8 @@
 */
 #pragma once
 #include "acl/acl.h"
-#include "atlasutil/atlas_model.h"
-#include "atlasutil/dvpp_process.h"
+#include "acllite/AclLiteModel.h"
+#include "acllite/AclLiteImageProc.h"
 #include <map>
 #include <memory>
 
@@ -54,18 +54,18 @@ public:
                  uint32_t modelWidth, uint32_t modelHeight);
     ~GestureDetect();
 
-    AtlasError Init();
-    AtlasError Preprocess(ImageData& resizedImage, ImageData& srcImage);
-    AtlasError OpenPoseInference(std::vector<InferenceOutput>& inferOutputs, ImageData& resizedImage);
-    AtlasError GestureInference(std::vector<InferenceOutput>& inferOutputs,
+    AclLiteError Init();
+    AclLiteError Preprocess(ImageData& resizedImage, ImageData& srcImage);
+    AclLiteError OpenPoseInference(std::vector<InferenceOutput>& inferOutputs, ImageData& resizedImage);
+    AclLiteError GestureInference(std::vector<InferenceOutput>& inferOutputs,
                                 std::shared_ptr<EngineTransNewT> motion_data_new);
-    AtlasError Postprocess(ImageData& image, std::vector<InferenceOutput>& modelOutput,
+    AclLiteError Postprocess(ImageData& image, std::vector<InferenceOutput>& modelOutput,
                                 std::shared_ptr<EngineTransNewT> motion_data_new, int &success_num);
-    AtlasError PostGestureProcess(std::vector<InferenceOutput>& modelOutput);
+    AclLiteError PostGestureProcess(std::vector<InferenceOutput>& modelOutput);
 private:
-    AtlasError InitResource();
-    AtlasError InitModel(const char* omModelPath_openpose, const char* omModelPath_gesture);
-    AtlasError CreateImageInfoBuffer();
+    AclLiteError InitResource();
+    AclLiteError InitModel(const char* omModelPath_openpose, const char* omModelPath_gesture);
+    AclLiteError CreateImageInfoBuffer();
     void DrowBoundBoxToImage(std::vector<BBox>& detectionResults,
                              const std::string& origImagePath);
     void DestroyResource();
@@ -76,15 +76,15 @@ private:
     aclrtStream stream_;
     uint32_t imageInfoSize_;
     void* imageInfoBuf_;
-    AtlasModel  modelOpenPose_;
-    AtlasModel  modelGesture_;
+    AclLiteModel  modelOpenPose_;
+    AclLiteModel  modelGesture_;
 
     const char* modelPathOpenPose_;
     const char* modelPathGesture_;
     uint32_t modelWidth_;
     uint32_t modelHeight_;
     uint32_t inputDataSize_;
-    DvppProcess dvpp_;
+    AclLiteImageProc dvpp_;
     aclrtRunMode runMode_;
     bool isInited_;
 };

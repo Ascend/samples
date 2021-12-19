@@ -6,9 +6,9 @@
 
 ## 环境要求<a name="section15875915982"></a>
 
--   操作系统及架构：CentOS x86系统、CentOS aarch64系统
+-   操作系统及架构：CentOS x86系统、CentOS aarch64系统、Ubuntu 18.04 x86\_64
 -   芯片：Ascend310、Ascend710
--   python及依赖的库：python3.7.5
+-   python及依赖的库：Python3.7.*x*（3.7.0 ~ 3.7.11）、Python3.8.*x*（3.8.0 ~ 3.8.11）
 -   已完成昇腾AI软件栈在开发环境、运行环境上的部署。
 -   已参考[batch_norm](https://github.com/Ascend/samples/tree/master/cplusplus/level1_single_api/4_op_dev/4_other/singleop/tbe/impl)完成自定义算子的编译部署。
 
@@ -26,7 +26,7 @@
 
      ```
      export DDK_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/x86_64-linux
-     export NPU_HOST_LIB=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/x86_64-linux/acllib/lib64/stub
+     export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
      ```
 
      请将DDK_PATH替换为ACLlib组件的实际安装路径。
@@ -35,7 +35,7 @@
 
      ```
      export DDK_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/arm64-linux
-     export NPU_HOST_LIB=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/arm64-linux/acllib/lib64/stub
+     export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
      ```
 
      请将DDK_PATH替换为ACLlib组件的实际安装路径。
@@ -64,7 +64,7 @@
 
        -   “../../../src”表示CMakeLists.txt文件所在的目录，请根据实际目录层级修改。
        -   DCMAKE\_CXX\_COMPILER：编译应用程序所用的编译器。
-       -   DCMAKE\_SKIP\_RPATH：**设置为TRUE**，代表不会将rpath信息（即NPU\_HOST\_LIB配置的路径）添加到编译生成的可执行文件中去。可执行文件运行时会自动搜索实际设置的LD\_LIBRARY\_PATH（“xxx/acllib/lib64”或“xxx/fwkacllib/lib64”）中的动态链接库。
+       -   DCMAKE\_SKIP\_RPATH：**设置为TRUE**，代表不会将rpath信息（即NPU\_HOST\_LIB配置的路径）添加到编译生成的可执行文件中去。可执行文件运行时会自动搜索实际设置的LD\_LIBRARY\_PATH中的动态链接库。
 
 5. 执行如下命令，生成可执行文件。
 
@@ -82,16 +82,12 @@
 
    以运行用户将开发环境“acl\_execute\_batchnorm/run/out”目录下所有文件上传到运行环境（硬件设备Host侧）任一目录，若后续需要进行单算子profiling操作，建议上传到/home/HwHiAiUser/HIAI\_PROJECTS目录下，例如上传到/home/HwHiAiUser/HIAI\_PROJECTS/run\_batchnorm/目录下。
 
-2. 设置环境变量。
-
-   利用export命令，在当前终端下声明环境变量，关闭Shell终端失效。参考如下方法设置：
+2. 设置CANN软件基础环境变量。
 
    ```
-   export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/nnrt/latest/acllib/lib64:$LD_LIBRARY_PATH
+. ${HOME}/Ascend/nnrt/set_env.sh
    ```
-
-   请将/home/HwHiAiUser/Ascend/nnrt/latest替换为ACLlib组件的实际安装路径。
-
+   
 3. 在运行环境中执行**execute\_batchnorm\_op**文件。
 
    在/home/HwHiAiUser/HIAI\_PROJECTS/run\_batchnorm/out目录下执行如下命令：

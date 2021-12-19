@@ -4,6 +4,6 @@
 cmake_minimum_required(VERSION 3.5.1)
 
 # project information
-project(MultiBatch)
+project(DynamicBatch)
 
 add_subdirectory("./src")

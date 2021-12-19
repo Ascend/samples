@@ -18,8 +18,8 @@
 */
 #include <time.h>
 #include <thread>
-#include "atlasutil/atlas_utils.h"
-#include "atlasutil/acl_device.h"
+#include "acllite/AclLiteUtils.h"
+#include "acllite/AclLiteResource.h"
 #include "queue.h"
 #include "acl/acl.h"
 #include <iostream>
@@ -31,7 +31,7 @@
 #include "opencv2/opencv.hpp"
 #include "opencv2/videoio.hpp"
 #include <bits/stdint-uintn.h>
-#include "opencv2/imgcodecs/legacy/constants_c.h"
+
 #define VIDEONUM 4
 using namespace std;
 
@@ -81,7 +81,7 @@ void Preprocess(cv::VideoCapture capture, aclrtContext context,
     while(1){
         cv::Mat frame;
         if (!capture.read(frame)){
-            ATLAS_LOG_ERROR("Video capture return false");
+            ACLLITE_LOG_INFO("Video capture return false");
             break;
         }
         premsg.frame = frame;
@@ -90,7 +90,7 @@ void Preprocess(cv::VideoCapture capture, aclrtContext context,
         cv::Mat reiszeMat;
         cv::resize(frame, reiszeMat, cv::Size(kModelWidth, kModelHeight));
         if (reiszeMat.empty()) {
-            ATLAS_LOG_ERROR("Resize image failed");
+            ACLLITE_LOG_ERROR("Resize image failed");
             break;
         }
         premsg.reiszeMat = reiszeMat;
@@ -110,7 +110,7 @@ void Preprocess(cv::VideoCapture capture, aclrtContext context,
             usleep(1000);
         }
         else {
-            ATLAS_LOG_INFO("preprocess end");
+            ACLLITE_LOG_INFO("preprocess end");
             break;
         }
     }
@@ -168,23 +168,23 @@ void Postprocess(aclrtContext context, BlockingQueue<message>* queue_post){
         }
     }
     g_video_need_postprocess--;
-    ATLAS_LOG_INFO("postprocess end");
+    ACLLITE_LOG_INFO("postprocess end");
 }
 
 int main(int argc, char *argv[]) {
     //init acl resource
-    AclDevice aclDev;
-    AtlasError ret = aclDev.Init();
+    AclLiteResource aclDev;
+    AclLiteError ret = aclDev.Init();
     if (ret) {
-        ATLAS_LOG_ERROR("Init resource failed, error %d", ret);
-        return ATLAS_ERROR;
+        ACLLITE_LOG_ERROR("Init resource failed, error %d", ret);
+        return ACLLITE_ERROR;
     }
 
     ObjectDetect detect(kModelPath, kModelWidth, kModelHeight);
 
     ret = detect.Init();
-    if (ret != ATLAS_OK) {
-        ATLAS_LOG_ERROR("ObjectDetect Init resource failed");
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("ObjectDetect Init resource failed");
         return 1;
     }
 
@@ -202,7 +202,7 @@ int main(int argc, char *argv[]) {
     cout << "CAP_PROP_FPS is :" << rate1 << endl;
 
     if (!capture1.isOpened() || !capture2.isOpened() || !capture3.isOpened() || !capture4.isOpened()) {
-        ATLAS_LOG_ERROR("Movie open Error");
+        ACLLITE_LOG_ERROR("Movie open Error");
         return 1;
     }
 
@@ -260,8 +260,8 @@ int main(int argc, char *argv[]) {
         msg.frame = premsg.frame;
         std::vector<InferenceOutput> inferenceOutput;
         ret = detect.Inference(inferenceOutput, premsg.reiszeMat);
-        if (ret != ATLAS_OK) {
-            ATLAS_LOG_ERROR("Inference model inference output data failed");
+        if (ret != ACLLITE_OK) {
+            ACLLITE_LOG_ERROR("Inference model inference output data failed");
             return 1;
         }
         msg.detectData = inferenceOutput[kBBoxDataBufId].data;
@@ -288,7 +288,7 @@ int main(int argc, char *argv[]) {
     }
 
     usleep(1000);
-    ATLAS_LOG_INFO("Execute sample success");
-    return ATLAS_OK;
+    ACLLITE_LOG_INFO("Execute sample success");
+    return ACLLITE_OK;
 }
 

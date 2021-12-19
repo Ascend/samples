@@ -29,11 +29,11 @@
 #include "presenter/agent/presenter_types.h"
 
 #include "acl/acl.h"
-#include "atlasutil/atlas_model.h"
-#include "atlasutil/dvpp_process.h"
+#include "acllite/AclLiteModel.h"
+#include "acllite/AclLiteImageProc.h"
 
 #include "opencv2/opencv.hpp"
-#include "opencv2/imgcodecs/legacy/constants_c.h"
+
 #include "opencv2/imgproc/types_c.h"
 #include "clipper.hpp"
 
@@ -47,25 +47,25 @@ public:
     TextRecongnize();
     ~TextRecongnize();
 
-    AtlasError Init();
-    AtlasError Process(ImageData& image, aclrtRunMode RunMode);
+    AclLiteError Init();
+    AclLiteError Process(ImageData& image, aclrtRunMode RunMode);
     void DestroyResource();
 
 private:
-    AtlasError FirstModelPreprocess(cv::Mat &camera_rgb, ImageData &srcImage, cv::Mat &modelInputMat, aclrtRunMode RunMode);
+    AclLiteError FirstModelPreprocess(cv::Mat &camera_rgb, ImageData &srcImage, cv::Mat &modelInputMat, aclrtRunMode RunMode);
 
-    AtlasError FirstModelInference(std::vector<InferenceOutput>& inferOutputs,
+    AclLiteError FirstModelInference(std::vector<InferenceOutput>& inferOutputs,
                          cv::Mat &modelInputMat);
     
-    AtlasError FirstModelPostprocess(std::vector<InferenceOutput>& firstmodelinferOutputs, 
+    AclLiteError FirstModelPostprocess(std::vector<InferenceOutput>& firstmodelinferOutputs, 
                         cv::Mat rgbImg, cv::Mat &detectResImg, vector<cv::Mat> &cropArea,
                         vector<vector<Point2f>> &boxes, vector<Mat> &HMatrix);
     
-    AtlasError SecondModelPreprocess(cv::Mat &srcImage, cv::Mat &modelInputMat);
+    AclLiteError SecondModelPreprocess(cv::Mat &srcImage, cv::Mat &modelInputMat);
     
-    AtlasError SecondModelInference(std::vector<InferenceOutput>& inferOutputs, cv::Mat &detectResImg);
+    AclLiteError SecondModelInference(std::vector<InferenceOutput>& inferOutputs, cv::Mat &detectResImg);
 
-    AtlasError SecondModelPostprocess(std::vector<InferenceOutput>& inferOutputs, string &TextRes, cv::Mat &detectResImg,
+    AclLiteError SecondModelPostprocess(std::vector<InferenceOutput>& inferOutputs, string &TextRes, cv::Mat &detectResImg,
                                   vector<cv::Point2f> &box);
 
     void PostProcessDBNet(float *outData, cv::Mat rgbImg, vector<vector<cv::Point2f>> &boxes);
@@ -85,27 +85,27 @@ private:
 
     void fourPointsTransform(const cv::Mat &frame, cv::Point2f *vertices, cv::Mat &result, vector<Mat> &HMatrix);
 
-    AtlasError SendImage(cv::Mat& jpegImage);
+    AclLiteError SendImage(cv::Mat& jpegImage);
 
-    AtlasError CopyImageToDvpp(ImageData &srcImage, 
+    AclLiteError CopyImageToDvpp(ImageData &srcImage, 
                             aclrtRunMode runMode);
 
-    AtlasError CopyMatToDevice(cv::Mat &srcMat, 
+    AclLiteError CopyMatToDevice(cv::Mat &srcMat, 
                             aclrtRunMode runMode);
 
-    AtlasError CopyImageFromDvpp(ImageData &srcImage, 
+    AclLiteError CopyImageFromDvpp(ImageData &srcImage, 
                             aclrtRunMode runMode);
 
     void EncodeImage(vector<uint8_t>& encodeImg, cv::Mat& origImg);
                              
 private:
-    AtlasModel FirstModel_;
-    AtlasModel SecondModel_;
+    AclLiteModel FirstModel_;
+    AclLiteModel SecondModel_;
     uint32_t firstModelWidth_;
     uint32_t firstModelHeight_;
     uint32_t secondModelWidth_;
     uint32_t secondModelHeight_;
-    DvppProcess dvpp_;    
+    AclLiteImageProc dvpp_;    
     ascend::presenter::Channel* presenterChannel_;
 
     bool isInited_;

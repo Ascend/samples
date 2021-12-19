@@ -23,19 +23,19 @@
 #include <sys/time.h>
 
 #include "TextRecongnize.h"
-#include "atlasutil/atlas_videocapture.h"
-#include "atlasutil/atlas_error.h"
-#include "atlasutil/acl_device.h"
+#include "acllite/AclLiteVideoProc.h"
+#include "acllite/AclLiteError.h"
+#include "acllite/AclLiteResource.h"
 
 using namespace std;
 
 int main(int argc, char *argv[]) {
     //init acl resource
-    AclDevice aclDev;
-    AtlasError ret = aclDev.Init();
+    AclLiteResource aclDev;
+    AclLiteError ret = aclDev.Init();
     if (ret) {
-        ATLAS_LOG_ERROR("Init resource failed, error %d", ret);
-        return ATLAS_ERROR;
+        ACLLITE_LOG_ERROR("Init resource failed, error %d", ret);
+        return ACLLITE_ERROR;
     }
     aclrtRunMode RunMode = aclDev.GetRunMode();   
     
@@ -43,36 +43,36 @@ int main(int argc, char *argv[]) {
     TextRecongnize Recongnize;
     ret = Recongnize.Init();
     if (ret) {
-        ATLAS_LOG_ERROR("Init resource failed, error %d", ret);
-        return ATLAS_ERROR;
+        ACLLITE_LOG_ERROR("Init resource failed, error %d", ret);
+        return ACLLITE_ERROR;
     }
     
     //open camera. If CAMERA0 is accessiable,open CAMERA0, otherwise open CAMERA1
-    AtlasVideoCapture cap = AtlasVideoCapture("../data/data.mp4");
+    AclLiteVideoProc cap = AclLiteVideoProc("../data/data.mp4");
     if(!cap.IsOpened()) {
-        ATLAS_LOG_ERROR("Open camera failed");
-        return ATLAS_ERROR;
+        ACLLITE_LOG_ERROR("Open camera failed");
+        return ACLLITE_ERROR;
     }
     //read frame from camera and inference
     while(true) {
         ImageData image;
         ret = cap.Read(image);
         if (ret) {
-            ATLAS_LOG_ERROR("Read image failed, error %d", ret);
+            ACLLITE_LOG_ERROR("Read image failed, error %d", ret);
             break;
         }
         
         ret = Recongnize.Process(image, RunMode);
         if (ret) {
-            ATLAS_LOG_ERROR("Inference image failed, error %d",  ret);
+            ACLLITE_LOG_ERROR("Inference image failed, error %d",  ret);
             break;
         }
 
     }
     cap.Close();
-    ATLAS_LOG_INFO("Execute sample success");
+    ACLLITE_LOG_INFO("Execute sample success");
     //release text recongnize
     Recongnize.DestroyResource();
     aclDev.Release();
-    return ATLAS_OK;
+    return ACLLITE_OK;
 }

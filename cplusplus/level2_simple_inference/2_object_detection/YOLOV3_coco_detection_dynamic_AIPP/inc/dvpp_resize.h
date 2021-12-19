@@ -23,7 +23,6 @@
 #include "acl/ops/acl_dvpp.h"
 #include "utils.h"
 
-
 class DvppResize {
 public:
     /**
@@ -75,10 +74,8 @@ private:
     void DestroyResource();
     void DestroyOutputPara();
 
-
     aclrtStream stream_;
     acldvppChannelDesc *dvppChannelDesc_;
-
     acldvppResizeConfig *resizeConfig_;
 
     acldvppPicDesc *vpcInputDesc_; // vpc input desc

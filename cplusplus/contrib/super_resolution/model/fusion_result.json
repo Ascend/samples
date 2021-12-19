@@ -1,0 +1,27 @@
+{
+    "graph_fusion": {
+        "ConvToFullyConnectionFusionPass": {
+            "effect_times": "0",
+            "match_times": "3"
+        },
+        "ConvWeightCompressFusionPass": {
+            "effect_times": "0",
+            "match_times": "3"
+        },
+        "StrideHoistingPass": {
+            "effect_times": "0",
+            "match_times": "2"
+        },
+        "TransdataCastFusionPass": {
+            "effect_times": "0",
+            "match_times": "5"
+        }
+    },
+    "session_and_graph_id": "0_0",
+    "ub_fusion": {
+        "TbeCommonRules0FusionPass": {
+            "effect_times": "2",
+            "match_times": "2"
+        }
+    }
+}

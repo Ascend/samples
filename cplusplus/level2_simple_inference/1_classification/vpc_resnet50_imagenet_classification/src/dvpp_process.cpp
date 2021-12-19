@@ -47,7 +47,7 @@ Result DvppProcess::InitResource()
     }
 
     aclError ret = acldvppCreateChannel(dvppChannelDesc_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("acldvppCreateChannelAsync failed, errorCode = %d", static_cast<int32_t>(ret));
         return FAILED;
     }
@@ -97,7 +97,7 @@ Result DvppProcess::InitDvppOutputPara(int modelInputWidth, int modelInputHeight
     // output buffer, adjust the value based on the actual model
     resizeOutBufferSize_ = resizeOutWidthStride_ * resizeOutHeightStride_ * 3 / 2; // yuv format size
     aclError ret = acldvppMalloc(&resizeOutBufferDev_, resizeOutBufferSize_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("acldvppMalloc resizeOutBuffer failed, errorCode = %d", static_cast<int32_t>(ret));
         return FAILED;
     }
@@ -116,7 +116,7 @@ void DvppProcess::DestroyOutputPara()
 Result DvppProcess::InitDecodeOutputDesc()
 {
     aclError ret = acldvppMalloc(&decodeOutDevBuffer_, jpegDecodeOutputSize_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("acldvppMalloc jpegOutBufferDev failed, errorCode = %d", static_cast<int32_t>(ret));
         return FAILED;
     }
@@ -138,13 +138,13 @@ Result DvppProcess::ProcessDecode()
     // decode to yuv format
     aclError ret = acldvppJpegDecodeAsync(dvppChannelDesc_, inDevBuffer_, inDevBufferSize_,
         decodeOutputDesc_, stream_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("acldvppJpegDecodeAsync failed, errorCode = %d", static_cast<int32_t>(ret));
         return FAILED;
     }
 
     ret = aclrtSynchronizeStream(stream_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("aclrtSynchronizeStream failed, errorCode = %d", static_cast<int32_t>(ret));
         return FAILED;
     }
@@ -208,13 +208,13 @@ Result DvppProcess::ProcessResize()
     aclError ret = acldvppSetResizeConfigInterpolation(resizeConfig_, 0);
     ret = acldvppVpcResizeAsync(dvppChannelDesc_, resizeInputDesc_,
         resizeOutputDesc_, resizeConfig_, stream_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("acldvppVpcResizeAsync failed, errorCode = %d", static_cast<int32_t>(ret));
         return FAILED;
     }
 
     ret = aclrtSynchronizeStream(stream_);
-    if (ret != ACL_ERROR_NONE) {
+    if (ret != ACL_SUCCESS) {
         ERROR_LOG("aclrtSynchronizeStream failed, errorCode = %d", static_cast<int32_t>(ret));
         return FAILED;
     }
@@ -250,7 +250,7 @@ void DvppProcess::DestroyResource()
 
     if (dvppChannelDesc_ != nullptr) {
         aclError ret = acldvppDestroyChannel(dvppChannelDesc_);
-        if (ret != ACL_ERROR_NONE) {
+        if (ret != ACL_SUCCESS) {
             ERROR_LOG("acldvppDestroyChannel failed, errorCode = %d", static_cast<int32_t>(ret));
         }
 

@@ -3,8 +3,8 @@ import numpy as np
 import sys
 sys.path.append("../../../../common")
 sys.path.append("../")
-from atlas_utils.acl_dvpp import Dvpp
-from atlas_utils.presenteragent import presenter_datatype
+from acllite_imageproc import AclLiteImageProc
+from presenteragent import presenter_datatype
 
 LABEL = 1
 SCORE = 2
@@ -13,16 +13,13 @@ TOP_LEFT_Y = 4
 BOTTOM_RIGHT_X = 5
 BOTTOM_RIGHT_Y = 6
 
-
 class VggSsd(object):
     """vggssd"""
     def __init__(self, acl_resource, model_width, model_height):
         self._acl_resource = acl_resource
         self._model_width = model_width
         self._model_height = model_height
-        #Use dvpp to process images, when using opencv or PIL, 
-        # you don't need to create a dvpp instance
-        self._dvpp = Dvpp(acl_resource)
+        self._dvpp = AclLiteImageProc(acl_resource)
 
     def __del__(self):
         if self._dvpp:

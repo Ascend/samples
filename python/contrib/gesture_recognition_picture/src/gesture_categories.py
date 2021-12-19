@@ -25,7 +25,6 @@ gesture_categories = [
         'No gesture'
 ]
 
-
 def get_gesture_categories(gesture_id):
     """
 	get_gesture_categories
@@ -34,4 +33,3 @@ def get_gesture_categories(gesture_id):
         return "unknown"
     else:
         return gesture_categories[gesture_id]
-

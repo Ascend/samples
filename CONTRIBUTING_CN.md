@@ -20,26 +20,25 @@ Ascend Samples，欢迎各位开发者！
     
     -   工程目录下有 src 文件夹，用于存放源码。   
     -   工程目录下有 readme (*.md 格式的文件)。   
-    -   工程目录下有 scripts 文件夹, 文件夹下有当前待提交工程的入口脚本 : testcase*.sh 。
-    -   工程目录下有 scripts 文件夹, 文件夹下有描述当前工程所适配的设备形态以及相应版本的配置说明文件 host_version.conf 。
+    -   samples的目录下st的文件夹中放置用户testcase测试脚本,cplusplus下放置C++工程的测试脚本，python文件夹下放置python工程的测试脚本。命名规则要求为testcase_ + "工程名称" + .sh，其中，工程名称为对应工程的src文件夹上一级目录名。     
+        **以C++ YOLOV3_coco_detection_picture样例为例：**   
+        **样例src目录为：** samples/cplusplus/level2_simple_inference/2_object_detection/YOLOV3_coco_detection_picture/src     
+        **因此样例testcase的脚本为：** st/cplusplus/testcase_YOLOV3_coco_detection_picture.sh
     
-    > **说明：** 每一个入口脚本对应一种设备形态，要求当前工程至少适配一种设备形态，每种设备的入口脚本对应的版本号须填写在同级目录下的 host_version.conf 文件中。
-    >- testcase_200dk.sh   适配设备Atlas200dk。   
-    >- testcase_300.sh     适配设备Atlas300。   
-   
-    > **说明：** 每一个设备形态对应一种或多种版本，要求当前工程至少适配一种版本。当前测试环境有3个版本，分别是驱动版本为1.0.8.alpha,1.0.9.alpha,1.0.10.alpha的Atlas200dk和Atlas300。注意：host_version.conf中的内容为黑名单版本，即不会在该版本上跑该testcase，例如 host_version.conf中内容为：
-    >- Atlas300 = 1.0.10.alpha         当前工程适配Atlas300驱动版本为1.0.8.alpha,1.0.9.alpha两种版本。
-    >- Atlas200dk = 1.0.8.alpha,1.0.9.alpha      当前工程适配Atlas200dk驱动版本为1.0.10.alpha一种版本。
-
+    > **说明：** 
+    >- 每一个入口脚本对应两种设备形态，要求当前工程适配这两种设备形态：Atlas200dk，A300-3010。   
+    >- 每一个设备形态对应一种或多种版本，要求当前工程至少适配一种版本。
+    >- 当前测试环境存在版本为：1. CANN 5.0.3.alpha005的Atlas200dk和A300-3010。 2. CANN 5.0.4.alpha002。
+    >- 注意：blacklist_version.conf中的内容为黑名单版本，即不会在该版本上跑该testcase。如testcase_YOLOV3_coco_detection_picture: 5.0.3.alpha005
 
 4. 从其他开源迁移的代码，请增加License声明。
 
  **二、License规则**
 
-#### 需要根据您签署的CLA类型进行声明：
-#### CLA签署网站：https://clasign.osinfra.cn/sign/Z2l0ZWUlMkZhc2NlbmQ=
-#### CLA包括企业签署、员工签署、个人签署三类，非华为员工签署个人，并根据自己签署的类型声明对应的copyright
-#### 所有的新建源码文件(cpp、py、h等文件)需要支持Apache 2.0 License，并在源码文件头部增加如下声明，将[yyyy]替换为代码创建的4位数年份，将[name of the copyright owner]替换为所在组织的名字（所有个人签署CLA一律声明Huawei Technologies Co., Ltd），注意删除方括号：
+**需要根据您签署的CLA类型进行声明：**    
+**CLA签署网站：https://clasign.osinfra.cn/sign/Z2l0ZWUlMkZhc2NlbmQ=**    
+**CLA包括企业签署、员工签署、个人签署三类，非华为员工签署个人，并根据自己签署的类型声明对应的copyright**   
+**所有的新建源码文件(cpp、py、h等文件)需要支持Apache 2.0 License，并在源码文件头部增加如下声明，将[yyyy]替换为代码创建的4位数年份，将[name of the copyright owner]替换为所在组织的名字（所有个人签署CLA一律声明Huawei Technologies Co., Ltd），注意删除方括号：**   
 ```
 # Copyright [yyyy] [name of copyright owner]
 #
@@ -56,7 +55,7 @@ Ascend Samples，欢迎各位开发者！
 # limitations under the License. 
 ```
 
-#### 所有从其他源码修改而来的代码，不要改变源代码中的LICENSE类型，如果源码中已有其它公司的Copyright，原有的copyright声明保持不变，在上面增加一行Copyright，将[yyyy]替换为修改代码的4位数年份，将[name of the copyright owner]替换为本人所在组织的名字（所有个人签署CLA一律声明Huawei Technologies Co., Ltd），注意删除方括号。
+**所有从其他源码修改而来的代码，不要改变源代码中的LICENSE类型，如果源码中已有其它公司的Copyright，原有的copyright声明保持不变，在上面增加一行Copyright，将[yyyy]替换为修改代码的4位数年份，将[name of the copyright owner]替换为本人所在组织的名字（所有个人签署CLA一律声明Huawei Technologies Co., Ltd），注意删除方括号。**     
 例如：
 ```
 # Copyright [yyyy] [name of copyright owner]
@@ -107,18 +106,16 @@ PR提交的样例需要包含门禁项、工程测试用例和readme。
 
         1. 工程目录下有 src 文件夹，用于存放源码。   
         2. 工程目录下有 readme (*.md 格式的文件)。   
-        3. 工程目录下有 scripts 文件夹, 文件夹下有testcase*.sh脚本。
-        4. 工程目录下有 scripts 文件夹, 文件夹下有host_version.conf配置文件。   
+        3. st目录下有testcase*.sh (样例功能测试脚本)
 
-   - 提交PR后，会自动触发门禁流水，后台会根据用例入口shell(工程目录下的scripts/testcase*.sh)进行编译，关键要求如下：
+   - 提交PR后，会自动触发门禁流水，后台会根据用例入口shell(st目录下对应编程语言文件夹中的testcase*.sh)进行编译，关键要求如下：
 
         1. 提交的PR中的文件不能包含 rm 删除命令；   
         2. 提交的PR中不应上传原始模型文件和转换后的Davinci模型；   
         3. 提交的PR中不应上传测试集和验证集;   
 
-2. scripts/testcase*.sh 应该包含如下功能。   
-    testcase*.sh 包含两方面功能：推理和校验推理的结果。 
-  
+2. st目录下对应编程语言文件夹中的testcase*.sh 应该包含推理和校验推理的结果的功能，具体释义如下：   
+
     推理阶段包含：   
     -    下载测试集和验证集。    
     -    下载原始模型文件。   

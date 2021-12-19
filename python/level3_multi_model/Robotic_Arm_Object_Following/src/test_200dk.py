@@ -23,9 +23,9 @@ import socket
 import struct
 
 sys.path.append("../../../common")
-from atlas_utils.acl_resource import AclResource
-from atlas_utils.acl_model import Model
-from atlas_utils.acl_image import AclImage
+from acllite_resource import AclLiteResource
+from acllite_model import AclLiteModel
+from acllite_image import AclLiteImage
 
 # config for ascend detection
 LABELS = ["ascend"]
@@ -431,11 +431,11 @@ def inference(model, bgr_img):
 
 if __name__ == "__main__":
     # acl resource init
-    acl_resource = AclResource()
+    acl_resource = AclLiteResource()
     acl_resource.init()
 
     # load om model
-    yolov3_model = Model(MODEL_PATH)
+    yolov3_model = AclLiteModel(MODEL_PATH)
 
     # model inference
     input_dir = os.listdir(INPUT_DIR)

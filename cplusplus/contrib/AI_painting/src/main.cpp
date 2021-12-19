@@ -50,10 +50,9 @@ int main(int argc, char *argv[]) {
 
         Result ret = painting.Preprocess();
         if (ret != SUCCESS) {
-            INFO_LOG("Continue receiving...");
+	    continue;
         }
         else{
-
             aclmdlDataset* inferenceOutput = nullptr;
             ret = painting.Inference(inferenceOutput);
             if ((ret != SUCCESS) || (inferenceOutput == nullptr)) {
@@ -66,7 +65,6 @@ int main(int argc, char *argv[]) {
                 ERROR_LOG("Process model inference output data failed");
                 return FAILED;
             }
-            INFO_LOG("Inference once success");
         }
     }
 

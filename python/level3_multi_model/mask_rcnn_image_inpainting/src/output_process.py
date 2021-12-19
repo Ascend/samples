@@ -5,13 +5,11 @@ import sys
 import numpy as np
 from PIL import Image
 import cv2
-
 import draw_predict
 from config import config
 
 path = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.join(path, ".."))
-
 
 def get_img_size(file_name):
     img = Image.open(file_name)

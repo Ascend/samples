@@ -19,13 +19,12 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include <memory>
 #include "opencv2/opencv.hpp"
-#include "opencv2/imgcodecs/legacy/constants_c.h"
 #include "opencv2/imgproc/types_c.h"
 #include "acl/acl.h"
-#include "atlasutil/atlas_model.h"
-#include <memory>
-#include "ascenddk/presenter/agent/presenter_channel.h"
+#include "acllite/AclLiteModel.h"
+#include "presenter/agent/presenter_channel.h"
 
 /**
 * ColorizeProcess
@@ -35,27 +34,27 @@ public:
     ColorizeProcess(const char* modelPath, uint32_t modelWidth, uint32_t modelHeight);
     ~ColorizeProcess();
 
-    AtlasError Init();
-    AtlasError Preprocess(cv::Mat& frame);
-    AtlasError Inference(std::vector<InferenceOutput>& inferOutputs);
-    AtlasError Postprocess(cv::Mat& frame, std::vector<InferenceOutput>& modelOutput);
+    AclLiteError Init();
+    AclLiteError Preprocess(cv::Mat& frame);
+    AclLiteError Inference(std::vector<InferenceOutput>& inferOutputs);
+    AclLiteError Postprocess(cv::Mat& frame, std::vector<InferenceOutput>& modelOutput);
     
 private:
-    AtlasError InitResource();
-    AtlasError CreateInput();
-    AtlasError OpenPresenterChannel();
+    AclLiteError InitResource();
+    AclLiteError CreateInput();
+    AclLiteError OpenPresenterChannel();
 
     void ConstructClassifyResult(std::vector<ascend::presenter::DetectionResult>& result,
                                  int classIdx, float score);
     void EncodeImage(std::vector<uint8_t>& encodeImg, cv::Mat& origImg);
-    AtlasError SendImage(cv::Mat& image);
+    AclLiteError SendImage(cv::Mat& image);
     void DestroyResource();
 
 private:
     int32_t deviceId_;
     aclrtContext context_;
     aclrtStream stream_;
-    AtlasModel model_;
+    AclLiteModel model_;
 
     const char* modelPath_;
     uint32_t modelWidth_;

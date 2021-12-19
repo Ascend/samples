@@ -83,7 +83,6 @@ const int kSecToMillisec = 1000;
 const int kMillSecToNanoSec = 1000000;
 
 const int kDebugRecordFrameThresHold = 100;
-
 const int kParaCheckError = -1;
 
 // the quality of yuv convert to jpg
@@ -91,7 +90,6 @@ const int kDvppToJpgQualityParameter = 100;
 
 const char KPortChannelSeparator = '/';
 const char kPortIpSeparator = ':';
-
 const int kFirstIndex = 0;
 
 struct ControlObject {
@@ -147,8 +145,6 @@ class MainProcess {
   void DestroyResource(void);
 
  private:
-
-  
   int32_t deviceId_;
   aclrtContext context_;
   aclrtStream stream_;

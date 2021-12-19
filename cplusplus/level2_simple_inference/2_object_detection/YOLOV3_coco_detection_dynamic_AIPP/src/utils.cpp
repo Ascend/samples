@@ -125,7 +125,7 @@ void* Utils::CopyDataDeviceToLocal(void* deviceData, uint32_t dataSize) {
     }
 
     aclError aclRet = aclrtMemcpy(buffer, dataSize, deviceData, dataSize, ACL_MEMCPY_DEVICE_TO_HOST);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("Copy device data to local failed, aclRet is %d", aclRet);
         delete[](buffer);
         return nullptr;
@@ -137,13 +137,13 @@ void* Utils::CopyDataDeviceToLocal(void* deviceData, uint32_t dataSize) {
 void* Utils::CopyDataToDevice(void* data, uint32_t dataSize, aclrtMemcpyKind policy) {
     void* buffer = nullptr;
     aclError aclRet = acldvppMalloc(&buffer, dataSize);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("malloc device data buffer failed, aclRet is %d", aclRet);
         return nullptr;
     }
 
     aclRet = aclrtMemcpy(buffer, dataSize, data, dataSize, policy);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("Copy data to device failed, aclRet is %d", aclRet);
         (void)aclrtFree(buffer);
         return nullptr;
@@ -190,7 +190,7 @@ aclrtRunMode runMode) {
     }
     void* buffer = nullptr;
     aclError aclRet = acldvppMalloc(&buffer, reiszeMatLen);
-    if (aclRet != ACL_ERROR_NONE) {
+    if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("malloc device data buffer failed, aclRet is %d", aclRet);
         return FAILED;
     }
@@ -198,7 +198,7 @@ aclrtRunMode runMode) {
         aclRet = aclrtMemcpy(buffer, reiszeMatLen,
                             srcMat.ptr<uint8_t>(), reiszeMatLen,
                             ACL_MEMCPY_HOST_TO_DEVICE);
-        if (aclRet != ACL_ERROR_NONE) {
+        if (aclRet != ACL_SUCCESS) {
             ERROR_LOG("Copy resized mat data to device failed.");
             return FAILED;
         }
