@@ -120,6 +120,9 @@ Result SampleProcess::CheckAndFillDynamicPara(int argc, char **argv, DynamicInfo
         }
         dynamicInfo.dynamicArr[0] = dynamicBatchNum;
         dynamicInfo.dynamicType = DYNAMIC_BATCH;
+        //  width and height of input image are 416 when it is dynamic batch
+        dynamicInfo.imageW = 416;
+        dynamicInfo.imageH = 416;
     } else {
         uint64_t height = atoll(argv[1]);
         uint64_t width = atoll(argv[2]);
@@ -132,6 +135,8 @@ Result SampleProcess::CheckAndFillDynamicPara(int argc, char **argv, DynamicInfo
         dynamicInfo.dynamicArr[0] = height;
         dynamicInfo.dynamicArr[1] = width;
         dynamicInfo.dynamicType = DYNAMIC_HW;
+        dynamicInfo.imageW = width;
+        dynamicInfo.imageH = height;
     }
 
     return SUCCESS;
@@ -195,13 +200,14 @@ Result SampleProcess::Process(const DynamicInfo &dynamicInfo)
     std::string &inputFile = testFile[dynamicInfo.dynamicArr[0]];
     INFO_LOG("start to process file: %s", inputFile.c_str());
     // create input
-    uint32_t devBufferSize;
-    void *picDevBuffer = Utils::GetDeviceBufferOfFile(inputFile, devBufferSize);
-    if (picDevBuffer == nullptr) {
-        ERROR_LOG("get pic device buffer failed, file name[%s].", inputFile.c_str());
-        return FAILED;
+    ImageMemoryInfo imageMemInfo;
+    ret = Utils::GetDeviceBufferOfFile(inputFile, dynamicInfo.imageW, dynamicInfo.imageH, imageMemInfo);
+    if (ret != SUCCESS) {
+        ERROR_LOG("get image device buffer failed, file name[%s].", inputFile.c_str());
+        return ret;
     }
-    ret = modelProcess.CreateInput(picDevBuffer, devBufferSize);
+
+    ret = modelProcess.CreateInput(imageMemInfo);
     if (ret != SUCCESS) {
         ERROR_LOG("execute CreateInput failed.");
         return FAILED;

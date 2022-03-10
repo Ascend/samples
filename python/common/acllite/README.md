@@ -23,7 +23,7 @@
 完成后，将该目录路径加入PYTHONPATH环境变量即可。例如在以上文档中，公共库被拷贝到```$THIRDPART_PATH```，在~/.bashrc文件中添加：
 
 ```
-export PYTHONPATH=$THIRDPART_PATH:$PYTHONPATH
+export PYTHONPATH=$THIRDPART_PATH/acllite:$PYTHONPATH
 ```
 
 保存配置好的环境变量，执行以下命令使环境变量生效
@@ -69,26 +69,6 @@ memory_type ：图片数据存储类型，即该图片数据是存储在一般�
 返回值：
 
 AclLiteImage结构的数据
-
-约束：
-
-无
-
-#### nparray
-
-方法：nparray ():
-
-说明：
-
-将AclLiteImage转换为np array。
-
-输入参数：
-
-无
-
-返回值：
-
-np array结构数据
 
 约束：
 

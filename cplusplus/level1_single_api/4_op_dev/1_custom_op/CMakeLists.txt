@@ -20,7 +20,10 @@ execute_process(COMMAND rm -rf ./makepkg)
 message(STATUS "OP_COMMON_INC=${OP_COMMON_INC}")
 # add sub compile directory
 if(EXISTS "${CMAKE_SOURCE_DIR}/cpukernel")
-    add_subdirectory(cpukernel)
+    if (NOT "x$ENV{COMPILE_KERNEL_TARGET}" STREQUAL "xtbe")
+        message(STATUS "compile kernel target is $ENV{COMPILE_KERNEL_TARGET}")
+        add_subdirectory(cpukernel)
+    endif()
 endif()
 if(IS_DIRECTORY "${CMAKE_SOURCE_DIR}/framework")
     add_subdirectory(framework)
@@ -29,7 +32,10 @@ if(IS_DIRECTORY "${CMAKE_SOURCE_DIR}/op_proto")
     add_subdirectory(op_proto)
 endif()
 if(EXISTS "${CMAKE_SOURCE_DIR}/tbe")
-    add_subdirectory(tbe)
+    if (NOT "x$ENV{COMPILE_KERNEL_TARGET}" STREQUAL "xcpu")
+        message(STATUS "compile kernel target is $ENV{COMPILE_KERNEL_TARGET}")
+        add_subdirectory(tbe)
+    endif()
 endif()
 
 if (NOT "x$ENV{ADD_TESTCASE}" STREQUAL "x")
@@ -43,13 +49,19 @@ message(STATUS "operation system is ${CMAKE_HOST_SYSTEM_NAME}")
 
 set(ALL_MODULES ${OP_PROTO_TARGET})
 if(EXISTS "${CMAKE_SOURCE_DIR}/cpukernel/CMakeLists.txt")
-    set(ALL_MODULES ${ALL_MODULES} ${AICPU_KERNEL_TARGET})
-    set(ALL_MODULES ${ALL_MODULES} ${AICPU_CONFIG_JSON_TARGET})
+    if (NOT "x$ENV{COMPILE_KERNEL_TARGET}" STREQUAL "xtbe")
+        message(STATUS "kernel target and config json: $ENV{COMPILE_KERNEL_TARGET}")
+        set(ALL_MODULES ${ALL_MODULES} ${AICPU_KERNEL_TARGET})
+        set(ALL_MODULES ${ALL_MODULES} ${AICPU_CONFIG_JSON_TARGET})
+    endif()
 endif()
 message(STATUS "AICPU_CONFIG_INFO_FLAG=${AICPU_CONFIG_INFO_FLAG}")
 
 if(EXISTS "${CMAKE_SOURCE_DIR}/tbe/CMakeLists.txt")
-    set(ALL_MODULES ${ALL_MODULES} config_json)
+    if (NOT "x$ENV{COMPILE_KERNEL_TARGET}" STREQUAL "xcpu")
+        message(STATUS "kernel target and config json: $ENV{COMPILE_KERNEL_TARGET}")
+        set(ALL_MODULES ${ALL_MODULES} config_json)
+    endif()
 endif()
 
 if(IS_DIRECTORY "${CMAKE_SOURCE_DIR}/framework/caffe_plugin")
@@ -68,12 +80,24 @@ endif()
 message(STATUS "ALL_MODULES=${ALL_MODULES}")
 add_custom_target(${RUN_TARGET} ALL DEPENDS ${ALL_MODULES})
 
+if (NOT "x$ENV{COMPILE_KERNEL_TARGET}" STREQUAL "xcpu")
+    add_custom_command(TARGET ${RUN_TARGET}
+        PRE_BUILD
+        COMMAND mkdir -p ./makepkg/packages/op_impl/${PROJECT_DIR}/ai_core/tbe/custom_impl
+        COMMAND mkdir -p ./makepkg/packages/op_impl/${PROJECT_DIR}/vector_core/tbe/custom_impl
+        )
+endif()
+
+if (NOT "x$ENV{COMPILE_KERNEL_TARGET}" STREQUAL "xtbe")
+    add_custom_command(TARGET ${RUN_TARGET}
+        PRE_BUILD
+        COMMAND mkdir -p ./makepkg/packages/op_impl/${PROJECT_DIR}/cpu/aicpu_kernel/custom_impl
+        )
+endif()
+
 add_custom_command(TARGET ${RUN_TARGET}
         PRE_BUILD
         COMMAND mkdir -p ./makepkg/packages/fusion_rules/${PROJECT_DIR}/
-        COMMAND mkdir -p ./makepkg/packages/op_impl/${PROJECT_DIR}/ai_core/tbe/custom_impl
-        COMMAND mkdir -p ./makepkg/packages/op_impl/${PROJECT_DIR}/vector_core/tbe/custom_impl
-        COMMAND mkdir -p ./makepkg/packages/op_impl/${PROJECT_DIR}/cpu/aicpu_kernel/custom_impl
         COMMAND bash ${CMAKE_SOURCE_DIR}/cmake/util/gen_impl_and_mrege_json.sh ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR}
         COMMAND cp ${CMAKE_SOURCE_DIR}/scripts/install.sh ./makepkg/
         COMMAND cp ${CMAKE_SOURCE_DIR}/scripts/upgrade.sh ./makepkg/

@@ -76,13 +76,13 @@ int32_t sample_comm_vpc_equalize_hist(FuncInput funcInput)
 
     // this structure determines how the picture is remapped.
     hi_vpc_lut_remap lut;
-    for (int i = 0; i < 128; i++) { // remap value 0 to 128 as 0
+    for (int i = 0; i < 128; i++) { // remap value 0 to 127 as 0
         lut.map_value_u_or_g[i] = 0;
         lut.map_value_v_or_b[i] = 0;
         lut.map_value_y_or_r[i] = 0;
     }
 
-    for (int i = 128; i < 256; i++) { // remap value 128 to 256 as 255
+    for (int i = 128; i < 256; i++) { // remap value 128 to 255 as 255
         lut.map_value_u_or_g[i] = 255; // new value 255
         lut.map_value_v_or_b[i] = 255; // new value 255
         lut.map_value_y_or_r[i] = 255; // new value 255

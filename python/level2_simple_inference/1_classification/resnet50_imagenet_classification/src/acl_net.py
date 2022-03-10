@@ -186,6 +186,11 @@ class Net(object):
         print("data interaction from device to host success")
         result = self.get_result(res)
         self._print_result(result)
+        # free host memory
+        for item in res:
+            ptr = item['buffer']
+            ret = acl.rt.free_host(ptr)
+            check_ret('acl.rt.free_host', ret)
 
     def run(self, images):
         self._data_from_host_to_device(images)

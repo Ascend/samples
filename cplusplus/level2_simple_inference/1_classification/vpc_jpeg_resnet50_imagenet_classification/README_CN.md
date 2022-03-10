@@ -114,179 +114,103 @@
 ## 环境要求<a name="section3833348101215"></a>
 
 -   操作系统及架构：CentOS 7.6 x86\_64、CentOS aarch64、Ubuntu 18.04 x86\_64、EulerOS x86、EulerOS aarch64
--   编译器：
-    -   Ascend 310 EP/Ascend 710/Ascend 910形态编译器：g++ 或 aarch64-linux-gnu-g++
-
-    -   Atlas 200 DK编译器：aarch64-linux-gnu-g++
-
+-   编译器：g++或aarch64-linux-gnu-g++
 -   芯片：Ascend 310、Ascend 710、Ascend 910
-
 -   python及依赖的库：python3.7.5
--   已在环境上部署昇腾AI软件栈。
+-   已在环境上部署昇腾AI软件栈
 
 ## 配置环境变量<a name="section1025910381783"></a>
 
--   **Ascend 310 EP/Ascend 910：**
-    1.  开发环境上，设置模型转换依赖的环境变量。
+- 开发环境上环境变量配置
 
-        $\{install\_path\}表示开发套件包Ascend-cann-toolkit所在的路径。
+  1. CANN-Toolkit包提供进程级环境变量配置脚本，供用户在进程中引用，以自动完成CANN基础环境变量的配置，配置示例如下所示
 
-        ```
-        export PATH=${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
-        export ASCEND_OPP_PATH=${install_path}/opp
-        ```
+     ```
+     . ${HOME}/Ascend/ascend-toolkit/set_env.sh
+     ```
 
-    2.  开发环境上，设置环境变量，编译脚本src/CMakeLists.txt通过环境变量所设置的头文件、库文件的路径来编译代码。
+     “$HOME/Ascend”请替换“Ascend-cann-toolkit”包的实际安装路径。
 
-        如下为设置环境变量的示例，请将$HOME/Ascend/ascend-toolkit/latest/_\{os\_arch\}_替换为开发套件包Ascend-cann-toolkit下对应架构的FwkACLlib的路径。
+  2. 算子编译依赖Python，以Python3.7.5为例，请以运行用户执行如下命令设置Python3.7.5的相关环境变量。
 
-        -   当运行环境操作系统架构为x86时，执行以下命令：
+     ```
+     #用于设置python3.7.5库文件路径
+     export LD_LIBRARY_PATH=/usr/local/python3.7.5/lib:$LD_LIBRARY_PATH
+     #如果用户环境存在多个python3版本，则指定使用python3.7.5版本
+     export PATH=/usr/local/python3.7.5/bin:$PATH
+     ```
 
-            ```
-            export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux
-            export NPU_HOST_LIB=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux/fwkacllib/lib64/stub
-            ```
-
-        -   当运行环境操作系统架构为Arm时，执行以下命令：
-
-            ```
-            export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux
-            export NPU_HOST_LIB=$HOME/Ascend/ascend-toolkit/latest/arm64-linux/fwkacllib/lib64/stub
-            ```
-
-
-        使用“$HOME/Ascend/ascend-toolkit/latest/_\{os\_arch\}_/fwkacllib/lib64/stub”目录下的\*.so库，是为了编译基于AscendCL接口的代码逻辑时，不依赖其它组件（例如Driver）的任何\*.so库。编译通过后，在Host上运行应用时，会根据环境变量LD\_LIBRARY\_PATH链接到“fwkacllib/lib64“或“acllib/lib64“目录下的\*.so库，并自动链接到依赖其它组件的\*.so库。
-
-        设置环境变量后，还需修改src/CMakeLists.txt文件中的如下配置段，将“**acllib**”修改为“**fwkacllib**”。
-
-        ```
-        # Header path
-        include_directories(
-            ${INC_PATH}/acllib/include/
-            ../inc/
-        )
-        ```
-
-    3.  运行环境上，设置环境变量，运行应用时需要根据环境变量找到对应的库文件。
-        -   若运行环境上安装的是开发套件包Ascend-cann-toolkit，环境变量设置如下：
-
-            如下为设置环境变量的示例，请将$HOME/Ascend/ascend-toolkit/latest替换为FwkACLlib的路径。
-
-            ```
-            export LD_LIBRARY_PATH=$HOME/Ascend/ascend-toolkit/latest/fwkacllib/lib64
-            ```
-
-        -   若运行环境上安装的是Ascend-cann-nnrt包，环境变量设置如下：
-
-            如下为设置环境变量的示例，请将$HOME/Ascend/nnrt/latest替换为ACLlib的路径。
-
-            ```
-            export LD_LIBRARY_PATH=$HOME/Ascend/nnrt/latest/acllib/lib64
-            ```
-
-
-
--   **Ascend 710：**
-    1.  开发环境上，设置模型转换依赖的环境变量。
-
-        $\{install\_path\}表示开发套件包Ascend-cann-toolkit所在的路径。
-
-        ```
-        export PATH=${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
-        export ASCEND_OPP_PATH=${install_path}/opp
-        ```
-
-    2.  开发环境上，设置环境变量，编译脚本src/CMakeLists.txt通过环境变量所设置的头文件、库文件的路径来编译代码。
-
-        如下为设置环境变量的示例，请将$HOME/Ascend/ascend-toolkit/latest/_\{os\_arch\}_替换为开发套件包Ascend-cann-toolkit下对应架构的ACLlib的路径。
-
-        -   当运行环境操作系统架构为x86时，执行以下命令：
-
-            ```
-            export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux
-            export NPU_HOST_LIB=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux/acllib/lib64/stub
-            ```
-
-        -   当运行环境操作系统架构为Arm时，执行以下命令：
-
-            ```
-            export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux
-            export NPU_HOST_LIB=$HOME/Ascend/ascend-toolkit/latest/arm64-linux/acllib/lib64/stub
-            ```
-
-
-        使用“$HOME/Ascend/ascend-toolkit/latest/_\{os\_arch\}_/acllib/lib64/stub”目录下的\*.so库，是为了编译基于AscendCL接口的代码逻辑时，不依赖其它组件（例如Driver）的任何\*.so库。编译通过后，在Host上运行应用时，会根据环境变量LD\_LIBRARY\_PATH链接到“$HOME/Ascend/nnrt/latest/acllib/lib64”目录下的\*.so库，并自动链接到依赖其它组件的\*.so库。
-
-    3.  运行环境上，设置环境变量，运行应用时需要根据环境变量找到对应的库文件。
-
-        如下为设置环境变量的示例，请将$HOME/Ascend/nnrt/latest替换为ACLlib的路径。
-
-        ```
-        export LD_LIBRARY_PATH=$HOME/Ascend/nnrt/latest/acllib/lib64
-        ```
-
-
--   **Atlas 200 DK：**
-
-    仅需在开发环境上设置环境变量，运行环境上的环境变量在制卡时已配置，此处无需单独配置。
-
-    1.  开发环境上，设置模型转换依赖的环境变量。
-
-        $\{install\_path\}表示开发套件包Ascend-cann-toolkit所在的路径。
-
-        ```
-        export PATH=${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
-        export ASCEND_OPP_PATH=${install_path}/opp
-        ```
-
-    2.  开发环境上，设置环境变量，编译脚本src/CMakeLists.txt通过环境变量所设置的头文件、库文件的路径来编译代码。
-
-        如下为设置环境变量的示例，请将$HOME/Ascend/ascend-toolkit/latest/arm64-linux替换为开发套件包Ascend-cann-toolkit下Arm架构的ACLlib的路径。
-
-        ```
-        export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux
-        export NPU_HOST_LIB=$HOME/Ascend/ascend-toolkit/latest/arm64-linux/acllib/lib64/stub
-        ```
-
-        使用“$HOME/Ascend/ascend-toolkit/latest/arm64-linux/acllib/lib64/stub”目录下的\*.so库，是为了编译基于AscendCL接口的代码逻辑时，不依赖其它组件（例如Driver）的任何\*.so库。编译通过后，在板端环境上运行应用时，会根据环境变量LD\_LIBRARY\_PATH链接到“$HOME/Ascend/acllib/lib64”目录下的\*.so库，并自动链接到依赖其它组件的\*.so库。
+     Python3.7.5安装路径请根据实际情况进行替换，您也可以将以上命令写入~/.bashrc文件中，然后执行source ~/.bashrc命令使其立即生效。
+     
+  3. 开发环境上，设置环境变量，配置AscendCL单算子验证程序编译依赖的头文件与库文件路径。
+  
+     编译脚本会按环境变量指向的路径查找编译依赖的头文件和库文件，“$HOME/Ascend”请替换“Ascend-cann-toolkit”包的实际安装路径。
+  
+     -   当运行环境操作系统架构是x86时，配置示例如下所示：
+  
+         ```
+         export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux
+         export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
+         ```
+  
+     -   当运行环境操作系统架构时AArch64时，配置示例如下所示：
+  
+         ```
+         export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux
+         export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
+         ```
+- 运行环境上环境变量配置
+  
+  -   若运行环境上安装的“Ascend-cann-toolkit”包，环境变量设置如下：
+  
+      ```
+      . ${HOME}/Ascend/ascend-toolkit/set_env.sh
+      ```
+  
+  -   若运行环境上安装的“Ascend-cann-nnrt”包，环境变量设置如下：
+  
+      ```
+      . ${HOME}/Ascend/nnrt/set_env.sh
+      ```
+  
+  -   若运行环境上安装的“Ascend-cann-nnae”包，环境变量设置如下：
+  
+      ```
+      . ${HOME}/Ascend/nnae/set_env.sh
+      ```
+  
+    “$HOME/Ascend”请替换相关软件包的实际安装路径。
+  
 
 
 
-## 编译运行（Ascend 310 EP/Ascend 710/Ascend 910）<a name="section183454368119"></a>
+## 编译运行<a name="section183454368119"></a>
 
 1.  模型转换。
     1.  以运行用户登录开发环境。
-    2.  设置环境变量。
 
-        $\{install\_path\}表示开发套件包Ascend-cann-toolkit的安装路径。
-
-        ```
-        export PATH=${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
-        export ASCEND_OPP_PATH=${install_path}/opp
-        ```
-
-    3.  准备数据。
+    2.  准备数据。
 
         您可以从以下链接中获取ResNet-50网络的模型文件（\*.prototxt）、预训练模型文件（\*.caffemodel），并以运行用户将获取的文件上传至开发环境的“样例目录/caffe\_model“目录下。如果目录不存在，需要自行创建。
 
         -   从gitee上获取：单击[Link](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/resnet50/ATC_resnet50_caffe_AE)，查看README.md，查找获取原始模型的链接。
         -   从GitHub上获取：单击[Link](https://github.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/resnet50/ATC_resnet50_caffe_AE)，查看README.md，查找获取原始模型的链接。
 
-    4.  将ResNet-50网络转换为适配昇腾AI处理器的离线模型（\*.om文件），转换模型时，需配置色域转换参数，用于将YUV420SP格式的图片转换为RGB格式的图片。
+    3.  将ResNet-50网络转换为适配昇腾AI处理器的离线模型（\*.om文件），转换模型时，需配置色域转换参数，用于将YUV420SP格式的图片转换为RGB格式的图片。
 
         切换到样例目录，执行如下命令：
 
         ```
-        atc --model=caffe_model/resnet50.prototxt --weight=caffe_model/resnet50.caffemodel --framework=0 --soc_version=${soc_version} --insert_op_conf=caffe_model/aipp.cfg --output=model/resnet50_aipp 
+        atc --model=caffe_model/resnet50.prototxt --weight=caffe_model/resnet50.caffemodel --framework=0 --soc_version=Ascend310 --insert_op_conf=caffe_model/aipp.cfg --output=model/resnet50_aipp 
         ```
 
         -   --model：原始模型文件路径。
         -   --weight：权重文件路径。
         -   --framework：原始框架类型。0：表示Caffe；1：表示MindSpore；3：表示TensorFlow；5：表示ONNX。
         -   --soc\_version：
-            -   Ascend 310芯片，此处配置为Ascend310。
-            -   Ascend 710芯片，此处配置为Ascend710。
-            -   Ascend 910芯片，此处配置为Ascend910A或Ascend910B或Ascend910ProA或Ascend910ProB或Ascend910PremiumA，其中，Pro或Premium表示芯片性能提升等级、A或B表示PartialGood等级，请根据实际情况选择。
+            -   昇腾310 AI处理器，此处配置为Ascend310。
+            -   昇腾710 AI处理器，此处配置为Ascend710。
+            -   昇腾910 AI处理器，此处配置为Ascend910A或Ascend910B或Ascend910ProA或Ascend910ProB或Ascend910PremiumA，其中，Pro或Premium表示芯片性能提升等级、A或B表示PartialGood等级，请根据实际情况选择。
 
         -   --insert\_op\_conf：插入AIPP（AI Preprocessing）算子的配置文件路径，用于在AI Core上完成图像预处理，包括改变图像尺寸、色域转换（转换图像格式）、减均值/乘系数（改变图像像素），数据处理之后再进行真正的模型推理。
         -   --output：生成的resnet50\_aipp.om文件存放在“样例目录/model“目录下。建议使用命令中的默认设置，否则在编译代码前，您还需要修改sample\_process.cpp中的omModelPath参数值。
@@ -308,6 +232,8 @@
     3.  切换到“build/intermediates/host“目录，执行**cmake**生成编译文件。
 
         “../../../src“表示CMakeLists.txt文件所在的目录，请根据实际目录层级修改。
+
+        将DCMAKE\_SKIP\_RPATH设置为TRUE，代表不会将rpath信息（即NPU_HOST_LIB配置的路径）添加到编译生成的可执行文件中去，可执行文件运行时会自动搜索实际设置的LD_LIBRARY_PATH中的动态链接库。
 
         -   当开发环境与运行环境操作系统架构相同时，执行如下命令编译。
 
@@ -464,273 +390,6 @@
             [INFO] Process dvpp success
             [INFO] model execute success
             [INFO] result : classType[331], top1[0.670898], top5[0.963564]
-            [INFO]---------------------------------------------
-            [INFO] Unload model success, modelId is 1
-            [INFO] execute sample success
-            [INFO] end to destroy stream 
-            [INFO] end to destroy context
-            [INFO] end to reset device is 0
-            ```
-
-        4.  将一张YUV420SP格式的图片编码为\*.jpg格式的图片。
-
-            ```
-            ./main 3
-            ```
-
-            执行结果示例如下：
-
-            ```
-            [INFO] acl init success
-            [INFO] open device 0 success
-            [INFO] create context success
-            [INFO] create stream success
-            [INFO] dvpp init resource success
-            [INFO] start to process picture:../data/wood_rabbit_1024_1068_nv12.yuv
-            [INFO] call JpegE
-            [INFO] end to destroy stream 
-            [INFO] end to destroy context
-            [INFO] end to reset device is 0
-            ```
-
-        5.  将一张分辨率为8192\*8192的YUV420SP格式的图片缩放至4000\*4000。
-
-            ```
-            ./main 4
-            ```
-
-            执行结果示例如下：
-
-            ```
-            [INFO] acl init success
-            [INFO] open device 0 success
-            [INFO] create context success
-            [INFO] create stream success
-            [INFO] get run mode success
-            [INFO] dvpp process 8k resize begin
-            [INFO] dvpp init resource success
-            [INFO] dvpp process 8k resize success
-            [INFO] end to destroy stream 
-            [INFO] end to destroy context
-            [INFO] end to reset device is 0
-            [INFO] end to finalize acl
-            ```
-
-
-        执行可执行文件成功后，同时会在main文件同级的result目录下生成结果文件，便于后期查看。结果文件如下：
-
-        -   dvpp\_output\_0：persian\_cat\_1024\_1536\_283.jpg图片经过缩放或抠图或抠图贴图之后的结果图片。
-        -   dvpp\_output\_1：wood\_rabbit\_1024\_1061\_330.jpg图片经过缩放或抠图或抠图贴图之后的结果图片。
-        -   model\_output\_0：persian\_cat\_1024\_1536\_283.jpg图片的模型推理结果，二进制文件。
-        -   model\_output\_0.txt：persian\_cat\_1024\_1536\_283.jpg图片的模型推理结果，txt文件。
-        -   model\_output\_1：wood\_rabbit\_1024\_1061\_330.jpg图片的模型推理结果，二进制文件。
-        -   model\_output\_1.txt：wood\_rabbit\_1024\_1061\_330.jpg图片的模型推理结果，txt文件。
-        -   jpege\_output\_0.jpg：wood\_rabbit\_1024\_1068\_nv12.yuv图片结果编码后的结果图片。
-        -   dvpp\_vpc\_4000x4000\_nv12.yuv：dvpp\_vpc\_8192x8192\_nv12.yuv图片缩放后的结果图片。
-
-
-
-## 编译运行（Atlas 200 DK）<a name="section1112951551211"></a>
-
-1.  模型转换。
-    1.  以运行用户登录开发环境。
-    2.  设置环境变量。
-
-        $\{install\_path\}表示开发套件包Ascend-cann-toolkit的安装路径。
-
-        ```
-        export PATH=${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
-        export ASCEND_OPP_PATH=${install_path}/opp
-        ```
-
-    3.  准备数据。
-
-        您可以从以下链接中获取ResNet-50网络的模型文件（\*.prototxt）、预训练模型文件（\*.caffemodel），并以运行用户将获取的文件上传至开发环境的“样例目录/caffe\_model“目录下。如果目录不存在，需要自行创建。
-
-        -   从gitee上获取：单击[Link](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/resnet50/ATC_resnet50_caffe_AE)，查看README.md，查找获取原始模型的链接。
-        -   从GitHub上获取：单击[Link](https://github.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/resnet50/ATC_resnet50_caffe_AE)，查看README.md，查找获取原始模型的链接。
-
-    4.  将ResNet-50网络转换为适配昇腾AI处理器的离线模型（\*.om文件），转换模型时，需配置色域转换参数，用于将YUV420SP格式的图片转换为RGB格式的图片。
-
-        切换到样例目录，执行如下命令：
-
-        ```
-        atc --model=caffe_model/resnet50.prototxt --weight=caffe_model/resnet50.caffemodel --framework=0 --soc_version=${soc_version} --insert_op_conf=caffe_model/aipp.cfg --output=model/resnet50_aipp 
-        ```
-
-        -   --model：原始模型文件路径。
-        -   --weight：权重文件路径。
-        -   --framework：原始框架类型。0：表示Caffe；1：表示MindSpore；3：表示TensorFlow；5：表示ONNX。
-        -   --soc\_version：
-            -   Ascend 310芯片，此处配置为Ascend310。
-            -   Ascend 710芯片，此处配置为Ascend710。
-            -   Ascend 910芯片，此处配置为Ascend910A或Ascend910B或Ascend910ProA或Ascend910ProB或Ascend910PremiumA，其中，Pro或Premium表示芯片性能提升等级、A或B表示PartialGood等级，请根据实际情况选择。
-
-        -   --insert\_op\_conf：插入AIPP（AI Preprocessing）算子的配置文件路径，用于在AI Core上完成图像预处理，包括改变图像尺寸、色域转换（转换图像格式）、减均值/乘系数（改变图像像素），数据处理之后再进行真正的模型推理。
-        -   --output：生成的resnet50\_aipp.om文件存放在“样例目录/model“目录下。建议使用命令中的默认设置，否则在编译代码前，您还需要修改sample\_process.cpp中的omModelPath参数值。
-
-            ```
-            const char* omModelPath = "../model/resnet50_aipp.om";
-            ```
-
-
-
-2.  编译代码。
-    1.  以运行用户登录开发环境。
-    2.  切换到样例目录，创建目录用于存放编译文件，例如，本文中，创建的目录为“build/intermediates/minirc“。
-
-        ```
-        mkdir -p build/intermediates/minirc
-        ```
-
-    3.  切换到“build/intermediates/minirc“目录，执行**cmake**生成编译文件。
-
-        “../../../src“表示CMakeLists.txt文件所在的目录，请根据实际目录层级修改。
-
-        ```
-        cd build/intermediates/minirc
-        cmake ../../../src -DCMAKE_CXX_COMPILER=aarch64-linux-gnu-g++ -DCMAKE_SKIP_RPATH=TRUE
-        ```
-
-    4.  执行**make**命令，生成的可执行文件main在“样例目录/out“目录下。
-
-        ```
-        make
-        ```
-
-
-3.  准备输入图片。
-
-    请从以下链接获取该样例的输入图片，并以运行用户将获取的文件上传至开发环境的“样例目录/data“目录下。如果目录不存在，需自行创建。
-
-    [https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/dvpp\_vpc\_8192x8192\_nv12.yuv](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/dvpp_vpc_8192x8192_nv12.yuv)
-
-    [https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/persian\_cat\_1024\_1536\_283.jpg](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/persian_cat_1024_1536_283.jpg)
-
-    [https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/wood\_rabbit\_1024\_1061\_330.jpg](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/wood_rabbit_1024_1061_330.jpg)
-
-    [https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/wood\_rabbit\_1024\_1068\_nv12.yuv](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/wood_rabbit_1024_1068_nv12.yuv)
-
-4.  运行应用。
-    1.  以运行用户将开发环境的样例目录及目录下的文件上传到板端环境，例如“$HOME/acl\_vpc\_jpege\_resnet50”。
-    2.  以运行用户登录板端环境。
-    3.  切换到可执行文件main所在的目录，例如“$HOME/acl\_vpc\_jpege\_resnet50/out”，给该目录下的main文件加执行权限。
-
-        ```
-        chmod +x main
-        ```
-
-    4.  切换到可执行文件main所在的目录，例如“$HOME/acl\_vpc\_jpege\_resnet50/out”，运行可执行文件。
-
-        1.  将两张\*.jpg格式的解码成两张YUV420SP NV12格式的图片，缩放，再进行模型推理，分别得到两张图片的推理结果。
-
-            ```
-            ./main 0
-            ```
-
-            执行结果示例如下，提示信息中的classType表示类别标识、top1表示该分类的最大置信度、top5表示最大的5个置信度之和，这些值可能会根据版本、环境有所不同，请以实际情况为准：
-
-            ```
-            [INFO] acl init success
-            [INFO] open device 0 success
-            [INFO] create context success
-            [INFO] create stream success
-            [INFO] dvpp init resource success
-            [INFO] load model ../model/resnet50_aipp.om success
-            [INFO] create model description success
-            [INFO] create model output success
-            [INFO]---------------------------------------------
-            [INFO] start to process picture:../data/persian_cat_1024_1536_283.jpg
-            [INFO] call JpegD
-            [INFO] call vpcResize
-            [INFO] Process dvpp success
-            [INFO] model execute success
-            [INFO] result : classType[283], top1[xxxxxx], top5[xxxxxx]
-            [INFO]---------------------------------------------
-            [INFO] start to process picture:../data/wood_rabbit_1024_1061_330.jpg
-            [INFO] call JpegD
-            [INFO] call vpcResize
-            [INFO] Process dvpp success
-            [INFO] model execute success
-            [INFO] result : classType[330], top1[xxxxxx], top5[xxxxxx]
-            [INFO]---------------------------------------------
-            [INFO] Unload model success, modelId is 1
-            [INFO] execute sample success
-            [INFO] end to destroy stream 
-            [INFO] end to destroy context
-            [INFO] end to reset device is 0
-            ```
-
-        2.  将两张\*.jpg格式的解码成两张YUV420SP NV12格式的图片，抠图，再进行模型推理，分别得到两张图片的推理结果。
-
-            ```
-            ./main 1
-            ```
-
-            执行结果示例如下，提示信息中的classType表示类别标识、top1表示该分类的最大置信度、top5表示最大的5个置信度之和，这些值可能会根据版本、环境有所不同，请以实际情况为准：
-
-            ```
-            [INFO] acl init success
-            [INFO] open device 0 success
-            [INFO] create context success
-            [INFO] create stream success
-            [INFO] dvpp init resource success
-            [INFO] load model ../model/resnet50_aipp.om success
-            [INFO] create model description success
-            [INFO] create model output success
-            [INFO]---------------------------------------------
-            [INFO] start to process picture:../data/persian_cat_1024_1536_283.jpg
-            [INFO] call JpegD
-            [INFO] call vpcCrop
-            [INFO] Process dvpp success
-            [INFO] model execute success
-            [INFO] result : classType[284], top1[xxxxxx], top5[xxxxxx]
-            [INFO]---------------------------------------------
-            [INFO] start to process picture:../data/wood_rabbit_1024_1061_330.jpg
-            [INFO] call JpegD
-            [INFO] call vpcCrop
-            [INFO] Process dvpp success
-            [INFO] model execute success
-            [INFO] result : classType[330], top1[xxxxxx], top5[xxxxxx]
-            [INFO]---------------------------------------------
-            [INFO] Unload model success, modelId is 1
-            [INFO] execute sample success
-            [INFO] end to destroy stream 
-            [INFO] end to destroy context
-            [INFO] end to reset device is 0
-            ```
-
-        3.  将两张\*.jpg格式的解码成两张YUV420SP NV12格式的图片，抠图贴图，再进行模型推理，分别得到两张图片的推理结果。
-
-            ```
-            ./main 2
-            ```
-
-            执行结果示例如下，提示信息中的classType表示类别标识、top1表示该分类的最大置信度、top5表示最大的5个置信度之和，这些值可能会根据版本、环境有所不同，请以实际情况为准：
-
-            ```
-            [INFO] acl init success
-            [INFO] open device 0 success
-            [INFO] create context success
-            [INFO] create stream success
-            [INFO] dvpp init resource success
-            [INFO] load model ../model/resnet50_aipp.om success
-            [INFO] create model description success
-            [INFO] create model output success
-            [INFO]---------------------------------------------
-            [INFO] start to process picture:../data/persian_cat_1024_1536_283.jpg
-            [INFO] call JpegD
-            [INFO] call vpcCropAndPaste
-            [INFO] Process dvpp success
-            [INFO] model execute success
-            [INFO] result : classType[284], top1[xxxxxx], top5[xxxxxx]
-            [INFO]---------------------------------------------
-            [INFO] start to process picture:../data/wood_rabbit_1024_1061_330.jpg
-            [INFO] call JpegD
-            [INFO] call vpcCropAndPaste
-            [INFO] Process dvpp success
-            [INFO] model execute success
-            [INFO] result : classType[331], top1[xxxxxx], top5[xxxxxx]
             [INFO]---------------------------------------------
             [INFO] Unload model success, modelId is 1
             [INFO] execute sample success

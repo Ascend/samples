@@ -1,0 +1,68 @@
+<launch>
+
+    <arg name="robot_name" default="/"/>
+    <arg name="rviz" default="true"/>
+
+    <arg if="$(eval arg('robot_name') == '/')" name="frame_prefix" value=""/>
+    <arg unless="$(eval arg('robot_name') == '/')" name="frame_prefix" value="$(arg robot_name)/"/>
+
+    <include file="$(find scout_bringup)/launch/scout_minimal.launch"/>
+
+    <!-- <param name="robot_description" command="$(find xacro)/xacro '$(find scout_description)/urdf/mini.xacro'"/>-->
+    <param name="robot_description" command="$(find xacro)/xacro '$(find scout_description)/urdf/scout_v2.xacro'"/>
+    <node name="scout_mini_robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+    <node name="scout_mini_joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+
+    <node pkg="tf2_ros" type="static_transform_publisher" name="imu2base_publisher" args="0 0 0 0 0 0 base_link imu"/>
+    <node pkg="tf2_ros" type="static_transform_publisher" name="lidar2base_publisher"
+          args="0 0 0.445 0 0 0 base_link velodyne"/>
+    <node pkg="tf2_ros" type="static_transform_publisher" name="d435i2base_publisher"
+          args="0.2 0 0.3 0.0 0.0 0.0 base_link camera_link"/>
+
+    <!-- <include file="$(find lslidar_c16_decoder)/launch/lslidar_c16.launch">
+        <arg name="frame_id" value="velodyne" />
+        <arg name="time_synchronization" value="false" />
+    </include> -->
+    
+    <!-- lidar -->
+    <!-- <include file="$(find velodyne_pointcloud)/launch/VLP16_points.launch"/> -->
+    <include file="$(find ole_pointcloud)/launch/LR16F_points.launch">
+        <arg name="frame_id" value="velodyne"/>
+    </include>
+
+    <!--    <include file="$(find pointcloud_to_laserscan)/launch/sample_node.launch">-->
+    <!--        <arg name="cloud_in" value="/velodyne_points" />-->
+    <!--    </include>-->
+
+
+    <include file="$(find realsense2_camera)/launch/rs_camera.launch">
+        <arg name="color_width" value="480"/>
+        <arg name="color_height" value="360"/>
+        <arg name="enable_infra" value="false"/>
+        <arg name="enable_infra1" value="false"/>
+        <arg name="enable_infra2" value="false"/>
+        <arg name="infra_rgb" value="false"/>
+	<arg name="color_fps" value="15"/>
+
+        <arg name="enable_depth" value="false"/>
+        <arg name="enable_gyro" value="false"/>
+        <arg name="enable_accel" value="false"/>
+        <arg name="publish_tf" value="true"/>
+    </include>
+
+    <!-- <node pkg="imu_transformer" type="imu_transformer_node" name="imu_data_transformer" output="screen">
+        <remap from="imu_in/data" to="/camera/imu"/>
+        <remap from="imu_out/data" to="/camera/imu/data"/>
+        <param name="target_frame" value="camera_gyro_frame"/>
+    </node>
+
+    <node pkg="imu_filter_madgwick" type="imu_filter_node" name="ImuFilter">
+        <param name="use_mag" type="bool" value="false"/>
+        <param name="world_frame" type="string" value="enu"/>
+
+        <param name="publish_tf" type="bool" value="false"/>
+        <remap from="/imu/data_raw" to="/camera/imu/data"/>
+        <remap from="/imu/data" to="/imu/data"/>
+    </node> -->
+
+</launch>

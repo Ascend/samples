@@ -17,7 +17,7 @@ add ut case
 
 import unittest
 
-from impl.add import add as add
+from cust_impl.add_tik import add_tik as add
 
 
 def add_cce(shape_x, shape_y, dtype, kernel_name="add"):

@@ -48,11 +48,10 @@ public:
 
     /**
      * @brief create model input
-     * @param [in] inputDataBuffer: input buffer
-     * @param [in] bufferSize: input buffer size
+     * @param [in] imageMemInfo: input buffer info
      * @return result
      */
-    Result CreateInput(void *inputDataBuffer, size_t bufferSize);
+    Result CreateInput(const ImageMemoryInfo &imageMemInfo);
 
     /**
      * @brief destroy input resource

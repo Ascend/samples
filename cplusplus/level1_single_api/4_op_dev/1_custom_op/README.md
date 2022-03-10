@@ -81,7 +81,8 @@ The directory of a Caffe or TensorFlow custom operator sample project is organiz
 -   AI CPU custom operator samples
     -   ReshapeCust. For details, see  [Reshape](doc/Reshape_EN.md).
     -   UniqueCust. For details, see  [Unique](doc/Unique_EN.md).
-
+    -   AddBlockCust.  This operator supports block-based parallel computing, for details, see [AddBlockCust](doc/AddBlockCust_EN.md)。
+    
 -   Scope fusion pattern samples
 
     This sample contains the following fusion pattern samples. For details, see  [tf\_scope\_fusion\_pass](framework/tf_scope_fusion_pass).
@@ -181,37 +182,58 @@ The directory of a Caffe or TensorFlow custom operator sample project is organiz
      export ASCEND_TENSOR_COMPILER_INCLUDE=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/include
      ```
      
-   - **TOOLCHAIN\_DIR**  specifies the directory of the HCC cross-compiler in the Toolkit component, without default value specified. This compiler is used to build the AI CPU operator in the sample.
+   - **TOOLCHAIN\_DIR**  path of the compiler used for compiling AI CPU operators. Uncomment this environment variable and change it as follows:
      
-      Uncomment this environment variable and change it to the actual path of the HCC compiler. For example:
+      - In Ascend EP mode, set this environment variable to the path of Huawei Compiler Collection (HCC), for example:
       
-      ```
-      export TOOLCHAIN_DIR=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/toolkit/toolchain/hcc
-      ```
-      
+         ```
+         export TOOLCHAIN_DIR=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/toolkit/toolchain/hcc
+         ```
+      - In Ascend RC mode (for example, Atlas 200 DK), set TOOLCHAIN_DIR in the build.sh file to the parent directory of the bin folder where the g++ cross compiler is located. For example, if the cross compiler is stored in /usr/bin/aarch64-linux-gnu-g++, set the TOOLCHAIN_DIR variable as follows:
+         ```
+         export TOOLCHAIN_DIR=/usr
+         ```
+
    - **AICPU\_KERNEL\_TARGET**  specifies the name of the dynamic library file generated after the implementation file of the AI CPU operator is built.
-         - If this environment variable is not configured, the default value  **cust\_aicpu\_kernels**  is used.
+    
+      - If this environment variable is not configured, the default value  **cust\_aicpu\_kernels**  is used.
 
-           **Note**: The  **opInfo.kernelSo**  field in the AI CPU operator information library \(**cpukernel/op\_info\_cfg/aicpu\_kernel/xx.ini**\) must be set to the name of the generated dynamic library file. For example, if the value of  **AICPU\_KERNEL\_TARGET**  is  **cust\_aicpu\_kernels**, the name of the generated dynamic library file is  **libcust\_aicpu\_kernels.so**.
+        **Note**: The  **opInfo.kernelSo**  field in the AI CPU operator information library \(**cpukernel/op\_info\_cfg/aicpu\_kernel/xx.ini**\) must be set to the name of the generated dynamic library file. For example, if the value of  **AICPU\_KERNEL\_TARGET**  is  **cust\_aicpu\_kernels**, the name of the generated dynamic library file is  **libcust\_aicpu\_kernels.so**.
+         
+      - If you need to customize the name of the dynamic library file, uncomment the environment variable and modify the name as follows:
+         
+        **export AICPU_KERNEL_TARGET=xxx**
 
-         - If you need to customize the name of the dynamic library file, uncomment the environment variable and modify the name as follows:
-
-              export AICPU_KERNEL_TARGET=xxx
-
-   - **AICPU\_SOC\_VERSION** : Ascend AI ProcessorHiSilicon SoC  version. Set it to the folder name of the corresponding product in  **opp/op\_impl/built-in/aicpu/aicpu\_kernel/lib**  under the AI CPU installation directory, that is, the name of the folder where  **libcpu\_kernels\_context.a**  and  **libcpu\_kernels\_v1.0.1.so**  are located.
+   - **AICPU\_SOC\_VERSION** : Ascend AI Processor version. Set it to the folder name of the corresponding product in  **opp/op\_impl/built-in/aicpu/aicpu\_kernel/lib**  under the AI CPU installation directory, that is, the name of the folder where  **libcpu\_kernels\_context.a**  and  **libcpu\_kernels\_v1.0.1.so**  are located.
 
 
 3.  Build the operator project.
 
-    Run the following command in the directory of the custom operator sample project to build a custom operator project:
+   - To compile only the TBE operator, run the following command in the operator project directory.
 
-    **chmod + x build.sh**
+      **chmod +x build.sh**
 
-    **./build.sh**
+      **./build.sh -t**
 
-    After successful build, an OPP runfile  **custom\_opp\__<target OS\>\_<target architecture\>_.run**  is generated in the  **build\_out**  directory.
+   - To compile only the AI CPU operator, run the following command in the operator project directory.
 
-    **Note**: If you need to rebuild the project, run the  **./build.sh clean**  command to clear the build outputs.
+     **chmod +x build.sh**
+
+     **./build.sh -c**
+
+   - If you need to compile both the TBE and AI CPU operators, run the following command in the operator project directory.
+
+     **chmod +x build.sh**
+
+     **./build.sh**
+
+   After successful build, an OPP runfile  **custom\_opp\__<target OS\>\_<target architecture\>_.run**  is generated in the  **build\_out**  directory.
+
+   **Note**:
+
+   - If you need to rebuild the project, run the  **./build.sh clean**  command to clear the build outputs.
+
+   - If the custom operator that you develop contains both the TBE and AI CPU operators, compile and generate a customized operator installation package.  In the current version, only one customized operator installation package can be installed. A later customized operator package will overwrite the previously installed operator package.
 
 
 ## Operator Deployment

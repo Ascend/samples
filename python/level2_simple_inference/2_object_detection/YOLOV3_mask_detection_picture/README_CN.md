@@ -9,16 +9,15 @@
 样例输入：待推理的jpg图片。    
 样例输出：推理后的jpg图片。     
 
-### 适配要求
-
-本产品的适配要求如下表，如不符合适配要求，样例可能运行失败。
-| 适配项 | 适配条件 | 备注 |
+### 前置条件
+请检查以下条件要求是否满足，如不满足请按照备注进行相应处理。如果CANN版本升级，请同步检查第三方依赖是否需要重新安装（5.0.4及以上版本第三方依赖和5.0.4以下版本有差异，需要重新安装）。
+| 条件 | 要求 | 备注 |
 |---|---|---|
-| 适配版本 | >=5.0.4 | 已完成版本安装，版本信息请参考[版本说明](https://ascend.huawei.com/zh/#/software/cann/notice) |
-| 适配硬件 | Atlas200DK/Atlas300([ai1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366))  | 当前已在Atlas200DK和Atlas300测试通过，产品说明请参考[硬件平台](https://ascend.huawei.com/zh/#/hardware/product) |
-| 第三方依赖 | opencv, python-acllite | 请参考[第三方依赖安装指导（python样例）](../../../environment)完成对应安装 |
+| CANN版本 | >=5.0.4 | 请参考CANN样例仓介绍中的[安装步骤](https://github.com/Ascend/samples#%E5%AE%89%E8%A3%85)完成CANN安装，如果CANN低于要求版本请根据[版本说明](https://github.com/Ascend/samples/blob/master/README_CN.md#%E7%89%88%E6%9C%AC%E8%AF%B4%E6%98%8E)切换samples仓到对应CANN版本 |
+| 硬件要求 | Atlas200DK/Atlas300([ai1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366))  | 当前已在Atlas200DK和Atlas300测试通过，产品说明请参考[硬件平台](https://ascend.huawei.com/zh/#/hardware/product) ，其他产品可能需要另做适配|
+| 第三方依赖 | opencv, python-acllite | 请参考[第三方依赖安装指导（python样例）](../../../environment)选择需要的依赖完成安装 |
 
-### 软件准备
+### 样例准备
 
 1. 获取源码包。
 
@@ -28,20 +27,26 @@
        # 开发环境，非root用户命令行中执行以下命令下载源码仓。    
        cd ${HOME}     
        git clone https://github.com/Ascend/samples.git
+       ```
+       **注：如果需要切换到其它tag版本，以v0.5.0为例，可执行以下命令。**
+       ```
+       git checkout v0.5.0
        ```   
     - 压缩包方式下载（下载时间较短，但步骤稍微复杂）。   
+       **注：如果需要下载其它版本代码，请先请根据前置条件说明进行samples仓分支切换。**   
        ``` 
         # 1. samples仓右上角选择 【克隆/下载】 下拉框并选择 【下载ZIP】。    
         # 2. 将ZIP包上传到开发环境中的普通用户家目录中，【例如：${HOME}/ascend-samples-master.zip】。     
         # 3. 开发环境中，执行以下命令，解压zip包。     
         cd ${HOME}    
-        unzip ascend-samples-master.zip    
+        unzip ascend-samples-master.zip
+        ```
 
 2. 获取此应用中所需要的原始网络模型。
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
     |  mask_detection.pb | 基于TensorFlow-YOLOV3的口罩检测模型。  |  请参考[https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/yolov3_resnet18/ATC_yolo3_resnet18_tf_AE](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/yolov3_resnet18/ATC_yolo3_resnet18_tf_AE)目录中README.md下载原始模型章节下载原始模型文件。 |
-    | mask_detection_quanzited.pb | 基于TensorFlow-YOLOV3的口罩检测的量化后模型。 | 下载地址:https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com:443/003_Atc_Models/AE/ATC%20Model/YOLOV3-RESNET18%20/yolo3_resnet18_quantized.pb?AccessKeyId=WBGD0ZYB7N1EWW9PINNF&Expires=1630045437&Signature=Zge36iJtfvZd0KgAo/GSZaM9QOs%3D   (转换om离线模型的操作和未量化的pb模型是一样的,量化的具体操作可以参考：https://github.com/Ascend/samples/wikis/%E4%BD%BF%E7%94%A8AMCT%E5%B7%A5%E5%85%B7%E9%87%8F%E5%8C%96YOLOV3%E6%A8%A1%E5%9E%8B?sort_id=4402780 ,如果选择使用量化后模型请注意样例中模型名称的替换) |
+    | mask_detection_quanzited.pb | 基于TensorFlow-YOLOV3的口罩检测的量化后模型。 | 下载地址:https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com:443/003_Atc_Models/AE/ATC%20Model/YOLOV3-RESNET18%20/yolo3_resnet18_quantized.pb (转换om离线模型的操作和未量化的pb模型是一样的,量化的具体操作可以参考：https://github.com/Ascend/samples/wikis/%E4%BD%BF%E7%94%A8AMCT%E5%B7%A5%E5%85%B7%E9%87%8F%E5%8C%96YOLOV3%E6%A8%A1%E5%9E%8B?sort_id=4402780 ,如果选择使用量化后模型请注意样例中模型名称的替换) |
     ```
     # 为了方便下载，在这里直接给出原始模型下载及模型转换命令,可以直接拷贝执行。也可以参照上表在modelzoo中下载并手工转换，以了解更多细节。     
     cd ${HOME}/samples/python/level2_simple_inference/2_object_detection/YOLOV3_mask_detection_picture/model    
@@ -77,3 +82,7 @@
 ### 查看结果
 
 运行完成后，会在out目录下生成带推理结果的jpg图片。
+
+
+### 常见错误
+请参考[常见问题定位](https://github.com/Ascend/samples/wikis/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D/%E4%BB%8B%E7%BB%8D)对遇到的错误进行排查。如果wiki中不包含，请在samples仓提issue反馈。

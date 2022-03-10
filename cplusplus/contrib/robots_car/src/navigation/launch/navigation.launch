@@ -1,0 +1,94 @@
+<!-- -->
+<launch>
+    <param name="use_sim_time" value="false"/>
+    <arg name="OPEN_RVIZ" default="false"/>
+
+    <arg name="method_type" default="3"/> <!-- pcl_generic=0, pcl_anh=1, pcl_anh_gpu=2, pcl_openmp=3 -->
+    <arg name="thread_num" default="1"/> <!-- max_threads=-1, openmp thread num -->
+    <arg name="search_method" default="2"/> <!-- KDTREE=0, DIRECT7=1, DIRECT1=2 -->
+    <arg name="use_gnss" default="0"/>
+    <arg name="use_odom" default="false"/>
+    <arg name="use_imu" default="false"/>
+    <arg name="imu_upside_down" default="false"/>
+    <arg name="imu_topic" default="/imu/data"/>
+    <arg name="queue_size" default="10"/>
+    <arg name="offset" default="linear"/>
+    <arg name="get_height" default="false"/>
+    <arg name="use_local_transform" default="false"/>
+    <arg name="output_log_data" default="false"/>
+
+    <node pkg="lidar_localizer" type="queue_counter" name="queue_counter" output="screen">
+        <remap from="points_raw" to="velodyne_points"/>
+    </node>
+
+    <node pkg="lidar_localizer" type="ndt_matching" name="ndt_matching" output="screen">
+        <param name="method_type" value="$(arg method_type)"/>
+        <param name="search_method" value="$(arg search_method)"/>
+        <param name="use_gnss" value="$(arg use_gnss)"/>
+        <param name="use_odom" value="$(arg use_odom)"/>
+        <param name="use_imu" value="$(arg use_imu)"/>
+        <param name="imu_upside_down" value="$(arg imu_upside_down)"/>
+        <param name="imu_topic" value="$(arg imu_topic)"/>
+        <param name="queue_size" value="$(arg queue_size)"/>
+        <param name="offset" value="$(arg offset)"/>
+        <param name="get_height" value="$(arg get_height)"/>
+        <param name="use_local_transform" value="$(arg use_local_transform)"/>
+        <param name="output_log_data" value="$(arg output_log_data)"/>
+        <remap from="/points_raw" to="/velodyne_points"/>
+
+        <param name="localizer" value="velodyne"/>
+        <param name="tf_x" value="0.0"/>
+        <param name="tf_y" value="0.0"/>
+        <param name="tf_z" value="0.445"/>
+        <param name="tf_roll" value="0.0"/>
+        <param name="tf_pitch" value="0.0"/>
+        <param name="tf_yaw" value="0.0"/>
+
+        <param name="voxel_leaf_size" value="0.2"/>
+
+        <param name="max_iter" value="30"/>
+        <param name="ndt_res" value="1.0"/>
+        <param name="step_size" value="0.1"/>
+        <param name="trans_eps" value="0.01"/>
+        <param name="thread_num" value="$(arg thread_num)"/>
+
+        <param name="surround_radius" value="50.0"/>
+
+        <param name="min_scan_range" value="0.25"/>
+        <param name="max_scan_range" value="200.0"/>
+    </node>
+
+
+    <!-- AMCL used for localization -->
+<!--    <include file="$(find navigation)/launch/amcl.launch"/>-->
+
+    <include file="$(find navigation)/launch/noah_diff_move_base.launch" />
+
+
+    <!-- <include file="$(find navigation)/launch/jueying_move_base.launch" /> -->
+
+    <include file="$(find pointcloud_to_laserscan)/launch/sample_node.launch">
+        <arg name="cloud_in" value="/velodyne_points" />
+    </include>
+
+    <arg name="3d_map_file" default="$(find navigation)/map/jiedaishi3D_5_16.pcd"/>
+    <node pkg="pcl_ros" name="ndt_map_server" type="pcd_to_pointcloud"
+          args="$(arg 3d_map_file) 1 /cloud_pcd:=/map_cloud _frame_id:=/map" output="screen"/>
+
+    <arg name="2d_map_file" default="$(find navigation)/map/jiedaishi2D_5_16.yaml"/>
+    <node pkg="map_server" name="map_server" type="map_server" args="$(arg 2d_map_file)" >
+        <param name="frame_id" value="map" />
+    </node>
+
+    <node name="rviz" pkg="rviz" type="rviz"
+          args="-d $(find navigation)/rviz/navigation.rviz"
+          output="screen" if="$(arg OPEN_RVIZ)"/>
+
+</launch>
+
+<!--<param name="voxel_leaf_size" value="0.5"/>-->
+
+<!--<param name="max_iter" value="30"/>-->
+<!--<param name="ndt_res" value="2.0"/>-->
+<!--<param name="step_size" value="0.1"/>-->
+<!--<param name="trans_eps" value="0.01"/>-->

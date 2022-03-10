@@ -5,7 +5,7 @@
 ### 1.1 量化前提
 
 + **模型准备**  
-请至[昇腾社区-ModelZoo](https://ascend.huawei.com/zh/#/software/modelzoo/detail/C/210261e64adc42d2b3d84c447844e4c7)下载 YOLOv3 模型文件。解压并将其中的 single/pb/yolov3_tensorflow_1.5.pb 放到 [model](./data/) 目录下。
+请至[昇腾社区-ModelZoo](https://ascend.huawei.com/zh/#/software/modelzoo/detail/C/210261e64adc42d2b3d84c447844e4c7)下载 YOLOv3 模型文件。解压并将其中的 single/pb/yolov3_tensorflow_1.5.pb 放到 [model](./model/) 目录下。
 
 + **数据集准备**  
 使用昇腾模型压缩工具对模型完成量化后，需要对模型进行推理，以测试量化数据的精度。推理过程中需要使用和模型相匹配的数据集。请下载[测试图片](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/yolo_v3_calibration/detection.jpg)，并将图片放到 [data](./data/) 目录下。
@@ -47,7 +47,7 @@ quantize.png save successfully!
 量化成功后，在当前目录会生成量化日志文件 [./amct_log/amct_tensorflow.log](./amct_log/amct_tensorflow.log) 和 [outputs](./outputs/) 文件夹，该文件夹内包含以下内容：
 
 + [config.json](./outputs/config.json): 量化配置文件，描述了如何对模型中的每一层进行量化。
-+ [record.txt](./outputs/record.txt): 量化因子记录文件，记录量化因子。关于该文件的原型定义请参见[量化因子记录文件说明](https://support.huaweicloud.com/content/dam/cloudbu-site/archive/china/zh-cn/support/docs/auxiliarydevtool-cann330alphaXinfer/atlasamcttf_16_0014.html)。
++ [record.txt](./outputs/record.txt): 量化因子记录文件，记录量化因子。
 + [yolo_v3_quant.json](./outputs/yolo_v3_quant.json): 量化信息文件，记录了量化模型同原始模型节点的映射关系，用于量化后模型同原始模型精度比对使用。
 + [yolo_v3_quantized.pb](./outputs/yolo_v3_quantized.pb): 量化模型，可在 TensorFlow 环境进行精度仿真并可在昇腾 AI 处理器部署。
 

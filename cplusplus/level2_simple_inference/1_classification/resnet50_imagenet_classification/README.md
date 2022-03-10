@@ -91,114 +91,103 @@ The sample directory is organized as follows:
 
 ## Environment Requirements<a name="section3833348101215"></a>
 
--   OS and architecture: CentOS 7.6 x86\_64, CentOS AArch64, or Ubuntu 18.04 x86\_64
--   Compiler:
-    -   Ascend 310 EP/Ascend 710: g++ or aarch64-linux-gnu-g++
-    -   Atlas 200 DK: aarch64-linux-gnu-g++
-
--   SoC: Ascend 310 AI Processor or Ascend 710 AI Processor
+-   OS and architecture: CentOS x86\_64, CentOS AArch64, Ubuntu 18.04 x86\_64, Ubuntu 18.04 aarch64,  EulerOS x86, EulerOS AArch64
+-   Compiler: g++ or aarch64-linux-gnu-g++
+-   SoC: Ascend 310 AI Processor, Ascend 710 AI Processor, Ascend 910 AI Processor
 -   Python and its dependency library: Python 3.7.5 and Pillow
 -   Ascend AI Software Stack deployed
 
 ## Environment Variables<a name="section1313218510108"></a>
 
--   **Ascend 310 EP/Ascend 710:**
-    1.  In the development environment, set the environment variables on which model conversion depends.
+- Configuring Environment Variables in the Development Environment
 
-        Replace  _**$\{install\_path\}**_  with the actual  Ascend-CANN-Toolkit  installation path.
+  1. The CANN portfolio provides a process-level environment variable setting script to automatically set environment variables. The following commands are used as examples
 
-        ```
-        export PATH=${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
-        export ASCEND_OPP_PATH=${install_path}/opp
-        ```
+     ```
+     . ${HOME}/Ascend/ascend-toolkit/set_env.sh
+     ```
 
-    2.  Set the header file path and library file path environment variables for the  **src/CMakeLists.txt**  build script in the development environment.
+     Replace  **$HOME/Ascend**  with the actual Ascend-CANN-Toolkit installation path.
 
-        The following is an example. Replace  ****_$HOME/Ascend_**_**/ascend-toolkit/latest**_/_\{os\_arch\}_**  with the ACLlib path under the  Ascend-CANN-Toolkit  directory of the corresponding architecture.
+  2. Operator building requires Python installation. The following takes Python 3.7.5 as an example. Run the following commands as a running user to set the environment variables related to Python 3.7.5.
 
-        -   x86 operating environment:
+     ```
+     # Set tje Python3.7.5 library path.
+     export LD_LIBRARY_PATH=/usr/local/python3.7.5/lib:$LD_LIBRARY_PATH
+     # If multiple Python 3 versions exist in the user environment, specify Python 3.7.5.
+     export PATH=/usr/local/python3.7.5/bin:$PATH
+     ```
 
-            ```
-            export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux
-            export NPU_HOST_LIB=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux/acllib/lib64/stub
-            ```
+     Replace the Python 3.7.5 installation path as required. You can also write the preceding commands to the ~/.bashrc file and run the source ~/.bashrc command to make the modification take effect immediately.
 
-        -   ARM operating environment:
+  3. In the development environment, set environment variables and configure the header search path and library search path on which the build of the AscendCL single-operator verification program depends.
 
-            ```
-            export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux
-            export NPU_HOST_LIB=$HOME/Ascend/ascend-toolkit/latest/arm64-linux/acllib/lib64/stub
-            ```
+     The build script searches for the required header files and libraries through the paths specified by the environment variables. Replace  **$HOME/Ascend**  with the actual Ascend-CANN-Toolkit installation path.
 
+     - If the development environment operating system architecture is x86, the configuration example is as follows:
 
-        Use the .so library files in the  ****_$HOME/Ascend_**_**/ascend-toolkit/latest**_/_\{os\_arch\}_/acllib/lib64/stub**  directory to build the code logic using AscendCL APIs, without depending on any .so library files of other components \(such as Driver\). At run time on the host, the app links to the .so library files in the  ****_$HOME/Ascend_**_**/nnrt/latest**_/acllib/lib64**  directory on the host through the configured environment variable and automatically links to the .so library files of other components.
+       ```
+        export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux
+        export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
+       ```
 
-    3.  Set the library path environment variable in the operating environment for app execution.
+     - If the running environment operating system architecture is AArch64, the configuration example is as follows:
 
-        The following is an example. Replace  ****_$HOME/Ascend_**_**/nnrt/latest**_**  with the ACLlib path.
-
-        ```
-        export LD_LIBRARY_PATH=$HOME/Ascend/nnrt/latest/acllib/lib64
-        ```
-
-
--   **Atlas 200 DK:**
-
-    You only need to set environment variables in the development environment. Environment variables in the operating environment have been set in the phase of preparing a bootable SD card.
-
-    1.  In the development environment, set the environment variables on which model conversion depends.
-
-        Replace  _**$\{install\_path\}**_  with the actual  Ascend-CANN-Toolkit  installation path.
-
-        ```
-        export PATH=${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
-        export ASCEND_OPP_PATH=${install_path}/opp
-        ```
-
-    2.  Set the header file path and library file path environment variables for the  **src/CMakeLists.txt**  build script in the development environment.
-
-        The following is an example. Replace  ****_$HOME/Ascend_**_**/ascend-toolkit/latest**_/arm64-linux**  with the ACLlib path under the ARM  Ascend-CANN-Toolkit  directory.
-
-        ```
+       ```
         export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux
-        export NPU_HOST_LIB=$HOME/Ascend/ascend-toolkit/latest/arm64-linux/acllib/lib64/stub
-        ```
+        export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
+       ```
 
-        The .so library files in the  **_$HOME/Ascend_**_**/ascend-toolkit/latest**_**/arm64-linux/acllib/lib64/stub**  directory are required to build code using AscendCL APIs, without depending on any .so library files of other components \(such as Driver\). At run time in the  board environment, the app links to the .so library files in the  **$HOME/Ascend/acllib/lib64**  directory in the open-form ACLlib installation path in the  board environment  through the configured environment variable and automatically links to the .so library files of other components.
+- Configuring Environment Variables in the Running Environment
+
+  - If Ascend-CANN-Toolkit is installed in the running environment, set the environment variable as follows:
+
+    ```
+    . ${HOME}/Ascend/ascend-toolkit/set_env.sh
+    ```
+
+  - If Ascend-CANN-NNRT is installed in the running environment, set the environment variable as follows:
+
+    ```
+    . ${HOME}/Ascend/nnrt/set_env.sh
+    ```
+
+  - If Ascend-CANN-NNAE is installed in the running environment, set the environment variable as follows:
+
+    ```
+    . ${HOME}/Ascend/nnae/set_env.sh
+    ```
+
+    Replace  **$HOME/Ascend**  with the actual component installation path.
 
 
 
-## Build and Run \(Ascend310 EP/Ascend 710\)<a name="section1593012514493"></a>
+## Build and Run <a name="section1593012514493"></a>
 
 1.  Convert your model.
     1.  Log in to the  development environment  as the running user.
-    2.  Set environment variables.
 
-        Replace  _**$\{install\_path\}**_  with the  Ascend-CANN-Toolkit  installation path.
-
-        ```
-        export PATH=${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
-        export ASCEND_OPP_PATH=${install_path}/opp
-        ```
-
-    3.  Prepare data.
+    2.  Prepare data.
 
         Download the .prototxt model file and .caffemodel pre-trained model file of the ResNet-50 network and upload the files to  **/caffe\_model**  under the sample directory in the  development environment  as the running user. If the directory does not exist, create it.
 
         Click [link](https://github.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/resnet50/ATC_resnet50_caffe_AE), find the download links in the  **README.md**  file.
 
-    4.  Convert the ResNet-50 network to an .om  offline model adapted to Ascend AI ProcessorHiSilicon SoC.
+    3.  Convert the ResNet-50 network to an .om  offline model adapted to Ascend AI ProcessorHiSilicon SoC.
 
-        Go to the sample directory and run the following command:
+        Go to the sample directory and run the following command (take Ascend310 as an example):
 
         ```
-        atc --model=caffe_model/resnet50.prototxt --weight=caffe_model/resnet50.caffemodel --framework=0 --output=model/resnet50 --soc_version=${soc_version} --input_format=NCHW --input_fp16_nodes=data -output_type=FP32 --out_nodes=prob:0
+        atc --model=caffe_model/resnet50.prototxt --weight=caffe_model/resnet50.caffemodel --framework=0 --output=model/resnet50 --soc_version=Ascend310 --input_format=NCHW --input_fp16_nodes=data -output_type=FP32 --out_nodes=prob:0
         ```
 
         -   **--model**: directory of the source model file.
         -   **--weight**: directory of the weight file.
         -   **--framework**: source framework type, selected from  **0**  \(Caffe\),  **1**  \(MindSpore\),  **3**  \(TensorFlow\), and  **5**  \(ONNX\).
-        -   **--soc\_version**: SoC version, either  **Ascend310**  or  **Ascend710**.
+        -   **--soc\_version**: 
+            -   Ascend 310 AI Processor, set this parameter to **Ascend310**.
+            -   Ascend 710 AI Processor, set this parameter to **Ascend710**.
+            -   Ascend 910 AI Processor, set this parameter to **Ascend910A** or **Ascend910B** or **Ascend910ProA** or **Ascend910ProB** or **Ascend910PremiumA**. **Pro** or **Premium** indicate the performance improvement level. **A** or **B** indicate PartialGood level. Select a value based on the site requirements.
         -   **--input\_format**: input format.
         -   **--input\_fp16\_nodes**: input nodes to specify as FP16 nodes.
         -   **--output\_type**  and  **--out\_nodes**: specify the data type of the first output as float32.
@@ -220,6 +209,8 @@ The sample directory is organized as follows:
     2.  Go to the  **build/intermediates/host**  directory and run the  **cmake**  command.
 
         Replace  **../../../src**  with the actual directory of  **CMakeLists.txt**.
+
+        Set **DCMAKE_SKIP_RPATH** to  **TRUE**,  **rpath**  (path specified by  **NPU_HOST_LIB**) is not added to the executable generated after build. The executable automatically looks up for dynamic libraries in the path  included in  **LD_LIBRARY_PATH**.
 
         -   If the operating system architecture of the  development environment is the same as that of the running environment, run the following commands to perform compilation.
 

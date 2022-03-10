@@ -1,0 +1,7 @@
+global_frame: map #odom
+rolling_window: true
+track_unknown_space: true
+
+plugins:
+  - { name: obstacle_layer,           type: "costmap_2d::ObstacleLayer" }
+  - { name: global_inflation,                 type: "costmap_2d::InflationLayer" }

@@ -45,7 +45,7 @@ INFO - [AMCT]:[Utils]: The model file is saved in ./outputs/calibration/resnet-1
 
 + [tmp](./outputs/calibration/tmp/): 临时文件夹
   + [config.json](./outputs/calibration/tmp/config.json): 量化配置文件描述了如何对模型中的每一层进行量化。
-  + [record.txt](./outputs/calibration/tmp/record.txt): 量化因子记录文件记录量化因子。关于该文件的原型定义请参见[量化因子记录文件说明](https://support.huaweicloud.com/content/dam/cloudbu-site/archive/china/zh-cn/support/docs/auxiliarydevtool-cann330alphaXinfer/atlasamcttf_16_0014.html)。
+  + [record.txt](./outputs/calibration/tmp/record.txt): 量化因子记录文件记录量化因子。 
   + [modified_model.onnx](./outputs/calibration/tmp/modified_model.onnx): 临时模型文件，即原始模型 BN 融合后导出的 ONNX 模型文件。
 + [resnet-101_deploy_model.onnx](./outputs/calibration/resnet-101_deploy_model.onnx): 量化部署模型，即量化后的可在昇腾 AI 处理器部署的模型文件。
 + [resnet-101_fake_quant_model.onnx](./outputs/calibration/resnet-101_fake_quant_model.onnx): 量化仿真模型，即量化后的可在 ONNX 执行框架 ONNX Runtime 进行精度仿真的模型文件。
@@ -101,7 +101,7 @@ INFO - [AMCT]:[Utils]: The model file is saved in ./outputs/nuq/resnet-101_fake_
 
 + [tmp](./outputs/nuq/tmp/): 临时文件夹
   + [config.json](./outputs/nuq/tmp/config.json): 量化配置文件描述了如何对模型中的每一层进行量化。
-  + [record.txt](./outputs/nuq/tmp/record.txt): 量化因子记录文件记录量化因子。关于该文件的原型定义请参见[量化因子记录文件说明](https://support.huaweicloud.com/content/dam/cloudbu-site/archive/china/zh-cn/support/docs/auxiliarydevtool-cann330alphaXinfer/atlasamcttf_16_0014.html)。
+  + [record.txt](./outputs/nuq/tmp/record.txt): 量化因子记录文件记录量化因子。
   + [modified_model.onnx](./outputs/nuq/tmp/modified_model.onnx): 临时模型文件为原始模型 BN 融合后导出的 ONNX 模型文件。
 + [resnet-101_deploy_model.onnx](./outputs/nuq/resnet-101_deploy_model.onnx): 量化部署模型，即量化后的可在昇腾 AI 处理器部署的模型文件。
 + [resnet-101_fake_quant_model.onnx](./outputs/nuq/resnet-101_fake_quant_model.onnx): 量化仿真模型，即量化后的可在 ONNX 执行框架 ONNX Runtime 进行精度仿真的模型文件。

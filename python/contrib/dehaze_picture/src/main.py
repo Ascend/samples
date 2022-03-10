@@ -13,7 +13,7 @@ import struct
 sys.path.append("../../../common/")
 sys.path.append("../")
 import acl
-import utils
+import acllite_utils as utils
 import constants as constants
 from acllite_model import AclLiteModel
 from acllite_image import AclLiteImage

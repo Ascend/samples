@@ -13,7 +13,7 @@ sys.path.append(os.path.join(path, "../../../../common/acllite"))
 
 from acllite_resource import AclLiteResource
 from acllite_model import AclLiteModel
-from utils import display_time, check_ret 
+from acllite_utils import display_time, check_ret 
 from constants import ACL_FLOAT, ACL_FORMAT_NCHW, ACL_MEM_MALLOC_NORMAL_ONLY, \
     ACL_MEM_MALLOC_HUGE_FIRST, ACL_MEMCPY_HOST_TO_DEVICE, ACL_MEMCPY_DEVICE_TO_HOST 
 

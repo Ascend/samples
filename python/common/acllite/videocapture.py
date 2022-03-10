@@ -5,7 +5,7 @@ import acl
 import time
 
 import constants as const
-import utils
+import acllite_utils as utils
 import acllite_logger as acl_log
 import dvpp_vdec as dvpp_vdec
 from acllite_image import AclLiteImage

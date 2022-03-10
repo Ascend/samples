@@ -1,6 +1,6 @@
 中文|[English](README.md)
 
-## 昇腾CANN样例仓介绍
+## CANN样例仓介绍
    
 CANN AscendCL（Ascend Computing Language）提供Device管理、Context管理、Stream管理、内存管理、模型加载与执行、算子加载与执行、媒体数据处理等C语言API库供用户开发深度神经网络应用，用于实现目标识别、图像分类等功能。用户可以通过第三方框架调用AscendCL接口，以便使用昇腾AI处理器的计算能力；用户还可以使用AscendCL封装实现第三方lib库，以便提供昇腾AI处理器的运行管理、资源管理能力。
 
@@ -8,17 +8,34 @@ CANN AscendCL（Ascend Computing Language）提供Device管理、Context管理�
 
 ## 版本说明
 
-**master分支样例版本适配情况请参见[样例表单及适配说明](#Version-of-samples)。     
-历史版本请参考[表 版本说明](#Version-Description)下载对应发行版**。
+**请在[硬件平台页面](https://www.hiascend.com/hardware/firmware-drivers?tag=community)选择您使用的产品后，通过下拉框选择支持的CANN版本并查看配套关系。**
 
-**表1** 版本说明<a name="Version-Description"></a>
-| CANN版本 | 驱动版本 |cann-samples仓是否维护 | cann-samples获取方式 |
-|---|---|---|---|
-| [5.0.2.alpha005/5.0.3.alpha001/<br>5.0.3.alpha002/5.0.3.alpha003/<br>5.0.3.alpha005](https://ascend.huawei.com/#/software/cann/download) | [1.0.11.alpha](https://www.hiascend.com/en/hardware/firmware-drivers?tag=community) | 是 | Release 0.5.0发行版，[点击跳转](https://github.com/Ascend/samples/releases/v0.5.0) |
-| [5.0.2.alpha003](https://ascend.huawei.com/#/software/cann/download) | [1.0.10.alpha](https://www.hiascend.com/en/hardware/firmware-drivers?tag=community) | 是 | Release 0.4.0发行版，[点击跳转](https://github.com/Ascend/samples/releases/v0.4.0) |
-| [3.3.0.alpha001/3.3.0.alpha005/<br>3.3.0.alpha006/5.0.2.alpha001/<br>5.0.2.alpha002](https://ascend.huawei.com/#/software/cann/download) | [1.0.9.alpha](https://www.hiascend.com/en/hardware/firmware-drivers?tag=community) | 是 | Release 0.3.0发行版，[点击跳转](https://github.com/Ascend/samples/releases/v0.3.0) |
-| [3.2.0.alpha001](https://ascend.huawei.com/#/software/cann/download) | [1.0.8.alpha](https://www.hiascend.com/en/hardware/firmware-drivers?tag=community) | 是 | Release 0.2.0发行版，[点击跳转](https://github.com/Ascend/samples/releases/v0.2.0) |
-| [3.1.0.alpha001](https://ascend.huawei.com/#/software/cann/download) | [1.0.7.alpha](https://www.hiascend.com/en/hardware/firmware-drivers?tag=community) | 是 | Release 0.1.0发行版，[点击跳转](https://github.com/Ascend/samples/releases/v0.1.0) |
+- **当前分支样例版本适配说明如下：**    
+    | CANN版本 | 驱动版本 |
+    |---|---|
+    | [>=5.0.4.alpha001](https://www.hiascend.com/software/cann/community) | [1.0.12.alpha](https://www.hiascend.com/en/hardware/firmware-drivers?tag=community) | 
+ 
+- **历史版本请参考下表使用对应发行版：**      
+    | CANN版本 | 驱动版本 | cann-samples获取方式 |
+    |---|---|---|
+    | [5.0.2.alpha005/5.0.3.alpha001/<br>5.0.3.alpha002/5.0.3.alpha003/<br>5.0.3.alpha005](https://www.hiascend.com/software/cann/community) | [1.0.11.alpha](https://www.hiascend.com/en/hardware/firmware-drivers?tag=community) | [tag v0.5.0](https://github.com/Ascend/samples/tree/v0.5.0/)，[下载Release 0.5.0发行版](https://github.com/Ascend/samples/releases/v0.5.0) |
+    | [5.0.2.alpha003](https://www.hiascend.com/software/cann/community) | [1.0.10.alpha](https://www.hiascend.com/en/hardware/firmware-drivers?tag=community) | [tag v0.4.0](https://github.com/Ascend/samples/tree/v0.4.0/)，[下载Release 0.4.0发行版](https://github.com/Ascend/samples/releases/v0.4.0) |
+    | [3.3.0.alpha001/3.3.0.alpha005/<br>3.3.0.alpha006/5.0.2.alpha001/<br>5.0.2.alpha002](https://www.hiascend.com/software/cann/community) | [1.0.9.alpha](https://www.hiascend.com/en/hardware/firmware-drivers?tag=community) | [tag v0.3.0](https://github.com/Ascend/samples/tree/v0.3.0/)，[下载Release 0.3.0发行版](https://github.com/Ascend/samples/releases/v0.3.0) |
+    | [3.2.0.alpha001](https://www.hiascend.com/software/cann/community) | [1.0.8.alpha](https://www.hiascend.com/en/hardware/firmware-drivers?tag=community) | [tag v0.2.0](https://github.com/Ascend/samples/tree/v0.2.0/)，[下载Release 0.2.0发行版](https://github.com/Ascend/samples/releases/v0.2.0) |
+    | [3.1.0.alpha001](https://www.hiascend.com/software/cann/community) | [1.0.7.alpha](https://www.hiascend.com/en/hardware/firmware-drivers?tag=community) | [tag v0.1.0](https://github.com/Ascend/samples/tree/v0.1.0/)，[下载Release 0.1.0发行版](https://github.com/Ascend/samples/releases/v0.1.0) |
+
+- **历史版本操作说明**      
+  **tag**：对某一时间点的代码仓打标签，在发布某个软件版本（比如 v0.1.0 等等）时使用tag标签，给仓库中的项目添加tag。可以理解为某一时刻的不会变化的分支。   
+  **Realease**：基于tag，为tag添加更丰富的信息，一般是编译好的文件。     
+  1. 用户可以在仓库的分支切换框中选择对应的标签（tag）从而查看对应版本的代码及readme。    
+  2. 用户可以下载realease提供的编译好的文件（Source code）进行代码使用。    
+  3. 如果需要在命令行访问tag代码，可以按照如下方式操作。
+     ```
+     # 命令行下载master代码
+     git clone https://github.com/Ascend/samples.git   
+     # 切换到历史tag，以v0.1.0举例
+     git checkout v0.1.0
+     ```
 
 ## 目录结构与说明
 | 目录 | 说明 |
@@ -28,44 +45,19 @@ CANN AscendCL（Ascend Computing Language）提供Device管理、Context管理�
 | [python](./python) | samples仓python样例目录 |
 | [st](./st) | samples仓样例测试用例目录 | 
 
+## 安装
+**根据设备形态按按照如下步骤搭建环境：**    
+   - Atlas200DK:     
+     (1) 在[硬件产品文档](https://www.hiascend.com/document?tag=hardware)中选择**AI开发者套件**文档，点击**环境部署**进入文档。    
+     (2) 根据**安装部署流程**章节了解整体流程并根据文档进行硬件及CANN软件安装。    
+   
+   - Atlas300（ai1s）:    
+    (1) 在[开发者文档（社区版）](https://www.hiascend.com/document?tag=community-developer)中选择**环境部署**文档 ，点击**CANN软件安装**进入文档。     
+    (2) 选择**安装驱动和固件**章节，按照要求进行固件与驱动的安装。    
+    (3) 选择**安装开发环境**章节，按找要求根据需要安装依赖及CANN软件包。   
 
-
-## 使用指南
-
-1.根据设备形态按按照如下步骤搭建合设环境
-
-#### 200DK:
-
-在Atlas 200 DK上搭建开发运行环境
-
-https://support.huaweicloud.com/environment-deployment-Atlas200DK1012/atlased_04_0017.html
-
-#### Ai1S 300:
-
-(1)安装驱动和固件
-
-https://support.huaweicloud.com/instg-cli-cann504-alpha002/atlasdeploy_03_0015.html
-
-（2）安装开发套件包：
-    
-    安装依赖：https://support.huaweicloud.com/instg-cli-cann504-alpha002/atlasdeploy_03_0021.html
-    
-    安装套件包：https://support.huaweicloud.com/instg-cli-cann504-alpha002/atlasdeploy_03_0031.html
-
-
-2.安装第三方依赖
-
-（1）c++：https://github.com/Ascend/samples/tree/master/cplusplus/environment
-
-（2）python：https://github.com/Ascend/samples/tree/master/python/environment
-
-3.下载samples仓，运行样例
-
-  git  clone https://github.com/Ascend/samples
-
-
-## 样例表单&适配说明<a name="Version-of-samples"></a>
-
+## 运行  
+**根据以下表单，选择需要运行的样例，并按照readme进行第三方依赖的安装及样例下载运行**      
 | 样例名称 | 语言 | 适配CANN版本 | 简介 |
 |---|---|---|---|
 | [DVPP接口样例](./cplusplus/level2_simple_inference/0_data_process) |  c++ | >=5.0.4 | 调用dvpp的相关接口，实现图像处理。包含crop/vdec/venc/jpegd/jpege/resize/batchcrop/cropandpaste等功能。 |
@@ -85,11 +77,6 @@ https://support.huaweicloud.com/instg-cli-cann504-alpha002/atlasdeploy_03_0015.h
 | [从训练到推理端到端样例](./python/level2_simple_inference/n_e2e) | python | >=5.0.4 | 从训练到部署端到端样例指导，包含口罩识别，垃圾分类，猫狗大战等指导。 |
 | [python行业样例](./python/level3_multi_model) | python | >=5.0.4 | 较为复杂的样例，结合硬件或使用多模型多线程样例。如去除图像的指定前景目标样例，机械臂样例等。 |
 | [python用户贡献样例](./python/contrib) | python | >=5.0.4 | 用户贡献的推理样例。 |
-
-## 环境搭建&样例部署
-samples仓所有样例依赖异构计算架构CANN，如果还未安装，请参考[CANN软件安装 (开发&运行场景, 通过命令行方式)](https://www.hiascend.com/document?tag=community-developer)选择你使用的版本完成CANN安装。
-
-然后按照各目录下的Readme进行样例选择，并根据所选样例下的Readme进行操作。   
 
 ## 文档
 

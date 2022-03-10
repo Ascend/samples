@@ -63,16 +63,16 @@
 
   3. 开发环境上，设置环境变量，配置AscendCL单算子验证程序编译依赖的头文件与库文件路径。
 
-   编译脚本会按环境变量指向的路径查找编译依赖的头文件和库文件，“$HOME/Ascend”请替换“Ascend-cann-toolkit”包的实际安装路径。
+     编译脚本会按环境变量指向的路径查找编译依赖的头文件和库文件，“$HOME/Ascend”请替换“Ascend-cann-toolkit”包的实际安装路径。
 
-   - 当运行环境操作系统架构是x86时，配置示例如下所示：
+     - 当运行环境操作系统架构是x86时，配置示例如下所示：
 
-     ```
-     export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux
-     export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
-     ```
+       ```
+       export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux
+       export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
+       ```
 
-   - 当运行环境操作系统架构时AArch64时，配置示例如下所示：
+     - 当运行环境操作系统架构时AArch64时，配置示例如下所示：
 
        ```
        export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux
@@ -133,37 +133,35 @@
     会在当前目录下生成数据文件input\_0.bin与input\_1.bin，用于进行Conv2dTik算子的验证。
 
 3. 编译样例工程，生成单算子验证可执行文件。
-   2.  切换到样例工程根目录acl\_execute\_conv2d，然后在样例工程根目录下执行如下命令创建目录用于存放编译文件，例如，创建的目录为“build/intermediates/host“。
+   1. 切换到样例工程根目录acl\_execute\_conv2d，然后在样例工程根目录下执行如下命令创建目录用于存放编译文件，例如，创建的目录为“build/intermediates/host“。
 
-       **mkdir -p build/intermediates/host**
+      **mkdir -p build/intermediates/host**
 
-   3.  切换到“build/intermediates/host”目录，执行cmake命令生成编译文件。
+   2. 切换到“build/intermediates/host”目录，执行cmake命令生成编译文件。
 
-       -   当开发环境与运行环境操作系统架构相同时，执行如下命令编译。
+      “../../../src“表示CMakeLists.txt文件所在的目录，请根据实际目录层级修改。
 
-           **cd build/intermediates/host**
+      DCMAKE_SKIP_RPATH需设置为TRUE，代表不会将rpath信息（即NPU_HOST_LIB配置的路径）添加到编译生成的可执行文件中去，可执行文件运行时会自动搜索实际设置的LD_LIBRARY_PATH中的动态链接库。
 
-           **cmake ../../../src -DCMAKE\_CXX\_COMPILER=g++ -DCMAKE\_SKIP\_RPATH=TRUE**
+      - 当开发环境与运行环境操作系统架构相同时，执行如下命令编译。
 
-       -   当开发环境与运行环境操作系统架构不同时，需要使用交叉编译。
+        **cd build/intermediates/host**
 
-           例如，当开发环境为X86架构，运行环境为AArch64架构时，执行以下命令进行交叉编译。
+        **cmake ../../../src -DCMAKE\_CXX\_COMPILER=g++ -DCMAKE\_SKIP\_RPATH=TRUE**
 
-           **cd build/intermediates/host**
-           
-           **cmake ../../../src -DCMAKE\_CXX\_COMPILER=aarch64-linux-gnu-g++ -DCMAKE\_SKIP\_RPATH=TRUE**
+      - 当开发环境与运行环境操作系统架构不同时，需要使用交叉编译。
 
-        参数说明如下：
-   
-         - “../../../src”表示CMakeLists.txt文件所在的目录，请根据实际目录层级修改。
-         - DCMAKE\_CXX\_COMPILER：编译应用程序所用的编译器。
-         - DCMAKE\_SKIP\_RPATH：**设置为TRUE**，代表不会将rpath信息（即NPU\_HOST\_LIB配置的路径）添加到编译生成的可执行文件中去。可执行文件运行时会自动搜索实际设置的LD\_LIBRARY\_PATH中的动态链接库。
-   
-    4.  执行如下命令，生成可执行文件。
-   
-        **make**
-   
-        会在工程目录的“run/out“目录下生成可执行文件**execute\_conv2d\_op**。
+        例如，当开发环境为X86架构，运行环境为AArch64架构时，执行以下命令进行交叉编译。
+
+        **cd build/intermediates/host**
+
+        **cmake ../../../src -DCMAKE\_CXX\_COMPILER=aarch64-linux-gnu-g++ -DCMAKE\_SKIP\_RPATH=TRUE**
+
+    3. 执行如下命令，生成可执行文件。
+
+       **make**
+
+       会在工程目录的“run/out“目录下生成可执行文件**execute\_conv2d\_op**。
 
 
 4.  在硬件设备的Host侧执行单算子验证文件。

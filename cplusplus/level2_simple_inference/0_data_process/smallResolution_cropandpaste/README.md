@@ -68,62 +68,78 @@ The sample directory is organized as follows:
 
 ## Environment Requirements<a name="section3833348101215"></a>
 
--   OS and architecture: CentOS 7.6 x86\_64, CentOS AArch64, or Ubuntu 18.04 x86\_64
--   Compiler:
-    -   Ascend 310 EP/Ascend 710: g++ or aarch64-linux-gnu-g++
-    -   Atlas 200 DK: aarch64-linux-gnu-g++
-
--   SoC: Ascend 310 AI Processor or Ascend 710 AI Processor
+-   OS and architecture: CentOS x86\_64, CentOS AArch64, Ubuntu 18.04 x86\_64, Ubuntu 18.04 aarch64,  EulerOS x86, EulerOS AArch64
+-   Compiler: g++ or aarch64-linux-gnu-g++
+-   SoC: Ascend 310 AI Processor, Ascend 710 AI Processor, Ascend 910 AI Processor
+-   Python version and dependency library: Python 3.7.5
 -   Ascend AI Software Stack deployed
 
 ## Environment Variables<a name="section1931223812141"></a>
 
--   **Ascend 310 EP/Ascend 710:**
-    1.  Set the header file path and library file path environment variables for the  **src/CMakeLists.txt**  build script in the development environment.
+- Configuring Environment Variables in the Development Environment
 
-        The following is an example. Replace  **$HOME/Ascend/ascend-toolkit/latest/_\{os\_arch\}_**  with the ACLlib path in  Ascend-CANN-Toolkit  of the corresponding architecture.
+  1. The CANN portfolio provides a process-level environment variable setting script to automatically set environment variables. The following commands are used as examples
 
-        -   x86 operating environment:
+     ```
+     . ${HOME}/Ascend/ascend-toolkit/set_env.sh
+     ```
 
-            ```
-            export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux
-            export NPU_HOST_LIB=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux/acllib/lib64/stub
-            ```
+     Replace  **$HOME/Ascend**  with the actual Ascend-CANN-Toolkit installation path.
 
-        -   ARM operating environment:
+  2. Operator building requires Python installation. The following takes Python 3.7.5 as an example. Run the following commands as a running user to set the environment variables related to Python 3.7.5.
 
-            ```
-            export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux
-            export NPU_HOST_LIB=$HOME/Ascend/ascend-toolkit/latest/arm64-linux/acllib/lib64/stub
-            ```
+     ```
+     # Set tje Python3.7.5 library path.
+     export LD_LIBRARY_PATH=/usr/local/python3.7.5/lib:$LD_LIBRARY_PATH
+     # If multiple Python 3 versions exist in the user environment, specify Python 3.7.5.
+     export PATH=/usr/local/python3.7.5/bin:$PATH
+     ```
 
+     Replace the Python 3.7.5 installation path as required. You can also write the preceding commands to the ~/.bashrc file and run the source ~/.bashrc command to make the modification take effect immediately.
 
-        The .so library files in the  **$HOME/Ascend/ascend-toolkit/latest/_\{os\_arch\}_/acllib/lib64/stub**  directory are required to build the code logic based on the AscendCL APIs, without depending on any .so library files of other components \(such as Driver\). After successful build, when you run an app on the host, the app can be linked to the .so library files in the  **$HOME/Ascend/nnrt/latest/acllib/lib64**  directory on the host by configuring corresponding environment variables. The app is automatically linked to the dependent .so library files of other components during runtime.
+  3. In the development environment, set environment variables and configure the header search path and library search path on which the build of the AscendCL single-operator verification program depends.
 
-    2.  Set the library path environment variable in the operating environment for app execution.
+     The build script searches for the required header files and libraries through the paths specified by the environment variables. Replace  **$HOME/Ascend**  with the actual Ascend-CANN-Toolkit installation path.
 
-        The following is an example. Replace  **$HOME/Ascend/nnrt/latest**  with the path of ACLlib.
+     - If the development environment operating system architecture is x86, the configuration example is as follows:
 
-        ```
-        export LD_LIBRARY_PATH=$HOME/Ascend/nnrt/latest/acllib/lib64
-        ```
+       ```
+        export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux
+        export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
+       ```
 
+     - If the running environment operating system architecture is AArch64, the configuration example is as follows:
 
--   **Atlas 200 DK:**
+       ```
+        export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux
+        export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
+       ```
 
-    You only need to set environment variables in the development environment. Environment variables in the operating environment have been set in the phase of preparing a bootable SD card.
+- Configuring Environment Variables in the Running Environment
 
-    The following is an example. Replace  **$HOME/Ascend/ascend-toolkit/latest/arm64-linux**  with the ACLlib path in  Ascend-CANN-Toolkit  of the ARM architecture.
+  - If Ascend-CANN-Toolkit is installed in the running environment, set the environment variable as follows:
 
     ```
-    export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux
-    export NPU_HOST_LIB=$HOME/Ascend/ascend-toolkit/latest/arm64-linux/acllib/lib64/stub
+    . ${HOME}/Ascend/ascend-toolkit/set_env.sh
     ```
 
-    The .so library files in the  **$HOME/Ascend/ascend-toolkit/latest/arm64-linux/acllib/lib64/stub**  directory are required to build the code logic based on the AscendCL APIs, without depending on any .so library files of other components \(such as Driver\). At run time, the app links to the .so library files in the  **$HOME/Ascend/acllib/lib64**  directory on the board through the configured environment variable and automatically links to the .so library files of other components.
+  - If Ascend-CANN-NNRT is installed in the running environment, set the environment variable as follows:
+
+    ```
+    . ${HOME}/Ascend/nnrt/set_env.sh
+    ```
+
+  - If Ascend-CANN-NNAE is installed in the running environment, set the environment variable as follows:
+
+    ```
+    . ${HOME}/Ascend/nnae/set_env.sh
+    ```
+
+    Replace  **$HOME/Ascend**  with the actual component installation path.
 
 
-## Build and Run \(Ascend310 EP/Ascend 710\)<a name="section16011204259"></a>
+
+## Build and Run <a name="section16011204259"></a>
 
 1.  Build the code.
     1.  Log in to the  development environment  as the running user.
@@ -136,6 +152,8 @@ The sample directory is organized as follows:
     3.  Go to the  **build/intermediates/host**  directory and run the  **cmake**  command.
 
         Replace  **../../../src**  with the actual directory of  **CMakeLists.txt**.
+
+        Set **DCMAKE_SKIP_RPATH** to  **TRUE**,  **rpath**  (path specified by  **NPU_HOST_LIB**) is not added to the executable generated after build. The executable automatically looks up for dynamic libraries in the path  included in  **LD_LIBRARY_PATH**.
 
         -   If the operating system architecture of the  development environment is the same as that of the running environment, run the following commands to perform compilation.
 
@@ -178,7 +196,7 @@ The sample directory is organized as follows:
     4.  Switch to the directory where the executable file  **main**  is located, for example,  **$HOME/acl\_vpc\_smallResolution\_crop/out**. The following command calls VPC twice to crop a 6 x 6 ROI from the input image and resize the cropped image to 224 x 224.
 
         ```
-        ./main --inImgName dvpp_vpc_1920x1080_nv12.yuv --inFormat 1 --inWidth 1920 --inHeight 1080 --cLeftOffset 0 --cRightOffset 5 --cTopOffset 0 --cBottomOffset 5 --outImgName output_224_224.yuv --outFormat 1 --outWidth 224 --outHeight 224 --pLeftOffset 0 --pRightOffset 223 --pTopOffset 0 --pBottomOffset 223
+        ./main --inImgName ../data/dvpp_vpc_1920x1080_nv12.yuv --inFormat 1 --inWidth 1920 --inHeight 1080 --cLeftOffset 0 --cRightOffset 5 --cTopOffset 0 --cBottomOffset 5 --outImgName output_224_224.yuv --outFormat 1 --outWidth 224 --outHeight 224 --pLeftOffset 0 --pRightOffset 223 --pTopOffset 0 --pBottomOffset 223
         ```
 
         The options are described as follows.
@@ -216,91 +234,4 @@ The sample directory is organized as follows:
         [INFO]  end to destroy context
         [INFO]  end to reset device 0
         ```
-
-
-
-## Build and Run \(Atlas 200 DK\)<a name="section18557246182520"></a>
-
-1.  Build the code.
-    1.  Log in to the  development environment  as the running user.
-    2.  Go to the sample directory and create a directory for storing build outputs. For example, the directory created in this sample is  **build/intermediates/minirc**.
-
-        ```
-        mkdir -p build/intermediates/minirc
-        ```
-
-    3.  Go to the  **build/intermediates/minirc**  directory and run the  **cmake**  command.
-
-        Replace  **../../../src**  with the actual directory of  **CMakeLists.txt**.
-
-        ```
-        cd build/intermediates/minirc
-        cmake ../../../src -DCMAKE_CXX_COMPILER=aarch64-linux-gnu-g++ -DCMAKE_SKIP_RPATH=TRUE
-        ```
-
-    4.  Run the  **make **command. The  **main**  executable file is generated in  **/out**  under the sample directory.
-
-        ```
-        make
-        ```
-
-
-2.  Prepare input images.
-
-    Obtain the input images of the sample from the following link and upload the obtained images to  **/data**  under the sample directory in the  development environment  as the running user. If the directory does not exist, create it.
-
-    [https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/dvpp\_vpc\_1920x1080\_nv12.yuv](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/dvpp_vpc_1920x1080_nv12.yuv)
-
-3.  Run the app.
-    1.  As the running user, upload the sample folder in the  development environment  to the  board environment, for example,  **$HOME/acl\_vpc\_smallResolution\_crop**.
-    2.  Log in to the  board environment  as the running user.
-    3.  Go to the directory where the executable file  **main**  is located \(for example,  **$HOME/acl\_vpc\_smallResolution\_crop/out**\) and grant execute permission on the  **main**  file in the directory.
-
-        ```
-        chmod +x main
-        ```
-
-    4.  Switch to the directory where the executable file  **main**  is located, for example,  **$HOME/acl\_vpc\_smallResolution\_crop/out**. The following command calls VPC twice to crop a 6 x 6 ROI from the input image and resize the cropped image to 224 x 224.
-
-        ```
-        ./main --inImgName dvpp_vpc_1920x1080_nv12.yuv --inFormat 1 --inWidth 1920 --inHeight 1080 --cLeftOffset 0 --cRightOffset 5 --cTopOffset 0 --cBottomOffset 5 --outImgName output_224_224.yuv --outFormat 1 --outWidth 224 --outHeight 224 --pLeftOffset 0 --pRightOffset 223 --pTopOffset 0 --pBottomOffset 223
-        ```
-
-        The options are described as follows.
-
-        -   **inImgName**: input image file directory, including the file name.
-        -   **inFormat**: input format.
-        -   **inWidth**: width of the input image.
-        -   **inHeight**: height of the input image.
-        -   **cLeftOffset**: left offset of the crop ROI. Must be an even number.
-        -   **cRightOffset**: right offset of the crop ROI. Must be an odd number.
-        -   **cTopOffset**: offset of the cropped image. Must be an even number.
-        -   **cBottomOffset**: bottom offset of the crop ROI. Must be an odd number.
-        -   **outImgName**: output image file directory, including the file name.
-        -   **outFormat**: output format.
-        -   **outWidth**: width of the output image.
-        -   **outHeight**: height of the output image.
-        -   **pLeftOffset**: left offset of the paste ROI. Must be an even number aligned to 16.
-        -   **pRightOffset**: right offset of the paste ROI. Must be an odd number.
-        -   **pTopOffset**: top offset of the paste ROI. Must be an even number.
-        -   **pBottomOffset**: bottom offset of the paste ROI. Must be an odd number.
-
-        The following messages indicate that the file is successfully executed.
-
-        ```
-        [INFO]  acl init success
-        [INFO]  set device 0 success
-        [INFO]  create context success
-        [INFO]  create stream success
-        [INFO]  get run mode success
-        [INFO]  dvpp init resource success
-        [INFO]  call SplitProcessCropAndPaste
-        [INFO]  vpc crop and paste success
-        [INFO]  execute sample success
-        [INFO]  end to destroy stream
-        [INFO]  end to destroy context
-        [INFO]  end to reset device 0
-        ```
-
-
 

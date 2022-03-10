@@ -7,7 +7,7 @@ MODIFIED: 2021-02-03 14:04:45
 import threading
 import acl
 
-import utils
+import acllite_utils as utils
 
 REGISTER = 0
 UNREGISTER = 1

@@ -55,16 +55,16 @@ Run the following on operation environment to install dependencies and python-op
    # Install ffmpeg
    sudo apt-get install -y libavformat-dev libavcodec-dev libavdevice-dev libavutil-dev libswscale-dev libavresample-dev
    # Install other dependencies
-   pip3.6 install --upgrade pip
-   pip3.6 install Cython
+   python3.6 -m pip install --upgrade pip
+   python3.6 -m pip install Cython
    sudo apt-get install pkg-config libxcb-shm0-dev libxcb-xfixes0-dev
    # Install pyav
    python3.6 -m pip install av==6.2.0
    # Install pillow dependencies
    sudo apt-get install libtiff5-dev libjpeg8-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python-tk
    # Install numpy and PIL
-   pip3.6 install numpy
-   pip3.6 install Pillow
+   python3.6 -m pip install numpy
+   python3.6 -m pip install Pillow
    ```
 2. <a name="step_2"></a>install python-acllite     
    **python acllite library is delivered as source code, copy acllite directory to third party library directory on operation environment during installation**

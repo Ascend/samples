@@ -44,6 +44,13 @@ int32_t sample_comm_vpc_convert_color(FuncInput funcInput)
     uint32_t outFormat = funcInput.g_vpc_attribute.outFormat;
     hi_vpc_chn chnId = funcInput.chnId;
 
+    // you can set the coefficient for convert color interface
+    int32_t ret = hi_mpi_sys_set_chn_csc_matrix(HI_ID_VPC, chnId, HI_CSC_MATRIX_BT601_WIDE, 0);
+    if (ret != HI_SUCCESS) {
+        SAMPLE_PRT("set csc matrix failed!\n");
+        return ret;
+    }
+
     // configure the input picture
     hi_vpc_pic_info inputPic;
     inputPic.picture_width = width;
@@ -58,7 +65,7 @@ int32_t sample_comm_vpc_convert_color(FuncInput funcInput)
     outputPic.picture_format = static_cast<hi_pixel_format>(outFormat);
     uint32_t dstBufferSize = configure_stride_and_buffer_size(outputPic);
 
-    int32_t ret = prepare_input_data(inputPic, inputFileName);
+    ret = prepare_input_data(inputPic, inputFileName);
     if (ret != HI_SUCCESS) {
         SAMPLE_PRT("prepare input data failed!\n");
         return ret;

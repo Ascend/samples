@@ -12,7 +12,7 @@ import sys
 import os
 
 import constants as const
-import utils
+import acllite_utils as utils
 from acllite_logger import log_error, log_info, log_warning
 from acllite_image import AclLiteImage
 from acllite_resource import resource_list
@@ -156,7 +156,10 @@ class AclLiteModel(object):
         buffer_item = self._input_buffer[index]
         data = None
         if buffer_item['addr'] is None:
-            data = utils.copy_data_device_to_device(input_ptr, size)
+            if self._run_mode == const.ACL_HOST:
+                data = utils.copy_data_host_to_device(input_ptr, size)
+            else:
+                data = utils.copy_data_device_to_device(input_ptr, size)
             if data is None:
                 log_error("Malloc memory and copy model %dth "
                           "input to device failed" % (index))
@@ -164,9 +167,14 @@ class AclLiteModel(object):
             buffer_item['addr'] = data
             buffer_item['size'] = size
         elif size == buffer_item['size']:
-            ret = acl.rt.memcpy(buffer_item['addr'], size,
-                                input_ptr, size,
-                                const.ACL_MEMCPY_DEVICE_TO_DEVICE)
+            if self._run_mode == const.ACL_HOST:
+                ret = acl.rt.memcpy(buffer_item['addr'], size,
+                                    input_ptr, size,
+                                    const.ACL_MEMCPY_HOST_TO_DEVICE)
+            else:
+                ret = acl.rt.memcpy(buffer_item['addr'], size,
+                                    input_ptr, size,
+                                    const.ACL_MEMCPY_DEVICE_TO_DEVICE)                
             if ret != const.ACL_SUCCESS:
                 log_error("Copy model %dth input to device failed" % (index))
                 return None

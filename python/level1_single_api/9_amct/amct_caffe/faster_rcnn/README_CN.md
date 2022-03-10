@@ -1,6 +1,11 @@
 # faster-rcnn sample 的说明
+## 1. 准备工作
 
-## 1. 环境准备
+### 1.1 AMCT_Caffe 环境
+
+执行本用例需要配置 AMCT_Caffe python 环境，详细环境准备流程可以参照[昇腾社区开发者文档](https://ascend.huawei.com/zh/#/document?tag=developer)页面下搜索 “模型压缩 (Caffe)” 文档并参照文档进行配置。
+
+### 1.2 Caffe Faster-RCNN环境准备
 
 如果使用 FasterRCNN 模型，则执行步骤环境初始化时会将模型自动下载到本地，本手册以该场景下的模型为例进行说明，用户也可以自行准备模型。
 环境初始化用于获取检测网络源代码、模型文件、权重文件以及数据集等信息。
@@ -30,7 +35,7 @@
    切换到sample/faster_rcnn/scripts目录，执行初始化脚本，示例如下：
 
    ```none
-   init_env.sh CPU **/caffe-master/ python3.7 /usr/include/python3.7m
+   bash init_env.sh CPU **/caffe-master/ python3.7 /usr/include/python3.7m
    ```
 
    初始化脚本优先检查当前目录是否存在上述下载的软件包，如果已经存在，则不会连接网络再次下载，直接使用上述软件包中的内容生成相关目录下的文件。
@@ -76,7 +81,7 @@
 
    量化前，需要先将原始模型和数据集在 Caffe 环境中执行推理过程，以避免数据集和模型不匹配、模型无法在 Caffe 环境中执行的问题。在执行精度测试前，需确保执行1.0章节中的初始化脚本，并添加`with_benchmark`参数。
    ```none
-   init_env.sh CPU **/caffe-master/ python3.7 /usr/include/python3.7m with_benchmark
+   bash init_env.sh CPU **/caffe-master/ python3.7 /usr/include/python3.7m with_benchmark
    ```
 
    然后切换到 sample/faster_rcnn/src 目录，执行如下命令检测 faster_rcnn 网络模型。

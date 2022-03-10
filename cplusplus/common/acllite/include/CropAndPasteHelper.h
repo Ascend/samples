@@ -29,14 +29,17 @@ class CropAndPasteHelper {
     * @param [in] stream: stream
     */
     CropAndPasteHelper(aclrtStream &stream, acldvppChannelDesc *dvppChannelDesc,
-    uint32_t lt_horz, uint32_t lt_vert,uint32_t rb_horz, uint32_t rb_vert);
+                       uint32_t lt_horz, uint32_t lt_vert,
+                       uint32_t rb_horz, uint32_t rb_vert);
 
     /**
     * @brief Constructor
     * @param [in] stream: stream
     */
     CropAndPasteHelper(aclrtStream &stream, acldvppChannelDesc *dvppChannelDesc,
-                       uint32_t width, uint32_t height);
+                       uint32_t width, uint32_t height,
+                       uint32_t lt_horz, uint32_t lt_vert, 
+                       uint32_t rb_horz, uint32_t rb_vert);
 
     /**
     * @brief Destructor
@@ -62,14 +65,12 @@ class CropAndPasteHelper {
     * @return AclLiteError
     */
     AclLiteError Process(ImageData& resizedImage, ImageData& srcImage);
-    AclLiteError ProcessResolution(ImageData& cropedImage, ImageData& srcImage);
-    AclLiteError ProcessUniform(ImageData& resizedImage, ImageData& srcImage);
+    AclLiteError ProcessCropPaste(ImageData& cropedImage, ImageData& srcImage);
+    AclLiteError ProportionProcess(ImageData& resizedImage, ImageData& srcImage);
 
 private:
     AclLiteError InitCropAndPasteResource(ImageData& inputImage);
-    AclLiteError InitCropAndPasteResourceResolution(ImageData& inputImage);
     AclLiteError InitCropAndPasteInputDesc(ImageData& inputImage);
-    AclLiteError InitCropAndPasteInputDescResolution(ImageData& inputImage);
     AclLiteError InitCropAndPasteOutputDesc();
 
     void DestroyCropAndPasteResource();

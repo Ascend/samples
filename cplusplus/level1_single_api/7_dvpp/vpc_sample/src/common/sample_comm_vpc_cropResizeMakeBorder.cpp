@@ -127,7 +127,7 @@ int32_t sample_comm_vpc_crop_resize_make_border(FuncInput funcInput)
         return HI_FAILURE;
     }
 
-    // asign the taskID that you get from the last interface to get the process result
+    // assign the taskID that you get from the last interface to get the process result
     uint32_t taskIDResult = taskID;
     ret = hi_mpi_vpc_get_process_result(chnId, taskIDResult, -1);
     if (ret != HI_SUCCESS) {

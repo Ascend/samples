@@ -52,6 +52,7 @@ const string kRegexOutputWidth = "^output_width+$";
 const string kRegexDeviceNum = "^device_num+$";
 aclrtContext context;
 aclrtRunMode runMode;
+vector<aclrtContext> kContext;
 }
 
 int MainThreadProcess(uint32_t msgId, 
@@ -119,10 +120,10 @@ AclLiteError ParseConfig(string& dataAddr, uint32_t& postNum, uint32_t& deviceNu
 
 void CreatePreprocessInstances(vector<AclLiteThreadParam>& threadTbl,
                                string dataAddr, uint32_t postNum, uint32_t deviceCount, AclLiteResource& aclDev) {
+    aclrtContext context = aclDev.GetContext();
     AclLiteThreadParam param;
-
     param.threadInst = new PreprocessThread(dataAddr, kModelWidth,
-                                      kModelHeight, postNum, deviceCount);
+                                      kModelHeight, postNum, deviceCount, context);
     param.context = aclDev.GetContext();
     param.runMode = aclDev.GetRunMode();
     ACLLITE_LOG_INFO("Preprocess context is ：%p", param.context);
@@ -134,7 +135,7 @@ void CreateInferenceInstance(vector<AclLiteThreadParam>& threadTbl, int32_t i, a
     AclLiteThreadParam param;
 
     param.threadInst = new InferenceThread(kModelPath, kModelWidth, 
-                                            kModelHeight);
+                                            kModelHeight, context);
     param.threadInstName.assign(kInferName[i].c_str());
     param.context = context;
     param.runMode = runMode;
@@ -168,17 +169,14 @@ void CreateThreadInstance(vector<AclLiteThreadParam>& threadTbl, AclLiteResource
     if (ret != ACLLITE_OK) {
         return;
     }
-    // uint32_t device_Count[NUM];
-    // ret = aclrtGetDeviceCount(device_Count);
-    // if (ret != ACLLITE_OK) {
-    //     ACLLITE_LOG_ERROR("aclrtGetDeviceCount failed");
-    //     return;
-    // }
-    // kExitCount = postNum * device_Count[0];
-    kExitCount = postNum * deviceNum;
 
-    // CreatePreprocessInstances(threadTbl, dataAddr, postNum, device_Count[0], aclDev);
-    // for(int32_t i=0; i < device_Count[0]; i++){
+    kExitCount = postNum * deviceNum;
+    ret = aclrtGetRunMode(&runMode);
+    if (ret != ACL_ERROR_NONE) {
+        ACLLITE_LOG_ERROR("acl get run mode failed");
+        return;
+    }
+
     CreatePreprocessInstances(threadTbl, dataAddr, postNum, deviceNum, aclDev);
     for(int32_t i=0; i < deviceNum; i++){
         ret = aclrtSetDevice(i);
@@ -192,12 +190,7 @@ void CreateThreadInstance(vector<AclLiteThreadParam>& threadTbl, AclLiteResource
             ACLLITE_LOG_ERROR("Create acl context failed, error:%d", ret);
             return;
         }
-
-        ret = aclrtGetRunMode(&runMode);
-        if (ret != ACL_ERROR_NONE) {
-            ACLLITE_LOG_ERROR("acl get run mode failed");
-            return;
-        }
+        kContext.push_back(context);
 
         CreateInferenceInstance(threadTbl, i, context, runMode);
         CreatePostprocessInstances(threadTbl, postNum, i, context, runMode, outputHeight, outputWidth);
@@ -209,6 +202,12 @@ void ExitApp(AclLiteApp& app, vector<AclLiteThreadParam>& threadTbl) {
         delete threadTbl[i].threadInst;
     }  
     app.Exit();
+    for(int i = 0; i < kContext.size(); i++) {
+        aclrtDestroyContext(kContext[i]);
+        if(i){
+            aclrtResetDevice(i);
+        }
+    }
 }
 
 void StartApp(AclLiteResource& aclDev) {

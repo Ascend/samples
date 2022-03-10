@@ -10,7 +10,7 @@ sys.path.append(cur_file_dir + "/../../../../common")
 
 import videocapture as video
 from constants import *
-from utils import *
+from acllite_utils import *
 from acllite_resource import AclLiteResource
 from acllite_image import AclLiteImage
 from acllite_logger import log_error, log_info

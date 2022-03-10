@@ -70,7 +70,7 @@ def main():
     Images pre-processing and converting to bin file.
     """
     # preprocess data to np
-    os.system("rm -rf data/image && mkdir data/image && cd data/image/ && wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/amct_acl/classification/calibration.rar && unrar e calibration.rar && cd -")
+    os.system("cd data && unrar x calibration.rar && mv calibration/* image/  && cd -")
     images = image_preprocces(IMAGE_PATH)
     os.system("rm -rf data/image/*")
     # save processed data to bin file

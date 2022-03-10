@@ -63,22 +63,23 @@
      Python3.7.5安装路径请根据实际情况进行替换，您也可以将以上命令写入~/.bashrc文件中，然后执行source ~/.bashrc命令使其立即生效。
      
   3. 开发环境上，设置环境变量，配置AscendCL单算子验证程序编译依赖的头文件与库文件路径。
-  
-   编译脚本会按环境变量指向的路径查找编译依赖的头文件和库文件，“$HOME/Ascend”请替换“Ascend-cann-toolkit”包的实际安装路径。
-  
-   -   当运行环境操作系统架构是x86时，配置示例如下所示：
-  
+
+     编译脚本会按环境变量指向的路径查找编译依赖的头文件和库文件，“$HOME/Ascend”请替换“Ascend-cann-toolkit”包的实际安装路径。
+
+     - 当运行环境操作系统架构是x86时，配置示例如下所示：
+
        ```
        export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux
        export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
        ```
-  
-   -   当运行环境操作系统架构时AArch64时，配置示例如下所示：
-  
-         ```
-         export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux
-         export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
-         ```
+
+     - 当运行环境操作系统架构时AArch64时，配置示例如下所示：
+
+       ```
+       export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux
+       export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
+       ```
+
 - 运行环境上环境变量配置
   
   -   若运行环境上安装的“Ascend-cann-toolkit”包，环境变量设置如下：
@@ -143,6 +144,10 @@
 
    2. 切换到“build/intermediates/host”目录，执行cmake命令生成编译文件。
 
+      “../../../src“表示CMakeLists.txt文件所在的目录，请根据实际目录层级修改。
+
+      DCMAKE_SKIP_RPATH需设置为TRUE，代表不会将rpath信息（即NPU_HOST_LIB配置的路径）添加到编译生成的可执行文件中去，可执行文件运行时会自动搜索实际设置的LD_LIBRARY_PATH中的动态链接库。
+
        -   当开发环境与运行环境操作系统架构相同时，执行如下命令编译。
 
            **cd build/intermediates/host**
@@ -157,11 +162,7 @@
            
            **cmake ../../../src -DCMAKE\_CXX\_COMPILER=aarch64-linux-gnu-g++ -DCMAKE\_SKIP\_RPATH=TRUE**
 
-           参数说明如下：
-
-          - “../../../src”表示CMakeLists.txt文件所在的目录，请根据实际目录层级修改。
-          - DCMAKE\_CXX\_COMPILER：编译应用程序所用的编译器。
-          - DCMAKE\_SKIP\_RPATH：**设置为TRUE**，代表不会将rpath信息（即NPU\_HOST\_LIB配置的路径）添加到编译生成的可执行文件中去。可执行文件运行时会自动搜索实际设置的LD\_LIBRARY\_PATH中的动态链接库。
+          
 
    3. 执行如下命令，生成可执行文件。
 

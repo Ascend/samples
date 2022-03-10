@@ -1,0 +1,26 @@
+<launch>
+
+    <arg name="robot_name" default="/"/>
+    <arg name="rviz" default="true"/>
+
+    <arg if="$(eval arg('robot_name') == '/')" name="frame_prefix" value=""/>
+    <arg unless="$(eval arg('robot_name') == '/')" name="frame_prefix" value="$(arg robot_name)/"/>
+
+    <include file="$(find scout_bringup)/launch/scout_minimal.launch"/>
+
+    <param name="robot_description" command="$(find xacro)/xacro '$(find scout_description)/urdf/mini.xacro'"/>
+    <!-- <param name="robot_description" command="$(find xacro)/xacro '$(find scout_description)/urdf/scout_v2.xacro'"/> -->
+    <node name="scout_mini_robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+    <node name="scout_mini_joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+
+
+    <!-- <include file="$(find lslidar_c16_decoder)/launch/lslidar_c16.launch">
+        <arg name="frame_id" value="velodyne" />
+        <arg name="time_synchronization" value="false" />
+    </include> -->
+    
+    <!--    <include file="$(find pointcloud_to_laserscan)/launch/sample_node.launch">-->
+    <!--        <arg name="cloud_in" value="/velodyne_points" />-->
+    <!--    </include>-->
+
+</launch>

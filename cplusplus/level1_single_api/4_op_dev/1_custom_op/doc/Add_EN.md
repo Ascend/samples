@@ -54,7 +54,7 @@ The Add operator returns the sum of its operands, as shown in the following figu
 
 -   Operator Implementation
 
-    The Add operator supports only three data types: float16, float32, and int32. Therefore, the input data type needs to be verified. The two inputs may have different shapes. This scenario is supported by the Add operator, but not supported by the operator compute API  **te.lang.cce.vadd\(\)**. As a result, the two input shapes need to be broadcast and verified. For details about the operator implementation code, see  [add.py](../tbe/impl/add.py).
+    The Add operator supports only three data types: float16, float32, and int32. Therefore, the input data type needs to be verified. The two inputs may have different shapes. This scenario is supported by the Add operator, but not supported by the operator compute API  **te.lang.cce.vadd\(\)**. As a result, the two input shapes need to be broadcast and verified. For details about the operator implementation code, see  [add_tik.py](../tbe/impl/add_tik.py).
 
 -   Operator Prototype Definition
 

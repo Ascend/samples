@@ -104,6 +104,8 @@ struct VpcAttr {
     uint32_t writeFileIndex{1};
     uint32_t pyramidPaddingMode{2}; // initialize the PaddingMode to 2
     double pyramidPaddingValue{0};
+    uint32_t filterLevel{4};
+    uint16_t divisor{256};
     uint32_t paddingTopSize{0};
     uint32_t paddingBottomSize{0};
     uint32_t paddingLeftSize{0};
@@ -170,7 +172,7 @@ int32_t dvpp_mem_free(void* addr);
 * @return : actual buffer size
 */
 uint32_t configure_stride_and_buffer_size(hi_vpc_pic_info& pic, uint32_t widthAlign = 16,
-    uint32_t heightAlign = 2);
+    uint32_t heightAlign = 2, bool widthStride32Align = true);
 
 /*
 * @brief : get dest picture with target stride

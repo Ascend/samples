@@ -113,10 +113,10 @@ AclLiteError ParseConfig(string& dataAddr, uint32_t& postNum, uint32_t& deviceNu
 
 void CreatePreprocessInstances(vector<AclLiteThreadParam>& threadTbl,
                                string dataAddr, uint32_t postNum, uint32_t deviceCount, AclLiteResource& aclDev) {
+    aclrtContext context = aclDev.GetContext();
     AclLiteThreadParam param;
-
     param.threadInst = new PreprocessThread(dataAddr, kModelWidth,
-                                      kModelHeight, postNum, deviceCount);
+                                      kModelHeight, postNum, deviceCount, context);
     param.context = aclDev.GetContext();
     param.runMode = aclDev.GetRunMode();
     threadTbl.push_back(param);
@@ -127,7 +127,7 @@ void CreateInferenceInstance(vector<AclLiteThreadParam>& threadTbl, int32_t i, a
     AclLiteThreadParam param;
 
     param.threadInst = new InferenceThread(kModelPath, kModelWidth, 
-                                            kModelHeight);
+                                            kModelHeight, context);
     param.threadInstName.assign(kInferName[i].c_str());
     param.context = context;
     param.runMode = runMode;
@@ -206,7 +206,9 @@ void ExitApp(AclLiteApp& app, vector<AclLiteThreadParam>& threadTbl) {
 
     for(int i = 0; i < kContext.size(); i++) {
         aclrtDestroyContext(kContext[i]);
-        aclrtResetDevice(i);
+        if(i){
+            aclrtResetDevice(i);
+        }
     }
 }
 

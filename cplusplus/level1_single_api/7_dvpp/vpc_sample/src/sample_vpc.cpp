@@ -70,6 +70,12 @@ void get_option_1(int c)
         case '8':
             g_vpc_attribute.paddingValB = atof(optarg);
             break;
+        case 'Q':
+            g_vpc_attribute.filterLevel = atof(optarg);
+            break;
+        case 'U':
+            g_vpc_attribute.divisor = atof(optarg);
+            break;
         case 'P':
             g_vpc_attribute.paddingMode = (hi_vpc_bord_type)atoi(optarg);
             break;
@@ -132,17 +138,19 @@ void get_option(int argc, char **argv)
             {"padding_val_r", 1, 0, '6'},
             {"padding_val_g", 1, 0, '7'},
             {"padding_val_b", 1, 0, '8'},
+            {"filter_level", 1, 0, 'Q'},
+            {"divisor", 1, 0, 'U'},
             {"padding_mode", 1, 0, 'P'},
             {"in_image_num", 1, 0, 'N'},
-            {"in_width_ailgn", 1, 0, 'X'},
+            {"in_width_align", 1, 0, 'X'},
             {"in_height_align", 1, 0, 'Y'},
-            {"out_width_ailgn", 1, 0, 'Z'},
+            {"out_width_align", 1, 0, 'Z'},
             {"out_height_align", 1, 0, 'V'},
             {nullptr, 1, 0, 'U'},
         };
 
         int32_t c = getopt_long(argc, argv,
-            "w:h:f:b:c:t:d:g:e:m:r:s:p:u:v:x:y:i:L:T:C:D:F:O:W:M:I:0:1:2:3:4:5:6:7:8:P:N:X:Y:Z:V",
+            "w:h:f:b:c:t:d:g:e:m:r:s:p:u:v:x:y:i:L:T:C:D:F:O:W:M:I:0:1:2:3:4:5:6:7:8:Q:U:P:N:X:Y:Z:V",
             long_options, &option_index);
         if (c == -1) {
             break;
@@ -386,7 +394,7 @@ void init_test_entry_single_chnl()
 int main(int argc, char *argv[])
 {
     if (argc < 4) { // if argc is less than 4
-        SAMPLE_PRT("\nInvaild input!\n");
+        SAMPLE_PRT("\nInvalid input!\n");
         return HI_FAILURE;
     }
 

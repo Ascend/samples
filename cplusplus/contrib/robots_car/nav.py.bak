@@ -1,0 +1,104 @@
+#!/usr/bin/env python
+from __future__ import print_function
+
+import sys
+import json
+import math
+import numpy as np
+
+import rospy
+from geometry_msgs.msg import TransformStamped
+from std_msgs.msg import String
+from sensor_msgs.msg import Image
+from move_base_msgs.msg import MoveBaseAction
+from move_base_msgs.msg import MoveBaseGoal
+from cv_bridge import CvBridge
+import actionlib
+
+import threading
+
+home = [0.372436, 0.038186, 0.0264694]
+temperature = [1.57538, 0.00102924, 0.0317283]
+after_temperature = [1.61204, -0.00837164, 1.61451]
+
+pressure = [1.69871, 1.26753, 1.0718]
+after_pressure = [1.74522, 1.30155,  -3.11793]
+
+before_voltage = [0.472106, 1.3393, 3.13938]
+voltage = [0.382186, 1.34889, 2.56757]
+after_voltage = [0.359086, 1.34972, 0.0480798]
+
+level = [1.10077, 1.34668, -0.400094]
+after_level = [1.63997, 0.86414, -1.5344]
+caution = [1.7462, 0.186029, 2.64698]
+
+before_digital = [0.398489, 0.0190004, -2.57065]
+digital = [0.372436, 0.038186,-1.53879]
+
+waypoints = [temperature, after_temperature, pressure, \
+        after_pressure, before_voltage, voltage, \
+        after_voltage, level, caution, \
+        before_digital, digital, home]
+
+no_stop = [after_temperature, after_pressure, before_voltage, \
+          after_voltage, after_level, before_digital]
+
+def excute_move(client, goal):
+  rospy.loginfo("Sending goal!")
+  client.send_goal(goal, done_cb=final_cb, active_cb=start_cb, feedback_cb=fb_cb)
+  client.wait_for_result()
+  client.get_result()
+  return
+
+def start_cb():
+  rospy.loginfo("Start Nav")
+  return
+
+def final_cb(status, result):
+  rospy.loginfo("Get result: %d", status)
+  if status == 3:
+    rospy.loginfo('The robot has got the destination!')
+  else:
+    rospy.logwarn('The robot failed to get the goal!')
+  return
+
+def fb_cb(feedback):
+  return
+
+def main():
+  # Init Node
+  rospy.init_node("ultimate_nav_action_client")
+  # Init Action Client
+  client = actionlib.SimpleActionClient('move_base', MoveBaseAction)
+  client.wait_for_server()
+  # Nav
+  while True:
+    for waypoint in waypoints:
+      print(waypoint)
+      # Prepare Goal
+      goal = MoveBaseGoal()
+      goal.target_pose.header.frame_id = 'map'
+      goal.target_pose.header.stamp = rospy.Time.now()
+      goal.target_pose.pose.position.x = waypoint[0]
+      goal.target_pose.pose.position.y = waypoint[1]
+      goal.target_pose.pose.position.z = 0
+
+      goal.target_pose.pose.orientation.x = 0
+      goal.target_pose.pose.orientation.y = 0
+      goal.target_pose.pose.orientation.z = math.sin(waypoint[2]/2)
+      goal.target_pose.pose.orientation.w = math.cos(waypoint[2]/2)
+
+      # Move
+      try:
+        rospy.loginfo("======== Move to waypoints========")
+        excute_move(client, goal)
+      except rospy.ROSInterruptException:
+        print('program interrupted before completion', file=sys.stderr)
+
+      if waypoint in no_stop:
+        continue
+      rospy.sleep(rospy.Duration(1.5))
+    rospy.sleep(rospy.Duration(15))
+
+if __name__ == '__main__':
+  main()

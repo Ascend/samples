@@ -75,7 +75,7 @@ DVPP 中的VENC功能模块，实现将YUV420SP、YVU420SP格式的视频编码�
    2. 设置环境变量。“$HOME/Ascend“表示runtime标准形态安装包的安装路径，请根据实际情况替换。
 
       ```
-      export LD_LIBRARY_PATH=$HOME/Ascend/runtimelib64
+      export LD_LIBRARY_PATH=$HOME/Ascend/runtime/lib64
       ```
 
    3. <a name="li163081446764"></a>运行应用。
@@ -100,7 +100,7 @@ DVPP 中的VENC功能模块，实现将YUV420SP、YVU420SP格式的视频编码�
 
         - ImgStride：输入视频的跨度（用户不设置默认等于宽度，一帧NV12/NV21数据大小为:跨度x高度x3/2）。
 
-        - ChnNum：创建编码通道的数目,范围\[1, 24\]。
+        - ChnNum：创建编码通道的数目,范围\[1, 128\]。
 
         - CodecType：编码协议类型
 
@@ -155,7 +155,7 @@ DVPP 中的VENC功能模块，实现将YUV420SP、YVU420SP格式的视频编码�
 
         - IFrameGop：I帧间隔\[1, 65536‬\]，1为全I帧，默认65536。
 
-        - StartChnlId：多进程测试指定每个进程起始通道号，范围\[0, 47\]，默认为0。
+        - StartChnlId：多进程测试指定每个进程起始通道号，范围\[0, 127\]，默认为0。
 
         - PerfTest：指定功能测试还是性能测试：
 

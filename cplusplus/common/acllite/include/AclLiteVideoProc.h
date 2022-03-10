@@ -25,12 +25,13 @@
 class AclLiteVideoProc {
 public:
     AclLiteVideoProc();
-    ~AclLiteVideoProc();
-
     AclLiteVideoProc(uint32_t cameraId, uint32_t width = 1280, 
                       uint32_t height = 720, uint32_t fps = 15);
     AclLiteVideoProc(const std::string& videoPath, 
                       aclrtContext context = nullptr);
+    AclLiteVideoProc(VencConfig& vencConfig,
+                     aclrtContext context = nullptr);
+    ~AclLiteVideoProc();
 
     bool IsOpened();
     AclLiteError Set(StreamProperty key, uint32_t value);

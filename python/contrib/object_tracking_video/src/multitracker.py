@@ -25,7 +25,7 @@ import cv2
 
 from utils.decode import mot_decode
 from utils.kalman_filter import KalmanFilter
-import utils.matching as matching
+from utils.matching import matching
 from utils.basetrack import BaseTrack, TrackState
 from utils.post_process import ctdet_post_process
 from utils.image import get_affine_transform

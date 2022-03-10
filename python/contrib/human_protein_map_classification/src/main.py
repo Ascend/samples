@@ -17,7 +17,7 @@ sys.path.append(os.path.join(path, "../../../common/"))
 sys.path.append(os.path.join(path, "../../../common/acllite"))
 
 import acl
-import utils
+import acllite_utils as utils
 import constants as constants
 from acllite_model import AclLiteModel
 from acllite_image import AclLiteImage

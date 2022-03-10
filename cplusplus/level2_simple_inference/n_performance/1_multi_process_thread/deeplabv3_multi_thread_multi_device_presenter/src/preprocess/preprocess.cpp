@@ -28,8 +28,10 @@ struct timespec time1 = {0, 0};
 struct timespec time2 = {0, 0};
 
 PreprocessThread::PreprocessThread(string& videoPath, uint32_t modelWidth, 
-                       uint32_t modelHeight, uint32_t postThreadNum, uint32_t inferThreadNum) : 
+                       uint32_t modelHeight, uint32_t postThreadNum, 
+                       uint32_t inferThreadNum, aclrtContext& context) : 
 videoPath_(videoPath),
+context_(context),
 cap_(nullptr),
 modelWidth_(modelWidth),
 modelHeight_(modelHeight),
@@ -50,6 +52,10 @@ frameCnt_(0) {
 }
 
 PreprocessThread::~PreprocessThread() {
+    aclError ret = aclrtSetCurrentContext(context_);
+    if (ret != ACL_SUCCESS) {
+        ACLLITE_LOG_ERROR("PreprocessThread destructor set context failed, error: %d", ret);
+    }
     if (cap_ != nullptr) {
         cap_->Close();
         delete cap_;
@@ -203,19 +209,10 @@ AclLiteError PreprocessThread::MsgProcess(shared_ptr<PreprocDataMsg> &preprocDat
         ACLLITE_LOG_ERROR("Copy image to device failed");
         return ACLLITE_ERROR;
     }
-/*
-    ImageData yuvImage;
-    ret = dvpp_.JpegD(yuvImage, imageDevice);
-    if (ret == ACLLITE_ERROR) {
-        ACLLITE_LOG_ERROR("Convert jpeg to yuv failed");
-        return ACLLITE_ERROR;
-    }
 
-    yuvImage.width = imageDevice.width;
-    yuvImage.height = imageDevice.height;
-*/
     ImageData resizedImage;
-    ret = dvpp_.CropResolution(resizedImage, imageDevice, modelWidth_, modelHeight_);
+    ret = dvpp_.CropPaste(resizedImage, imageDevice, modelWidth_, modelHeight_,
+                          0, 0, imageDevice.width, imageDevice.height);
     if (ret == ACLLITE_ERROR) {
         ACLLITE_LOG_ERROR("dvpp_cropandpaste image failed");
         return ACLLITE_ERROR;
@@ -233,10 +230,6 @@ AclLiteError PreprocessThread::MsgProcess(shared_ptr<PreprocDataMsg> &preprocDat
         return ACLLITE_ERROR;
     }
 
-    //  cv::Mat yuvimg(yuvImage.height * 3 / 2, yuvImage.width, CV_8UC1, yuvImage.data.get());
-    //  cv::Mat rgbimg(yuvImage.height, yuvImage.width, CV_8UC3);
-    //  cvtColor(yuvimg, rgbimg, CV_YUV2BGR_NV12);
-    //  preprocDataMsg->frame = rgbimg;
     cv::Mat yuvimg(yuvImage.height * 3 / 2, yuvImage.width, CV_8UC1, yuvImage.data.get());
     cv::cvtColor(yuvimg, preprocDataMsg->frame, CV_YUV2BGR_NV12);
 

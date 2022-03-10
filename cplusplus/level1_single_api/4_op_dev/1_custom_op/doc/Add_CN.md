@@ -54,7 +54,7 @@ Add算子实现了两个数据相加，返回相加结果的功能，如下所�
 
 -   算子实现
 
-    Add算子仅支持float16, float32, int32三种数据类型，所以需要对算子的输入数据进行校验；由于Add算子允许两个输入数据的shape不同，但算子计算接口**te.lang.cce.vadd**要求两输入shape相同，因此需要对算子两个输入的shape进行广播并对其进行校验，算子实现代码可参见[add.py](../tbe/impl/add.py)。
+    Add算子仅支持float16, float32, int32三种数据类型，所以需要对算子的输入数据进行校验；由于Add算子允许两个输入数据的shape不同，但算子计算接口**te.lang.cce.vadd**要求两输入shape相同，因此需要对算子两个输入的shape进行广播并对其进行校验，算子实现代码可参见[add_tik.py](../tbe/impl/add_tik.py)。
 
 -   算子原型定义
 

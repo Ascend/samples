@@ -36,8 +36,8 @@ JpegEHelper::~JpegEHelper() {
 }
 
 AclLiteError JpegEHelper::InitEncodeInputDesc(ImageData& inputImage) {
-    uint32_t alignWidth = ALIGN_UP16(inputImage.width);
-    uint32_t alignHeight = ALIGN_UP2(inputImage.height);
+    uint32_t alignWidth = inputImage.alignWidth;
+    uint32_t alignHeight = inputImage.alignHeight;
     if (alignWidth == 0 || alignHeight == 0) {
         ACLLITE_LOG_ERROR("Input image width %d or height %d invalid",
                           inputImage.width, inputImage.height);

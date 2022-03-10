@@ -14,7 +14,10 @@
 # limitations under the License.
 # ============================================================================
 set -e
+rm -rf ./data/calibration/*.jpg
+cd data
+unrar x calibration.rar
+cd -
 python3 ./data/process_data.py
 rm -rf ./data/calibration/*.jpg
-rm -rf ./data/calibration/*.txt
 amct_tensorflow calibration --model model/mobilenet_v2_1.0_224_frozen.pb  --outputs "MobilenetV2/Predictions/Reshape_1:0" --input_shape "input:32,224,224,3" --data_type "float32" --data_dir ./data/calibration/ --save_path output

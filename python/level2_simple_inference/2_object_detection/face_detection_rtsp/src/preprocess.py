@@ -9,7 +9,7 @@ import sys
 import acl
 from acllite_imageproc import AclLiteImageProc
 import videocapture as video
-import utils
+import acllite_utils as utils
 import constants as const
 from acllite_logger import log_error, log_info
 

@@ -104,179 +104,45 @@
 ## 环境要求<a name="section3833348101215"></a>
 
 -   操作系统及架构：CentOS 7.6 x86\_64、CentOS aarch64、Ubuntu 18.04 x86\_64、EulerOS x86、EulerOS aarch64
--   编译器：
-    -   Ascend 310 EP/Ascend 710/Ascend 910形态编译器：g++ 或 aarch64-linux-gnu-g++
-
-    -   Atlas 200 DK编译器：aarch64-linux-gnu-g++
-
+-   编译器：g++ 或 aarch64-linux-gnu-g++
 -   芯片：Ascend 310、Ascend 710、Ascend 910
-
 -   python及依赖的库：python3.7.5
--   已在环境上部署昇腾AI软件栈。
-
-## 配置环境变量<a name="section1270920211277"></a>
-
--   **Ascend 310 EP/Ascend 910：**
-    1.  开发环境上，设置模型转换依赖的环境变量。
-
-        $\{install\_path\}表示开发套件包Ascend-cann-toolkit所在的路径。
-
-        ```
-        export PATH=${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
-        export ASCEND_OPP_PATH=${install_path}/opp
-        ```
-
-    2.  开发环境上，设置环境变量，编译脚本src/CMakeLists.txt通过环境变量所设置的头文件、库文件的路径来编译代码。
-
-        如下为设置环境变量的示例，请将$HOME/Ascend/ascend-toolkit/latest/_\{os\_arch\}_替换为开发套件包Ascend-cann-toolkit下对应架构的FwkACLlib的路径。
-
-        -   当运行环境操作系统架构为x86时，执行以下命令：
-
-            ```
-            export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux
-            export NPU_HOST_LIB=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux/fwkacllib/lib64/stub
-            ```
-
-        -   当运行环境操作系统架构为Arm时，执行以下命令：
-
-            ```
-            export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux
-            export NPU_HOST_LIB=$HOME/Ascend/ascend-toolkit/latest/arm64-linux/fwkacllib/lib64/stub
-            ```
-
-
-        使用“$HOME/Ascend/ascend-toolkit/latest/_\{os\_arch\}_/fwkacllib/lib64/stub”目录下的\*.so库，是为了编译基于AscendCL接口的代码逻辑时，不依赖其它组件（例如Driver）的任何\*.so库。编译通过后，在Host上运行应用时，会根据环境变量LD\_LIBRARY\_PATH链接到“fwkacllib/lib64“或“acllib/lib64“目录下的\*.so库，并自动链接到依赖其它组件的\*.so库。
-
-        设置环境变量后，还需修改src/CMakeLists.txt文件中的如下配置段，将“**acllib**”修改为“**fwkacllib**”。
-
-        ```
-        # Header path
-        include_directories(
-            ${INC_PATH}/acllib/include/
-            ../inc/
-        )
-        ```
-
-    3.  运行环境上，设置环境变量，运行应用时需要根据环境变量找到对应的库文件。
-        -   若运行环境上安装的是开发套件包Ascend-cann-toolkit，环境变量设置如下：
-
-            如下为设置环境变量的示例，请将$HOME/Ascend/ascend-toolkit/latest替换为FwkACLlib的路径。
-
-            ```
-            export LD_LIBRARY_PATH=$HOME/Ascend/ascend-toolkit/latest/fwkacllib/lib64
-            ```
-
-        -   若运行环境上安装的是Ascend-cann-nnrt包，环境变量设置如下：
-
-            如下为设置环境变量的示例，请将$HOME/Ascend/nnrt/latest替换为ACLlib的路径。
-
-            ```
-            export LD_LIBRARY_PATH=$HOME/Ascend/nnrt/latest/acllib/lib64
-            ```
+-   已在环境上部署昇腾AI软件栈，并配置对应的的环境变量，请参见[Link](https://www.hiascend.com/document)中对应版本的CANN安装指南。
 
 
 
--   **Ascend 710：**
-    1.  开发环境上，设置模型转换依赖的环境变量。
 
-        $\{install\_path\}表示开发套件包Ascend-cann-toolkit所在的路径。
+## 编译运行<a name="section13133171616172"></a>
 
-        ```
-        export PATH=${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
-        export ASCEND_OPP_PATH=${install_path}/opp
-        ```
+下载sample仓代码后，请先进入“cplusplus/level2_simple_inference/1_classification/vpc_resnet50_imagenet_classification”样例目录，执行以下操作。
 
-    2.  开发环境上，设置环境变量，编译脚本src/CMakeLists.txt通过环境变量所设置的头文件、库文件的路径来编译代码。
-
-        如下为设置环境变量的示例，请将$HOME/Ascend/ascend-toolkit/latest/_\{os\_arch\}_替换为开发套件包Ascend-cann-toolkit下对应架构的ACLlib的路径。
-
-        -   当运行环境操作系统架构为x86时，执行以下命令：
-
-            ```
-            export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux
-            export NPU_HOST_LIB=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux/acllib/lib64/stub
-            ```
-
-        -   当运行环境操作系统架构为Arm时，执行以下命令：
-
-            ```
-            export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux
-            export NPU_HOST_LIB=$HOME/Ascend/ascend-toolkit/latest/arm64-linux/acllib/lib64/stub
-            ```
-
-
-        使用“$HOME/Ascend/ascend-toolkit/latest/_\{os\_arch\}_/acllib/lib64/stub”目录下的\*.so库，是为了编译基于AscendCL接口的代码逻辑时，不依赖其它组件（例如Driver）的任何\*.so库。编译通过后，在Host上运行应用时，会根据环境变量LD\_LIBRARY\_PATH链接到“$HOME/Ascend/nnrt/latest/acllib/lib64”目录下的\*.so库，并自动链接到依赖其它组件的\*.so库。
-
-    3.  运行环境上，设置环境变量，运行应用时需要根据环境变量找到对应的库文件。
-
-        如下为设置环境变量的示例，请将$HOME/Ascend/nnrt/latest替换为ACLlib的路径。
-
-        ```
-        export LD_LIBRARY_PATH=$HOME/Ascend/nnrt/latest/acllib/lib64
-        ```
-
-
--   **Atlas 200 DK：**
-
-    仅需在开发环境上设置环境变量，运行环境上的环境变量在制卡时已配置，此处无需单独配置。
-
-    1.  开发环境上，设置模型转换依赖的环境变量。
-
-        $\{install\_path\}表示开发套件包Ascend-cann-toolkit所在的路径。
-
-        ```
-        export PATH=${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
-        export ASCEND_OPP_PATH=${install_path}/opp
-        ```
-
-    2.  开发环境上，设置环境变量，编译脚本src/CMakeLists.txt通过环境变量所设置的头文件、库文件的路径来编译代码。
-
-        如下为设置环境变量的示例，请将$HOME/Ascend/ascend-toolkit/latest/arm64-linux替换为开发套件包Ascend-cann-toolkit下Arm架构的ACLlib的路径。
-
-        ```
-        export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux
-        export NPU_HOST_LIB=$HOME/Ascend/ascend-toolkit/latest/arm64-linux/acllib/lib64/stub
-        ```
-
-        使用“$HOME/Ascend/ascend-toolkit/latest/arm64-linux/acllib/lib64/stub”目录下的\*.so库，是为了编译基于AscendCL接口的代码逻辑时，不依赖其它组件（例如Driver）的任何\*.so库。编译通过后，在板端环境上运行应用时，会根据环境变量LD\_LIBRARY\_PATH链接到“$HOME/Ascend/acllib/lib64”目录下的\*.so库，并自动链接到依赖其它组件的\*.so库。
-
-
-
-## 编译运行（Ascend 310 EP/Ascend 710/Ascend 910）<a name="section13133171616172"></a>
+以下步骤中，开发环境指编译开发代码的环境，运行环境指运行算子、推理或训练等程序的环境，运行环境上必须带昇腾AI处理器。开发环境和运行环境可以合设在同一台服务器上，也可以分设在不同的服务器上，分设场景下，开发环境下编译出来的可执行文件，在运行环境下执行时，若两者服务器上的操作系统架构不同，则需要在开发环境中执行交叉编译。
 
 1.  模型转换。
     1.  以运行用户登录开发环境。
-    2.  设置环境变量。
 
-        $\{install\_path\}表示开发套件包Ascend-cann-toolkit的安装路径。
-
-        ```
-        export PATH=${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
-        export ASCEND_OPP_PATH=${install_path}/opp
-        ```
-
-    3.  准备数据。
+    2.  准备模型。
 
         您可以从以下链接中获取ResNet-50网络的模型文件（\*.prototxt）、预训练模型文件（\*.caffemodel），并以运行用户将获取的文件上传至开发环境的“样例目录/caffe\_model“目录下。如果目录不存在，需要自行创建。
 
         -   从gitee上获取：单击[Link](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/resnet50/ATC_resnet50_caffe_AE)，查看README.md，查找获取原始模型的链接。
         -   从GitHub上获取：单击[Link](https://github.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/resnet50/ATC_resnet50_caffe_AE)，查看README.md，查找获取原始模型的链接。   
 
-    4.  将ResNet-50网络转换为适配昇腾AI处理器的离线模型（\*.om文件），转换模型时，需配置色域转换参数，用于将YUV420SP格式的图片转换为RGB格式的图片。
+    3.  将ResNet-50网络转换为适配昇腾AI处理器的离线模型（\*.om文件），转换模型时，需配置色域转换参数，用于将YUV420SP格式的图片转换为RGB格式的图片。
 
-        切换到样例目录，执行如下命令：
+        切换到样例目录，执行如下命令(以昇腾310 AI处理器为例)：
 
         ```
-        atc --model=caffe_model/resnet50.prototxt --weight=caffe_model/resnet50.caffemodel --framework=0 --soc_version=${soc_version} --insert_op_conf=caffe_model/aipp.cfg --output=model/resnet50_aipp 
+        atc --model=caffe_model/resnet50.prototxt --weight=caffe_model/resnet50.caffemodel --framework=0 --soc_version=Ascend310 --insert_op_conf=caffe_model/aipp.cfg --output=model/resnet50_aipp 
         ```
 
         -   --model：原始模型文件路径。
         -   --weight：权重文件路径。
         -   --framework：原始框架类型。0：表示Caffe；1：表示MindSpore；3：表示TensorFlow；5：表示ONNX。
         -   --soc\_version：
-            -   Ascend 310芯片，此处配置为Ascend310。
-            -   Ascend 710芯片，此处配置为Ascend710。
-            -   Ascend 910芯片，此处配置为Ascend910A或Ascend910B或Ascend910ProA或Ascend910ProB或Ascend910PremiumA，其中，Pro或Premium表示芯片性能提升等级、A或B表示PartialGood等级，请根据实际情况选择。
+            -   昇腾310 AI处理器，此处配置为Ascend310。
+            -   昇腾710 AI处理器，此处配置为Ascend710。
+            -   昇腾910 AI处理器，此处配置为Ascend910A或Ascend910B或Ascend910ProA或Ascend910ProB或Ascend910PremiumA，其中，Pro或Premium表示芯片性能提升等级、A或B表示PartialGood等级，请根据实际情况选择。
 
         -   --insert\_op\_conf：插入AIPP（AI Preprocessing）算子的配置文件路径，用于在AI Core上完成图像预处理，包括改变图像尺寸、色域转换（转换图像格式）、减均值/乘系数（改变图像像素），数据处理之后再进行真正的模型推理。
         -   --output：生成的resnet50\_aipp.om文件存放在“样例目录/model“目录下。建议使用命令中的默认设置，否则在编译代码前，您还需要修改sample\_process.cpp中的omModelPath参数值。
@@ -288,32 +154,52 @@
 
     5.  将Cast和ArgMaxD两个算子的算子描述信息（\*.json文件）编译成适配昇腾AI处理器的离线模型（\*.om文件），用于运行算子时使用。
 
-        切换到样例目录，执行如下命令：
+        切换到样例目录，执行如下命令(以昇腾310 AI处理器为例)：
 
         ```
-        atc --singleop=out/op_models/op_list.json --soc_version=${soc_version} --output=out/op_models
+        atc --singleop=out/op_models/op_list.json --soc_version=Ascend310 --output=out/op_models
         ```
 
         -   --singleop：单算子定义文件（\*.json文件）。
         -   --soc\_version：
-            -   Ascend 310芯片，此处配置为Ascend310。
-            -   Ascend 710芯片，此处配置为Ascend710。
-            -   Ascend 910芯片，此处配置为Ascend910A或Ascend910B或Ascend910ProA或Ascend910ProB或Ascend910PremiumA，其中，Pro或Premium表示芯片性能提升等级、A或B表示PartialGood等级，请根据实际情况选择。
+            -   昇腾310 AI处理器，此处配置为Ascend310。
+            -   昇腾710 AI处理器，此处配置为Ascend710。
+            -   昇腾910 AI处理器，此处配置为Ascend910A或Ascend910B或Ascend910ProA或Ascend910ProB或Ascend910PremiumA，其中，Pro或Premium表示芯片性能提升等级、A或B表示PartialGood等级，请根据实际情况选择。
 
         -   --output参数：生成的om文件必须放在“out/op\_models“目录下。
 
 
 2.  编译代码。
     1.  以运行用户登录开发环境。
-    2.  切换到样例目录，创建目录用于存放编译文件，例如，本文中，创建的目录为“build/intermediates/host“。
+    2. 设置环境变量，配置程序编译依赖的头文件与库文件路径。
+  
+       编译脚本会按环境变量指向的路径查找编译依赖的头文件和库文件，“$HOME/Ascend”请替换“Ascend-cann-toolkit”包的实际安装路径。
+  
+       -   当运行环境操作系统架构是x86时，配置示例如下所示：
+  
+           ```
+           export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux
+           export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
+           ```
+  
+       -   当运行环境操作系统架构时AArch64时，配置示例如下所示：
+  
+           ```
+           export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux
+           export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
+           ```
+
+    3.  切换到样例目录，创建目录用于存放编译文件，例如，本文中，创建的目录为“build/intermediates/host“。
 
         ```
         mkdir -p build/intermediates/host
         ```
 
-    3.  切换到“build/intermediates/host“目录，执行**cmake**生成编译文件。
+    4.  切换到“build/intermediates/host“目录，执行以下命令生成编译文件。
 
         “../../../src“表示CMakeLists.txt文件所在的目录，请根据实际目录层级修改。
+
+        将DCMAKE\_SKIP\_RPATH设置为TRUE，代表不会将rpath信息（即NPU_HOST_LIB配置的路径）添加到编译生成的可执行文件中去，可执行文件运行时会自动搜索实际设置的LD_LIBRARY_PATH中的动态链接库。
 
         -   当开发环境与运行环境操作系统架构相同时，执行如下命令编译。
 
@@ -329,9 +215,9 @@
             cd build/intermediates/host
             cmake ../../../src -DCMAKE_CXX_COMPILER=aarch64-linux-gnu-g++ -DCMAKE_SKIP_RPATH=TRUE
             ```
+        您可以登录对应的环境，执行“uname -a”命令查询其操作系统的架构。
 
-
-    4.  执行**make**命令，生成的可执行文件main在“样例目录/out“目录下。
+    5.  执行以下命令，生成的可执行文件main在“样例目录/out“目录下。
 
         ```
         make
@@ -380,148 +266,6 @@
         [INFO] singleOp process success
         [INFO] ---> index of classification result is 161
         [INFO] start to process picture:../data/dog2_1024_683.jpg
-        [INFO] Process dvpp success
-        [INFO] model execute success
-        [INFO] execute singleOp Cast success
-        [INFO] execute ArgMaxD success
-        [INFO] singleOp process success
-        [INFO] ---> index of classification result is 267 
-        [INFO] Unload model success, modelId is 1
-        [INFO] execute sample success
-        [INFO] end to destroy stream 
-        [INFO] end to destroy context
-        [INFO] end to reset device is 0
-        ```
-
-
-
-## 编译运行（Atlas 200 DK）<a name="section34427631818"></a>
-
-1.  模型转换。
-    1.  以运行用户登录开发环境。
-    2.  设置环境变量。
-
-        $\{install\_path\}表示开发套件包Ascend-cann-toolkit的安装路径。
-
-        ```
-        export PATH=${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
-        export ASCEND_OPP_PATH=${install_path}/opp
-        ```
-
-    3.  准备数据。
-
-        您可以从以下链接中获取ResNet-50网络的模型文件（\*.prototxt）、预训练模型文件（\*.caffemodel），并以运行用户将获取的文件上传至开发环境的“样例目录/caffe\_model“目录下。如果目录不存在，需要自行创建。
-
-        -   从gitee上获取：单击[Link](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/resnet50/ATC_resnet50_caffe_AE)，查看README.md，查找获取原始模型的链接。
-        -   从GitHub上获取：单击[Link](https://github.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/resnet50/ATC_resnet50_caffe_AE)，查看README.md，查找获取原始模型的链接。 
-
-    4.  将ResNet-50网络转换为适配昇腾AI处理器的离线模型（\*.om文件），转换模型时，需配置色域转换参数，用于将YUV420SP格式的图片转换为RGB格式的图片。
-
-        切换到样例目录，执行如下命令：
-
-        ```
-        atc --model=caffe_model/resnet50.prototxt --weight=caffe_model/resnet50.caffemodel --framework=0 --soc_version=${soc_version} --insert_op_conf=caffe_model/aipp.cfg --output=model/resnet50_aipp 
-        ```
-
-        -   --model：原始模型文件路径。
-        -   --weight：权重文件路径。
-        -   --framework：原始框架类型。0：表示Caffe；1：表示MindSpore；3：表示TensorFlow；5：表示ONNX。
-        -   --soc\_version：
-            -   Ascend 310芯片，此处配置为Ascend310。
-            -   Ascend 710芯片，此处配置为Ascend710。
-            -   Ascend 910芯片，此处配置为Ascend910A或Ascend910B或Ascend910ProA或Ascend910ProB或Ascend910PremiumA，其中，Pro或Premium表示芯片性能提升等级、A或B表示PartialGood等级，请根据实际情况选择。
-
-        -   --insert\_op\_conf：插入AIPP（AI Preprocessing）算子的配置文件路径，用于在AI Core上完成图像预处理，包括改变图像尺寸、色域转换（转换图像格式）、减均值/乘系数（改变图像像素），数据处理之后再进行真正的模型推理。
-        -   --output：生成的resnet50\_aipp.om文件存放在“样例目录/model“目录下。建议使用命令中的默认设置，否则在编译代码前，您还需要修改sample\_process.cpp中的omModelPath参数值。
-
-            ```
-            const char* omModelPath = "../model/resnet50_aipp.om";
-            ```
-
-
-    5.  将Cast和ArgMaxD两个算子的算子描述信息（\*.json文件）编译成适配昇腾AI处理器的离线模型（\*.om文件），用于运行算子时使用。
-
-        切换到样例目录，执行如下命令：
-
-        ```
-        atc --singleop=out/op_models/op_list.json --soc_version=${soc_version} --output=out/op_models
-        ```
-
-        -   --singleop：单算子定义文件（\*.json文件）。
-        -   --soc\_version：
-            -   Ascend 310芯片，此处配置为Ascend310。
-            -   Ascend 710芯片，此处配置为Ascend710。
-            -   Ascend 910芯片，此处配置为Ascend910A或Ascend910B或Ascend910ProA或Ascend910ProB或Ascend910PremiumA，其中，Pro或Premium表示芯片性能提升等级、A或B表示PartialGood等级，请根据实际情况选择。
-
-        -   --output参数：生成的om文件必须放在“out/op\_models“目录下。
-
-
-2.  编译代码。
-    1.  以运行用户登录开发环境。
-    2.  切换到样例目录，创建目录用于存放编译文件，例如，本文中，创建的目录为“build/intermediates/minirc“。
-
-        ```
-        mkdir -p build/intermediates/minirc
-        ```
-
-    3.  切换到“build/intermediates/minirc“目录，执行**cmake**生成编译文件。
-
-        “../../../src“表示CMakeLists.txt文件所在的目录，请根据实际目录层级修改。
-
-        ```
-        cd build/intermediates/minirc
-        cmake ../../../src -DCMAKE_CXX_COMPILER=aarch64-linux-gnu-g++ -DCMAKE_SKIP_RPATH=TRUE
-        ```
-
-    4.  执行**make**命令，生成的可执行文件main在“样例/out“目录下。
-
-        ```
-        make
-        ```
-
-
-3.  准备输入图片。
-
-    请从以下链接获取该样例的输入图片，并以运行用户将获取的文件上传至开发环境的“样例目录/data“目录下。如果目录不存在，需自行创建。
-
-    [https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/dog1\_1024\_683.jpg](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/dog1_1024_683.jpg)
-
-    [https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/dog2\_1024\_683.jpg](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/dog2_1024_683.jpg)
-
-4.  运行应用。
-    1.  以运行用户将开发环境的样例目录及目录下的文件上传到板端环境，例如“$HOME/acl\_dvpp\_resnet50”。
-    2.  以运行用户登录板端环境。
-    3.  切换到可执行文件main所在的目录，例如“$HOME/acl\_dvpp\_resnet50/out”，给该目录下的main文件加执行权限。
-
-        ```
-        chmod +x main
-        ```
-
-    4.  切换到可执行文件main所在的目录，例如“$HOME/acl\_dvpp\_resnet50/out”，运行可执行文件。
-
-        ```
-        ./main
-        ```
-
-        执行成功后，在屏幕上显示最大置信度的类别标识，示例如下。
-
-        ```
-        [INFO] acl init success
-        [INFO] open device 0 success
-        [INFO] create context success
-        [INFO] create stream success
-        [INFO] dvpp init resource success
-        [INFO] load model ./model/resnet50_aipp.om success
-        [INFO] create model description success
-        [INFO] create model output success
-        [INFO] start to process picture:./test_data/data/dog1_1024_683.jpg
-        [INFO] Process dvpp success
-        [INFO] model execute success
-        [INFO] execute singleOp Cast success
-        [INFO] execute ArgMaxD success
-        [INFO] singleOp process success
-        [INFO] ---> index of classification result is 161
-        [INFO] start to process picture:./test_data/data/dog2_1024_683.jpg
         [INFO] Process dvpp success
         [INFO] model execute success
         [INFO] execute singleOp Cast success

@@ -35,7 +35,8 @@ using namespace std;
 class InferenceThread : public AclLiteThread {
 public:
     InferenceThread(const string& modelPath,
-              uint32_t modelWidth, uint32_t modelHeight);
+              uint32_t modelWidth, uint32_t modelHeight, 
+              aclrtContext& context);
     ~InferenceThread();
 
     AclLiteError Init();
@@ -55,5 +56,6 @@ private:
     uint32_t modelHeight_;
     aclrtRunMode runMode_;
     aclrtStream stream_;
+    aclrtContext context_;
 };
 

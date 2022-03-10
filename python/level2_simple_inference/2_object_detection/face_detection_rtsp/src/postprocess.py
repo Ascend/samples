@@ -6,7 +6,7 @@ import numpy as np
 import sys
 
 import acl
-import utils
+import acllite_utils as utils
 import constants as const
 from acllite_logger import log_error, log_info
 from presenteragent import presenter_channel

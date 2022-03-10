@@ -105,7 +105,7 @@ static int32_t save_file_type(hi_pixel_format pixel_format,
     } else if ((pixel_format >= HI_PIXEL_FORMAT_YUV_400) && (pixel_format < HI_PIXEL_FORMAT_BUTT)) {
         ret = snprintf(type_name, type_name_len - 1, "yuv");
     } else {
-        SAMPLE_PRT("pixel_format type err");
+        SAMPLE_PRT("pixel_format type err\n");
         return HI_FAILURE;
     }
 
@@ -481,7 +481,7 @@ void *pngd_send_stream_compatible(void *pArgs)
 
     if (g_run_mode == ACL_HOST) {
         if (aclrtSetCurrentContext(g_context)) {
-            SAMPLE_PRT("set context error");
+            SAMPLE_PRT("set context error\n");
             return (void *)(HI_FAILURE);
         }
     }
@@ -489,7 +489,7 @@ void *pngd_send_stream_compatible(void *pArgs)
     prctl(PR_SET_NAME, "PngSendStreamComp", 0, 0, 0);
 
     if ((currentDir = opendir(g_compatible_dir_name)) == nullptr) {
-        SAMPLE_PRT("[chn:%d] opendir error", pstPngdThreadParam->s32ChnId);
+        SAMPLE_PRT("[chn:%d] opendir error\n", pstPngdThreadParam->s32ChnId);
         return (void *)(HI_FAILURE);
     }
 
@@ -641,11 +641,11 @@ void *pngd_send_stream_compatible(void *pArgs)
 
                 s32Ret = hi_mpi_dvpp_free(inBuffer);
                 if (s32Ret != 0) {
-                    SAMPLE_PRT("hi_mpi_dvpp_free inBuffer failed");
+                    SAMPLE_PRT("hi_mpi_dvpp_free inBuffer failed\n");
                 }
                 s32Ret = hi_mpi_dvpp_free(outBuffer);
                 if (s32Ret != 0) {
-                    SAMPLE_PRT("hi_mpi_dvpp_free outBuffer failed");
+                    SAMPLE_PRT("hi_mpi_dvpp_free outBuffer failed\n");
                 }
             }
 
@@ -697,7 +697,7 @@ void *pngd_send_stream_performance(void *pArgs)
 
     if (g_run_mode == ACL_HOST) {
         if (aclrtSetCurrentContext(g_context)) {
-            SAMPLE_PRT("set context error");
+            SAMPLE_PRT("set context error\n");
             return (void *)(HI_FAILURE);
         }
     }
@@ -886,7 +886,7 @@ void *pngd_send_stream(void *pArgs)
 
     if (g_run_mode == ACL_HOST) {
         if (aclrtSetCurrentContext(g_context)) {
-            SAMPLE_PRT("set context error");
+            SAMPLE_PRT("set context error\n");
             return (void *)(HI_FAILURE);
         }
     }
@@ -1011,11 +1011,11 @@ void *pngd_send_stream(void *pArgs)
                            (uint64_t)(uintptr_t)outBuffer, outBufferSize);
                 s32Ret = hi_mpi_dvpp_free((void*)pu8Buf);
                 if (s32Ret != 0) {
-                    SAMPLE_PRT("[chn:%d] Free stream failed", pstPngdThreadParam->s32ChnId);
+                    SAMPLE_PRT("[chn:%d] Free stream failed\n", pstPngdThreadParam->s32ChnId);
                 }
                 s32Ret = hi_mpi_dvpp_free((void *)outBuffer);
                 if (s32Ret != 0) {
-                    SAMPLE_PRT("[chn:%d] Free outBuffer failed", pstPngdThreadParam->s32ChnId);
+                    SAMPLE_PRT("[chn:%d] Free outBuffer failed\n", pstPngdThreadParam->s32ChnId);
                 }
             }
 
@@ -1178,7 +1178,7 @@ void pngd_show_decode_state()
         }
         SAMPLE_PRT("\033[0;33m -------------------------------------------------------------------------\033[0;39m\n");
         double actualFrameRate = ((double)g_pngd_thread_param[idxChn].u32Decoded * MULTIPLE_S_TO_US) / u64DiffTime;
-        SAMPLE_PRT("\033[0;33m chnId %u, actualFrameRate %.1f, SendCnt %lu, GetCnt %llu DiffTime %lu\033[0;39m\n",
+        SAMPLE_PRT("\033[0;33m chnId %u, actualFrameRate %.1f, SendCnt %u, GetCnt %u DiffTime %lu\033[0;39m\n",
                    idxChn, actualFrameRate, g_pngd_thread_param[idxChn].u32SendSucc,
                    g_pngd_thread_param[idxChn].u32Decoded, u64DiffTime);
         SAMPLE_PRT("\033[0;33m -------------------------------------------------------------------------\033[0;39m\n");
@@ -1209,7 +1209,7 @@ void *pngd_get_pic(void *pArgs)
 
     if (g_run_mode == ACL_HOST) {
         if (aclrtSetCurrentContext(g_context)) {
-            SAMPLE_PRT("set context error");
+            SAMPLE_PRT("set context error\n");
             return (void *)(HI_FAILURE);
         }
     }
@@ -1422,7 +1422,7 @@ int32_t setup_acl_device()
 
     aclRet = aclrtCreateContext(&g_context, 0);
     if (aclRet != ACL_SUCCESS) {
-        SAMPLE_PRT("acl create context failed with %d.", aclRet);
+        SAMPLE_PRT("acl create context failed with %d.\n", aclRet);
         aclrtResetDevice(0);
         aclFinalize();
         return aclRet;

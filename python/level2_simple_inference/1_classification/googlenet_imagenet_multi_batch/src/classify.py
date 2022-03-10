@@ -8,7 +8,7 @@ sys.path.append(os.path.join(path, ".."))
 sys.path.append(os.path.join(path, "../../../../common/"))
 sys.path.append(os.path.join(path, "../../../../common/acllite"))
 
-from utils import check_ret
+from acllite_utils import check_ret
 from constants import ACL_MEM_MALLOC_HUGE_FIRST, ACL_MEMCPY_DEVICE_TO_DEVICE, IMG_EXT
 from acllite_imageproc import AclLiteImageProc
 from acllite_model import AclLiteModel

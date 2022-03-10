@@ -46,6 +46,10 @@
 
 4. 切换到“build/intermediates/host”目录，执行cmake命令生成编译文件。
 
+   “../../../src“表示CMakeLists.txt文件所在的目录，请根据实际目录层级修改。
+
+   DCMAKE_SKIP_RPATH需设置为TRUE，代表不会将rpath信息（即NPU_HOST_LIB配置的路径）添加到编译生成的可执行文件中去，可执行文件运行时会自动搜索实际设置的LD_LIBRARY_PATH中的动态链接库。
+
    - 当开发环境与运行环境操作系统架构相同时，执行如下命令编译。
 
      **cd build/intermediates/host**
@@ -59,12 +63,6 @@
      **cd build/intermediates/host**
 
      **cmake ../../../src -DCMAKE\_CXX\_COMPILER=aarch64-linux-gnu-g++ -DCMAKE\_SKIP\_RPATH=TRUE**
-
-    参数说明如下：
-
-       -   “../../../src”表示CMakeLists.txt文件所在的目录，请根据实际目录层级修改。
-       -   DCMAKE\_CXX\_COMPILER：编译应用程序所用的编译器。
-       -   DCMAKE\_SKIP\_RPATH：**设置为TRUE**，代表不会将rpath信息（即NPU\_HOST\_LIB配置的路径）添加到编译生成的可执行文件中去。可执行文件运行时会自动搜索实际设置的LD\_LIBRARY\_PATH中的动态链接库。
 
 5. 执行如下命令，生成可执行文件。
 
@@ -85,7 +83,7 @@
 2. 设置CANN软件基础环境变量。
 
    ```
-. ${HOME}/Ascend/nnrt/set_env.sh
+    . ${HOME}/Ascend/nnrt/set_env.sh
    ```
    
 3. 在运行环境中执行**execute\_batchnorm\_op**文件。

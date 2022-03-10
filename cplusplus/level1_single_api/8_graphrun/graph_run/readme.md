@@ -47,9 +47,9 @@
 
    1. 执行编译脚本。
 
-   a. 修改Makefile文件的安装包路径。
+       a. 修改Makefile文件的安装包路径。
 
-   b. 分别执行**make clean**和**make graph_run**进行编译。
+       b. 分别执行**make clean**和**make graph_run**进行编译。
 
    2. 编译结束后，在out目录下生成可执行文件graph_run。
 
@@ -57,13 +57,25 @@
 
    1. 在运行环境配置环境变量。
 
-      ```
-      export install_path=/home/HwHiAiUser/Ascend  # fwkacllib组件的安装路径，请根据实际修改
-      export LD_LIBRARY_PATH=${install_path}/fwkacllib/lib64:$LD_LIBRARY_PATH 
-      export PATH=${install_path}/fwkacllib/ccec_compiler/bin:${install_path}/fwkacllib/bin:$PATH 
-      export PYTHONPATH=${install_path}/fwkacllib/python/site-packages:$PYTHONPATH 
-      export ASCEND_OPP_PATH=${install_path}/opp
-      ```
+      - 若运行环境上安装的“Ascend-cann-toolkit”包，环境变量设置如下：
+
+        ```
+        . ${HOME}/Ascend/ascend-toolkit/set_env.sh
+        ```
+
+      - 若运行环境上安装的“Ascend-cann-nnrt”包，环境变量设置如下：
+    
+        ```
+        . ${HOME}/Ascend/nnrt/set_env.sh
+        ```
+
+      - 若运行环境上安装的“Ascend-cann-nnae”包，环境变量设置如下：
+        
+        ```
+        . ${HOME}/Ascend/nnae/set_env.sh
+        ```
+
+        “$HOME/Ascend”请替换相关软件包的实际安装路径。
 
    2. 在运行环境执行可执行文件。
 

@@ -13,7 +13,7 @@ import cv2 as cv
 import numpy as np
 import acl
 import base64
-import utils
+import acllite_utils as utils
 from acllite_imageproc import AclLiteImageProc
 import constants as const
 from acllite_model import AclLiteModel

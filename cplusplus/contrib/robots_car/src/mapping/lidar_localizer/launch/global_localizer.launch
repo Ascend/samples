@@ -1,0 +1,35 @@
+<!-- -->
+<launch>
+    <param name="use_sim_time" value="false"/>
+    <arg name="OPEN_RVIZ" default="false"/>
+
+    <arg name="method_type" default="3"/> <!-- pcl_generic=0, pcl_openmp=3 -->
+    <arg name="thread_num" default="1"/> <!-- max_threads=-1, openmp thread num -->
+    <arg name="search_method" default="2"/><!-- KDTREE=0, DIRECT7=1, DIRECT1=2 -->
+
+    <node pkg="lidar_localizer" type="global_localizer" name="global_localizer_server" output="screen">
+        <param name="method_type" value="$(arg method_type)"/>
+        <param name="search_method" value="$(arg search_method)"/>
+        <remap from="/points_raw" to="/velodyne_points"/>
+
+        <param name="localizer" value="velodyne"/>
+        <param name="tf_x" value="0.0"/>
+        <param name="tf_y" value="0.0"/>
+        <param name="tf_z" value="0.445"/>
+        <param name="tf_roll" value="0.0"/>
+        <param name="tf_pitch" value="0.0"/>
+        <param name="tf_yaw" value="0.0"/>
+
+        <param name="voxel_leaf_size" value="0.2"/>
+
+        <param name="max_iter" value="30"/>
+        <param name="ndt_res" value="1.0"/>
+        <param name="step_size" value="0.1"/>
+        <param name="trans_eps" value="0.01"/>
+        <param name="thread_num" value="$(arg thread_num)"/>
+
+        <param name="min_scan_range" value="0.25"/>
+        <param name="max_scan_range" value="200.0"/>
+    </node>
+
+</launch>

@@ -8,7 +8,7 @@ sys.path.append(os.path.join(path, ".."))
 sys.path.append(os.path.join(path, "../../../../common/"))
 
 import acl
-import utils
+import acllite_utils as utils
 import constants as const
 from acllite_model import AclLiteModel
 from acllite_image import AclLiteImage
@@ -67,20 +67,21 @@ class Cartoonization(object):
 
         output_path = os.path.join("../out", os.path.basename(image_file))
         cv2.imwrite(output_path, cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
-
+global_shape = sys.argv[2]
 currentPath = os.path.join(path, "..")
 OUTPUT_DIR = os.path.join(currentPath, 'out')
-MODEL_PATH = os.path.join(currentPath, "model/AnimeGANv2.om")
-MODEL_WIDTH = 512
-MODEL_HEIGHT = 512
+MODEL_PATH = os.path.join(currentPath, "model/AnimeGANv2_"+ global_shape +".om")
+MODEL_WIDTH = int(global_shape)
+MODEL_HEIGHT = int(global_shape)
 
 def main():
     # check param
-    if (len(sys.argv) != 2):
+    if (len(sys.argv) != 3):
         print("The App arg is invalid")
         exit(1)
     # get all pictures
     image_dir = sys.argv[1]
+    
     images_list = [os.path.join(image_dir, img)
                    for img in os.listdir(image_dir)
                    if os.path.splitext(img)[1] in const.IMG_EXT]

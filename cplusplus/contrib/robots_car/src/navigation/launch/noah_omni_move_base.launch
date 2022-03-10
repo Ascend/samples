@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+
+<launch>
+  <arg name="no_static_map" default="false"/>
+
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+    <rosparam file="$(find navigation)/config/omnidir/costmap_common_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find navigation)/config/omnidir/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find navigation)/config/omnidir/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find navigation)/config/omnidir/global_costmap_params.yaml" command="load"/>
+
+    <rosparam file="$(find navigation)/config/omnidir/teb_local_planner_params.yaml" command="load" />
+    <rosparam file="$(find navigation)/config/omnidir/costmap_converter_params.yaml" command="load" />
+
+    <param name="base_global_planner" value="global_planner/GlobalPlanner" />
+    <param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS" />
+
+
+    <param name="planner_frequency" value="0.0" />
+    <param name="planner_patience" value="5.0" />
+    <param name="controller_frequency" value="20.0" />
+    <param name="controller_patience" value="15.0" />
+  </node>
+</launch>

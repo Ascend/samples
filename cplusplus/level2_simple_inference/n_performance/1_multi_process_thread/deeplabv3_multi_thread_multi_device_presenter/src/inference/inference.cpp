@@ -28,12 +28,20 @@ using namespace std;
 struct timespec time3 = {0, 0};
 struct timespec time4 = {0, 0};
 
-InferenceThread::InferenceThread(const string& modelPath,
-                     uint32_t modelWidth, uint32_t modelHeight) : 
-model_(modelPath), modelWidth_(modelWidth), modelHeight_(modelHeight){
+InferenceThread::InferenceThread(const string& modelPath, uint32_t modelWidth, 
+                                 uint32_t modelHeight, aclrtContext& context) : 
+stream_(nullptr),
+context_(context),
+model_(modelPath), 
+modelWidth_(modelWidth), 
+modelHeight_(modelHeight){
 }
 
 InferenceThread::~InferenceThread() {
+    aclError ret = aclrtSetCurrentContext(context_);
+    if (ret != ACL_SUCCESS) {
+        ACLLITE_LOG_ERROR("InferenceThread destructor set context failed, error: %d", ret);
+    }
     model_.DestroyResource();
 }
 

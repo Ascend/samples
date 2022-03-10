@@ -14,7 +14,11 @@ endif
 
 media_mini_exist = $(shell if [ -f ${INSTALL_DIR}/driver/libmedia_mini.so ]; then echo "exist"; else echo "notexist"; fi;)
 
-ifeq ($(CPU_ARCH), aarch64)
+LOCAL_ARCH = $(shell arch)
+ifeq ($(CPU_ARCH), $(LOCAL_ARCH))
+    CC := g++
+    $(info "target arch is equal to local.")
+else ifeq ($(CPU_ARCH), aarch64)
     CC := aarch64-linux-gnu-g++
 else ifeq ($(CPU_ARCH), x86_64)
     CC := g++

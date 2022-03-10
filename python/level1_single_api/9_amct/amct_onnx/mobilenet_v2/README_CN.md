@@ -47,8 +47,7 @@ Quantized Model Prediction:
 量化成功后，在当前目录会生成量化日志文件 [./amct_log/amct_onnx.log](./amct_log/amct_onnx.log) 和 [outputs](./outputs/) 文件夹，该文件夹内包含以下内容：
 
 + [convert_qat](./outputs/convert_qat/)
-  + [record.txt](./outputs/convert_qat/record.txt): 量化因子记录文件记录量化因子。关于该文件的原型定义请参见
-[量化因子记录文件说明](https://support.huaweicloud.com/content/dam/cloudbu-site/archive/china/zh-cn/support/docs/auxiliarydevtool-cann330alphaXinfer/atlasamcttf_16_0014.html)。
+  + [record.txt](./outputs/convert_qat/record.txt): 量化因子记录文件记录量化因子。
   + [mobilenet_v2_fake_quant_model.onnx](./outputs/convert_qat/mobilenet_v2_fake_quant_model.onnx): 量化仿真模型，即可在 ONNX 环境进行精度仿真的模型。
   + [mobilenet_v2_deploy_model.onnx](./outputs/convert_qat/mobilenet_v2_deploy_model.onnx): 量化部署模型，即可在昇腾 AI 处理器部署的模型。
 

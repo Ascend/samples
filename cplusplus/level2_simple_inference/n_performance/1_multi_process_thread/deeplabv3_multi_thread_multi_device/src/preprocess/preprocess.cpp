@@ -32,9 +32,10 @@ struct timespec time1 = {0, 0};
 struct timespec time2 = {0, 0};
 
 PreprocessThread::PreprocessThread(string& filePath, uint32_t modelWidth, 
-                       uint32_t modelHeight, uint32_t postThreadNum, uint32_t inferThreadNum) : 
+                       uint32_t modelHeight, uint32_t postThreadNum, 
+                       uint32_t inferThreadNum, aclrtContext& context) : 
 filePath_(filePath),
-stream_(nullptr),
+context_(context),
 modelWidth_(modelWidth),
 modelHeight_(modelHeight),
 selfThreadId_(INVALID_INSTANCE_ID),
@@ -53,6 +54,10 @@ frameCnt_(0) {
 }
 
 PreprocessThread::~PreprocessThread() {
+    aclError ret = aclrtSetCurrentContext(context_);
+    if (ret != ACL_SUCCESS) {
+        ACLLITE_LOG_ERROR("PreprocessThread destructor set context failed, error: %d", ret);
+    }
     dvpp_.DestroyResource();
 }
 
@@ -186,7 +191,8 @@ AclLiteError PreprocessThread::MsgProcess(ImageData& imageFrame,
     yuvImage.height = imageDevice.height;
 
     ImageData resizedImage;
-    ret = dvpp_.CropResolution(resizedImage, yuvImage, modelWidth_, modelHeight_);
+    ret = dvpp_.CropPaste(resizedImage, yuvImage, modelWidth_, modelHeight_,
+                          0, 0, yuvImage.width, yuvImage.height);
     if (ret == ACLLITE_ERROR) {
         ACLLITE_LOG_ERROR("dvpp_cropandpaste image failed");
         return ACLLITE_ERROR;

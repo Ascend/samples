@@ -438,7 +438,7 @@ int32_t jpege_save_stream_to_file(hi_venc_chn vencChn, int32_t chnImgCnt, hi_ven
     FILE* pFile = nullptr;
 
     if (g_set_outfile != 0) {
-        snprintf(originalFile, FILE_NAME_LEN, "%d_%d_%s", vencChn, chnImgCnt, g_output_file_name);
+        snprintf(originalFile, FILE_NAME_LEN, "%s_%d_%d", g_output_file_name, vencChn, chnImgCnt);
     } else {
         snprintf(originalFile, FILE_NAME_LEN, "snap_chnl%d_no%d.jpg", vencChn, chnImgCnt);
     }
@@ -530,7 +530,6 @@ void* jpege_sync_enc(void *p)
         videoFrame = tmp;
         ret = read_yuv_file(fpYuv, videoFrame, pixelFormat, &yuvFileReadOff, vencChn, count);
         if (ret != HI_SUCCESS) {
-            SAMPLE_PRT("read yuv file fail, offset %lld \n", yuvFileReadOff);
             jpegeSendPara->threadStart = HI_FALSE;
             fflush(stdout);
             fclose(fpYuv);
@@ -562,6 +561,7 @@ void* jpege_sync_enc(void *p)
             SAMPLE_GET_TIMESTAMP_US(videoFrame->v_frame.pts);
             ret = hi_mpi_venc_send_frame(vencChn, videoFrame, 10000);
             if (ret != HI_SUCCESS) {
+                hi_mpi_dvpp_free((void*)(videoFrame->v_frame.header_virt_addr[0]));
                 SAMPLE_PRT("hi_mpi_venc_send_frame failed, ret:0x%x\n", ret);
                 free(stream.pack);
                 stream.pack = NULL;
@@ -572,6 +572,7 @@ void* jpege_sync_enc(void *p)
             stream.pack_cnt = 1;
             ret = hi_mpi_venc_get_stream(vencChn, &stream, -1);
             if (ret != HI_SUCCESS) {
+                hi_mpi_dvpp_free((void*)(videoFrame->v_frame.header_virt_addr[0]));
                 SAMPLE_PRT("hi_mpi_venc_get_stream failed with %#x!\n", ret);
                 free(stream.pack);
                 stream.pack = NULL;
@@ -590,6 +591,7 @@ void* jpege_sync_enc(void *p)
             // release output buffer
             ret = hi_mpi_venc_release_stream(vencChn, &stream);
             if (ret != HI_SUCCESS) {
+                hi_mpi_dvpp_free((void*)(videoFrame->v_frame.header_virt_addr[0]));
                 SAMPLE_PRT("hi_mpi_venc_release_stream failed with %#x!\n", ret);
                 free(stream.pack);
                 stream.pack = NULL;
@@ -604,6 +606,7 @@ void* jpege_sync_enc(void *p)
                 vencChn, fps, avgTime, g_jpege_send_frame_cnt[vencChn]);
             fflush(stdout);
         }
+        hi_mpi_dvpp_free((void*)(videoFrame->v_frame.header_virt_addr[0]));
         free(stream.pack);
         stream.pack = NULL;
 
@@ -1001,6 +1004,8 @@ void* jpege_snap_send_frame_dc_performace(void* p)
 int32_t jpege_snap_start(hi_venc_chn vencChn, hi_video_size* size, hi_bool supportDc, uint32_t level)
 {
     int32_t ret = HI_SUCCESS;
+    uint32_t align_up_width;
+    uint32_t align_up_height;
     uint32_t bufSize = 0;
     hi_venc_start_param recvParam;
     hi_venc_chn_attr vencChnAttr;
@@ -1012,10 +1017,12 @@ int32_t jpege_snap_start(hi_venc_chn vencChn, hi_video_size* size, hi_bool suppo
     hi_mpi_venc_set_mod_param(&modParam);
 
     // 1: create channel
+    align_up_width = ALIGN_UP(size->width, 16);
+    align_up_height = ALIGN_UP(size->height, 16);
     if (size->width > 4096) {
-        bufSize = ALIGN_UP(size->width * size->height * 4, 64); // 4 buffer blocks for huge input
+        bufSize = ALIGN_UP(align_up_width * align_up_height * 4, 64); // 4 buffer blocks for huge input
     } else {
-        bufSize = ALIGN_UP(size->width * size->height * 5, 64); // 5:number of buffer blocks, 64-aligned
+        bufSize = ALIGN_UP(align_up_width * align_up_height * 5, 64); // 5:number of buffer blocks, 64-aligned
     }
     bufSize = (bufSize < 384000) ? 384000 : bufSize; // 384000 = 320 * 240 * 5
     SAMPLE_PRT("vencChn = %d, bufSize = %u !\n", vencChn, bufSize);

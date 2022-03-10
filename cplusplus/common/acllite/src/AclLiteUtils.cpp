@@ -231,10 +231,8 @@ aclrtMemcpyKind GetCopyPolicy(aclrtRunMode srcDev,
         else
             policy = ACL_MEMCPY_DEVICE_TO_DEVICE;
     } else {//TO_HOST
-        if (srcDev == ACL_HOST) 
-            policy = ACL_MEMCPY_DEVICE_TO_HOST; 
-        else
-            policy = ACL_MEMCPY_DEVICE_TO_DEVICE;       
+        if (srcDev == ACL_DEVICE) 
+            policy = ACL_MEMCPY_DEVICE_TO_HOST;     
     }
 
     return policy;

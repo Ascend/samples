@@ -91,7 +91,7 @@ AclLiteError AclLiteImageProc::Init() {
 }
 
 AclLiteError AclLiteImageProc::Resize(ImageData& dest, ImageData& src,
-                                 uint32_t width, uint32_t height) {
+                                      uint32_t width, uint32_t height) {
     ResizeHelper resizeOp(stream_, dvppChannelDesc_, width, height);
     return resizeOp.Process(dest, src);
 }
@@ -109,19 +109,22 @@ AclLiteError AclLiteImageProc::Crop(ImageData& dest, ImageData& src,
     return crop.Process(dest, src);
 }
 
-AclLiteError AclLiteImageProc::CropResolution(ImageData& dest, ImageData& src,
-                                              uint32_t width, uint32_t height) {
+AclLiteError AclLiteImageProc::CropPaste(ImageData& dest, ImageData& src,
+                                         uint32_t width, uint32_t height,
+                                         uint32_t ltHorz, uint32_t ltVert,
+                                         uint32_t rbHorz, uint32_t rbVert) {
     CropAndPasteHelper crop(stream_, dvppChannelDesc_, 
-                            width, height);
-    return crop.ProcessResolution(dest, src);
+                            width, height, ltHorz, 
+                            ltVert, rbHorz, rbVert);
+    return crop.ProcessCropPaste(dest, src);
 }
 
-AclLiteError AclLiteImageProc::CropUniform(ImageData& dest, ImageData& src,
-                                           uint32_t ltHorz, uint32_t ltVert,
-                                           uint32_t rbHorz, uint32_t rbVert) {
+AclLiteError AclLiteImageProc::ProportionPaste(ImageData& dest, ImageData& src,
+                                               uint32_t ltHorz, uint32_t ltVert,
+                                               uint32_t rbHorz, uint32_t rbVert) {
     CropAndPasteHelper crop(stream_, dvppChannelDesc_, 
                             ltHorz, ltVert, rbHorz, rbVert);
-    return crop.ProcessUniform(dest, src);
+    return crop.ProportionProcess(dest, src);
 }
 
 AclLiteError AclLiteImageProc::JpegE(ImageData& dest, ImageData& src) {

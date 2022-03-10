@@ -10,7 +10,7 @@ sys.path.append(os.path.join(path, "../../../common/acllite"))
 import numpy as np
 import acl
 import base64
-import utils
+import acllite_utils as utils
 from PIL import Image, ImageDraw, ImageFont
 from acllite_imageproc import AclLiteImageProc
 import constants as const

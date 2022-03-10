@@ -16,7 +16,7 @@ sys.path.append(os.path.join(path, "../../../common/"))
 sys.path.append(os.path.join(path, "../../../common/acllite"))
 
 import acl_model
-from utils import display_time  
+from acllite_utils import display_time  
 
 currentPath= os.path.abspath(os.path.dirname(path) + os.path.sep + ".")
 

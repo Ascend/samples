@@ -1,0 +1,7 @@
+<!-- -->
+<launch>
+
+  <arg name="3d_map_file" default="$(find lidar_localizer)/../../../maps/hdl_costa2Z4b.pcd"/>
+  <node pkg = "pcl_ros"  name = "ndt_map_server" type = "pcd_to_pointcloud"
+        args = "$(arg 3d_map_file) 1 /cloud_pcd:=/map_cloud _frame_id:=/map" output="screen" />
+</launch>

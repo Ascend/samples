@@ -14,7 +14,7 @@ from acllite_model import AclLiteModel
 from acllite_image import AclLiteImage
 from acllite_imageproc import AclLiteImageProc
 import constants as const
-import utils
+import acllite_utils as utils
 
 currentPath = os.path.join(path, "..")
 OUTPUT_DIR = os.path.join(currentPath, 'out')

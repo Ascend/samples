@@ -28,8 +28,10 @@ struct timespec time1 = {0, 0};
 struct timespec time2 = {0, 0};
 
 PreprocessThread::PreprocessThread(string& videoPath, uint32_t modelWidth, 
-                       uint32_t modelHeight, uint32_t postThreadNum, uint32_t inferThreadNum) : 
+                                   uint32_t modelHeight, uint32_t postThreadNum, 
+                                   uint32_t inferThreadNum, aclrtContext& context) : 
 videoPath_(videoPath),
+context_(context),
 cap_(nullptr),
 stream_(nullptr),
 modelWidth_(modelWidth),
@@ -51,6 +53,10 @@ frameCnt_(0) {
 }
 
 PreprocessThread::~PreprocessThread() {
+    aclError ret = aclrtSetCurrentContext(context_);
+    if (ret != ACL_SUCCESS) {
+        ACLLITE_LOG_ERROR("PreprocessThread destructor set context failed, error: %d", ret);
+    }
     if (cap_ != nullptr) {
         cap_->Close();
         delete cap_;
@@ -206,7 +212,8 @@ AclLiteError PreprocessThread::MsgProcess(shared_ptr<PreprocDataMsg> &preprocDat
     }
 
     ImageData resizedImage;
-    ret = dvpp_.CropResolution(resizedImage, imageDevice, modelWidth_, modelHeight_);
+    ret = dvpp_.CropPaste(resizedImage, imageDevice, modelWidth_, modelHeight_,
+                          0, 0, imageDevice.width, imageDevice.height);
     if (ret == ACLLITE_ERROR) {
         ACLLITE_LOG_ERROR("dvpp_cropandpaste image failed");
         return ACLLITE_ERROR;

@@ -76,7 +76,7 @@ class PresenterChannel(object):
         """Send image frame request to presenter server"""
         image_data = None
         if isinstance(image, AclLiteImage):
-            image_data = image.nparray()
+            image_data = image.byte_data_to_np_array()
         elif isinstance(image, np.ndarray):
             image_data = image
         else:

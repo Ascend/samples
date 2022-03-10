@@ -14,7 +14,7 @@ Function: record data over the MIC
 
 Before deploying this sample, ensure that:
 
-- The environment has been prepared based on [Preparing Environment and Installing Dependencies](https://github.com/Ascend/samples/tree/dev/cplusplus/environment).
+- The environment has been prepared based on [Preparing Environment and Installing Dependencies](../../../environment).
 
 - The development environment and operating environment of the corresponding product have been installed.
 

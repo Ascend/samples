@@ -40,18 +40,17 @@
 #include <string.h>
 #include "AclLiteUtils.h"
 #include "AclLiteVideoProc.h"
-
+#include "VideoCapture.h"
+#include "VideoWriter.h"
 #ifdef ENABLE_BOARD_CAMARE
 #include "CameraCapture.h"
 #endif
-
-#include "VideoCapture.h"
 
 using namespace std;
 
 AclLiteVideoProc::AclLiteVideoProc():cap_(nullptr) {
 #ifdef ENABLE_BOARD_CAMARE
-    cap_ = new CameraCapture(1280, 720, 20);
+    cap_ = new CameraCapture(1280, 720, 15);
     Open();
 #endif
 }
@@ -65,17 +64,22 @@ AclLiteVideoProc::AclLiteVideoProc(uint32_t cameraId, uint32_t width,
 #endif
 }
 
+AclLiteVideoProc::AclLiteVideoProc(const string& videoPath, aclrtContext context){
+    cap_ = new VideoCapture(videoPath, context);
+    Open();
+}
+
+AclLiteVideoProc::AclLiteVideoProc(VencConfig& vencConfig, aclrtContext context){
+    cap_ = new VideoWriter(vencConfig, context);
+    Open();
+}
+
 AclLiteVideoProc::~AclLiteVideoProc() {
     if (cap_ != nullptr) {
         Close();
         delete cap_;
         cap_ = nullptr;
     }    
-}
-
-AclLiteVideoProc::AclLiteVideoProc(const string& videoPath, aclrtContext context){
-    cap_ = new VideoCapture(videoPath, context);
-    Open();
 }
 
 bool AclLiteVideoProc::IsOpened() {

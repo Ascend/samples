@@ -25,9 +25,9 @@
 using namespace std;
 
 CropAndPasteHelper::CropAndPasteHelper(aclrtStream& stream, 
-                                   acldvppChannelDesc *dvppChannelDesc,
-                                   uint32_t ltHorz, uint32_t ltVert,
-                                   uint32_t rbHorz, uint32_t rbVert): 
+                                       acldvppChannelDesc *dvppChannelDesc,
+                                       uint32_t ltHorz, uint32_t ltVert,
+                                       uint32_t rbHorz, uint32_t rbVert): 
   stream_(stream),
   vpcOutBufferDev_(nullptr),
   cropArea_(nullptr),
@@ -39,8 +39,7 @@ CropAndPasteHelper::CropAndPasteHelper(aclrtStream& stream,
     // Change the left top coordinate to even numver
     ltHorz_ = (ltHorz >> 1) << 1;
     ltVert_ = (ltVert >> 1) << 1;
-
-    // Change the left top coordinate to odd numver
+    // Change the right bottom coordinate to odd numver
     rbHorz_ = ((rbHorz >> 1) << 1) - 1;
     rbVert_ = ((rbVert >> 1) << 1) - 1;
     //odd
@@ -50,7 +49,9 @@ CropAndPasteHelper::CropAndPasteHelper(aclrtStream& stream,
 
 CropAndPasteHelper::CropAndPasteHelper(aclrtStream& stream, 
                                        acldvppChannelDesc *dvppChannelDesc,
-                                       uint32_t width, uint32_t height): 
+                                       uint32_t width, uint32_t height,
+                                       uint32_t ltHorz, uint32_t ltVert,
+                                       uint32_t rbHorz, uint32_t rbVert): 
   stream_(stream),
   vpcOutBufferDev_(nullptr),
   cropArea_(nullptr),
@@ -59,6 +60,12 @@ CropAndPasteHelper::CropAndPasteHelper(aclrtStream& stream,
   vpcOutputDesc_(nullptr),
   dvppChannelDesc_(dvppChannelDesc),
   vpcOutBufferSize_(0) {
+    // Change the left top coordinate to even numver
+    ltHorz_ = (ltHorz >> 1) << 1;
+    ltVert_ = (ltVert >> 1) << 1;
+    // Change the right bottom coordinate to odd numver
+    rbHorz_ = ((rbHorz >> 1) << 1) - 1;
+    rbVert_ = ((rbVert >> 1) << 1) - 1;
     size_.width = width;
     size_.height = height;
 }
@@ -70,8 +77,8 @@ CropAndPasteHelper::~CropAndPasteHelper() {
 AclLiteError CropAndPasteHelper::InitCropAndPasteInputDesc(ImageData& inputImage) {
     originalImageWidth_ = inputImage.width;
     originalImageHeight_ = inputImage.height;
-    uint32_t alignWidth = ALIGN_UP16(inputImage.width);
-    uint32_t alignHeight = ALIGN_UP2(inputImage.height);
+    uint32_t alignWidth = inputImage.alignWidth;
+    uint32_t alignHeight = inputImage.alignHeight;
     if (alignWidth == 0 || alignHeight == 0) {
         ACLLITE_LOG_ERROR("Invalid image parameters, width %d, height %d",
                           inputImage.width, inputImage.height);
@@ -80,35 +87,6 @@ AclLiteError CropAndPasteHelper::InitCropAndPasteInputDesc(ImageData& inputImage
 
     uint32_t inputBufferSize = YUV420SP_SIZE(alignWidth, alignHeight);
 
-    vpcInputDesc_ = acldvppCreatePicDesc();
-    if (vpcInputDesc_ == nullptr) {
-        ACLLITE_LOG_ERROR("Dvpp crop create pic desc failed");
-        return ACLLITE_ERROR;
-    }
-
-    acldvppSetPicDescData(vpcInputDesc_, inputImage.data.get());
-    acldvppSetPicDescFormat(vpcInputDesc_, PIXEL_FORMAT_YUV_SEMIPLANAR_420);
-    acldvppSetPicDescWidth(vpcInputDesc_, inputImage.width);
-    acldvppSetPicDescHeight(vpcInputDesc_, inputImage.height);
-    acldvppSetPicDescWidthStride(vpcInputDesc_, alignWidth);
-    acldvppSetPicDescHeightStride(vpcInputDesc_, alignHeight);
-    acldvppSetPicDescSize(vpcInputDesc_, inputBufferSize);
-
-    return ACLLITE_OK;
-}
-
-AclLiteError CropAndPasteHelper::InitCropAndPasteInputDescResolution(ImageData& inputImage) {
-    originalImageWidth_ = inputImage.width;
-    originalImageHeight_ = inputImage.height;
-    uint32_t alignWidth = ALIGN_UP128(inputImage.width);
-    uint32_t alignHeight = ALIGN_UP16(inputImage.height);
-    if (alignWidth == 0 || alignHeight == 0) {
-        ACLLITE_LOG_ERROR("Invalid image parameters, width %d, height %d",
-                        inputImage.width, inputImage.height);
-        return ACLLITE_ERROR;
-    }
-
-    uint32_t inputBufferSize = YUV420SP_SIZE(alignWidth, alignHeight);
     vpcInputDesc_ = acldvppCreatePicDesc();
     if (vpcInputDesc_ == nullptr) {
         ACLLITE_LOG_ERROR("Dvpp crop create pic desc failed");
@@ -180,20 +158,6 @@ AclLiteError CropAndPasteHelper::InitCropAndPasteResource(ImageData& inputImage)
     return ACLLITE_OK;
 }
 
-AclLiteError CropAndPasteHelper::InitCropAndPasteResourceResolution(ImageData& inputImage) {
-    if (ACLLITE_OK != InitCropAndPasteInputDescResolution(inputImage)) {
-        ACLLITE_LOG_ERROR("Dvpp crop init input failed");
-        return ACLLITE_ERROR;
-    }
-
-    if (ACLLITE_OK != InitCropAndPasteOutputDesc()) {
-        ACLLITE_LOG_ERROR("Dvpp crop init output failed");
-        return ACLLITE_ERROR;
-    }
-
-    return ACLLITE_OK;
-}
-
 AclLiteError CropAndPasteHelper::Process(ImageData& cropedImage, ImageData& srcImage) {
     if (ACLLITE_OK != InitCropAndPasteResource(srcImage)) {
         ACLLITE_LOG_ERROR("Dvpp cropandpaste failed for init error");
@@ -210,7 +174,7 @@ AclLiteError CropAndPasteHelper::Process(ImageData& cropedImage, ImageData& srcI
     uint32_t cropBottomOffset = rbVert_;
     
     cropArea_ = acldvppCreateRoiConfig(cropLeftOffset, cropRightOffset,
-    cropTopOffset, cropBottomOffset);
+                                       cropTopOffset, cropBottomOffset);
     if (cropArea_ == nullptr) {
         ACLLITE_LOG_ERROR("acldvppCreateRoiConfig cropArea_ failed");
         return ACLLITE_ERROR;
@@ -226,7 +190,7 @@ AclLiteError CropAndPasteHelper::Process(ImageData& cropedImage, ImageData& srcI
     uint32_t pasteBottomOffset = size_.height;
 
     pasteArea_ = acldvppCreateRoiConfig(pasteLeftOffset, pasteRightOffset,
-    pasteTopOffset, pasteBottomOffset);
+                                        pasteTopOffset, pasteBottomOffset);
     if (pasteArea_ == nullptr) {
         ACLLITE_LOG_ERROR("acldvppCreateRoiConfig pasteArea_ failed");
         return ACLLITE_ERROR;
@@ -234,7 +198,8 @@ AclLiteError CropAndPasteHelper::Process(ImageData& cropedImage, ImageData& srcI
 
     // crop and patse pic
     aclError aclRet = acldvppVpcCropAndPasteAsync(dvppChannelDesc_, vpcInputDesc_,
-    vpcOutputDesc_, cropArea_, pasteArea_, stream_);
+                                                  vpcOutputDesc_, cropArea_, 
+                                                  pasteArea_, stream_);
     if (aclRet != ACL_SUCCESS) {
         ACLLITE_LOG_ERROR("acldvppVpcCropAndPasteAsync failed, aclRet = %d", aclRet);
         return ACLLITE_ERROR;
@@ -246,10 +211,10 @@ AclLiteError CropAndPasteHelper::Process(ImageData& cropedImage, ImageData& srcI
         return ACLLITE_ERROR;
     }
     cropedImage.format = PIXEL_FORMAT_YUV_SEMIPLANAR_420;
-    cropedImage.width = ALIGN_UP16(size_.width);
-    cropedImage.height = ALIGN_UP2(size_.height);
-    cropedImage.alignWidth = cropedImage.width;
-    cropedImage.alignHeight = cropedImage.height;
+    cropedImage.width = size_.width;
+    cropedImage.height = size_.height;
+    cropedImage.alignWidth = ALIGN_UP16(size_.width);
+    cropedImage.alignHeight = ALIGN_UP2(size_.height);
     cropedImage.size = vpcOutBufferSize_;
     cropedImage.data = SHARED_PTR_DVPP_BUF(vpcOutBufferDev_);
 
@@ -258,24 +223,24 @@ AclLiteError CropAndPasteHelper::Process(ImageData& cropedImage, ImageData& srcI
     return ACLLITE_OK;
 }
 
-AclLiteError CropAndPasteHelper::ProcessResolution(ImageData& cropedImage, ImageData& srcImage)
+AclLiteError CropAndPasteHelper::ProcessCropPaste(ImageData& cropedImage, ImageData& srcImage)
 {
-    if (ACLLITE_OK != InitCropAndPasteResourceResolution(srcImage)) {
+    if (ACLLITE_OK != InitCropAndPasteResource(srcImage)) {
         ACLLITE_LOG_ERROR("Dvpp cropandpaste failed for init error");
         return ACLLITE_ERROR;
     }
 
     // must even
-    uint32_t cropLeftOffset = 0;
+    uint32_t cropLeftOffset = ltHorz_;
     // must even
-    uint32_t cropTopOffset = 0;
+    uint32_t cropTopOffset = ltVert_;
     // must odd
-    uint32_t cropRightOffset = (((cropLeftOffset + originalImageWidth_) >> 1) << 1) -1;
+    uint32_t cropRightOffset = rbHorz_;
     // must odd
-    uint32_t cropBottomOffset = (((cropTopOffset + originalImageHeight_) >> 1) << 1) -1;
+    uint32_t cropBottomOffset = rbVert_;
 
     cropArea_ = acldvppCreateRoiConfig(cropLeftOffset, cropRightOffset,
-    cropTopOffset, cropBottomOffset);
+                                       cropTopOffset, cropBottomOffset);
     if (cropArea_ == nullptr) {
         ACLLITE_LOG_ERROR("acldvppCreateRoiConfig cropArea_ failed");
         return ACLLITE_ERROR;
@@ -291,7 +256,7 @@ AclLiteError CropAndPasteHelper::ProcessResolution(ImageData& cropedImage, Image
     uint32_t pasteBottomOffset = (((pasteTopOffset + size_.height) >> 1) << 1) -1;
 
     pasteArea_ = acldvppCreateRoiConfig(pasteLeftOffset, pasteRightOffset,
-    pasteTopOffset, pasteBottomOffset);
+                                        pasteTopOffset, pasteBottomOffset);
     if (pasteArea_ == nullptr) {
         ACLLITE_LOG_ERROR("acldvppCreateRoiConfig pasteArea_ failed");
         return ACLLITE_ERROR;
@@ -299,7 +264,8 @@ AclLiteError CropAndPasteHelper::ProcessResolution(ImageData& cropedImage, Image
 
     // crop and patse pic
     aclError aclRet = acldvppVpcCropAndPasteAsync(dvppChannelDesc_, vpcInputDesc_,
-    vpcOutputDesc_, cropArea_, pasteArea_, stream_);
+                                                  vpcOutputDesc_, cropArea_, 
+                                                  pasteArea_, stream_);
     if (aclRet != ACL_SUCCESS) {
         ACLLITE_LOG_ERROR("acldvppVpcCropAndPasteAsync failed, aclRet = %d", aclRet);
         return ACLLITE_ERROR;
@@ -311,8 +277,8 @@ AclLiteError CropAndPasteHelper::ProcessResolution(ImageData& cropedImage, Image
         return ACLLITE_ERROR;
     }
     cropedImage.format = PIXEL_FORMAT_YUV_SEMIPLANAR_420;
-    cropedImage.width = ALIGN_UP16(size_.width);
-    cropedImage.height = ALIGN_UP2(size_.height);
+    cropedImage.width = size_.width;
+    cropedImage.height = size_.height;
     cropedImage.alignWidth = ALIGN_UP16(size_.width);
     cropedImage.alignHeight = ALIGN_UP2(size_.height);
     cropedImage.size = vpcOutBufferSize_;
@@ -323,7 +289,7 @@ AclLiteError CropAndPasteHelper::ProcessResolution(ImageData& cropedImage, Image
     return ACLLITE_OK;
 }
 
-AclLiteError CropAndPasteHelper::ProcessUniform(ImageData& resizedImage, ImageData& srcImage) {
+AclLiteError CropAndPasteHelper::ProportionProcess(ImageData& resizedImage, ImageData& srcImage) {
     if (ACLLITE_OK != InitCropAndPasteResource(srcImage)) {
         ACLLITE_LOG_ERROR("Dvpp cropandpaste failed for init error");
         return ACLLITE_ERROR;
@@ -338,8 +304,8 @@ AclLiteError CropAndPasteHelper::ProcessUniform(ImageData& resizedImage, ImageDa
     // must odd
     uint32_t cropBottomOffset = (((cropTopOffset + originalImageHeight_) >> 1) << 1) -1;
     //data created to describe area location
-    cropArea_ = acldvppCreateRoiConfig(cropLeftOffset, cropRightOffset, cropTopOffset, cropBottomOffset);
-
+    cropArea_ = acldvppCreateRoiConfig(cropLeftOffset, cropRightOffset, 
+                                       cropTopOffset, cropBottomOffset);
     if (cropArea_ == nullptr) {
         ACLLITE_LOG_ERROR("acldvppCreateRoiConfig cropArea_ failed");
         return ACLLITE_ERROR;
@@ -366,7 +332,6 @@ AclLiteError CropAndPasteHelper::ProcessUniform(ImageData& resizedImage, ImageDa
     // must even
     uint32_t pasteLeftOffset = 0;
     // must even
-    //uint32_t pasteTopOffset = CHECK_EVEN(dy);
     uint32_t pasteTopOffset = 0;
     // must odd
     uint32_t pasteRightOffset = size_.width - 2 * dx;
@@ -374,7 +339,7 @@ AclLiteError CropAndPasteHelper::ProcessUniform(ImageData& resizedImage, ImageDa
     uint32_t pasteBottomOffset = size_.height -  2 * dy;
 
     pasteArea_ = acldvppCreateRoiConfig(pasteLeftOffset, pasteRightOffset,
-    pasteTopOffset, pasteBottomOffset);
+                                        pasteTopOffset, pasteBottomOffset);
     if (pasteArea_ == nullptr) {
         ACLLITE_LOG_ERROR("acldvppCreateRoiConfig pasteArea_ failed");
         return ACLLITE_ERROR;
@@ -382,7 +347,8 @@ AclLiteError CropAndPasteHelper::ProcessUniform(ImageData& resizedImage, ImageDa
 
     // crop and patse pic
     aclError aclRet = acldvppVpcCropAndPasteAsync(dvppChannelDesc_, vpcInputDesc_,
-    vpcOutputDesc_, cropArea_, pasteArea_, stream_);
+                                                  vpcOutputDesc_, cropArea_, 
+                                                  pasteArea_, stream_);
     if (aclRet != ACL_SUCCESS) {
         ACLLITE_LOG_ERROR("acldvppVpcCropAndPasteAsync failed, aclRet = %d", aclRet);
         return ACLLITE_ERROR;

@@ -458,11 +458,6 @@ void AclLiteModel::Unload()
         ACLLITE_LOG_ERROR("Unload model(%s) error:%d", modelPath_.c_str(), ret);
     }
 
-    if (modelDesc_ != nullptr) {
-        (void)aclmdlDestroyDesc(modelDesc_);
-        modelDesc_ = nullptr;
-    }
-
     if (modelMemPtr_ != nullptr) {
         aclrtFree(modelMemPtr_);
         modelMemPtr_ = nullptr;

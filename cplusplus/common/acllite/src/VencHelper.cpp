@@ -24,11 +24,15 @@ namespace {
     bool g_RunFlag = true;
 }
 
-VencHelper::VencHelper(VencConfig& vencInfo):
-vencInfo_(vencInfo),
-status_(STATUS_VENC_INIT),
-vencProc_(nullptr),
-frameImageQueue_(kVencQueueSize){    
+VencHelper::VencHelper(VencConfig &vencInfo):
+  vencInfo_(vencInfo),
+  status_(STATUS_VENC_INIT),
+  vencProc_(nullptr),
+  frameImageQueue_(kVencQueueSize) {  
+}
+
+VencHelper::~VencHelper() {
+    DestroyResource();
 }
 
 AclLiteError VencHelper::Init() {
@@ -46,11 +50,9 @@ AclLiteError VencHelper::Init() {
     
     thread asyncVencTh = thread(VencHelper::AsyncVencThreadEntry, (void*)this);
     asyncVencTh.detach();
-
     while(status_ == STATUS_VENC_INIT) {
         usleep(kAsyncWait);
     }
-
     return (status_ == STATUS_VENC_WORK)? ACLLITE_OK : ACLLITE_ERROR_VENC_STATUS;
 }
 
@@ -90,7 +92,6 @@ AclLiteError VencHelper::Process(ImageData& image) {
         ACLLITE_LOG_ERROR("The venc(status %d) is not working", status_);
         return ACLLITE_ERROR_VENC_STATUS;
     }
-
     shared_ptr<ImageData> imagePtr = make_shared<ImageData>();    
     imagePtr->format = image.format;
     imagePtr->width = image.width;
@@ -116,11 +117,19 @@ shared_ptr<ImageData> VencHelper::GetEncodeImage() {
     return image;
 }
 
+void VencHelper::DestroyResource() {
+    vencProc_->Finish();
+}
+
 DvppVenc::DvppVenc(VencConfig& vencInfo):
-vencInfo_(vencInfo), threadId_(0),
-vencChannelDesc_(nullptr), vencFrameConfig_(nullptr),
-inputPicDesc_(nullptr), vencStream_(nullptr), 
-outFp_(nullptr), isFinished_(false){
+  vencInfo_(vencInfo), 
+  threadId_(0),
+  vencChannelDesc_(nullptr), 
+  vencFrameConfig_(nullptr),
+  inputPicDesc_(nullptr), 
+  vencStream_(nullptr), 
+  outFp_(nullptr), 
+  isFinished_(false){
 }
 
 DvppVenc::~DvppVenc(){
@@ -134,7 +143,6 @@ void DvppVenc::Callback(acldvppPicDesc *input,
     if (retCode == 0) {
         //encode success, then process output pic
         uint32_t size = acldvppGetStreamDescSize(output);
-
         DvppVenc* venc = (DvppVenc*)userData;  
         AclLiteError ret = venc->SaveVencFile(data, size);     
         if (ret != ACLLITE_OK) {
@@ -151,7 +159,6 @@ void DvppVenc::Callback(acldvppPicDesc *input,
 
 AclLiteError DvppVenc::SaveVencFile(void* vencData, uint32_t size) {   
     AclLiteError atlRet = ACLLITE_OK;
-
     void* data = vencData;
     if (vencInfo_.runMode == ACL_HOST) {
         data = CopyDataToHost(vencData, size, vencInfo_.runMode, MEMORY_NORMAL);
@@ -175,7 +182,7 @@ AclLiteError DvppVenc::SaveVencFile(void* vencData, uint32_t size) {
 }
 
 AclLiteError DvppVenc::Init() {
-       // create process callback thread
+    // create process callback thread
     int ret = pthread_create(&threadId_, nullptr, 
                              &DvppVenc::SubscribleThreadFunc, nullptr);                             
     if (ret != 0) {
@@ -186,7 +193,7 @@ AclLiteError DvppVenc::Init() {
     outFp_ = fopen(vencInfo_.outFile.c_str(), "wb+");
     if (outFp_ == nullptr) {
         ACLLITE_LOG_ERROR("Open file %s failed, error %s", 
-                        vencInfo_.outFile.c_str(), strerror(errno));
+                          vencInfo_.outFile.c_str(), strerror(errno));
         return ACLLITE_ERROR_OPEN_FILE;
     } 
 

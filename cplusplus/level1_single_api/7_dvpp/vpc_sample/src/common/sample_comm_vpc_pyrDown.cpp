@@ -1,5 +1,5 @@
 /**
- *  Copyright [2021] Huawei Technologies Co., Ltd
+ *  Copyright [2022] Huawei Technologies Co., Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,9 @@
  * limitations under the License. 
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 #include <sys/types.h>
 #include <string>
 #include "sample_comm.h"
@@ -40,15 +40,12 @@ int32_t sample_comm_vpc_pyrdown(FuncInput funcInput)
     uint32_t width = funcInput.g_vpc_attribute.width;
     uint32_t height = funcInput.g_vpc_attribute.height;
     uint32_t format = funcInput.g_vpc_attribute.format;
-    uint32_t outWidth = funcInput.g_vpc_attribute.outWidth;
-    uint32_t outHeight = funcInput.g_vpc_attribute.outHeight;
-    uint32_t outFormat = funcInput.g_vpc_attribute.outFormat;
     hi_vpc_bord_type pyramidPaddingMode = static_cast<hi_vpc_bord_type>(funcInput.g_vpc_attribute.pyramidPaddingMode);
     double pyramidPaddingValue = funcInput.g_vpc_attribute.pyramidPaddingValue;
     hi_vpc_chn chnId = funcInput.chnId;
 
     // the pyramid down sampling interface can generate up to 4 pictures
-    uint32_t filterLevel = 4;
+    uint32_t filterLevel = funcInput.g_vpc_attribute.filterLevel;
     // configure how you fill the border of the down sampling pictures
     hi_vpc_make_border_info makeBorderInfo;
     makeBorderInfo.border_type = static_cast<hi_vpc_bord_type>(pyramidPaddingMode);
@@ -76,7 +73,7 @@ int32_t sample_comm_vpc_pyrdown(FuncInput funcInput)
                                 6, 24, 36, 24, 6,
                                 4, 16, 24, 16, 4,
                                 1, 4,  6,  4,  1};
-    uint16_t divisor = 256; // 256 is the divisor after convolution
+    uint16_t divisor = funcInput.g_vpc_attribute.divisor; // divisor after convolution
     uint32_t dstBufferSize[4];
 
     // configure input picture

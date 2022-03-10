@@ -16,7 +16,7 @@ sys.path.append(os.path.join(path, "../../../../common/acllite"))
 
 from acllite_resource import AclLiteResource
 from acllite_model import AclLiteModel
-from utils import display_time
+from acllite_utils import display_time
 
 model_path = '../model/bert_text_classification.om'
 dict_path = '../scripts/vocab.txt'

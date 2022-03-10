@@ -5,7 +5,7 @@ ONNX ResNet-101 分类网络模型量化
 ### 1.1 量化前提
 
 + **模型准备**  
-请下载 [ResNet-101](https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/resnet-101_nuq/resnet101-5d3b4d8f.pth) 模型文件到 [model](./model/) 目录。
+请下载 [ResNet-101](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/amct_acl/resnet101_v11.onnx) 模型文件到 [model](./model/) 目录。
 
 + **数据集准备**  
 使用昇腾模型压缩工具对模型完成量化后，需要对模型进行推理，以测试量化数据的精度。推理过程中需要使用和模型相匹配的数据集。请下载[测试图片](https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/resnet-101_nuq/images.zip)，解压后将 “images” 文件夹放到 [data](./data/) 目录下。
@@ -20,7 +20,7 @@ ONNX ResNet-101 分类网络模型量化
 + [data](./data/)
   + [images](./data/images/)
 + [model](./model/)
-  + [resnet101-5d3b4d8f.pth](./model/resnet101-5d3b4d8f.pth)
+  + [resnet101_v11.onnx](./model/resnet101_v11.onnx)
 
 请在当前目录执行如下命令运行示例程序：
 ```none
@@ -30,7 +30,7 @@ bash ./scripts/run_calibration.sh
 
 ### 3.1 量化结果
 
-量化成功后，在当前目录会生成量化日志文件 [./amct_log/amct_onnx.log](./amct_log/amct_onnx.log) 包含以下内容：
+量化成功后，在当前目录会生成量化日志文件 [./amct_log/amct_onnx.log](./amct_log/amct_onnx.log) ，在当前目录下生成以下内容：
 
 + [date](./date/): 临时文件夹，date是随机数加下划线加当前日期组成，如29978_20210930135210
   + [config.json](./date/config.json): 量化配置文件描述了如何对模型中的每一层进行量化。
@@ -38,7 +38,7 @@ bash ./scripts/run_calibration.sh
   + [modified_model.onnx](./date/modified_model.onnx): 临时模型文件，即原始模型 BN 融合后导出的 ONNX 模型文件。
 + [output_deploy_model.onnx](./output_deploy_model.onnx): 量化部署模型，即量化后的可在昇腾 AI 处理器部署的模型文件。
 + [output_fake_quant_model.onnx](./output_fake_quant_model.onnx): 量化仿真模型，即量化后的可在 ONNX 执行框架 ONNX Runtime 进行精度仿真的模型文件。
-+ [resnet-101_quant.json](./outputs/calibration/resnet-101_quant.json)：融合信息文件。
++ [output_quant.json](./outputs/calibration/resnet-101_quant.json)：融合信息文件。
 
 # MobileNet V2
 
@@ -69,11 +69,7 @@ bash ./scripts/run_convert_qat.sh
 
 ### 1.2 量化结果
 
-量化成功后，在当前目录会生成量化日志文件 [./amct_log/amct_onnx.log](./amct_log/amct_onnx.log) 和 [outputs](./outputs/) 文件夹，该文件夹内包含以下内容：
-
-+ [convert_qat](./outputs/convert_qat/)
-  + [record.txt](./outputs/convert_qat/record.txt): 量化因子记录文件记录量化因子。关于该文件的原型定义请参见
-[量化因子记录文件说明](https://support.huaweicloud.com/content/dam/cloudbu-site/archive/china/zh-cn/support/docs/auxiliarydevtool-cann330alphaXinfer/atlasamcttf_16_0014.html)。
-  + [mobilenet_v2_fake_quant_model.onnx](./outputs/convert_qat/mobilenet_v2_fake_quant_model.onnx): 量化仿真模型，即可在 ONNX 环境进行精度仿真的模型。
-  + [mobilenet_v2_deploy_model.onnx](./outputs/convert_qat/mobilenet_v2_deploy_model.onnx): 量化部署模型，即可在昇腾 AI 处理器部署的模型。
+量化成功后，在当前目录会生成量化日志文件 [./amct_log/amct_onnx.log](./amct_log/amct_onnx.log) 和 [output](./output/) 文件夹，该文件夹内包含以下内容：
+  + [result_fake_quant_model.onnx](./output/result_fake_quant_model.onnx): 量化仿真模型，即可在 ONNX 环境进行精度仿真的模型。
+  + [result_deploy_model.onnx](./output/result_deploy_model.onnx): 量化部署模型，即可在昇腾 AI 处理器部署的模型。
 

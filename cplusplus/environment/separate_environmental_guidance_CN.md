@@ -13,8 +13,8 @@
   export CPU_ARCH=[aarch64/x86_64]
   # THIRDPART_PATH需要按照运行环境安装路径设置，如运行环境为arm，指定安装路径为Ascend-arm，则需要设置为export THIRDPART_PATH=${HOME}/Ascend-arm/thirdpart/${CPU_ARCH}
   export THIRDPART_PATH=${HOME}/Ascend/thirdpart/${CPU_ARCH}  #代码编译时链接第三方库
-  # CANN软件安装后文件存储路径
-  export INSTALL_DIR=${HOME}/Ascend/ascend-toolkit/latest
+  # CANN软件安装后文件存储路径，最后一级目录请根据运行环境设置，运行环境为arm，这里填arm64-linux；运行环境为x86，则这里填x86_64-linux，以下以arm环境为例
+  export INSTALL_DIR=${HOME}/Ascend/ascend-toolkit/latest/arm64-linux
   # 执行命令保存文件并退出。
   :wq!  
   # 执行命令使其立即生效。 
@@ -132,11 +132,13 @@
   1. 安装protobuf相关依赖
       ```
       # 安装protobuf相关依赖
-      sudo apt-get install autoconf automake libtool
+      sudo apt-get install autoconf automake libtool 
+      # 安装pip3
+      sudo apt-get install python3-pip 
       # 安装presentserver启动所需要的python库。若安装失败，请自行更换python源。
       python3.6 -m pip install --upgrade pip --user
       python3.6 -m pip install tornado==5.1.0 protobuf Cython numpy --user
-      python3.7.5 -m pip install tornado==5.1.0 protobuf Cython numpy --user
+      python3.7 -m pip install tornado==5.1.0 protobuf Cython numpy --user
       ```
   2. 安装protobuf
       - **运行环境为x86**，执行以下命令安装protobuf      

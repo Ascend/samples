@@ -1,0 +1,10 @@
+global_frame: map #odom
+rolling_window: true
+
+resolution: 0.03
+
+
+plugins:
+#  - { name: static,                  type: "costmap_2d::StaticLayer" }
+  - { name: obstacle_layer,           type: "costmap_2d::ObstacleLayer" }
+  - { name: local_inflation,                type: "costmap_2d::InflationLayer" }

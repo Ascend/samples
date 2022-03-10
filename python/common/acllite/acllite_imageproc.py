@@ -6,7 +6,7 @@ MODIFIED: 2021-01-29 14:04:45
 """
 import numpy as np
 import acl
-import utils
+import acllite_utils as utils
 from acllite_image import AclLiteImage
 from acllite_logger import log_error, log_info
 from acllite_resource import resource_list

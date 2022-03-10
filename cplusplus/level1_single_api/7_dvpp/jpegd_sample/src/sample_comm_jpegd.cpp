@@ -85,30 +85,6 @@ const uint32_t JPEGD_PERFOR_MODE_BUF_NUM   = 6;
 const uint32_t JPEGD_PERFOR_MODE_QUERY_CNT = 20000;
 const uint32_t JPEGD_SLEEP_INTERVAL_TIME   = 5000;
 
-static void print_jpegd_chn_status(int32_t chn, hi_vdec_chn_status stStatus)
-{
-    SAMPLE_PRT("---------------------------------------------------------------------------------------------------\n");
-    SAMPLE_PRT("chn:%d, Type:%d, bStart:%d, DecodeFrames:%d, LeftPics:%d, LeftBytes:%d, LeftFrames:%d, RecvFrames:%d\n",
-        chn,
-        stStatus.type,
-        stStatus.is_started,
-        stStatus.dec_stream_frames,
-        stStatus.left_decoded_frames,
-        stStatus.left_stream_bytes,
-        stStatus.left_stream_frames,
-        stStatus.recv_stream_frames);
-    SAMPLE_PRT("FormatErr:%d, set_pic_size_err:%d, stream_unsupport:%d, pack_err:%d,\
-u32PrtclNumErrSet:%d, set_ref_num_err:%d, set_pic_buf_size_err:%d\n",
-        stStatus.dec_err.format_err,
-        stStatus.dec_err.set_pic_size_err,
-        stStatus.dec_err.stream_unsupport,
-        stStatus.dec_err.pack_err,
-        stStatus.dec_err.set_protocol_num_err,
-        stStatus.dec_err.set_ref_num_err,
-        stStatus.dec_err.set_pic_buf_size_err);
-    SAMPLE_PRT("---------------------------------------------------------------------------------------------------\n");
-}
-
 static int32_t save_file_type(hi_pixel_format pixelFormat,
                             hi_compress_mode compressMode,
                             char *typeName,
@@ -128,7 +104,7 @@ static int32_t save_file_type(hi_pixel_format pixelFormat,
     } else if ((pixelFormat >= HI_PIXEL_FORMAT_YUV_400) && (pixelFormat < HI_PIXEL_FORMAT_BUTT)) {
         ret = snprintf(typeName, typeNameLen - 1, "yuv");
     } else {
-        SAMPLE_PRT("pixelFormat type err");
+        SAMPLE_PRT("pixelFormat type err\n");
         return HI_FAILURE;
     }
 
@@ -548,7 +524,7 @@ void jpegd_save_rgb_file(const std::string &fileName, hi_video_frame* pVB)
 
     u32Stride = ALIGN_UP(u32WidthInBytes, JPEGD_ALIGN_H);
 
-    SAMPLE_PRT("saving %s......RGB..%dx%d......", fileName.c_str(), pVB->width, pVB->height);
+    SAMPLE_PRT("saving %s......RGB..%dx%d......\n", fileName.c_str(), pVB->width, pVB->height);
 
     FILE *fp = fopen(fileName.c_str(), "wb");
     if (fp == nullptr) {
@@ -661,7 +637,7 @@ void *jpegd_send_stream_compatible(void *pArgs)
 
     if (g_run_mode == ACL_HOST) {
         if (aclrtSetCurrentContext(g_context)) {
-            SAMPLE_PRT("set context error");
+            SAMPLE_PRT("set context error\n");
             return (void *)(HI_FAILURE);
         }
     }
@@ -669,9 +645,11 @@ void *jpegd_send_stream_compatible(void *pArgs)
     prctl(PR_SET_NAME, "JpegSendStreamComp", 0, 0, 0);
 
     if ((currentDir = opendir(g_compatible_dir_name)) == nullptr) {
-        SAMPLE_PRT("[chn:%d] opendir error", pstJpegdThreadParam->s32ChnId);
+        SAMPLE_PRT("[chn:%d] opendir error\n", pstJpegdThreadParam->s32ChnId);
         return (void *)(HI_FAILURE);
     }
+
+    jpegd_get_time_stamp_us(&g_start_send_time[pstJpegdThreadParam->s32ChnId]);
 
     while (1) {
         if (pstJpegdThreadParam->enSendThreadCtrl == THREAD_CTRL_STOP) {
@@ -833,11 +811,11 @@ void *jpegd_send_stream_compatible(void *pArgs)
             if (pstJpegdThreadParam->enSendThreadCtrl == THREAD_CTRL_STOP) {
                 s32Ret = hi_mpi_dvpp_free(inBuffer);
                 if (s32Ret != 0) {
-                    SAMPLE_PRT("[chn:%d] Free stream failed", pstJpegdThreadParam->s32ChnId);
+                    SAMPLE_PRT("[chn:%d] Free stream failed\n", pstJpegdThreadParam->s32ChnId);
                 }
                 s32Ret = hi_mpi_dvpp_free((void *)outBuffer);
                 if (s32Ret != 0) {
-                    SAMPLE_PRT("[chn:%d] Free outBuffer failed", pstJpegdThreadParam->s32ChnId);
+                    SAMPLE_PRT("[chn:%d] Free outBuffer failed\n", pstJpegdThreadParam->s32ChnId);
                 }
                 break; // break while(1)
             }
@@ -865,15 +843,15 @@ void *jpegd_send_stream_compatible(void *pArgs)
 
                 s32Ret = hi_mpi_dvpp_free(inBuffer);
                 if (s32Ret != 0) {
-                    SAMPLE_PRT("hi_mpi_dvpp_free inBuffer failed");
+                    SAMPLE_PRT("hi_mpi_dvpp_free inBuffer failed\n");
                 }
                 s32Ret = hi_mpi_dvpp_free((void*)outBuffer);
                 if (s32Ret != 0) {
-                    SAMPLE_PRT("hi_mpi_dvpp_free outBuffer failed");
+                    SAMPLE_PRT("hi_mpi_dvpp_free outBuffer failed\n");
                 }
 
                 if (pstJpegdThreadParam->enSendThreadCtrl == THREAD_CTRL_STOP) {
-                    break; // break while ((dirp = readdir(currentDir)) != nullptr))
+                    break; // break while ((dirp = readdir(currentDir)) != nullptr)
                 }
             }
 
@@ -935,7 +913,7 @@ void *jpegd_send_stream_performance(void *pArgs)
 
     if (g_run_mode == ACL_HOST) {
         if (aclrtSetCurrentContext(g_context)) {
-            SAMPLE_PRT("set context error");
+            SAMPLE_PRT("set context error\n");
             return (void *)(HI_FAILURE);
         }
     }
@@ -1117,7 +1095,7 @@ void *jpegd_send_stream(void *pArgs)
 
     if (g_run_mode == ACL_HOST) {
         if (aclrtSetCurrentContext(g_context)) {
-            SAMPLE_PRT("set context error");
+            SAMPLE_PRT("set context error\n");
             return (void *)(HI_FAILURE);
         }
     }
@@ -1148,6 +1126,8 @@ void *jpegd_send_stream(void *pArgs)
     SAMPLE_PRT("[chn:%d] outBufferSize:%u. pixFormat:%d stream file:%s, filesize:%d Start!\n",
                pstJpegdThreadParam->s32ChnId, outBufferSize, pstJpegdThreadParam->enPixFormat,
                g_input_file_name, fileSize);
+
+    jpegd_get_time_stamp_us(&g_start_send_time[pstJpegdThreadParam->s32ChnId]);
 
     // 开始发码流
     while (1) {
@@ -1240,11 +1220,11 @@ void *jpegd_send_stream(void *pArgs)
         if (pstJpegdThreadParam->enSendThreadCtrl == THREAD_CTRL_STOP) {
             s32Ret = hi_mpi_dvpp_free((void*)pu8Buf);
             if (s32Ret != 0) {
-                SAMPLE_PRT("[chn:%d] Free stream failed", pstJpegdThreadParam->s32ChnId);
+                SAMPLE_PRT("[chn:%d] Free stream failed\n", pstJpegdThreadParam->s32ChnId);
             }
             s32Ret = hi_mpi_dvpp_free((void *)outBuffer);
             if (s32Ret != 0) {
-                SAMPLE_PRT("[chn:%d] Free outBuffer failed", pstJpegdThreadParam->s32ChnId);
+                SAMPLE_PRT("[chn:%d] Free outBuffer failed\n", pstJpegdThreadParam->s32ChnId);
             }
             break; // break while(1)
         }
@@ -1276,11 +1256,11 @@ void *jpegd_send_stream(void *pArgs)
             }
             s32Ret = hi_mpi_dvpp_free((void*)pu8Buf);
             if (s32Ret != 0) {
-                SAMPLE_PRT("[chn:%d] Free stream failed", pstJpegdThreadParam->s32ChnId);
+                SAMPLE_PRT("[chn:%d] Free stream failed\n", pstJpegdThreadParam->s32ChnId);
             }
             s32Ret = hi_mpi_dvpp_free((void *)outBuffer);
             if (s32Ret != 0) {
-                SAMPLE_PRT("[chn:%d] Free outBuffer failed", pstJpegdThreadParam->s32ChnId);
+                SAMPLE_PRT("[chn:%d] Free outBuffer failed\n", pstJpegdThreadParam->s32ChnId);
             }
 
             break; // break while(1)
@@ -1355,9 +1335,6 @@ void jpegd_cmd_ctrl(pthread_t *pJpegdSendTid, pthread_t *pJpegdGetTid)
             if ((stStatus.left_stream_bytes == 0) &&
                 (stStatus.left_decoded_frames == 0)) {
                 if (g_jpegd_thread_param[idxChn].enGetThreadCtrl == THREAD_CTRL_START) {
-                    if (g_performance <= 0) {
-                        print_jpegd_chn_status(g_jpegd_thread_param[idxChn].s32ChnId, stStatus);
-                    }
                     g_jpegd_thread_param[idxChn].enGetThreadCtrl = THREAD_CTRL_STOP;
                     break;
                 }
@@ -1453,13 +1430,8 @@ void jpegd_stop_send_stream()
     }
 }
 
-// JPEGD性能测试打印性能参数
 void jpegd_show_decode_state()
 {
-    if (g_performance <= 0) { 
-        return;
-    }
-
     for (uint32_t idxChn = g_start_channel; idxChn < g_chn_num + g_start_channel; ++idxChn) {
         uint64_t u64DiffTime = g_end_get_time[idxChn] - g_start_send_time[idxChn];
         if (u64DiffTime == 0) {
@@ -1490,7 +1462,7 @@ void *jpegd_get_pic(void *pArgs)
 
     if (g_run_mode == ACL_HOST) {
         if (aclrtSetCurrentContext(g_context)) {
-            SAMPLE_PRT("set context error");
+            SAMPLE_PRT("set context error\n");
             return (void *)(HI_FAILURE);
         }
     }
@@ -1515,6 +1487,7 @@ void *jpegd_get_pic(void *pArgs)
         s32Ret = hi_mpi_vdec_get_frame(pstJpegdThreadParam->s32ChnId,
                                        &stVFrame, &stSupplement, &stStream, pstJpegdThreadParam->s32MilliSec);
         if (s32Ret == HI_SUCCESS) {
+            jpegd_get_time_stamp_us(&g_end_get_time[pstJpegdThreadParam->s32ChnId]);
             // 统计解码结果
             if (stVFrame.v_frame.frame_flag == 0) {
                 SAMPLE_PRT("[chn:%d] Yes, GetFrame Success [%d].\n", pstJpegdThreadParam->s32ChnId, s32Cnt);
@@ -1528,6 +1501,7 @@ void *jpegd_get_pic(void *pArgs)
                            pstJpegdThreadParam->s32ChnId, s32DecFailCnt, stVFrame.v_frame.frame_flag);
                 s32DecFailCnt++;
             }
+            g_get_frame_cnt[pstJpegdThreadParam->s32ChnId] = s32Cnt + s32DecFailCnt;
 
             // 释放码流内存
             if (stStream.addr != nullptr) {
@@ -1575,7 +1549,7 @@ void *jpegd_get_pic_performance(void *pArgs)
 
     if (g_run_mode == ACL_HOST) {
         if (aclrtSetCurrentContext(g_context)) {
-            SAMPLE_PRT("set context error");
+            SAMPLE_PRT("set context error\n");
             return (void *)(HI_FAILURE);
         }
     }
@@ -1781,7 +1755,7 @@ int32_t setup_acl_device()
 
     aclRet = aclrtCreateContext(&g_context, 0);
     if (aclRet != ACL_SUCCESS) {
-        SAMPLE_PRT("acl create context failed with %d.", aclRet);
+        SAMPLE_PRT("acl create context failed with %d.\n", aclRet);
         aclrtResetDevice(0);
         aclFinalize();
         return aclRet;

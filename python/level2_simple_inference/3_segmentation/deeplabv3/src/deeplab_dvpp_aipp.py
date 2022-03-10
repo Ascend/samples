@@ -15,7 +15,7 @@ from constants import IMG_EXT
 from acllite_model import AclLiteModel
 from acllite_image import AclLiteImage
 from acllite_resource import AclLiteResource
-import utils
+import acllite_utils as utils
 from acllite_imageproc import AclLiteImageProc
 import draw_predict
 

@@ -9,7 +9,6 @@
 */
 #include <fstream>
 #include "utils.h"
-#include "acl/acl.h"
 
 #if defined(_MSC_VER)
 #include <windows.h>
@@ -19,45 +18,108 @@
 
 extern bool g_isDevice;
 
-void *Utils::GetDeviceBufferOfFile(std::string &fileName, uint32_t &fileSize)
+void *Utils::CopyDataToDevice(void *data, uint32_t dataSize, aclrtMemcpyKind policy)
+{
+    void *buffer = nullptr;
+    aclError aclRet = aclrtMalloc(&buffer, dataSize, ACL_MEM_MALLOC_NORMAL_ONLY);
+    if (aclRet != ACL_SUCCESS) {
+        ERROR_LOG("malloc device data buffer failed, aclRet is %d", aclRet);
+        return nullptr;
+    }
+
+    aclRet = aclrtMemcpy(buffer, dataSize, data, dataSize, policy);
+    if (aclRet != ACL_SUCCESS) {
+        ERROR_LOG("Copy data to device failed, aclRet is %d", aclRet);
+        (void)aclrtFree(buffer);
+        return nullptr;
+    }
+
+    return buffer;
+}
+
+Result Utils::GetImageInfoBuffer(uint32_t imageWidth, uint32_t imageHeight, ImageMemoryInfo &imageMemInfo)
+{
+    void *imageInfoBuf = nullptr;
+    const float imageInfo[4] = {(float)imageWidth, (float)imageHeight,
+        (float)imageWidth, (float)imageHeight};
+    size_t imageInfoSize = sizeof(imageInfo);
+    if (!g_isDevice) {
+        imageInfoBuf = CopyDataToDevice((void *)imageInfo, imageInfoSize, ACL_MEMCPY_HOST_TO_DEVICE);
+    } else {
+        imageInfoBuf = CopyDataToDevice((void *)imageInfo, imageInfoSize, ACL_MEMCPY_DEVICE_TO_DEVICE);
+    }
+
+    if (imageInfoBuf == nullptr) {
+        return FAILED;
+    }
+
+    imageMemInfo.imageInfoBuf = imageInfoBuf;
+    imageMemInfo.imageInfoSize = imageInfoSize;
+
+    return SUCCESS;
+}
+
+Result Utils::GetDeviceBufferOfFile(const std::string &fileName, uint32_t imageW, uint32_t imageH,
+    ImageMemoryInfo &imageMemInfo)
 {
     uint32_t inputBuffSize = 0;
     void *inputBuff = Utils::ReadBinFile(fileName, inputBuffSize);
     if (inputBuff == nullptr) {
-        return nullptr;
+        return FAILED;
+    }
+
+    Result retVal = GetImageInfoBuffer(imageW, imageH, imageMemInfo);
+    if (retVal != SUCCESS) {
+        ERROR_LOG("malloc image info buffer failed. errorCode = %d.", static_cast<int32_t>(retVal));
+        if (!g_isDevice) {
+            (void)aclrtFreeHost(inputBuff);
+        } else {
+            (void)aclrtFree(inputBuff);
+        }
+        inputBuff = nullptr;
+        return retVal;
     }
     if (!g_isDevice) {
-        void *inBufferDev = nullptr;
-        aclError ret = aclrtMalloc(&inBufferDev, inputBuffSize, ACL_MEM_MALLOC_NORMAL_ONLY);
+        imageMemInfo.imageDataSize = inputBuffSize;
+        aclError ret = aclrtMalloc(&imageMemInfo.imageDataBuf, imageMemInfo.imageDataSize,
+            ACL_MEM_MALLOC_NORMAL_ONLY);
         if (ret != ACL_SUCCESS) {
-            ERROR_LOG("malloc device buffer failed. size is %u, errorCode = %d.",
+            ERROR_LOG("malloc image data buffer failed. size is %u, errorCode = %d.",
                 inputBuffSize, static_cast<int32_t>(ret));
-            aclrtFreeHost(inputBuff);
-            inputBuff = nullptr;
-            return nullptr;
-        }
-
-        ret = aclrtMemcpy(inBufferDev, inputBuffSize, inputBuff, inputBuffSize, ACL_MEMCPY_HOST_TO_DEVICE);
-        if (ret != ACL_SUCCESS) {
-            ERROR_LOG("memcpy failed. device buffer size is %u, input host buffer size is %u, errorCode = %d.",
-                inputBuffSize, inputBuffSize, static_cast<int32_t>(ret));
-            (void)aclrtFree(inBufferDev);
-            inBufferDev = nullptr;
+            (void)aclrtFree(imageMemInfo.imageInfoBuf);
+            imageMemInfo.imageInfoBuf = nullptr;
+            imageMemInfo.imageInfoSize = 0;
             (void)aclrtFreeHost(inputBuff);
             inputBuff = nullptr;
-            return nullptr;
+            return FAILED;
+        }
+
+        ret = aclrtMemcpy(imageMemInfo.imageDataBuf, imageMemInfo.imageDataSize,
+            inputBuff, inputBuffSize, ACL_MEMCPY_HOST_TO_DEVICE);
+        if (ret != ACL_SUCCESS) {
+            ERROR_LOG("memcpy failed. image data buffer size is %zu, input host buffer size is %u, errorCode = %d.",
+                imageMemInfo.imageDataSize, inputBuffSize, static_cast<int32_t>(ret));
+            (void)aclrtFree(imageMemInfo.imageInfoBuf);
+            imageMemInfo.imageInfoBuf = nullptr;
+            imageMemInfo.imageInfoSize = 0;
+            (void)aclrtFree(imageMemInfo.imageDataBuf);
+            imageMemInfo.imageDataBuf = nullptr;
+            imageMemInfo.imageDataSize = 0;
+            (void)aclrtFreeHost(inputBuff);
+            inputBuff = nullptr;
+            return FAILED;
         }
         (void)aclrtFreeHost(inputBuff);
         inputBuff = nullptr;
-        fileSize = inputBuffSize;
-        return inBufferDev;
+        return SUCCESS;
     } else {
-        fileSize = inputBuffSize;
-        return inputBuff;
+        imageMemInfo.imageDataSize = inputBuffSize;
+        imageMemInfo.imageDataBuf = inputBuff;
+        return SUCCESS;
     }
 }
 
-void *Utils::ReadBinFile(std::string &fileName, uint32_t &fileSize)
+void *Utils::ReadBinFile(const std::string &fileName, uint32_t &fileSize)
 {
     if (CheckPathIsFile(fileName) == FAILED) {
         ERROR_LOG("%s is not a file", fileName.c_str());

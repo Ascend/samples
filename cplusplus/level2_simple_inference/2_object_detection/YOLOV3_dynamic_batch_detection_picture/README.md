@@ -77,84 +77,77 @@ The sample directory is organized as follows:
 
 ## Environment Requirements<a name="section3833348101215"></a>
 
--   OS and architecture: CentOS 7.6 x86\_64, CentOS AArch64, or Ubuntu 18.04 x86\_64
--   Compiler:
-    -   Ascend 310 EP/Ascend 710: g++ or aarch64-linux-gnu-g++
-    -   Atlas 200 DK: aarch64-linux-gnu-g++
-
--   SoC: Ascend 310 AI Processor or Ascend 710 AI Processor
+-   OS and architecture: CentOS x86\_64, CentOS AArch64, Ubuntu 18.04 x86\_64, Ubuntu 18.04 aarch64,  EulerOS x86, EulerOS AArch64
+-   Compiler: g++ or aarch64-linux-gnu-g++
+-   SoC: Ascend 310 AI Processor, Ascend 710 AI Processor, Ascend 910 AI Processor
 -   Python version and dependency library: Python 3.7.5
 -   Ascend AI Software Stack deployed
 
 ## Environment Variables<a name="section9202202861519"></a>
 
--   **Ascend 310 EP/Ascend 710:**
-    1.  In the development environment, set the environment variables on which model conversion depends.
+- Configuring Environment Variables in the Development Environment
 
-        Replace  _**$\{install\_path\}**_  with the actual  Ascend-CANN-Toolkit  installation path.
+  1. The CANN portfolio provides a process-level environment variable setting script to automatically set environment variables. The following commands are used as examples
 
-        ```
-        export PATH=${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
-        export ASCEND_OPP_PATH=${install_path}/opp
-        ```
+     ```
+     . ${HOME}/Ascend/ascend-toolkit/set_env.sh
+     ```
 
-    2.  Set the header file path and library file path environment variables for the  **src/CMakeLists.txt**  build script in the development environment.
+     Replace  **$HOME/Ascend**  with the actual Ascend-CANN-Toolkit installation path.
 
-        The following is an example. Replace  ****_$HOME/Ascend_**_**/ascend-toolkit/latest**_/_\{os\_arch\}_**  with the ACLlib path under the  Ascend-CANN-Toolkit  directory of the corresponding architecture.
+  2. Operator building requires Python installation. The following takes Python 3.7.5 as an example. Run the following commands as a running user to set the environment variables related to Python 3.7.5.
 
-        -   x86 operating environment:
+     ```
+     # Set tje Python3.7.5 library path.
+     export LD_LIBRARY_PATH=/usr/local/python3.7.5/lib:$LD_LIBRARY_PATH
+     # If multiple Python 3 versions exist in the user environment, specify Python 3.7.5.
+     export PATH=/usr/local/python3.7.5/bin:$PATH
+     ```
 
-            ```
-            export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux
-            export NPU_HOST_LIB=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux/acllib/lib64/stub
-            ```
+     Replace the Python 3.7.5 installation path as required. You can also write the preceding commands to the ~/.bashrc file and run the source ~/.bashrc command to make the modification take effect immediately.
 
-        -   ARM operating environment:
+  3. In the development environment, set environment variables and configure the header search path and library search path on which the build of the AscendCL single-operator verification program depends.
 
-            ```
-            export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux
-            export NPU_HOST_LIB=$HOME/Ascend/ascend-toolkit/latest/arm64-linux/acllib/lib64/stub
-            ```
+     The build script searches for the required header files and libraries through the paths specified by the environment variables. Replace  **$HOME/Ascend**  with the actual Ascend-CANN-Toolkit installation path.
 
+     - If the development environment operating system architecture is x86, the configuration example is as follows:
 
-        Use the .so library files in the  ****_$HOME/Ascend_**_**/ascend-toolkit/latest**_/_\{os\_arch\}_/acllib/lib64/stub**  directory to build the code logic using AscendCL APIs, without depending on any .so library files of other components \(such as Driver\). At run time on the host, the app links to the .so library files in the  ****_$HOME/Ascend_**_**/nnrt/latest**_/acllib/lib64**  directory on the host through the configured environment variable and automatically links to the .so library files of other components.
+       ```
+        export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux
+        export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
+       ```
 
-    3.  Set the library path environment variable in the operating environment for app execution.
+     - If the running environment operating system architecture is AArch64, the configuration example is as follows:
 
-        The following is an example. Replace  ****_$HOME/Ascend_**_**/nnrt/latest**_**  with the ACLlib path.
-
-        ```
-        export LD_LIBRARY_PATH=$HOME/Ascend/nnrt/latest/acllib/lib64
-        ```
-
-
--   **Atlas 200 DK:**
-
-    You only need to set environment variables in the development environment. Environment variables in the operating environment have been set in the phase of preparing a bootable SD card.
-
-    1.  In the development environment, set the environment variables on which model conversion depends.
-
-        Replace  _**$\{install\_path\}**_  with the actual  Ascend-CANN-Toolkit  installation path.
-
-        ```
-        export PATH=${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
-        export ASCEND_OPP_PATH=${install_path}/opp
-        ```
-
-    2.  Set the header file path and library file path environment variables for the  **src/CMakeLists.txt**  build script in the development environment.
-
-        The following is an example. Replace  ****_$HOME/Ascend_**_**/ascend-toolkit/latest**_/arm64-linux**  with the ACLlib path under the ARM  Ascend-CANN-Toolkit  directory.
-
-        ```
+       ```
         export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux
-        export NPU_HOST_LIB=$HOME/Ascend/ascend-toolkit/latest/arm64-linux/acllib/lib64/stub
-        ```
+        export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
+       ```
 
-        The .so library files in the  **_$HOME/Ascend_**_**/ascend-toolkit/latest**_**/arm64-linux/acllib/lib64/stub**  directory are required to build code using AscendCL APIs, without depending on any .so library files of other components \(such as Driver\). At run time in the  board environment, the app links to the .so library files in the  **$HOME/Ascend/acllib/lib64**  directory in the open-form ACLlib installation path in the  board environment  through the configured environment variable and automatically links to the .so library files of other components.
+- Configuring Environment Variables in the Running Environment
+
+  - If Ascend-CANN-Toolkit is installed in the running environment, set the environment variable as follows:
+
+    ```
+    . ${HOME}/Ascend/ascend-toolkit/set_env.sh
+    ```
+
+  - If Ascend-CANN-NNRT is installed in the running environment, set the environment variable as follows:
+
+    ```
+    . ${HOME}/Ascend/nnrt/set_env.sh
+    ```
+
+  - If Ascend-CANN-NNAE is installed in the running environment, set the environment variable as follows:
+
+    ```
+    . ${HOME}/Ascend/nnae/set_env.sh
+    ```
+
+    Replace  **$HOME/Ascend**  with the actual component installation path.
 
 
-
-## Build and Run \(Ascend310 EP/Ascend 710\)<a name="section17151737173112"></a>
+## Build and Run <a name="section17151737173112"></a>
 
 1.  Convert your model.
     1.  Log in to the  development environment  as the running user.
@@ -167,16 +160,16 @@ The sample directory is organized as follows:
 
     4.  Go to the sample directory and convert the YOLOv3 network into an .om offline model that adapts to the Ascend AI Processor.
 
-        If the input for model inference allows a dynamic batch size, run the following command to convert the model:
+        If the input for model inference allows a dynamic batch size, run the following command to convert the model(take Ascend310 as an example):
 
         ```
-        atc --model=caffe_model/yolov3.prototxt --weight=caffe_model/yolov3.caffemodel --framework=0 --input_shape="data:-1,3,416,416" --input_format=NCHW --dynamic_batch_size="1,2,4,8" --soc_version=${soc_version} --output=model/yolov3_dynamic_batch 
+        atc --model=caffe_model/yolov3.prototxt --weight=caffe_model/yolov3.caffemodel --framework=0 --input_shape="data:-1,3,416,416" --input_format=NCHW --dynamic_batch_size="1,2,4,8" --soc_version=Ascend310 --output=model/yolov3_dynamic_batch 
         ```
 
-        If the input for model inference allows a dynamic image size, run the following command to convert the model:
+        If the input for model inference allows a dynamic image size, run the following command to convert the model(take Ascend310 as an example):
 
         ```
-        atc --model=caffe_model/yolov3.prototxt --weight=caffe_model/yolov3.caffemodel --framework=0 --input_shape="data:1,3,-1,-1" --input_format=NCHW --dynamic_image_size="416,416;832,832;1248,1248" --soc_version=${soc_version} --output=model/yolov3_dynamic_hw 
+        atc --model=caffe_model/yolov3.prototxt --weight=caffe_model/yolov3.caffemodel --framework=0 --input_shape="data:1,3,-1,-1" --input_format=NCHW --dynamic_image_size="416,416;832,832;1248,1248" --soc_version=Ascend310 --output=model/yolov3_dynamic_hw 
         ```
 
         -   **--model**: directory of the source model file.
@@ -186,7 +179,10 @@ The sample directory is organized as follows:
         -   **--input\_format**: input format.
         -   **--dynamic\_batch\_size**: dynamic batch size choices. Applies to the scenario where image count per inference batch is unfixed.
         -   **--dynamic\_image\_size**: dynamic image size choices. Applies to the scenario where image size per inference batch is unfixed.
-        -   **--soc\_version**: SoC version, either  **Ascend310**  or  **Ascend710**.
+        -   **--soc\_version**:
+            -   Ascend 310 AI Processor, set this parameter to **Ascend310**.
+            -   Ascend 710 AI Processor, set this parameter to **Ascend710**.
+            -   Ascend 910 AI Processor, set this parameter to **Ascend910A** or **Ascend910B** or **Ascend910ProA** or **Ascend910ProB** or **Ascend910PremiumA**. **Pro** or **Premium** indicate the performance improvement level. **A** or **B** indicate PartialGood level. Select a value based on the site requirements.
         -   **--output**: directory for storing the generated  **yolov3\_dynamic\_batch.om**  or  **yolov3\_dynamic\_hw.om**  file, that is,  **/model**  under the sample directory. The default path in the command example is recommended. To specify another path, you need to change the value of  **omModelPath**  in  **sample\_process.cpp**  before building the code.
 
             ```
@@ -223,6 +219,9 @@ The sample directory is organized as follows:
     4.  Go to the  **build/intermediates/host**  directory and run the  **cmake**  command.
 
         Replace  **../../../src**  with the actual directory of  **CMakeLists.txt**.
+
+        Set **DCMAKE_SKIP_RPATH** to  **TRUE**,  **rpath**  (path specified by  **NPU_HOST_LIB**) is not added to the executable generated after build. The executable automatically looks up for dynamic libraries in the path  included in  **LD_LIBRARY_PATH**.
+
 
         -   If the operating system architecture of the  development environment is the same as that of the running environment, run the following commands to perform compilation.
 
@@ -278,25 +277,24 @@ The sample directory is organized as follows:
             [INFO]  start to process file: ../data/input_float32_1x3x416x416.bin.in
             [INFO]  create model output success.
             [INFO]  set dynamic batch size[1] success.
-            [INFO]  model input num[2], output num[3].
+            [INFO]  model input num[3], output num[2].
             [INFO]  start to print input tensor desc:
-            [INFO]  index[0]: name[data], inputSize[16613376], format[0], dataType[0]
+            [INFO]  index[0]: name[data], inputSize[16613376], fotmat[0], dataType[0]
             [INFO]  dimcount:[4],dims:[-1][3][416][416]
-            [INFO]  index[1]: name[ascend_mbatch_shape_data], inputSize[8], format[2], dataType[9]
+            [INFO]  index[1]: name[img_info], inputSize[16], fotmat[0], dataType[0]
+            [INFO]  dimcount:[2],dims:[1][4]
+            [INFO]  index[2]: name[ascend_mbatch_shape_data], inputSize[4], fotmat[2], dataType[3]
             [INFO]  dimcount:[1],dims:[1]
             [INFO]  start to print output tensor desc:
-            [INFO]  index[0]: name[layer82-conv:0:layer82-conv], outputSize[1379040], format[0], dataType[0]
-            [INFO]  dimcount:[4],dims:[8][255][13][13]
-            [INFO]  index[1]: name[layer94-conv:0:layer94-conv], outputSize[5516160], format[0], dataType[0]
-            [INFO]  dimcount:[4],dims:[8][255][26][26]
-            [INFO]  index[2]: name[layer106-conv:0:layer106-conv], outputSize[22064640], format[0], dataType[0]
-            [INFO]  dimcount:[4],dims:[8][255][52][52]
+            [INFO]  index[0]: name[detection_out3:0:box_out], outputSize[196608], fotmat[0], dataType[0]
+            [INFO]  dimcount:[2],dims:[8][6144]
+            [INFO]  index[1]: name[detection_out3:1:box_out_num], outputSize[256], fotmat[0], dataType[3]
+            [INFO]  dimcount:[2],dims:[8][8]
             [INFO]  start to print model dynamic batch info:
             [INFO]  dynamic batch count:[4],dims:{[1][2][4][8]}
             [INFO]  start to print model current output shape info:
-            [INFO]  index:0,dims:[1][255][13][13]
-            [INFO]  index:1,dims:[1][255][26][26]
-            [INFO]  index:2,dims:[1][255][52][52]
+            [INFO]  index:0,dims:[1][6144]
+            [INFO]  index:1,dims:[1][8]
             [INFO]  model execute success.
             [INFO]  dump data success.
             [INFO]  unload model success, modelId is 1.
@@ -318,7 +316,6 @@ The sample directory is organized as follows:
 
             ```
             [INFO]  1: ./main [param], [param] is dynamic batch. It should be 1,2,4 or 8. For example: ./main 8;
-            
             [INFO]  2: ./main [param1] [param2], [param1] is dynamic height. [param1] is dynamic width. It should be 416, 416; 832, 832; 1248, 1248. For example: ./main 416 416
             [INFO]  acl init success.
             [INFO]  set device 0 success.
@@ -331,25 +328,24 @@ The sample directory is organized as follows:
             [INFO]  create model input success.
             [INFO]  create model output success.
             [INFO]  set dynamic hw[416, 416] success.
-            [INFO]  model input num[2], output num[3].
+            [INFO]  model input num[3], output num[2].
             [INFO]  start to print input tensor desc:
-            [INFO]  index[0]: name[data], inputSize[18690048], format[0], dataType[0]
+            [INFO]  index[0]: name[data], inputSize[18690048], fotmat[0], dataType[0]
             [INFO]  dimcount:[4],dims:[1][3][-1][-1]
-            [INFO]  index[1]: name[ascend_mbatch_shape_data], inputSize[16], format[2], dataType[9]
+            [INFO]  index[1]: name[img_info], inputSize[16], fotmat[0], dataType[0]
+            [INFO]  dimcount:[2],dims:[1][4]
+            [INFO]  index[2]: name[ascend_mbatch_shape_data], inputSize[8], fotmat[2], dataType[3]
             [INFO]  dimcount:[1],dims:[2]
             [INFO]  start to print output tensor desc:
-            [INFO]  index[0]: name[layer82-conv:0:layer82-conv], outputSize[1551420], format[0], dataType[0]
-            [INFO]  dimcount:[4],dims:[1][255][39][39]
-            [INFO]  index[1]: name[layer94-conv:0:layer94-conv], outputSize[6205680], format[0], dataType[0]
-            [INFO]  dimcount:[4],dims:[1][255][78][78]
-            [INFO]  index[2]: name[layer106-conv:0:layer106-conv], outputSize[24822720], format[0], dataType[0]
-            [INFO]  dimcount:[4],dims:[1][255][156][156]
+            [INFO]  index[0]: name[detection_out3:0:box_out], outputSize[24576], fotmat[0], dataType[0]
+            [INFO]  dimcount:[2],dims:[1][6144]
+            [INFO]  index[1]: name[detection_out3:1:box_out_num], outputSize[32], fotmat[0], dataType[3]
+            [INFO]  dimcount:[2],dims:[1][8]
             [INFO]  start to print model dynamic hw info:
             [INFO]  dynamic hw count:[3],dims:{[416, 416][832, 832][1248, 1248]}
             [INFO]  start to print model current output shape info:
-            [INFO]  index:0,dims:[1][255][13][13]
-            [INFO]  index:1,dims:[1][255][26][26]
-            [INFO]  index:2,dims:[1][255][52][52]
+            [INFO]  index:0,dims:[1][6144]
+            [INFO]  index:1,dims:[1][8]
             [INFO]  model execute success.
             [INFO]  dump data success.
             [INFO]  unload model success, modelId is 1.
@@ -361,207 +357,5 @@ The sample directory is organized as follows:
             [INFO]  end to destroy context.
             [INFO]  end to reset device: 0.
             ```
-
-
-
-
-## Build and Run \(Atlas 200 DK\)<a name="section518661623815"></a>
-
-1.  Convert your model.
-    1.  Log in to the  development environment  as the running user.
-    2.  Complete  **Preparations**, including obtaining the tool and setting environment variables, as described in "Getting Started with ATC" in  _ATC Tool Instructions_.
-    3.  Prepare data.
-
-        Download the .prototxt model file and .caffemodel pre-trained model file of the YOLOv3 network and upload the files to  **/caffe\_model**  under the sample directory in the  development environment  as the running user. If the directory does not exist, create it.
-
-        Click [link](https://github.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/yolov3/ATC_yolov3_caffe_AE), find the download link in the  **README.md**  file. 
-
-    4.  Go to the sample directory and convert the YOLOv3 network into an .om offline model that adapts to the Ascend AI Processor.
-
-        If the input for model inference allows a dynamic batch size, run the following command to convert the model:
-
-        ```
-        atc --model=caffe_model/yolov3.prototxt --weight=caffe_model/yolov3.caffemodel --framework=0 --input_shape="data:-1,3,416,416" --input_format=NCHW --dynamic_batch_size="1,2,4,8" --soc_version=${soc_version} --output=model/yolov3_dynamic_batch 
-        ```
-
-        If the input for model inference allows a dynamic image size, run the following command to convert the model:
-
-        ```
-        atc --model=caffe_model/yolov3.prototxt --weight=caffe_model/yolov3.caffemodel --framework=0 --input_shape="data:1,3,-1,-1" --input_format=NCHW --dynamic_image_size="416,416;832,832;1248,1248" --soc_version=${soc_version} --output=model/yolov3_dynamic_hw 
-        ```
-
-        -   **--model**: directory of the source model file.
-        -   **--weight**: directory of the weight file.
-        -   **--framework**: source framework type, selected from  **0**  \(Caffe\),  **1**  \(MindSpore\),  **3**  \(TensorFlow\), and  **5**  \(ONNX\).
-        -   **--input\_shape**: input shape.
-        -   **--input\_format**: input format.
-        -   **--dynamic\_batch\_size**: dynamic batch size choices. Applies to the scenario where image count per inference batch is unfixed.
-        -   **--dynamic\_image\_size**: dynamic image size choices. Applies to the scenario where image size per inference batch is unfixed.
-        -   **--soc\_version**: SoC version, either  **Ascend310**  or  **Ascend710**.
-        -   **--output**: directory for storing the generated  **yolov3\_dynamic\_batch.om**  or  **yolov3\_dynamic\_hw.om**  file, that is,  **/model**  under the sample directory. The default path in the command example is recommended. To specify another path, you need to change the value of  **omModelPath**  in  **sample\_process.cpp**  before building the code.
-
-            ```
-            string omModelPath = "../model/yolov3_dynamic_batch.om";
-            ......
-            string omModelPath = "../model/yolov3_dynamic_hw.om";
-            ```
-
-
-
-2.  Build the code.
-    1.  Log in to the  development environment  as the running user.
-    2.  Run the  **tools\_generate\_data.py **script in the sample directory. The test bin files corresponding to different batch sizes or image sizes are generated in  **/data**  under the sample directory.
-
-        For example, run the following command to generate the  **input\_float32\_1x3x416x416.bin.in**  file for: batch size = 1, channel number = 3, image size = 416 x 416 pixels, and data type = float32.
-
-        ```
-        python3.7 tools_generate_data.py input -s [1,3,416,416] -r [2,3] -d float32
-        ```
-
-        The configuration options in  **tools\_generate\_data.py**  are described as follows:
-
-        -   **input**: prefix of the .bin file name.
-        -   **s**: shape of the input data.
-        -   **r**: pixel value range of each channel. The value range is \[0, 255\]. After the  **tools\_generate\_data.py**  script is executed, the pixel value of each channel is randomly generated within the value range specified by the  **-r**  argument.
-        -   **d**: data format, selected from  **int8**,  **uint8**,  **float16**,  **float32**,  **int32**, and  **uint32**.
-
-    3.  Go to the sample directory and create a directory for storing build outputs. For example, the directory created in this sample is  **build/intermediates/minirc**.
-
-        ```
-        mkdir -p build/intermediates/minirc
-        ```
-
-    4.  Go to the  **build/intermediates/minirc**  directory and run the  **cmake**  command.
-
-        Replace  **../../../src**  with the actual directory of  **CMakeLists.txt**.
-
-        ```
-        cd build/intermediates/minirc
-        cmake ../../../src -DCMAKE_CXX_COMPILER=aarch64-linux-gnu-g++ -DCMAKE_SKIP_RPATH=TRUE
-        ```
-
-    5.  Run the  **make **command. The  **main**  executable file is generated in  **/out**  under the sample directory.
-
-        ```
-        make
-        ```
-
-
-3.  Run the app.
-    1.  As the running user, upload the sample folder in the  development environment  to the  board environment, for example,  **$HOME/acl\_yolov3\_dynamic\_batch**.
-    2.  Log in to the  board environment  as the running user.
-    3.  Go to the directory where the executable file  **main**  is located \(for example,  **$HOME/acl\_yolov3\_dynamic\_batch/out**\) and grant execute permission on the  **main**  file in the directory.
-
-        ```
-        chmod +x main
-        ```
-
-    4.  Go to the directory where the executable file  **main**  is located \(for example,  **$HOME/acl\_yolov3\_dynamic\_batch/out**\) and run the executable file.
-        -   In the dynamic batch size scenario, run the following command. Replace the input argument with the actual batch size, which should be among the choices specified by the  **--dynamic\_batch\_size**  argument in the model conversion command.
-
-            ```
-            ./main 1
-            ```
-
-            The following messages indicate that the file is successfully executed.
-
-            ```
-            [INFO]  1: ./main [param], [param] is dynamic batch. It should be 1,2,4 or 8. For example: ./main 8;
-            [INFO]  2: ./main [param1] [param2], [param1] is dynamic height. [param1] is dynamic width. It should be 416, 416; 832, 832; 1248, 1248. For example: ./main 416 416
-            [INFO]  acl init success.
-            [INFO]  set device 0 success.
-            [INFO]  create context success.
-            [INFO]  create stream success.
-            [INFO]  get run mode success.
-            [INFO]  load model ../model/yolov3_dynamic_batch.om success.
-            [INFO]  create model description success.
-            [INFO]  start to process file: ../data/input_float32_1x3x416x416.bin.in
-            [INFO]  create model output success.
-            [INFO]  set dynamic batch size[1] success.
-            [INFO]  model input num[2], output num[3].
-            [INFO]  start to print input tensor desc:
-            [INFO]  index[0]: name[data], inputSize[16613376], format[0], dataType[0]
-            [INFO]  dimcount:[4],dims:[-1][3][416][416]
-            [INFO]  index[1]: name[ascend_mbatch_shape_data], inputSize[8], format[2], dataType[9]
-            [INFO]  dimcount:[1],dims:[1]
-            [INFO]  start to print output tensor desc:
-            [INFO]  index[0]: name[layer82-conv:0:layer82-conv], outputSize[1379040], format[0], dataType[0]
-            [INFO]  dimcount:[4],dims:[8][255][13][13]
-            [INFO]  index[1]: name[layer94-conv:0:layer94-conv], outputSize[5516160], format[0], dataType[0]
-            [INFO]  dimcount:[4],dims:[8][255][26][26]
-            [INFO]  index[2]: name[layer106-conv:0:layer106-conv], outputSize[22064640], format[0], dataType[0]
-            [INFO]  dimcount:[4],dims:[8][255][52][52]
-            [INFO]  start to print model dynamic batch info:
-            [INFO]  dynamic batch count:[4],dims:{[1][2][4][8]}
-            [INFO]  start to print model current output shape info:
-            [INFO]  index:0,dims:[1][255][13][13]
-            [INFO]  index:1,dims:[1][255][26][26]
-            [INFO]  index:2,dims:[1][255][52][52]
-            [INFO]  model execute success.
-            [INFO]  dump data success.
-            [INFO]  unload model success, modelId is 1.
-            [INFO]  execute sample success.
-            [INFO]  end to destroy stream.
-            [INFO]  end to destroy context.
-            [INFO]  end to reset device: 0.
-            [INFO]  end to finalize acl.
-            ```
-
-
-        -   In the dynamic image size scenario, run the following command. Replace the input arguments with the actual image height and width, which should be among the choices specified by the  **--dynamic\_image\_size**  argument in the model conversion command.
-
-            ```
-            ./main 416 416
-            ```
-
-            The following messages indicate that the file is successfully executed.
-
-            ```
-            [INFO]  1: ./main [param], [param] is dynamic batch. It should be 1,2,4 or 8. For example: ./main 8;
-            
-            [INFO]  2: ./main [param1] [param2], [param1] is dynamic height. [param1] is dynamic width. It should be 416, 416; 832, 832; 1248, 1248. For example: ./main 416 416
-            [INFO]  acl init success.
-            [INFO]  set device 0 success.
-            [INFO]  create context success.
-            [INFO]  create stream success.
-            [INFO]  get run mode success.
-            [INFO]  load model ../model/yolov3_dynamic_hw.om success.
-            [INFO]  create model description success.
-            [INFO]  start to process file: ../data/input_float32_1x3x416x416.bin.in
-            [INFO]  create model input success.
-            [INFO]  create model output success.
-            [INFO]  set dynamic hw[416, 416] success.
-            [INFO]  model input num[2], output num[3].
-            [INFO]  start to print input tensor desc:
-            [INFO]  index[0]: name[data], inputSize[18690048], format[0], dataType[0]
-            [INFO]  dimcount:[4],dims:[1][3][-1][-1]
-            [INFO]  index[1]: name[ascend_mbatch_shape_data], inputSize[16], format[2], dataType[9]
-            [INFO]  dimcount:[1],dims:[2]
-            [INFO]  start to print output tensor desc:
-            [INFO]  index[0]: name[layer82-conv:0:layer82-conv], outputSize[1551420], format[0], dataType[0]
-            [INFO]  dimcount:[4],dims:[1][255][39][39]
-            [INFO]  index[1]: name[layer94-conv:0:layer94-conv], outputSize[6205680], format[0], dataType[0]
-            [INFO]  dimcount:[4],dims:[1][255][78][78]
-            [INFO]  index[2]: name[layer106-conv:0:layer106-conv], outputSize[24822720], format[0], dataType[0]
-            [INFO]  dimcount:[4],dims:[1][255][156][156]
-            [INFO]  start to print model dynamic hw info:
-            [INFO]  dynamic hw count:[3],dims:{[416, 416][832, 832][1248, 1248]}
-            [INFO]  start to print model current output shape info:
-            [INFO]  index:0,dims:[1][255][13][13]
-            [INFO]  index:1,dims:[1][255][26][26]
-            [INFO]  index:2,dims:[1][255][52][52]
-            [INFO]  model execute success.
-            [INFO]  dump data success.
-            [INFO]  unload model success, modelId is 1.
-            [INFO]  destroy model description success.
-            [INFO]  destroy model input success.
-            [INFO]  destroy model output success.
-            [INFO]  execute sample success.
-            [INFO]  end to destroy stream.
-            [INFO]  end to destroy context.
-            [INFO]  end to reset device: 0.
-            ```
-
-
 
 

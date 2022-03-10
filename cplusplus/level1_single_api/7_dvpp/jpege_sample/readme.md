@@ -60,11 +60,11 @@ DVPP中的JPEGE功能模块，实现将YUV格式图片编码成.jpg图片。
        make
        ```
 
-       在“jpege\_sample/build“目录下会生成可执行程序jpege\_demo。
+       在“jpege\_sample/build/src“目录下会生成可执行程序jpege\_demo。
 
 
 
-2. 以运行用户将开发环境的“jpege\_sample/build“目录下的可执行程序jpege\_demo以及[准备测试数据](#section13765133092318)中测试数据上传到运行环境（Host）的同一目录下，例如“$HOME/dvpp/jpege\_sample“。
+2. 以运行用户将开发环境的“jpege\_sample/build/src“目录下的可执行程序jpege\_demo以及[准备测试数据](#section13765133092318)中测试数据上传到运行环境（Host）的同一目录下，例如“$HOME/dvpp/jpege\_sample“。
 
 3. 运行应用。
 
@@ -107,12 +107,12 @@ DVPP中的JPEGE功能模块，实现将YUV格式图片编码成.jpg图片。
           - 8：UYVY422PACKED
           - 9：YVYU422PACKED
           - 10：VYUY422PACKED
-        - chn\_num：创建编码通道的数目，最大不得超过24路。
+        - chn\_num：创建编码通道的数目，最大不得超过128路。
         - in\_image\_file：输入图像文件的路径，包含文件名。
         - save：是否保存输出码流。
           - 默认1，0：不保留（主要用于性能测试）
           - 非0：保留
-        - chn\_start：编码起始通道号，范围\[0, 47\]，不指定则从0开始。
+        - chn\_start：编码起始通道号，范围\[0, 127\]，不指定则从0开始。
         - performance：性能测试标识。
           - 默认0：功能测试
           - 非0：性能测试

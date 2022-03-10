@@ -69,114 +69,75 @@
 ## 环境要求<a name="section3833348101215"></a>
 
 -   操作系统及架构：CentOS 7.6 x86\_64、CentOS aarch64、Ubuntu 18.04 x86\_64、EulerOS x86、EulerOS aarch64
--   编译器：
-    -   Ascend 310 EP/Ascend 710/Ascend 910形态编译器：g++ 或 aarch64-linux-gnu-g++
-
-    -   Atlas 200 DK编译器：aarch64-linux-gnu-g++
-
+-   编译器：g++或aarch64-linux-gnu-g++
 -   芯片：Ascend 310、Ascend 710、Ascend 910
-
--   已在环境上部署昇腾AI软件栈。
+-   python及依赖的库：python3.7.5
+-   已在环境上部署昇腾AI软件栈
 
 ## 配置环境变量<a name="section137281211130"></a>
 
--   **Ascend 310 EP/Ascend 910：**
-    1.  开发环境上，设置环境变量，编译脚本src/CMakeLists.txt通过环境变量所设置的头文件、库文件的路径来编译代码。
+- 开发环境上环境变量配置
 
-        如下为设置环境变量的示例，请将$HOME/Ascend/ascend-toolkit/latest/_\{os\_arch\}_替换为开发套件包Ascend-cann-toolkit下对应架构的ACLlib的路径。
+  1. CANN-Toolkit包提供进程级环境变量配置脚本，供用户在进程中引用，以自动完成CANN基础环境变量的配置，配置示例如下所示
 
-        -   当运行环境操作系统架构为x86时，执行以下命令：
+     ```
+     . ${HOME}/Ascend/ascend-toolkit/set_env.sh
+     ```
 
-            ```
-            export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux
-            export NPU_HOST_LIB=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux/fwkacllib/lib64/stub
-            ```
+     “$HOME/Ascend”请替换“Ascend-cann-toolkit”包的实际安装路径。
 
-        -   当运行环境操作系统架构为Arm时，执行以下命令：
+  2. 算子编译依赖Python，以Python3.7.5为例，请以运行用户执行如下命令设置Python3.7.5的相关环境变量。
 
-            ```
-            export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux
-            export NPU_HOST_LIB=$HOME/Ascend/ascend-toolkit/latest/arm64-linux/fwkacllib/lib64/stub
-            ```
+     ```
+     #用于设置python3.7.5库文件路径
+     export LD_LIBRARY_PATH=/usr/local/python3.7.5/lib:$LD_LIBRARY_PATH
+     #如果用户环境存在多个python3版本，则指定使用python3.7.5版本
+     export PATH=/usr/local/python3.7.5/bin:$PATH
+     ```
 
+     Python3.7.5安装路径请根据实际情况进行替换，您也可以将以上命令写入~/.bashrc文件中，然后执行source ~/.bashrc命令使其立即生效。
+     
+  3. 开发环境上，设置环境变量，配置AscendCL单算子验证程序编译依赖的头文件与库文件路径。
+  
+     编译脚本会按环境变量指向的路径查找编译依赖的头文件和库文件，“$HOME/Ascend”请替换“Ascend-cann-toolkit”包的实际安装路径。
+  
+     -   当运行环境操作系统架构是x86时，配置示例如下所示：
+  
+         ```
+         export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux
+         export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
+         ```
+  
+     -   当运行环境操作系统架构时AArch64时，配置示例如下所示：
+  
+         ```
+         export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux
+         export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
+         ```
+- 运行环境上环境变量配置
+  
+  -   若运行环境上安装的“Ascend-cann-toolkit”包，环境变量设置如下：
+  
+      ```
+      . ${HOME}/Ascend/ascend-toolkit/set_env.sh
+      ```
+  
+  -   若运行环境上安装的“Ascend-cann-nnrt”包，环境变量设置如下：
+  
+      ```
+      . ${HOME}/Ascend/nnrt/set_env.sh
+      ```
+  
+  -   若运行环境上安装的“Ascend-cann-nnae”包，环境变量设置如下：
+  
+      ```
+      . ${HOME}/Ascend/nnae/set_env.sh
+      ```
+  
+    “$HOME/Ascend”请替换相关软件包的实际安装路径。
+  
 
-        使用“$HOME/Ascend/ascend-toolkit/latest/_\{os\_arch\}_/fwkacllib/lib64/stub”目录下的\*.so库，是为了编译基于AscendCL接口的代码逻辑时，不依赖其它组件（例如Driver）的任何\*.so库。编译通过后，在Host上运行应用时，会根据环境变量LD\_LIBRARY\_PATH链接到“fwkacllib/lib64“或“acllib/lib64“目录下的\*.so库，并自动链接到依赖其它组件的\*.so库。
-
-        设置环境变量后，还需修改src/CMakeLists.txt文件中的如下配置段，将“**acllib**”修改为“**fwkacllib**”。
-
-        ```
-        # Header path
-        include_directories(
-            ${INC_PATH}/acllib/include/
-            ../inc/
-        )
-        ```
-
-    2.  运行环境上，设置环境变量，运行应用时需要根据环境变量找到对应的库文件。
-        -   若运行环境上安装的是开发套件包Ascend-cann-toolkit，环境变量设置如下：
-
-            如下为设置环境变量的示例，请将$HOME/Ascend/ascend-toolkit/latest替换为FwkACLlib的路径。
-
-            ```
-            export LD_LIBRARY_PATH=$HOME/Ascend/ascend-toolkit/latest/fwkacllib/lib64
-            ```
-
-        -   若运行环境上安装的是Ascend-cann-nnrt包，环境变量设置如下：
-
-            如下为设置环境变量的示例，请将$HOME/Ascend/nnrt/latest替换为ACLlib的路径。
-
-            ```
-            export LD_LIBRARY_PATH=$HOME/Ascend/nnrt/latest/acllib/lib64
-            ```
-
-
-
--   **Ascend 710：**
-    1.  开发环境上，设置环境变量，编译脚本src/CMakeLists.txt通过环境变量所设置的头文件、库文件的路径来编译代码。
-
-        如下为设置环境变量的示例，请将$HOME/Ascend/ascend-toolkit/latest/_\{os\_arch\}_替换为开发套件包Ascend-cann-toolkit下对应架构的ACLlib的路径。
-
-        -   当运行环境操作系统架构为x86时，执行以下命令：
-
-            ```
-            export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux
-            export NPU_HOST_LIB=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux/acllib/lib64/stub
-            ```
-
-        -   当运行环境操作系统架构为Arm时，执行以下命令：
-
-            ```
-            export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux
-            export NPU_HOST_LIB=$HOME/Ascend/ascend-toolkit/latest/arm64-linux/acllib/lib64/stub
-            ```
-
-
-        使用“$HOME/Ascend/ascend-toolkit/latest/_\{os\_arch\}_/acllib/lib64/stub”目录下的\*.so库，是为了编译基于AscendCL接口的代码逻辑时，不依赖其它组件（例如Driver）的任何\*.so库。编译通过后，在Host上运行应用时，会根据环境变量LD\_LIBRARY\_PATH链接到“$HOME/Ascend/nnrt/latest/acllib/lib64”目录下的\*.so库，并自动链接到依赖其它组件的\*.so库。
-
-    2.  运行环境上，设置环境变量，运行应用时需要根据环境变量找到对应的库文件。
-
-        如下为设置环境变量的示例，请将$HOME/Ascend/nnrt/latest替换为ACLlib的路径。
-
-        ```
-        export LD_LIBRARY_PATH=$HOME/Ascend/nnrt/latest/acllib/lib64
-        ```
-
-
--   **Atlas 200 DK：**
-
-    仅需在开发环境上设置环境变量，运行环境上的环境变量在制卡时已配置，此处无需单独配置。
-
-    如下为设置环境变量的示例，请将$HOME/Ascend/ascend-toolkit/latest/arm64-linux替换为开发套件包Ascend-cann-toolkit下Arm架构的ACLlib的路径。
-
-    ```
-    export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux
-    export NPU_HOST_LIB=$HOME/Ascend/ascend-toolkit/latest/arm64-linux/acllib/lib64/stub
-    ```
-
-    使用“$HOME/Ascend/ascend-toolkit/latest/arm64-linux/acllib/lib64/stub”目录下的\*.so库，是为了编译基于AscendCL接口的代码逻辑时，不依赖其它组件（例如Driver）的任何\*.so库。编译通过后，在板端环境上运行应用时，会根据环境变量LD\_LIBRARY\_PATH链接到“$HOME/Ascend/acllib/lib64”目录下的\*.so库，并自动链接到依赖其它组件的\*.so库。
-
-
-## 编译运行（Ascend 310 EP/Ascend 710/Ascend 910）<a name="section19471849121012"></a>
+## 编译运行<a name="section19471849121012"></a>
 
 1.  编译代码。
     1.  以运行用户登录开发环境。
@@ -189,6 +150,8 @@
     3.  切换到“build/intermediates/host“目录，执行**cmake**生成编译文件。
 
         “../../../src“表示CMakeLists.txt文件所在的目录，请根据实际目录层级修改。
+
+        将DCMAKE\_SKIP\_RPATH设置为TRUE，代表不会将rpath信息（即NPU_HOST_LIB配置的路径）添加到编译生成的可执行文件中去，可执行文件运行时会自动搜索实际设置的LD_LIBRARY_PATH中的动态链接库。
 
         -   当开发环境与运行环境操作系统架构相同时，执行如下命令编译。
 
@@ -269,91 +232,4 @@
         执行可执行文件成功后，同时会在main文件同级的目录下生成结果文件，便于后期查看。
 
         cropName0、cropName1、cropName2、cropName3、cropName4、cropName5、cropName6、cropName7这八张图片是从输入图片dvpp\_vpc\_1920×1980\_nv12.yuv中抠出的子图。
-
-
-
-## 编译运行（Atlas 200 DK）<a name="section112152503113"></a>
-
-1.  编译代码。
-    1.  以运行用户登录开发环境。
-    2.  切换到样例目录，创建目录用于存放编译文件，例如，本文中，创建的目录为“build/intermediates/minirc“。
-
-        ```
-        mkdir -p build/intermediates/minirc
-        ```
-
-    3.  切换到“build/intermediates/minirc“目录，执行**cmake**生成编译文件。
-
-        “../../../src“表示CMakeLists.txt文件所在的目录，请根据实际目录层级修改。
-
-        ```
-        cd build/intermediates/minirc
-        cmake ../../../src -DCMAKE_CXX_COMPILER=aarch64-linux-gnu-g++ -DCMAKE_SKIP_RPATH=TRUE
-        ```
-
-    4.  执行**make**命令，生成的可执行文件main在“样例目录/out“目录下。
-
-        ```
-        make
-        ```
-
-
-2.  准备输入图片。
-
-    请从以下链接获取该样例的输入图片，并以运行用户将获取的文件上传至开发环境的“样例目录/data“目录下。如果目录不存在，需自行创建。
-
-    [https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/dvpp\_vpc\_1920x1080\_nv12.yuv](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/dvpp_vpc_1920x1080_nv12.yuv)
-
-3.  运行应用。
-    1.  以运行用户将开发环境的“acl\_vpc\_batchcrop“目录及目录下的文件上传到板端环境，例如“$HOME/acl\_vpc\_batchcrop”。
-    2.  以运行用户登录板端环境。
-    3.  切换到可执行文件main所在的目录，例如“$HOME/acl\_vpc\_batchcrop/out”，给该目录下的main文件加执行权限。
-
-        ```
-        chmod +x main
-        ```
-
-    4.  切换到可执行文件main所在的目录，例如“$HOME/acl\_vpc\_batchcrop/out”，运行可执行文件。
-
-        ```
-        ./main
-        ```
-
-        执行成功后，在屏幕上的关键提示信息示例如下。
-
-        ```
-        [INFO]  aclInit success, ret = 0.
-        [INFO]  open device 0 success
-        [INFO]  create context success
-        [INFO]  create stream success
-        [INFO]  dvpp init resource success
-        [INFO]  open file = ./dvpp_vpc_1920x1080_nv12.yuv success.
-        [INFO]  start set inputDesc success.
-        [INFO]  write out to file ./cropName0 success.
-        [INFO]  write out to file ./cropName1 success.
-        [INFO]  write out to file ./cropName2 success.
-        [INFO]  write out to file ./cropName3 success.
-        [INFO]  write out to file ./cropName4 success.
-        [INFO]  write out to file ./cropName5 success.
-        [INFO]  write out to file ./cropName6 success.
-        [INFO]  write out to file ./cropName7 success.
-        [INFO]  ProcessBatchCrop success.
-        [INFO]  ProcessBatchCrop success.
-        [INFO]  DestroyBatchCropResource start
-        [INFO]  DestroyBatchCropResource end
-        [INFO]  SampleProcess DestroyResource start.
-        [INFO]  end to destroy stream
-        [INFO]  end to destroy context
-        [INFO]  0 deviceID
-        [INFO]  end to reset device is 0
-        [INFO]  SampleProcess DestroyResource success.
-        [INFO]  end to finalize acl
-        ......
-        ```
-
-        执行可执行文件成功后，同时会在main文件同级的目录下生成结果文件，便于后期查看。
-
-        cropName0、cropName1、cropName2、cropName3、cropName4、cropName5、cropName6、cropName7这八张图片是从输入图片dvpp\_vpc\_1920×1980\_nv12.yuv中抠出的子图。
-
-
 

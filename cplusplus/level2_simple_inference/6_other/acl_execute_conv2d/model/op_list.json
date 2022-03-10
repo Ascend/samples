@@ -1,0 +1,41 @@
+[
+  {
+    "op": "Conv2D",
+    "input_desc": [
+      {
+        "format": "NHWC",
+        "shape": [2, 1024, 1024, 3],
+        "type": "float16"
+      },
+      {
+        "format": "NCHW",
+        "shape": [6, 3, 3, 3],
+        "type": "float16"
+      }
+    ],
+    "output_desc": [
+      {
+        "format": "NHWC",
+        "shape": [2, 1024, 1024, 6],
+        "type": "float16"
+      }
+    ],
+    "attr": [
+      {
+        "name": "strides",
+        "type": "list_int",
+        "value": [1, 1, 1, 1]
+      },
+      {
+        "name": "pads",
+        "type": "list_int",
+        "value": [1, 1, 1, 1]
+      },
+      {
+        "name": "dilations",
+        "type": "list_int",
+        "value": [1, 1, 1, 1]
+      }
+    ]
+  }
+]

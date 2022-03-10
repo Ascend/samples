@@ -33,12 +33,12 @@ public:
     AclLiteError Init(const std::string& modelPath);
     AclLiteError Init(void *modelAddr, size_t modelSize);
     void DestroyResource();
-    AclLiteError CreateInput(void *input, uint32_t input1size);
+    AclLiteError CreateInput(void *input, uint32_t inputsize);
     AclLiteError CreateInput(void *input1, uint32_t input1size,
-                       void* input2, uint32_t input2size);
+                             void* input2, uint32_t input2size);
     AclLiteError CreateInput(std::vector<DataInfo>& inputData);
     AclLiteError Execute(std::vector<InferenceOutput>& inferOutputs, 
-                       void *data, uint32_t size);
+                         void *data, uint32_t size);
     AclLiteError Execute(std::vector<InferenceOutput>& inferOutputs);
     size_t GetModelInputSize(int index);
     void DestroyInput();
@@ -49,9 +49,9 @@ private:
     AclLiteError SetDesc();
     AclLiteError CreateOutput();
     AclLiteError AddDatasetBuffer(aclmdlDataset* dataset, 
-                                void* buffer, uint32_t bufferSize);
+                                  void* buffer, uint32_t bufferSize);
     AclLiteError GetOutputItem(InferenceOutput& out,
-                             uint32_t idx);
+                               uint32_t idx);
     void Unload();    
     void DestroyDesc();
     void DestroyOutput();

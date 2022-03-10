@@ -3,7 +3,8 @@
 ## 第三方依赖安装指导（python样例）
 
 ### 前置条件
-**按照官方指导文档完成CANN包安装。** 
+**1. 首先按照官方指导文档完成CANN包安装。**      
+**2. CANN版本需要>=5.0.4.alpha001，低于此版本请参见[昇腾CANN样例仓介绍](https://github.com/Ascend/samples/tree/master)中的版本说明切换tag并使用发行版。** 
 
 ### 安装须知
 samples仓中的部分python样例使用到opencv，ffmpeg等第三方依赖进行图像等处理，所以需要在运行之前，根据本文指导安装第三方依赖并进行环境配置。 
@@ -56,16 +57,16 @@ samples仓中的部分python样例使用到opencv，ffmpeg等第三方依赖进�
    # 安装ffmpeg
    sudo apt-get install -y libavformat-dev libavcodec-dev libavdevice-dev libavutil-dev libswscale-dev libavresample-dev
    # 安装其它依赖
-   pip3.6 install --upgrade pip
-   pip3.6 install Cython
+   python3.6 -m pip install --upgrade pip
+   python3.6 -m pip install Cython
    sudo apt-get install pkg-config libxcb-shm0-dev libxcb-xfixes0-dev
    # 安装pyav
    python3.6 -m pip install av==6.2.0
    # 安装pillow 的依赖
    sudo apt-get install libtiff5-dev libjpeg8-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python-tk
    # 安装numpy和PIL
-   pip3.6 install numpy
-   pip3.6 install Pillow
+   python3.6 -m pip install numpy
+   python3.6 -m pip install Pillow
    ```
 2. <a name="step_2"></a>安装python-acllite     
    **python acllite库以源码方式提供，安装时将acllite目录拷贝到运行环境的第三方库目录**

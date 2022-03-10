@@ -18,6 +18,11 @@
 using namespace std;
 extern bool g_isDevice;
 
+typedef struct DataInfo {
+    void *data;
+    size_t size;
+} DataInfo;
+
 ModelProcess::ModelProcess()
     : modelId_(0), modelWorkPtr_(nullptr), modelWorkSize_(0), modelWeightPtr_(nullptr), modelWeightSize_(0),
       loadFlag_(false), modelDesc_(nullptr), input_(nullptr), output_(nullptr)
@@ -153,69 +158,64 @@ void ModelProcess::DestroyDesc()
     INFO_LOG("destroy model description success.");
 }
 
-Result ModelProcess::CreateInput(void *inputDataBuffer, size_t bufferSize)
+Result ModelProcess::CreateInput(const ImageMemoryInfo &imageMemInfo)
 {
-    if (inputDataBuffer == nullptr) {
-        ERROR_LOG("inputDataBuffer is empty.");
+    if ((imageMemInfo.imageDataBuf == nullptr) || (imageMemInfo.imageInfoBuf == nullptr)) {
+        ERROR_LOG("input image memory is nullptr.");
         return FAILED;
     }
+
+    const size_t mdlInputNum = aclmdlGetNumInputs(modelDesc_);
+    // dynamic batch yolov3 has three inputs, two are data input, one is dynamic input
+    if (mdlInputNum != 3) {
+        ERROR_LOG("the input number of dynamic batch yolov3 must be 3.");
+        return FAILED;
+    }
+    size_t dynamicIdx = 0;
+    auto ret = aclmdlGetInputIndexByName(modelDesc_, ACL_DYNAMIC_TENSOR_NAME, &dynamicIdx);
+    if ((ret != ACL_SUCCESS) || (dynamicIdx != (mdlInputNum - 1))) {
+        ERROR_LOG("get input index by name failed, dynamicIdx = %zu, errorCode = %d.",
+            dynamicIdx, static_cast<int32_t>(ret));
+        return FAILED;
+    }
+    size_t dataLen = aclmdlGetInputSizeByIndex(modelDesc_, dynamicIdx);
+    void *data = nullptr;
+    ret = aclrtMalloc(&data, dataLen, ACL_MEM_MALLOC_HUGE_FIRST);
+    if (ret != ACL_SUCCESS) {
+        ERROR_LOG("malloc device memory failed, errorCode = %d.", static_cast<int32_t>(ret));
+        return FAILED;
+    }
+
+    // the first two inputs of yolov3 model are data input, the third input is dynamic input
+    DataInfo inputDataInfo[mdlInputNum] = {{imageMemInfo.imageDataBuf, imageMemInfo.imageDataSize},
+        {imageMemInfo.imageInfoBuf, imageMemInfo.imageInfoSize},
+        {data, dataLen}};
 
     input_ = aclmdlCreateDataset();
     if (input_ == nullptr) {
         ERROR_LOG("can't create dataset, create input failed.");
+        aclrtFree(data);
+        data = nullptr;
         return FAILED;
     }
 
-    for (size_t index = 0; index < aclmdlGetNumInputs(modelDesc_); ++index) {
-        const char *name = aclmdlGetInputNameByIndex(modelDesc_, index);
-        if (name == nullptr) {
-            ERROR_LOG("get input name failed, index = %zu.", index);
+    for (size_t index = 0; index < mdlInputNum; ++index) {
+        aclDataBuffer *inputData = aclCreateDataBuffer(inputDataInfo[index].data, inputDataInfo[index].size);
+        if (inputData == nullptr) {
+            ERROR_LOG("can't create data buffer, create input failed.");
+            (void)aclrtFree(inputDataInfo[index].data);
+            inputDataInfo[index].data = nullptr;
             return FAILED;
         }
-        size_t inputLen = aclmdlGetInputSizeByIndex(modelDesc_, index);
-        if (strcmp(name, ACL_DYNAMIC_TENSOR_NAME) == 0) {
-            void *data = nullptr;
-            auto ret = aclrtMalloc(&data, inputLen, ACL_MEM_MALLOC_HUGE_FIRST);
-            if (ret != ACL_SUCCESS) {
-                ERROR_LOG("malloc device memory failed, errorCode = %d.", static_cast<int32_t>(ret));
-                return FAILED;
-            }
 
-            aclDataBuffer *dataBuffer = aclCreateDataBuffer(data, inputLen);
-            if (dataBuffer == nullptr) {
-                ERROR_LOG("create data buffer failed.");
-                (void)aclrtFree(data);
-                data = nullptr;
-                return FAILED;
-            }
-
-            ret = aclmdlAddDatasetBuffer(input_, dataBuffer);
-            if (ret != ACL_SUCCESS) {
-                ERROR_LOG("add user input dataset buffer failed, errorCode = %d.", static_cast<int32_t>(ret));
-                (void)aclrtFree(data);
-                data = nullptr;
-                (void)aclDestroyDataBuffer(dataBuffer);
-                dataBuffer = nullptr;
-                return FAILED;
-            }
-        } else {
-            aclDataBuffer *inputData = aclCreateDataBuffer(inputDataBuffer, bufferSize);
-            if (inputData == nullptr) {
-                ERROR_LOG("can't create data buffer, create input failed.");
-                (void)aclrtFree(inputDataBuffer);
-                inputDataBuffer = nullptr;
-                return FAILED;
-            }
-
-            aclError ret = aclmdlAddDatasetBuffer(input_, inputData);
-            if (ret != ACL_SUCCESS) {
-                ERROR_LOG("add input dataset buffer failed, errorCode = %d.", static_cast<int32_t>(ret));
-                aclDestroyDataBuffer(inputData);
-                inputData = nullptr;
-                (void)aclrtFree(inputDataBuffer);
-                inputDataBuffer = nullptr;
-                return FAILED;
-            }
+        aclError ret = aclmdlAddDatasetBuffer(input_, inputData);
+        if (ret != ACL_SUCCESS) {
+            ERROR_LOG("add input dataset buffer failed, errorCode = %d.", static_cast<int32_t>(ret));
+            aclDestroyDataBuffer(inputData);
+            inputData = nullptr;
+            (void)aclrtFree(inputDataInfo[index].data);
+            inputDataInfo[index].data = nullptr;
+            return FAILED;
         }
     }
     INFO_LOG("create model input success.");
@@ -434,7 +434,7 @@ void ModelProcess::DumpModelOutputResult()
                 continue;
             }
 
-            uint32_t len = aclGetDataBufferSize(dataBuffer);
+            size_t len = aclGetDataBufferSizeV2(dataBuffer);
 
             void* outHostData = nullptr;
             aclError ret = ACL_SUCCESS;

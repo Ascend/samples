@@ -138,6 +138,10 @@ Note: The generation of a single-operator model file depends only on the operato
        **mkdir -p build/intermediates/host**
 
    2.  Go to the  **build/intermediates/host**  directory and run the  **cmake**  command.
+       
+       Replace  **../../../src**  with the actual directory of  **CMakeLists.txt**.
+
+       Set **DCMAKE_SKIP_RPATH** to  **TRUE**,  **rpath**  (path specified by  **NPU_HOST_LIB**) is not added to the executable generated after build. The executable automatically looks up for dynamic libraries in the path  included in  **LD_LIBRARY_PATH**.
 
        -   If the operating system architecture of the  development environment is the same as that of the running environment, run the following command:
 
@@ -153,11 +157,6 @@ Note: The generation of a single-operator model file depends only on the operato
            
            **cmake ../../../src -DCMAKE\_CXX\_COMPILER=aarch64-linux-gnu-g++ -DCMAKE\_SKIP\_RPATH=TRUE**
 
-      The parameters are described as follows:
-
-      - Replace  **../../../src**  with the actual directory of  **CMakeLists.txt**.
-      - **DCMAKE\_CXX\_COMPILER**: compiler used to build the app.
-      - **DCMAKE\_SKIP\_RPATH**: If it is set to  **TRUE**,  **rpath**  \(path specified by  **NPU\_HOST\_LIB**\) is not added to the executable generated after build. The executable automatically looks up for dynamic libraries in the path  included in  **LD\_LIBRARY\_PATH**.
 
    3.  Run the following command to generate an executable:
 

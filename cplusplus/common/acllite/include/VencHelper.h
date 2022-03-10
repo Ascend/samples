@@ -11,38 +11,18 @@
 #include <cstdint>
 #include <iostream>
 #include <thread>
-
 #include "acl/acl.h"
 #include "acl/ops/acl_dvpp.h"
-
 #include "AclLiteUtils.h"
 #include "ThreadSafeQueue.h"
 
-enum VencStatus {
-    STATUS_VENC_INIT = 0,
-    STATUS_VENC_WORK,
-    STATUS_VENC_FINISH,
-    STATUS_VENC_EXIT,
-    STATUS_VENC_ERROR,
-};
-
-struct VencConfig {
-    uint32_t maxWidth = 0;
-    uint32_t maxHeight = 0;
-    std::string   outFile;
-    acldvppPixelFormat format = PIXEL_FORMAT_YUV_SEMIPLANAR_420;
-    acldvppStreamFormat enType = H264_MAIN_LEVEL;
-    aclrtContext context = nullptr;
-    aclrtRunMode runMode = ACL_HOST;
-};
-
 class DvppVenc {
 public:
-    DvppVenc(VencConfig& vencConfig);
+    DvppVenc(VencConfig &vencConfig);
     ~DvppVenc();
 
     AclLiteError Init();
-    AclLiteError Process(ImageData& image);
+    AclLiteError Process(ImageData &image);
     void Finish();
 
 private:
@@ -70,16 +50,16 @@ private:
     bool isFinished_;
 };
 
-
 class VencHelper {
-    public:
-    VencHelper(VencConfig& vencConfig);
+public:
+    VencHelper(VencConfig &vencConfig);
     ~VencHelper();
 
     AclLiteError Init();
-    AclLiteError Process(ImageData& image);
+    AclLiteError Process(ImageData &image);
 
     void SetStatus(VencStatus status) { status_ = status; }
+    void DestroyResource();
     VencStatus GetStatus() { return status_; }
     
 private:

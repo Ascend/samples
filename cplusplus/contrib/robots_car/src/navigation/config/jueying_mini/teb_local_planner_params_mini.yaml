@@ -1,0 +1,93 @@
+TebLocalPlannerROS:
+  odom_topic: leg_odom
+  map_frame: /map
+
+  # Trajectory
+  teb_autosize: true
+  dt_ref: 0.3
+  dt_hysteresis: 0.05
+  min_samples: 3
+  global_plan_overwrite_orientation: false
+  allow_init_with_backwards_motion: false
+  global_plan_viapoint_sep: 0.05
+  max_global_plan_lookahead_dist: 3.0
+  exact_arc_length: false
+  force_reinit_new_goal_dist: 0.5
+  feasibility_check_no_poses: 3
+  publish_feedback: false
+  control_look_ahead_poses: 2
+
+  # Robot 全向速度 & 加速度参数配置
+  max_vel_x: 0.7
+  max_vel_x_backwards: 0.2
+  max_vel_y: 0.2
+  max_vel_theta: 0.5
+  acc_lim_x: 0.7
+  acc_lim_y: 0.2
+  acc_lim_theta: 0.3
+  use_proportional_saturation: true
+  footprint_model:
+    type: "polygon"
+    vertices: [[0.343,0.18], [0.343,-0.18], [-0.38,-0.18], [-0.38,0.18]] # MINI
+
+  # GoalTolerance
+  yaw_goal_tolerance: 0.15
+  xy_goal_tolerance: 0.15
+  free_goal_vel: false
+
+  # Obstacles
+  min_obstacle_dist: 0.1
+  inflation_dist: 0.2
+  include_costmap_obstacles: true
+  costmap_obstacles_behind_robot_dist: 2.0
+  obstacle_poses_affected: 25
+  legacy_obstacle_association: false
+  obstacle_association_force_inclusion_factor: 1.5
+  obstacle_association_cutoff_factor: 5.0
+  costmap_converter_plugin: "costmap_converter::CostmapToPolygonsDBSMCCH"
+  costmap_converter_spin_thread: true
+  costmap_converter_rate: 10
+
+  # Optimization
+  no_inner_iterations: 5
+  no_outer_iterations: 4
+  optimization_activate: true
+  optimization_verbose: false
+  penalty_epsilon: 0.01
+
+  weight_max_vel_x: 1
+  weight_max_vel_y: 1
+  weight_max_vel_theta: 1
+  weight_acc_lim_x: 1
+  weight_acc_lim_y: 1
+  weight_acc_lim_theta: 1
+  weight_kinematics_nh: 1
+  weight_kinematics_forward_drive: 10
+  weight_optimaltime: 1
+  weight_shortest_path: 1
+  weight_obstacle: 5
+  weight_inflation: 5
+  weight_viapoint: 7
+  weight_adapt_factor: 2
+
+  # Homotopy Class Planner
+  enable_homotopy_class_planning: false
+  enable_multithreading: true
+  simple_exploration: false
+  max_number_classes: 4
+  selection_cost_hysteresis: 1.0
+  selection_obst_cost_scale: 1.0
+  selection_viapoint_cost_scale: 1.0
+  selection_alternative_time_cost: false
+
+  roadmap_graph_no_samples: 15
+  roadmap_graph_area_width: 5
+  h_signature_prescaler: 0.5
+  h_signature_threshold: 0.1
+  obstacle_keypoint_offset: 0.1
+  obstacle_heading_threshold: 0.45
+  visualize_hc_graph: false
+
+  # Recovery
+  shrink_horizon_backup: false
+  oscillation_recovery: false

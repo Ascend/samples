@@ -17,7 +17,7 @@ test add
 import unittest
 import os
 import shutil
-from impl.add import add
+from cust_impl.add_tik import add
 from run_testcase import run_testcase,get_path_val,print_func_name
 
 testcases = {

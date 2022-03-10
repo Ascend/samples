@@ -1,6 +1,7 @@
 中文|[English](separate_environmental_guidance.md)
 
 ### 昇腾AI设备安装开发环境，同时作为运行环境场景下的第三方依赖安装 （推荐）
+
 **以下指导以普通用户HwHiAiUser安装CANN包为例说明。**
 
 #### 安装准备
@@ -71,6 +72,7 @@
   cd protobuf
   ./autogen.sh
   ./configure --prefix=${THIRDPART_PATH}
+  make clean
   make -j8
   sudo make install
   # 进入presentagent源码目录并编译

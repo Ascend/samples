@@ -11,7 +11,7 @@ import cv2
 import re
 import json
 
-import utils
+import acllite_utils as utils
 from PIL import Image, ImageDraw, ImageFont
 from acllite_imageproc import AclLiteImageProc
 import constants as const

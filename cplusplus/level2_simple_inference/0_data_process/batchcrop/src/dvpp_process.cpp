@@ -117,6 +117,8 @@ uint32_t DvppProcess::CalculateInBufferSize(uint32_t inputWidth, uint32_t inputH
     uint32_t inputBufferSize;
     switch (inputFormat) {
         case PIXEL_FORMAT_YUV_400:
+            inputBufferSize = inputWidthStride_ * inputHeightStride_;
+            break;
         case PIXEL_FORMAT_YUV_SEMIPLANAR_420:
         case PIXEL_FORMAT_YVU_SEMIPLANAR_420:
             inputBufferSize = inputWidthStride_ * inputHeightStride_ * sizeAlignment / sizeNum;

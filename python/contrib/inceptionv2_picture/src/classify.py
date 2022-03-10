@@ -22,7 +22,7 @@ from acllite_image import AclLiteImage
 from acllite_resource import AclLiteResource
 from image_net_classes import get_image_net_class
 from PIL import Image, ImageDraw, ImageFont
-from utils import display_time 
+from acllite_utils import display_time 
 
 class Classify(object):
     """

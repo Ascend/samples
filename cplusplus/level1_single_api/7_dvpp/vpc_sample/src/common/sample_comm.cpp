@@ -52,7 +52,8 @@ int32_t acl_init()
         SAMPLE_PRT("aclInit failed with %d.\n", aclRet);
         return HI_FAILURE;
     }
-
+    // By default, the program is running on device 0.
+    // On a multi-P environment, you can choose target device by the following interface.
     aclRet = aclrtSetDevice(0);
     if (aclRet != ACL_SUCCESS) {
         SAMPLE_PRT("aclrtSetDevice(0) failed with %d.\n", aclRet);
@@ -222,7 +223,7 @@ int32_t handle_output_data(hi_vpc_pic_info& outputPic, uint32_t dstBufferSize, c
         // Due to VPC alignment requirements, the output picture may contain redundant data.
         // If you don't need that, use GetNotAlignBuffe to write the real output picture
         hi_vpc_pic_info notAlignPic = outputPicHost;
-        configure_stride_and_buffer_size(notAlignPic, 1, 1);
+        configure_stride_and_buffer_size(notAlignPic, 1, 1, false);
         notAlignPic.picture_address = malloc(dstBufferSize);
         if (notAlignPic.picture_address == nullptr) {
             SAMPLE_PRT("malloc not align buffer failed!\n");
@@ -254,7 +255,7 @@ int32_t handle_output_data(hi_vpc_pic_info& outputPic, uint32_t dstBufferSize, c
         // Due to VPC alignment requirements, the output picture may contain redundant data.
         // If you don't need that, use GetNotAlignBuffe to write the real output picture
         hi_vpc_pic_info notAlignPic = outputPic;
-        configure_stride_and_buffer_size(notAlignPic, 1, 1);
+        configure_stride_and_buffer_size(notAlignPic, 1, 1, false);
         notAlignPic.picture_address = malloc(dstBufferSize);
         if (notAlignPic.picture_address == nullptr) {
             SAMPLE_PRT("malloc align buffer failed!");
@@ -295,7 +296,8 @@ void memset_buffer(hi_vpc_pic_info& picInfo)
     }
 }
 
-uint32_t configure_stride_and_buffer_size(hi_vpc_pic_info& pic, uint32_t widthAlign, uint32_t heightAlign)
+uint32_t configure_stride_and_buffer_size(hi_vpc_pic_info& pic, uint32_t widthAlign, uint32_t heightAlign,
+    bool widthStride32Align)
 {
     if ((widthAlign == 0) || (widthAlign > 128) || ((widthAlign & (widthAlign - 1)) != 0)) { // 最大128
         SAMPLE_PRT("widthAlign = %u, should be power of 2, and between (0, 128]!\n", widthAlign);
@@ -311,6 +313,10 @@ uint32_t configure_stride_and_buffer_size(hi_vpc_pic_info& pic, uint32_t widthAl
     uint32_t format = pic.picture_format;
     uint32_t dstBufferSize = 0; // dstBufferSize is the real size
     uint32_t minWidthAlignNum = 32; // min number of width stride is 32
+
+    if (!widthStride32Align) {
+        minWidthAlignNum = 1;
+    }
 
     switch (format) {
         case HI_PIXEL_FORMAT_YUV_400:

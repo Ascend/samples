@@ -4,7 +4,7 @@ sys.path.append("../")
 import os
 import numpy as np
 import acl
-import utils
+import acllite_utils as utils
 from PIL import Image, ImageDraw, ImageFont
 from acllite_imageproc import AclLiteImageProc
 import constants as const

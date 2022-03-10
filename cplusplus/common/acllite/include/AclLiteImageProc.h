@@ -34,17 +34,19 @@ public:
 
     AclLiteError Init();
     AclLiteError Resize(ImageData& dest,ImageData& src, 
-                      uint32_t width, uint32_t height);
+                        uint32_t width, uint32_t height);
     AclLiteError JpegD(ImageData& destYuv, ImageData& srcJpeg);
     AclLiteError JpegE(ImageData& destJpeg, ImageData& srcYuv);
     AclLiteError Crop(ImageData& dest, ImageData& src,
                       uint32_t ltHorz, uint32_t ltVert,
                       uint32_t rbHorz, uint32_t rbVert);
-    AclLiteError CropResolution(ImageData& dest, ImageData& src,
-                                uint32_t width, uint32_t height);
-    AclLiteError CropUniform(ImageData& dest, ImageData& src,
-                             uint32_t ltHorz, uint32_t ltVert,
-                             uint32_t rbHorz, uint32_t rbVert); 
+    AclLiteError CropPaste(ImageData& dest, ImageData& src,
+                           uint32_t width, uint32_t height,
+                           uint32_t ltHorz, uint32_t ltVert,
+                           uint32_t rbHorz, uint32_t rbVert);                           
+    AclLiteError ProportionPaste(ImageData& dest, ImageData& src,
+                                 uint32_t ltHorz, uint32_t ltVert,
+                                 uint32_t rbHorz, uint32_t rbVert); 
     void DestroyResource();
 
 protected:

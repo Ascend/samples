@@ -5,11 +5,11 @@ import os
 import numpy as np
 import cv2 as cv
 import acl
-import utils
+import acllite_utils as utils
 from acllite_imageproc import AclLiteImageProc
 import constants as const
 from acllite_model import AclLiteModel
-from utils import display_time 
+from acllite_utils import display_time 
 from acllite_image import AclLiteImage
 from acllite_resource import AclLiteResource
 

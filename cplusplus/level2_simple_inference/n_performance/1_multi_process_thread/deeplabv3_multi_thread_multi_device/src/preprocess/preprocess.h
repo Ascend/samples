@@ -28,7 +28,8 @@
 class PreprocessThread : public AclLiteThread {
 public:
     PreprocessThread(string& fileName, uint32_t modelWidth, 
-            uint32_t modelHeight, uint32_t postThreadNum, uint32_t inferThreadNum);
+            uint32_t modelHeight, uint32_t postThreadNum, 
+            uint32_t inferThreadNum, aclrtContext& context);
     ~PreprocessThread();
 
     AclLiteError Init();
@@ -42,20 +43,19 @@ private:
 
 private:
     string filePath_;
-    aclrtStream stream_;
     aclrtRunMode runMode_;
     uint32_t modelWidth_;
     uint32_t modelHeight_;
     int selfThreadId_;
-    vector<int> nextThreadId_;      //下一个线程id
-    vector<int> postprocThreadId_;  //下下个线程id
-    uint32_t inferThreadNum_;   //推理线程总数
-    uint32_t postThreadNum_;    //单个推理的后处理线程数
-    int frameCnt_;              //帧号
+    vector<int> nextThreadId_;
+    vector<int> postprocThreadId_;
+    uint32_t inferThreadNum_;
+    uint32_t postThreadNum_;
+    int frameCnt_;
     AclLiteImageProc dvpp_;
-
-    int inferChannel_;           //哪一个推理线程
-    int postChannel_;            //哪一个后处理线程
-    int indexCount_;             //
+    int inferChannel_;
+    int postChannel_;
+    int indexCount_;
+    aclrtContext context_;
 };
 

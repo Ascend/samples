@@ -27,7 +27,7 @@ class AclLiteResource {
 public:
     AclLiteResource();
     AclLiteResource(int32_t devId, const std::string& aclConfigPath, 
-              bool useDefaultCtx = true);   
+                    bool useDefaultCtx = true);   
     ~AclLiteResource();
 
     AclLiteError Init();

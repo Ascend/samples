@@ -72,7 +72,7 @@ def main(model_path):
             print('Error: Camera read failed')
             break
         # Camera Input (YUV) to RGB Image
-        img_original = img_original.nparray()
+        img_original = img_original.byte_data_to_np_array()
         img_original = YUVtoRGB(img_original)
         # img_original = cv2.flip(img_original, 1)
 

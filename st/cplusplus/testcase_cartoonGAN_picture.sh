@@ -40,7 +40,7 @@ function main() {
     if [ $? -eq ${inferenceError} ];then
         return ${inferenceError}
     elif [ $? -eq ${verifyResError} ];then
-	return ${verifyResError}
+        return ${verifyResError}
     fi
 
     return ${success}

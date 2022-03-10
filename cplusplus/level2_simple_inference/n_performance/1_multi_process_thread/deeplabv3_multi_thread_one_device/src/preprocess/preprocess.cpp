@@ -174,12 +174,13 @@ AclLiteError PreprocessThread::MsgProcess(ImageData& imageFrame,
     yuvImage.width = imageDevice.width;
     yuvImage.height = imageDevice.height;
 
-    ret = dvpp_.CropResolution(preprocDataMsg->resizedMat, yuvImage, 514, 514);
+    ret = dvpp_.CropPaste(preprocDataMsg->resizedMat, yuvImage, 514, 514,
+                          0, 0, imageDevice.width, imageDevice.height);
     if (ret == ACLLITE_ERROR) {
         ACLLITE_LOG_ERROR("dvpp_cropandpaste image failed");
         return ACLLITE_ERROR;
     }
-//////////////
+
     ImageData yuvimg;
     ret = CopyImageToLocal(yuvimg, preprocDataMsg->resizedMat, runMode_);
     if (ret == ACLLITE_ERROR) {

@@ -29,7 +29,8 @@
 class PreprocessThread : public AclLiteThread {
 public:
     PreprocessThread(string& fileName, uint32_t modelWidth, 
-            uint32_t modelHeight, uint32_t postThreadNum, uint32_t inferThreadNum);
+                     uint32_t modelHeight, uint32_t postThreadNum, 
+                     uint32_t inferThreadNum, aclrtContext& context);
     ~PreprocessThread();
 
     AclLiteError Init();
@@ -60,5 +61,6 @@ private:
     int inferChannel_;
     int postChannel_;
     int indexCount_;
+    aclrtContext context_;
 };
 

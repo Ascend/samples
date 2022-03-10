@@ -56,22 +56,22 @@ GemmRunner::~GemmRunner()
 
 bool GemmRunner::Init()
 {
-    if (aclrtMalloc((void **) &devMatrixA_, sizeA_, ACL_MEM_MALLOC_NORMAL_ONLY) != ACL_SUCCESS) {
+    if (aclrtMalloc((void **) &devMatrixA_, sizeA_, ACL_MEM_MALLOC_HUGE_FIRST) != ACL_SUCCESS) {
         ERROR_LOG("malloc device memory for matrix A failed");
         return false;
     }
 
-    if (aclrtMalloc((void **) &devMatrixB_, sizeB_, ACL_MEM_MALLOC_NORMAL_ONLY) != ACL_SUCCESS) {
+    if (aclrtMalloc((void **) &devMatrixB_, sizeB_, ACL_MEM_MALLOC_HUGE_FIRST) != ACL_SUCCESS) {
         ERROR_LOG("malloc device memory for matrix B failed");
         return false;
     }
 
-    if (aclrtMalloc((void **) &devMatrixC_, sizeC_, ACL_MEM_MALLOC_NORMAL_ONLY) != ACL_SUCCESS) {
+    if (aclrtMalloc((void **) &devMatrixC_, sizeC_, ACL_MEM_MALLOC_HUGE_FIRST) != ACL_SUCCESS) {
         ERROR_LOG("malloc device memory for matrix C failed");
         return false;
     }
 
-    if (aclrtMalloc((void **) &devAlpha_, sizeAlphaBeta_, ACL_MEM_MALLOC_NORMAL_ONLY) != ACL_SUCCESS) {
+    if (aclrtMalloc((void **) &devAlpha_, sizeAlphaBeta_, ACL_MEM_MALLOC_HUGE_FIRST) != ACL_SUCCESS) {
         ERROR_LOG("malloc device memory for alpha failed");
         return false;
     }

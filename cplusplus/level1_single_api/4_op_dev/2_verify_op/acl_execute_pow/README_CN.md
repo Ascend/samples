@@ -62,21 +62,21 @@
 
   3. 开发环境上，设置环境变量，配置AscendCL单算子验证程序编译依赖的头文件与库文件路径。
 
-   编译脚本会按环境变量指向的路径查找编译依赖的头文件和库文件，“$HOME/Ascend”请替换“Ascend-cann-toolkit”包的实际安装路径。
+     编译脚本会按环境变量指向的路径查找编译依赖的头文件和库文件，“$HOME/Ascend”请替换“Ascend-cann-toolkit”包的实际安装路径。
 
-   - 当运行环境操作系统架构是x86时，配置示例如下所示：
+     - 当运行环境操作系统架构是x86时，配置示例如下所示：
 
-     ```
-     export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux
-     export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
-     ```
+       ```
+       export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux
+       export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
+       ```
 
-   - 当运行环境操作系统架构时AArch64时，配置示例如下所示：
+     - 当运行环境操作系统架构时AArch64时，配置示例如下所示：
 
-     ```
-     export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux
-     export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
-     ```
+       ```
+       export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux
+       export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
+       ```
 
 - 运行环境上环境变量配置
 
@@ -100,27 +100,28 @@
 
     “$HOME/Ascend”请替换相关软件包的实际安装路径。
 
-## 编译运行（Ascend 310 EP/Ascend 710/Ascend 910）
+## 编译运行
 
 1. 以运行用户（例如HwHiAiUser）登录开发环境，并进入样例工程的“acl\_execute\_pow/run/out“目录。
-    2.  在out目录下执行如下命令，生成单算子模型文件。
-    
+
+    在out目录下执行如下命令，生成单算子模型文件。
+
     **atc --singleop=test\_data/config/pow\_op.json  --soc\_version=*Ascend310*  --output=op\_models**
-    
+
     其中：
-    
+
     -   singleop：算子描述的json文件。
         -   soc\_version：昇腾AI处理器的型号，请根据实际情况替换。
-    
+
     -   --output=op\_models：代表生成的模型文件存储在当前目录下的op\_models文件夹下。
-    
+
     模型转换成功后，会生成如下文件：
-    
+
     在当前目录的op\_models目录下生成单算子的模型文件**0\_Pow\_2\_2\_2\_2\_2\_2.om**，命名规范为：序号+opType + 输入的描述\(dateType\_format\_shape\)+输出的描述。
-    
+
     dataType以及format对应枚举值请从CANN软件所在目录下的“include/graph/types.h”文件中查看，枚举值从0开始依次递增。
-    
-    **说明：**模型转换时，会优先去查找自定义算子库去匹配模型文件中的算子。
+
+     **说明：** 模型转换时，会优先去查找自定义算子库去匹配模型文件中的算子。
 
 
 2. 生成测试数据。
@@ -134,9 +135,13 @@
 3. 编译样例工程，生成单算子验证可执行文件。
     1.  切换到样例工程根目录acl\_execute\_pow，然后在样例工程根目录下执行如下命令创建目录用于存放编译文件，例如，创建的目录为“build/intermediates/host“。
 
-       **mkdir -p build/intermediates/host**
+        **mkdir -p build/intermediates/host** 
 
-    2.  切换到“build/intermediates/host”目录，执行cmake命令生成编译文件。
+    2. 切换到“build/intermediates/host”目录，执行cmake命令生成编译文件。
+
+       “../../../src“表示CMakeLists.txt文件所在的目录，请根据实际目录层级修改。
+
+       DCMAKE_SKIP_RPATH需设置为TRUE，代表不会将rpath信息（即NPU_HOST_LIB配置的路径）添加到编译生成的可执行文件中去，可执行文件运行时会自动搜索实际设置的LD_LIBRARY_PATH中的动态链接库。
 
        -   开发环境与运行环境操作系统架构相同时，执行如下命令编译。
 
@@ -152,12 +157,6 @@
            
            **cmake ../../../src -DCMAKE\_CXX\_COMPILER=aarch64-linux-gnu-g++ -DCMAKE\_SKIP\_RPATH=TRUE**
 
-        参数说明如下：
-
-        - “../../../src”表示CMakeLists.txt文件所在的目录，请根据实际目录层级修改。
-        - DCMAKE\_CXX\_COMPILER：编译应用程序所用的编译器。
-            -   DCMAKE\_SKIP\_RPATH：**设置为TRUE**，代表不会将rpath信息（即NPU\_HOST\_LIB配置的路径）添加到编译生成的可执行文件中去。可执行文件运行时会自动搜索实际设置的LD\_LIBRARY\_PATH中的动态链接库。
-
     3. 执行如下命令，生成可执行文件。
 
        **make**
@@ -168,7 +167,7 @@
 4.  在硬件设备的Host侧执行单算子验证文件。
     1.  以运行用户（例如HwHiAiUser）拷贝开发环境中样例工程acl\_execute\_pow/run/目录下的out文件夹到运行环境任一目录，例如上传到/home/HwHiAiUser/HIAI\_PROJECTS/run\_pow/目录下。
 
-        **说明：**若您的开发环境即为运行环境，此拷贝操作可跳过。
+         **说明：** 若您的开发环境即为运行环境，此拷贝操作可跳过。
 
     2.  在运行环境中执行execute\_pow\_op文件，验证单算子模型文件。
 

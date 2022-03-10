@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 import unittest
-from impl.scatter_nd_add import scatter_nd_add
+from cust_impl.scatter_nd_add import scatter_nd_add
 import os
 import shutil
 import sys

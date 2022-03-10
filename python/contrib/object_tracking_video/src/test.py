@@ -31,7 +31,7 @@ import numpy as np
 
 sys.path.append("../../../common/")
 
-import utils.dataloader as loader # LoadVideo, LoadImages
+from utils.dataloader import loader # LoadVideo, LoadImages
 from multitracker import JDETracker
 from utils.timer import Timer
 from utils import visualization as vis

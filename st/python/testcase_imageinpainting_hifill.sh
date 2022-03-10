@@ -1,5 +1,7 @@
 json_model="https://c7xcode.obs.myhuaweicloud.com/models/imageinpainting_hifill/matmul_27648.json"
-model_name="0_BatchMatMul_0_0_1_1_1024_1024_0_0_1_1_1024_27648_0_0_1_1_1024_27648"
+pb1="https://c7xcode.obs.myhuaweicloud.com/models/imageinpainting_hifill/hifill.pb"
+model_name1="0_BatchMatMul_0_0_1_1_1024_1024_0_0_1_1_1024_27648_0_0_1_1_1024_27648"
+model_name2="hifill"
 
 data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/imageinpainting_hifill/data/"
 data_name="test.jpg"
@@ -13,7 +15,10 @@ script_path_temp="$( cd "$(dirname $BASH_SOURCE)" ; pwd -P)"
 project_path=${script_path_temp}/../../python/level2_simple_inference/6_other/imageinpainting_hifill
 common_script_dir=${project_path}/../../../../common/
 run_command="python3.6 main.py"
-model_atc="atc --singleop=./matmul_27648.json --output=${HOME}/models/${project_name}/${model_name} --soc_version=Ascend310"
+input_txt="img:1,512,512,3;mask:1,512,512,1"
+model_atc1="atc --singleop=./matmul_27648.json --output=${HOME}/models/${project_name}/${model_name1} --soc_version=Ascend310"
+model_atc2="atc --output_type=FP32 --input_shape=${input_txt} --input_format=NHWC --output=${HOME}/models/${project_name}/${model_name2} --soc_version=Ascend310 --framework=3 --save_original_model=false --model=${project_path}/model/${pb1##*/}"
+
 
 . ${common_script_dir}/testcase_common.sh
 
@@ -33,36 +38,22 @@ function main() {
         fi
     fi
 
-    #modelconvert
-    cd ${project_path}/model
-    if [ ! -f "${project_path}/model/hifill.om" ];then
-        wget https://c7xcode.obs.myhuaweicloud.com/models/imageinpainting_hifill/hifill.om --no-check-certificate
-	if [ $? -ne 0 ];then
-            return 1
-        fi
-    fi
-    cd ${project_path}/model/
-    if [[ $(find ${HOME}/models/${project_name} -name ${model_name}".om")"x" = "x" ]];then 
-        if [[ ${json_model}"x" != "x" ]];then
-            wget -O ${project_path}/model/${json_model##*/} ${json_model} --no-check-certificate
-            if [ $? -ne 0 ];then
-                echo "wget json_model failed, please check Network."
-                return ${inferenceError}
-            fi
-        fi
-        ${model_atc}
-        if [ $? -ne 0 ];then
-            echo "ERROR: convert model failed"
-            return ${inferenceError}
-        fi
-    fi
-
-    if [[ $(find ${project_path}/model -name ${model_name}".om")"x" != "x" ]];then
-        rm ${project_path}/model/${model_name}".om"
-    fi
-    cp   ${HOME}/models/${project_name}/${model_name}/${model_name}".om" ${project_path}/model/
+    tf_model=""
+    json_model=${json_model}
+    model_name=${model_name1}
+    model_atc=${model_atc1}
+    modelconvert
     if [ $? -ne 0 ];then
-        echo "ERROR: failed to set model soft connection"
+        echo "ERROR: convert model failed"
+        return ${inferenceError}
+    fi
+    mv ${HOME}/models/${project_name}/${model_name1}/* ${project_path}/model
+    tf_model=${pb1}
+    model_name=${model_name2}
+    model_atc=${model_atc2}
+    modelconvert
+    if [ $? -ne 0 ];then
+        echo "ERROR: convert model failed"
         return ${inferenceError}
     fi
 

@@ -27,6 +27,8 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
 
 若执行成功，将会下载 `ResNet-50-deploy.prototxt`, `ResNet_50_train_val.prototxt` 与 `ResNet-50-model.caffemodel` 到该路径下。
 
+若用户自行下载“.prototxt”文件，需手动修改文件中的batch size为32，即将“.prototxt”文件中"data"层的第一个"input_dim"修改为32。
+
 若用户环境无法连接网络。则请先在可连通网络的服务器，下载相应文件上传到 model 路径下。
 
 ### 1.3 示例数据集下载

@@ -129,7 +129,7 @@ void get_option(int argc, char **argv)
             {"sync_enc"       , 1, 0, 'S'},
             {NULL, 0, 0, 0}
         };
-        c = getopt_long(argc, argv, "W:H:w:h:f:b:c:i:o:l:s:B:p:O:Q:T:S", longOptions, &optionIndex);
+        c = getopt_long(argc, argv, "W:H:w:h:f:b:c:i:o:l:s:B:p:O:Q:T:S:", longOptions, &optionIndex);
         if (c == -1) {
             break;
         }

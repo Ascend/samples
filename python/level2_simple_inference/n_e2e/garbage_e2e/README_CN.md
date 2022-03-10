@@ -51,7 +51,7 @@
 
     接下来将通过ModelArts的Notebook训练AI模型，使用ModelArts的MindSpore框架训练一个垃圾分类模型。
 
-    进入[ModelArts管理控制台](https://console.huaweicloud.com/modelarts/?region=cn-north-4#/manage/trainingjobs)，进入ModelArts“开发环境/Notebook”页面。
+    进入[ModelArts管理控制台](https://console.huaweicloud.com/modelarts/?region=cn-north-4#/manage/trainingjobs)，进入ModelArts“开发环境/Notebook”页面，默认进入的是新版的界面，这里点击左上角，选择返回旧版（以下以旧版本界面为例）。
 
     单击“ **创建** ”按钮，进入“ **创建Notebook** ”页面。
 
@@ -105,6 +105,10 @@
     源代码中设置了device_id为3，此处设置会有报错，所以需要删除准备工作中context.set_context函数的参数device_id=3。
 
     ![](https://images.gitee.com/uploads/images/2021/0129/143536_bccaa3d7_5400693.png "delparam.png")
+
+    将超参中的"pretrained_ckpt"中的参数改成 "./mobilenetV2-200_1067.ckpt"
+  
+    ![](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/200dk/pictures/garbage_pr_use.png)
 
     依次单步执行即可，可以查看每一步的输出结果和描述来了解代码。
 

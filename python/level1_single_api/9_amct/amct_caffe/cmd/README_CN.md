@@ -29,9 +29,8 @@ python3.7.5 ./src/download_models.py --close_certificate_verify
 
 ```bash
 cd data
-mkdir image && cd image
+mkdir image
 wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/amct_acl/classification/calibration.rar
-unrar e calibration.rar
 ```
 
 > 如果环境中没有安装 unrar 工具，可以通过以下命令获取：
@@ -67,8 +66,9 @@ bash ./scripts/run_customized_calibration.sh
 
 + [amct_log](./amct_log/)
   + [amct_acl.log](./amct_log/amct_acl.log): 量化日志文件，记录昇腾模型压缩工具量化过程的日志信息。
-+ [outputs](./outputs/)
-  + [resnet50__deploy_model.prototxt](./outputs/resnet50__deploy_model.prototxt): 量化后的部署模型文件。
-  + [resnet50__deploy_weights.caffemodel](./outputs/resnet50__deploy_weights.caffemodel): 量化后的部署权重文件。
-  + [resnet50__fake_quant_model.prototxt](./outputs/resnet50__fake_quant_model.prototxt): 量化后的仿真模型文件。
-  + [resnet50__deploy_weights.caffemodel](./outputs/resnet50__deploy_weights.caffemodel): 量化后的仿真权重文件。
++ [results](./results/)
+  + [resnet50__deploy_model.prototxt](./results/resnet50__deploy_model.prototxt): 量化后的部署模型文件。
+  + [resnet50__deploy_weights.caffemodel](./results/resnet50__deploy_weights.caffemodel): 量化后的部署权重文件。
+  + [resnet50__fake_quant_model.prototxt](./results/resnet50__fake_quant_model.prototxt): 量化后的仿真模型文件。
+  + [resnet50__deploy_weights.caffemodel](./results/resnet50__deploy_weights.caffemodel): 量化后的仿真权重文件。
+  + [resnet50__quant.json](./results/resnet50__quant.json): 量化算子信息。

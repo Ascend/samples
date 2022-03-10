@@ -71,7 +71,7 @@ int32_t sample_comm_vpc_copy_make_border(FuncInput funcInput)
     configure_stride_and_buffer_size(inputPic);
 
     // the output witdh and height can be configured as below.
-    // If you use outWidth, it must be equal to th value configured below
+    // If you use outWidth, it must be equal to the value configured below
     hi_vpc_pic_info outputPic;
     outputPic.picture_width = width + paddingLeftSize + paddingRightSize;
     outputPic.picture_height = height + paddingTopSize + paddingBottomSize;
@@ -106,7 +106,7 @@ int32_t sample_comm_vpc_copy_make_border(FuncInput funcInput)
         return HI_FAILURE;
     }
 
-    // asign the taskID that you get from the interface to get the process result
+    // assign the taskID that you get from the interface to get the process result
     uint32_t taskIDResult = taskID;
     ret = hi_mpi_vpc_get_process_result(ChnID, taskIDResult, -1);
     if (ret != HI_SUCCESS) {

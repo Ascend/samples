@@ -82,6 +82,7 @@ Caffe与TensorFlow共存的自定义算子样例工程的目录结构如下所�
 -   AI CPU自定义算子样例
     -   ReshapeCust算子，请参见[Reshape](doc/Reshape_CN.md)。
     -   UniqueCust算子，请参见[Unique](doc/Unique_CN.md)。
+    -   AddBlockCust算子，此算子支持分块并行计算，请参见[AddBlockCust](doc/AddBlockCust_CN.md)。
 
 -   Scope融合规则样例
 
@@ -183,13 +184,16 @@ Caffe与TensorFlow共存的自定义算子样例工程的目录结构如下所�
      export ASCEND_TENSOR_COMPILER_INCLUDE=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/include
      ```
 
-   -   TOOLCHAIN\_DIR：HCC编译器所在路径，无默认值，此编译器用于对样例中的AI CPU算子进行编译。
+   -   TOOLCHAIN\_DIR：AI CPU算子使用的编译器路径，请取消此环境变量的注释，并按照下述描述修改。
+       - 针对Ascend EP场景，请配置为HCC编译器所在路径，例如：
 
-       请取消此环境变量的注释，并修改为实际的HCC编译器所在，例如：
-
-       ```
-       export TOOLCHAIN_DIR=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/toolkit/toolchain/hcc
-       ```
+          ```
+          export TOOLCHAIN_DIR=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/toolkit/toolchain/hcc
+          ```
+       - 针对Ascend RC场景（例如:Atlas 200 DK），请配置为g++交叉编译器所在bin文件夹的上级目录，例如，交叉编译器存储路径为“/usr/bin/aarch64-linux-gnu-g++”，则TOOLCHAIN_DIR配置如下：
+          ```
+          export TOOLCHAIN_DIR=/usr
+          ```         
 
    -   AICPU\_KERNEL\_TARGET：AI CPU算子实现文件编译生成的动态库文件名称。
        -   若不配置此环境变量，使用默认值：cust\_aicpu\_kernels。
@@ -208,15 +212,32 @@ Caffe与TensorFlow共存的自定义算子样例工程的目录结构如下所�
 
 3.  执行算子工程编译。
 
-    在自定义算子样例工程目录下执行如下操作进行自定义算子工程的编译。
+    - 若您只需要编译TBE算子，请在算子工程目录下执行如下命令。
 
-    **chmod +x build.sh**
+      **chmod +x build.sh**
 
-    **./build.sh**
+      **./build.sh -t**
+
+
+    - 若您只需要编译AI CPU算子，请在算子工程目录下执行如下命令。
+
+      **chmod +x build.sh**
+
+      **./build.sh -c**
+
+    - 若您既需要编译TBE算子，又需要编译AI CPU算子，请在算子工程目录下执行如下命令。
+
+      **chmod +x build.sh**
+
+      **./build.sh**
 
     编译成功后，会在当前目录下创建build\_out目录，并在build\_out目录下生成自定义算子安装包**custom\_opp\__<target os\>\_<target architecture\>_.run**。
     
-    **说明：**若重新进行工程编译，请先执行**./build.sh clean**命令进行编译文件的清理。
+    **说明：**
+
+    -  若重新进行工程编译，请先执行./build.sh clean命令进行编译文件的清理。
+    -  若您开发的自定义算子既包含TBE算子，又包含AI CPU算子，请选择同时编译，生成一个自定义算子安装包。因为当前版本，仅支持安装一个自定义算子安装包，后面安装的自定义算子包会覆盖之前安装的算子包。
+
 
 
 ## 算子部署
@@ -263,7 +284,8 @@ Caffe与TensorFlow共存的自定义算子样例工程的目录结构如下所�
     │   ├── op_proto
     │       ├── built-in
     │       ├── custom
-│           ├── libcust_op_proto.so    //自定义算子原型库文件
+    │           ├── libcust_op_proto.so    //自定义算子原型库文件
+
     ```
     
     注：其他目录与文件，自定义算子部署无需关注。

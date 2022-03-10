@@ -3,7 +3,7 @@ import numpy as np
 from PIL import Image
 
 import acl
-import utils
+import acllite_utils as utils
 import acllite_logger as acl_log
 import constants as const
 
@@ -121,7 +121,7 @@ class AclLiteImage(object):
         self._type = const.IMAGE_DATA_NUMPY
         self._memory_type = const.MEMORY_NORMAL
 
-    def nparray(self):
+    def byte_data_to_np_array(self):
         """Trans image data to np array"""
         if self._type == const.IMAGE_DATA_NUMPY:
             return self._data.copy()
@@ -183,7 +183,7 @@ class AclLiteImage(object):
 
     def save(self, filename):
         """Save image as file"""
-        image_np = self.nparray()
+        image_np = self.byte_data_to_np_array()
         image_np.tofile(filename)
 
     def destroy(self):

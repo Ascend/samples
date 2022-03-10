@@ -9,16 +9,15 @@
 样例输入：原始mp4视频。    
 样例输出：presenter界面展现预测结果。
 
-### 适配要求
-
-本产品的适配要求如下表，如不符合适配要求，样例可能运行失败。
-| 适配项 | 适配条件 | 备注 |
+### 前置条件
+请检查以下条件要求是否满足，如不满足请按照备注进行相应处理。如果CANN版本升级，请同步检查第三方依赖是否需要重新安装（5.0.4及以上版本第三方依赖和5.0.4以下版本有差异，需要重新安装）。
+| 条件 | 要求 | 备注 |
 |---|---|---|
-| 适配版本 | >=5.0.4 | 已完成版本安装，版本信息请参考[版本说明](https://ascend.huawei.com/zh/#/software/cann/notice) |
-| 适配硬件 | Atlas200DK/Atlas300([ai1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366))  | 当前已在Atlas200DK和Atlas300测试通过，产品说明请参考[硬件平台](https://ascend.huawei.com/zh/#/hardware/product) |
-| 第三方依赖 | presentagent, opencv, ffmpeg+acllite| 请参考[第三方依赖安装指导（C++样例）](../../../environment)完成对应安装 |
+| CANN版本 | >=5.0.4 | 请参考CANN样例仓介绍中的[安装步骤](https://github.com/Ascend/samples#%E5%AE%89%E8%A3%85)完成CANN安装，如果CANN低于要求版本请根据[版本说明](https://github.com/Ascend/samples/blob/master/README_CN.md#%E7%89%88%E6%9C%AC%E8%AF%B4%E6%98%8E)切换samples仓到对应CANN版本 |
+| 硬件要求 | Atlas200DK/Atlas300([ai1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366))  | 当前已在Atlas200DK和Atlas300测试通过，产品说明请参考[硬件平台](https://ascend.huawei.com/zh/#/hardware/product) ，其他产品可能需要另做适配|
+| 第三方依赖 | presentagent, opencv, ffmpeg+acllite| 请参考[第三方依赖安装指导(C++样例)](../../../environment)完成对应安装 |
 
-### 软件准备
+### 样例准备
 
 1. 获取源码包。
 
@@ -28,8 +27,13 @@
        # 开发环境，非root用户命令行中执行以下命令下载源码仓。    
        cd ${HOME}     
        git clone https://github.com/Ascend/samples.git
+       ```
+       **注：如果需要切换到其它tag版本，以v0.5.0为例，可执行以下命令。**
+       ```
+       git checkout v0.5.0
        ```   
     - 压缩包方式下载（下载时间较短，但步骤稍微复杂）。   
+       **注：如果需要下载其它版本代码，请先请根据前置条件说明进行samples仓分支切换。**   
        ``` 
         # 1. samples仓右上角选择 【克隆/下载】 下拉框并选择 【下载ZIP】。    
         # 2. 将ZIP包上传到开发环境中的普通用户家目录中，【例如：${HOME}/ascend-samples-master.zip】。     
@@ -69,31 +73,25 @@ bash sample_build.sh
     scp -r ${HOME}/samples/cplusplus/level2_simple_inference/2_object_detection/YOLOV3_coco_detection_video HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser    
     ssh HwHiAiUser@xxx.xxx.xxx.xxx     
     cd ${HOME}/YOLOV3_coco_detection_video/scripts
-    ```    
+    ```
 
 2. <a name="step_2"></a>执行运行脚本，开始样例运行。         
     ```
     bash sample_run.sh
-    ```      
+    ```
 
 ### 查看结果
 
-1. 打开presentserver网页界面。
+1. 打开presentserver网页界面。    
+   - 使用产品为200DK开发者板。    
+      打开启动Presenter Server服务时提示的URL即可。    
+   - 使用产品为300加速卡（ai1s云端推理环境）。    
+      **以300加速卡（ai1s）内网ip为192.168.0.194，公网ip为124.70.8.192举例说明。**    
+      启动Presenter Server服务时提示为Please visit http://192.168.0.194:7009 for display server。    
+      只需要将URL中的内网ip：192.168.0.194替换为公网ip：124.70.8.192，则URL为 http://124.70.8.192:7009。    
+      然后在windows下的浏览器中打开URL即可。    
+2. 等待Presenter Agent传输数据给服务端，单击“Refresh“刷新，当有数据时相应的Channel 的Status变成绿色。    
+3. 单击右侧对应的View Name链接，查看结果。    
 
-   - 使用产品为200DK开发者板。
-
-      打开启动Presenter Server服务时提示的URL即可。
-      
-   - 使用产品为300加速卡（ai1s云端推理环境）。
-
-      **以300加速卡（ai1s）内网ip为192.168.0.194，公网ip为124.70.8.192举例说明。**
-
-      启动Presenter Server服务时提示为Please visit http://192.168.0.194:7009 for display server。
-
-      只需要将URL中的内网ip：192.168.0.194替换为公网ip：124.70.8.192，则URL为 http://124.70.8.192:7009。
-
-      然后在windows下的浏览器中打开URL即可。
-
-2. 等待Presenter Agent传输数据给服务端，单击“Refresh“刷新，当有数据时相应的Channel 的Status变成绿色。
-
-3. 单击右侧对应的View Name链接，查看结果。
+### 常见错误
+请参考[常见问题定位](https://github.com/Ascend/samples/wikis/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D/%E4%BB%8B%E7%BB%8D)对遇到的错误进行排查。如果wiki中不包含，请在samples仓提issue反馈。

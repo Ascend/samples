@@ -3,7 +3,7 @@ import acl
 import queue
 
 import constants as const
-import utils
+import acllite_utils as utils
 import acllite_logger as acl_log
 from acllite_image import AclLiteImage
 

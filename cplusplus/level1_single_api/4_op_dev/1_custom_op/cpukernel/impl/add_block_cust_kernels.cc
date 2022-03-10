@@ -65,9 +65,10 @@ uint32_t AddBlockCpuKernel::AddCompute(CpuKernelContext &ctx)
   if (block_id_ptr == nullptr || block_dim_ptr == nullptr) {
     blockid = 0;
     blockdim = 1;
+  } else {
+    blockid = block_id_ptr->GetInt();
+    blockdim = block_dim_ptr->GetInt();
   }
-  blockid = block_id_ptr->GetInt();
-  blockdim = block_dim_ptr->GetInt();
   if (blockid >= blockdim || blockid < 0) {
     blockid = 0;
     blockdim = 1;

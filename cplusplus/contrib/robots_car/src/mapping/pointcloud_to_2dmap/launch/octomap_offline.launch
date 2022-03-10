@@ -1,0 +1,36 @@
+<launch>
+
+    <arg name="OPEN_RVIZ" default="true"/>
+
+    <arg name="3d_map_file" default="$(find lidar_localizer)/../../../maps/ndt_costa2Z4b_without_ground.pcd"/>
+    <node pkg="pcl_ros" name="map_cloud_server" type="pcd_to_pointcloud"
+          args="$(arg 3d_map_file) 1 /cloud_pcd:=/map_cloud _frame_id:=/map" output="screen"/>
+
+    <node pkg="octomap_server" type="octomap_server_node" name="octomap_server">
+
+        <!-- resolution in meters per pixel -->
+        <param name="resolution" value="0.1"/>
+
+        <!-- name of the fixed frame -->
+        <param name="frame_id" type="string" value="/map"/>
+
+        <!-- max range / depth resolution of the kinect in meter -->
+        <param name="sensor_model/max_range" value="2000.0"/>
+        <param name="latch" value="true"/>
+
+        <!-- max/min height for occupancy map, should be in meters -->
+        <param name="pointcloud_max_z" value="1.0"/>
+<!--        <param name="pointcloud_min_z" value="-1.0"/>-->
+        <!--<param name="ground_filter_angle" value="3.14" />-->
+
+        <!-- topic from where pointcloud2 messages are subscribed -->
+        <!--    <remap from="cloud_in" to="/hdl_graph_slam/map_points" />&lt;!&ndash; hdl &ndash;&gt;-->
+        <remap from="cloud_in" to="/map_cloud"/><!-- ndt -->
+
+    </node>
+
+    <node name="rviz" pkg="rviz" type="rviz"
+          args="-d $(find pointcloud_to_2dmap)/rviz/pointcloud_to_2dmap.rviz"
+          output="screen" if="$(arg OPEN_RVIZ)"/>
+</launch>
+

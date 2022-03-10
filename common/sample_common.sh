@@ -96,14 +96,19 @@ function target_kernel()
 }
 function build()
 {
+  UserKernel=`arch`
   if [[ ${TargetKernel} = "x86" ]] || [[ ${TargetKernel} = "X86" ]];then
     TargetCompiler="g++"
     TargetKernel="x86"
   else
-    TargetCompiler="aarch64-linux-gnu-g++"
-    TargetKernel="arm"
+    if [[ ${UserKernel} == "x86_64" ]];then
+      TargetCompiler="aarch64-linux-gnu-g++"
+      TargetKernel="arm"
+    else
+      TargetCompiler="g++"
+      TargetKernel="arm"
+    fi
   fi
-
   if [ -d ${ScriptPath}/../build/intermediates/host ];then
     rm -rf ${ScriptPath}/../build/intermediates/host
   fi

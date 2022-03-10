@@ -8,7 +8,7 @@ sys.path.append(os.path.join(path, ".."))
 sys.path.append(os.path.join(path, "../../../common/"))
 
 import acl
-import utils
+import acllite_utils as utils
 import constants as const
 from acllite_imageproc import AclLiteImageProc
 from acllite_model import AclLiteModel
