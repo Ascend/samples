@@ -93,6 +93,8 @@ private:
     */
     Result WriteOutputFile();
 
+    void CalYuv400InputBufferSize(uint32_t inWidthStride, uint32_t inHeightStride, uint32_t &inBufferSize);
+
     aclrtStream stream_;
     acldvppChannelDesc *dvppChannelDesc_;
     acldvppResizeConfig *resizeConfig_;

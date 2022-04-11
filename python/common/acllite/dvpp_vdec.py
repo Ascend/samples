@@ -86,7 +86,7 @@ class DvppVdec(object):
                               % (channel_id, frame_id, ret_code))
             acl.media.dvpp_free(pic_data)
         else:
-            image = AclLiteImage(pic_data, self._width, self._height,
+            image = AclLiteImage(pic_data, self._width, self._height, 0, 0,
                              pic_data_size, const.MEMORY_DVPP)
             self._frame_queue.put(image)
         acl.media.dvpp_destroy_pic_desc(pic_desc)
@@ -251,3 +251,4 @@ class DvppVdec(object):
                                   % (self._channel_id, self._decode_cnt,
                                      self._decode_complete_cnt))
         return ret, image
+

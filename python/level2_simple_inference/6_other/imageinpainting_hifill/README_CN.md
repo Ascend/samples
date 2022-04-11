@@ -45,7 +45,7 @@
 2. 获取此应用中所需要的模型并转换。  
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
-    |  image_inpainting | 使用ImageInpainting模型对超高分辨率图像修复  |  image_inpainting：[https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/imageinpainting_HiFill](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/imageinpainting_HiFill) |
+    |  image_inpainting | 使用ImageInpainting模型对超高分辨率图像修复  |  image_inpainting：[https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/imageinpainting_HiFill](https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/imageinpainting_HiFill) |
    ```
    cd ${HOME}/samples/python/level2_simple_inference/6_other/imageinpainting_hifill/model
    wget https://c7xcode.obs.myhuaweicloud.com/models/imageinpainting_hifill/matmul_27648.json   

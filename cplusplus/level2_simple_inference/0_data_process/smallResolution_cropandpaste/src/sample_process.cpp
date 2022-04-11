@@ -217,7 +217,7 @@ Result SampleProcess::VpcProcess()
 
     ret = dvppProcess.CheckParameter();
     if (ret != SUCCESS) {
-        ERROR_LOG("cehck dvpp process parameter failed");
+        ERROR_LOG("check dvpp process parameter failed");
         return FAILED;
     }
 

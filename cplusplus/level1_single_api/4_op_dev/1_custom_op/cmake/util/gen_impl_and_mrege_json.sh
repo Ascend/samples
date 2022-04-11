@@ -13,10 +13,10 @@ if [[ ! -d "$build_path" ]]; then
 fi
 
 # copy ai_core operators implements
-tbe_impl_files_num=$(ls $project_path/tbe/impl/*.py 2> /dev/null | wc -l)
+tbe_impl_files_num=$(ls $project_path/tbe/custom_impl/*.py 2> /dev/null | wc -l)
 if [[ "$tbe_impl_files_num" -gt 0 ]];then
-    cp -f ${project_path}/tbe/impl/*.py ${build_path}/makepkg/packages/op_impl/custom/ai_core/tbe/custom_impl
-    cp -f ${project_path}/tbe/impl/*.py ${build_path}/makepkg/packages/op_impl/custom/vector_core/tbe/custom_impl
+    cp -f ${project_path}/tbe/custom_impl/*.py ${build_path}/makepkg/packages/op_impl/custom/ai_core/tbe/custom_impl
+    cp -f ${project_path}/tbe/custom_impl/*.py ${build_path}/makepkg/packages/op_impl/custom/vector_core/tbe/custom_impl
 fi
 
 # copy aicpu kernel so operators

@@ -43,7 +43,7 @@
 2. 获取此应用中所需要的原始网络模型。
     |  **模型说明**  |  **模型下载路径**  |
     |---|---|
-    | 基于GAN网络的模型。  |  请参考[https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/style_transfer](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/style_transfer)目录中README.md下载原始模型章节下载模型和权重文件。 |
+    | 基于GAN网络的模型。  |  请参考[https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/style_transfer](https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/style_transfer)目录中README.md下载原始模型章节下载模型和权重文件。 |
 
     ```
     # 为了方便下载，在这里直接给出原始模型下载及模型转换命令,可以直接拷贝执行。也可以参照上表在modelzoo中下载并手工转换，以了解更多细节。 

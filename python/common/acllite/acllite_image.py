@@ -19,13 +19,15 @@ class AclLiteImage(object):
                       device and np array
         width: image width
         height: image height
+        alignWidth: align image width
+        alignHeight: align image height
         _encode_format: image format
         _load_ok: load image success or not
 
     """
     _run_mode, _ = acl.rt.get_run_mode()
 
-    def __init__(self, image, width=0, height=0,
+    def __init__(self, image, width=0, height=0, alignWidth=0, alignHeight=0,
                  size=0, memory_type=const.MEMORY_NORMAL):
         """Create AclLiteImage instance
         Args:
@@ -43,6 +45,8 @@ class AclLiteImage(object):
         self._memory_type = memory_type
         self.width = 0
         self.height = 0
+        self.alignWidth = 0
+        self.alignHeight = 0
         self.size = 0
         self._encode_format = const.ENCODE_FORMAT_UNKNOW
         self._load_ok = True
@@ -143,14 +147,14 @@ class AclLiteImage(object):
         if device_ptr is None:
             acl_log.log_error("Copy image to dvpp failed")
             return None
-        return AclLiteImage(device_ptr, self.width, self.height,
+        return AclLiteImage(device_ptr, self.width, self.height, 0, 0,
                         self.size, const.MEMORY_DVPP)
 
     def copy_to_host(self):
         """"Copy data to host"""
         if self._type == const.IMAGE_DATA_NUMPY:
             data_np = self._data.copy()
-            return AclLiteImage(data_np, self.width, self.height)
+            return AclLiteImage(data_np, self.width, self.height, 0, 0)
 
         data = None
         mem_type = const.MEMORY_HOST
@@ -166,7 +170,7 @@ class AclLiteImage(object):
             acl_log.log_error("Copy image to host failed")
             return None
 
-        return AclLiteImage(data, self.width, self.height, self.size, mem_type)
+        return AclLiteImage(data, self.width, self.height, 0, 0, self.size, mem_type)
 
     def is_local(self):
         """Image data is in host server memory and access directly or not"""
@@ -204,3 +208,4 @@ class AclLiteImage(object):
 
     def __del__(self):
         self.destroy()
+

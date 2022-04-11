@@ -28,7 +28,7 @@ class CameraOutputC(Structure):
 
 class CameraCapture(object):
     """Atlas200dk board camera access class"""
-    def __init__(self, camera_id, fps=20, size=(1280, 720)):
+    def __init__(self, camera_id, fps=15, size=(1280, 720)):
         """Create camera instance
         Args:
             camera_id: camera slot
@@ -71,6 +71,8 @@ class CameraCapture(object):
             addressof(frame_data.data.contents),                
             self._width,
             self._height,
+            0,
+            0,
             self._size,
             const.MEMORY_DVPP)
 
@@ -83,9 +85,10 @@ class CameraCapture(object):
         self.close()
 
 if __name__ == "__main__":
-    cap = Camera(camera_id=0, fps=20, size=(1280, 720))
+    cap = Camera(camera_id=0, fps=15, size=(1280, 720))
 
     start = time.time()
     for i in range(0, 100):
         image = cap.read()
     print("Read 100 frame exhaust ", time.time() - start)
+

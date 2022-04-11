@@ -326,7 +326,7 @@ void Decode() {
 int main(int argc, char *argv[]) {
     //Check the input when the application executes, which takes the path to the input video file
     if((argc < 2) || (argv[1] == nullptr)){
-        ACLLITE_LOG_ERROR("Please input: ./main <image_dir>");
+        ACLLITE_LOG_ERROR("Please input: ./main <file_dir>");
         return FAILED;
     }
 
@@ -352,8 +352,7 @@ int main(int argc, char *argv[]) {
         ACLLITE_LOG_INFO("Video %s fps is 0, change to %d", 
                        streamName_.c_str(), fps_);
     }
-    //Call the frame interval time(us)
-    int fpsInterval_ = kUsec / fps_;
+
     Decode();
 
     return SUCCESS;

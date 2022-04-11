@@ -212,12 +212,12 @@ AclLiteError PreprocessThread::MsgProcess(shared_ptr<PreprocDataMsg> &preprocDat
     }
 
     ImageData resizedImage;
-    ret = dvpp_.CropPaste(resizedImage, imageDevice, modelWidth_, modelHeight_,
-                          0, 0, imageDevice.width, imageDevice.height);
+    ret = dvpp_.Resize(resizedImage, imageDevice, modelWidth_, modelHeight_);
     if (ret == ACLLITE_ERROR) {
-        ACLLITE_LOG_ERROR("dvpp_cropandpaste image failed");
+        ACLLITE_LOG_ERROR("dvpp_resize image failed");
         return ACLLITE_ERROR;
     }
+
     ret = CopyImageToLocal(preprocDataMsg->resizedMat, resizedImage, runMode_);
     if (ret == ACLLITE_ERROR) {
         ACLLITE_LOG_ERROR("Copy image to host failed");

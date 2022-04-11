@@ -56,7 +56,7 @@ Before deploying this sample, ensure that:
 
 | **Model Name** | **Description**                          | **How to Obtain**                        |
 | -------------- | ---------------------------------------- | ---------------------------------------- |
-| PortraitNet    | Portrait segmentation model based on TensorFlow | Download the model file and the corresponding CFG file by referring to the **[README.md](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/portraitnet/ATC_PortraitNet_tf_AE)** file. |
+| PortraitNet    | Portrait segmentation model based on TensorFlow | Download the model file and the corresponding CFG file by referring to the **[README.md](https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/portraitnet/ATC_PortraitNet_tf_AE)** file. |
 
 #### 3. (For CANN 3.0.0) Convert the original model to a Da Vinci model.
 

@@ -40,7 +40,7 @@
 2. 模型转换。  
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
-    | AnimeGAN | 将普通照片转换为卡通风格的图片。  |  请参考https://github.com/Ascend/modelzoo/blob/7a201e11060835296dc809e85123d98aced315f4/contrib/TensorFlow/Research/cv/AnimeGAN/README.MD 下载原始模型。 |
+    | AnimeGAN | 将普通照片转换为卡通风格的图片。  |  请参考https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/AnimeGAN/README.MD 下载原始模型。 |
     ```
     # 为了方便下载，在这里直接给出原始模型下载及模型转换命令,可以直接拷贝执行。也可以参照上表在modelzoo中下载并手工转换，以了解更多细节。 
     #这里为大家提供了三种shape的模型，下方提供转换命令

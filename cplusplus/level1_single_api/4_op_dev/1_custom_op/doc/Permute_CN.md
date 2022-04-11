@@ -53,7 +53,7 @@
 
 -   算子实现
 
-    PermuteTik算子的实现代码请参见[permute\_tik.py](../tbe/impl/permute_tik.py)，计算函数的实现逻辑如下所示：
+    PermuteTik算子的实现代码请参见[permute\_tik.py](../tbe/custom_impl/permute_tik.py)，计算函数的实现逻辑如下所示：
 
     1.  定义Permute类，并在初始化函数中初始化后续计算用到的参数。核心计算主要是计算每个输入的shape的大小，申请Global Memory大小。通过tbe\_platform.cce\_conf.get\_soc\_spec\(tbe\_platform.cce\_conf.UB\_SIZE\)接口获取到UB的实际物理空间。后续的步骤中，我们还会使用这些数据来计算data\_move、vec\_trans\_scatter等接口的参数。设置独立的tiling模块，将其与算子计算逻辑分离可以很好的做到算子的shape泛化。对于不同的shape，我们可以在不改变计算逻辑的情况下，只改变tiling参数来优化搬运和计算的次数，来做到泛化和高性能。
 

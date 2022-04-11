@@ -51,7 +51,7 @@ python3.6 -m pip install matplotlib==3.3.4 --user
 2. 获取此应用中所需要的原始网络模型。
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
-    |  mask_rcnn+image_inpainting | 使用MaskRcnn和ImageInpainting模型对输入图片指定前景目标去除的模型。  |  mask_rcnn：[https://www.hiascend.com/zh/software/modelzoo/detail/C/5b5232e55ca04b81af264d9600cc8bd3](https://www.hiascend.com/zh/software/modelzoo/detail/C/5b5232e55ca04b81af264d9600cc8bd3)<br>image_inpainting：[https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/imageinpainting_HiFill](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/imageinpainting_HiFill) |
+    |  mask_rcnn+image_inpainting | 使用MaskRcnn和ImageInpainting模型对输入图片指定前景目标去除的模型。  |  mask_rcnn：[https://www.hiascend.com/zh/software/modelzoo/detail/C/5b5232e55ca04b81af264d9600cc8bd3](https://www.hiascend.com/zh/software/modelzoo/detail/C/5b5232e55ca04b81af264d9600cc8bd3)<br>image_inpainting：[https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/imageinpainting_HiFill](https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/imageinpainting_HiFill) |
     ```
     # 为了方便下载，在这里直接给出原始模型下载及模型转换命令,可以直接拷贝执行。也可以参照上表下载并手工转换，以了解更多细节。     
     cd ${HOME}/samples/python/level3_multi_model/mask_rcnn_image_inpainting/model    

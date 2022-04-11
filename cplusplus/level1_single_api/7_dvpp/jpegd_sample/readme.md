@@ -11,7 +11,8 @@ DVPP中的JPEGD功能模块，实现.jpg、.jpeg、.JPG、.JPEG图片的解码�
 ## 原理介绍<a name="section19985135703818"></a>
 
 样例中的关键接口调用流程如下：
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0209/225501_4f77500e_8679122.png "JpegdProcessImg.png")
+
+![输入图片说明](https://support.huaweicloud.com/aclcppdevg-cann51RC1alpha2/figure/zh-cn_image_0000001213553428.png)
 
 ## 目录结构<a name="section86232112399"></a>
 

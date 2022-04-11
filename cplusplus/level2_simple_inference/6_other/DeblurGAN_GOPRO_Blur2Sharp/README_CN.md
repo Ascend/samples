@@ -46,7 +46,7 @@
 2. 获取此应用中所需要Davinci模型。
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
-    |  DeblurGAN| 图像变清晰模型。是基于Tensorflow的DeblurGAN模型。  |  请参考[https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/Blur2Sharp/ATC_DeblurGAN_tf_AE](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/Blur2Sharp/ATC_DeblurGAN_tf_AE)目录中README.md下载原始模型章节下载模型文件。 |
+    |  DeblurGAN| 图像变清晰模型。是基于Tensorflow的DeblurGAN模型。  |  请参考[https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/Blur2Sharp/ATC_DeblurGAN_tf_AE](https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/Blur2Sharp/ATC_DeblurGAN_tf_AE)目录中README.md下载原始模型章节下载模型文件。 |
     ```
     # 为了方便下载，在这里直接给出原始模型下载及模型转换命令,可以直接拷贝执行。也可以参照上表在modelzoo中下载并手工转换，以了解更多细节。     
     cd ${HOME}/samples/cplusplus/level2_simple_inference/6_other/DeblurGAN_GOPRO_Blur2Sharp/model     

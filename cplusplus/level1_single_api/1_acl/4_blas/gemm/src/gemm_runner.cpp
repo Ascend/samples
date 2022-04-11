@@ -76,7 +76,7 @@ bool GemmRunner::Init()
         return false;
     }
 
-    if (aclrtMalloc((void **) &devBeta_, sizeAlphaBeta_, ACL_MEM_MALLOC_NORMAL_ONLY) != ACL_SUCCESS) {
+    if (aclrtMalloc((void **) &devBeta_, sizeAlphaBeta_, ACL_MEM_MALLOC_HUGE_FIRST) != ACL_SUCCESS) {
         ERROR_LOG("malloc device memory for beta failed");
         return false;
     }

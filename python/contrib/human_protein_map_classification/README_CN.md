@@ -47,7 +47,7 @@
 2. 获取此应用中所需要的模型     
     | **模型名称** | **模型说明**          | **模型下载路径**                                             |
     | ------------ | --------------------- | ------------------------------------------------------------ |
-    | deploy_vel          | 基于Caffe的蛋白质亚细胞定位预测 | 请参考https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/hpa/ATC_hpa_caffe_AE 中README.md原始模型章节，下载**原始模型网络**及**模型权重文件**。 |
+    | deploy_vel          | 基于Caffe的蛋白质亚细胞定位预测 | 请参考https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/hpa/ATC_hpa_caffe_AE 中README.md原始模型章节，下载**原始模型网络**及**模型权重文件**。 |
     ```
     # 为了方便下载，在这里直接给出原始模型下载及模型转换命令,可以直接拷贝执行。也可以参照上表在modelzoo中下载并手工转换，以了解更多细节。     
     cd ${HOME}/samples/python/level2_simple_inference/6_other/colorization_picture/model    

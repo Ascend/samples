@@ -8,6 +8,7 @@
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 #include "dvpp_process.h"
+#include <string.h>
 
 using namespace std;
 
@@ -176,13 +177,25 @@ uint32_t DvppProcess::GetInputWidthStride()
     return inWidthStride;
 }
 
+void DvppProcess::CalYuv400InputBufferSize(uint32_t inWidthStride, uint32_t inHeightStride, uint32_t &inBufferSize)
+{
+    auto socVersion = aclrtGetSocName();
+    INFO_LOG("Current soc version is %s", socVersion);
+    if (strncmp(socVersion, "Ascend710", sizeof("Ascend710") - 1) == 0) {
+        inBufferSize = inWidthStride * inHeightStride;
+    } else {
+        inBufferSize = inWidthStride * inHeightStride * 3 / 2;
+    }
+}
+
 uint32_t DvppProcess::GetInputBufferSize(uint32_t inWidthStride, uint32_t inHeightStride)
 {
     uint32_t inBufferSize = 0;
     switch (inFormat_) {
-        case PIXEL_FORMAT_YUV_400:
-            inBufferSize = inWidthStride * inHeightStride;
+        case PIXEL_FORMAT_YUV_400: {
+            CalYuv400InputBufferSize(inWidthStride, inHeightStride, inBufferSize);
             break;
+        }
         case PIXEL_FORMAT_YUV_SEMIPLANAR_420:
         case PIXEL_FORMAT_YVU_SEMIPLANAR_420:
             inBufferSize = inWidthStride * inHeightStride * 3 / 2;

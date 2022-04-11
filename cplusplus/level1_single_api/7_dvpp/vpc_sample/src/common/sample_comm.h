@@ -96,6 +96,7 @@ struct VpcAttr {
     uint32_t destTopOffset{0};
     uint32_t testType{0};
     uint32_t chnNum{1};
+    uint32_t queueLen{0};
     uint32_t bitwidth{8}; // initialize the bit width to 8
     uint32_t threadNum{1};
     uint32_t loop{1};

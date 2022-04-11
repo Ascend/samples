@@ -182,14 +182,6 @@ AclLiteError DvppVenc::SaveVencFile(void* vencData, uint32_t size) {
 }
 
 AclLiteError DvppVenc::Init() {
-    // create process callback thread
-    int ret = pthread_create(&threadId_, nullptr, 
-                             &DvppVenc::SubscribleThreadFunc, nullptr);                             
-    if (ret != 0) {
-        ACLLITE_LOG_ERROR("Create venc subscrible thread failed, error %d", ret);
-        return ACLLITE_ERROR_CREATE_THREAD;
-    }
-
     outFp_ = fopen(vencInfo_.outFile.c_str(), "wb+");
     if (outFp_ == nullptr) {
         ACLLITE_LOG_ERROR("Open file %s failed, error %s", 
@@ -200,24 +192,22 @@ AclLiteError DvppVenc::Init() {
     return InitResource();
 }
 
-void* DvppVenc::SubscribleThreadFunc(void *arg)
+void* DvppVenc::SubscribleThreadFunc(aclrtContext sharedContext)
 {
-     // Notice: create context for this thread
-    aclrtContext context = nullptr;
-    aclError ret = aclrtCreateContext(&context, 0);
+    if (sharedContext == nullptr) {
+        ACLLITE_LOG_ERROR("sharedContext can not be nullptr");
+        return ((void*)(-1));
+    }
+    ACLLITE_LOG_INFO("use shared context for this thread");
+    aclError ret = aclrtSetCurrentContext(sharedContext);
     if (ret != ACL_SUCCESS) {
-        ACLLITE_LOG_ERROR("Create context failed, error %d.", ret);
+        ACLLITE_LOG_ERROR("aclrtSetCurrentContext failed, errorCode = %d", static_cast<int32_t>(ret));
         return ((void*)(-1));
     }
 
     while (g_RunFlag) {
         // Notice: timeout 1000ms
         (void)aclrtProcessReport(1000);
-    }
-
-    ret = aclrtDestroyContext(context);
-    if (ret != ACL_SUCCESS) {
-        ACLLITE_LOG_ERROR("aclrtDestroyContext failed, ret=%d.", ret);
     }
 
     return (void*)0;
@@ -231,7 +221,15 @@ AclLiteError DvppVenc::InitResource()
         return ACLLITE_ERROR_SET_ACL_CONTEXT;
     }
 
-    AclLiteError ret = CreateVencChannel();
+    // create process callback thread
+    AclLiteError ret = pthread_create(&threadId_, nullptr, 
+                             &DvppVenc::SubscribleThreadFunc, vencInfo_.context);                             
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Create venc subscrible thread failed, error %d", ret);
+        return ACLLITE_ERROR_CREATE_THREAD;
+    }
+
+    ret = CreateVencChannel();
     if (ret != ACLLITE_OK) {
         ACLLITE_LOG_ERROR("Create venc channel failed, error %d", ret);
         return ret; 

@@ -1,6 +1,6 @@
 [
   {
-    "op": "AddTik",
+    "op": "AddDsl",
     "input_desc": [
       {
         "format": "ND",

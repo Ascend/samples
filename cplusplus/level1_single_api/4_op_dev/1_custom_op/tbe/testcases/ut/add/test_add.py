@@ -17,10 +17,10 @@ add ut case
 
 import unittest
 
-from cust_impl.add_tik import add_tik as add
+from custom_impl.add_dsl import add_dsl as add
 
 
-def add_cce(shape_x, shape_y, dtype, kernel_name="add"):
+def add_cce(shape_x, shape_y, dtype, kernel_name="add_dsl"):
     add({"shape":shape_x, "dtype":dtype}, {"shape":shape_y, "dtype":dtype},
         {"shape":shape_x, "dtype":dtype}, kernel_name=kernel_name)
 

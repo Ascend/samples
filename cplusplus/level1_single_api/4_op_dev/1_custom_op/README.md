@@ -46,7 +46,7 @@ The directory of a Caffe or TensorFlow custom operator sample project is organiz
 │   ├── CMakeLists.txt   // CMakeList.txt of the operator IR definition file, called by CMakeList.txt of the operator project
 ├── tbe 
 │   ├── CMakeLists.txt   
-│   ├── impl    // Directory of operator implementation files
+│   ├── custom_impl    // Directory of operator implementation files
 │   │      ├── xx.py
 │   │      ├── __init__.py      // Python package identification file
 │   ├── op_info_cfg   // Directory of operator information library files

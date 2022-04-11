@@ -44,20 +44,23 @@
 
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
-    | AnimeGAN | 将普通照片转换为卡通风格的图片。  |  请参考https://github.com/Ascend/modelzoo/blob/7a201e11060835296dc809e85123d98aced315f4/contrib/TensorFlow/Research/cv/AnimeGAN/README.MD 下载原始模型。 |
+    | AnimeGAN | 将普通照片转换为卡通风格的图片。  |  请参考https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/AnimeGAN/README.MD 下载原始模型。 |
     ```
     # 为了方便下载，在这里直接给出原始模型下载及模型转换命令,可以直接拷贝执行。也可以参照上表在modelzoo中下载并手工转换，以了解更多细节。 
     #这里为大家提供了三种shape的模型，下方提供转换命令
     cd ${HOME}/samples/python/level2_simple_inference/6_other/animeGAN_picture/model    
     #AnimeGAN_256_256.pb
     wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/animeGAN/AnimeGAN_256_256.pb
-    atc --model="./AnimeGAN_256_256.pb" --output_type=FP32 --input_shape="test:1,256,256,3" --input_format=NHWC --output="AnimeGANv2_256" --soc_version=Ascend310 --framework=3 --precision_mode=allow_fp32_to_fp16
+    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/animeGAN/aipp_256_256.cfg
+    atc --model="./AnimeGAN_256_256.pb" --output_type=FP32 --input_shape="test:1,256,256,3" --input_format=NHWC --output="AnimeGANv2_256" --soc_version=Ascend310 --framework=3 --precision_mode=allow_fp32_to_fp16 --insert_op_conf=aipp_256_256.cfg
     #AnimeGAN_512_512.pb
     wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/animeGAN/AnimeGAN_512_512.pb
-    atc --model="./AnimeGAN_512_512.pb" --output_type=FP32 --input_shape="test:1,512,512,3" --input_format=NHWC --output="AnimeGANv2_512" --soc_version=Ascend310 --framework=3 --precision_mode=allow_fp32_to_fp16
+    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/animeGAN/aipp_512_512.cfg
+    atc --model="./AnimeGAN_512_512.pb" --output_type=FP32 --input_shape="test:1,512,512,3" --input_format=NHWC --output="AnimeGANv2_512" --soc_version=Ascend310 --framework=3 --precision_mode=allow_fp32_to_fp16 --insert_op_conf=aipp_512_512.cfg
     #AnimeGAN_1024_1024.pb
     wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/animeGAN/AnimeGAN_1024_1024.pb
-    atc --model="./AnimeGAN_1024_1024.pb" --output_type=FP32 --input_shape="test:1,1024,1024,3" --input_format=NHWC --output="AnimeGANv2_1024" --soc_version=Ascend310 --framework=3 --precision_mode=allow_fp32_to_fp16
+    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/animeGAN/aipp_1024_1024.cfg
+    atc --model="./AnimeGAN_1024_1024.pb" --output_type=FP32 --input_shape="test:1,1024,1024,3" --input_format=NHWC --output="AnimeGANv2_1024" --soc_version=Ascend310 --framework=3 --precision_mode=allow_fp32_to_fp16 --insert_op_conf=aipp_1024_1024.cfg
     ```
 
 3. 获取样例需要的测试图片。

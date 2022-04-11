@@ -30,7 +30,7 @@ using namespace std;
 
 class PostprocessThread: public AclLiteThread {
 public:
-    PostprocessThread(uint32_t outputWidth, uint32_t outputHeight);
+    PostprocessThread(uint32_t modelWidth, uint32_t modelHeight);
     ~PostprocessThread();
 
     AclLiteError Init();
@@ -38,10 +38,10 @@ public:
 
 private:
     AclLiteError InferOutputProcess(shared_ptr<InferOutputMsg> inferMsg);
-    //AclLiteError MsgSend(shared_ptr<InferOutputMsg> inferMsg,
-    //                                   shared_ptr<PostOutputMsg> &postOutputMsg);
 
 private:
+    uint32_t modelWidth_;
+    uint32_t modelHeight_;
     uint32_t outputWidth_;
     uint32_t outputHeight_;
 };

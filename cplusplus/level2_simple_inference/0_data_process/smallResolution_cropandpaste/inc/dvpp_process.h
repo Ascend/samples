@@ -120,6 +120,8 @@ private:
 
     void GetHeightExtendDirection(uint32_t extendedHeight);
 
+    void CalYuv400InputBufferSize(uint32_t inWidthStride, uint32_t inHeightStride, uint32_t &inBufferSize);
+
     Result BuildVpcParamterStack(std::stack<CropAndPaste> &cropAndPasteInfoStack);
 
     Result ModifyFirstCropRoi(CropAndPaste cropAndPasteFirstInfo);

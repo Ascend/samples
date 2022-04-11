@@ -32,7 +32,7 @@ public:
     * @brief init reousce
     * @return result
     */
-    Result InitResource(uint32_t width, uint32_t height);
+    Result InitResource(uint32_t width, uint32_t height, aclrtContext& context);
 
     /**
     * @brief venc process

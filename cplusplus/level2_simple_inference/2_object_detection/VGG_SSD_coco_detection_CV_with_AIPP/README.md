@@ -54,7 +54,7 @@ Before deploying this sample, ensure that:
    
    | **Model Name**| **Description**| **How to Obtain**|
    |----------|----------|----------|
-   | vgg\_ssd| Object detection model. It is a vgg\_ssd model based on Caffe.| Download the model and weight file by referring to the section about downloading the original model in the **README.md** file in [https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/vgg_ssd/ATC_vgg_ssd_caffe_AE](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/vgg_ssd/ATC_vgg_ssd_caffe_AE).|
+   | vgg\_ssd| Object detection model. It is a vgg\_ssd model based on Caffe.| Download the model and weight file by referring to the section about downloading the original model in the **README.md** file in [https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/vgg_ssd/ATC_vgg_ssd_caffe_AE](https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/vgg_ssd/ATC_vgg_ssd_caffe_AE).|
 
    ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **Note:**
    

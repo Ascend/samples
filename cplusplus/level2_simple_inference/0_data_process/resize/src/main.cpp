@@ -192,17 +192,18 @@ int main(int argc, char *argv[])
     /* processdecode*/
     inputWidth = inPicDesc.width;
     inputHeight = inPicDesc.height;
-    uint32_t widthAlignment = 16;
-    uint32_t heightAlignment = 2;
     uint32_t sizeAlignment = 3;
     uint32_t sizeNum = 2;
-    uint32_t inputWidthStride = AlignmentHelper(inputWidth, widthAlignment);
-    uint32_t inputHeightStride = AlignmentHelper(inputHeight, heightAlignment);
+    // if the input yuv is from JPEGD, it should be aligned to 128*16
+    // if the input yuv is from VDEC, it shoud be aligned to 16*2
+    uint32_t inputWidthStride = AlignmentHelper(inputWidth, 128);
+    uint32_t inputHeightStride = AlignmentHelper(inputHeight, 16);
     uint32_t inputBufferSize = inputWidthStride * inputHeightStride * sizeAlignment / sizeNum;
     acldvppPicDesc *vpcInputDesc_ = acldvppCreatePicDesc();
     acldvppPicDesc *vpcOutputDesc_ = acldvppCreatePicDesc();
     void *vpcOutBufferDev_ = nullptr;
     acldvppSetPicDescData(vpcInputDesc_, reinterpret_cast<char *>(inBufferDev));
+    // the format is the input yuv's format.
     acldvppSetPicDescFormat(vpcInputDesc_, PIXEL_FORMAT_YUV_SEMIPLANAR_420);
     acldvppSetPicDescWidth(vpcInputDesc_, inputWidth);
     acldvppSetPicDescHeight(vpcInputDesc_, inputHeight);
@@ -210,12 +211,15 @@ int main(int argc, char *argv[])
     acldvppSetPicDescHeightStride(vpcInputDesc_, inputHeightStride);
     acldvppSetPicDescSize(vpcInputDesc_, inputBufferSize);
 
-
-    int resizeOutWidthStride = AlignmentHelper(modelInputWidth, widthAlignment);
-    int resizeOutHeightStride = AlignmentHelper(modelInputHeight, heightAlignment);
+    // here is the VPC constraints, should be aligned to 16*2
+    int resizeOutWidthStride = AlignmentHelper(modelInputWidth, 16);
+    int resizeOutHeightStride = AlignmentHelper(modelInputHeight, 2);
     uint32_t vpcOutBufferSize_ = resizeOutWidthStride * resizeOutHeightStride * sizeAlignment / sizeNum;
     acldvppMalloc(&vpcOutBufferDev_, vpcOutBufferSize_);
     acldvppSetPicDescData(vpcOutputDesc_, vpcOutBufferDev_);
+    // the format should be under the VPC constraints(only support the following 2):
+    // PIXEL_FORMAT_YUV_SEMIPLANAR_420 = 1
+    // PIXEL_FORMAT_YVU_SEMIPLANAR_420 = 2
     acldvppSetPicDescFormat(vpcOutputDesc_, PIXEL_FORMAT_YUV_SEMIPLANAR_420);
     acldvppSetPicDescWidth(vpcOutputDesc_, modelInputWidth);
     acldvppSetPicDescHeight(vpcOutputDesc_, modelInputHeight);

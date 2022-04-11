@@ -36,9 +36,22 @@ AclLiteError DoProcess::InitResource() {
     aclInit(aclConfigPath);
 
     /* 2. 运行管理资源申请,包括Device、Context、Stream */
-    aclrtSetDevice(0);
+    aclError ret = aclrtSetDevice(deviceId_);
+    if (ret != ACL_SUCCESS) {
+        ACLLITE_LOG_ERROR("Acl open device %d failed", deviceId_);
+        return FAILED;
+    }
+    ACLLITE_LOG_INFO("Open device %d success", deviceId_);
+
+    ret = aclrtCreateContext(&context_, deviceId_);
+    if (ret != ACL_SUCCESS) {
+        ACLLITE_LOG_ERROR("acl create context failed");
+        return FAILED;
+    }
+    ACLLITE_LOG_INFO("create context success");
+
     // create stream
-    aclError ret = aclrtCreateStream(&stream_);
+    ret = aclrtCreateStream(&stream_);
     if (ret != ACL_SUCCESS) {
         ACLLITE_LOG_ERROR("acl create stream failed\n");
         return ACLLITE_ERROR_CREATE_STREAM;
@@ -84,7 +97,7 @@ AclLiteError DoProcess::Process(ImageData& image) {
     return ACLLITE_OK;
 }
 AclLiteError DoProcess::Set(uint32_t width, uint32_t height) {
-    AclLiteError ret = encoder_.InitResource(width, height);
+    AclLiteError ret = encoder_.InitResource(width, height, context_);
     if (ret != ACLLITE_OK) {
         ACLLITE_LOG_ERROR("Init video_encoder failed\n");
         return ret;
@@ -105,6 +118,15 @@ void DoProcess::DestroyResource()
         }
         stream_ = nullptr;
     }
+
+    if (context_ != nullptr) {
+        ret = aclrtDestroyContext(context_);
+        if (ret != ACL_SUCCESS) {
+            ACLLITE_LOG_ERROR("destroy context failed");
+        }
+        context_ = nullptr;
+    }
+    ACLLITE_LOG_INFO("end to destroy context");
 
     ret = aclrtResetDevice(deviceId_);
     if (ret != ACL_SUCCESS) {

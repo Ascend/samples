@@ -62,7 +62,7 @@
     3.  调用conv2d\(\)实现二维卷积计算。
     4.  调用fixpipe\(\)实现计算结果数据的搬运。
 
-    完整的实现代码请参见[conv2d\_tik.py](../tbe/impl/conv2d_tik.py)。
+    完整的实现代码请参见[conv2d\_tik.py](../tbe/custom_impl/conv2d_tik.py)。
 
 -   算子原型定义
 

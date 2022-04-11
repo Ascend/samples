@@ -30,7 +30,7 @@ Result Initparam(int argc, char *argv[])
     if ((dir = opendir("./output")) == NULL)
         system("mkdir ./output");
     if(argc!=9)	{
-        ERROR_LOG("./crop infile w h outfile w h");
+        ERROR_LOG("./crop infile w h outfile outl outt outw outh");
         return FAILED;
 	}
     int inw,inh,outl,outt,outw,outh;

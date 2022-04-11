@@ -17,11 +17,11 @@ test add
 import unittest
 import os
 import shutil
-from cust_impl.add_tik import add
+from custom_impl.add_dsl import add
 from run_testcase import run_testcase,get_path_val,print_func_name
 
 testcases = {
-    "op_name": "add",
+    "op_name": "add_dsl",
     "all": {
         "test_st_add_1": ((1, 1), (1, 1), "float32", "cce_add_1_1_float32"),
         "test_st_add_2": ((16, 32), (16, 32), "float32", "cce_add_16_32_float32"),

@@ -13,11 +13,12 @@ CANN AscendCL（Ascend Computing Language）提供Device管理、Context管理�
 - **当前分支样例版本适配说明如下：**    
     | CANN版本 | 驱动版本 |
     |---|---|
-    | [>=5.0.4.alpha001](https://www.hiascend.com/software/cann/community) | [1.0.12.alpha](https://www.hiascend.com/en/hardware/firmware-drivers?tag=community) | 
+    | [>=5.1.RC1.alpha005](https://www.hiascend.com/software/cann/community) | [1.0.13.alpha](https://www.hiascend.com/en/hardware/firmware-drivers?tag=community) | 
  
 - **历史版本请参考下表使用对应发行版：**      
     | CANN版本 | 驱动版本 | cann-samples获取方式 |
     |---|---|---|
+    | [5.0.4.alpha002/5.0.4.alpha003/<br>5.0.4.alpha005/5.0.5.alpha001/<br>5.1.RC1.alpha001/5.1.RC1.alpha002/<br>5.1.RC1.alpha003](https://www.hiascend.com/software/cann/community) | [1.0.12.alpha](https://www.hiascend.com/en/hardware/firmware-drivers?tag=community) | [tag v0.6.0](https://github.com/Ascend/samples/tree/v0.6.0/)，[下载Release 0.6.0发行版](https://github.com/Ascend/samples/releases/v0.6.0) |
     | [5.0.2.alpha005/5.0.3.alpha001/<br>5.0.3.alpha002/5.0.3.alpha003/<br>5.0.3.alpha005](https://www.hiascend.com/software/cann/community) | [1.0.11.alpha](https://www.hiascend.com/en/hardware/firmware-drivers?tag=community) | [tag v0.5.0](https://github.com/Ascend/samples/tree/v0.5.0/)，[下载Release 0.5.0发行版](https://github.com/Ascend/samples/releases/v0.5.0) |
     | [5.0.2.alpha003](https://www.hiascend.com/software/cann/community) | [1.0.10.alpha](https://www.hiascend.com/en/hardware/firmware-drivers?tag=community) | [tag v0.4.0](https://github.com/Ascend/samples/tree/v0.4.0/)，[下载Release 0.4.0发行版](https://github.com/Ascend/samples/releases/v0.4.0) |
     | [3.3.0.alpha001/3.3.0.alpha005/<br>3.3.0.alpha006/5.0.2.alpha001/<br>5.0.2.alpha002](https://www.hiascend.com/software/cann/community) | [1.0.9.alpha](https://www.hiascend.com/en/hardware/firmware-drivers?tag=community) | [tag v0.3.0](https://github.com/Ascend/samples/tree/v0.3.0/)，[下载Release 0.3.0发行版](https://github.com/Ascend/samples/releases/v0.3.0) |

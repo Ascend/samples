@@ -49,7 +49,7 @@
 
 | **模型名称** | **模型说明**                   | **模型下载路径**                                             |
 | ------------ | ------------------------------ | ------------------------------------------------------------ |
-| Portrait     | 基于TensorFlow的人像分割模型。 | 请参考https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/portraitnet/ATC_PortraitNet_tf_AE 中README.md原始模型章节，下载**原始模型**及**对应的cfg文件**。 |
+| Portrait     | 基于TensorFlow的人像分割模型。 | 请参考https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/portraitnet/ATC_PortraitNet_tf_AE 中README.md原始模型章节，下载**原始模型**及**对应的cfg文件**。 |
     
     
     # 为了方便下载，在这里直接给出原始模型下载及模型转换命令,可以直接拷贝执行。也可以参照上表在modelzoo中下载并手工转换，以了解更多细节。     

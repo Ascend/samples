@@ -13,6 +13,8 @@ import constants as const
 from acllite_model import AclLiteModel
 from acllite_image import AclLiteImage
 from acllite_resource import AclLiteResource
+from acllite_imageproc import AclLiteImageProc
+from time import *
 
 class Cartoonization(object):
     """
@@ -24,28 +26,28 @@ class Cartoonization(object):
         self._model_height = model_height
         self.device_id = 0
         self._model = None
+        self._dvpp = None
 
     def init(self):
         """
         Initialize
         """
+        self._dvpp = AclLiteImageProc()
         # Load model
         self._model = AclLiteModel(self._model_path)
-
+        
         return const.SUCCESS
 
     @utils.display_time
-    def pre_process(self, image_path, size=[256, 256]):
+    def pre_process(self, image, size=[256, 256]):
         """
         image preprocess
         """
-        img = cv2.imread(image_path).astype(np.float32)
-        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        img = cv2.resize(img, (self._model_width, self._model_height))
-        img = img / 127.5 - 1.0
-        img = np.expand_dims(img, axis=0)
-
-        return img
+        image_dvpp = image.copy_to_dvpp()
+        yuv_image = self._dvpp.jpegd(image_dvpp)
+        crop_and_paste_image = self._dvpp.crop_and_paste_get_roi(yuv_image, image.width, image.height, \
+                                self._model_width, self._model_height)
+        return crop_and_paste_image
 
     def inference(self, resized_image):
         """
@@ -100,12 +102,12 @@ def main():
 
     for image_file in images_list:
         # preprocess
-        test_img = cartoonization.pre_process(image_file)
+        image = AclLiteImage(image_file)
+        test_img = cartoonization.pre_process(image)
         # inference
         y_pred = cartoonization.inference([test_img, ])
         # postprocess
         cartoonization.post_process(y_pred, image_file)
-
 if __name__ == '__main__':
     main()
  

@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 import unittest
-from cust_impl.scatter_nd_add import scatter_nd_add
+from custom_impl.scatter_nd_add import scatter_nd_add
 from te import tvm
 import time
 import sys
@@ -31,7 +31,7 @@ class Test_scatter_nd_add(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         print("---------------------------------------------------")
-        print("[ UNITTEST START cust_impl/scatter_nd_add.py    ]")
+        print("[ UNITTEST START custom_impl/scatter_nd_add.py    ]")
 
     def test_op_scatter_nd_add_invalid_dtype(self):
         var_valid_dtype_list = ["float16", "float32", "int32", "int8", "uint8"]

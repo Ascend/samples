@@ -222,8 +222,16 @@ void destroy_encode_resource()
     INFO_LOG("Call acldvppFree success");
 }
 
-int main()
-{
+int main(int argc, char *argv[]) {
+
+    if((argc < 4) || (argv[1] == nullptr)){
+        ERROR_LOG("Please input: ./main <image_path> <image_width> <image_height>");
+        return FAILED;
+    }
+    string image_path = string(argv[1]);
+    int image_width = stoi(argv[2]);
+    int image_height = stoi(argv[3]);
+
     //ACL Init
     const char *aclConfigPath = "../src/acl.json";
     aclInit(aclConfigPath);
@@ -237,9 +245,8 @@ int main()
     INFO_LOG("Create stream success");
     aclrtGetRunMode(&runMode);
 
-    std::string encodeOutFileName = "./output/jpege_output";
     uint32_t encodeLevel = 100; // default optimal level (0-100)
-    PicDesc testPic = {"../data/dvpp_output.yuv", 1024, 688};
+    PicDesc testPic = {image_path, image_width, image_height};
     INFO_LOG("Start to process picture:%s", testPic.picName.c_str());
     INFO_LOG("Call JpegE");
 
@@ -316,8 +323,16 @@ int main()
     }
 
     //malloc host mem & save pic
-    encodeOutFileName = encodeOutFileName + ".jpg";
-    Result ret = save_dvpp_outputdata(encodeOutFileName.c_str(), encode_out_buffer_dev_, encode_outbuffer_size_);
+
+    int dir_tail_index = image_path.find("/data");
+    std::string outfile_dir = image_path.substr(0, dir_tail_index) + "/" + "out/output/";
+    std::string outfile_path = outfile_dir + image_path.substr(dir_tail_index+5+1, image_path.rfind(".yuv")-dir_tail_index-5-1) 
+        + "_jpege_" + std::to_string(inputWidth_) + "_" + std::to_string(inputHeight_) + ".jpg";   
+    INFO_LOG("outfile_path=%s", outfile_path.c_str());
+
+    // std::string encodeOutFileName = image_path.replace(image_path.rfind(".yuv"), 4, "_jpege_output");
+    // encodeOutFileName = encodeOutFileName + ".jpg";
+    Result ret = save_dvpp_outputdata(outfile_path.c_str(), encode_out_buffer_dev_, encode_outbuffer_size_);
     if (ret != SUCCESS) {
         ERROR_LOG("save encode output data failed.");
         return FAILED;

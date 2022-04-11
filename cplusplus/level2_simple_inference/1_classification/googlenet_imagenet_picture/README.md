@@ -54,7 +54,7 @@ Before deploying this sample, ensure that:
    
    | **Model Name**| **Description**| **Download Link**|
    |----------|----------|----------|
-   | googlenet| Applies to image classification. It is a GoogLeNet model based on Caffe.| Download the model and weight file by referring to the section about downloading the original model in the **README.md** file in [https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/googlenet/ATC\_googlenet\_caffe\_AE](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/googlenet/ATC_googlenet_caffe_AE).|
+   | googlenet| Applies to image classification. It is a GoogLeNet model based on Caffe.| Download the model and weight file by referring to the section about downloading the original model in the **README.md** file in [https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/googlenet/ATC\_googlenet\_caffe\_AE](https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/googlenet/ATC_googlenet_caffe_AE).|
 
    ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **Note:**
    

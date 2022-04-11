@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <vector>
 #include <string>
+#include <string.h>
 #include <memory>
 #include <stdlib.h>
 #include "utils.h"
@@ -101,6 +102,17 @@ Result DvppProcess::InitResource()
     return SUCCESS;
 }
 
+void DvppProcess::CalYuv400InputBufferSize(uint32_t inWidthStride, uint32_t inHeightStride, uint32_t &inBufferSize)
+{
+    auto socVersion = aclrtGetSocName();
+    INFO_LOG("Current soc version is %s", socVersion);
+    if (strncmp(socVersion, "Ascend710", sizeof("Ascend710") - 1) == 0) {
+        inBufferSize = inWidthStride * inHeightStride;
+    } else {
+        inBufferSize = inWidthStride * inHeightStride * 3 / 2;
+    }
+}
+
 uint32_t DvppProcess::CalculateInBufferSize(uint32_t inputWidth, uint32_t inputHeight,
                                             acldvppPixelFormat inputFormat)
 {
@@ -116,9 +128,10 @@ uint32_t DvppProcess::CalculateInBufferSize(uint32_t inputWidth, uint32_t inputH
     }
     uint32_t inputBufferSize;
     switch (inputFormat) {
-        case PIXEL_FORMAT_YUV_400:
-            inputBufferSize = inputWidthStride_ * inputHeightStride_;
+        case PIXEL_FORMAT_YUV_400: {
+            CalYuv400InputBufferSize(inputWidthStride_, inputHeightStride_, inputBufferSize);
             break;
+        }
         case PIXEL_FORMAT_YUV_SEMIPLANAR_420:
         case PIXEL_FORMAT_YVU_SEMIPLANAR_420:
             inputBufferSize = inputWidthStride_ * inputHeightStride_ * sizeAlignment / sizeNum;

@@ -63,6 +63,10 @@ bash sample_build.sh
     ```
     bash sample_run.sh
     ```
+    或者，直接运行可执行程序(自己填写参数）:
+    ```
+    ./main ../data/wood_rabbit_1024_1068_nv12.yuv 1024 1068 ./output/output.yuv 224 224
+    ```
 
 ### 查看结果
 运行完成后，会在运行环境的命令行中打印出推理结果,并在运行环境样例目录下的out/output里生成resize缩放后的YUV图片。

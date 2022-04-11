@@ -44,7 +44,7 @@
 2. 将原始模型转换为Davinci模型。   
    | **模型名称** | **模型说明**                                     | **模型下载路径**                                             |
    | ------------ | ------------------------------------------------ | ------------------------------------------------------------ |
-   | DeRain       | 图像增强推理模型。是基于tensorflow的模型。 | 请参考[ATC_DeRain_TensorFlow_AE](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/DeRain/ATC_DeRain_TensorFlow_AE)目录中README.md下载原始模型章节下载模型和权重文件。 |
+   | DeRain       | 图像增强推理模型。是基于tensorflow的模型。 | 请参考[ATC_DeRain_TensorFlow_AE](https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/DeRain/ATC_DeRain_TensorFlow_AE)目录中README.md下载原始模型章节下载模型和权重文件。 |
    ```
    # 为了方便下载，在这里直接给出原始模型下载及模型转换命令,可以直接拷贝执行。也可以参照上表在modelzoo中下载并手工转换，以了解更多细节。     
    cd ${HOME}/samples/cplusplus/level2_simple_inference/6_other/DeRain/model     

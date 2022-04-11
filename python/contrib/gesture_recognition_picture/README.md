@@ -55,7 +55,7 @@ Before deploying this sample, ensure that:
 
 | **Model Name**      | **Description**                          | **How to Obtain**                        |
 | ------------------- | ---------------------------------------- | ---------------------------------------- |
-| gesture_recognition | Image classification model based on Caffe | Download the model and weight files by referring to the **[README.md](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/gesture_recognition/ATC_gesture_recognition_Caffe_AE)** file. |
+| gesture_recognition | Image classification model based on Caffe | Download the model and weight files by referring to the **[README.md](https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/gesture_recognition/ATC_gesture_recognition_Caffe_AE)** file. |
 
 ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **NOTE**  
 > - The converted OM model provided by ModelZoo does not match the current sample. Therefore, you need to download the original model and weight files, and convert the model by yourself.

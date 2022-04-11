@@ -134,9 +134,9 @@ AclLiteError PreprocessThread::AppStart() {
 }
 
 AclLiteError PreprocessThread::ReadFrame(shared_ptr<PreprocDataMsg> &preprocDataMsg) {
-    postChannel = frameCnt_ % channelId_;   //发给哪个后处理
-    preprocDataMsg->postprocThreadId = postprocThreadId_[postChannel];  //后处理线程id
-    preprocDataMsg->frameNum = frameCnt_;   //每一帧编号
+    postChannel = frameCnt_ % channelId_;
+    preprocDataMsg->postprocThreadId = postprocThreadId_[postChannel];
+    preprocDataMsg->frameNum = frameCnt_;
     preprocDataMsg->isLastFrame = 0;
     if (imageFile == fileVec.end()) { 
         preprocDataMsg->isLastFrame = 1;
@@ -171,13 +171,9 @@ AclLiteError PreprocessThread::MsgProcess(ImageData& imageFrame,
         return ACLLITE_ERROR;
     }
 
-    yuvImage.width = imageDevice.width;
-    yuvImage.height = imageDevice.height;
-
-    ret = dvpp_.CropPaste(preprocDataMsg->resizedMat, yuvImage, 514, 514,
-                          0, 0, imageDevice.width, imageDevice.height);
+    ret = dvpp_.Resize(preprocDataMsg->resizedMat, yuvImage, modelWidth_, modelHeight_);
     if (ret == ACLLITE_ERROR) {
-        ACLLITE_LOG_ERROR("dvpp_cropandpaste image failed");
+        ACLLITE_LOG_ERROR("dvpp_resize image failed");
         return ACLLITE_ERROR;
     }
 
@@ -187,8 +183,6 @@ AclLiteError PreprocessThread::MsgProcess(ImageData& imageFrame,
         ACLLITE_LOG_ERROR("Copy image to host failed");
         return ACLLITE_ERROR;
     }
-    cv::Mat bgrImage(yuvimg.height * 3 / 2, yuvimg.width, CV_8UC1, yuvimg.data.get());
-    cv::cvtColor(bgrImage, preprocDataMsg->frame, CV_YUV2BGR_NV12);
 
     return ACLLITE_OK;
 }

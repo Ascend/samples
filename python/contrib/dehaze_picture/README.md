@@ -55,7 +55,7 @@ Before deploying this sample, ensure that:
 
 | **Model Name** | **Description**                  | **How to Obtain**                        |
 | -------------- | -------------------------------- | ---------------------------------------- |
-| deploy_vel     | Dehaze model based on TensorFlow | Download the model file and the corresponding CFG file by referring to "[Original Model](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/dehaze/ATC_deploy_vel_tf_AE)". |
+| deploy_vel     | Dehaze model based on TensorFlow | Download the model file and the corresponding CFG file by referring to "[Original Model](https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/dehaze/ATC_deploy_vel_tf_AE)". |
 
 
 #### 3. Convert the original model to a Da Vinci model.

@@ -273,7 +273,7 @@ function running()
         echo "[ERROR] The program failed to run, please check the log in the /var/log/npu/slog/host-0 directory!"
         return 1
     else
-        echo "[INFO] The program runs successfully, please view the result file in the ${ScriptPath}../out/output directory!"
+        echo "[INFO] The program runs successfully, please view the result file in the ${ScriptPath}/../out/output directory!"
         return 0
     fi
 }

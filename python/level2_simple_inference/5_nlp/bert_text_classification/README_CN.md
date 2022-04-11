@@ -43,7 +43,7 @@
 2. 获取此应用中所需要的原始网络模型。
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
-    |  bert_text_classification | 文本分类推理模型 | 请参考[https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/nlp/bert_text_classification/ATC_bert_classification_tf_AE](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/nlp/bert_text_classification/ATC_bert_classification_tf_AE)目录中README.md下载原始模型章节下载模型和权重文件 |
+    |  bert_text_classification | 文本分类推理模型 | 请参考[https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/nlp/bert_text_classification/ATC_bert_classification_tf_AE](https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/nlp/bert_text_classification/ATC_bert_classification_tf_AE)目录中README.md下载原始模型章节下载模型和权重文件 |
     ```
     # 为了方便下载，在这里直接给出原始模型下载及模型转换命令,可以直接拷贝执行。也可以参照上表在modelzoo中下载并手工转换，以了解更多细节。     
     cd ${HOME}/samples/python/level2_simple_inference/5_nlp/bert_text_classification/model     

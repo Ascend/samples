@@ -43,7 +43,7 @@
 2. 获取此应用中所需要的原始网络模型。
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
-    |  count_person.caffe| 	基于caffe的密集人群计数处理。  |  请参考https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/crowdCount/ATC_count_person_caffe_AE](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/crowdCount/ATC_count_person_caffe_AE)原始模型章节，下载原始模型及对应的cfg文件。 |
+    |  count_person.caffe| 	基于caffe的密集人群计数处理。  |  请参考https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/crowdCount/ATC_count_person_caffe_AE](https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/crowdCount/ATC_count_person_caffe_AE)原始模型章节，下载原始模型及对应的cfg文件。 |
     ```
     # 为了方便下载，在这里直接给出原始模型下载及模型转换命令,可以直接拷贝执行。也可以参照上表在modelzoo中下载并手工转换，以了解更多细节。     
     cd ${HOME}/samples/python/contrib/crowd_count_picture/model    

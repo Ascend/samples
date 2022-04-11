@@ -61,10 +61,11 @@ This sample involves the following key functions:
     The sample provides a user-defined API  **DumpModelOutputResult**, which is used to write the model inference result to a file \(after the executable file is executed, the inference result file is generated in the directory of the executable file in the  operating environment\). This API is not called by default. To call this API, you need to add the following code before the  **OutputModelResult**  call in  **sample\_process.cpp**  in advance.
 
     ```
-    // Print the top 1 confidence values with indexes using DumpModelOutputResult
-    // if want to dump output result to file in the current directory
-    processModel.DumpModelOutputResult();
-    processModel.OutputModelResult();
+    // OutputModelResult prints the top 1 confidence value with index.
+    // If want to dump output result to file in the current directory,
+    // use function DumpModelOutputResult.
+    ModelProcess::DumpModelOutputResult(data.second);
+    ModelProcess::OutputModelResult(data.second);
     ```
 
 

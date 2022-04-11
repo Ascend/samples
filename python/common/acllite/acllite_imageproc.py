@@ -55,8 +55,9 @@ class AclLiteImageProc(object):
     def _gen_input_pic_desc(self, image,
                             width_align_factor=16, height_align_factor=2):
         # Create input image
-        stride_width = utils.align_up(image.width, width_align_factor)
-        stride_height = utils.align_up(image.height, height_align_factor)
+        if image.alignWidth == 0 and image.alignHeight == 0:
+            image.alignWidth = utils.align_up(image.width, width_align_factor)
+            image.alignHeight = utils.align_up(image.height, height_align_factor)
 
         pic_desc = acl.media.dvpp_create_pic_desc()
         acl.media.dvpp_set_pic_desc_data(pic_desc, image.data())
@@ -64,8 +65,8 @@ class AclLiteImageProc(object):
             pic_desc, constants.PIXEL_FORMAT_YUV_SEMIPLANAR_420)
         acl.media.dvpp_set_pic_desc_width(pic_desc, image.width)
         acl.media.dvpp_set_pic_desc_height(pic_desc, image.height)
-        acl.media.dvpp_set_pic_desc_width_stride(pic_desc, stride_width)
-        acl.media.dvpp_set_pic_desc_height_stride(pic_desc, stride_height)
+        acl.media.dvpp_set_pic_desc_width_stride(pic_desc, image.alignWidth)
+        acl.media.dvpp_set_pic_desc_height_stride(pic_desc, image.alignHeight)
         acl.media.dvpp_set_pic_desc_size(pic_desc, image.size)
 
         return pic_desc
@@ -121,7 +122,7 @@ class AclLiteImageProc(object):
         stride_width = utils.align_up128(image.width)
         stride_height = utils.align_up16(image.height)
         stride_size = utils.yuv420sp_size(stride_width, stride_height)
-        return AclLiteImage(out_buffer, stride_width,
+        return AclLiteImage(out_buffer, image.width, image.height, stride_width,
                         stride_height, stride_size, constants.MEMORY_DVPP)
 
     def _gen_jpegd_out_pic_desc(self, image):
@@ -195,7 +196,7 @@ class AclLiteImageProc(object):
         # Release the resources requested for scaling
         acl.media.dvpp_destroy_pic_desc(input_desc)
         acl.media.dvpp_destroy_pic_desc(output_desc)
-        return AclLiteImage(out_buffer, stride_width,
+        return AclLiteImage(out_buffer, resize_width, resize_height, stride_width,
                         stride_height, output_size, constants.MEMORY_DVPP)
 
     def _gen_resize_out_pic_desc(self, resize_width,
@@ -265,7 +266,7 @@ class AclLiteImageProc(object):
         #stride_width = utils.align_up16(crop_and_paste_width)
         #stride_height = utils.align_up2(crop_and_paste_height)
 
-        return AclLiteImage(out_buffer, stride_width,
+        return AclLiteImage(out_buffer, image.width, image.height, stride_width,
                         stride_height, out_buffer_size, constants.MEMORY_DVPP)
 
     def crop_and_paste_get_roi(
@@ -310,7 +311,7 @@ class AclLiteImageProc(object):
         print('[AclLiteImageProc] vpc crop and paste stage success')
         stride_width = utils.align_up16(crop_and_paste_width)
         stride_height = utils.align_up2(crop_and_paste_height)
-        return AclLiteImage(out_buffer, stride_width,
+        return AclLiteImage(out_buffer, image.width, image.height, stride_width,
                         stride_height, out_buffer_size, constants.MEMORY_DVPP)
 
     def jpege(self, image):
@@ -350,7 +351,7 @@ class AclLiteImageProc(object):
         # Release resources
         acl.media.dvpp_destroy_pic_desc(input_desc)
         return AclLiteImage(
-            output_buffer, image.width, image.height, int(
+            output_buffer, image.width, image.height, 0, 0, int(
                 output_size_array[0]), constants.MEMORY_DVPP)
 
     def destroy(self):
@@ -375,3 +376,4 @@ class AclLiteImageProc(object):
 
     def __del__(self):
         self.destroy()
+

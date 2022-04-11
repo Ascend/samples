@@ -12,7 +12,7 @@ DVPP中的JPEGE功能模块，实现将YUV格式图片编码成.jpg图片。
 
 样例中的关键接口调用流程如下：
 
-![输入图片说明](https://images.gitee.com/uploads/images/2020/1225/093219_44fe5420_8492653.png "zh-cn_image_0000001072787903.png")
+![输入图片说明](https://support.huaweicloud.com/aclcppdevg-cann51RC1alpha2/figure/zh-cn_image_0000001213073514.png)
 
 ## 目录结构<a name="section86232112399"></a>
 

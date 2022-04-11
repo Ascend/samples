@@ -40,14 +40,12 @@ struct timespec time10 = {0, 0};
 
 namespace {
 uint32_t kExitCount = 0;
-uint32_t kModelWidth = 514;
-uint32_t kModelHeight = 514;
+uint32_t kModelWidth = 513;
+uint32_t kModelHeight = 513;
 const char* kModelPath = "../model/deeplab_quant.om";
 const char* kConfigFile = "../scripts/deeplab_multi_thread.conf";
 const string kRegexData = "^data_addr+$";
 const string kRegexPostNum = "^postprocess_num+$";
-const string kRegexOutputHeight = "^output_height+$";
-const string kRegexOutputWidth = "^output_width+$";
 }
 
 int MainThreadProcess(uint32_t msgId, 
@@ -67,8 +65,7 @@ int MainThreadProcess(uint32_t msgId,
     return ACLLITE_OK;
 }
 
-AclLiteError ParseConfig(string& dataAddr, uint32_t& postNum,
-                       uint32_t& outputHeight, uint32_t& outputWidth) {
+AclLiteError ParseConfig(string& dataAddr, uint32_t& postNum) {
     map<string, string> config;
     if(!ReadConfig(config, kConfigFile)) {
         return ACLLITE_ERROR;
@@ -76,8 +73,6 @@ AclLiteError ParseConfig(string& dataAddr, uint32_t& postNum,
 
     regex dataAddrRegex(kRegexData.c_str());
     regex postNumRegex(kRegexPostNum.c_str());
-    regex outputHeightRegex(kRegexOutputHeight.c_str());
-    regex outputWidthRegex(kRegexOutputWidth.c_str());
     map<string, string>::const_iterator mIter = config.begin();
     for (; mIter != config.end(); ++mIter) {
         printf("config item: %s=%s\n", mIter->first.c_str(), mIter->second.c_str());
@@ -88,16 +83,6 @@ AclLiteError ParseConfig(string& dataAddr, uint32_t& postNum,
         }
         else if (regex_match(mIter->first, postNumRegex)) {
             postNum = stoi(mIter->second);
-            ACLLITE_LOG_INFO("Rtsp config item: %s=%s", 
-                           mIter->first.c_str(), mIter->second.c_str());
-        }
-        else if (regex_match(mIter->first, outputHeightRegex)) {
-            outputHeight = stoi(mIter->second);
-            ACLLITE_LOG_INFO("Rtsp config item: %s=%s", 
-                           mIter->first.c_str(), mIter->second.c_str());
-        }
-        else if (regex_match(mIter->first, outputWidthRegex)) {
-            outputWidth = stoi(mIter->second);
             ACLLITE_LOG_INFO("Rtsp config item: %s=%s", 
                            mIter->first.c_str(), mIter->second.c_str());
         }
@@ -124,11 +109,10 @@ void CreateInferenceInstance(vector<AclLiteThreadParam>& threadTbl) {
     threadTbl.push_back(param);
 }
 
-void CreatePostprocessInstances(vector<AclLiteThreadParam>& threadTbl,
-                               uint32_t videoHeight, uint32_t videoWidth, uint32_t postNum) {
+void CreatePostprocessInstances(vector<AclLiteThreadParam>& threadTbl, uint32_t postNum) {
     AclLiteThreadParam param;
     for (int i = 0; i < postNum; i++) {  
-        param.threadInst = new PostprocessThread(videoWidth, videoHeight);
+        param.threadInst = new PostprocessThread(kModelWidth, kModelHeight);
         param.threadInstName.assign(kPostprocName[i].c_str());    
         threadTbl.push_back(param);
     }    
@@ -136,10 +120,8 @@ void CreatePostprocessInstances(vector<AclLiteThreadParam>& threadTbl,
 void CreateThreadInstance(vector<AclLiteThreadParam>& threadTbl, AclLiteResource& aclDev) {
     string dataAddr;
     uint32_t postNum;
-    uint32_t outputHeight;
-    uint32_t outputWidth;
 
-    AclLiteError ret = ParseConfig(dataAddr, postNum, outputHeight, outputWidth);
+    AclLiteError ret = ParseConfig(dataAddr, postNum);
     if (ret != ACLLITE_OK) {
         return;
     }
@@ -147,7 +129,7 @@ void CreateThreadInstance(vector<AclLiteThreadParam>& threadTbl, AclLiteResource
     CreatePreprocessInstances(threadTbl, dataAddr, postNum);
     CreateInferenceInstance(threadTbl);
     cout << "postprocess start" << endl;
-    CreatePostprocessInstances(threadTbl, outputHeight, outputWidth, postNum);
+    CreatePostprocessInstances(threadTbl, postNum);
     cout << "postprocess start" << endl;
     for (int i = 0; i < threadTbl.size(); i++) {
         threadTbl[i].context = aclDev.GetContext();

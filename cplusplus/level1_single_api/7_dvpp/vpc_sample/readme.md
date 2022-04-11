@@ -138,6 +138,7 @@ DVPP中的VPC功能模块，实现图片的抠图、缩放、边界填充、色�
       -   in\_image\_file：输入图像文件的路径，包含文件名。
       -   out\_image\_file：输出图像文件的路径，包含文件名。
       -   thread\_num：线程数
+      -   queue_len：通道任务队列深度
       -   test\_type，该参数表示测试的功能类型，各取值的含义如下：
           -   1：抠图
           -   2：缩放
@@ -161,7 +162,7 @@ DVPP中的VPC功能模块，实现图片的抠图、缩放、边界填充、色�
 ## 抠图<a name="section56911075516"></a>
 
 ```
-./vpc_demo --test_type 1 --in_image_file dvpp_vpc_1920x1080_nv12.yuv --out_image_file crop.yuv --img_width 1920 --img_height 1080 --crop_x 0 --crop_y 0 --crop_width 960 --crop_height 540 --out_width 960 --out_height 540 --in_format 1 --out_format 1 --multi_count 1
+./vpc_demo --test_type 1 --in_image_file dvpp_vpc_1920x1080_nv12.yuv --out_image_file crop.yuv --img_width 1920 --img_height 1080 --crop_x 0 --crop_y 0 --crop_width 960 --crop_height 540 --out_width 960 --out_height 540 --in_format 1 --out_format 1 --multi_count 1 --queue_len 32
 ```
 
 -   示例描述：使用VPC从分辨率1920\*1080的原图中抠出以左上角为原点、分辨率960\*540的图片。
@@ -178,7 +179,7 @@ DVPP中的VPC功能模块，实现图片的抠图、缩放、边界填充、色�
 ## 缩放<a name="section15497132717511"></a>
 
 ```
-./vpc_demo --test_type 2 --in_image_file dvpp_vpc_1920x1080_nv12.yuv --out_image_file resize.yuv --img_width 1920 --img_height 1080 --out_width 960 --out_height 540  --fx 0 --fy 0 --interpolation 0 --in_format 1 --out_format 1
+./vpc_demo --test_type 2 --in_image_file dvpp_vpc_1920x1080_nv12.yuv --out_image_file resize.yuv --img_width 1920 --img_height 1080 --out_width 960 --out_height 540  --fx 0 --fy 0 --interpolation 0 --in_format 1 --out_format 1 --queue_len 32
 ```
 
 -   示例描述：优先根据输出文件大小进行缩放，当输出宽高都为0时，根据fx和fy进行配置。
@@ -196,7 +197,7 @@ DVPP中的VPC功能模块，实现图片的抠图、缩放、边界填充、色�
 ## 抠图+缩放<a name="section325163225117"></a>
 
 ```
-./vpc_demo --test_type 3 --in_image_file dvpp_vpc_1920x1080_nv12.yuv --out_image_file cropResize.yuv --img_width 1920 --img_height 1080--crop_x 0 --crop_y 0 --crop_width 960 --crop_height 540 --resize_width 1920 --resize_height 1080 --interpolation 0  --out_width 1920 --out_height 1080 --in_format 1 --out_format 1 --multi_count 1
+./vpc_demo --test_type 3 --in_image_file dvpp_vpc_1920x1080_nv12.yuv --out_image_file cropResize.yuv --img_width 1920 --img_height 1080--crop_x 0 --crop_y 0 --crop_width 960 --crop_height 540 --resize_width 1920 --resize_height 1080 --interpolation 0  --out_width 1920 --out_height 1080 --in_format 1 --out_format 1 --multi_count 1 --queue_len 32
 ```
 
 -   示例描述：先抠图，后缩放。
@@ -219,7 +220,7 @@ DVPP中的VPC功能模块，实现图片的抠图、缩放、边界填充、色�
 ## 单图抠图+缩放+贴图<a name="section11644204213518"></a>
 
 ```
-./vpc_demo --test_type 4 --in_image_file dvpp_vpc_1920x1080_nv12.yuv --out_image_file cropResizePaste.yuv --img_width 1920 --img_height 1080 --out_width 1920 --out_height 1080 --crop_x 0 --crop_y 0 --crop_width 960 --crop_height 540 --resize_width 1280 --resize_height 720 --dest_left_offset 320 --dest_top_offset 320 --interpolation 0 --in_format 1 --out_format 1 --multi_count 1
+./vpc_demo --test_type 4 --in_image_file dvpp_vpc_1920x1080_nv12.yuv --out_image_file cropResizePaste.yuv --img_width 1920 --img_height 1080 --out_width 1920 --out_height 1080 --crop_x 0 --crop_y 0 --crop_width 960 --crop_height 540 --resize_width 1280 --resize_height 720 --dest_left_offset 320 --dest_top_offset 320 --interpolation 0 --in_format 1 --out_format 1 --multi_count 1 --queue_len 32
 ```
 
 -   示例描述：单张输入图片先抠图，后缩放，再贴图。
@@ -244,7 +245,7 @@ DVPP中的VPC功能模块，实现图片的抠图、缩放、边界填充、色�
 ## 单图抠图+缩放+边界填充<a name="section5854252115115"></a>
 
 ```
-./vpc_demo --test_type 5 --in_image_file dvpp_vpc_1920x1080_nv12.yuv --out_image_file cropResizePadding.yuv --img_width 1920 --img_height 1080 --out_width 1920 --out_height 1080 --crop_x 0 --crop_y 0 --crop_width 1280 --crop_height 720 --resize_width 960 --resize_height 540 --dest_left_offset 320 --dest_top_offset 320 --interpolation 0 --in_format 1 --out_format 1 --padding_val_r 255 --padding_val_g 255 --padding_val_b 255 --multi_count 1
+./vpc_demo --test_type 5 --in_image_file dvpp_vpc_1920x1080_nv12.yuv --out_image_file cropResizePadding.yuv --img_width 1920 --img_height 1080 --out_width 1920 --out_height 1080 --crop_x 0 --crop_y 0 --crop_width 1280 --crop_height 720 --resize_width 960 --resize_height 540 --dest_left_offset 320 --dest_top_offset 320 --interpolation 0 --in_format 1 --out_format 1 --padding_val_r 255 --padding_val_g 255 --padding_val_b 255 --multi_count 1 --queue_len 32
 ```
 
 -   示例描述：先抠图，后缩放，再边界填充。
@@ -272,7 +273,7 @@ DVPP中的VPC功能模块，实现图片的抠图、缩放、边界填充、色�
 ## 色域转换<a name="section5722112135213"></a>
 
 ```
-./vpc_demo --test_type 6 --in_image_file dvpp_vpc_1920x1080_nv12.yuv --out_image_file cvtColor.bgra --img_width 1920 --img_height 1080 --out_width 1920 --out_height 1080 --in_format 1 --out_format 14
+./vpc_demo --test_type 6 --in_image_file dvpp_vpc_1920x1080_nv12.yuv --out_image_file cvtColor.bgra --img_width 1920 --img_height 1080 --out_width 1920 --out_height 1080 --in_format 1 --out_format 14 --queue_len 32
 ```
 
 -   示例描述：色域转换。
@@ -283,7 +284,7 @@ DVPP中的VPC功能模块，实现图片的抠图、缩放、边界填充、色�
 ## 边界填充<a name="section379513130524"></a>
 
 ```
-./vpc_demo --test_type 7 --in_image_file dvpp_vpc_1920x1080_nv12.yuv --out_image_file padding.yuv --img_width 1920 --img_height 1080 --out_width 1924 --out_height 1084 --in_format 1 --out_format 1 --padding_mode 0 --top_padding_size 2 --bottom_padding_size 2 --left_padding_size 2 --right_padding_size 2 --padding_val_r 255 --padding_val_g 255 --padding_val_b 255
+./vpc_demo --test_type 7 --in_image_file dvpp_vpc_1920x1080_nv12.yuv --out_image_file padding.yuv --img_width 1920 --img_height 1080 --out_width 1924 --out_height 1084 --in_format 1 --out_format 1 --padding_mode 0 --top_padding_size 2 --bottom_padding_size 2 --left_padding_size 2 --right_padding_size 2 --padding_val_r 255 --padding_val_g 255 --padding_val_b 255 --queue_len 32
 ```
 
 -   示例描述：边界填充。
@@ -308,7 +309,7 @@ DVPP中的VPC功能模块，实现图片的抠图、缩放、边界填充、色�
 ## 金字塔<a name="section3994172425214"></a>
 
 ```
-./vpc_demo --test_type 8 --in_image_file dvpp_vpc_1920x1080_yuv400.yuv --out_image_file pyramid.yuv400 --img_width 1920 --img_height 1080 --in_format 0 --filter_level 4 --divisor 256 --pyramid_padding_mode 0
+./vpc_demo --test_type 8 --in_image_file dvpp_vpc_1920x1080_yuv400.yuv --out_image_file pyramid.yuv400 --img_width 1920 --img_height 1080 --in_format 0 --filter_level 4 --divisor 256 --pyramid_padding_mode 0 --queue_len 32
 ```
 
 -   示例描述：图像金字塔功能，其中滤波器参数、输出图片数等已在代码中配置。
@@ -327,7 +328,7 @@ DVPP中的VPC功能模块，实现图片的抠图、缩放、边界填充、色�
 ## 直方图统计<a name="section145662380524"></a>
 
 ```
-./vpc_demo --test_type 9 --in_image_file dvpp_vpc_1920x1080_nv12.yuv --out_image_file histogram --img_width 1920 --img_height 1080 --in_format 1
+./vpc_demo --test_type 9 --in_image_file dvpp_vpc_1920x1080_nv12.yuv --out_image_file histogram --img_width 1920 --img_height 1080 --in_format 1 --queue_len 32
 ```
 
 -   示例描述：直方图统计，即对输入图片的每个分量的像素个数进行统计。
@@ -338,7 +339,7 @@ DVPP中的VPC功能模块，实现图片的抠图、缩放、边界填充、色�
 ## 色彩重映射<a name="section187344910524"></a>
 
 ```
-./vpc_demo --test_type 10 --in_image_file dvpp_vpc_1920x1080_nv12.yuv --out_image_file remap.yuv --img_width 1920 --img_height 1080 --in_format 1 --out_format 1
+./vpc_demo --test_type 10 --in_image_file dvpp_vpc_1920x1080_nv12.yuv --out_image_file remap.yuv --img_width 1920 --img_height 1080 --in_format 1 --out_format 1 --queue_len 32
 ```
 
 -   示例描述：LUT重映射，其中重映射值已在代码中配置。
@@ -349,7 +350,7 @@ DVPP中的VPC功能模块，实现图片的抠图、缩放、边界填充、色�
 ## 多图抠图+缩放+贴图<a name="section14440521531"></a>
 
 ```
-./vpc_demo --test_type 11 --in_image_file dvpp_vpc_1920x1080_nv12.yuv --out_image_file batchCropResizePaste.yuv --img_width 1920 --img_height 1080 --out_width 1920 --out_height 1080 --crop_x 0 --crop_y 0 --crop_width 960 --crop_height 540 --resize_width 1280 --resize_height 720 --dest_left_offset 320 --dest_top_offset 320 --interpolation 0 --in_format 1 --out_format 1 --in_image_num 1 --multi_count 2
+./vpc_demo --test_type 11 --in_image_file dvpp_vpc_1920x1080_nv12.yuv --out_image_file batchCropResizePaste.yuv --img_width 1920 --img_height 1080 --out_width 1920 --out_height 1080 --crop_x 0 --crop_y 0 --crop_width 960 --crop_height 540 --resize_width 1280 --resize_height 720 --dest_left_offset 320 --dest_top_offset 320 --interpolation 0 --in_format 1 --out_format 1 --in_image_num 1 --multi_count 2 --queue_len 32
 ```
 
 -   示例描述：多张输入图片先抠图，后缩放，再贴图。
@@ -375,7 +376,7 @@ DVPP中的VPC功能模块，实现图片的抠图、缩放、边界填充、色�
 ## 多图抠图+缩放+边界填充<a name="section2082361014539"></a>
 
 ```
-./vpc_demo --test_type 12 --in_image_file dvpp_vpc_1920x1080_nv12.yuv --out_image_file batchCropResizePadding.yuv --img_width 1920 --img_height 1080 --out_width 1920 --out_height 1080 --crop_x 0 --crop_y 0 --crop_width 1280 --crop_height 720 --resize_width 960 --resize_height 540 --dest_left_offset 320 --dest_top_offset 320 --interpolation 0 --in_format 1 --out_format 1 --padding_val_r 255 --padding_val_g 255 --padding_val_b 255 --in_image_num 1 --multi_count 2
+./vpc_demo --test_type 12 --in_image_file dvpp_vpc_1920x1080_nv12.yuv --out_image_file batchCropResizePadding.yuv --img_width 1920 --img_height 1080 --out_width 1920 --out_height 1080 --crop_x 0 --crop_y 0 --crop_width 1280 --crop_height 720 --resize_width 960 --resize_height 540 --dest_left_offset 320 --dest_top_offset 320 --interpolation 0 --in_format 1 --out_format 1 --padding_val_r 255 --padding_val_g 255 --padding_val_b 255 --in_image_num 1 --multi_count 2 --queue_len 32
 ```
 
 -   示例描述：多张输入图片先抠图，后缩放，再边界填充。
@@ -406,10 +407,27 @@ DVPP中的VPC功能模块，实现图片的抠图、缩放、边界填充、色�
 ./vpc_demo --test_type 20 --in_image_file dvpp_vpc_382x300_nv12.yuv --out_image_file 384x300_nv12.yuv --img_width 382 --img_height 300 --in_width_align 1 --in_height_align 1 --out_width_align 16 --out_height_align 2  --in_format 1
 ```
 
--   示例描述：按用户指定的输出图片的宽对齐、高对齐，输出满足要求的图片。请注意，该示例仅供参考。当前示例中，宽或高的对齐值的取值范围是(0 , 128]，且对齐值必须是2的幂次方。宽stride最小值为32。如果当前示例不满足用户需求，用户可参考pre_process函数中的实现自行调整。
+- 示例描述：按用户指定的输出图片的宽对齐、高对齐，输出满足要求的图片。
+
+  该示例是通过“vpc_sample/src/common/sample_comm.cpp”中的pre_process函数实现的。在该函数内，宽或高的对齐值的取值范围是(0 , 128]，且对齐值必须是2的幂次方。宽stride最小值为32。您可以参考该函数的实现，根据实际场景调整。
+
+  pre_process函数的完整入参包括：输入图像的文件路径（inputFileName）、宽（width）、高（height）、宽对齐值（inWidthAlign）、高对齐值（inHeightAlign）、格式（format），以及输出图像的文件路径（outputFileName）、宽对齐值（outWidthAlign）、高对齐值（outHeightAlign）。pre_process函数参数配置说明如下：
+
+  1. 场景一：用户想将原始大小图像转换成对齐图像，则只需要配置输入图像的文件路径、宽、高、格式，以及输出图像的文件路径、宽对齐值、高对齐值。
+  2. 场景二：用户想将对齐图像转换为原始大小图像，则只需要配置输入图像的文件路径、宽、高、宽对齐值、高对齐值、格式，以及输出图像的文件路径。
+  3. 场景三：用户想将对齐图像转换为另一种对齐的图像，则需要配置完整参数。
+
+  pre_process函数的实现逻辑如下;
+
+  1. 基于入参，调用configure_stride_and_buffer_size函数，计算出输入和输出图像的宽stride、高stride以及所需输入、输出内存大小；
+  2. 申请输入、输出内存，向输入内存中读取输入图像数据；
+  3. 基于入参所配置的对齐值，调用get_dst_stride_picture函数将输入内存中的数据拷贝到输出内存中；
+  4. 将输出内存中的图像数据保存到本地。
+
 -   输入图像：宽382像素、高300像素、格式为yuv420SP NV12的图片，图片名称为dvpp_vpc_382x300_nv12.yuv。
 -   输出图像：宽384像素、高300像素、格式为yuv420SP NV12的图片，图片名称为384x300_nv12.yuv。
--   本示例的通用参数说明请参见[3](#li163081446761)，关键参数说明如下：
+-   参数说明如下：
+    -   test_type、in_image_file、out_image_file、img_width、img_height、in_format参数说明请参见[3](#li163081446761)。
     -   in_width_align：输入图片的宽对齐值，例如输入图片的高为382，满足1对齐。
     -   in_height_align：输入图片的高对齐值，例如输入图片的宽为300，满足1对齐。
     -   out_width_align：输出图片的宽对齐值，例如输入图片的宽为382，通过此参数设置输出图片的宽需满足16对齐，则输出图片的宽为384。

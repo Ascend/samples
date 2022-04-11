@@ -37,8 +37,11 @@ namespace {
         40, 156, 177, 49, 48, 79, 89, 122};
 }
 
-PostprocessThread::PostprocessThread(uint32_t outputWidth, uint32_t outputHeight) : 
-outputWidth_(outputWidth), outputHeight_(outputHeight){
+PostprocessThread::PostprocessThread(uint32_t modelWidth, uint32_t modelHeight) : 
+modelWidth_(modelWidth), 
+modelHeight_(modelHeight),
+outputWidth_(0),
+outputHeight_(0){
 }
 
 PostprocessThread::~PostprocessThread() {
@@ -83,9 +86,8 @@ AclLiteError PostprocessThread::InferOutputProcess(shared_ptr<InferOutputMsg> in
 
     //读原图宽高
     cv::Mat originImage = cv::imread(inferMsg->imageFileName, CV_LOAD_IMAGE_COLOR);
-    cv::Mat resizeImage;
-    //cv::resize(inferMsg->frame, resizeImage, cv::Size(outputWidth_, outputHeight_));
-    cv::resize(originImage, resizeImage, cv::Size(outputWidth_, outputHeight_));
+    outputWidth_ = originImage.size().width;
+    outputHeight_ = originImage.size().height;
 
     int pos = inferMsg->imageFileName.find_last_of("/");
     string filename(inferMsg->imageFileName.substr(pos + 1));
@@ -102,11 +104,11 @@ AclLiteError PostprocessThread::InferOutputProcess(shared_ptr<InferOutputMsg> in
                 data[j] = 0;
             }
         }
-        cv::Mat mat_a(513, 513, CV_32FC1, const_cast<float*>((float*)data) + (size / 21)*i);
+        cv::Mat mat_a(modelWidth_, modelHeight_, CV_32FC1, const_cast<float*>((float*)data) + (size / 21)*i);
         int iVal255 = cv::countNonZero(mat_a);
         if (iVal255){
-            cv::Mat mat_a_up(outputHeight_, outputWidth_, CV_32FC1);
-            cv::resize(mat_a, mat_a_up, cv::Size(outputWidth_, outputHeight_));        //现在拿到一个原图掩码
+            cv::Mat mat_a_up(outputWidth_, outputHeight_, CV_32FC1);
+            cv::resize(mat_a, mat_a_up, cv::Size(outputWidth_, outputHeight_));
 
             cv::multiply(mat_a_up, mat_a_up, mat_b_up, kColors_1[i % kColors_1.size()]);
             cv::multiply(mat_a_up, mat_a_up, mat_g_up, kColors_2[i % kColors_2.size()]);
@@ -117,7 +119,7 @@ AclLiteError PostprocessThread::InferOutputProcess(shared_ptr<InferOutputMsg> in
             cv::Mat newChannels[3] = { mat_b_up, mat_g_up, mat_r_up };
             cv::Mat resultImage;
             cv::merge(newChannels, 3, resultImage);
-            cv::addWeighted(resizeImage,1,resultImage,1,0,resizeImage);
+            cv::addWeighted(originImage,1,resultImage,1,0,originImage);
         }
     }
 
@@ -125,7 +127,7 @@ AclLiteError PostprocessThread::InferOutputProcess(shared_ptr<InferOutputMsg> in
     sstream.str("");
     sstream << "./out_" << filename;
     string outputPath = sstream.str();    
-    cv::imwrite(outputPath, resizeImage);
+    cv::imwrite(outputPath, originImage);
 
     return ACLLITE_OK;
 }

@@ -43,7 +43,7 @@
    2. 模型转换。
       | **模型名称** | **模型说明**                                 | **模型下载路径**                                             |
       | ------------ | -------------------------------------------- | ------------------------------------------------------------ |
-      | vgg_ssd      | 图片检测推理模型。是基于Caffe的vgg_ssd模型。 | 请参考[https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/vgg_ssd/ATC_vgg_ssd_caffe_AE](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/vgg_ssd/ATC_vgg_ssd_caffe_AE)目录中README.md下载原始模型章节下载模型和权重文件。 |
+      | vgg_ssd      | 图片检测推理模型。是基于Caffe的vgg_ssd模型。 | 请参考[https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/vgg_ssd/ATC_vgg_ssd_caffe_AE](https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/vgg_ssd/ATC_vgg_ssd_caffe_AE)目录中README.md下载原始模型章节下载模型和权重文件。 |
 
       ```
       # 为了方便下载，在这里直接给出原始模型下载及模型转换命令,可以直接拷贝执行。也可以参照上表在modelzoo中下载并手工转换，以了解更多细节。     

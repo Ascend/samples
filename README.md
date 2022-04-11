@@ -14,6 +14,7 @@ This repository provides a wide range of samples developed based on AscendCL API
 **Table 1** CANN Version Description <a name="Version-Description"></a>
 | CANN Version | Driver Version | Samples Repository Support | Download Link |
 |---|---|---|---|
+| [5.0.4.alpha002/5.0.4.alpha003/<br>5.0.4.alpha005/5.0.5.alpha001/<br>5.1.RC1.alpha001/5.1.RC1.alpha002/<br>5.1.RC1.alpha003](https://www.hiascend.com/software/cann/community) | [1.0.12.alpha](https://www.hiascend.com/en/hardware/firmware-drivers?tag=community) | Yes |Release 0.6.0: [click here](https://github.com/Ascend/samples/releases/v0.6.0) |
 | [5.0.2.alpha005/5.0.3.alpha001/<br>5.0.3.alpha002/5.0.3.alpha003/<br>5.0.3.alpha005](https://ascend.huawei.com/#/software/cann/download) | [1.0.11.alpha](https://www.hiascend.com/en/hardware/firmware-drivers?tag=community) | Yes | Release 0.5.0: [click here](https://github.com/Ascend/samples/releases/v0.5.0) |
 | [5.0.2.alpha003](https://ascend.huawei.com/#/software/cann/download) | [1.0.10.alpha](https://www.hiascend.com/en/hardware/firmware-drivers?tag=community) | Yes | Release 0.4.0: [click here](https://github.com/Ascend/samples/releases/v0.4.0) |
 | [3.3.0.alpha001/3.3.0.alpha005/<br>3.3.0.alpha006/5.0.2.alpha001/<br>5.0.2.alpha002](https://ascend.huawei.com/#/software/cann/download) | [1.0.9.alpha](https://www.hiascend.com/en/hardware/firmware-drivers?tag=community) | Yes | Release 0.3.0: [click here](https://github.com/Ascend/samples/releases/v0.3.0) |

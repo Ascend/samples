@@ -31,9 +31,10 @@ typedef enum Result {
 
 typedef struct PicDesc {
     std::string picName;
-    int width;
-    int height;
-}PicDesc;
+    uint32_t width;
+    uint32_t height;
+    uint32_t jpegDecodeSize;
+} PicDesc;
 
 static void* GetDeviceBufferOfPicture(const PicDesc &picDesc, uint32_t &devPicBufferSize);
 static char* ReadBinFile(std::string fileName, uint32_t& fileSize);

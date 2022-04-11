@@ -43,7 +43,7 @@
 2. 获取此应用中所需要的模型
     | **模型名称** | **模型说明**                                | **模型下载路径**                                             |
     | ------------ | ------------------------------------------- | ------------------------------------------------------------ |
-    | vgg16        | 基于TensorFlow的VGG16模型，用于猫狗分类。 | 请参考https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/classification_cat_dog/ATC_VGG16_tf_AE 中README.md原始模型章节，下载**原始模型**及**对应的cfg文件**。 |
+    | vgg16        | 基于TensorFlow的VGG16模型，用于猫狗分类。 | 请参考https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/classification_cat_dog/ATC_VGG16_tf_AE 中README.md原始模型章节，下载**原始模型**及**对应的cfg文件**。 |
 
     ```
     # 为了方便下载，在这里直接给出原始模型下载及模型转换命令,可以直接拷贝执行。也可以参照上表在modelzoo中下载并手工转换，以了解更多细节。     

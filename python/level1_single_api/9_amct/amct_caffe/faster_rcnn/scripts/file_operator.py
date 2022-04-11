@@ -384,6 +384,9 @@ def comment_operator(file_operator):
 
         def comment_operation(string):
             """comment_operation"""
+            striped_str = string.strip()
+            if len(striped_str) and striped_str.startswith('#'):
+                return string
             for index, char in enumerate(string):
                 if char != ' ' and index < len(string) - 1 and char != '#':
                     return '{}{}{}'.format(string[0:index], '# ',

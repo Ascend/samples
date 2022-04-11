@@ -81,18 +81,23 @@ bool ReadFileToDeviceMem(const char *fileName, void *&dataDev, uint32_t &dataSiz
     return true;
 }
 
-void *ThreadFunc(void *arg)
+void *ThreadFunc(aclrtContext sharedContext)
 {
-    // Notice: create context for this thread
-    int deviceId = 0;
-    aclrtContext context = nullptr;
-    aclError ret = aclrtCreateContext(&context, deviceId);
+    if (sharedContext == nullptr) {
+        ERROR_LOG("sharedContext can not be nullptr");
+        return ((void*)(-1));
+    }
+    INFO_LOG("use shared context for this thread");
+    aclError ret = aclrtSetCurrentContext(sharedContext);
+    if (ret != ACL_SUCCESS) {
+        ERROR_LOG("aclrtSetCurrentContext failed, errorCode = %d", static_cast<int32_t>(ret));
+        return ((void*)(-1));
+    }
+    INFO_LOG("process callback thread start ");
     while (runFlag) {
         // Notice: timeout 1000ms
         aclError aclRet = aclrtProcessReport(1000);
     }
-
-    ret = aclrtDestroyContext(context);
     return (void*)0;
 }
 bool WriteToFile(const char *fileName, const void *dataDev, uint32_t dataSize)
@@ -162,7 +167,7 @@ int main()
 
     /* 3. Vdec init */
     // create threadId
-    pthread_create(&threadId_, nullptr, ThreadFunc, nullptr);
+    pthread_create(&threadId_, nullptr, ThreadFunc, context_);
     (void)aclrtSubscribeReport(static_cast<uint64_t>(threadId_), stream_);
 
 	/*4.Set the properties of the channel description information when creating the video code stream

@@ -57,7 +57,7 @@ Before deploying this sample, ensure that:
 
 | **Model Name** | **Description**                          | **How to Obtain**                        |
 | -------------- | ---------------------------------------- | ---------------------------------------- |
-| deploy_vel     | Protein subcell location and prediction model based on Caffe | Download the model and weight files by referring to the [**readme.md**](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/hpa/ATC_hpa_caffe_AE) file. |
+| deploy_vel     | Protein subcell location and prediction model based on Caffe | Download the model and weight files by referring to the [**readme.md**](https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/hpa/ATC_hpa_caffe_AE) file. |
 
 #### 3. Convert the original model to a Da Vinci model.
 

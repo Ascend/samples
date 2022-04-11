@@ -91,6 +91,9 @@ void get_option_1(int c)
         case 'V':
             g_vpc_attribute.outHeightAlign = atoi(optarg);
             break;
+        case 'l':
+            g_vpc_attribute.queueLen = atoi(optarg);
+            break;
         default:
             SAMPLE_PRT("this is default!\n");
         break;
@@ -107,6 +110,7 @@ void get_option(int argc, char **argv)
             {"in_format", 1, 0, 'f'},
             {"in_bitwidth", 1, 0, 'b'},
             {"chn_num", 1, 0, 'c'},
+            {"queue_len", 1, 0, 'l'},
             {"thread_num", 1, 0, 't'},
             {"out_width", 1, 0, 'd'},
             {"out_height", 1, 0, 'g'},
@@ -150,7 +154,7 @@ void get_option(int argc, char **argv)
         };
 
         int32_t c = getopt_long(argc, argv,
-            "w:h:f:b:c:t:d:g:e:m:r:s:p:u:v:x:y:i:L:T:C:D:F:O:W:M:I:0:1:2:3:4:5:6:7:8:Q:U:P:N:X:Y:Z:V",
+            "w:h:f:b:c:l:t:d:g:e:m:r:s:p:u:v:x:y:i:L:T:C:D:F:O:W:M:I:0:1:2:3:4:5:6:7:8:Q:U:P:N:X:Y:Z:V",
             long_options, &option_index);
         if (c == -1) {
             break;
@@ -279,7 +283,8 @@ int32_t test_entry_single_chnl(TEST_FUNC test_func)
 
     // create vpc channel
     hi_vpc_chn chnId;
-    hi_vpc_chn_attr stChnAttr;
+    hi_vpc_chn_attr stChnAttr {};
+    stChnAttr.attr = g_vpc_attribute.queueLen;
     s32Ret = hi_mpi_vpc_sys_create_chn(&chnId, &stChnAttr);
     if (s32Ret != HI_SUCCESS) {
         SAMPLE_PRT("Call hi_mpi_vpc_sys_create_chn failed, ret = %#x\n", s32Ret);

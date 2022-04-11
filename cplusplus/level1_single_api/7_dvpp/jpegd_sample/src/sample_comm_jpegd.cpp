@@ -976,6 +976,8 @@ void *jpegd_send_stream_performance(void *pArgs)
         s32Ret = hi_mpi_dvpp_malloc(0, &outBuffer, outBufferSize);
         if ((s32Ret != 0) || (outBuffer == nullptr)) {
             SAMPLE_PRT("[chn:%d] DvppMalloc From Pool Failed!\n", pstJpegdThreadParam->s32ChnId);
+            hi_mpi_dvpp_free(pstJpegdThreadParam->perfStreamBuf);
+            return (void *)(HI_FAILURE);
         } else {
             idxChn++;
             g_out_buffer_pool[pstJpegdThreadParam->s32ChnId].push_back(outBuffer);

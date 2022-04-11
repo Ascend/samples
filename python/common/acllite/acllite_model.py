@@ -247,6 +247,18 @@ class AclLiteModel(object):
                 np_type = np.float32
                 output_tensor = np.zeros(
                     size // 4, dtype=np_type).reshape(shape)
+            elif datatype == const.ACL_DOUBLE:
+                np_type = np.float64
+                output_tensor = np.zeros(
+                    size // 8, dtype=np_type).reshape(shape)
+            elif datatype == const.ACL_INT64:
+                np_type = np.int64
+                output_tensor = np.zeros(
+                    size // 8, dtype=np_type).reshape(shape)
+            elif datatype == const.ACL_UINT64:
+                np_type = np.uint64
+                output_tensor = np.zeros(
+                    size // 8, dtype=np_type).reshape(shape)
             elif datatype == const.ACL_INT32:
                 np_type = np.int32
                 output_tensor = np.zeros(
@@ -259,6 +271,18 @@ class AclLiteModel(object):
                 np_type = np.float16
                 output_tensor = np.zeros(
                     size // 2, dtype=np_type).reshape(shape)
+            elif datatype == const.ACL_INT16:
+                np_type = np.int16
+                output_tensor = np.zeros(
+                    size // 2, dtype=np_type).reshape(shape)
+            elif datatype == const.ACL_UINT16:
+                np_type = np.uint16
+                output_tensor = np.zeros(
+                    size // 2, dtype=np_type).reshape(shape)
+            elif datatype == const.ACL_INT8:
+                np_type = np.int8
+                output_tensor = np.zeros(
+                    size, dtype=np_type).reshape(shape)
             elif datatype == const.ACL_BOOL or datatype == const.ACL_UINT8:
                 np_type = np.uint8
                 output_tensor = np.zeros(

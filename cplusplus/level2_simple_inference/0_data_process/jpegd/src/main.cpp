@@ -25,7 +25,7 @@
 
 using namespace std;
 
-void* GetDeviceBufferOfPicture(const PicDesc &picDesc, uint32_t &devPicBufferSize)
+void* GetDeviceBufferOfPicture(PicDesc &picDesc, uint32_t &devPicBufferSize)
 {
     if (picDesc.picName.empty()) {
         ERROR_LOG("picture file name is empty");
@@ -53,6 +53,29 @@ void* GetDeviceBufferOfPicture(const PicDesc &picDesc, uint32_t &devPicBufferSiz
 		fclose(fp); 
         return nullptr;
     }
+
+    acldvppJpegFormat format;
+    
+    aclError aclRet = acldvppJpegGetImageInfoV2(inputBuff, inputBuffSize, &picDesc.width, &picDesc.height,
+                                                nullptr, &format);
+    if (aclRet != ACL_SUCCESS) {
+        ERROR_LOG("get jpeg image info failed, errorCode is %d", static_cast<int32_t>(aclRet));
+        delete[] inputBuff;
+		fclose(fp); 
+        return nullptr;
+    }
+
+    INFO_LOG("get jpeg image info successed, width=%d, height=%d, format=%d, jpegDecodeSize=%d", picDesc.width, picDesc.height, format, picDesc.jpegDecodeSize);
+    
+    // when you run, from the output, we can see that the original format is ACL_JPEG_CSS_420, 
+    // so it can be decoded as PIXEL_FORMAT_YUV_SEMIPLANAR_420 or PIXEL_FORMAT_YVU_SEMIPLANAR_420
+    aclRet = acldvppJpegPredictDecSize(inputBuff, inputBuffSize, PIXEL_FORMAT_YUV_SEMIPLANAR_420, &picDesc.jpegDecodeSize);    
+    if (aclRet != ACL_SUCCESS) {
+        ERROR_LOG("get jpeg decode size failed, errorCode is %d", static_cast<int32_t>(aclRet));
+        delete[] inputBuff;
+		fclose(fp); 
+        return nullptr;
+    }    
 
     void *inBufferDev = nullptr;
     aclError ret = acldvppMalloc(&inBufferDev, inputBuffSize);
@@ -90,14 +113,6 @@ void SetInput(void *inDevBuffer, int inDevBufferSize, int inputWidth, int inputH
     inDevBufferSize_ = inDevBufferSize;
     inputWidth_ = inputWidth;
     inputHeight_ = inputHeight;
-}
-
-void GetOutput(void **outputBuffer, int &outputSize)
-{
-    *outputBuffer = decodeOutDevBuffer_;
-    outputSize = decodeDataSize_;
-    decodeOutDevBuffer_= nullptr;
-    decodeDataSize_ = 0;
 }
 
 Result SaveDvppOutputData(const char *fileName, const void *devPtr, uint32_t dataSize)
@@ -147,17 +162,15 @@ Result SaveDvppOutputData(const char *fileName, const void *devPtr, uint32_t dat
     return SUCCESS;
 }
 
-void DestroyDecodeResource()
-{
-    if (decodeOutputDesc_ != nullptr) {
-        acldvppDestroyPicDesc(decodeOutputDesc_);
-        decodeOutputDesc_ = nullptr;
-    }
-}
-
 void DestroyResource()
 {
     aclError ret;
+    inDevBuffer_ = nullptr;
+     if (decodeOutputDesc_ != nullptr) {
+        acldvppDestroyPicDesc(decodeOutputDesc_);
+        decodeOutputDesc_ = nullptr;
+    }
+
     if (stream_ != nullptr) {
         ret = aclrtDestroyStream(stream_);
         if (ret != ACL_SUCCESS) {
@@ -189,8 +202,15 @@ void DestroyResource()
     INFO_LOG("end to finalize acl");
 }
 
-int main()
-{
+int main(int argc, char *argv[]) {
+
+    if((argc < 2) || (argv[1] == nullptr)){
+        ERROR_LOG("Please input: ./main <image_path>");
+        return FAILED;
+    }
+    string image_path = string(argv[1]);
+
+
     //1.acl init
     const char *aclConfigPath = "../src/acl.json";
     aclInit(aclConfigPath);
@@ -204,14 +224,11 @@ int main()
     aclrtCreateStream(&stream_);
     aclrtGetRunMode(&runMode);
     INFO_LOG("create stream success");
-    std::string dvppOutputfileName = "./output/dvpp_output";
-    // loop begin
-    PicDesc testPic = {"../data/dog1_1024_683.jpg", 1024, 683};
-
-    DIR *dir;
-    if ((dir = opendir("./output")) == NULL)
-        system("mkdir ./output");
-
+        
+    uint32_t image_width = 0;
+    uint32_t image_height = 0;
+    PicDesc testPic = {image_path, image_width, image_height};
+    
     INFO_LOG("start to process picture:%s", testPic.picName.c_str());
     // dvpp process
     /*3.Read the picture into memory. InDevBuffer_ indicates the memory for storing the input picture, 
@@ -233,8 +250,11 @@ int main()
     // InitDecodeOutputDesc
     uint32_t decodeOutWidthStride = (inputWidth_ + 127) / 128 * 128; // 128-byte alignment
     uint32_t decodeOutHeightStride = (inputHeight_ + 15) / 16 * 16; // 16-byte alignment
-    uint32_t decodeOutBufferSize = decodeOutWidthStride * decodeOutHeightStride * 3 / 2; // yuv format size
-    aclError ret = acldvppMalloc(&decodeOutDevBuffer_, decodeOutBufferSize);
+
+    // use acldvppJpegPredictDecSize to get output size.
+    // uint32_t decodeOutBufferSize = decodeOutWidthStride * decodeOutHeightStride * 3 / 2; // yuv format size
+    // uint32_t decodeOutBufferSize = testPic.jpegDecodeSize;
+    aclError ret = acldvppMalloc(&decodeOutDevBuffer_, testPic.jpegDecodeSize);
     if (ret != ACL_SUCCESS) {
         ERROR_LOG("acldvppMalloc jpegOutBufferDev failed, ret = %d", ret);
         return FAILED;
@@ -247,12 +267,13 @@ int main()
     }
 
     acldvppSetPicDescData(decodeOutputDesc_, decodeOutDevBuffer_);
-    acldvppSetPicDescFormat(decodeOutputDesc_, PIXEL_FORMAT_YUV_SEMIPLANAR_420);
+    // here the format shoud be same with the value you set when you get decodeOutBufferSize from
+    acldvppSetPicDescFormat(decodeOutputDesc_, PIXEL_FORMAT_YUV_SEMIPLANAR_420); 
     acldvppSetPicDescWidth(decodeOutputDesc_, inputWidth_);
     acldvppSetPicDescHeight(decodeOutputDesc_, inputHeight_);
     acldvppSetPicDescWidthStride(decodeOutputDesc_, decodeOutWidthStride);
     acldvppSetPicDescHeightStride(decodeOutputDesc_, decodeOutHeightStride);
-    acldvppSetPicDescSize(decodeOutputDesc_, decodeOutBufferSize);
+    acldvppSetPicDescSize(decodeOutputDesc_, testPic.jpegDecodeSize);
 
     ret = acldvppJpegDecodeAsync(dvppChannelDesc_, inDevBuffer_, inDevBufferSize_,
     decodeOutputDesc_, stream_);
@@ -271,17 +292,20 @@ int main()
 
     (void)acldvppFree(picDevBuffer);
     picDevBuffer = nullptr;
+   
+    int dir_tail_index = image_path.find("/data");
+    std::string outfile_dir = image_path.substr(0, dir_tail_index) + "/" + "out/output/";
+    std::string outfile_path = outfile_dir + image_path.substr(dir_tail_index+5+1, image_path.rfind(".jpg")-dir_tail_index-5-1) 
+        + "_jpegd_" + std::to_string(testPic.width) + "_" + std::to_string(testPic.height) + ".yuv";   
+    INFO_LOG("outfile_path=%s", outfile_path.c_str());
 
-    void *dvppOutputBuffer = nullptr;
-    int dvppOutputSize;
-    GetOutput(&dvppOutputBuffer, dvppOutputSize);
-    std::string dvppOutputfileNameCur = dvppOutputfileName + ".yuv";
-    ret = SaveDvppOutputData(dvppOutputfileNameCur.c_str(), dvppOutputBuffer, dvppOutputSize);
+
+    ret = SaveDvppOutputData(outfile_path.c_str(), decodeOutDevBuffer_, decodeDataSize_);
     if (ret != SUCCESS) {
         ERROR_LOG("save dvpp output data failed");
         // allow not return
     }
-    DestroyDecodeResource();
+
     DestroyResource();
 
     INFO_LOG("execute sample success");

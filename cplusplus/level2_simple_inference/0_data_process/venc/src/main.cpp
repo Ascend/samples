@@ -46,20 +46,27 @@ uint32_t inputBufferSize;
 FILE *outFileFp;
 bool runFlag= true;
 
-void *ThreadFunc(void *arg)
+void *ThreadFunc(aclrtContext sharedContext)
 {
-    // Notice: create context for this thread
-    int deviceId = 0;
-    aclrtContext context = nullptr;
-    aclError ret = aclrtCreateContext(&context, deviceId);
+    if (sharedContext == nullptr) {
+        ERROR_LOG("sharedContext can not be nullptr");
+        return ((void*)(-1));
+    }
+    INFO_LOG("use shared context for this thread");
+    aclError ret = aclrtSetCurrentContext(sharedContext);
+    if (ret != ACL_SUCCESS) {
+        ERROR_LOG("aclrtSetCurrentContext failed, errorCode = %d", static_cast<int32_t>(ret));
+        return ((void*)(-1));
+    }
+    INFO_LOG("process callback thread start ");
     while (runFlag) {
         // Notice: timeout 1000ms
         (void)aclrtProcessReport(1000);
         //pthread_testcancel();
     }
-    ret = aclrtDestroyContext(context);
     return (void*)0;
 }
+
 bool WriteToFile(FILE *outFileFp_, const void *dataDev, uint32_t dataSize)
 {
     bool ret = true;
@@ -131,7 +138,7 @@ Result Init(int imgWidth, int imgHeight){
 
     InitResource();
 
-    pthread_create(&threadId, nullptr, ThreadFunc, nullptr);
+    pthread_create(&threadId, nullptr, ThreadFunc, context);
     int width = imgWidth;
     int height = imgHeight;
     uint32_t alignWidth = ALIGN_UP128(width);

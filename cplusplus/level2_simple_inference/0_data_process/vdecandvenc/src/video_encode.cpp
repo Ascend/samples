@@ -24,32 +24,28 @@ VideoEncode::~VideoEncode()
 {
 }
 
-void *ThreadFunc(void *arg)
+void *ThreadFunc(aclrtContext sharedContext)
 {
-     // Notice: create context for this thread
-    int deviceId = 0;
-    aclrtContext context = nullptr;
-    aclError ret = aclrtCreateContext(&context, deviceId);
-    if (ret != ACL_SUCCESS) {
-        ERROR_LOG("aclrtCreateContext failed, ret=%d.", ret);
+    if (sharedContext == nullptr) {
+        ERROR_LOG("sharedContext can not be nullptr");
         return ((void*)(-1));
     }
-
+    INFO_LOG("use shared context for this thread");
+    aclError ret = aclrtSetCurrentContext(sharedContext);
+    if (ret != ACL_SUCCESS) {
+        ERROR_LOG("aclrtSetCurrentContext failed, errorCode = %d", static_cast<int32_t>(ret));
+        return ((void*)(-1));
+    }
     INFO_LOG("process callback thread start ");
     while (runFlag) {
         // Notice: timeout 1000ms
         (void)aclrtProcessReport(1000);
     }
 
-    ret = aclrtDestroyContext(context);
-    if (ret != ACL_SUCCESS) {
-        ERROR_LOG("aclrtDestroyContext failed, ret=%d.", ret);
-    }
-
     return (void*)0;
 }
 
-Result VideoEncode::InitResource(uint32_t width, uint32_t height)
+Result VideoEncode::InitResource(uint32_t width, uint32_t height, aclrtContext& context)
 {
     // get run mode
     aclrtRunMode runMode;
@@ -63,7 +59,7 @@ Result VideoEncode::InitResource(uint32_t width, uint32_t height)
     INFO_LOG("get run mode success");
 
     // create process callback thread
-    int createThreadErr = pthread_create(&threadId_, nullptr, ThreadFunc, nullptr);
+    int createThreadErr = pthread_create(&threadId_, nullptr, ThreadFunc, context);
     if (createThreadErr != 0) {
         ERROR_LOG("create thread failed, err = %d", createThreadErr);
         return FAILED;

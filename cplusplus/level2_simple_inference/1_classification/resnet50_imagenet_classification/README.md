@@ -55,8 +55,8 @@ This sample involves the following key functions:
     ```
     // Print the top 5 confidence values with indexes using DumpModelOutputResult
     // if want to dump output result to file in the current directory
-    processModel.DumpModelOutputResult();
-    processModel.OutputModelResult();
+    modelProcess.DumpModelOutputResult();
+    modelProcess.OutputModelResult();
     ```
 
 

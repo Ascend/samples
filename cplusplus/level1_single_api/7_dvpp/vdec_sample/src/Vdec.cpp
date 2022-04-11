@@ -339,10 +339,39 @@ int32_t vdec_create()
     return ret;
 }
 
+void vdec_reset_chn(uint32_t chanId)
+{
+    int32_t ret = HI_SUCCESS;
+    hi_vdec_chn_status status{};
+
+    ret = hi_mpi_vdec_stop_recv_stream(chanId);
+    if (ret != HI_SUCCESS) {
+        printf("[%s][%d] Chn %u, hi_mpi_vdec_stop_recv_stream Fail, ret = %x \n", __FUNCTION__, __LINE__, chanId, ret);
+        return;
+    }
+    // reset channel
+    ret = hi_mpi_vdec_reset_chn(chanId);
+    if (ret != HI_SUCCESS) {
+        printf("[%s][%d] Chn %u, hi_mpi_vdec_reset_chn Fail, ret = %x \n", __FUNCTION__, __LINE__, chanId, ret);
+        return;
+    }
+
+    ret = hi_mpi_vdec_start_recv_stream(chanId);
+    if (ret != HI_SUCCESS) {
+        printf("[%s][%d] Chn %u, hi_mpi_vdec_start_recv_stream Fail, ret = %x \n", __FUNCTION__, __LINE__, chanId, ret);
+        return;
+    }
+    printf("[%s][%d] Chn %u, reset chn success \n", __FUNCTION__, __LINE__, chanId);
+    return;
+}
+
 void wait_vdec_end()
 {
     int32_t ret = HI_SUCCESS;
     hi_vdec_chn_status status;
+    hi_vdec_chn_status pre_status;
+
+    pre_status.left_decoded_frames = 0;
 
     for (uint32_t i = g_start_chn_num; i < g_start_chn_num + g_chn_num; i++) {
         if (g_vdec_send_thread[i] != 0) {
@@ -361,6 +390,11 @@ void wait_vdec_end()
             if (((status.left_stream_bytes == 0) && (status.left_decoded_frames == 0)) || (g_get_exit_state[i] == 1)) {
                 break;
             }
+            if (status.left_decoded_frames == pre_status.left_decoded_frames) {
+                vdec_reset_chn(i);
+                break;
+            }
+            pre_status = status;
             // 10000us
             usleep(10000);
         }
@@ -591,6 +625,7 @@ void* send_stream(void* const chanNum)
         default:
             break;
     }
+    uint32_t sendOneFrameCnt = 0;
     int32_t timeOut = 1000;
     get_current_time_us(currentSendTime);
     while (1) {
@@ -655,8 +690,14 @@ void* send_stream(void* const chanNum)
         get_current_time_us(lastSendTime);
 
         do {
+            sendOneFrameCnt++;
             // Send one frame data
             ret = hi_mpi_vdec_send_stream(chanId, &stream, &outPicInfo, timeOut);
+            if (sendOneFrameCnt > 30) { // if send stream timeout 30 times, end the decode process
+                vdec_reset_chn(chanId);
+                sendOneFrameCnt = 0;
+                break;
+            }
         } while (ret == HI_ERR_VDEC_BUF_FULL); // Try again
 
         if (ret != HI_SUCCESS) {           
@@ -664,6 +705,7 @@ void* send_stream(void* const chanNum)
                 __FUNCTION__, __LINE__, chanId, ret);
             break;
         } else {
+            sendOneFrameCnt = 0;
             if ((g_send_times != 0) && (circleTimes >= g_send_times)) {
                 break;
             }

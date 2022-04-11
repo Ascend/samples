@@ -47,7 +47,7 @@ Before deploying this sample, ensure that:
     
     |  **Model Name**  |  **Description**  |  **How to Obtain**  |
     |---|---|---|
-    | ResNet-18 | Handwritten Chinese character recognition model  | Download the model and weight file by referring to the **README.md** file in [https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/resnet18/%20ATC_resnet18_caffe_AE](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/resnet18/%20ATC_resnet18_caffe_AE). |
+    | ResNet-18 | Handwritten Chinese character recognition model  | Download the model and weight file by referring to the **README.md** file in [https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/resnet18/%20ATC_resnet18_caffe_AE](https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/resnet18/%20ATC_resnet18_caffe_AE). |
 
     ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **NOTE**  
     > - The converted OM model provided by ModelZoo does not match the current sample. Therefore, you need to download the original model and weight file, and convert the model by yourself.

@@ -31,14 +31,16 @@ SampleProcess::~SampleProcess()
 {
     DestroyResource();
 }
-void *ThreadFunc(void *arg)
+void *ThreadFunc(aclrtContext sharedContext)
 {
-    // Notice: create context for this thread
-    int deviceId = 0;
-    aclrtContext context = nullptr;
-    aclError ret = aclrtCreateContext(&context, deviceId);
+    if (sharedContext == nullptr) {
+        ERROR_LOG("sharedContext can not be nullptr");
+        return ((void*)(-1));
+    }
+    INFO_LOG("use shared context for this thread");
+    aclError ret = aclrtSetCurrentContext(sharedContext);
     if (ret != ACL_SUCCESS) {
-        ERROR_LOG("aclrtCreateContext failed, errorCode = %d", static_cast<int32_t>(ret));
+        ERROR_LOG("aclrtSetCurrentContext failed, errorCode = %d", static_cast<int32_t>(ret));
         return ((void*)(-1));
     }
 
@@ -47,12 +49,6 @@ void *ThreadFunc(void *arg)
         // Notice: timeout 1000ms
         (void)aclrtProcessReport(1000);
     }
-
-    ret = aclrtDestroyContext(context);
-    if (ret != ACL_SUCCESS) {
-        ERROR_LOG("aclrtDestroyContext failed, errorCode = %d", static_cast<int32_t>(ret));
-    }
-
     return (void*)0;
 }
 
@@ -112,7 +108,7 @@ Result SampleProcess::InitResource()
 Result SampleProcess::DoVdecProcess()
 {
     // create threadId
-    thread_ = std::thread(ThreadFunc, nullptr);
+    thread_ = std::thread(ThreadFunc, context_);
     std::ostringstream oss;
     oss << thread_.get_id();
     uint64_t tid = std::stoull(oss.str());

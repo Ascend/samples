@@ -57,7 +57,7 @@ Before deploying this sample, ensure that:
 
     | **Model Name** | **Description**                          | **How to Obtain**                        |
     | -------------- | ---------------------------------------- | ---------------------------------------- |
-    | mobilenetV2    | Image classification inference model. It is a MobileNetV2 model based on MindSpore. | Download the model and weight files by referring to the **README.md** file in [https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/garbage_classification/ATC_mobilenetv2_mindspore_AE](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/garbage_classification/ATC_mobilenetv2_mindspore_AE). |
+    | mobilenetV2    | Image classification inference model. It is a MobileNetV2 model based on MindSpore. | Download the model and weight files by referring to the **README.md** file in [https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/garbage_classification/ATC_mobilenetv2_mindspore_AE](https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/garbage_classification/ATC_mobilenetv2_mindspore_AE). |
 
     ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **NOTE**  
 

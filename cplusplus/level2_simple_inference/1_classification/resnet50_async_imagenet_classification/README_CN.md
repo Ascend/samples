@@ -58,13 +58,14 @@
 
     提供样例代码，处理模型推理的结果，直接在终端上显示top1置信度的类别编号。
 
-    另外，样例中提供了自定义接口DumpModelOutputResult，用于将模型推理的结果写入文件（运行可执行文件后，推理结果文件在运行环境上的应用可执行文件的同级目录下），默认未调用该接口，用户可在sample\_process.cpp中，在调用OutputModelResult接口前，增加如下代码调用DumpModelOutputResult接口：
+    另外，样例中提供了自定义接口DumpModelOutputResult，用于将模型推理的结果写入文件（运行可执行文件后，推理结果文件在运行环境上的应用可执行文件的同级目录下），默认未调用该接口，用户可在model\_process.cpp中，在调用OutputModelResult接口前，增加如下代码调用DumpModelOutputResult接口：
 
     ```
-    // print the top 1 confidence values with indexes.use function DumpModelOutputResult
-    // if want to dump output result to file in the current directory
-    processModel.DumpModelOutputResult();
-    processModel.OutputModelResult();
+    // OutputModelResult prints the top 1 confidence value with index.
+    // If want to dump output result to file in the current directory,
+    // use function DumpModelOutputResult.
+    ModelProcess::DumpModelOutputResult(data.second);
+    ModelProcess::OutputModelResult(data.second);
     ```
 
 
@@ -179,7 +180,7 @@
 
         您可以从以下链接中获取ResNet-50网络的模型文件（\*.prototxt）、预训练模型文件（\*.caffemodel），并以运行用户将获取的文件上传至开发环境的“样例目录/caffe\_model“目录下。如果目录不存在，需要自行创建。
 
-        -   从gitee上获取：单击[Link](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/resnet50/ATC_resnet50_caffe_AE)，查看README.md，查找获取原始模型的链接。
+        -   从gitee上获取：单击[Link](https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/resnet50/ATC_resnet50_caffe_AE)，查看README.md，查找获取原始模型的链接。
         -   从GitHub上获取：单击[Link](https://github.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/resnet50/ATC_resnet50_caffe_AE)，查看README.md，查找获取原始模型的链接。 
 
     3.  将ResNet-50网络转换为适配昇腾AI处理器的离线模型（\*.om文件）。

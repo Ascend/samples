@@ -199,9 +199,9 @@ AclLiteError DetectPreprocessThread::MsgProcess(shared_ptr<CarDetectDataMsg> &ca
         return ACLLITE_ERROR;
     }
 
-    ret = dvpp_.CropResolution(carDetectDataMsg->resizedMat, imageDevice, modelWidth_, modelHeight_);
+    ret = dvpp_.Resize(carDetectDataMsg->resizedMat, imageDevice, modelWidth_, modelHeight_);
     if (ret == ACLLITE_ERROR) {
-        ACLLITE_LOG_ERROR("dvpp_cropandpaste image failed");
+        ACLLITE_LOG_ERROR("dvpp_resize image failed");
         return ACLLITE_ERROR;
     }
 

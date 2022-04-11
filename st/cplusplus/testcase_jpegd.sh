@@ -6,7 +6,7 @@ script_path_temp="$( cd "$(dirname $BASH_SOURCE)" ; pwd -P)"
 script_path=${script_path_temp}/../../cplusplus/level2_simple_inference/0_data_process/jpegd/scripts
 project_path=${script_path}/..
 common_script_dir=${script_path}/../../../../../common/
-run_command="./main"
+run_command="./main ../data/dog1_1024_683.jpg"
 
 . ${common_script_dir}/testcase_common.sh
 

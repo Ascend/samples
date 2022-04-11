@@ -109,26 +109,26 @@
 -   python及依赖的库：python3.7.5
 -   已在环境上部署昇腾AI软件栈，并配置对应的的环境变量，请参见[Link](https://www.hiascend.com/document)中对应版本的CANN安装指南。
 
+    以下步骤中，开发环境指编译开发代码的环境，运行环境指运行算子、推理或训练等程序的环境，运行环境上必须带昇腾AI处理器。开发环境和运行环境可以合设在同一台服务器上，也可以分设在不同的服务器上，分设场景下，开发环境下编译出来的可执行文件，在运行环境下执行时，若两者服务器上的操作系统架构不同，则需要在开发环境中执行交叉编译。
 
 
+## 准备模型和图片<a name="section13133171616100"></a>
 
-## 编译运行<a name="section13133171616172"></a>
+1.  以运行用户登录开发环境。
 
-下载sample仓代码后，请先进入“cplusplus/level2_simple_inference/1_classification/vpc_resnet50_imagenet_classification”样例目录，执行以下操作。
+2.  下载sample仓代码并上传至环境后，请先进入“cplusplus/level2_simple_inference/1_classification/vpc_resnet50_imagenet_classification”样例目录。
 
-以下步骤中，开发环境指编译开发代码的环境，运行环境指运行算子、推理或训练等程序的环境，运行环境上必须带昇腾AI处理器。开发环境和运行环境可以合设在同一台服务器上，也可以分设在不同的服务器上，分设场景下，开发环境下编译出来的可执行文件，在运行环境下执行时，若两者服务器上的操作系统架构不同，则需要在开发环境中执行交叉编译。
+    请注意，下文中的样例目录均指“cplusplus/level2_simple_inference/1_classification/vpc_resnet50_imagenet_classification”目录。
 
-1.  模型转换。
-    1.  以运行用户登录开发环境。
-
-    2.  准备模型。
+3.  准备ResNet-50模型。
+    1.  获取ResNet-50原始模型。
 
         您可以从以下链接中获取ResNet-50网络的模型文件（\*.prototxt）、预训练模型文件（\*.caffemodel），并以运行用户将获取的文件上传至开发环境的“样例目录/caffe\_model“目录下。如果目录不存在，需要自行创建。
 
-        -   从gitee上获取：单击[Link](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/resnet50/ATC_resnet50_caffe_AE)，查看README.md，查找获取原始模型的链接。
-        -   从GitHub上获取：单击[Link](https://github.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/resnet50/ATC_resnet50_caffe_AE)，查看README.md，查找获取原始模型的链接。   
+        -   ResNet-50网络的模型文件（\*.prototxt）：单击[Link](https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/resnet50/resnet50.prototxt)下载该文件。
+        -   ResNet-50网络的预训练模型文件（\*.caffemodel）：单击[Link](https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/resnet50/resnet50.caffemodel)下载该文件。 
 
-    3.  将ResNet-50网络转换为适配昇腾AI处理器的离线模型（\*.om文件），转换模型时，需配置色域转换参数，用于将YUV420SP格式的图片转换为RGB格式的图片。
+    2.  将ResNet-50原始模型转换为适配昇腾AI处理器的离线模型（\*.om文件），转换模型时，需配置色域转换参数，用于将YUV420SP格式的图片转换为RGB格式的图片。
 
         切换到样例目录，执行如下命令(以昇腾310 AI处理器为例)：
 
@@ -152,7 +152,7 @@
             ```
 
 
-    5.  将Cast和ArgMaxD两个算子的算子描述信息（\*.json文件）编译成适配昇腾AI处理器的离线模型（\*.om文件），用于运行算子时使用。
+    3.  将Cast和ArgMaxD两个算子的算子描述信息（\*.json文件）编译成适配昇腾AI处理器的离线模型（\*.om文件），用于运行算子时使用。
 
         切换到样例目录，执行如下命令(以昇腾310 AI处理器为例)：
 
@@ -168,10 +168,24 @@
 
         -   --output参数：生成的om文件必须放在“out/op\_models“目录下。
 
+4.  准备测试图片。
 
-2.  编译代码。
+    请从以下链接获取该样例的输入图片，并以运行用户将获取的文件上传至开发环境的“样例目录/data“目录下。如果目录不存在，需自行创建。
+
+    [https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/dog1\_1024\_683.jpg](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/dog1_1024_683.jpg)
+
+    [https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/dog2\_1024\_683.jpg](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/dog2_1024_683.jpg)
+
+## 编译运行<a name="section13133171616172"></a>
+
+1.  编译代码。
     1.  以运行用户登录开发环境。
-    2. 设置环境变量，配置程序编译依赖的头文件与库文件路径。
+
+    2.  请先进入“cplusplus/level2_simple_inference/1_classification/vpc_resnet50_imagenet_classification”样例目录。
+
+        请注意，下文中的样例目录均指“cplusplus/level2_simple_inference/1_classification/vpc_resnet50_imagenet_classification”目录。
+
+    3. 设置环境变量，配置程序编译依赖的头文件与库文件路径。
   
        编译脚本会按环境变量指向的路径查找编译依赖的头文件和库文件，“$HOME/Ascend”请替换“Ascend-cann-toolkit”包的实际安装路径。
   
@@ -189,13 +203,13 @@
            export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
            ```
 
-    3.  切换到样例目录，创建目录用于存放编译文件，例如，本文中，创建的目录为“build/intermediates/host“。
+    4.  切换到样例目录，创建目录用于存放编译文件，例如，本文中，创建的目录为“build/intermediates/host“。
 
         ```
         mkdir -p build/intermediates/host
         ```
 
-    4.  切换到“build/intermediates/host“目录，执行以下命令生成编译文件。
+    5.  切换到“build/intermediates/host“目录，执行以下命令生成编译文件。
 
         “../../../src“表示CMakeLists.txt文件所在的目录，请根据实际目录层级修改。
 
@@ -217,31 +231,25 @@
             ```
         您可以登录对应的环境，执行“uname -a”命令查询其操作系统的架构。
 
-    5.  执行以下命令，生成的可执行文件main在“样例目录/out“目录下。
+    6.  执行以下命令，生成的可执行文件main在“样例目录/out“目录下。
 
         ```
         make
         ```
 
+2.  运行应用。
 
-3.  准备输入图片。
+    当开发环境和运行环境可以合设在同一台服务器上时，无需执行以下第1~3步，直接执行以下第4步。
 
-    请从以下链接获取该样例的输入图片，并以运行用户将获取的文件上传至开发环境的“样例目录/data“目录下。如果目录不存在，需自行创建。
-
-    [https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/dog1\_1024\_683.jpg](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/dog1_1024_683.jpg)
-
-    [https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/dog2\_1024\_683.jpg](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/dog2_1024_683.jpg)
-
-4.  运行应用。
-    1.  以运行用户将开发环境的样例目录及目录下的文件上传到运行环境（Host），例如“$HOME/acl\_dvpp\_resnet50”。
-    2.  以运行用户登录运行环境（Host）。
-    3.  切换到可执行文件main所在的目录，例如“$HOME/acl\_dvpp\_resnet50/out”，给该目录下的main文件加执行权限。
+    1.  以运行用户将开发环境的样例目录及目录下的文件上传到运行环境，例如“$HOME/cplusplus/level2_simple_inference/1_classification/vpc_resnet50_imagenet_classification”。
+    2.  以运行用户登录运行环境。
+    3.  切换到可执行文件main所在的目录，例如“$HOME/cplusplus/level2_simple_inference/1_classification/vpc_resnet50_imagenet_classification/out”，给该目录下的main文件加执行权限。
 
         ```
         chmod +x main
         ```
 
-    4.  切换到可执行文件main所在的目录，例如“$HOME/acl\_dvpp\_resnet50/out”，运行可执行文件。
+    4.  切换到可执行文件main所在的目录，例如“$HOME/cplusplus/level2_simple_inference/1_classification/vpc_resnet50_imagenet_classification/out”，运行可执行文件。
 
         ```
         ./main
@@ -278,6 +286,3 @@
         [INFO] end to destroy context
         [INFO] end to reset device is 0
         ```
-
-
-

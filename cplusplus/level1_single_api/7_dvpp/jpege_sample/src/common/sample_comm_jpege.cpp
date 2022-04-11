@@ -809,6 +809,10 @@ void* jpege_snap_send_frame(void* p)
                 ret = hi_mpi_venc_send_frame(vencChn, videoFrame, 10000);
                 if (ret != HI_SUCCESS) {
                     SAMPLE_PRT("hi_mpi_venc_send_frame failed, ret:0x%x\n", ret);
+                    free(tmp);
+                    tmp = NULL;
+                    fclose(fpYuv);
+                    fpYuv = NULL;
                     return NULL;
                 }
                 g_jpege_send_frame_cnt[vencChn]++;
@@ -824,6 +828,10 @@ void* jpege_snap_send_frame(void* p)
             ret = hi_mpi_venc_send_frame(vencChn, videoFrame, 10000);
             if (ret != HI_SUCCESS) {
                 SAMPLE_PRT("hi_mpi_venc_send_frame failed, ret:0x%x\n", ret);
+                free(tmp);
+                tmp = NULL;
+                fclose(fpYuv);
+                fpYuv = NULL;
                 return NULL;
             }
 
@@ -969,7 +977,6 @@ void* jpege_snap_send_frame_dc_performace(void* p)
                 fflush(stdout);
                 if (ret != HI_SUCCESS) {
                     SAMPLE_PRT("hi_mpi_venc_send_frame failed, ret:0x%x\n", ret);
-                    return NULL;
                 }
                 g_jpege_send_frame_cnt[vencChn]++;
             }
@@ -1373,7 +1380,6 @@ void* jpege_snap_process(void* p)
             ret = hi_mpi_dvpp_free((void*)(stream.pack[0].input_addr));
             if (ret != HI_SUCCESS) {
                 SAMPLE_PRT("hi_mpi_dvpp_free failed!\n");
-                return NULL;
             }
         }
         // 释放输出buffer

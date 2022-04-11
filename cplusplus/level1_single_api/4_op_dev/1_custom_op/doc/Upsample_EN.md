@@ -50,7 +50,7 @@ Implemented by using TIK, the Upsample operator is used to scale up the feature 
 
 -   Operator Implementation
 
-    For details about the implementation code of the UpsampleTik operator, see  [upsample\_tik.py](../tbe/impl/upsample_tik.py).
+    For details about the implementation code of the UpsampleTik operator, see  [upsample\_tik.py](../tbe/custom_impl/upsample_tik.py).
 
 -   Operator Prototype Definition
 

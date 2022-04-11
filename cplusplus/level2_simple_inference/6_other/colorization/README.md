@@ -52,7 +52,7 @@ Before deploying this sample, ensure that:
 
     | **Model Name** | **Description** | **How to Obtain** |
     |---|---|---|
-    | colorization | Inference model for black and white image colorization.   | Download the original model and weight file by referring to [https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/colorization/ATC_colorization_caffe_AE](https://github.com/Ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/colorization/ATC_colorization_caffe_AE).  |
+    | colorization | Inference model for black and white image colorization.   | Download the original model and weight file by referring to [https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/colorization/ATC_colorization_caffe_AE](https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/colorization/ATC_colorization_caffe_AE).  |
 
     ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **Note**
 

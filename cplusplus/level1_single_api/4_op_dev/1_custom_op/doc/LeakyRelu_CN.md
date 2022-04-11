@@ -64,7 +64,7 @@ LeakyRelu算子的数学表达式如下所示：
 
 -   算子实现
 
-    算子计算函数的实现逻辑如下所示，完整的代码实现请参见[leaky\_relu\_demo.py](../tbe/impl/leaky_relu_demo.py)。
+    算子计算函数的实现逻辑如下所示，完整的代码实现请参见[leaky\_relu\_demo.py](../tbe/custom_impl/leaky_relu_demo.py)。
 
     1.  当negative\_slope为“0”时，输出y取输入x与0之间的较大值。
         -   如果输入数据的类型为float16与int8，可直接调用te.lang.cce.vrelu\(x\)接口进行计算。

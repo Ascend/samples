@@ -187,17 +187,12 @@ AclLiteError PreprocessThread::MsgProcess(ImageData& imageFrame,
         return ACLLITE_ERROR;
     }
 
-    yuvImage.width = imageDevice.width;
-    yuvImage.height = imageDevice.height;
-
     ImageData resizedImage;
-    ret = dvpp_.CropPaste(resizedImage, yuvImage, modelWidth_, modelHeight_,
-                          0, 0, yuvImage.width, yuvImage.height);
+    ret = dvpp_.Resize(resizedImage, yuvImage, modelWidth_, modelHeight_);
     if (ret == ACLLITE_ERROR) {
-        ACLLITE_LOG_ERROR("dvpp_cropandpaste image failed");
+        ACLLITE_LOG_ERROR("dvpp_resize image failed");
         return ACLLITE_ERROR;
     }
-    //拷贝resizedImage  preprocDataMsg->resizedMat
     ret = CopyImageToLocal(preprocDataMsg->resizedMat, resizedImage, runMode_);
     if (ret == ACLLITE_ERROR) {
         ACLLITE_LOG_ERROR("Copy image to host failed");

@@ -12,7 +12,7 @@ DVPP 中的VENC功能模块，实现将YUV420SP、YVU420SP格式的视频编码�
 
 样例中的主要接口调用流程如下：
 
-![输入图片说明](https://images.gitee.com/uploads/images/2020/1225/093425_701f9326_8492653.png "zh-cn_image_0000001073477178.png")
+![输入图片说明](https://support.huaweicloud.com/aclcppdevg-cann51RC1alpha2/figure/zh-cn_image_0000001213073514.png)
 
 ## 目录结构<a name="section86232112399"></a>
 
