@@ -43,7 +43,7 @@
 2. 获取此应用中所需要的原始网络模型。
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
-    |  InceptionV3| 图片分类推理模型。是Pytorch框架模型。  |  请参考[https://github.com/Ascend/modelzoo/tree/master/built-in/ACL_PyTorch/Official/cv/InceptionV3_for_Pytorch](https://github.com/Ascend/modelzoo/tree/master/built-in/ACL_PyTorch/Official/cv/InceptionV3_for_Pytorch)目录中README.md下载原始模型。 |
+    |  InceptionV3| 图片分类推理模型。是Pytorch框架模型。  |  请参考[https://github.com/Ascend/ModelZoo-PyTorch/tree/master/ACL_PyTorch/built-in/cv/InceptionV3_for_Pytorch](https://github.com/Ascend/ModelZoo-PyTorch/tree/master/ACL_PyTorch/built-in/cv/InceptionV3_for_Pytorch)目录中README.md下载原始模型。 |
     ```
     # 为了方便下载，在这里直接给出原始模型下载及模型转换命令,可以直接拷贝执行。也可以参照上表在modelzoo中下载并手工转换，以了解更多细节。     
     cd $HOME/samples/python/level2_simple_inference/1_classification/inceptionv3_picture/model

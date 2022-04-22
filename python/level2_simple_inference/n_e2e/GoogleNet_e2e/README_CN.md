@@ -32,14 +32,14 @@
 2. **Atlas推理准备工作（两种产品二选一即可）**
 
     - Atlas200 DK    
-      （1）参考[制卡文档](https://support.huaweicloud.com/environment-deployment-Atlas200DK202/atlased_04_0001.html)进行SD卡制作，制卡成功后等待开发者板四个灯常亮即可。
+      （1）参考[制卡文档](https://www.hiascend.com/document/detail/zh/Atlas200DKDeveloperKit/1013/environment/atlased_04_0010.html)进行SD卡制作，制卡成功后等待开发者板四个灯常亮即可。
     
-      （2）参考[连接文档](https://support.huaweicloud.com/environment-deployment-Atlas200DK202/atlased_04_0014.html)中的**使用网线通过路由器连接Linux服务器**步骤，完成开发者板和本地机器的连接及开发者板上网配置。
+      （2）参考[连接文档](https://www.hiascend.com/document/detail/zh/Atlas200DKDeveloperKit/1013/environment/atlased_04_0012.html)中的步骤，完成开发者板和本地机器的连接及开发者板上网配置。
 
       （3）配置完成后，参考[环境准备和依赖安装](https://github.com/Ascend/samples/blob/master/python/environment)准备好环境。
 
     - Atlas300（ai1s）
-      （1）参考[购买并登录Linux弹性云服务器指南](https://support.huaweicloud.com/qs-ecs/zh-cn_topic_0132727313.html)购买AI加速型（ai1s）ECS弹性云服务器，选择镜像的时候选择公共的linux镜像即可。
+      （1）参考[购买并登录Linux弹性云服务器指南](https://github.com/Ascend/samples/wikis/%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C%E6%8C%87%E5%8D%97/%E8%B4%AD%E4%B9%B0%E5%8D%8E%E4%B8%BA%E4%BA%91AI1s%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%B9%B6%E5%88%B6%E4%BD%9C%E7%9B%B8%E5%BA%94%E7%89%88%E6%9C%AC%E9%95%9C%E5%83%8F%E6%8C%87%E5%AF%BC)购买AI加速型（ai1s）ECS弹性云服务器，选择镜像的时候选择公共的linux镜像即可。
 
       （2）参考[环境准备和依赖安装](https://github.com/Ascend/samples/blob/master/python/environment)准备好环境。
 
@@ -54,7 +54,7 @@
                                
 
 
-我们在ModelArts中训练模型，模型训练完成后转换成昇腾芯片中可用的om模型。
+我们在ModelArts中训练模型，模型训练完成后转换成昇腾芯片中可用的om模型。需要注意，这里我们 **使用的是旧版ModelArts** .
 
 **1、按照如下步骤在modelarts上部署数据集。**
 
@@ -70,14 +70,14 @@
 
 - 命令行方式下载。
   命令行中执行以下命令下载源码仓。
-  **git clone https://github.com/Ascend/modelzoo.git**
+  **git clone https://gitee.com/mindspore/models.git**
 - 压缩包方式下载。
-  1. [modelzoo仓](https://github.com/Ascend/modelzoo)右上角选择 **克隆/下载** 下拉框并选择 **下载ZIP**。
-  2. 解压zip包，进入modelzoo/built-in/MindSpore/Official/cv/image_classification/GoogLeNet_for_MindSpore目录，准备上传到OBS。
+  1. [mindspore/models仓](https://gitee.com/mindspore/models)右上角选择 **克隆/下载** 下拉框并选择 **下载ZIP**。
+  2. 解压zip包，进入models/official/cv/googlenet目录，准备上传到OBS。
 
 - 上传数据至OBS
 
-windows环境中在OBS Browser+中，进入刚刚创建的“华为北京四”区域的OBS桶，然后点击上传按钮，上传本地文件夹**cifar-10-batches-bin和modelzoo/built-in/MindSpore/Official/cv/image_classification/GoogLeNet_for_MindSpore**至OBS桶的一个文件目录下。
+windows环境中在OBS Browser+中，进入刚刚创建的“华为北京四”区域的OBS桶，然后点击上传按钮，上传本地文件夹**cifar-10-batches-bin和models/official/cv/googlenet**至OBS桶的一个文件目录下例如googlenet_train目录。
 
 ![](https://images.gitee.com/uploads/images/2021/0127/151112_1ab34d4a_5400693.png "uploadfolder.png")
 
@@ -111,7 +111,7 @@ windows环境中在OBS Browser+中，进入刚刚创建的“华为北京四”�
 - 类型：默认选择“Ascend”即可。
 - 规格：默认选择“Ascend：1*Ascend 910 cpu：24核 96 GIB”即可。。
 - 存储配置：默认选择“对象存储服务（OBS）”即可。
-- **存储位置：选择一个上传代码的路径，即OBS上训练代码和数据集所在的地方，如/modelarts--course/GoogLeNet/，方便后续上传到modelarts。**
+- **存储位置：选择一个上传代码的路径，即OBS上训练代码和数据集所在的地方，如/modelarts--course/googlenet_train/，方便后续上传到modelarts。**
 - 完成信息填写，单击“下一步”,规格确认无误后点击提交即可。
 
 
@@ -162,17 +162,18 @@ cat /home/ma-user/README
 可以看到进入Mindspore的环境命令，执行
 
 ```
-source /home/ma-user/miniconda3/bin/activate Mindspore-python3.7-aarch64
+source /home/ma-user/miniconda3/bin/activate MindSpore-python3.7-aarch64
 ```
 
 进入/home/ma-user/work目录，即可看到刚才同步OBS的文件目录。
 
-配置config.py文件中数据集对应目录，准备训练
-```
-vi ./src/config.py
-```
-修改cifar_cfg中的data_path字段，这里为../    
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0607/112011_2204eeb7_5400693.png "cf951262048edb7d81001d9c8486a67.png")
+在左边双击打开配置文件，配置cifar10_config.yaml文件中数据集对应目录，准备训练
+
+![输入图片说明](https://modelarts-course.obs.cn-north-4.myhuaweicloud.com/pictures/34fcd45f-5587-4483-bd2f-7f9c9dd4f77a.png)
+
+需要注意，每次左边修改完后，需要点击同步obs，这时候右边终端的文件才能同步为刚才修改好的文件。
+
+![输入图片说明](https://modelarts-course.obs.cn-north-4.myhuaweicloud.com/pictures/%E5%90%8C%E6%AD%A5obs.png)
 
 执行以下命令开始训练，可以在当前terminal中看到打印日志
 
@@ -184,36 +185,28 @@ python train.py
 执行流程如图
 
 
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0607/112143_7e31b367_5400693.png "a61707c47e9be21efdd2aff29619268.png")
+![输入图片说明](https://modelarts-course.obs.cn-north-4.myhuaweicloud.com/pictures/%E8%AE%AD%E7%BB%83%E6%88%90%E5%8A%9F.png)
 
 
 当看到"train success"时，说明训练完成了。
-
-
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0607/170652_3f238c6f_5400693.png "d7e5edc172fdd7f4bffb794303627f2.png")
 
 
 - **导出AIR格式模型**
 
 这时候我们看到当前目录下生成了ckpt_0文件夹，目录中取生成的最后一个即train_googlenet_cifar10-125_468.ckpt，通过脚本生成AIR格式模型文件。
 
-进入配置文件，修改cifar_cfg中的checkpoint_path为"./ckpt_0/train_googlenet_cifar10-125_468.ckpt"。    
-```
-vi ./src/config.py
-```
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0607/175045_f596534f_5400693.png "屏幕截图.png")
+双击左边的配置文件，修改cifar10_config.yaml中的ckpt_file,file_name,file_format,batch_size，修改完成后记得同步obs
 
-进入export.py文件，按照截图修改export函数。
-```
-vi export.py
-```
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0607/175230_3342b2ac_5400693.png "屏幕截图.png")
+![输入图片说明](https://modelarts-course.obs.cn-north-4.myhuaweicloud.com/pictures/%E5%AF%BC%E5%87%BAair.png)
 
-执行export.py文件，完成后会在/home/ma-user/work/GoogLeNet_for_MindSpore下生成.air文件。
+执行命令导出
+
 ```
 python export.py
 ```
+导出成功如下：
 
+![输入图片说明](https://modelarts-course.obs.cn-north-4.myhuaweicloud.com/pictures/air%E6%A8%A1%E5%9E%8B.png)
 
 - **上传模型到OBS**
 
@@ -221,11 +214,16 @@ python export.py
 
 ```
 import moxing as mox
-mox.file.copy('/home/ma-user/work/GoogLeNet_for_MindSpore/googlenet.air', 'obs://modelarts--course/GoogLeNet/googlenet.air')
+mox.file.copy('/home/ma-user/work/googlenet/googlenet.air', 'obs://modelarts-course/googlenet_train/googlenet.air')
 ```
+![输入图片说明](https://modelarts-course.obs.cn-north-4.myhuaweicloud.com/pictures/%E5%AF%BC%E5%87%BA.png)
 
 执行成功后就可以在OBS的路径下看到自己的模型文件了，在OBS界面获取这个.air文件的链接，下载模型文件，准备做离线模型转换。
 
+需要注意，obs的默认下载权限是仅提供给拥有者，所以这里需要修改一下权限
+
+![输入图片说明](https://modelarts-course.obs.cn-north-4.myhuaweicloud.com/pictures/obs1.png)
+![输入图片说明](https://modelarts-course.obs.cn-north-4.myhuaweicloud.com/pictures/obs2.png)
 
 
 ## 6 应用开发
@@ -276,14 +274,7 @@ mox.file.copy('/home/ma-user/work/GoogLeNet_for_MindSpore/googlenet.air', 'obs:/
 
 步骤 1 设置环境变量
 
-
-```
-export install_path=$HOME/Ascend/ascend-toolkit/latest
-export PATH=/usr/local/python3.7.5/bin:${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
-export PYTHONPATH=${install_path}/atc/python/site-packages:${install_path}/atc/python/site-packages/auto_tune.egg/auto_tune:${install_path}/atc/python/site-packages/schedule_search.egg:$PYTHONPATH
-export LD_LIBRARY_PATH=${install_path}/atc/lib64:$LD_LIBRARY_PATH
-export ASCEND_OPP_PATH=${install_path}/opp
-```
+参考文档进行设置 https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/51RC2alpha001/infacldevg/atctool/atlasatc_16_0004.html
 
 步骤 2   ATC转化
 
@@ -455,8 +446,7 @@ ssh HwHiAiUser@192.168.1.2 "tail -n8  .bashrc"
 本实验的输入图片需要自行下载放到工程目录下的./data目录下。
 
 ```
-wget https://modelart-xuyetao.obs.cn-north-4.myhuaweicloud.com/googlenet/airplane.jpg 
-wget https://modelart-xuyetao.obs.cn-north-4.myhuaweicloud.com/googlenet/car.jpg
+wget https://modelarts-course.obs.cn-north-4.myhuaweicloud.com/pictures/airplane.jpg 
 ```
 
 用户可将要推理的图片存放于此目录作为推理输入数据。

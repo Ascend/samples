@@ -1016,12 +1016,6 @@ int32_t jpege_snap_start(hi_venc_chn vencChn, hi_video_size* size, hi_bool suppo
     uint32_t bufSize = 0;
     hi_venc_start_param recvParam;
     hi_venc_chn_attr vencChnAttr;
-    hi_venc_mod_param modParam;
-
-    modParam.mod_type = HI_VENC_MOD_JPEG;
-    hi_mpi_venc_get_mod_param(&modParam);
-    modParam.jpeg_mod_param.one_stream_buf = 1; // only support single-packet mode
-    hi_mpi_venc_set_mod_param(&modParam);
 
     // 1: create channel
     align_up_width = ALIGN_UP(size->width, 16);

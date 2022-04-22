@@ -76,6 +76,7 @@ class Dvpp(object):
     def get_output(self):
         return self._resize_out_dev, self._resize_out_size
 
+    # set input and output desc
     def gen_tensor_desc(self,
                         temp_buffer,
                         temp_width,
@@ -83,17 +84,23 @@ class Dvpp(object):
                         flag=True,
                         need_malloc=True):
         if flag:
-            decode_out_width = int(int((temp_width + 127) / 128) * 128)
-            decode_out_height = int(int((temp_height + 15) / 16) * 16)
+            # stride_width = int(int((temp_width + 127) / 128) * 128)
+            # stride_height = int(int((temp_height + 15) / 16) * 16)
+            # because here the input is from vdec, the input stride is 16*2;
+            # and the output of resize is vpc constraint, the output stride is 16*2 too.
+            stride_width = int(int((temp_width + 15) / 16) * 16)
+            stride_height = int(int((temp_height + 1) / 2) * 2)
+            
+            
         else:
             if temp_height % 2 or temp_width % 2:
                 raise Exception("[Dvpp] width={} or height={} of output is odd"
                                 .format(temp_width, temp_height))
-            decode_out_width = temp_width
-            decode_out_height = temp_height
+            stride_width = temp_width
+            stride_height = temp_height
 
-        decode_out_buffer_size = int(int(decode_out_width *
-                                         decode_out_height * 3) / 2)
+        decode_out_buffer_size = int(int(stride_width *
+                                         stride_height * 3) / 2)
 
         if need_malloc:
             temp_buffer, ret = acl.media.dvpp_malloc(decode_out_buffer_size)
@@ -104,8 +111,8 @@ class Dvpp(object):
         acl.media.dvpp_set_pic_desc_format(temp_desc, self._format)
         acl.media.dvpp_set_pic_desc_width(temp_desc, temp_width)
         acl.media.dvpp_set_pic_desc_height(temp_desc, temp_height)
-        acl.media.dvpp_set_pic_desc_width_stride(temp_desc, decode_out_width)
-        acl.media.dvpp_set_pic_desc_height_stride(temp_desc, decode_out_height)
+        acl.media.dvpp_set_pic_desc_width_stride(temp_desc, stride_width)
+        acl.media.dvpp_set_pic_desc_height_stride(temp_desc, stride_height)
         acl.media.dvpp_set_pic_desc_size(temp_desc, decode_out_buffer_size)
         return temp_desc, temp_buffer, decode_out_buffer_size
 
@@ -115,11 +122,14 @@ class Dvpp(object):
                 img_width,
                 img_height):
         print('[Dvpp] vpc resize stage:')
+        
+        # because here the input is from vdec, the input stride is 16*2;
         self._resize_in_desc_, self._decode_out_buffer, _resize_in_size = \
             self.gen_tensor_desc(img_buffer,
                                  img_width,
                                  img_height,
                                  need_malloc=False)
+        # the output of resize is vpc constraint, the output stride is 16*2 too.
         self._resize_out_desc, self._resize_out_dev, self._resize_out_size = \
             self.gen_tensor_desc(self._resize_out_dev,
                                  self._model_input_width,

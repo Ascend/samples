@@ -13,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import acl
+import numpy as np
 from constant import ACL_MEM_MALLOC_NORMAL_ONLY, \
     ACL_MEMCPY_DEVICE_TO_HOST, ACL_INT32, \
     ACL_FORMAT_ND, ACL_FLOAT, ACL_FLOAT16
@@ -169,7 +170,11 @@ class SingleOp(object):
                             ACL_MEMCPY_DEVICE_TO_HOST)
         check_ret("acl.rt.memcpy", ret)
 
-        data = acl.util.ptr_to_numpy(host_buffer, (self.output_shape,), 5)
+        if "ptr_to_bytes" in dir(acl.util):
+            bytes_data = acl.util.ptr_to_bytes(host_buffer, self.tensor_size_arg_max_d)
+            data = np.frombuffer(bytes_data, dtype=np.int32)
+        else:
+            data = acl.util.ptr_to_numpy(host_buffer, (self.output_shape,), 5)
         print("[SingleOP][ArgMaxOp] label of classification result is:{}"
               .format(data[0]))
         ret = acl.rt.free_host(host_buffer)

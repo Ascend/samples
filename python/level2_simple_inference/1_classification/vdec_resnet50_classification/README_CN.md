@@ -56,6 +56,8 @@ vdec_resnet50_classification
 | 单算子推理          | 算子加载与执行      | acl.op.execute                    | 异步加载并执行指定的算子。              |
 | 公共模块            | --                 | acl.util.ptr_to_numpy            | 指针转numpy类型数据。                    |
 |                    | --                 | acl.util.numpy_to_ptr            | numpy类型数据转指针。                    |
+|                    | --                 | acl.util.ptr_to_bytes            | 指针转bytes类型数据。                    |
+|                    | --                 | acl.util.bytes_to_ptr            | bytes类型数据转指针。                    |
 | 资源释放            | 内存管理            | acl.rt.free                      | 释放Device上的内存。                     |
 |                    | 内存管理            | acl.media.dvpp_free              | 通过acl.media.dvpp_malloc接口申请的内存。 |
 |                    | 内存管理            | acl.rt.free_host                 | 释放Host上的内存。                       |

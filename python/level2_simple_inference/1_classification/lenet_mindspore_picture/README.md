@@ -14,7 +14,7 @@ Input: JPG images to be inferred
 
 Output: the number of JPG images after inference
 
-For details about the training, see [mnist Sorting with lenet](https://github.com/Ascend/modelzoo/tree/master/built-in/MindSpore/Official/cv/image_classification/LeNet_for_MindSpore).
+For details about the training, see [mnist Sorting with lenet](https://gitee.com/mindspore/models/blob/master/official/cv/lenet/README.md).
 In Ascend910 ， use scripts/convert.py convert checkpoint_lenet-1_1875.ckpt to mnist.air
 
 

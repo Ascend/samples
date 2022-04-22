@@ -102,8 +102,11 @@ class AclLiteImageProc(object):
         """
         jepg image to yuv image
         """
+        stride_width = utils.align_up128(image.width)
+        stride_height = utils.align_up16(image.height)
+        stride_size = utils.yuv420sp_size(stride_width, stride_height)
         # Create conversion output image desc
-        output_desc, out_buffer = self._gen_jpegd_out_pic_desc(image)
+        output_desc, out_buffer = self._gen_jpegd_out_pic_desc(image, stride_size)
         ret = acl.media.dvpp_jpeg_decode_async(self._dvpp_channel_desc,
                                                image.data(),
                                                image.size,
@@ -119,15 +122,12 @@ class AclLiteImageProc(object):
             return None
 
         # Return the decoded AclLiteImage instance
-        stride_width = utils.align_up128(image.width)
-        stride_height = utils.align_up16(image.height)
-        stride_size = utils.yuv420sp_size(stride_width, stride_height)
         return AclLiteImage(out_buffer, image.width, image.height, stride_width,
                         stride_height, stride_size, constants.MEMORY_DVPP)
 
-    def _gen_jpegd_out_pic_desc(self, image):
+    def _gen_jpegd_out_pic_desc(self, image, stride_size):
         # Predict the memory size required to decode jpeg into yuv pictures
-        ret, out_buffer_size = self._get_jpegd_memory_size(image)
+        ret, out_buffer_size = self._get_jpegd_memory_size(image, stride_size)
         if not ret:
             return None
         # Apply for memory for storing decoded yuv pictures
@@ -145,7 +145,7 @@ class AclLiteImageProc(object):
             height_align_factor=16)
         return pic_desc, out_buffer
 
-    def _get_jpegd_memory_size(self, image):
+    def _get_jpegd_memory_size(self, image, stride_size):
         if image.is_local():
             size, ret = acl.media.dvpp_jpeg_predict_dec_size(
                 image.data(), image.size, constants.PIXEL_FORMAT_YUV_SEMIPLANAR_420)
@@ -154,9 +154,7 @@ class AclLiteImageProc(object):
                 return False, 0
             return True, size
         else:
-            return True, int(
-                utils.yuv420sp_size(
-                    image.width, image.height) * 3)
+            return True, int(stride_size)
 
     def resize(self, image, resize_width, resize_height):
         """

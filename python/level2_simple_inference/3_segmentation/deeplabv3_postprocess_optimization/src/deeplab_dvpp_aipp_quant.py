@@ -18,10 +18,8 @@ import acllite_utils as utils
 from acllite_imageproc import AclLiteImageProc
 import draw_predict
 
-MODEL_WIDTH = 528
-MODEL_HEIGHT = 514
-out_w = 56
-out_h = 56
+MODEL_WIDTH = 513
+MODEL_HEIGHT = 513
 INPUT_DIR = '../data/'
 OUTPUT_DIR = '../out/'
 model_path = '../model/deeplab_quant.om'
@@ -32,9 +30,8 @@ def preprocess(image, dvpp_):
     
     image_dvpp = image.copy_to_dvpp()
     yuv_image = dvpp_.jpegd(image_dvpp)
-    crop_and_paste_image = dvpp_.crop_and_paste_get_roi(yuv_image, image.width, image.height, \
-                                514, 514)
-    return crop_and_paste_image
+    resized_image = dvpp_.resize(yuv_image, MODEL_WIDTH, MODEL_HEIGHT)
+    return resized_image
 
 @utils.display_time
 def postprocess(result_list, pic, output_dir):

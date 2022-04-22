@@ -121,9 +121,13 @@ class Model(object):
             output_host, _ = acl.rt.malloc_host(infer_output_size)
             acl.rt.memcpy(output_host, infer_output_size, infer_output_ptr,
                           infer_output_size, ACL_MEMCPY_DEVICE_TO_HOST)
-            result = acl.util.ptr_to_numpy(output_host,
-                                           tuple(out_dim),
-                                           NPY_FLOAT32)
+            if "ptr_to_bytes" in dir(acl.util):
+                bytes_data = acl.util.ptr_to_bytes(output_host, infer_output_size)
+                result = np.frombuffer(bytes_data, dtype=np.float32).reshape(tuple(out_dim))
+            else:
+                result = acl.util.ptr_to_numpy(output_host,
+                                            tuple(out_dim),
+                                            NPY_FLOAT32)
             vals = np.array(result).flatten()
             top_k = vals.argsort()[-1:-6:-1]
             possible = 0

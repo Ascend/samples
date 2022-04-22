@@ -86,7 +86,7 @@ class AclVenc(object):
         if os.path.exists('./data/output.h265'):
             os.remove('./data/output.h265')
 
-    def __del__(self):
+    def release_resource(self):
         print("[INFO] free resource")
         if self.stream_host:
             acl.rt.free_host(self.stream_host)
@@ -137,16 +137,20 @@ class AclVenc(object):
                 output_stream_desc)
             print("[INFO] [venc] stream_data size", stream_data_size)
             # stream memcpy d2h
-            np_data = np.zeros(stream_data_size, dtype=np.byte)
-            np_data_ptr = acl.util.numpy_to_ptr(np_data)
-            ret = acl.rt.memcpy(np_data_ptr, stream_data_size,
+            if "bytes_to_ptr" in dir(acl.util):
+                data = bytes(stream_data_size)
+                data_ptr = acl.util.bytes_to_ptr(data)
+            else:
+                data = np.zeros(stream_data_size, dtype=np.byte)
+                data_ptr = acl.util.numpy_to_ptr(data)
+            ret = acl.rt.memcpy(data_ptr, stream_data_size,
                                 stream_data, stream_data_size,
                                 memcpy_kind.get("ACL_MEMCPY_DEVICE_TO_HOST"))
             if ret != 0:
                 print("[INFO] [venc] acl.rt.memcpy ret=", ret)
                 return
             with open('./data/output.h265', 'ab') as f:
-                f.write(np_data)
+                f.write(data)
 
     def venc_set_desc(self, width, height):
         # venc_channel_desc set function
@@ -220,7 +224,11 @@ class AclVenc(object):
         # load file
         file_context = np.fromfile(VENC_FILE_PATH, dtype=np.byte)
         file_size = file_context.size
-        file_mem = acl.util.numpy_to_ptr(file_context)
+        if "bytes_to_ptr" in dir(acl.util):
+            bytes_data = file_context.tobytes()
+            file_mem = acl.util.bytes_to_ptr(bytes_data)
+        else:
+            file_mem = acl.util.numpy_to_ptr(file_context)
 
         input_size = file_size
         input_mem, ret = acl.media.dvpp_malloc(input_size)
@@ -289,6 +297,7 @@ if __name__ == '__main__':
     venc_handle.venc_init()
     venc_handle.venc_run()
     venc_handle.venc_stream_desc_set()
+    venc_handle.release_resource()
     ret = acl.rt.reset_device(DEVICE_ID)
     check_ret("acl.rt.reset_device", ret)
     ret = acl.finalize()

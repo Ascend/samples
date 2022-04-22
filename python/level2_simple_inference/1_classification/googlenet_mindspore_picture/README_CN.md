@@ -7,7 +7,7 @@
 样例输入：待推理的jpg图片。    
 样例输出：推理后的jpg图片。
 
-训练过程参考 [googlenet mindspore训练](https://github.com/Ascend/modelzoo/tree/master/built-in/MindSpore/Official/cv/image_classification/GoogLeNet_for_MindSpore)； 
+训练过程参考 [googlenet mindspore训练](https://gitee.com/mindspore/models/tree/master/official/cv/googlenet)； 
 
 ### 前置条件
 请检查以下条件要求是否满足，如不满足请按照备注进行相应处理。如果CANN版本升级，请同步检查第三方依赖是否需要重新安装（5.0.4及以上版本第三方依赖和5.0.4以下版本有差异，需要重新安装）。

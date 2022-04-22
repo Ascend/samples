@@ -32,8 +32,6 @@ DVPP中的VPC功能模块，实现图片的抠图、缩放、边界填充、色�
 
     EP标准形态编译器：g++
 
-    EP开放形态编译器：hcc编译器aarch64-target-linux-gnu-g++\(在toolkit包中\)
-
 - 芯片：Ascend710
 
 - 已完成昇腾AI软件栈在开发环境、运行环境上的部署。

@@ -28,8 +28,6 @@ DVPP 中的VENC功能模块，实现将YUV420SP、YVU420SP格式的视频编码�
 
     EP标准形态编译器：g++
 
-    EP开放形态编译器：hcc编译器aarch64-target-linux-gnu-g++\(在toolkit包中\)
-
 -   芯片：Ascend710
 -   已完成昇腾AI软件栈在开发环境、运行环境上的部署。
 
@@ -40,6 +38,7 @@ DVPP 中的VENC功能模块，实现将YUV420SP、YVU420SP格式的视频编码�
 ## 编译运行<a name="section3789175815018"></a>
 
 1. 以运行用户登录开发环境，编译代码。
+
    1. 设置环境变量，编译脚本CMakeLists.txt通过环境变量所设置的头文件、库文件的路径来编译代码。
 
       如下为示例，$HOME/Ascend表示runtime标准形态安装包的安装路径，请根据实际情况替换。

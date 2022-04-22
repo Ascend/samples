@@ -61,7 +61,7 @@ class Sample(object):
         check_ret("acl.rt.create_stream", ret)
         print("init resource stage success")
 
-    def __del__(self):
+    def release_resource(self):
         print('[Sample] release source stage:')
         if self.dvpp_process:
             del self.dvpp_process
@@ -89,30 +89,35 @@ class Sample(object):
     def _transfer_to_device(self, img):
         img_device = img["buffer"]
         img_buffer_size = img["size"]
+        
         '''
-        若单独执行图像缩放操作，此处应该调用acl.rt.memcpy将图像数据从host侧拷贝到device侧
-        在此样例中，因为之前视频解码的数据已经在device侧，所以此处不做数据拷贝
+        if the buffer is not in device, need to copy to device, but here, the data is from vdec, no need to copy.
         '''
         return img_device, img_buffer_size
 
     def forward(self, temp):
         _, input_width, input_height, _ = temp
-        # 视频解码过程
+
+        # vdec process，note：the input is h264 file，vdec output datasize need to be computed by strided width and height by 16*2
         self.vdec_process.run(temp)
+        
         images_buffer = self.vdec_process.get_image_buffer()
         if images_buffer:
             for img_buffer in images_buffer:
                 img_device, img_buffer_size = \
                     self._transfer_to_device(img_buffer)
-                # 图片缩放过程
+                
+                print("vdec output, img_buffer_size = ", img_buffer_size)
+                # vpc process, parameters：vdec output buffer and size, original picture width and height.
                 dvpp_output_buffer, dvpp_output_size = \
                     self.dvpp_process.run(img_device,
                                           img_buffer_size,
                                           input_width,
                                           input_height)
+           
                 ret = acl.media.dvpp_free(img_device)
                 check_ret("acl.media.dvpp_free", ret)
-                # 图像推理过程
+                
                 self.model_process.run(dvpp_output_buffer,
                                        dvpp_output_size)
 
@@ -129,4 +134,11 @@ if __name__ == '__main__':
                   1280,  # width
                   720,  # height
                   np.uint8]  # dtype
+    # vedio_list = ["./data/test_29.h264",
+    #               720,  # width
+    #               1280,  # height
+    #               np.uint8]  # dtype
+    
+    
     sample.forward(vedio_list)
+    sample.release_resource()

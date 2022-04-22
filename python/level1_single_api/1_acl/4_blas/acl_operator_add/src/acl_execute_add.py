@@ -65,7 +65,7 @@ class Operator(object):
         self.host_outputs = []
         self.init_resource()
 
-    def __del__(self):
+    def release_resource(self):
         print('release source stage:')
         while self._inputs_desc:
             ret = acl.destroy_data_buffer(self._inputs_device_buffer.pop())
@@ -150,7 +150,11 @@ class Operator(object):
             factor_device, ret = acl.rt.malloc(
                 factor_size, ACL_MEM_MALLOC_NORMAL_ONLY)
             check_ret("acl.rt.malloc", ret)
-            factor_ptr = acl.util.numpy_to_ptr(factor)
+            if "bytes_to_ptr" in dir(acl.util):
+                bytes_data = factor.tobytes()
+                factor_ptr = acl.util.bytes_to_ptr(bytes_data)
+            else:
+                factor_ptr = acl.util.numpy_to_ptr(factor)
 
             ret = acl.rt.memcpy(factor_device,
                                 factor_size,
@@ -188,6 +192,7 @@ class Operator(object):
         self._gen_output_tensor()
         self._forward()
         result = self._get_operator_result()
+        self.release_resource()
         return result
 
     def _forward(self):
@@ -219,9 +224,13 @@ class Operator(object):
             check_ret("acl.rt.memcpy", ret)
 
             print("shape:", tuple(self.shape))
-            data = acl.util.ptr_to_numpy(self.host_outputs[index],
-                                         tuple(self.shape),
-                                         NPY_INT)
+            if "ptr_to_bytes" in dir(acl.util):
+                bytes_data = acl.util.ptr_to_bytes(self.host_outputs[index], factor_size)
+                data = np.frombuffer(bytes_data, dtype=np.int32).reshape(tuple(self.shape))
+            else:
+                data = acl.util.ptr_to_numpy(self.host_outputs[index],
+                                            tuple(self.shape),
+                                            NPY_INT)
             print("ACL output:\n", data)
             result.append(data)
         print('get operator result success')

@@ -63,10 +63,10 @@ class Vdec(object):
             vdec_out_buffer = acl.media.dvpp_get_pic_desc_data(output_pic_desc)
             acl.media.dvpp_get_pic_desc_ret_code(output_pic_desc)
             '''
-            若单独执行视频解码操作，此处建议调用acl.rt.memcpy将解码后的数据拷贝回host侧
-            在此样例中，因为之后还涉及到图片缩放与推理操作，所以此处不做数据拷贝
+            here no need to copy back to host, because, the data will send to infer process.
             '''
             data_size = acl.media.dvpp_get_pic_desc_size(output_pic_desc)
+            print("data_size in call_back:", data_size)
             self.images_buffer.append(dict({"buffer": vdec_out_buffer,
                                             "size": data_size}))
             ret = acl.media.dvpp_destroy_pic_desc(output_pic_desc)
@@ -97,7 +97,11 @@ class Vdec(object):
     def _gen_input_dataset(self, img_path):
         img = np.fromfile(img_path, dtype=self.dtype)
         img_buffer_size = img.size
-        img_ptr = acl.util.numpy_to_ptr(img)
+        if "bytes_to_ptr" in dir(acl.util):
+            bytes_data = img.tobytes()
+            img_ptr = acl.util.bytes_to_ptr(bytes_data)
+        else:
+            img_ptr = acl.util.numpy_to_ptr(img)
         img_device, ret = acl.media.dvpp_malloc(img_buffer_size)
         ret = acl.rt.memcpy(img_device,
                             img_buffer_size,
@@ -123,6 +127,17 @@ class Vdec(object):
         check_ret("acl.media.dvpp_malloc", ret)
 
         self.dvpp_pic_desc = acl.media.dvpp_create_pic_desc()
+        
+
+        acl.media.dvpp_set_pic_desc_height(self.dvpp_pic_desc, self.input_height)
+        acl.media.dvpp_set_pic_desc_width(self.dvpp_pic_desc, self.input_width)
+        
+        vdec_out_height = int(int((self.input_height + 1) / 2) * 2)
+        vdec_out_width = int(int((self.input_width + 15) / 16) * 16)
+        acl.media.dvpp_set_pic_desc_width_stride(self.dvpp_pic_desc, vdec_out_width)
+        acl.media.dvpp_set_pic_desc_height_stride(self.dvpp_pic_desc, vdec_out_height)
+        
+        
         acl.media.dvpp_set_pic_desc_data(self.dvpp_pic_desc,
                                          output_pic_mem)
 
@@ -138,7 +153,8 @@ class Vdec(object):
 
         for i in range(self.rest_len):
             print("[Vdec] forward index:{}".format(i))
-            self._set_input(input_stream_size)
+            self._set_input(input_stream_size)           
+
             self._set_pic_output(output_pic_size)
 
             # vdec_send_frame
@@ -153,16 +169,26 @@ class Vdec(object):
     def run(self, video_path):
         self.video_path, self.input_width, self.input_height, \
             self.dtype = video_path
-        # 此处设置触发回调处理之前的等待时间，
+        # here set callback timeout time.
         timeout = 100
         cb_thread_id, ret = acl.util.start_thread(
             self._thread_func, [timeout])
 
-        self.init_resource(cb_thread_id)
-
-        output_pic_size = (self.input_width * self.input_height * 3) // 2
+        self.init_resource(cb_thread_id)              
+        
+        # vdec output need to be stride to 16*2
+        vdec_out_height = int(int((self.input_height + 1) / 2) * 2)
+        vdec_out_width = int(int((self.input_width + 15) / 16) * 16)
+        output_pic_size = vdec_out_width * vdec_out_height * 3 // 2
+                
+        
+        
+        # input_stream_size: is the size read from original stream file.
+        # input_stream_mem：the ptr to the data, which have been copy to device after read from original file.
         self.input_stream_mem, input_stream_size = self. \
             _gen_input_dataset(self.video_path)
+        
+ 
         self.forward(output_pic_size, input_stream_size)
 
         ret = acl.media.vdec_destroy_channel(self.vdec_channel_desc)

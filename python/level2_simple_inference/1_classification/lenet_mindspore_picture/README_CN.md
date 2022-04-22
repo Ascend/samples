@@ -10,7 +10,7 @@
 样例输入：待推理的jpg图片。    
 样例输出：存放图片中数字的txt文本。   
 
-训练过程参考 [lennet mindspore训练](https://github.com/Ascend/modelzoo/tree/master/built-in/MindSpore/Official/cv/image_classification/LeNet_for_MindSpore)；
+训练过程参考 [lennet mindspore训练](https://gitee.com/mindspore/models/tree/master/official/cv/lenet)；
  在Ascend910环境， 使用scripts/convert.py 脚本将训练好的checkpoint_lenet-1_1875.ckpt 转换为mnist.air模型文件
 
 ### 前置条件

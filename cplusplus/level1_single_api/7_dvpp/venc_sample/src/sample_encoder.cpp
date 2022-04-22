@@ -20,7 +20,6 @@
 
 extern std::map<hi_u64, hi_void*> g_mbuf_map;
 extern pthread_mutex_t g_mbuf_mutex;
-extern int32_t g_one_stream_mode;
 extern int32_t g_perf_test;
 extern hi_u64 g_start_send_time[MAX_ENC_CHANNEL_NUM];
 

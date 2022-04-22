@@ -41,6 +41,8 @@ acl_operator_add
 | 单算子推理      | 算子加载与执行  | acl.op.execute            | 异步加载并执行指定的算子。                |
 | 公共模块        | --             | acl.util.ptr_to_numpy     | 指针转numpy类型数据。                    |
 |                | --             | acl.util.numpy_to_ptr     | numpy类型数据转指针。                    |
+|                | --             | acl.util.bytes_to_ptr     | bytes类型数据转指针。                    |
+|                | --             | acl.util.ptr_to_bytes     | 指针转bytes类型数据。                    |
 | 资源释放        | 内存管理       | acl.rt.free               | 释放Device上的内存。                     |
 |                | 内存管理       | acl.rt.free_host           | 释放Host上的内存。                      |
 |                | Stream管理     | acl.rt.destroy_stream      | 销毁Stream。                            |

@@ -47,7 +47,7 @@ class Net(object):
 
         self.init_resource()
 
-    def __del__(self):
+    def release_resource(self):
         print("Releasing resources stage:")
         ret = acl.mdl.unload(self.model_id)
         check_ret("acl.mdl.unload", ret)
@@ -132,7 +132,11 @@ class Net(object):
 
         for i, item in enumerate(temp_data_buffer):
             if policy == ACL_MEMCPY_HOST_TO_DEVICE:
-                ptr = acl.util.numpy_to_ptr(dataset[i])
+                if "bytes_to_ptr" in dir(acl.util):
+                    bytes_data = dataset[i].tobytes()
+                    ptr = acl.util.bytes_to_ptr(bytes_data)
+                else:
+                    ptr = acl.util.numpy_to_ptr(dataset[i])
                 ret = acl.rt.memcpy(item["buffer"],
                                     item["size"],
                                     ptr,
@@ -235,7 +239,11 @@ class Net(object):
         for temp in output_data:
             ptr = temp["buffer"]
             # 转化为float32类型的数据
-            data = acl.util.ptr_to_numpy(ptr, tuple(out_dim), NPY_FLOAT32)
+            if "ptr_to_bytes" in dir(acl.util):
+                bytes_data = acl.util.ptr_to_bytes(ptr, temp["size"])
+                data = np.frombuffer(bytes_data, dtype=np.float32).reshape(tuple(out_dim))
+            else:
+                data = acl.util.ptr_to_numpy(ptr, tuple(out_dim), NPY_FLOAT32)
             result.append(data)
         return result
 
@@ -285,3 +293,4 @@ if __name__ == '__main__':
         net.run([img])
 
     print("*****run finish******")
+    net.release_resource()

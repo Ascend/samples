@@ -57,7 +57,7 @@ class Sample(object):
 
         self.sing_op = SingleOp(self.stream)
 
-    def __del__(self):
+    def release_resource(self):
         if self.model_process:
             del self.model_process
 
@@ -91,7 +91,11 @@ class Sample(object):
 
     def _transfer_to_device(self, img_path, dtype=np.uint8):
         img = np.fromfile(img_path, dtype=dtype)
-        img_ptr = acl.util.numpy_to_ptr(img)
+        if "bytes_to_ptr" in dir(acl.util):
+            bytes_data = img.tobytes()
+            img_ptr = acl.util.bytes_to_ptr(bytes_data)
+        else:
+            img_ptr = acl.util.numpy_to_ptr(img)
         img_buffer_size = img.itemsize * img.size
         img_device, ret = acl.media.dvpp_malloc(img_buffer_size)
         check_ret("acl.media.dvpp_malloc", ret)
@@ -151,3 +155,4 @@ if __name__ == '__main__':
     for image in images_list:
         img_dict_src = {"path": image, "dtype": np.uint8}
         sample.forward(img_dict_src)
+    sample.release_resource()

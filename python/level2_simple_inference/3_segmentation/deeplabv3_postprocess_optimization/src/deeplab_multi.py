@@ -20,10 +20,8 @@ import draw_predict
 from multiprocessing import Process,Queue
 import random
 
-MODEL_WIDTH = 528
-MODEL_HEIGHT = 514
-out_w = 56
-out_h = 56
+MODEL_WIDTH = 513
+MODEL_HEIGHT = 513
 INPUT_DIR = '../data/'
 OUTPUT_DIR = '../out/'
 model_path = '../model/deeplab_autotune_quant.om'
@@ -56,8 +54,8 @@ def preandinfer(image_queue, images_list):
         image = AclLiteImage(pic)
         image_dvpp = image.copy_to_dvpp()
         yuv_image = dvpp_.jpegd(image_dvpp)
-        crop_and_paste_image = dvpp_.crop_and_paste_get_roi(yuv_image, image.width, image.height, 514, 514)
-        result_list = model.execute([crop_and_paste_image,])
+        resized_image = dvpp_.resize(yuv_image, MODEL_WIDTH, MODEL_HEIGHT)
+        result_list = model.execute([resized_image,])
         data = ProcData(result_list, pic, OUTPUT_DIR) 
         image_queue.put(data)
     post_num = 6

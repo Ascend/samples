@@ -44,7 +44,7 @@ class Sample(object):
         self.model_process = Model(self.context, self.stream, model_path)
         self.dvpp_process = Dvpp(self.stream, mdl_w, mdl_h)
 
-    def __del__(self):
+    def release_resource(self):
         if self.model_process:
             del self.model_process
 
@@ -219,3 +219,4 @@ if __name__ == '__main__':
     }
 
     sample.forward(img_dict_data)
+    sample.release_resource()

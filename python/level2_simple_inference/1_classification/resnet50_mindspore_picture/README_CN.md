@@ -7,7 +7,7 @@
 样例输入：待推理的jpg图片。    
 样例输出：推理后的jpg图片。
 
-训练过程参考 [resnet50 mindspore训练](https://github.com/Ascend/modelzoo/tree/master/built-in/MindSpore/Official/cv/image_classification/ResNet50_for_MindSpore)； 在Ascend910环境， 使用本仓库下scripts/convert.py 脚本将训练好的resnet-90_1875.ckpt 转换为resnet-90_1875.air模型文件
+训练过程参考 [resnet50 mindspore训练](https://gitee.com/mindspore/models/tree/master/official/cv/resnet)； 在Ascend910环境， 使用本仓库下scripts/convert.py 脚本将训练好的resnet-90_1875.ckpt 转换为resnet-90_1875.air模型文件
 
 ### 前置条件
 请检查以下条件要求是否满足，如不满足请按照备注进行相应处理。如果CANN版本升级，请同步检查第三方依赖是否需要重新安装（5.0.4及以上版本第三方依赖和5.0.4以下版本有差异，需要重新安装）。

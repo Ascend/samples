@@ -40,6 +40,8 @@ resnet50_imagenet_classification
 |                    | 内存管理            | acl.rt.malloc_host               | 申请Host上的内存。                      |
 | 公共模块            | --                 | acl.util.ptr_to_numpy            | 指针转numpy类型数据。                    |
 |                    | --                 | acl.util.numpy_to_ptr            | numpy类型数据转指针。                    |
+|                    | --                 | acl.util.ptr_to_bytes            | 指针转bytes类型数据。                    |
+|                    | --                 | acl.util.bytes_to_ptr            | bytes类型数据转指针。                    |
 | 数据后处理          | 数据类型及操作接口   | acl.mdl.get_dataset_buffer       | 获取数据集中信息。                       |
 |                    | 数据类型及操作接口   | acl.mdl.get_dataset_num_buffers  | 获取数据集中信息。                       |
 | 资源释放            | 内存管理            | acl.rt.free                      | 释放Device上的内存。                     |

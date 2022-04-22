@@ -34,7 +34,6 @@ char g_input_file[500] = "";
 char g_output_file[500] = "";
 int32_t g_bit_rate = 0;
 int32_t g_frame_rate = 30;
-int32_t g_one_stream_mode = 0;
 int32_t g_max_qp = 51;
 int32_t g_min_qp = 20;
 int32_t g_max_iqp = 51;
@@ -467,28 +466,10 @@ int32_t venc_do_init(IHWCODEC_HANDLE* encHandle, VencParam* encParam)
         for (uint32_t i = 0; i < g_chn_num; ++i) {
             init_h264_params(&encParam[i], i);
         }
-        hi_venc_mod_param modParam;
-        modParam.mod_type = HI_VENC_MOD_H264;
-        hi_mpi_venc_get_mod_param(&modParam);
-        modParam.h264_mod_param.mini_buf_mode = 1;
-        modParam.h264_mod_param.one_stream_buf = g_one_stream_mode; // single pack/multi packs
-        modParam.h264_mod_param.low_power_mode = 0; // turn off low power mode to improve encode quality
-        modParam.h264_mod_param.vb_src = HI_VB_SRC_PRIVATE;
-        modParam.h264_mod_param.qp_hist_en = HI_TRUE;
-        hi_mpi_venc_set_mod_param(&modParam);
     } else if (g_codec_type == VENC_CODEC_TYPE_H265) {
         for (uint32_t i = 0; i < g_chn_num; ++i) {
             init_h265_params(&encParam[i], i);
         }
-        hi_venc_mod_param modParam;
-        modParam.mod_type = HI_VENC_MOD_H265;
-        hi_mpi_venc_get_mod_param(&modParam);
-        modParam.h265_mod_param.mini_buf_mode = 1;
-        modParam.h265_mod_param.one_stream_buf = g_one_stream_mode;
-        modParam.h265_mod_param.low_power_mode = 0; // turn off low power mode to improve encode quality
-        modParam.h265_mod_param.vb_src = HI_VB_SRC_PRIVATE;
-        modParam.h265_mod_param.qp_hist_en = HI_TRUE;
-        hi_mpi_venc_set_mod_param(&modParam);
     } else {
         HMEV_HISDK_PRT(ERROR, "not support codec type %d", g_codec_type);
         return HMEV_FAILURE;
@@ -700,9 +681,6 @@ void venc_get_option(int argc, char** argv)
             case 'p':
                 g_pixel_format  = atoi(optarg);
                 break;
-            case 'O':
-                g_one_stream_mode  = atoi(optarg);
-                break;
             case 'l':
                 g_profile  = atoi(optarg);
                 break;
@@ -744,7 +722,6 @@ hi_void venc_print_usage()
     HMEV_HISDK_PRT(INFO, "--ChnNum(-n): encode channel number");
     HMEV_HISDK_PRT(INFO, "--PixelFormat(-p): input yuv format 1:NV12 2:NV21");
     HMEV_HISDK_PRT(INFO, "--HighPriority(-H): channel priority 0:normal 1:high");
-    HMEV_HISDK_PRT(INFO, "--OneStreamBuffer(-O): output stream mode 0:multipack 1:singlepack");
     HMEV_HISDK_PRT(INFO, "--Profile(-l): encode profile H.264[0,2] H.265:0");
     HMEV_HISDK_PRT(INFO, "--IFrameGop(-g): I frame interval[1,65536]");
     HMEV_HISDK_PRT(INFO, "--StartChnlId(-d): start channel id of this process");
@@ -809,8 +786,8 @@ int32_t venc_check_option()
         "g_codec_type:%d g_chn_num:%d g_img_width:%d g_img_height:%d g_img_stride:%d g_pixel_format:%d",
         g_codec_type, g_chn_num, g_img_width, g_img_height, g_img_stride, g_pixel_format);
     HMEV_HISDK_PRT(INFO,
-        "g_bit_rate:%d g_frame_rate:%d g_one_stream_mode:%d g_profile:%d g_input_file:%s g_output_file:%s",
-        g_bit_rate, g_frame_rate, g_one_stream_mode, g_profile, g_input_file, g_output_file);
+        "g_bit_rate:%d g_frame_rate:%d g_profile:%d g_input_file:%s g_output_file:%s",
+        g_bit_rate, g_frame_rate, g_profile, g_input_file, g_output_file);
     HMEV_HISDK_PRT(INFO,
         "g_frame_gop:%d g_start_chnl:%d g_high_priority:%d g_perf_test:%d g_perf_frame_num:%d g_save_codec_out_data:%d",
         g_frame_gop, g_start_chnl, g_high_priority, g_perf_test, g_perf_frame_num, g_save_codec_out_data);
