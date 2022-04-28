@@ -183,7 +183,8 @@
 
         进入test\_data/data目录下，执行如下命令：
 
-        **python3.7.5 check\_out.py**
+        **python3.7.5 check\_out.py Ascend310**
+        - Ascend310：处理器的型号，此处以Ascend310为例，请根据实际情况替换, 默认Ascend310。
 
         **说明：**执行此脚本需要确保环境中已安装TensorFlow 1.15版本。此脚本调用TensorFlow命令生成预期结果，然后将算子实际运行结果与预期结果进行比对。
 

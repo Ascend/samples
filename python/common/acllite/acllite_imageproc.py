@@ -261,8 +261,8 @@ class AclLiteImageProc(object):
         print('[AclLiteImageProc] vpc crop and paste stage success')
         stride_width = crop_and_paste_width - 2 * dx
         stride_height = crop_and_paste_height - 2 * dy
-        #stride_width = utils.align_up16(crop_and_paste_width)
-        #stride_height = utils.align_up2(crop_and_paste_height)
+        acl.media.dvpp_destroy_pic_desc(input_desc)
+        acl.media.dvpp_destroy_pic_desc(output_desc)
 
         return AclLiteImage(out_buffer, image.width, image.height, stride_width,
                         stride_height, out_buffer_size, constants.MEMORY_DVPP)
@@ -309,6 +309,8 @@ class AclLiteImageProc(object):
         print('[AclLiteImageProc] vpc crop and paste stage success')
         stride_width = utils.align_up16(crop_and_paste_width)
         stride_height = utils.align_up2(crop_and_paste_height)
+        acl.media.dvpp_destroy_pic_desc(input_desc)
+        acl.media.dvpp_destroy_pic_desc(output_desc)
         return AclLiteImage(out_buffer, image.width, image.height, stride_width,
                         stride_height, out_buffer_size, constants.MEMORY_DVPP)
 

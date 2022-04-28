@@ -16,6 +16,7 @@ conv2d_tik
 from __future__ import absolute_import
 import numpy as np
 from tbe import tik
+from tbe.common.platform import get_soc_spec
 
 DTYPE_SIZE = {
     'bool': 1,
@@ -141,8 +142,13 @@ def conv2d_tik(inputs, weights, outputs, strides, pads, dilations, kernel_name="
     if weights.get("ori_format") != "NCHW":
         raise RuntimeError("format should be NCHW.")
 
-    loc_dtype = "float32"
-    quantize_params = {"mode": "fp322fp16", "mode_param": None}
+    if get_soc_spec("SOC_VERSION") in ["SD3403", "OPTG", "Hi3796CV300CS", "TsnsC"]:
+        loc_dtype = "float16"
+        quantize_params = None
+    else:
+        loc_dtype = "float32"
+        quantize_params = {"mode": "fp322fp16", "mode_param": None}
+
     stride_list = [strides[2], strides[3]]
     dilation_list = [dilations[2], dilations[3]]                    
     w5hd_shape = [w_shape[1] // 16, w_shape[2], w_shape[3], w_shape[0], 16]
