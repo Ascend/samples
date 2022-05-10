@@ -123,14 +123,16 @@ class Sample(object):
 
 
 if __name__ == '__main__':
-    MODEL_PATH = "./model/resnet50_aipp.om"
-    VDEC_OUT_PATH = "./vdec_out"
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    MODEL_PATH = os.path.join(current_dir, "../model/resnet50_aipp.om")
+    VEDIO_PATH = os.path.join(current_dir, "../data/vdec_h265_1frame_rabbit_1280x720.h265")
+    VDEC_OUT_PATH = os.path.join(current_dir, "../vdec_out")
 
     if not os.path.exists(VDEC_OUT_PATH):
         os.makedirs(VDEC_OUT_PATH)
 
     sample = Sample(0, MODEL_PATH, VDEC_OUT_PATH, 224, 224)
-    vedio_list = ["./data/vdec_h265_1frame_rabbit_1280x720.h265",
+    vedio_list = [VEDIO_PATH,
                   1280,  # width
                   720,  # height
                   np.uint8]  # dtype

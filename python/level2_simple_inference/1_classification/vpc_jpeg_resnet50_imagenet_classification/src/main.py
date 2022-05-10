@@ -76,7 +76,7 @@ class Sample(object):
     def _get_image_w_h(self, img_path, img_type):
         width, height = 0, 0
         if img_type == 'yuv':
-            h_w_str = img_path.split('/')[2]
+            h_w_str = img_path.split('/')[-1]
             width = int(h_w_str.split('_')[2])
             height = int(h_w_str.split('_')[3])
         elif img_type == 'jpg':
@@ -105,7 +105,7 @@ class Sample(object):
             out_np = self.dvpp_process.process_jpeg_enc(img_path, width,
                                                         height)
             tmp_file = res_path + '/' + \
-                img_path.split('/')[2].split('.')[0] + '.jpg'
+                img_path.split('/')[-1].split('.')[0] + '.jpg'
             out_np.tofile(tmp_file)
             self.dvpp_process.destroy_jpeg_resource()
             return
@@ -114,7 +114,7 @@ class Sample(object):
             out_np, width, height = self.dvpp_process.process_jpeg_dec(img_path)
             self.dvpp_process.destroy_jpeg_resource()
             tmp_file = res_path + '/' + \
-                img_path.split('/')[2].split('.')[0] + '.yuv'
+                img_path.split('/')[-1].split('.')[0] + '.yuv'
             out_np.tofile(tmp_file)
         elif dvpp_type != JPEG_ENC and img_type != 'jpg':
             tmp_file = img_path
@@ -134,7 +134,7 @@ class Sample(object):
             out_np, _, _ = self.dvpp_process.process_vpc_8k_resize(
                 tmp_file, width, height)
             out_file = res_path + '/' + \
-                img_path.split('/')[2].split('.')[0] + '_' + \
+                img_path.split('/')[-1].split('.')[0] + '_' + \
                 str(dvpp_type) + '_' + '.yuv'
             out_np.tofile(out_file)
             self.dvpp_process.destroy_resize_resource()
@@ -153,7 +153,7 @@ class Sample(object):
                 tmp_file, in_batch_size, out_batch_size, width, height)
             for i, item in enumerate(out_np):
                 out_file = res_path + '/' + \
-                    tmp_file.split('/')[2].split('.')[0] + '_' + \
+                    tmp_file.split('/')[-1].split('.')[0] + '_' + \
                     str(dvpp_type) + 'crop_{}_'.format(i) + '.yuv'
                 item.tofile(out_file)
                 print("[Sample]write out to file {} success".format(out_file))
@@ -165,7 +165,7 @@ class Sample(object):
                 tmp_file, in_batch_size, out_batch_size, width, height)
             for i, item in enumerate(out_np):
                 out_file = res_path + '/' + \
-                    tmp_file.split('/')[2].split('.')[0] + '_' + \
+                    tmp_file.split('/')[-1].split('.')[0] + '_' + \
                     str(dvpp_type) + 'crop_{}_'.format(i) + '.yuv'
                 item.tofile(out_file)
                 print("[Sample]write out to file {} success".format(out_file))
@@ -173,7 +173,7 @@ class Sample(object):
         else:
             return
 
-        out_file = res_path + '/' + tmp_file.split('/')[2].split('.')[0] + \
+        out_file = res_path + '/' + tmp_file.split('/')[-1].split('.')[0] + \
             '_' + str(dvpp_type) + '.yuv'
         out_np.tofile(out_file)
 
@@ -183,16 +183,18 @@ class Sample(object):
 
 
 if __name__ == '__main__':
+    current_dir = os.path.dirname(os.path.abspath(__file__))
     parser = argparse.ArgumentParser()
     parser.add_argument('--device', type=int, default=0)
     parser.add_argument('--model_path', type=str,
-                        default="./model/resnet50_aipp.om")
+                        default=os.path.join(current_dir, "../model/resnet50_aipp.om"))
     parser.add_argument('--model_input_width', type=int, default=224)
     parser.add_argument('--model_input_weight', type=int, default=224)
     parser.add_argument('--images_path', type=str,
-                        default="./data/persian_cat_1024_1536_283.jpg")
+                        default=os.path.join(current_dir, "../data/persian_cat_1024_1536_283.jpg"))
     parser.add_argument('--dvpp_type', type=int, default=0)
-    parser.add_argument('--result_path', type=str, default="./vpc_out")
+    parser.add_argument('--result_path', type=str,
+                        default=os.path.join(current_dir, "../vpc_out"))
     parser.add_argument('--image_type', type=str, default="jpg")
     parser.add_argument('--in_batch_size', type=int, default=1)
     parser.add_argument('--out_batch_size', type=int, default=8)

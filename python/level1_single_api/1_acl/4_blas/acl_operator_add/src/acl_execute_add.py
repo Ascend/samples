@@ -242,5 +242,6 @@ if __name__ == '__main__':
     b = np.random.randint(100, size=(8, 16)).astype(np.int32)
     print("factor_a:\n{} \nfactor_b:\n{}".format(a, b))
 
-    op = Operator(0, a, b, "./op_models")
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    op = Operator(0, a, b, os.path.join(current_dir, "../test_data/op_models"))
     result_list = op.run()

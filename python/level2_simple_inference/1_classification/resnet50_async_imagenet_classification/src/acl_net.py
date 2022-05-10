@@ -321,14 +321,15 @@ def transfer_pic(images_path):
 
 
 if __name__ == '__main__':
+    current_dir = os.path.dirname(os.path.abspath(__file__))
     parser = argparse.ArgumentParser()
     parser.add_argument('--device', type=int, default=0)
     parser.add_argument('--execute_times', type=int, default=4)
     parser.add_argument('--callback_interval', type=int, default=1)
     parser.add_argument('--mem_pools', type=int, default=4)
     parser.add_argument('--model_path', type=str,
-                        default="./model/resnet50.om")
-    parser.add_argument('--images_path', type=str, default="./data")
+                        default=os.path.join(current_dir, "../model/resnet50.om"))
+    parser.add_argument('--images_path', type=str, default=os.path.join(current_dir, "../data"))
     args = parser.parse_args()
     print("Using device id:{}\n"
           "execute_times:{} \n"

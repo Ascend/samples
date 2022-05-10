@@ -9,12 +9,14 @@
 """
 import numpy as np
 
-output_data = np.fromfile("../../result_files/output_0.bin", dtype=np.float16)
-NP_RESULT = np.fromfile("./np_result.bin", dtype=np.float32).reshape(16, 1024)
-out_old = output_data.reshape(16, 1024)
-out_new = np.zeros((16, 1024), dtype=np.float16)
-print("The matmulTik result is: \n", out_old)
-if (NP_RESULT == out_old).all():
+input_0 = np.fromfile("./input_0.bin", dtype=np.float16).reshape(16, 64)
+input_1 = np.fromfile("./input_1.bin", dtype=np.float16).reshape(64, 1024)
+
+TIK_RESULT = np.fromfile("../../result_files/output_0.bin", dtype=np.float16).reshape(16, 1024)
+NP_RESULT = np.matmul(input_0, input_1).astype('float16').reshape(16, 1024)
+
+print("The matmulTik result is: \n", TIK_RESULT)
+if (NP_RESULT == TIK_RESULT).all():
     print("Compared with the numpy calculation method, the result is correct.")
 else:
     print("Compared with the numpy calculation method, the result is wrong.")

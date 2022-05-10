@@ -133,13 +133,14 @@ class Sample(object):
 
 
 if __name__ == '__main__':
+    current_dir = os.path.dirname(os.path.abspath(__file__))
     parser = argparse.ArgumentParser()
     parser.add_argument('--device', type=int, default=0)
     parser.add_argument('--model_path', type=str,
-                        default="./model/resnet50_aipp.om")
+                        default=os.path.join(current_dir, "../model/resnet50_aipp.om"))
     parser.add_argument('--model_input_width', type=int, default=224)
     parser.add_argument('--model_input_weight', type=int, default=224)
-    parser.add_argument('--images_path', type=str, default="./data")
+    parser.add_argument('--images_path', type=str, default=os.path.join(current_dir, "../data"))
     args = parser.parse_args()
     print("Using device id:{}\nmodel path:{}\nimages path:{}"
           .format(args.device, args.model_path, args.images_path))

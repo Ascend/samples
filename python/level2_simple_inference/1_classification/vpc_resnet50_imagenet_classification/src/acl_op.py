@@ -12,6 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import os
 import acl
 import numpy as np
 from constant import ACL_MEM_MALLOC_NORMAL_ONLY, \
@@ -75,7 +76,8 @@ class SingleOp(object):
         print("[SingOp] class SingOp release source success")
 
     def init_resource(self):
-        ret = acl.op.set_model_dir("./op_models")
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        ret = acl.op.set_model_dir(os.path.join(current_dir, "../op_models"))
         check_ret("acl.op.set_model_dir", ret)
         self.init_resource_cast()
         self.init_resource_arg_max()

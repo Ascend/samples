@@ -43,7 +43,7 @@ DEVICE_ID = 0
 IMAGE_INPUT_WIDTH = 128
 IMAGE_INPUT_HEIGHT = 128
 
-VENC_FILE_PATH = "./data/dvpp_venc_128x128_nv12.yuv"
+VENC_FILE_PATH = "../data/dvpp_venc_128x128_nv12.yuv"
 
 
 def check_ret(message, ret_int):
@@ -149,7 +149,9 @@ class AclVenc(object):
             if ret != 0:
                 print("[INFO] [venc] acl.rt.memcpy ret=", ret)
                 return
-            with open('./data/output.h265', 'ab') as f:
+            current_dir = os.path.dirname(os.path.abspath(__file__))
+            output_path = os.path.join(current_dir, '../data/output.h265')
+            with open(output_path, 'ab') as f:
                 f.write(data)
 
     def venc_set_desc(self, width, height):
@@ -221,8 +223,10 @@ class AclVenc(object):
         check_ret("acl.util.start_thread", ret)
         print("[INFO] start_thread", self.cb_thread_id, ret)
 
+        current_dir = os.path.dirname(os.path.abspath(__file__))
         # load file
-        file_context = np.fromfile(VENC_FILE_PATH, dtype=np.byte)
+        file_context = np.fromfile(os.path.join(current_dir, VENC_FILE_PATH),
+                                   dtype=np.byte)
         file_size = file_context.size
         if "bytes_to_ptr" in dir(acl.util):
             bytes_data = file_context.tobytes()

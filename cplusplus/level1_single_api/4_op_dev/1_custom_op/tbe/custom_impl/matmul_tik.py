@@ -17,6 +17,7 @@ matmul_tik
 """
 
 from tbe import tik
+from tbe.common.platform import get_soc_spec
 
 DTYPE_SIZE = {
     'bool': 1,
@@ -99,7 +100,10 @@ def matmul_tik_compute(params, kernel_name):
 
     # Determine the output type
     if data_type == "float16":
-        C_loc_out_type = "float32"
+        if get_soc_spec("SOC_VERSION") in ["SD3403", "OPTG", "Hi3796CV300CS", "TsnsC"]:
+            C_loc_out_type = "float16"
+        else:
+            C_loc_out_type = "float32"
         K0 = 16
     else:
         C_loc_out_type = "int32"
