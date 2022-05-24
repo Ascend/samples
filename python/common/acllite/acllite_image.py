@@ -136,7 +136,12 @@ class AclLiteImage(object):
     def data(self):
         """Get image binary data"""
         if self._type == const.IMAGE_DATA_NUMPY:
-            return acl.util.numpy_to_ptr(self._data)
+            if "bytes_to_ptr" in dir(acl.util):
+                bytes_data=self._data.tobytes()
+                factor_ptr=acl.util.bytes_to_ptr(bytes_data)
+            else:
+                factor_ptr=acl.util.numpy_to_ptr(self._data)
+            return factor_ptr
         else:
             return self._data
 

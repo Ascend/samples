@@ -137,8 +137,12 @@ class AclLiteModel(object):
             size = input_data.size
             data = input_data.data()
         elif isinstance(input_data, np.ndarray):
-            ptr = acl.util.numpy_to_ptr(input_data)
             size = input_data.size * input_data.itemsize
+            if "bytes_to_ptr" in dir(acl.util):
+                bytes_data=input_data.tobytes()
+                ptr=acl.util.bytes_to_ptr(bytes_data)
+            else:
+                ptr = acl.util.numpy_to_ptr(input_data)
             data = self._copy_input_to_device(ptr, size, index)
             if data is None:
                 size = 0
@@ -223,14 +227,23 @@ class AclLiteModel(object):
             data = acl.get_data_buffer_addr(buf)
             size = int(acl.get_data_buffer_size(buf))
             output_ptr = output_tensor_list[i]["ptr"]
-            output_tensor = output_tensor_list[i]["tensor"]
+            output_data = output_tensor_list[i]["tensor"]
+            if isinstance (output_data,bytes):
+                data_size = len(output_data)
+            else:
+                data_size = output_data.size * output_data.itemsize
             ret = acl.rt.memcpy(output_ptr,
-                                output_tensor.size * output_tensor.itemsize,
+                                data_size,
                                 data, size, self._copy_policy)
             if ret != const.ACL_SUCCESS:
                 log_error("Memcpy inference output to local failed")
                 return None
 
+            if isinstance (output_data,bytes):
+                output_data = np.frombuffer(output_data, dtype=output_tensor_list[i]["dtype"]).reshape(output_tensor_list[i]["shape"])
+                output_tensor = output_data.copy()
+            else:
+                output_tensor = output_data
             dataset.append(output_tensor)
 
         return dataset
@@ -294,8 +307,16 @@ class AclLiteModel(object):
             if not output_tensor.flags['C_CONTIGUOUS']:
                 output_tensor = np.ascontiguousarray(output_tensor)
 
-            tensor_ptr = acl.util.numpy_to_ptr(output_tensor)
-            output_tensor_list.append({"ptr": tensor_ptr,
+            if "bytes_to_ptr" in dir(acl.util):
+                bytes_data=output_tensor.tobytes()
+                tensor_ptr=acl.util.bytes_to_ptr(bytes_data)
+                output_tensor_list.append({"ptr": tensor_ptr,
+                                        "tensor": bytes_data,
+                                        "shape":output_tensor.shape,
+                                        "dtype":output_tensor.dtype},)
+            else:
+                tensor_ptr = acl.util.numpy_to_ptr(output_tensor)
+                output_tensor_list.append({"ptr": tensor_ptr,
                                        "tensor": output_tensor})
 
         return output_tensor_list

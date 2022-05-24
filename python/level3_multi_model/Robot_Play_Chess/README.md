@@ -1,93 +1,98 @@
-**本样例为大家学习昇腾软件栈提供参考，非商业目的！**
+English|[中文](README_CN.md)
 
-**本样例适配3.1.0及以上版本，支持产品为Atlas200DK。**
 
-## 案例描述
-使用相机捕获对弈棋盘局面，使用Atlas200DK运行VGG16模型进行推理，在主控平台上运行对弈引擎计算出AI的走法，控制机械臂下棋，
-用户使用webserver在移动端根据UI与机械臂进行对弈。
 
-## 物料清单
-|**物料类型**|**详细描述**|
-|---|---|
-|推理平台|[Atlas 200DK](https://support.huaweicloud.com/Atlas200DK202/)|
-|摄像头|480x640 USB相机|
-|机械臂|[开塔米罗 桌面级六轴机械臂](http://cn.wlkata.com/cn_mirobot_robot_wlkata.php)|
-|主控平台|Ubuntu18.04 LTS-x64-Huawei Matebook X Pro|
-|棋盘棋子|亚克力板定制|
+**This sample provides reference for you to learn the Ascend AI Software Stack and cannot be used for commercial purposes.**
 
-## 环境准备
-### Ubuntu主控平台准备
-- 参考[Atlas200DK说明文档]( https://support.huaweicloud.com/Atlas200DK202/ )部署开发环境
-- 参考doc目录下**对弈引擎**和**中心控制**模块的README文件进行环境准备。
-### Atlas200DK推理平台准备
-- 参考[Atlas200DK说明文档]( https://support.huaweicloud.com/Atlas200DK202/ )部署运行环境
-- 参考Ascend案例如[vgg16_cat_dog_picture]( https://github.com/Ascend/samples/tree/master/python/level2_simple_inference/1_classification/vgg16_cat_dog_picture )测试推理平台是否搭建成功
-### 棋盘理解准备
-- 将摄像头固定在棋盘上方合适高度处，可以通过摄像头捕获软件查看当前效果，在保证棋盘位于图像中心的同时，
-使棋盘尽可能大，但是也不要超过边界（可参考data目录下的图）。
-- 参考doc目录下棋盘理解模块的README文件进行配置。
-### Wlkata Mirobot机械臂准备
-- 参考[Wlkata Mirobot使用指南](https://lin-nice.github.io/mirobot_gitbook/) 配置机械臂并校准。
-### Webserver服务器准备
-- 参考doc目录下webserver模块的README文件进行配置。
+**This sample applies to CANN 3.1.0 and later versions. The supported product is Atlas 200 DK.**
 
-## 案例说明
-本案例主要由中心控制、棋盘理解、对弈引擎、机械臂和Webserver五个模块组成，具体的开发设计文档请参阅doc目录下各自的README文件。
+## Sample Description
+Use a camera to capture checkerboard patterns, use Atlas 200 DK to run the VGG16 model for inference, run the game engine on the main control platform to calculate the moves in chess, and control the robotic arm to play chess.
+The user uses the web server to play games with the robotic arm based on the UI on the mobile device.
 
-## 案例部署
-### 代码获取
-- 获取源码包
+## Material List
+| **Material Type**| **Description**                                                |
+| ------------ | ------------------------------------------------------------ |
+| Inference platform    | [Atlas 200 DK](https://support.huaweicloud.com/intl/en-us/Atlas200DK202/)|
+| Camera      | 480 x 640 USB camera                                             |
+| Robotic arm      | [Mirobot 6DoF mini robotic arm](https://www.wlkata.com/)|
+| Main control platform    | Ubuntu18.04 LTS-x64-Huawei Matebook X Pro                    |
+| Chess    | Custom acrylic plate                                                |
 
-   在Ubuntu主控平台中，以非root用户在命令行中执行以下命令下载源码仓:
+## Environment Preparation
+### Ubuntu Main Control Platform
+- Deploy the development environment. For details, see the [Atlas 200 DK documentation](https://support.huaweicloud.com/intl/en-us/Atlas200DK202/).
+- Prepare the environment by referring to the README files of the **game engine** and **center control** modules in the **doc** directory.
+### Atlas 200 DK Inference Platform
+- Deploy the operating environment. For details, see the [Atlas 200 DK documentation](https://support.huaweicloud.com/intl/en-us/Atlas200DK202/).
+- Check whether the inference platform is successfully set up. See the Ascend sample [vgg16_cat_dog_picture](https://github.com/Ascend/samples/tree/master/python/level2_simple_inference/1_classification/vgg16_cat_dog_picture).
+### Checkerboard Comprehension
+- Fix a camera at a proper location above the checkerboard. You can use the camera capture software to view the effect. Ensure that the checkerboard is in the center of the images,
+and the chessboard is as large as possible but does not exceed the boundary. (For details, see the images in the **data** directory.)
+- Configure the checkerboard comprehension module. For details, see the README file of the checkerboard comprehension module in the **doc** directory.
+### Wlkata Mirobot Robotic Arm
+- Configure and calibrate the robotic arm. See the [Wlkata Mirobot User Guide](https://lin-nice.github.io/mirobot_gitbook/).
+### Web Server
+- Configure the web server. For details, see the README file of the web server module in the **doc** directory.
+
+## Sample Description
+This sample consists of five modules: center control, checkerboard comprehension, game engine, robotic arm, and web server. For details about the development and design documents, see the README files in the **doc** directory.
+
+## Sample Deployment
+### Code Obtaining
+- Obtain the source package.
+
+   On the Ubuntu main control platform, run the following commands as a non-root user to download the source repository:
     ```shell
     cd $HOME
     git clone https://github.com/Ascend/samples.git
     ```
 
-- 获取此案例中所需要的网络模型
- 
-    参考下表获取此应用中所用到的模型，并将其存放到开发环境普通用户下的工程目录：
+- Obtain the network model required by the sample.
+
+    Obtain the model used in the sample by referring to the following table and save it to the project directory of a common user in the development environment.
     ```shell
     cd $HOME/samples/python/level3_multi_model/Robot_Play_Chess/model
     ```
     
-    |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
-    |---|---|---|
-    | chess_ckpt_0804_vgg_99.om |  使用VGG16的棋子分类模型 |  https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/robot_play_chess/chess_ckpt_0804_vgg_99.om |
+    | **Model Name**             | **Model Description**           | **Download Link**                                            |
+    | ------------------------- | ----------------------- | ------------------------------------------------------------ |
+    | chess_ckpt_0804_vgg_99.om | VGG16 chess classification model | https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/robot_play_chess/chess_ckpt_0804_vgg_99.om |
 
-    ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
-    > - modelzoo中已经提供了转换好的om模型，可以直接使用。
-   
-- 执行以下命令，将主控平台的 **samples** 目录上传到推理平台中，例如 **/home/HwHiAiUser**，并以HwHiAiUser（运行用户）登录Atlas200DK推理平台：
+    ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **NOTE** 
     
+   > - The OM model has been provided in ModelZoo and can be used directly.
+   
+- Run the following commands to upload the **samples** directory of the main control platform to a directory on the inference platform, for example, **/home/HwHiAiUser**, and log in to the Atlas 200 DK inference platform as the **HwHiAiUser** user (running user):
+  
     ```shell
     scp -r $HOME/samples/ HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser
     ssh HwHiAiUser@xxx.xxx.xxx.xxx 
     ```
    
-    ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**    
-    > - **xxx.xxx.xxx.xxx**为Atlas200DK的ip，在200DK与Ubuntu主控平台用USB连接时一般为192.168.1.2。
+    ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **NOTE**   
+    
+    > - **xxx.xxx.xxx.xxx** indicates the IP address of Atlas 200 DK. When Atlas 200 DK is connected to the Ubuntu main control platform over the USB port, the IP address is 192.168.1.2.
 
-### 案例运行
+### Sample Running
 
-**保证设备都在一个局域网内**
+**Ensure that all devices are in the same LAN.**
 
-- 200DK端上启动棋盘理解模块
- 
-- PC端启动对弈引擎
+- Start the checkerboard comprehension module on Atlas 200 DK.
+
+- Start the game engine on the PC.
   
-- 启动机械臂
+- Start the robotic arm.
 
-- PC端启动中心控制
+- Start the center control on the PC.
 
-- PC端启动Webserver
+- Start the web server on the PC.
 
-具体启动方式请参考各自模块下的README.md。
+For details, see the README.md file of each module.
 
 
-### 预期结果
-效果图1：
-![效果图1](./doc/IMG_20210916_111735.jpg)
-效果图2：
-![效果图2](./doc/IMG_20210916_111621.jpg)
-
+### Expected Result
+Effect picture 1:
+![IMG_20210916_111621](./doc/IMG_20210916_111735.jpg)
+Effect picture 2:
+![IMG_20210916_111735](./doc/IMG_20210916_111621.jpg)

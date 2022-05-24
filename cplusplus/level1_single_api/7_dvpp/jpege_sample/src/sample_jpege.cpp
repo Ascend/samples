@@ -61,6 +61,8 @@ uint32_t g_mem_count = 100;
 uint32_t g_select_one_thread = 0;
 // 1: synchronize encode mode; 0: asynchronous mode
 uint32_t g_is_syn_enc = 0;
+// Frame count of input file
+uint32_t g_frameCount = 1;
 
 aclrtContext g_context = NULL;
 // ACL_HOST or ACL_DEVICE
@@ -127,9 +129,10 @@ void get_option(int argc, char **argv)
             {"mem_count"       , 1, 0, 'Q'},
             {"one_thread"      , 1, 0, 'T'},
             {"sync_enc"       , 1, 0, 'S'},
+            {"frame_count"     , 1, 0, 'n'},
             {NULL, 0, 0, 0}
         };
-        c = getopt_long(argc, argv, "W:H:w:h:f:b:c:i:o:l:s:B:p:O:Q:T:S:", longOptions, &optionIndex);
+        c = getopt_long(argc, argv, "W:H:w:h:f:b:c:i:o:l:s:B:p:O:Q:T:S:n", longOptions, &optionIndex);
         if (c == -1) {
             break;
         }
@@ -185,6 +188,9 @@ void get_option(int argc, char **argv)
                 break;
             case 'S':
                 g_is_syn_enc = atoi(optarg);
+                break;
+            case 'n':
+                g_frameCount = atoi(optarg);
                 break;
             default:
                 SAMPLE_PRT("bad arg!\n");

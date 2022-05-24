@@ -44,7 +44,7 @@ deviceId_(deviceId) {
 }
 
 ClassifyPostprocessThread::~ClassifyPostprocessThread() {
-    delete configFile_;
+    configFile_ = nullptr;
 }
 
 AclLiteError ClassifyPostprocessThread::GetOutputFrameResolution(int& frameWidth, int& frameHeight, uint32_t deviceId) {

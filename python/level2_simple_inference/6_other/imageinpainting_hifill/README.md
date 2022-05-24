@@ -1,126 +1,84 @@
-English|[中文](README_CN.md)
+English|[中文](README_CN.md) 
 
 **This sample provides reference for you to learn the Ascend AI Software Stack and cannot be used for commercial purposes.**
 
-**This sample applies to CANN 3.0.0 and later versions, and supports Atlas 200 DK and Atlas 300 ([ai1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366)).**
-
-**This document provides only guidance for running the sample in command line (CLI) mode. For details about how to run the sample in MindStudio, see [Running Image Samples in MindStudio](https://github.com/Ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E5%9B%BE%E7%89%87%E6%A0%B7%E4%BE%8B?sort_id=3164874).**
+**This README file provides only guidance for running the sample in command line (CLI) mode. For details about how to run the sample in MindStudio, see [Running Image Samples in MindStudio](https://github.com/Ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E5%9B%BE%E7%89%87%E6%A0%B7%E4%BE%8B?sort_id=3164874).**
 
 ## HD Image Repair (Python)
-
-Function: repairs ultra-HD images.
-
-Input: JPG image to be repaired and the corresponding mask.
-
+Function: repairs ultra-HD images.   
+Input: JPG image to be repaired and the corresponding mask image.   
 Output: repaired image.
 
 ### Prerequisites
+Check whether the following requirements are met. If not, perform operations according to the remarks. If the CANN version is upgraded, check whether the third-party dependencies need to be reinstalled. (The third-party dependencies for 5.0.4 and later versions are different from those for earlier versions.)
+| Item| Requirement| Remarks|
+|---|---|---|
+| CANN version| ≥ 5.0.4| Install the CANN by referring to [Sample Deployment](https://github.com/Ascend/samples#%E5%AE%89%E8%A3%85) in the About Ascend Samples Repository. If the CANN version is earlier than the required version, switch to the samples repository specific to the CANN version. See [Release Notes](https://github.com/Ascend/samples/blob/master/README.md). |
+| Hardware| Atlas 200 DK/Atlas 300 ([AI1s](https://support.huaweicloud.com/en-us/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366)) | Currently, the Atlas 200 DK and Atlas 300 have passed the test. For details about the product description, see [Hardware Platform](https://ascend.huawei.com/en/#/hardware/product). For other products, adaptation may be required.|
+| Third-party dependency| OpenCV and Python-acllite| Select required dependencies. See [Third-Party Dependency Installation Guide (Python Sample)](https://github.com/Ascend/samples/tree/master/python/environment).|
 
-Before deploying this sample, ensure that:
+### Sample Preparation
 
-- The environment has been set up by referring to [Environment Preparation and Dependency Installation](../../environment).
+1. Obtain the source package.
 
-- The development environment and operating environment of the corresponding product have been installed.
-
-### Software Preparation
-
-1. Obtain the source code package.
-
-   You can download the source code in either of the following ways:
-
+   You can download the source code in either of the following ways:  
     - Command line (The download takes a long time, but the procedure is simple.)
+       ```    
+       # In the development environment, run the following commands as a non-root user to download the source repository:   
+       cd ${HOME}     
+       git clone https://github.com/Ascend/samples.git
+       ```
+       **To switch to another tag (for example, v0.5.0), run the following command:**
+       ```
+       git checkout v0.5.0
+       ```
+    - Compressed package (The download takes a short time, but the procedure is complex.)  
+       **Note: If you want to download the code of another version, switch the branch of the samples repository according to the prerequisites.**  
+       ``` 
+        # 1. Click **Clone** or **Download** in the upper right corner of the samples repository and click **Download ZIP**.   
+        # 2. Upload the .zip package to the home directory of a common user in the development environment, for example, **${HOME}/ascend-samples-master.zip**.    
+        # 3. In the development environment, run the following commands to unzip the package:    
+        cd ${HOME}    
+        unzip ascend-samples-master.zip
+       ```
 
-        In the development environment, run the following commands as a non-root user to download the source code repository:
-
-       **cd $HOME**
-
-       **git clone https://github.com/Ascend/samples.git**
-
-    - Compressed package (The download takes a short time, but the procedure is complex.)
-
-        1. Click **Clone or download** in the upper right corner of the samples repository and select **Download ZIP**.
-
-        2. Upload the .zip package to the home directory of a common user in the development environment, for example, **$HOME/ascend-samples-master.zip**.
-
-        3. In the development environment, run the following commands to unzip the package:
-
-            **cd $HOME**
-
-            **unzip ascend-samples-master.zip**
-
-2. Obtain the single-operator JSON file and .om offline model file required by the application.  
-
-     **wget -P ~/imageinpainting_hifill https://c7xcode.obs.myhuaweicloud.com/models/imageinpainting_hifill/matmul_27648.json**   
-     **wget -P ~/imageinpainting_hifill https://c7xcode.obs.myhuaweicloud.com/models/imageinpainting_hifill/hifill.om**
-    
-
-3. Convert the single-operator JSON file into a Da Vinci model.
-    
-    **Note: Ensure that the environment variables have been configured in [Environment Preparation and Dependency Installation](.../../environment).**
-
-    1. Set the ***LD_LIBRARY_PATH*** environment variable.
-
-        The ***LD_LIBRARY_PATH*** environment variable conflicts with the sample when the ATC tool is used. Therefore, you need to set this environment variable separately in the CLI to facilitate modification.
-
-        **export install_path=$HOME/Ascend/ascend-toolkit/latest**      
-        **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64**  
-
-    2. Run the following commands to convert the model:  
-
-        **cd ~/imageinpainting_hifill** 
-
-        **atc --singleop=./matmul_27648.json --output=./0_BatchMatMul_0_0_1_1_1024_1024_0_0_1_1_1024_27648_0_0_1_1_1024_27648 --soc_version=Ascend310**   
-
-    3. Run the following commands to copy the converted model to the **model** folder of the sample:
-
-        **cp ./hifill.om \$HOME/samples/python/level2_simple_inference/6_other/imageinpainting_hifill/model/** 
- 
-        **cp ./0_BatchMatMul_0_0_1_1_1024_1024_0_0_1_1_1024_27648_0_0_1_1_1024_27648/*.om \$HOME/samples/python/level2_simple_inference/6_other/imageinpainting_hifill/model/**
-
-4. Obtain the test images required by the sample.
-
-    Run the following commands to download the test images:
-
-    **cd \$HOME/samples/python/level2_simple_inference/6_other/imageinpainting_hifill/data**
-
-    **wget https://c7xcode.obs.myhuaweicloud.com/models/imageinpainting_hifill/data/test.jpg**
-    
-    **cd \$HOME/samples/python/level2_simple_inference/6_other/imageinpainting_hifill/mask**
-
-    **wget https://c7xcode.obs.myhuaweicloud.com/models/imageinpainting_hifill/mask/test.jpg** 
-
-
-
+2. Obtain the model required by the application and convert the model. 
+    |  **Model** |  **Description** |  **How to Obtain** |
+    |---|---|---|
+    |  image_inpainting | Repaire ultra-high resolution images using the ImageInpainting model. |  image_inpainting: [https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/imageinpainting_HiFill](https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/imageinpainting_HiFill)|
+   ```
+   cd ${HOME}/samples/python/level2_simple_inference/6_other/imageinpainting_hifill/model
+   wget https://c7xcode.obs.myhuaweicloud.com/models/imageinpainting_hifill/matmul_27648.json   
+   wget https://c7xcode.obs.myhuaweicloud.com/models/imageinpainting_hifill/hifill.pb
+   atc --output_type=FP32 --input_shape="img:1,512,512,3;mask:1,512,512,1" --input_format=NHWC --output="./hifill" --soc_version=Ascend310 --framework=3 --save_original_model=false --model="./hifill.pb"
+   atc --singleop=./matmul_27648.json --output=./0_BatchMatMul_0_0_1_1_1024_1024_0_0_1_1_1024_27648_0_0_1_1_1024_27648 --soc_version=Ascend310
+   ```
+3. Obtain the test images required by the sample.  
+   ```
+   # Run the following commands to download the test images:
+   cd ${HOME}/samples/python/level2_simple_inference/6_other/imageinpainting_hifill/data
+   wget https://c7xcode.obs.myhuaweicloud.com/models/imageinpainting_hifill/data/test.jpg
+   cd ${HOME}/samples/python/level2_simple_inference/6_other/imageinpainting_hifill/mask
+   wget https://c7xcode.obs.myhuaweicloud.com/models/imageinpainting_hifill/mask/test.jpg 
+   cd ../src
+   ```
 ### Sample Running
+**Note: If the development environment and operating environment are set up on the same server, skip step 1 and go to [step 2](#step_2) directly.**    
+1. Run the following commands to upload the **imageinpainting_hifill** directory in the development environment to any directory in the operating environment, for example, **/home/HwHiAiUser**, and log in to the operating environment (host) as the running user (**HwHiAiUser**): 
+    ```
+    # In the following information, *xxx.xxx.xxx.xxx* is the IP address of the operating environment. The IP address of Atlas 200 DK is 192.168.1.2 when it is connected over the USB port, and that of Atlas 300 (AI1s) is the corresponding public IP address.
+    scp -r $HOME/samples/python/level2_simple_inference/6_other/imageinpainting_hifill HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser
+    ssh HwHiAiUser@xxx.xxx.xxx.xxx
+    cd ${HOME}/imageinpainting_hifill/src    
+    ```
+2. <a name="step_2"></a>Run the executable file.  
+   ```
+    python3.6 main.py
+   ```
 
-**Note: If the development environment and operating environment are set up on the same server, skip step 1 and go to [step 2](#step_2) directly.**   
+### Result Viewing
+After the execution is complete, find the JPG image with inference results in the **out** directory. 
+![input-image-description](https://images.gitee.com/uploads/images/2021/1109/110943_58f9e39d_5400693.png)
 
-1. Run the following commands to upload the **imageinpainting_hifill** directory in the development environment to any directory in the operating environment, for example, **/home/HwHiAiUser**, and log in to the operating environment (host) as the **HwHiAiUser** user:
-
-    **scp -r $HOME/samples/python/level2_simple_inference/6_other/imageinpainting_hifill HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
-
-    **ssh HwHiAiUser@xxx.xxx.xxx.xxx**    
-
-    ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **NOTE**  
-    > - ***xxx.xxx.xxx.xxx*** indicates the IP address of the operating environment, which is generally 192.168.1.2 for Atlas 200 DK when it is connected over the USB port. For Atlas 300 (ai1s), it is the corresponding public IP address.
-
-2. <a name="step_2"></a>Run the executable file.
-
-    - If the development environment and operating environment are set up on the same server, run the following commands to set the operating environment variables and switch the directory:
-
-      **export LD_LIBRARY_PATH=**
-
-      **source ~/.bashrc**
-        
-      **cd $HOME/samples/python/level2_simple_inference/6_other/imageinpainting_hifill/src**
-
-    - If the development environment and operating environment are set up on separate servers, run the following command to switch the directory:
-    
-      **cd $HOME/imageinpainting_hifill/src**      
-
-    Run the following command to run the sample:
-
-    **python3.6 main.py**
-### Result Checking
-
-After the execution is complete, find the result JPG image in the **out** directory.
+### Common Errors
+For details about how to rectify the errors, see [Troubleshooting](https://github.com/Ascend/samples/wikis/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D/%E4%BB%8B%E7%BB%8D). If an error is not included in Wiki, submit an issue to the **samples** repository.

@@ -118,8 +118,7 @@ def conv2d_tik_compute(params):
                     extend_params={"bias": None,
                                    "quantize_params": params["quantize_params"]})
 
-    tik_instance.BuildCCE(kernel_name=params["kernel_name"],
-                          inputs=[fm_gm, weight_gm], outputs=[dst_gm], config={'l2_mode': 1})
+    tik_instance.BuildCCE(kernel_name=params["kernel_name"], inputs=[fm_gm, weight_gm], outputs=[dst_gm])
 
     return tik_instance
 

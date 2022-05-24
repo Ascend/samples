@@ -40,6 +40,7 @@ endif()
 # Header path
 include_directories(
     $ENV{THIRDPART_PATH}/include/
+    $ENV{THIRDPART_PATH}/include/acllite
     $ENV{THIRDPART_PATH}/include/opencv4
     $ENV{INSTALL_DIR}/driver    
     $ENV{INSTALL_DIR}/acllib/include/
@@ -58,21 +59,6 @@ link_directories(
 )
 
 add_executable(main
-        AclLiteApp.cpp
-        AclLiteImageProc.cpp
-        AclLiteModel.cpp
-        AclLiteResource.cpp
-        AclLiteThread.cpp
-        AclLiteThreadMgr.cpp
-        AclLiteUtils.cpp
-        AclLiteVideoProc.cpp
-        CameraCapture.cpp
-        JpegDHelper.cpp
-        CropAndPasteHelper.cpp
-        ResizeHelper.cpp
-        VdecHelper.cpp
-        VideoCapture.cpp
-
         detectPreprocess/detectPreprocess.cpp
         inference/inference.cpp
         detectPostprocess/detectPostprocess.cpp
@@ -84,7 +70,7 @@ add_executable(main
 if(target STREQUAL "Simulator_Function")
     target_link_libraries(main funcsim)
 else()
-    target_link_libraries(main ascendcl acl_dvpp stdc++ pthread ${COMMON_DEPEND_LIB} opencv_highgui opencv_core opencv_imgproc opencv_imgcodecs opencv_calib3d opencv_features2d opencv_videoio protobuf presenteragent dl rt)
+    target_link_libraries(main ascendcl acl_dvpp stdc++ pthread ${COMMON_DEPEND_LIB} acllite opencv_highgui opencv_core opencv_imgproc opencv_imgcodecs opencv_calib3d opencv_features2d opencv_videoio protobuf presenteragent dl rt)
 endif()
 
 install(TARGETS main DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})

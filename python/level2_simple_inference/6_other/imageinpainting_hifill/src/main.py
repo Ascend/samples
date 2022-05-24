@@ -84,7 +84,12 @@ def get_imgs_masks_file_list(images, masks):
 create input databuffer
 """
 def create_input(np_data, size):
-    ptr, data_out = acl.util.numpy_contiguous_to_ptr(np_data)
+    if "bytes_to_ptr" in dir(acl.util):
+        data_out = np_data
+        bytes_data = np_data.tobytes()
+        ptr = acl.util.bytes_to_ptr(bytes_data)
+    else:
+        ptr, data_out = acl.util.numpy_contiguous_to_ptr(np_data)
     dev_ptr, ret = acl.rt.malloc(size, ACL_MEM_MALLOC_HUGE_FIRST)
     ret = acl.rt.memcpy(dev_ptr,
                 size,
@@ -106,7 +111,12 @@ def get_forward_result(dev_ptr, size):
                         ACL_MEMCPY_DEVICE_TO_HOST)
     check_ret("acl.rt.memcpy", ret)
 
-    return acl.util.ptr_to_numpy(host_buffer, (1024, 27648), 11)
+    if "ptr_to_bytes" in dir(acl.util):
+        bytes_data = acl.util.ptr_to_bytes(host_buffer, size)
+        data = np.frombuffer(bytes_data, dtype=np.float32).reshape(1024,27648)
+    else:
+        data = acl.util.ptr_to_numpy(host_buffer, (1024,27648), 11)
+    return data
   
 
 def forward_op_batch_matmul(data, stream):

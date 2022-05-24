@@ -61,6 +61,7 @@ extern char g_output_file_name[500];
 extern uint32_t g_set_outfile;
 extern uint32_t g_save;
 extern uint32_t g_is_syn_enc;
+extern uint32_t g_frameCount;
 extern aclrtContext g_context;
 extern aclrtRunMode g_run_mode;
 
@@ -817,8 +818,6 @@ void* jpege_snap_send_frame(void* p)
                 }
                 g_jpege_send_frame_cnt[vencChn]++;
             }
-            jpegeSendPara->threadStart = HI_FALSE;
-            break;
         } else {
             videoFrame->v_frame.time_ref = (g_jpege_send_frame_cnt[vencChn]) * 2;
             if (g_start_send_time_array[vencChn] == 0) {
@@ -836,12 +835,16 @@ void* jpege_snap_send_frame(void* p)
             }
 
             g_jpege_send_frame_cnt[vencChn]++;
-            sleep(3); // 3s is set to prevent the buffer from being full because the data is transmitted too fast.
         }
 
         if (tmp != NULL) {
             free(tmp);
             tmp = NULL;
+        }
+        if (jpegeSendPara->supportPerformance || (count == g_frameCount)) {
+            jpegeSendPara->threadStart = HI_FALSE;
+        } else {
+            sleep(3); // 3s is set to prevent the buffer from being full because the data is transmitted too fast.
         }
     }
 

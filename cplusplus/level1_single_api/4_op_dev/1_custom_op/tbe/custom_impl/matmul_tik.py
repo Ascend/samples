@@ -171,9 +171,7 @@ def matmul_tik_compute(params, kernel_name):
 
     N1MN0_TO_MN(tik_instance, mn_gm_output, nmk0_workspace, C_loc_out_type, n_size // K0, m_size, K0)
 
-    tik_instance.BuildCCE(kernel_name=kernel_name,
-                          inputs=[mk_gm_input, kn_gm_input], outputs=[mn_gm_output],
-                          config={'l2_mode': 1, "save_temp_cce_file": True})
+    tik_instance.BuildCCE(kernel_name=kernel_name, inputs=[mk_gm_input, kn_gm_input], outputs=[mn_gm_output])
     return tik_instance
 
 

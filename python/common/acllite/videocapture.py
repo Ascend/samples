@@ -253,7 +253,11 @@ class VideoCapture(object):
             self._status = DECODE_STATUS_PYAV_FINISH
             return None, 0
 
-        in_frame_ptr = acl.util.numpy_to_ptr(in_frame_np)
+        if "bytes_to_ptr" in dir(acl.util):
+            bytes_data = in_frame_np.tobytes()
+            in_frame_ptr = acl.util.bytes_to_ptr(bytes_data)
+        else:
+            in_frame_ptr = acl.util.numpy_to_ptr(in_frame_np)
         policy = const.ACL_MEMCPY_DEVICE_TO_DEVICE
         if self._run_mode == const.ACL_HOST:
             policy = const.ACL_MEMCPY_HOST_TO_DEVICE

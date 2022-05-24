@@ -1,38 +1,40 @@
-# python acllite使用说明
+English|[中文](README_CN.md)
+  
+# Python_acllite Usage Description
 
-## 使用说明
+## Usage
 
-1.本库仅供当前社区开源样例使用，不覆盖ascend平台应用开发的所有场景，不作为用户应用开发的标准库；
+1. This library is used only for open source samples in the current community. It does not cover all application development scenarios of the Ascend platform and cannot be used as a standard library for user application development.
 
-2.本库仅在Atlas200DK和Atlas300（x86）服务器上做了验证。
+2. This library is verified only on the Atlas 200 DK and Atlas 300 (x86) servers.
 
-## 使用约束
+## Constraints
 
-| 适配项 | 适配条件 | 备注 |
-|---|---|---|
-| 适配版本 | >=5.0.4 | 已完成版本安装，版本信息请参考[版本说明](https://ascend.huawei.com/zh/#/software/cann/notice) |
-| 适配硬件 | Atlas200DK/Atlas300([ai1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366))  | 当前已在Atlas200DK和Atlas300测试通过，产品说明请参考[硬件平台](https://ascend.huawei.com/zh/#/hardware/product) |
-| 第三方依赖 | pyav、numpy、Pillow等| 请参考[第三方依赖安装指导（python样例）](../../environment)完成对应依赖安装 |
+| Adaptation Item    | Adaptation Condition                                                    | Remarks                                                        |
+| ---------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| Applicable version  | ≥ 5.0.4                                                     | The version has been installed. For details about the version information, see [Version Number Change Notice](https://www.hiascend.com/en/software/cann/notice).|
+| Applicable hardware  | Atlas 200 DK/Atlas 300 ([AI1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366))| The library has passed the tests on Atlas 200 DK and Atlas 300. For details about the product description, see [Hardware](https://www.hiascend.com/en/hardware/product).|
+| Third-party dependency| pyav, NumPy, and Pillow                                       | Install the dependencies by referring to [Third-Party Dependency Installation Guide (Python Sample)](../../environment).|
 
 
-## 使用步骤
+## Procedure
 
-#### 2.公共库部署
+#### Public Library Deployment
 
-运行应用前需要先将公共库部署到运行环境，具体安装步骤参考[第三方依赖安装指导（python样例）](../../environment)。
-完成后，将该目录路径加入PYTHONPATH环境变量即可。例如在以上文档中，公共库被拷贝到```$THIRDPART_PATH```，在~/.bashrc文件中添加：
+Before running the application, deploy the public library to the operating environment. For details, see [Third-Party Dependency Installation Guide (Python Sample)](../../environment).
+Then, add the path to the PYTHONPATH environment variable. For example, in the preceding document, the public library is copied to `$THIRDPART_PATH`. Add the following information to the **~/.bashrc** file:
 
 ```
 export PYTHONPATH=$THIRDPART_PATH/acllite:$PYTHONPATH
 ```
 
-保存配置好的环境变量，执行以下命令使环境变量生效
+Save the configured environment variable and run the following command to make the environment variable take effect:
 
 ```
 source ~/.bashrc
 ```
 
-完成以上步骤后，即可在应用的代码中调用acllite库的接口，例如：
+After the preceding steps are complete, call the acllite library interfaces in the application code. For example:
 
 ```
 import presenteragent.presenter_channel as presenter_channel
@@ -40,299 +42,298 @@ import presenteragent.presenter_channel as presenter_channel
 chan = presenter_channel.open_channel(config_file)
 ```
 
-## 接口说明
+## Interface Description
 
-### AclLiteImage类
+### AclLiteImage Class
 
-AclLiteImage类为python-acllite公共库，针对atlas200dk摄像头、jpg图片、输入的图片数据，所提供的一套统一的数据封装结构，便于后续公共库接口对其进行处理。
+Provided in the python-acllite public library, the AclLiteImage class provides a unified data encapsulation structure for the Atlas 200 DK camera, JPG images, and input image data to facilitate subsequent processing by the public library interfaces.
 
 #### \_\_init\_\_
 
-方法：\_\_init\_\_ (image, width=0, height=0, size=0, memory_type=const.MEMORY_NORMAL):
+Method: \_\_init\_\_ (image, width=0, height=0, size=0, memory_type=const.MEMORY_NORMAL):
 
-说明：
+Note:
 
-根据初始化参数列表，生成对应的AclLiteImage结构的数据。
+Generates data of the AclLiteImage structure based on the initialization parameter list.
 
-输入参数：
+Input parameter:
 
-image ：图片数据，支持numpy array、jpeg/png图片路径、内存数据作为参数输入；不填/填写不支持类型输入会报错。
+**image**: image data. It can be NumPy arrays, JPEG/PNG image paths, and memory data. If this parameter is left blank or set to an unsupported type, an error is reported.
 
-width ：图片宽；如果image为jpeg/png图片，该参数可不填；不填则填入默认参数0。
+**width**: image width. If the image is a JPEG or PNG image, this parameter can be left empty. In this case, the default value **0** is used.
 
-height ：图片高；如果image为jpeg/png图片，该参数可不填；不填则填入默认参数0。
+**height**: image height. If the image is a JPEG or PNG image, this parameter can be left empty. In this case, the default value **0** is used.
 
-size ：图片数据大小，如果image为jpeg/png图片，该参数可不填；不填则填入默认参数0。
+**size**: image data size. If the image is a JPEG or PNG image, this parameter can be left empty. In this case, the default value **0** is used.
 
-memory_type ：图片数据存储类型，即该图片数据是存储在一般内存、device、host或是dvpp内存；如果image为jpeg/png图片，该参数可不填；不填则填入默认参数 MEMORY_NORMAL。
+**memory_type**: image data storage type, that is, whether the image data is stored in the normal memory, device memory, host memory, or DVPP memory. If the image is a JPEG or PNG image, this parameter can be left empty. In this case, the default value **MEMORY_NORMAL** is used.
 
-返回值：
+Return value:
 
-AclLiteImage结构的数据
+Data of the AclLiteImage structure
 
-约束：
+Constraints:
 
-无
+None
 
 #### save
 
-方法：save(filename):
+Method: save(filename):
 
-说明：
+Note:
 
-将AclLiteImage数据转换为np array后。保存为二进制文件。
+Converts the AclLiteImage data into the NumPy array and saves it as a binary file.
 
-输入参数：
+Input parameter:
 
-filename ： 保存后的文件名
+**filename**: name of the saved file.
 
-返回值：
+Return value:
 
-无
+None
 
-约束：
+Constraints:
 
-无
+None
 
-### Camera类
+### Camera Class
 
-Camera类为Atlas200DK板载摄像头解码提供python接口。
+The Camera class provides Python interfaces for Atlas 200 DK onboard camera decoding.
 
 #### is_opened
 
-方法：is_opened（）
+Method: is_opened()
 
-说明：
+Note:
 
-根据初始化的cameracapture类对象的摄像头id，判断Atlas200DK板载摄像头是否已打开。
+Checks whether the onboard camera of the Atlas 200 DK is opened based on the camera ID of the initialized cameracapture class object.
 
-输入参数：
+Input parameter:
 
-无
+None
 
-返回值：
+Return value:
 
-1.TRUE，摄像头已打开
+**TRUE**: The camera is turned on.
 
-2.FALSE，摄像头未打开
+**FALSE**: The camera is not turned on.
 
-约束：
+Constraints:
 
-无
+None
 
 #### read
 
-方法：read（）
+Method: read()
 
-说明：
+Note:
 
-根据cameracapture类对象初始化时的id，从该id表示的摄像头读取图片，并将图片保存为AclLiteImage结构的数据。
+Reads images from the camera specified by the ID during initialization of the cameracapture class object and saves the images as data in the AclLiteImage structure.
 
-输入参数：
+Input parameter:
 
-无
+None
 
-返回值：
+Return value:
 
-AclLiteImage类型的图片数据
+Image data of the AclLiteImage type
 
-约束：
+Constraints:
 
-无
+None
 
 #### close
 
-方法：close（）
+Method: close()
 
-说明：
+Note:
 
-关闭打开的摄像头
+Close the camera.
 
-输入参数：
+Input parameter:
 
-无
+None
 
-返回值：
+Return value:
 
-无，正常执行会打印 "Close camera" 字段。
+None. If the command is executed properly, the **Close camera** field is displayed.
 
-约束：
+Constraints:
 
-无
+None
 
-### AclLiteModel类
+### AclLiteModel Class
 
-AclLiteModel类为python-acllite对acl模型推理相关接口的封装，包括但不限于模型加载与初始化，模型输入输出dataset的创建，模型推理执行及资源释放等功能。
+Provided in the python-acllite library, the AclLiteModel class encapsulates APIs related to ACL model inference, including but not limited to model loading and initialization, creation of model input and output datasets, model inference execution, and resource release.
 
 #### execute
 
-方法：execute (input_list):
+Method: execute(input_list)
 
-说明：
+Note:
 
-模型推理接口，将输入数据转变为acl dataset类型数据后送给模型做推理，推理结果以numpy array表示
+Model inference API, which converts the input data into ACL dataset data and sends the data to the model for inference. The inference result is represented in NumPy array.
 
-输入参数：
+Input parameter:
 
-input_list：模型输入数据，支持AclLiteImage、numpy array 和{'data': ,'size':} dict 结构数据。
+**input_list**: model input data, which can be AclLiteImage, NumPy array, or {'data': ,'size':} dict structure data.
 
-返回值：
+Return value:
 
-numpy array，用来表示模型推理结果。
+**NumPy array**, which is used to represent the model inference result.
 
-约束：
+Constraints:
 
-无
+None
 
 
-### AclLiteImageProc类
+### AclLiteImageProc Class
 
-AclLiteImageProc类为python-acllite对CANN媒体数据处理相关接口的封装，包括但不限于图片解码编码，视频解码编码，抠图缩放等功能。
+Provided in the python-acllite library, the AclLiteImageProc class encapsulates CANN media data processing APIs, including but not limited to image decoding and encoding, video decoding and encoding, and image cropping and resizing.
 
 #### jpegd
 
-方法：jpegd(image):
+Method: jpegd(image):
 
-说明：
+Note:
 
-图片解码接口，将jpeg格式图片转换为yuv格式
+Image decoding API, which is used to convert JPEG images into YUV images.
 
-输入参数：
+Input parameter:
 
-image：原始jpeg图片数据，以AclLiteImage结构存储的数据。
+**image**: original JPEG image data, which is stored in the AclLiteImage structure.
 
-返回值：
+Return value:
 
-AclLiteImage，用来存放yuv图片数据。
+**AclLiteImage**: stores YUV image data.
 
-约束：
+Constraints:
 
-无
+None
 
 #### jpege
 
-方法：jpege(image):
+Method: jpege(image):
 
-说明：
+Note:
 
-图片解码接口，将yuv格式图片转换为jpeg格式
+Image decoding API, which is used to convert YUV images into JPEG images.
 
-输入参数：
+Input parameter:
 
-image：原始yuv图片数据，以AclLiteImage结构存储的数据。
+**image**: original YUV image data, which is stored in the AclLiteImage structure.
 
-返回值：
+Return value:
 
-AclLiteImage，用来存放jpeg图片数据。
+**AclLiteImage**: stores JPEG image data.
 
-约束：
+Constraints:
 
-无
+None
 
 #### crop_and_paste
 
-方法：crop_and_paste(image, width, height, crop_and_paste_width, crop_and_paste_height)
+Method: crop_and_paste(image, width, height, crop_and_paste_width, crop_and_paste_height)
 
-说明：
+Note:
 
-图片VPC（vision preprocessing core）功能相接口，将原始图片扣出再贴到目标大小
+Image vision preprocessing core (VPC) API, which is used to crop the original image and paste it to the target size.
 
-输入参数：
+Input parameter:
 
-image：原始图片数据，以AclLiteImage结构存储的数据。
+**image**: original image data, which is stored in the AclLiteImage structure.
 
-width：原始图片宽。
+**width**: width of the original image.
 
-height：原始图片高。
+**height**: height of the original image.
 
-crop_and_paste_width：VPC后目标图片的宽
+**crop_and_paste_width**: width of the target image after the VPC.
 
-crop_and_paste_height：VPC后目标图片的高
+**crop_and_paste_height**: height of the target image after the VPC.
 
-返回值：
+Return value:
 
-AclLiteImage，用来存放vpc后的图片数据。
+**AclLiteImage**: stores the image data after the VPC.
 
-约束：
+Constraints:
 
-无
+None
 
 #### resize
 
-方法：resize(image, resize_width, resize_height)
+Method: resize(image, resize_width, resize_height)
 
-说明：
+Note:
 
-将输入图片resize到指定大小。
+Resizes the input image to the specified size.
 
-输入参数：
+Input parameter:
 
-image：原始图片数据，以AclLiteImage结构存储的数据。
+**image**: original image data, which is stored in the AclLiteImage structure.
 
-resize_width：缩放后图片的宽。
+**resize_width**: destination image width.
 
-resize_height：缩放后图片的高。
+**resize_height**: destination image height.
 
-返回值：
+Return value:
 
-AclLiteImage，用来存放resize后的图片数据。
+**AclLiteImage**: stores the image data after resizing.
 
-约束：
+Constraints:
 
-无
+None
 
-### Dvpp_Vdec类
+### Dvpp_Vdec Class
 
-Dvpp_Vdec类为python-acllite对视频流的解码相关接口的封装。包括了对视频流的切帧等。
+Provided in the python-acllite library, the Dvpp_Vdec class encapsulates video stream decoding interfaces, including video stream frame cut.
 
 #### read
 
-方法：read (no_wait):
+Method: read(no_wait):
 
-说明：
+Note:
 
-视频帧读接口，异步接口，负责从队列中读取数据并送去解码。
+Video frame read interface (asynchronous), which reads data from the queue and sends the data to the decoder.
 
-输入参数：
+Input parameter:
 
-no_wait：布尔变量，为真则不断从队列中读取数据，需要使用is_finished（）接口来判断该帧数据是否解码完毕；为否则会按照READ_TIMEOUT设置的时间间隔从队列里读取数据，为空则会报错；默认为否。
+**no_wait**: Boolean variable. If the value is **true**, data is continuously read from the queue. The **is_finished ()** interface is used to check whether the frame data is decoded completely. If the value is **false**, data is read from the queue at the interval specified by **READ_TIMEOUT**. If the value is empty, an error is reported. The default value is **false**.
 
-返回值：
+Return value:
 
-ret ：接口执行结果；SUCCESS为正常；FAILED表示失败，有数据未解码，但是接口未从队列中读取到数据。
+**ret**: interface execution result. **SUCCESS** indicates that the execution is successfully completed. **FAILED** indicates that the interface fails to read data from the queue because some data is not decoded.
 
-image ：读到的视频帧
+**image**: video frame that is read.
 
-约束：
+Constraints:
 
-视频流必须为以下格式之一：
+The video stream must be in one of the following formats:
 
-h264 ：main, baselineor high level，且为 annex-b格式
+H.264: main, baseline, or high level, and in the annex-b format
 
-h265 ：main level
+H.265: main level
 
 #### process
 
-方法：process (input_data, input_size, user_data)
+Method: process(input_data, input_size, user_data)
 
-说明：
+Note:
 
-视频解码接口，将需要解码的视频帧数据送给解码器做处理。
+Video decoding interface. It transmits the video frame data to be decoded to the decoder.
 
-输入参数：
+Input parameter:
 
-input_data ：输入数据。
+**input_data**: input data.
 
-input_size ：输入数据大小。
+**input_size**: size of the input data.
 
-user_data ：python对象，用户自定义数据。如果用户需要获取解码的帧序号，则可以在user_data参数处定义，然后解码的帧序号可以通过user_data参数传递给VDEC的回调函数，用于确定回调函数中处理的是第几帧数据。
+**user_data**: Python object (user-defined). If you want to obtain the sequence number of the decoded frame, define the **user_data** parameter. Then, the sequence number can be passed to the VDEC callback function to determine the frame to be processed.
 
-返回值：
+Return value:
 
-ret ：接口执行结果；SUCCESS为正常；FAILED表示失败
+**ret**: interface execution result. The value can be **SUCCESS** or **FAILED**.
 
 
-约束：
+Constraints:
 
-无
-
+None

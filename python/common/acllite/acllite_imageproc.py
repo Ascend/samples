@@ -332,7 +332,11 @@ class AclLiteImageProc(object):
             log_error("Malloc jpege output memory failed")
             return None
         output_size_array = np.array([output_size], dtype=np.int32)
-        output_size_ptr = acl.util.numpy_to_ptr(output_size_array)
+        if "bytes_to_ptr" in dir(acl.util):
+            bytes_data = output_size_array.tobytes()
+            output_size_ptr = acl.util.bytes_to_ptr(bytes_data)
+        else:
+            output_size_ptr = acl.util.numpy_to_ptr(output_size_array)
 
         # Call jpege asynchronous interface to convert pictures
         ret = acl.media.dvpp_jpeg_encode_async(self._dvpp_channel_desc,
@@ -350,6 +354,8 @@ class AclLiteImageProc(object):
             return None
         # Release resources
         acl.media.dvpp_destroy_pic_desc(input_desc)
+        if "bytes_to_ptr" in dir(acl.util):
+            output_size_array=np.frombuffer(bytes_data,dtype=output_size_array.dtype).reshape(output_size_array.shape)
         return AclLiteImage(
             output_buffer, image.width, image.height, 0, 0, int(
                 output_size_array[0]), constants.MEMORY_DVPP)

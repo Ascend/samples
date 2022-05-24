@@ -159,7 +159,11 @@ def copy_data_as_numpy(data, size, data_mem_type, run_mode):
         others: numpy array whoes data copy from host_data
     """
     np_data = np.zeros(size, dtype=np.byte)
-    np_data_ptr = acl.util.numpy_to_ptr(np_data)
+    if "bytes_to_ptr" in dir(acl.util):
+        bytes_data=np_data.tobytes()
+        np_data_ptr=acl.util.bytes_to_ptr(bytes_data)
+    else:
+        np_data_ptr = acl.util.numpy_to_ptr(np_data)
 
     policy = const.ACL_MEMCPY_DEVICE_TO_DEVICE
     if run_mode == const.ACL_HOST:
@@ -171,7 +175,8 @@ def copy_data_as_numpy(data, size, data_mem_type, run_mode):
 
     ret = acl.rt.memcpy(np_data_ptr, size, data, size, policy)
     check_ret("acl.rt.memcpy", ret)
-
+    if "bytes_to_ptr" in dir(acl.util):
+        np_data=np.frombuffer(bytes_data,dtype=np_data.dtype).reshape(np_data.shape)
     return np_data
 
 def align_up(value, align):

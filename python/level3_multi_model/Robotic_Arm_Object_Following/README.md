@@ -1,93 +1,96 @@
-**本样例为大家学习昇腾软件栈提供参考，非商业目的！**
+English|[中文](README_CN.md)
 
-**本样例适配3.1.0及以上版本，支持产品为Atlas200DK。**
+**This sample provides reference for you to learn the Ascend AI Software Stack and cannot be used for commercial purposes.**
 
-## 案例描述
-使用Atlas200DK运行Yolov3模型，对双目深度相机给出的RGB数据流进行推理，实时检测目标在图像中的位置。并结合相机的深度数据流，控制机械臂的姿态，使得机械臂跟随目标移动。
+**This sample applies to CANN 3.1.0 and later versions. The supported product is Atlas 200 DK.**
 
-## 物料清单
-|**物料类型**|**详细描述**|
-|---|---|
-|推理平台|[Atlas200DK](https://support.huaweicloud.com/Atlas200DK202/)|
-|双目深度相机|[Realsense D435](https://www.intelrealsense.com/depth-camera-d435/)|
-|机械臂|[Dobot-Magician](https://cn.dobot.cc/dobot-magician/product-overview.html)|
-|主控平台|Ubuntu18.04 LTS-x64-Huawei Matebook X Pro|
-|路由器|Huawei 4G无线路由器B311|
-|检测目标|[Ascend图标](https://images.gitee.com/uploads/images/2021/0310/112721_0db30e79_5537256.png)|
+## Sample Description
+Use Atlas 200 DK to run the YOLOv3 model, perform inference on the RGB data streams provided by binocular depth cameras, and detect the locations of objects in images in real time. Control the robotic arm's postures to make it move with the objects based on the depth data streams of the cameras.
 
-## 环境准备
-### Ubuntu主控平台准备
-- 参考[Atlas200DK说明文档]( https://support.huaweicloud.com/Atlas200DK202/ )部署开发环境
-### Atlas200DK推理平台准备
-- 参考[Atlas200DK说明文档]( https://support.huaweicloud.com/Atlas200DK202/ )部署运行环境
-- 参考Ascend案例如[YOLOV3_coco_detection_picture](https://github.com/Ascend/samples/tree/master/python/level2_simple_inference/2_object_detection/YOLOV3_coco_detection_picture#yolov3_coco_detection_picture%E6%A0%B7%E4%BE%8B )测试推理平台是否搭建成功
-### Realsense双目相机准备
-- 参考[Realsense SDK 2.0安装说明]( https://dev.intelrealsense.com/docs/compiling-librealsense-for-linux-ubuntu-guide )安装SDK
-- 参考Realsense 使用示例如[opencv_viewer_example]( https://github.com/IntelRealSense/librealsense/blob/master/wrappers/python/examples/opencv_viewer_example.py )测试SDK是否安装成功
-### Dobot-Magician机械臂准备
-- 参考[pydobot]( https://github.com/luismesas/pydobot )说明下载Dobot-Magician Python API
-- 增加move_by_angle的控制接口
+## Material List
+| **Material Type**| **Description**                                                |
+| ------------ | ------------------------------------------------------------ |
+| Inference platform    | [Atlas 200 DK](https://support.huaweicloud.com/intl/en-us/Atlas200DK202/)|
+| Binocular depth camera| [RealSense D435](https://www.intelrealsense.com/depth-camera-d435/) |
+| Robotic arm      | [Dobot Magician](https://cn.dobot.cc/dobot-magician/product-overview.html) |
+| Main control platform    | Ubuntu18.04 LTS-x64-Huawei Matebook X Pro                    |
+| Router      | Huawei 4G wireless router B311                                     |
+| Object to be detected    | [Ascend icon](https://images.gitee.com/uploads/images/2021/0310/112721_0db30e79_5537256.png)|
+
+## Environment Preparation
+### Ubuntu Main Control Platform
+- Deploy the development environment. For details, see the [Atlas 200 DK documentation](https://support.huaweicloud.com/intl/en-us/Atlas200DK202/).
+### Atlas 200 DK Inference Platform
+- Deploy the operating environment. For details, see the [Atlas 200 DK documentation](https://support.huaweicloud.com/intl/en-us/Atlas200DK202/).
+- Check whether the inference platform is successfully set up. See the Ascend sample [YOLOV3_coco_detection_picture](https://github.com/Ascend/samples/tree/master/python/level2_simple_inference/2_object_detection/YOLOV3_coco_detection_picture#yolov3_coco_detection_picture%E6%A0%B7%E4%BE%8B).
+### RealSense Binocular Cameras
+- Install the SDK by following the [RealSense SDK 2.0 Build Guide](https://dev.intelrealsense.com/docs/compiling-librealsense-for-linux-ubuntu-guide).
+- Check whether the SDK is successfully installed. See [opencv_viewer_example](https://github.com/IntelRealSense/librealsense/blob/master/wrappers/python/examples/opencv_viewer_example.py ).
+### Dobot Magician Robotic Arm
+- Download the Dobot Magician Python API. See [pydobot](https://github.com/luismesas/pydobot).
+- Add the move_by_angle API.
   
-  编辑pydobot/dobot.py文件，在move_to函数后增加move_by_angle函数定义代码：
+  Edit the **pydobot/dobot.py** file and add the move_by_angle function definition code after the move_to function.
     ````python
     def move_by_angle(self, j1, j2, j3, j4, wait=False):
         self._set_ptp_cmd(j1, j2, j3, j4, mode=PTPMode.MOVL_ANGLE, wait=wait)
     ````
-- API安装
+- Install the API.
   ```shell
   python3.7.5 setup.py build
   python3.7.5 setup.py install
   ```
-- 参考上述Python API的说明文档中的[Python Example](https://github.com/luismesas/pydobot#example )测试API是否安装成功
+- Check whether the API is successfully installed. See [Python Example](https://github.com/luismesas/pydobot#example) in the Python API description document.
   
-    ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
-    > - 由于机械臂Dobot-Magician的官方Python API没有提供角度控制模式，所以这里需要手动添加move_by_angle模式。
+    ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **NOTE** 
+    
+    > - The official Python API of Dobot Magician does not provide the angle control mode. Therefore, you need to manually add the move_by_angle mode.
 
-## 案例说明
-### 系统数据流图
-   
-- 机械臂目标跟随样例的整个数据流图如下，Atlas200DK推理平台（运行环境）与Ubuntu主控平台（开发环境）通过路由器进行交互，Atlas200DK负责Yolov3目标检测模型的推理，Ubuntu主控平台通过路由器向Atlas200DK发送IntelRealsense的RGB数据，同时接收Atlas200DK的推理结果，利用推理结果对机械臂进行控制。
+## Sample Description
+### System Data Flow Diagram
 
-<div align=center><img width="750" height="190" src="https://images.gitee.com/uploads/images/2021/0310/112856_f44ecafd_5537256.png"/></div>
+- The following figure shows the data flow of the robotic arm following the path of object movement. The Atlas 200 DK inference platform (operating environment) interacts with the Ubuntu main control platform (development environment) through a router. The Atlas 200 DK is responsible for inference of the YOLOv3 object detection model. The Ubuntu main control platform sends the RGB data of Intel RealSense to the Atlas 200 DK through the router, receives the inference result from the Atlas 200 DK, and controls the robotic arm based on the inference result.
 
-### 机械臂控制逻辑
+<div align=center><img width="750" height="190" src="https://gitee.com/judithsq/samples/raw/master/python/level3_multi_model/Robotic_Arm_Object_Following/doc/Process.png"/></div>
+
+### Robotic Arm Control Logic
 
 <div align=center><img width="640" height="360" src="https://images.gitee.com/uploads/images/2021/0310/142505_86a67472_5537256.png"/></div>
 
-- 问题分析
-    * 分析一：机械臂的运动方式
+- Problem analysis
+    * Analysis 1: Movement mode of the robotic arm
 
-      机械臂的J1、J2和J3轴由独立电机驱动，运动相对独立。其中J1轴控制末端中心在XY平面上的移动，若以极坐标的方式分析，可知J1轴运动只影响末端中心在XY平面的角度，控制相机朝向目标。J2轴和J3轴主要控制末端中心在XZ平面的移动，控制相机在高度上对准目标，以及相机与目标保持合适的距离。
-    * 分析二：相机的位置姿态和内参外参
+      The J1, J2, and J3 axes of the robotic arm are driven by independent motors and move independently. The J1 axis controls the movement of the end center on the xy-plane. If the polar coordinate mode is used for analysis, it can be known that the J1 axis motion affects only the angle of the end center on the xy-plane and controls the camera to face the object. The J2 and J3 axes are used to control the movement of the end center on the xz-plane, control the camera to align with the object in height, and keep a proper distance between the camera and the object.
+    * Analysis 2: Camera location, posture, intrinsic parameters, and extrinsic parameters
 
-      根据系统示意图，双目相机安装在机械臂末端中心，末端中心的位置和姿态即为双目相机的位置和姿态。末端中心的位置可以通过机械臂SDK直接获取，可表示为$(T_x, T_y, T_z)$；通过观察，机械臂运动时，相机不存在绕X轴和Y轴的旋转，只会绕Z轴旋转，且其绕Z轴旋转的角度为机械臂J1轴的运动角度，所以其姿态可表示为$(0, 0, J_1)$。
-      根据上述分析可以计算出相机的外参矩阵。  
-      相机的内参矩阵可以通过Realsense的API直接获取。
-    * 分析三：任务描述
+      According to the schematic diagram of the system, the binocular camera is installed at an end center of the robotic arm, and the location and posture of the end center are the location and posture of the binocular camera. The location of the end center may be directly obtained by using the robotic arm SDK, and may be represented as $(T_x, T_y, T_z)$. According to observation, when the robotic arm moves, the camera does not rotate around the X or Y axis, and only rotates around the Z axis. The angle of rotation around the Z axis is a motion angle of the robotic arm's J1 axis. Therefore, the camera posture may be represented as $(0, 0, J_1)$.
+      The extrinsic parameter matrix of the camera can be calculated according to the proceeding analysis. 
+      The intrinsic parameter matrix of the camera can be directly obtained through the API of RealSense.
+    * Analysis 3: Task description
 
-      机械臂随目标在空间内移动的任务可以表述为两个子任务：
-        1. 机械臂的运动总是尽量使得相机对准目标，即目标位于相机的视场（图像）中心。
-        2. 目标离相机的距离大于标准距离时，机械臂要控制相机向前运动，反之亦然，即相机与目标总是保持一定的距离。
+      A task in which a robotic arm moves in space with an object may be expressed as two subtasks:
+        1. The movement of the robotic arm always makes the camera aim at the object, that is, the object is located in the center of the field of view (image) of the camera.
+        2. When the distance between the object and the camera is greater than the standard distance, the robotic arm controls the camera to move forward, and vice versa. That is, the camera always keeps a certain distance from the object.
 
-      机械臂的运动可以通过控制三个轴的角度实现，也即在拿到目标在图像坐标系中的位置以及深度数据后，J1、J2、J3三个轴要分别运动多少度，使得运动后目标位于相机的视场中心且距离合适。
+      The movement of the robotic arm may be implemented by controlling angles of the three axes, that is, the degrees that the J1, J2, and J3 axes need to move respectively after the location and depth data of the object in the image coordinate system are obtained, so that the object after movement is located in the center of the field of view of the camera and has a proper distance.
 
-- 建立数学模型
-    * 坐标系转换—图像坐标系->相机坐标系->世界坐标系
-        1. 相机的内参
+- Mathematical model establishment
+    * Coordinate system conversion: image coordinate system -> camera coordinate system -> world coordinate system
+        1. Intrinsic parameters of the camera
            
-            相机的内参矩阵可以通过Realsense的API直接获得，详见其API参考文档。在不考虑相机镜头畸变的情况下，内参矩阵$K$可以表示成如下形式：
+            The intrinsic parameter matrix of the camera can be directly obtained through the API of RealSense. For details, see the API reference document. If camera lens distortion is not considered, the intrinsic parameter matrix $K$ may be represented in the following format:
            
             $$ K = \begin{bmatrix}f_x & 0 & c_x \\\\ 0 & f_y & c_y \\\\ 0 & 0 & 1 \end{bmatrix} $$
         
-        2. 相机的外参
+        2. Extrinsic parameters of the camera
            
-            根据上述相机位置的计算，可以得到其平移向量$T$：
+            According to the preceding calculation of the camera location, the translation vector $T$ may be obtained:
             
             $$
             T = \begin{bmatrix} T_x \\\\ T_y \\\\ T_z \end{bmatrix}
             $$
             
-            根据上述相机姿态的计算，可以得到其旋转矩阵$R$：
+            According to the foregoing calculation of the camera posture, a rotation matrix $R$ of the camera may be obtained:
            
             $$
             R = \begin{bmatrix} 1 & 0 &  0 \\\\ 0 &   \cos\theta_0 & -\sin\theta_0  \\\\ 0 & \sin\theta_0& \cos\theta_0 \end{bmatrix} \cdot 
@@ -95,16 +98,16 @@
             \begin{bmatrix} \cos\theta_2 & -\sin\theta_2 & 0 \\\\ \sin\theta_2& \cos\theta_2 & 0 \\\\ 0 & 0 & 1\end{bmatrix} 
             $$
            
-            所以从相机坐标系到世界坐标系的转换为:
+            Therefore, the camera coordinate system can be converted to the world coordinate system as follows:
            
             $$
             \begin{bmatrix} x_w \\\\ y_w \\\\ z_w \end{bmatrix} = R \cdot 
             \begin{bmatrix} x_c \\\\ y_c \\\\ z_c \end{bmatrix} + T
             $$
            
-        3. 图像坐标系到世界坐标系的转换
+        3. Conversion from the image coordinate system to the world coordinate system
            
-            完整地从图像坐标系向世界坐标系的转换过程为：
+            Complete conversion process from the image coordinate system to the world coordinate system:
            
             $$\begin{bmatrix} x_w \\\\
                 y_w \\\\
@@ -113,97 +116,98 @@
                 y_p \\\\
                 1 \end{bmatrix} + T$$
 
-    * J1轴的运动逻辑
-        
-        根据之前的假设，J1轴的运动问题可以在世界坐标系的XOY投影平面内进行分析:
+    * Motion logic of the J1 axis
+      
+        According to the preceding assumption, the motion problem of the J1 axis can be analyzed in the XOY projection plane of the world coordinate system.
     
         <div align=center><img width="450" height="450" src="https://images.gitee.com/uploads/images/2021/0310/113212_56e70e40_5537256.png"/></div>
 
-        如图所示，A($x_A$, $y_A$)为目标的实际位置，B($x_B$, $y_B$)为当前相机视场中心位置（图像中心）。为使机械臂移动之后目标位于视场中心，J1轴的移动角度$\theta_1$可表示为：
+        As shown in the figure, A($x_A$, $y_A$) is the actual location of the object, and B($x_B$, $y_B$) is the center of the current camera's field of view (image center). To ensure that the object is located in the center of the field of view after the robotic arm moves, the moving angle $\theta_1$ of the J1 axis may be expressed as:
         
         $$
         \theta_1 = \arccos[\frac{\overrightarrow {OA} \cdot \overrightarrow {OB}}
                                                         {\mid\overrightarrow {OA}\mid \cdot \mid\overrightarrow {OB}\mid}]
         $$
         
-        即：
+        That is:
       
         $$
         \theta_1 = \arccos(\frac {x_A x_B + y_A y_B} {\sqrt{x_A^2 + y_A^2}\sqrt{x_B^2 + y_B^2}})
         $$
       
-    * J2 & J3轴的运动逻辑
-        
+    * Motion logic of the J2 and J3 axes
+      
         <div align=center><img width="450" height="450" src="https://images.gitee.com/uploads/images/2021/0310/113332_061a0a79_5537256.png"/></div>
 
-        建立关于$\theta_2$和$\theta_3$的方程组：
+        Create equations about $\theta_2$ and $\theta_3$:
         
         $$l_2\cos(\alpha_2 + \theta_2) + l_3\cos(\alpha_3 + \theta_3) = \Delta x + l_2\cos(\alpha_2) + l_3\cos(\alpha_3)$$
         
         $$l_2\sin(\alpha_2 + \theta_2) + l_3\sin(\alpha_3 + \theta_3) = \Delta z + l_2\sin(\alpha_2) + l_3\sin(\alpha_3)$$
 
-        求解该方程组，得到:
+        Solve the equations:
       
         $$\theta_3 = \arctan(\frac {R_z} {R_x}) - \arccos(\frac {l_3^2 - l_2^2 + R_x^2 + R_z^2} {2l_3\sqrt{R_x^2 + R_z^2}}) - \alpha_3$$
         $$\theta_2 = \arccos[\frac{\Delta x + l_2\cos\alpha_2 +l_3\cos\alpha_3 - l_3cos(\alpha_3 + \theta_3)}{l_2}] - \alpha_2$$
         
-        其中：
+        Where,
         
         $$R_x = \Delta x + l_2\cos(\alpha_2) + l_3\cos(\alpha_3)$$
         
         $$R_z = \Delta z + l_2\sin(\alpha_2) + l_3\sin(\alpha_3)$$
 
-## 案例部署
-### 代码获取
-- 获取源码包
+## Sample Deployment
+### Code Obtaining
+- Obtain the source package.
 
-   在Ubuntu主控平台中，以非root用户在命令行中执行以下命令下载源码仓:
+   On the Ubuntu main control platform, run the following commands as a non-root user to download the source code repository:
     ```shell
     cd $HOME
     git clone https://github.com/Ascend/samples.git
     ```
 
-- 获取此案例中所需要的网络模型
- 
-    参考下表获取此应用中所用到的模型，并将其存放到开发环境普通用户下的工程目录：
+- Obtain the network model required by the sample.
+
+    Obtain the model used in the sample by referring to the following table and save it to the project directory of a common user in the development environment.
     ```shell
     cd $HOME/samples/python/level3_multi_model/Robotic_Arm_Object_Following/model
     ```
     
-    |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
-    |---|---|---|
-    |  yolov3_ascend_logo| 基于Tensorflow-YOLOV3的[Ascend图标](https://images.gitee.com/uploads/images/2021/0310/112721_0db30e79_5537256.png )检测模型。  |  请参考[https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/yolov3_darknet53/ATC_yolov3_darknet53_tf_xdzhangtongxue](https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/yolov3_darknet53/ATC_yolov3_darknet53_tf_xdzhangtongxue )目录中README.md下载原始模型章节下载模型和权重文件。 |
+    | **Model Name**      | **Model Description**                                                | **Download Link**                                            |
+    | ------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+    | yolov3_ascend_logo | [Ascend icon](https://images.gitee.com/uploads/images/2021/0310/112721_0db30e79_5537256.png) detection model based on TensorFlow-YOLOv3 | Download the model and weight files by referring to the links in **README.md** in the [https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/yolov3_darknet53/ATC_yolov3_darknet53_tf_xdzhangtongxue](https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/yolov3_darknet53/ATC_yolov3_darknet53_tf_xdzhangtongxue) directory of the ModelZoo repository.|
 
-    ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
-    > - modelzoo中已经提供了转换好的om模型，可以直接使用。
-   
-- 执行以下命令，将主控平台的 **samples** 目录上传到推理平台中，例如 **/home/HwHiAiUser**，并以HwHiAiUser（运行用户）登录Atlas200DK推理平台：
+    ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **NOTE** 
     
+   > - The OM model has been provided in ModelZoo and can be directly used.
+   
+- Run the following commands to upload the **samples** directory of the main control platform to the inference platform, for example, **/home/HwHiAiUser**, and log in to the Atlas 200 DK inference platform as the **HwHiAiUser** user (running user):
+  
     ```shell
     scp -r $HOME/samples/ HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser
     ssh HwHiAiUser@xxx.xxx.xxx.xxx 
     ```
    
-    ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**    
-    > - **xxx.xxx.xxx.xxx**为Atlas200DK的ip，在200DK与Ubuntu主控平台用USB连接时一般为192.168.1.2。
+    ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **NOTE**   
+    
+    > - **xxx.xxx.xxx.xxx** indicates the IP address of Atlas 200 DK. When Atlas 200 DK is connected to the Ubuntu main control platform over the USB port, the IP address is 192.168.1.2.
 
-### 案例运行
-- 在Atlas200DK推理平台运行可执行文件，程序将等待接收Realsense的RGB数据进行推理：
+### Sample Running
+- Run the executable file on the Atlas 200 DK inference platform. The program waits for the RGB data from the RealSense for inference.
 
     ```shell
     cd $HOME/samples/python/level3_multi_model/Robotic_Arm_Object_Following/src 
     python3.6 object_detection.py
     ```
 
-- 在Ubuntu主控平台运行可执行程序，发送RGB数据到Atlas200DK，并接收推理结果控制Dobot-Magician机械臂：
-    
+- Run the executable program on the Ubuntu main control platform, send RGB data to Atlas 200 DK, and receive the inference result to control the Dobot Magician robotic arm.
+  
     ```shell
     cd $HOME/samples/python/level3_multi_model/Robotic_Arm_Object_Following/src
     python3.6 robotic_arm_object_following.py
     ```
 
-### 预期结果
-运行成功后，可以用[Ascend图标](https://images.gitee.com/uploads/images/2021/0310/112721_0db30e79_5537256.png )来控制机械臂的移动，预期效果如下：
+### Expected Result
+After the running is successful, you can use the [Ascend icon](https://images.gitee.com/uploads/images/2021/0310/112721_0db30e79_5537256.png) to control the movement of the robotic arm. The expected effect is as follows:
 
 <div align=center><img width="640" height="480" src="doc/demo.gif"/></div>
-
