@@ -20,9 +20,3 @@
   | [YOLOV4_coco_detection_car_picture](./YOLOV4_coco_detection_car_picture) | 图片检测 | 输入输出均为JPG图片，模型为yolov4-onnx网络。输出车道线和车辆检测信息 | Ascend310 |
   | [YOLOV4_coco_detection_car_video](./YOLOV4_coco_detection_car_video) | 视频检测 | 输入输出均为视频文件，模型为yolov4-onnx网络。输出车道线和车辆检测信息 | Ascend310 |
   | [YOLOV4_coco_detection_picture](./YOLOV4_coco_detection_picture) | 视频检测 | 输入输出均为视频文件，模型为yolov4-onnx网络。输出COCO数据集所有检测结果 | Ascend310 |
-
-- **face_detection系列样例**
-  | 样例名称  | 样例说明  | 特性解析  | 支持芯片 |
-  |---|---|---|---|
-  | [face_detection_camera](./face_detection_camera) | 视频检测 | 输入为200DK摄像头，输出为presneter界面展示。对每一帧图片进行人脸检测 | Ascend310 |
-  | [face_detection_rtsp](./face_detection_rtsp) | 视频检测 | 输入为rtsp视频流，输出为presneter界面展示。对每一帧图片进行人脸检测 | Ascend310 |

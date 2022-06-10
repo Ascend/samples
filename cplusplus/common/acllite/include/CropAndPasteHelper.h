@@ -67,6 +67,7 @@ class CropAndPasteHelper {
     AclLiteError Process(ImageData& resizedImage, ImageData& srcImage);
     AclLiteError ProcessCropPaste(ImageData& cropedImage, ImageData& srcImage);
     AclLiteError ProportionProcess(ImageData& resizedImage, ImageData& srcImage);
+    AclLiteError ProportionCenterProcess(ImageData& resizedImage, ImageData& srcImage);
 
 private:
     AclLiteError InitCropAndPasteResource(ImageData& inputImage);

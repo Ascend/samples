@@ -148,7 +148,6 @@ public:
 
 private:
 
-  // intf channel for face register
   std::unique_ptr<ascend::presenter::Channel> intf_channel_;
 
   // presenter channel for camera data

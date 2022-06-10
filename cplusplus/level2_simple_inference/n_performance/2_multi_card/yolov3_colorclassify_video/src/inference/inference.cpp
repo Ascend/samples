@@ -190,7 +190,7 @@ int InferenceThread::CopyImageData(uint8_t *buffer,
     ret = CopyDataToDeviceEx(buffer, bufferSize, image.data.get(), dataSize, 
                              runMode_);
     if (ret) {
-        ACLLITE_LOG_ERROR("Copy face data to device failed");
+        ACLLITE_LOG_ERROR("Copy data to device failed");
         return kInvalidSize;
     }
 

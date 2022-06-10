@@ -58,7 +58,6 @@ MAX_APP_NUM = 2
 
 
 class DisplayServer(PresenterSocketServer):
-    '''A server for face detection'''
 
     def __init__(self, server_address):
         '''init func'''
@@ -393,7 +392,6 @@ class DisplayServerManager():
 
 
 def run():
-    '''Entrance function of Face Detection Server '''
     # read config file
     config = ConfigParser()
 

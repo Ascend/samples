@@ -80,7 +80,7 @@
 ### 查看结果
 
 运行完成后，会在样例工程的out目录下生成带推理结果的jpg图片，显示对比结果如下所示。
-![输入图片说明](https://images.gitee.com/uploads/images/2021/1102/181934_bf935ec6_8070502.png "屏幕截图.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2021/1102/181934_bf935ec6_8070502.png)
 
 ### 常见错误
 请参考[常见问题定位](https://github.com/Ascend/samples/wikis/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D/%E4%BB%8B%E7%BB%8D)对遇到的错误进行排查。如果wiki中不包含，请在samples仓提issue反馈。

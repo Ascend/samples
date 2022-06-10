@@ -55,6 +55,7 @@ int32_t sample_comm_vpc_batch_crop_resize_make_border(FuncInput funcInput)
     double paddingValR = funcInput.g_vpc_attribute.paddingValR;
     double paddingValG =  funcInput.g_vpc_attribute.paddingValG;
     double paddingValB = funcInput.g_vpc_attribute.paddingValB;
+    hi_vpc_bord_type paddingMode = funcInput.g_vpc_attribute.paddingMode;
     uint32_t multiCount = funcInput.g_vpc_attribute.multiCount;
     uint32_t srcPicNum = funcInput.g_vpc_attribute.srcPicNum;
     hi_vpc_chn chnId = funcInput.chnId;
@@ -142,7 +143,7 @@ int32_t sample_comm_vpc_batch_crop_resize_make_border(FuncInput funcInput)
         cropResizeMakeBorderInfos[i].resize_info.resize_width = resizeWidth;
         cropResizeMakeBorderInfos[i].resize_info.resize_height = resizeHeight;
         cropResizeMakeBorderInfos[i].resize_info.interpolation = interpolation;
-        cropResizeMakeBorderInfos[i].border_type = (hi_vpc_bord_type)0;
+        cropResizeMakeBorderInfos[i].border_type = paddingMode;
         cropResizeMakeBorderInfos[i].dest_left_offset = destLeftOffset;
         cropResizeMakeBorderInfos[i].dest_top_offset = destTopOffset;
         cropResizeMakeBorderInfos[i].scalar_value.val[0] = paddingValR;

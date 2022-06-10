@@ -67,7 +67,7 @@ struct Rectangle {
 struct CarInfo {
     ImageData cropedImgs;  // cropped image from original image
     ImageData resizedImgs;  //resized image for inference
-    Rectangle rectangle;  // face rectangle
+    Rectangle rectangle;  
     std::string detect_result;
     std::string carColor_result;
 };

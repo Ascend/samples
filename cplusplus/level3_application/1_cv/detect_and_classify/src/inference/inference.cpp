@@ -56,16 +56,6 @@ InferenceThread::~InferenceThread() {
 }
 
 AclLiteError InferenceThread::InitModelInput() {
-    const float imageInfo[4] = {(float)kDetectModelWidth, (float)kDetectModelHeight,
-                                (float)kDetectModelWidth, (float)kDetectModelHeight};
-    imageInfoSize_ = sizeof(imageInfo);
-    imageInfoBuf_ = CopyDataToDevice((void *)imageInfo, imageInfoSize_,
-                                     runMode_, MEMORY_DEVICE);
-    if (imageInfoBuf_ == nullptr) {
-        ACLLITE_LOG_ERROR("Copy image info to device failed");
-        return ACLLITE_ERROR;
-    }
-
     classifyInputSize_ = YUV420SP_SIZE(kClassifyModelWidth, kClassifyModelHeight) * batchSize_;
     void* buf = nullptr;
     aclError aclRet = aclrtMalloc(&buf, classifyInputSize_, 
@@ -105,6 +95,20 @@ AclLiteError InferenceThread::DetectModelExecute(shared_ptr<CarDetectDataMsg> ca
     if (carDetectDataMsg->isLastFrame == 1) {
         ACLLITE_LOG_INFO("it is lastframe in Detect Inference");
         return ACLLITE_OK;
+    }
+    aclFloat16 new_shapeHeight = aclFloatToFloat16((float)kDetectModelHeight);
+    aclFloat16 new_shapeWidth = aclFloatToFloat16((float)kDetectModelWidth);
+    aclFloat16 orig_shapeHeight = aclFloatToFloat16((float)carDetectDataMsg->imageFrame.height);
+    aclFloat16 orig_shapeWidth = aclFloatToFloat16((float)carDetectDataMsg->imageFrame.width);
+    const aclFloat16 imageInfo[4] = {new_shapeHeight, new_shapeWidth,
+                                     orig_shapeHeight, orig_shapeWidth};
+    imageInfoSize_ = aclDataTypeSize(ACL_FLOAT16) * 4;
+    imageInfoBuf_ = CopyDataToDevice((void *)imageInfo, imageInfoSize_,
+                                     runMode_, MEMORY_DEVICE);
+    if (imageInfoBuf_ == nullptr)
+    {
+        ACLLITE_LOG_ERROR("Copy image info to device failed");
+        return ACLLITE_ERROR;
     }
 
     AclLiteError ret = detectModel_.CreateInput(carDetectDataMsg->resizedFrame.data.get(), 
@@ -191,7 +195,7 @@ int InferenceThread::CopyImageData(uint8_t *buffer,
     ret = CopyDataToDeviceEx(buffer, bufferSize, image.data.get(), dataSize, 
                              runMode_);
     if (ret) {
-        ACLLITE_LOG_ERROR("Copy face data to device failed");
+        ACLLITE_LOG_ERROR("Copy data to device failed");
         return kInvalidSize;
     }
 

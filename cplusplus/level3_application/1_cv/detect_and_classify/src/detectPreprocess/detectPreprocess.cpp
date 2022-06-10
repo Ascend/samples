@@ -258,14 +258,12 @@ AclLiteError DetectPreprocessThread::ReadPic(shared_ptr<CarDetectDataMsg> &carDe
     string picFile = fileVec_[frameCnt_];
     AclLiteError ret = ReadJpeg(carDetectDataMsg->imageFrame, picFile);
     carDetectDataMsg->frame = cv::imread(picFile);
-
     frameCnt_++;
     
     return ACLLITE_OK;
 }
 
 AclLiteError DetectPreprocessThread::ReadStream(shared_ptr<CarDetectDataMsg> &carDetectDataMsg) {
-    
     carDetectDataMsg->inferThreadId = inferThreadId_;
     carDetectDataMsg->detectPostThreadId = detectPostThreadId_;
     carDetectDataMsg->classifyPreThreadId = classifyPreThreadId_;
@@ -308,7 +306,7 @@ AclLiteError DetectPreprocessThread::ProcessPic(shared_ptr<CarDetectDataMsg> &ca
         return ACLLITE_ERROR;
     }
 
-    ret = dvpp_.Resize(carDetectDataMsg->resizedFrame, carDetectDataMsg->imageFrame, modelWidth_, modelHeight_);
+    ret = dvpp_.ProportionPasteCenter(carDetectDataMsg->resizedFrame, carDetectDataMsg->imageFrame, 0, 0, modelWidth_, modelHeight_);
     if (ret == ACLLITE_ERROR) {
         ACLLITE_LOG_ERROR("Pic decode failed");
         return ACLLITE_ERROR;
@@ -327,7 +325,7 @@ AclLiteError DetectPreprocessThread::ProcessStreamFrame(shared_ptr<CarDetectData
         return ACLLITE_ERROR;
     }
 
-    ret = dvpp_.Resize(carDetectDataMsg->resizedFrame, imageDevice, modelWidth_, modelHeight_);
+    ret = dvpp_.ProportionPasteCenter(carDetectDataMsg->resizedFrame, imageDevice, 0, 0, modelWidth_, modelHeight_);
     if (ret == ACLLITE_ERROR) {
         ACLLITE_LOG_ERROR("dvpp_cropandpaste image failed");
         return ACLLITE_ERROR;

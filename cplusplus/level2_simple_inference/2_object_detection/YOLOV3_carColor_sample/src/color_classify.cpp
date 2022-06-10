@@ -74,7 +74,7 @@ AclLiteError ColorClassify::InitModelInput() {
 
 AclLiteError ColorClassify::Init() {
     if (isInited_) {
-        ACLLITE_LOG_INFO("Face detection is initied already");
+        ACLLITE_LOG_INFO("Object detection is initied already");
         return ACLLITE_OK;
     }
 
@@ -176,7 +176,7 @@ int ColorClassify::CopyImageData(uint8_t *buffer, uint32_t bufferSize, ImageData
     uint32_t dataSize = YUV420SP_SIZE(kModelWidth, kModelHeight);
     ret = CopyDataToDeviceEx(buffer, bufferSize, image.data.get(), dataSize, runMode_);
     if (ret) {
-        ACLLITE_LOG_ERROR("Copy face data to device failed");
+        ACLLITE_LOG_ERROR("Copy data to device failed");
         return kInvalidSize;
     }
 

@@ -68,14 +68,14 @@
 
 - 命令行方式下载。
   命令行中执行以下命令下载源码仓。
-  **git clone https://github.com/Ascend/modelzoo.git**
+  **git clone https://gitee.com/mindspore/models.git**
 - 压缩包方式下载。
-  1. [modelzoo仓](https://github.com/Ascend/modelzoo)右上角选择 **克隆/下载** 下拉框并选择 **下载ZIP**。
-  2. 解压zip包，进入modelzoo/built-in/MindSpore/Official/cv/image_classification/LeNet_for_MindSpore目录，准备上传到OBS。
+  1. [mindspore/models仓](https://gitee.com/mindspore/models)右上角选择 **克隆/下载** 下拉框并选择 **下载ZIP**。
+  2. 解压zip包，进入models/official/cv/lenet目录，准备上传到OBS。
 
 - 上传数据至OBS
 
-windows环境中在OBS Browser+中，进入刚刚创建的“华为北京四”区域的OBS桶，然后点击上传按钮，上传本地文件夹**Date和modelzoo/built-in/MindSpore/Official/cv/image_classification/LeNet_for_MindSpore**至OBS桶的一个文件目录下。
+windows环境中在OBS Browser+中，进入刚刚创建的“华为北京四”区域的OBS桶，然后点击上传按钮，上传本地文件夹**Date和models/official/cv/lenet**至OBS桶的一个文件目录下。
 
 ![](https://images.gitee.com/uploads/images/2021/0127/151112_1ab34d4a_5400693.png "uploadfolder.png")
 
@@ -227,7 +227,7 @@ export(network, Tensor(input_data), file_name = './lenet', file_format = 'AIR')
 
 ```
 import moxing as mox
-mox.file.copy('/home/ma-user/work/lenet.air', 'obs://train-moderlarts/wy/LeNet_for_MindSpore/lenet.air')
+mox.file.copy('/home/ma-user/work/lenet.air', 'obs://train-moderlarts/wy/lenet/lenet.air')
 ```
 
 执行成功后就可以在OBS的路径下看到自己的模型文件了，在OBS界面获取这个.air文件的链接，下载模型文件，准备做离线模型转换。
@@ -387,7 +387,7 @@ atc --framework=1 --model=lenet.air --output=mnist --soc_version=Ascend310
  **任务四 应用运行** 
 本应用的运行过程是在开发板上执行，需要将工程文件拷贝到开发板上。
 
-我们在如下链接[https://github.com/Ascend/samples/tree/master/python/level2_simple_inference/1_classification/lenet_mindspore_picture](https://github.com/Ascend/samples/tree/master/python/level2_simple_inference/1_classification/lenet_mindspore_picture)的readme中详细提供了运行本案例部署和运行步骤、脚本使用方法与各参数的意义供读者阅读与实验。
+我们在如下链接[lenet_mindspore_picture应用](https://github.com/Ascend/samples/tree/master/python/level2_simple_inference/1_classification/lenet_mindspore_picture)的readme中详细提供了运行本案例部署和运行步骤、脚本使用方法与各参数的意义供读者阅读与实验。
 
 步骤 1 准备开发板运行环境
 

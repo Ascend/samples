@@ -48,8 +48,7 @@ class YOLOV3(object):
         return np.array(anchors).reshape(-1, 2)
 
     def inference(self, img):
-        """Run YOLOv3 for face detection
-
+        """
         Args:
             img ([ndarray]): image (416, 416, 3)
         """

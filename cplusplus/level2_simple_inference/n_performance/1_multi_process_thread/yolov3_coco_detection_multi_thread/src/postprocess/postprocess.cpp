@@ -26,7 +26,6 @@
 using namespace std;
 
 namespace {
-const static std::vector<std::string> ssdLabel = { "background", "face"};
 const uint32_t kBBoxDataBufId = 0;
 const uint32_t kBoxNumDataBufId = 1;
 const uint32_t kItemSize = 8;

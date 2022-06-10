@@ -45,13 +45,13 @@
 2. 获取此应用中所需要的原始网络模型。
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
-    |  mask_detection.pb | 基于TensorFlow-YOLOV3的口罩检测模型。  |  请参考[https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/yolov3_resnet18/ATC_yolo3_resnet18_tf_AE](https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/yolov3_resnet18/ATC_yolo3_resnet18_tf_AE)目录中README.md下载原始模型章节下载原始模型文件。 |
+    |  yolo3_resnet18.pb | 基于TensorFlow-YOLOV3的口罩检测模型。  |  请参考[https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/yolov3_resnet18/ATC_yolo3_resnet18_tf_AE](https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/yolov3_resnet18/ATC_yolo3_resnet18_tf_AE)目录中README.md下载原始模型章节下载原始模型文件。 |
     | mask_detection_quanzited.pb | 基于TensorFlow-YOLOV3的口罩检测的量化后模型。 | 下载地址:https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com:443/003_Atc_Models/AE/ATC%20Model/YOLOV3-RESNET18%20/yolo3_resnet18_quantized.pb (转换om离线模型的操作和未量化的pb模型是一样的,量化的具体操作可以参考：https://github.com/Ascend/samples/wikis/%E4%BD%BF%E7%94%A8AMCT%E5%B7%A5%E5%85%B7%E9%87%8F%E5%8C%96YOLOV3%E6%A8%A1%E5%9E%8B?sort_id=4402780 ,如果选择使用量化后模型请注意样例中模型名称的替换) |
     ```
     # 为了方便下载，在这里直接给出原始模型下载及模型转换命令,可以直接拷贝执行。也可以参照上表在modelzoo中下载并手工转换，以了解更多细节。     
     cd ${HOME}/samples/python/level2_simple_inference/2_object_detection/YOLOV3_mask_detection_picture/model    
-    wget https://obs-model-ascend.obs.cn-east-2.myhuaweicloud.com/mask_detection/mask_detection.pb     
-    atc --input_shape="images:1,352,640,3" --input_format=NHWC --output="./mask_detection" --soc_version=Ascend310 --framework=3 --model="./mask_detection.pb"
+    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOV3-RESNET18%20/yolo3_resnet18.pb     
+    atc --input_shape="images:1,352,640,3" --input_format=NHWC --output="./mask_detection" --soc_version=Ascend310 --framework=3 --model="./yolo3_resnet18.pb"
     ```
 
 3. 获取样例需要的测试图片。

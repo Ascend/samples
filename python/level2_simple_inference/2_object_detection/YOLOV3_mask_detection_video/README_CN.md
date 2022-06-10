@@ -3,7 +3,7 @@
 **本README只提供命令行方式运行样例的指导，如需在Mindstudio下运行样例，请参考[Mindstudio运行视频样例wiki](https://github.com/Ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E6%A0%B7%E4%BE%8B%E6%8C%87%E5%8D%97/Mindstudio%E8%BF%90%E8%A1%8C%E8%A7%86%E9%A2%91%E6%A0%B7%E4%BE%8B)。**
 
 ## 口罩识别视频输入样例
-功能：实现了对视频中的口罩、人脸、人信息进行预测的功能。   
+功能：实现了对视频中的口罩、人的位置信息进行预测的功能。   
 样例输入：待检测的视频。    
 样例输出：presenter界面展现推理结果。
 

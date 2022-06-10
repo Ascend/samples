@@ -443,8 +443,8 @@ int32_t get_dst_stride_picture(const hi_vpc_pic_info& srcPic, const hi_vpc_pic_i
                     srcPic.picture_width);
             }
             // copy uv component
-            srcBufUV = srcBufY + srcPic.picture_width_stride * srcPic.picture_height_stride;
-            dstBufUV = dstBufY + dstPic.picture_width_stride * dstPic.picture_height_stride;
+            srcBufUV = srcBufY + srcPic.picture_width_stride * srcPic.picture_height;
+            dstBufUV = dstBufY + dstPic.picture_width_stride * dstPic.picture_height;
             for (uint32_t i = 0; i < srcPic.picture_height; ++i) {
                 memcpy(dstBufUV + i * dstPic.picture_width_stride, srcBufUV + i * srcPic.picture_width_stride,
                     srcPic.picture_width);

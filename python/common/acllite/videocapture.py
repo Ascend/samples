@@ -91,6 +91,7 @@ class VideoCapture(object):
         self._width = 0
         self._height = 0
         self._decode_thread_id = None
+        self._dextory_dvpp_flag = False
         self._ctx, ret = acl.rt.get_context()
         if ret:
             acl_log.log_error("Get acl context failed when "
@@ -367,6 +368,9 @@ class VideoCapture(object):
         """Release all decode resource"""
         if self._vdec is not None:
             self._vdec.destroy()
+        while self._vdec._destory_channel_flag == False:
+            time.sleep(0.001)
         if self._input_buffer is not None:
             acl.media.dvpp_free(self._input_buffer)
             self._input_buffer = None
+        self._dextory_dvpp_flag = True

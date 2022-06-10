@@ -25,5 +25,4 @@ This warehouse contains a variety of detection samples for users' reference. The
 - **Other samples**
   | sample  | description  | support chip |
   |---|---|---|
-  | [face_detection_camera](./face_detection_camera)  | Use the face detection model to detect the face of the instant video in the raspberry camera  | Ascend310 |
   | [YOLOV4_coco_detection<br>_picture](./YOLOV4_coco_detection_picture)  | Use the yolov4 model to perform predictive inference on the input picture, and print the result on the output picture.  | Ascend310 |

@@ -100,6 +100,7 @@ AclLiteError AclLiteImageProc::JpegD(ImageData& dest, ImageData& src) {
     JpegDHelper jpegD(stream_, dvppChannelDesc_);
     return jpegD.Process(dest, src);
 }
+
 //CropAndPasteHelper
 AclLiteError AclLiteImageProc::Crop(ImageData& dest, ImageData& src,
                                     uint32_t ltHorz, uint32_t ltVert,
@@ -125,6 +126,14 @@ AclLiteError AclLiteImageProc::ProportionPaste(ImageData& dest, ImageData& src,
     CropAndPasteHelper crop(stream_, dvppChannelDesc_, 
                             ltHorz, ltVert, rbHorz, rbVert);
     return crop.ProportionProcess(dest, src);
+}
+
+AclLiteError AclLiteImageProc::ProportionPasteCenter(ImageData& dest, ImageData& src,
+                                               uint32_t ltHorz, uint32_t ltVert,
+                                               uint32_t rbHorz, uint32_t rbVert) {
+    CropAndPasteHelper crop(stream_, dvppChannelDesc_, 
+                            ltHorz, ltVert, rbHorz, rbVert);
+    return crop.ProportionCenterProcess(dest, src);
 }
 
 AclLiteError AclLiteImageProc::JpegE(ImageData& dest, ImageData& src) {

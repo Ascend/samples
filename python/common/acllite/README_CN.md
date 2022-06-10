@@ -165,6 +165,28 @@ AclLiteImage类型的图片数据
 
 AclLiteModel类为python-acllite对acl模型推理相关接口的封装，包括但不限于模型加载与初始化，模型输入输出dataset的创建，模型推理执行及资源释放等功能。
 
+#### __init__
+
+方法：AclLiteModel(model_path, load_type)
+
+说明：
+
+模型推理类初始化
+
+输入数据：
+
+model_path：模型的路径。
+
+load_type：加载模型的方式，可选0和1，默认值为0。（0：从文件加载离线模型数据；1：从内存加载离线模型数据）
+
+返回值：
+
+无
+
+约束：
+
+无
+
 #### execute
 
 方法：execute (input_list):

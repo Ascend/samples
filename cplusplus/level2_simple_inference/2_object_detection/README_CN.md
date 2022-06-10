@@ -25,5 +25,4 @@
 - **其它样例**
   | 样例  | 说明  | 支持芯片 |
   |---|---|---|
-  | [face_detection_camera](./face_detection_camera)  | 使用人脸检测模型对树莓摄像头中的即时视频进行人脸检测  | Ascend310 |
   | [YOLOV4_coco_detection<br>_picture](./YOLOV4_coco_detection_picture)  | 使用yolov4模型对输入图片进行预测推理，并将结果打印到输出图片上。  | Ascend310 |

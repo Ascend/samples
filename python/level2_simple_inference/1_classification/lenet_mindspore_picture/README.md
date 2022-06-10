@@ -1,132 +1,90 @@
-English|[中文](README_CN.md)
+[中文](README_CN.md)|English
 
 **This sample provides reference for you to learn the Ascend AI Software Stack and cannot be used for commercial purposes.**
 
-**This sample applies to CANN 3.0.0 and later versions, and supports Atlas 200 DK and Atlas 300 ([AI1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366)).**
+**This README file provides only guidance for running the sample in command line (CLI) mode.**
 
-**This readme file provides only guidance for running the sample in command line (CLI) mode.**
+## Handwritten Digit Classification Sample
 
-## Garbage Sorting Sample
+Function: classifies input images by using the LeNet model.  
+Input: a source JPG image.   
+Output: TXT file that stores digits in the image.  
 
-Function: classifies input images by using the lenet model.
-
-Input: JPG images to be inferred
-
-Output: the number of JPG images after inference
-
-For details about the training, see [mnist Sorting with lenet](https://gitee.com/mindspore/models/blob/master/official/cv/lenet/README.md).
-In Ascend910 ， use scripts/convert.py convert checkpoint_lenet-1_1875.ckpt to mnist.air
-
+For details about the training process, see [LeNet MindSpore training](https://gitee.com/mindspore/models/blob/master/official/cv/lenet/README.md).
+ In the Ascend 910 environment, use the **scripts/convert.py** script to convert the trained **checkpoint_lenet-1_1875.ckpt** model file into the **mnist.air** model file.
 
 ### Prerequisites
+Check whether the following requirements are met. If not, perform operations according to the remarks. If the CANN version is upgraded, check whether the third-party dependencies need to be reinstalled. (The third-party dependencies for 5.0.4 and later versions are different from those for earlier versions.)
+| Item      | Requirement                                                        | Remarks                                                        |
+| ---------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| CANN version  | ≥ 5.0.4                                                    | Install the CANN by referring to [Installation](https://github.com/Ascend/samples#%E5%AE%89%E8%A3%85) in the About Ascend Samples Repository. If the CANN version is earlier than the required version, switch to the samples repository specific to the CANN version. See [Release Notes](https://github.com/Ascend/samples/blob/master/README.md). |
+| Hardware  | Atlas200DK/Atlas300 ([Ai1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366)) | Currently, the Atlas 200 DK and Atlas 300 have passed the test. For details about the product description, see [Hardware Platform](https://ascend.huawei.com/en/#/hardware/product). For other products, adaptation may be required.|
+| Third-party dependency| opencv, numpy                                                | Select required dependencies. See [Third-Party Dependency Installation Guide (Python Sample)](https://github.com/Ascend/samples/tree/master/python/environment).|
 
-Before deploying this sample, ensure that:
+### Sample Preparation
 
-- The environment has been set up by referring to [Environment Preparation and Dependency Installation](https://github.com/Ascend/samples/tree/master/python/environment).
+1. Obtain the source package.
 
-- The development environment and operating environment of the corresponding product have been installed.
-
-### Software Preparation
-
-1. Obtain the source code package.
-
-   You can download the source code in either of the following ways:
-
+   You can download the source code in either of the following ways:  
     - Command line (The download takes a long time, but the procedure is simple.)
-
-        In the development environment, run the following commands as a non-root user to download the source code repository:
-
-       **cd $HOME**
-
-       **git clone https://github.com/Ascend/samples.git**
-
-    - Compressed package (The download takes a short time, but the procedure is complex.)
-
-        1. Click **Clone or download** in the upper right corner of the samples repository and click **Download ZIP**.
-
-        2. Upload the .zip package to the home directory of a common user in the development environment, for example, **$HOME/ascend-samples-master.zip**.
-
-        3. In the development environment, run the following commands to unzip the package:
-
-            **cd $HOME**
-
-            **unzip ascend-samples-master.zip**
+       ```    
+       # In the development environment, run the following commands as a non-root user to download the source repository:   
+       cd ${HOME}     
+       git clone https://github.com/Ascend/samples.git
+       ```
+       **Note: To switch to another tag (for example, v0.5.0), run the following command:**
+       ```
+       git checkout v0.5.0
+       ```
+    - Compressed package (The download takes a short time, but the procedure is complex.)  
+       **Note: If you want to download the code of another version, switch the branch of the samples repository according to the prerequisites.**  
+       ``` 
+        # 1. Click Clone or Download in the upper right corner of the samples repository and click Download ZIP.   
+        # 2. Upload the .zip package to the home directory of a common user in the development environment, for example, ${HOME}/ascend-samples-master.zip.    
+        # 3. In the development environment, run the following commands to unzip the package:    
+        cd ${HOME}    
+        unzip ascend-samples-master.zip
+       ```
 
 2. Obtain the source model required by the application.
+    | **Model**| **Description**                                  | **How to Obtain**                                            |
+    | ------------ | ---------------------------------------------- | ------------------------------------------------------------ |
+    | MNIST | Image classification inference model. It is a LeNet model based on MindSpore.| https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/lenet/mnist.air |
+    ```
+    # To facilitate download, the commands for downloading the original model and converting the model are provided here. You can directly copy and run the commands.
+    cd ${HOME}/samples/python/level2_simple_inference/1_classification/lenet_mindspore_picture/model    
+    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/lenet/mnist.air
+    atc --framework=1 --model=mnist.air  --output=mnist --soc_version=Ascend310
+    ```
 
-    Obtain the original model and its weight files used in the application by referring to the following table and save them to any directory of a common user in the development environment, for example, **$HOME/models/garbage_picture**.
-
-    | **Model Name** | **Description**                          | **How to Obtain**                        |
-    | -------------- | ---------------------------------------- | ---------------------------------------- |
-    | mnist    | Image classification inference model. It is a lenet model based on MindSpore. | https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/lenet/mnist.air |
-
-
-
-3. Convert the original model to a Da Vinci model.
-
-    **Note: Ensure that the environment variables have been configured in [Environment Preparation and Dependency Installation](https://github.com/Ascend/samples/tree/dev/python/environment).**
-
-    1. Set the ***LD_LIBRARY_PATH*** environment variable.
-
-        The ***LD_LIBRARY_PATH*** environment variable conflicts with the sample when the ATC tool is used. Therefore, you need to set this environment variable separately in the CLI to facilitate modification.
-
-        **export install_path=$HOME/Ascend/ascend-toolkit/latest**
-
-        **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64**  
-
-    2. Run the following commands to  convert the model:
-
-        **cd $HOME/models/lenet_mindspore**
-
-        **atc --framework=1 --model=mnist.air  --output=mnist --soc_version=Ascend310**
-
-    3. Run the following command to copy the converted model to the **model** folder of the sample:
-
-        **cp ./mnist.om $HOME/samples/python/level2_simple_inference/1_classification/lenet_mindspore_picture/model/**
-
-4. Obtain the test images required by the sample.
-
-    Run the following commands to go to the **data** folder of the sample and download the corresponding test images:
-
-    **cd $HOME/samples/python/level2_simple_inference/1_classification/lenet_mindspore_picture/data**
-
-    **https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/lenet_mindspore/test_image/test1.png**
-
-    **https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/lenet_mindspore/test_image/test2.png** 
-    
-    **https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/lenet_mindspore/test_image/test3.png**      
-
-
+3. Obtain the test image required by the sample.
+    ```
+    # To facilitate download, the commands for downloading the original model and converting the model are provided here. You can directly copy and run the commands.
+    cd ${HOME}/samples/python/level2_simple_inference/1_classification/lenet_mindspore_picture/data    
+    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/lenet_mindspore/test_image/test1.png
+    ```
 
 ### Sample Running
 
-**Note: If the development environment and operating environment are set up on the same server, skip step 1 and go to [step 2](#step_2) directly.**   
+**Note: If the development environment and operating environment are set up on the same server, skip step 1 and go to [step 2](#step_2) directly.**  
 
-1. Run the following commands to upload the **samples** directory in the development environment to any directory in the operating environment, for example, **/home/HwHiAiUser**, and log in to the operating environment (host) as the **HwHiAiUser** user:
+1. Run the following commands to upload the **lenet_mindspore_picture** directory in the development environment to any directory in the operating environment, for example, **/home/HwHiAiUser**, and log in to the operating environment (host) as the running user (**HwHiAiUser**):
+    ```
+    # In the following information, xxx.xxx.xxx.xxx is the IP address of the operating environment. The IP address of Atlas 200 DK is 192.168.1.2 when it is connected over the USB port, and that of Atlas 300 (AI1s) is the corresponding public IP address.
+    scp -r ${HOME}/samples/python/level2_simple_inference/1_classification/lenet_mindspore_picture HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser
+    ssh HwHiAiUser@xxx.xxx.xxx.xxx
+    cd ${HOME}/lenet_mindspore_picture/src    
+    ```
 
-    **scp -r $HOME/samples/  HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser**
+2. Run the sample.
+   ```
+   cd ${HOME}/samples/python/level2_simple_inference/1_classification/lenet_mindspore_picture/src
+   python3.6 classify.py ./data/
+   ```
 
-    **ssh HwHiAiUser@xxx.xxx.xxx.xxx**    
+### Result Viewing
 
-    ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **NOTE**  
-
-    > - In the following information, ***xxx.xxx.xxx.xxx*** is the IP address of the operating environment. The IP address of Atlas 200 DK is **192.168.1.2** when it is connected over the USB port, and that of Atlas 300 (AI1s) is the corresponding public IP address.
-
-2. Run the executable file.
-
-      **export LD_LIBRARY_PATH=**  
-
-      **source ~/.bashrc**  
-
-      **cd $HOME/samples/python/level2_simple_inference/1_classification/lenet_mindspore_picture/**     
-
-    Run the following command to run the sample:
-
-    **python3.6 src/classify.py ./data/**
-### Result Checking
-
-After the execution is complete, it will display:
-
+The inference result is displayed in the command line.
 ```
 init resource stage:
 Init resource success
@@ -135,24 +93,6 @@ Init model resource start...
 malloc output 0, size 40
 Create model output dataset success
 Init model resource success
-(32, 32)
-post process
-images:test2.png
-======== top5 inference results: =============
-label:9  confidence: 0.991472, class: 9
-label:7  confidence: 0.003693, class: 7
-label:8  confidence: 0.001775, class: 8
-label:3  confidence: 0.001515, class: 3
-label:4  confidence: 0.000880, class: 4
-(32, 32)
-post process
-images:test3.png
-======== top5 inference results: =============
-label:7  confidence: 0.958997, class: 7
-label:9  confidence: 0.022686, class: 9
-label:8  confidence: 0.006465, class: 8
-label:3  confidence: 0.005904, class: 3
-label:1  confidence: 0.002834, class: 1
 (32, 32)
 post process
 images:test1.png
@@ -170,4 +110,7 @@ Reset acl device  0
 Release acl resource success
 run success
 ```
+A .txt file is generated in the outputs folder to store the number with the highest confidence.
 
+### Common Errors
+For details about how to rectify the errors, see [Troubleshooting](https://github.com/Ascend/samples/wikis/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D/%E4%BB%8B%E7%BB%8D). If an error is not included in Wiki, submit an issue to the **samples** repository.

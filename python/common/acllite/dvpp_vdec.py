@@ -59,6 +59,7 @@ class DvppVdec(object):
         self._output_pic_size = (self._width * self._height * 3) // 2
         self._frame_queue = queue.Queue(64)
         self._frame_config = None
+        self._destory_channel_flag = False
 
     def _callback_thread_entry(self, args_list):
         ret = acl.rt.set_context(self._ctx)
@@ -215,6 +216,7 @@ class DvppVdec(object):
         if self._frame_config is not None:
             acl.media.vdec_destroy_frame_config(self._frame_config)
             self._frame_config = None
+        self._destory_channel_flag = True
 
     def is_finished(self):
         """Video decode finished"""

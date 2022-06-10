@@ -20,9 +20,3 @@ This catalog contains a variety of test samples for users' reference. The direct
   | [YOLOV4_coco_detection_car_picture](./YOLOV4_coco_detection_car_picture) | Picture detection | The input and output are all JPG pictures, and the model is yolov4-onnx network. Output lane line and vehicle detection information | Ascend310 |
   | [YOLOV4_coco_detection_car_video](./YOLOV4_coco_detection_car_video) | Video detection | The input and output are all video files, and the model is yolov4-onnx network. Output lane line and vehicle detection information | Ascend310 |
   | [YOLOV4_coco_detection_picture](./YOLOV4_coco_detection_picture) | Video detection | The input and output are all video files, and the model is yolov4-onnx network. Output all test results of COCO data set | Ascend310 |
-
-- **face_detection series samples**
-  | Sample name  | Sample description  | Characteristic analysis  | support chip |
-  |---|---|---|---|
-  | [face_detection_camera](./face_detection_camera) | Video detection | The input is a 200DK camera, and the output is the presneter interface display. Face detection for each frame of picture | Ascend310 |
-  | [face_detection_rtsp](./face_detection_rtsp) | Video detection | The input is the rtsp video stream, and the output is the presneter interface display. Face detection for each frame of picture | Ascend310 |

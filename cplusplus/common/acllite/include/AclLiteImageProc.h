@@ -43,10 +43,13 @@ public:
     AclLiteError CropPaste(ImageData& dest, ImageData& src,
                            uint32_t width, uint32_t height,
                            uint32_t ltHorz, uint32_t ltVert,
-                           uint32_t rbHorz, uint32_t rbVert);                           
+                           uint32_t rbHorz, uint32_t rbVert);
     AclLiteError ProportionPaste(ImageData& dest, ImageData& src,
                                  uint32_t ltHorz, uint32_t ltVert,
                                  uint32_t rbHorz, uint32_t rbVert); 
+    AclLiteError ProportionPasteCenter(ImageData& dest, ImageData& src,
+                                               uint32_t ltHorz, uint32_t ltVert,
+                                               uint32_t rbHorz, uint32_t rbVert);
     void DestroyResource();
 
 protected:

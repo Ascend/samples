@@ -52,7 +52,7 @@ int main(int argc, char *argv[]) {
     int channelId = 0;  //camera port
     bool bSetChannelId = true;
     if((argc < 2) || (argv[1] == nullptr))
-      bool bSetChannelId = false;
+      bSetChannelId = false;
 
     //获取camera channel id
     if(bSetChannelId)

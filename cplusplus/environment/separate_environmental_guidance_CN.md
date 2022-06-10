@@ -51,7 +51,7 @@
   source ~/.bashrc 
   # 创建第三方依赖文件夹
   mkdir -p ${THIRDPART_PATH}
-  # 拷贝相关数据，其中X.X.X.X为运行环境ip地址。
+  # 拷贝相关数据，其中X.X.X.X为开发环境ip地址。
   sudo scp -r HwHiAiUser@X.X.X.X:${THIRDPART_PATH}/common ${THIRDPART_PATH}
   ```  
   如果运行环境是200DK，还需要执行以下命令拷贝media_mini等动态库及相关头文件，满足摄像头样例运行需要。

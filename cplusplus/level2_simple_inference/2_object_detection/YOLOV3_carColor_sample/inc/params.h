@@ -16,7 +16,7 @@ struct Rectangle {
 struct CarInfo {
     ImageData cropedImgs;  // cropped image from original image
     ImageData resizedImgs;  //resized image for inference
-    Rectangle rectangle;  // face rectangle
+    Rectangle rectangle;  
     std::string text;   //类别
     std::string carColor_result;   //颜色
     float confidence;   //颜色

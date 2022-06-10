@@ -54,6 +54,7 @@ int32_t sample_comm_vpc_crop_resize_make_border(FuncInput funcInput)
     double paddingValR = funcInput.g_vpc_attribute.paddingValR;
     double paddingValG =  funcInput.g_vpc_attribute.paddingValG;
     double paddingValB = funcInput.g_vpc_attribute.paddingValB;
+    hi_vpc_bord_type paddingMode = funcInput.g_vpc_attribute.paddingMode;
     uint32_t multiCount = funcInput.g_vpc_attribute.multiCount;
     hi_vpc_chn chnId = funcInput.chnId;
 
@@ -107,7 +108,7 @@ int32_t sample_comm_vpc_crop_resize_make_border(FuncInput funcInput)
         cropResizeMakeBorderInfos[i].resize_info.interpolation = interpolation;
         cropResizeMakeBorderInfos[i].dest_left_offset = destLeftOffset;
         cropResizeMakeBorderInfos[i].dest_top_offset = destTopOffset;
-        cropResizeMakeBorderInfos[i].border_type = static_cast<hi_vpc_bord_type>(0);
+        cropResizeMakeBorderInfos[i].border_type = paddingMode;
         cropResizeMakeBorderInfos[i].scalar_value.val[0] =  paddingValR;
         cropResizeMakeBorderInfos[i].scalar_value.val[1] =  paddingValG;
         cropResizeMakeBorderInfos[i].scalar_value.val[2] =  paddingValB; // 2nd value of padding

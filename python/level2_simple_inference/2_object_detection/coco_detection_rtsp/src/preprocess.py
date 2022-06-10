@@ -81,7 +81,7 @@ class Preprocess(object):
 
             if image and (int(frame_cnt) % 5 == 0):
                 self._process_frame(image)  
-            time.sleep(0.0)
+            frame_cnt += 1
 
         self._thread_exit()        
 
@@ -112,6 +112,8 @@ class Preprocess(object):
             self._dvpp = None
 
         if self._cap is not None:
+            while self._cap._dextory_dvpp_flag == False:
+                time.sleep(0.001)
             del self._cap
             self._cap = None
 

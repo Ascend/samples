@@ -42,7 +42,6 @@ from common.presenter_socket_server import PresenterSocketServer
 from display.src.config_parser import ConfigParser
 
 class DisplayServer(PresenterSocketServer):
-    '''A server for face detection'''
     def __init__(self, server_address):
         '''init func'''
         self.channel_manager = ChannelManager(["image", "video"])
@@ -212,7 +211,6 @@ class DisplayServer(PresenterSocketServer):
         self.set_exit_switch()
 
 def run():
-    '''Entrance function of Face Detection Server '''
     # read config file
     config = ConfigParser()
 

@@ -83,7 +83,7 @@ struct Point {
 struct DetectionResult {
     Point lt;   //The coordinate of left top point
     Point rb;   //The coordinate of the right bottom point
-    std::string result_text;  // Face:xx%
+    std::string result_text;  
 };
 /**
  * ImageFrame

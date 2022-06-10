@@ -71,11 +71,11 @@ AclLiteError ClassifyPreprocessThread::Crop(vector<CarInfo> &carImgs, ImageData 
     for (int i = 0; i < carImgs.size(); i++) {
         ret = dvpp_.Crop(carImgs[i].cropedImgs, orgImg,
                          carImgs[i].rectangle.lt.x, carImgs[i].rectangle.lt.y,
-                         carImgs[i].rectangle.rb.x, carImgs[i].rectangle.rb.y);                                    
+                         carImgs[i].rectangle.rb.x, carImgs[i].rectangle.rb.y);
         if (ret) {
-            ACLLITE_LOG_ERROR("Crop image failed, error: %d, image width %d, "
+            ACLLITE_LOG_ERROR("Crop image failed, error: %d, orgImg width %d, "
                               "height %d, size %d, crop area (%d, %d) (%d, %d)", 
-                              ret, carImgs[i].cropedImgs.width, carImgs[i].cropedImgs.height,                            
+                              ret, orgImg.width, orgImg.height,
                               carImgs[i].cropedImgs.size, carImgs[i].rectangle.lt.x, 
                               carImgs[i].rectangle.lt.y, carImgs[i].rectangle.rb.x, 
                               carImgs[i].rectangle.rb.y);

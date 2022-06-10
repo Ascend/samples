@@ -25,7 +25,7 @@ class AclLiteModel(object):
         model_path: om offline mode file path
     """
 
-    def __init__(self, model_path):
+    def __init__(self, model_path, load_type=0):
         self._run_mode, ret = acl.rt.get_run_mode()
         utils.check_ret("acl.rt.get_run_mode", ret)
         self._copy_policy = const.ACL_MEMCPY_DEVICE_TO_DEVICE
@@ -33,6 +33,7 @@ class AclLiteModel(object):
             self._copy_policy = const.ACL_MEMCPY_DEVICE_TO_HOST
 
         self._model_path = model_path    # string
+        self._load_type = load_type
         self._model_id = None            # pointer
         self._input_num = 0
         self._input_buffer = []
@@ -52,8 +53,26 @@ class AclLiteModel(object):
                 self._model_path)
             return const.FAILED
 
-        self._model_id, ret = acl.mdl.load_from_file(self._model_path)
-        utils.check_ret("acl.mdl.load_from_file", ret)
+        if self._load_type == 0:
+            self._model_id, ret = acl.mdl.load_from_file(self._model_path)
+            utils.check_ret("acl.mdl.load_from_file", ret)
+        elif self._load_type == 1:
+            with open(self._model_path, "rb") as f:
+                om_bytes = f.read()
+            if om_bytes:
+                ptr = acl.util.bytes_to_ptr(om_bytes)
+                self._model_id, ret = acl.mdl.load_from_mem(ptr, len(om_bytes))
+                utils.check_ret("acl.mdl.load_from_mem", ret)
+            else:
+                log_error(
+                    "model_context is null, please check. model_path=%s" %
+                    self._model_path)
+                return const.FAILED
+        else:
+            log_error(
+                "load_type is not in 0 or 1, please check. load_type=%d" %
+                self._load_type)
+            return const.FAILED
         self._model_desc = acl.mdl.create_desc()
         ret = acl.mdl.get_desc(self._model_desc, self._model_id)
         utils.check_ret("acl.mdl.get_desc", ret)

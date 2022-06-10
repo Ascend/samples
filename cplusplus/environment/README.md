@@ -1,55 +1,25 @@
-English|[中文](README_CN.md)
+[中文](README_CN.md)|English
 
-## Third-party dependency installation guide（C++ sample）
+## Third-Party Dependency Installation Guide (C++ Sample)
 
-### Precondition
-**Install CANN package according to official documents.**   
+### Prerequisites
+**1. Install the CANN package according to the official guide.**    
+**2. The CANN version must be 5.0.4.alpha001 or later. If the CANN version is earlier than 5.0.4.alpha001, switch the tag and use the distribution by referring to the version description in [Ascend CANN Sample Repository](https://github.com/Ascend/samples/tree/master).**    
 
-### Installation note
-Some python samples in the samples repository use third-party dependencies such as opencv and ffmpeg for image processing, so you need to install third-party dependencies and configure the environment according to the instructions in this article before running. 
-- **Development environment：** Mainly used for coding, compiling and testing.    
-    （Scenario 1）Install development environment on Ascend AI device which can be used as operation environment, application execution and training script migration, testing and development.     
-    （Scenario 2）Install development environment on non-Ascend device which can only be used for coding, compiling, and other activities that do NOT rely on Ascend devices (such as ATC model convert, operator, application inference and other plainly code development).    
-- **Operation environment：** Migrate training scripts, code and test on applications developed by operation user on Ascend AI device.   
+### Installation Precautions
+Some C++ samples in the **samples** repository use third-party dependencies such as OpenCV and FFmpeg for image processing. You need to install the third-party dependencies and configure the environment before running the samples.
 
-### Scenario selection
-Select the corresponding scenario according to the following description.
+The development environment and running environment are described as follows:
+- **Running environment**: The running environment refers to the environment where operators, inference, or training programs run. The running environment must be on the basis of Ascend AI processors.      
+- **Development environment**: Used for code development, debugging, and build. The environment can be based on Ascend AI processors or any environment that meets CANN software installation requirements.      
 
-- [Ascend AI device as development, operation environment and third-party dependency installation in the operation scenario](./catenation_environmental_guidance_CN.md) **（recommended）**.   
-    **Pros：** Doesn't involve cross-compilation, easy third-party installation, compilation and execution together and no need to copy compiled executable file to operation environment.   
-    **Cons：** The CPU in development environment might be slow which results in slow compilation.
+### Scenario Selection
+Select the installation scenario based on the following description.
 
-- [Install third-party dependency in development environment on non-Ascend Ai device](./separate_environmental_guidance_CN.md).     
-    **Pros：** Aimed at arm operation environment, using x86 architecture for large sample compilation is quick.   
-    **Cons：** Involve cross-compilation, third-party dependency installation and sample execution might be complicated. 
+- [Install the development environment for the Ascend AI device and use this environment as the running environment.](catenation_environmental_guidance.md) (recommended)  
+    **Advantages**: Cross-compilation is not involved. The third-party dependency installation mode is simple. You do not need to copy the compiled executable files to the running environment.  
+    **Disadvantages**: The CPU usage of the running device may be low, resulting in a slow compilation speed.
 
-
-# C++ environment preparation and dependency installation
-
-### Introduction
-Introduction
-
-
-### Steps
-Please perform the following four steps in sequence, please click the corresponding link to install according to the device type.
-
-- for_atlas200dk  
-
-    [1.Basic environment configuration](./prepare_ENV/README_200DK_EN.md)： configure the basic environment, including the sudo permission, apt source, environment variables and deploying the Media Module  
-
-    [2.Install ffmpeg and opencv](./opencv_install/README_200DK_EN.md)： install ffmpeg and opencv  
-
-    [3.Install acllite](./acllite_install/README_200DK_EN.md)： The Atlasutil library encapsulates the ACL portion of the API.   
-
-    [4.Install Presenter Agent](./presenteragent_install/README_200DK_EN.md)： The Presenter Agent provides a series of APIs that users can call to push media messages to the presenter server.  
-
-- for_atlas300
-
-    [1.Basic environment configuration](./prepare_ENV/README_300_EN.md)： configure the basic environment, including the sudo permission, apt source and environment variables  
-
-    [2.Install ffmpeg and opencv](./opencv_install/README_300_EN.md)： install ffmpeg and opencv  
-
-    [3.Install acllite](./acllite_install/README_300_EN.md)： The Atlasutil library encapsulates the ACL portion of the API.   
-
-    [4.Install Presenter Agent](./presenteragent_install/README_300_EN.md)： The Presenter Agent provides a series of APIs that users can call to push media messages to the presenter server.  
-
+- [Development environment installed on a non-AI device and running environment installed on an AI device](separate_environmental_guidance.md)    
+    **Advantages**: In scenarios where the running environment is the ARM architecture, the compilation of large-scale samples in the x86 architecture development environment is fast.  
+    **Disadvantages**: Cross-compilation is involved. The third-party dependency installation and sample running are complex.

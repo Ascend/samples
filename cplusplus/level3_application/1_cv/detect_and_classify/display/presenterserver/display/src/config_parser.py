@@ -30,8 +30,6 @@
 #   =======================================================================
 #
 
-"""face detection config parser module"""
-
 import os
 import configparser
 import common.parameter_validation as validate

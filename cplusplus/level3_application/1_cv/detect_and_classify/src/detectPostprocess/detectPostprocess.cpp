@@ -110,22 +110,22 @@ AclLiteError DetectPostprocessThread::InferOutputProcess(shared_ptr<CarDetectDat
     uint32_t* boxNum = (uint32_t *)carDetectDataMsg->detectInferData[kBoxNumDataBufId].data.get();
     uint32_t totalBox = boxNum[0];
 
-    float widthScale = (float)(carDetectDataMsg->imageFrame.width) / kModelWidth;
-    float heightScale = (float)(carDetectDataMsg->imageFrame.height) / kModelHeight;
-
     for (uint32_t i = 0; i < totalBox; i++) {
         uint32_t score = uint32_t(detectData[totalBox * SCORE + i] * 100);
-        if (score < 90) {
+        if (score < 60) {
             continue;
         }
-        CarInfo carInfo;
-        carInfo.rectangle.lt.x = detectData[totalBox * TOPLEFTX + i] * widthScale;
-        carInfo.rectangle.lt.y = detectData[totalBox * TOPLEFTY + i] * heightScale;
-        carInfo.rectangle.rb.x = detectData[totalBox * BOTTOMRIGHTX + i] * widthScale;
-        carInfo.rectangle.rb.y = detectData[totalBox * BOTTOMRIGHTY + i] * heightScale;
         uint32_t objIndex = (uint32_t)detectData[totalBox * LABEL + i];
-        carInfo.detect_result = yolov3Label[objIndex] + std::to_string(score) + "\%";
-        carDetectDataMsg->carInfo.emplace_back(carInfo);
+        if (objIndex == 2){
+            CarInfo carInfo;
+            carInfo.rectangle.lt.x = detectData[totalBox * TOPLEFTX + i];
+            carInfo.rectangle.lt.y = detectData[totalBox * TOPLEFTY + i];
+            carInfo.rectangle.rb.x = detectData[totalBox * BOTTOMRIGHTX + i];
+            carInfo.rectangle.rb.y = detectData[totalBox * BOTTOMRIGHTY + i];
+            uint32_t objIndex = (uint32_t)detectData[totalBox * LABEL + i];
+            carInfo.detect_result = yolov3Label[objIndex] + std::to_string(score) + "\%";
+            carDetectDataMsg->carInfo.emplace_back(carInfo);
+        }
     }
     return ACLLITE_OK;
 }

@@ -464,7 +464,6 @@ function startViewVideo() {
                         pos[i] = pos[i] * scale_factor
                     }
                     var msg = rectangles[index].slice(4, 5)
-                    //add space between msg and face
                     //if upper space is not enough show the msg at the bottom
                     if (50 > pos[1]) {
                         ctx_a.fillText(msg, pos[0], pos[3] + 50)
@@ -504,7 +503,6 @@ function startViewVideo() {
                         pos[i] = pos[i] * scale_factor
                     }
                     var msg = rectangles[index].slice(4, 5)
-                    //add space between msg and face
                     //if upper space is not enough show the msg at the bottom
                     if (50 > pos[1]) {
                         ctx_b.fillText(msg, pos[0], pos[3] + 50)

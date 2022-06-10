@@ -362,8 +362,91 @@ AclLiteError CropAndPasteHelper::ProportionProcess(ImageData& resizedImage, Imag
 
     resizedImage.width = size_.width - 2 * dx;
     resizedImage.height = size_.height -  2 * dy;
-    resizedImage.alignWidth = ALIGN_UP16(resizedImage.width);
-    resizedImage.alignHeight = ALIGN_UP2(resizedImage.height);
+    resizedImage.alignWidth = ALIGN_UP16(size_.width);
+    resizedImage.alignHeight = ALIGN_UP2(size_.height);
+    resizedImage.size = vpcOutBufferSize_;
+    resizedImage.data = SHARED_PTR_DVPP_BUF(vpcOutBufferDev_);
+
+    DestroyCropAndPasteResource();
+
+    return ACLLITE_OK;
+}
+
+AclLiteError CropAndPasteHelper::ProportionCenterProcess(ImageData& resizedImage, ImageData& srcImage) {
+    if (ACLLITE_OK != InitCropAndPasteResource(srcImage)) {
+        ACLLITE_LOG_ERROR("Dvpp cropandpaste failed for init error");
+        return ACLLITE_ERROR;
+    }
+
+    // must even
+    uint32_t cropLeftOffset = 0;
+    // must even
+    uint32_t cropTopOffset = 0;
+    // must odd
+    uint32_t cropRightOffset = (((cropLeftOffset + originalImageWidth_) >> 1) << 1) -1;
+    // must odd
+    uint32_t cropBottomOffset = (((cropTopOffset + originalImageHeight_) >> 1) << 1) -1;
+    //data created to describe area location
+    cropArea_ = acldvppCreateRoiConfig(cropLeftOffset, cropRightOffset, 
+                                       cropTopOffset, cropBottomOffset);
+    if (cropArea_ == nullptr) {
+        ACLLITE_LOG_ERROR("acldvppCreateRoiConfig cropArea_ failed");
+        return ACLLITE_ERROR;
+    }
+
+    // set crop area:
+    float rx = (float)size_.width / (float)originalImageWidth_ ;
+    float ry = (float)size_.height / (float)originalImageHeight_;
+    int dx = 0;
+    int dy = 0;
+    float r = 0.0f;
+    if (rx > ry) {
+        r = ry;
+        dx = (size_.width - originalImageWidth_ * r) / 2;
+        dy = (size_.height - originalImageHeight_ * r) / 2;
+    }else{
+        r = rx;
+        dx = (size_.width - originalImageWidth_ * r) / 2;
+        dy = (size_.height - originalImageHeight_ * r) / 2;
+    }
+
+    dx = (dx >> 1) << 1;
+    dy = (dy >> 1) << 1;
+    // must even
+    uint32_t pasteLeftOffset = dx;
+    // must even
+    uint32_t pasteTopOffset = dy;
+    // must odd
+    uint32_t pasteRightOffset = size_.width - dx;
+    // must odd
+    uint32_t pasteBottomOffset = size_.height - dy;
+
+    pasteArea_ = acldvppCreateRoiConfig(pasteLeftOffset, pasteRightOffset,
+                                        pasteTopOffset, pasteBottomOffset);
+    if (pasteArea_ == nullptr) {
+        ACLLITE_LOG_ERROR("acldvppCreateRoiConfig pasteArea_ failed");
+        return ACLLITE_ERROR;
+    }
+
+    // crop and patse pic
+    aclError aclRet = acldvppVpcCropAndPasteAsync(dvppChannelDesc_, vpcInputDesc_,
+                                                  vpcOutputDesc_, cropArea_, 
+                                                  pasteArea_, stream_);
+    if (aclRet != ACL_SUCCESS) {
+        ACLLITE_LOG_ERROR("acldvppVpcCropAndPasteAsync failed, aclRet = %d", aclRet);
+        return ACLLITE_ERROR;
+    }
+    //END
+    aclRet = aclrtSynchronizeStream(stream_);
+    if (aclRet != ACL_SUCCESS) {
+        ACLLITE_LOG_ERROR("crop and paste aclrtSynchronizeStream failed, aclRet = %d", aclRet);
+        return ACLLITE_ERROR;
+    }
+
+    resizedImage.width = size_.width - 2 * dx;
+    resizedImage.height = size_.height -  2 * dy;
+    resizedImage.alignWidth = ALIGN_UP16(size_.width);
+    resizedImage.alignHeight = ALIGN_UP2(size_.height);
     resizedImage.size = vpcOutBufferSize_;
     resizedImage.data = SHARED_PTR_DVPP_BUF(vpcOutBufferDev_);
 

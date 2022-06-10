@@ -243,7 +243,7 @@ DVPP中的VPC功能模块，实现图片的抠图、缩放、边界填充、色�
 ## 单图抠图+缩放+边界填充<a name="section5854252115115"></a>
 
 ```
-./vpc_demo --test_type 5 --in_image_file dvpp_vpc_1920x1080_nv12.yuv --out_image_file cropResizePadding.yuv --img_width 1920 --img_height 1080 --out_width 1920 --out_height 1080 --crop_x 0 --crop_y 0 --crop_width 1280 --crop_height 720 --resize_width 960 --resize_height 540 --dest_left_offset 320 --dest_top_offset 320 --interpolation 0 --in_format 1 --out_format 1 --padding_val_r 255 --padding_val_g 255 --padding_val_b 255 --multi_count 1 --queue_len 32
+./vpc_demo --test_type 5 --in_image_file dvpp_vpc_1920x1080_nv12.yuv --out_image_file cropResizePadding.yuv --img_width 1920 --img_height 1080 --out_width 1920 --out_height 1080 --crop_x 0 --crop_y 0 --crop_width 1280 --crop_height 720 --resize_width 960 --resize_height 540 --dest_left_offset 320 --dest_top_offset 320 --interpolation 0 --in_format 1 --out_format 1 --padding_val_r 255 --padding_val_g 255 --padding_val_b 255 --padding_mode 0 --multi_count 1 --queue_len 32
 ```
 
 -   示例描述：先抠图，后缩放，再边界填充。
@@ -265,6 +265,11 @@ DVPP中的VPC功能模块，实现图片的抠图、缩放、边界填充、色�
     -   padding\_val\_r：填充的像素的r分量。
     -   padding\_val\_g：填充的像素的g分量。
     -   padding\_val\_b：填充的像素的b分量。
+    -   padding\_mode：填充模式。
+        -   0：添加有颜色的常数值边界。设置该模式时，可以通过padding\_val\_r、padding\_val\_g、padding\_val\_b参数设置颜色。
+        -   1：重复最后一个元素。举例: aaaaaa|abcdefgh|hhhhhhh。
+        -   2：带边界元素的镜像。举例：ba|abcde-fgh|hg。
+        -   3：不带边界元素的镜像。举例：cb|abcde-fgh|gf。
     -   multi\_count：剪裁缩放图片数量。支持多张图片。
 
 
@@ -374,7 +379,7 @@ DVPP中的VPC功能模块，实现图片的抠图、缩放、边界填充、色�
 ## 多图抠图+缩放+边界填充<a name="section2082361014539"></a>
 
 ```
-./vpc_demo --test_type 12 --in_image_file dvpp_vpc_1920x1080_nv12.yuv --out_image_file batchCropResizePadding.yuv --img_width 1920 --img_height 1080 --out_width 1920 --out_height 1080 --crop_x 0 --crop_y 0 --crop_width 1280 --crop_height 720 --resize_width 960 --resize_height 540 --dest_left_offset 320 --dest_top_offset 320 --interpolation 0 --in_format 1 --out_format 1 --padding_val_r 255 --padding_val_g 255 --padding_val_b 255 --in_image_num 1 --multi_count 2 --queue_len 32
+./vpc_demo --test_type 12 --in_image_file dvpp_vpc_1920x1080_nv12.yuv --out_image_file batchCropResizePadding.yuv --img_width 1920 --img_height 1080 --out_width 1920 --out_height 1080 --crop_x 0 --crop_y 0 --crop_width 1280 --crop_height 720 --resize_width 960 --resize_height 540 --dest_left_offset 320 --dest_top_offset 320 --interpolation 0 --in_format 1 --out_format 1 --padding_val_r 255 --padding_val_g 255 --padding_val_b 255 --padding_mode 0 --in_image_num 1 --multi_count 2 --queue_len 32
 ```
 
 -   示例描述：多张输入图片先抠图，后缩放，再边界填充。
@@ -396,6 +401,11 @@ DVPP中的VPC功能模块，实现图片的抠图、缩放、边界填充、色�
     -   padding\_val\_r：填充的像素的r分量，或者y分量。若输入输出都是YUV格式，填充YUV分量的值。反之，填充RGB分量的值。
     -   padding\_val\_g：填充的像素的g分量，或者u分量。
     -   padding\_val\_b：填充的像素的b分量，或者v分量。
+    -   padding\_mode：填充模式。
+        -   0：添加有颜色的常数值边界。设置该模式时，可以通过padding\_val\_r、padding\_val\_g、padding\_val\_b参数设置颜色。
+        -   1：重复最后一个元素。举例: aaaaaa|abcdefgh|hhhhhhh。
+        -   2：带边界元素的镜像。举例：ba|abcde-fgh|hg。
+        -   3：不带边界元素的镜像。举例：cb|abcde-fgh|gf。
     -   in\_image\_num：输入图片数量。支持多张图片。
     -   multi\_count：剪裁缩放图片数量。支持多张图片。
 

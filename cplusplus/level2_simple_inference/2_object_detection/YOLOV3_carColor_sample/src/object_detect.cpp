@@ -61,7 +61,7 @@ AclLiteError ObjectDetect::InitModelInput() {
 
 AclLiteError ObjectDetect::Init() {
     if (isInited_) {
-        ACLLITE_LOG_INFO("Face detection is initied already");
+        ACLLITE_LOG_INFO("Object detection is initied already");
         return ACLLITE_OK;
     }
 
