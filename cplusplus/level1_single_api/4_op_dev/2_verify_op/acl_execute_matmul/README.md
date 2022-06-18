@@ -33,7 +33,7 @@ Note: The generation of a single-operator model file depends only on the operato
 ## Environment Requirements
 
 -   OS and architecture: CentOS x86\_64, CentOS AArch64, Ubuntu 18.04 x86\_64, Ubuntu 18.04 aarch64
--   SoC: Ascend 310 or Ascend 710
+-   SoC: Ascend 310 or Ascend 310P
 -   Python version and dependency library: Python 3.7.*x* (3.7.0 to 3.7.11) and Python 3.8.*x* (3.8.0 to 3.8.11).
 -   Ascend AI Software Stack deployed
 -   Custom operator built and deployed by referring to  [custom\_op](../../1_custom_op)
@@ -152,7 +152,7 @@ Note: The generation of a single-operator model file depends only on the operato
            For example, if the development environment is x86 and the running environment is AArch64 , run the following command:
 
            **cd build/intermediates/host**
-           
+
            **cmake ../../../src -DCMAKE\_CXX\_COMPILER=aarch64-linux-gnu-g++ -DCMAKE\_SKIP\_RPATH=TRUE**
 
        The parameters are described as follows:

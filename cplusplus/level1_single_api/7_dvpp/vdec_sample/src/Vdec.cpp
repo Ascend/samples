@@ -368,10 +368,10 @@ void vdec_reset_chn(uint32_t chanId)
 void wait_vdec_end()
 {
     int32_t ret = HI_SUCCESS;
-    hi_vdec_chn_status status;
-    hi_vdec_chn_status pre_status;
-
-    pre_status.left_decoded_frames = 0;
+    int32_t waitTimes;
+    int32_t sleepTime = 10000; // 10000us
+    hi_vdec_chn_status status{};
+    hi_vdec_chn_status pre_status{};
 
     for (uint32_t i = g_start_chn_num; i < g_start_chn_num + g_chn_num; i++) {
         if (g_vdec_send_thread[i] != 0) {
@@ -380,6 +380,7 @@ void wait_vdec_end()
         }
         g_vdec_send_thread[i] = 0;
 
+        waitTimes = 0;
         // Wait channel decode over
         while (g_exit == 0) {
             ret = hi_mpi_vdec_query_status(i, &status);
@@ -391,12 +392,18 @@ void wait_vdec_end()
                 break;
             }
             if (status.left_decoded_frames == pre_status.left_decoded_frames) {
-                vdec_reset_chn(i);
-                break;
+                waitTimes += sleepTime;
+            } else {
+                waitTimes = 0;
             }
             pre_status = status;
             // 10000us
-            usleep(10000);
+            usleep(sleepTime);
+
+            if (waitTimes >= 5000000) { // 5000000 us
+                vdec_reset_chn(i);
+                break;
+            }
         }
     }
     // 1000000us

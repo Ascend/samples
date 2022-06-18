@@ -47,6 +47,7 @@ bool kDisplay = false;
 const char* kConfigFile = "../scripts/params.conf";
 const char* kPresentagentFile = "../scripts/present_start.conf";
 const string kRegexDeviceNum = "^device_num+$";
+const string kRegexRtspNumPerDevice = "^RtspNumPerDevice+$";
 Channel* kPresenterChannel;
 aclrtContext context;
 aclrtRunMode runMode;
@@ -76,22 +77,26 @@ AclLiteError InitPresentAgent() {
     return ACLLITE_OK;
 }
 
-AclLiteError ParseConfig(uint32_t& deviceNum) {
+AclLiteError ParseConfig(uint32_t& deviceNum, uint32_t& rtspNumPerDevice) {
     map<string, string> config;
     if(!ReadConfig(config, kConfigFile)) {
         return ACLLITE_ERROR;
     }
 
     regex deviceNumRegex(kRegexDeviceNum.c_str());
+    regex RtspNumPerDeviceRegex(kRegexRtspNumPerDevice.c_str());
     map<string, string>::const_iterator mIter = config.begin();
     for (; mIter != config.end(); ++mIter) {
         if (regex_match(mIter->first, deviceNumRegex)) {
             deviceNum = stoi(mIter->second);
             ACLLITE_LOG_INFO("Data config item: %s=%s", 
                            mIter->first.c_str(), mIter->second.c_str());
+        }else if(regex_match(mIter->first, RtspNumPerDeviceRegex)){
+            rtspNumPerDevice = stoi(mIter->second);
+            ACLLITE_LOG_INFO("Data config item: %s=%s", 
+                           mIter->first.c_str(), mIter->second.c_str());
         }
     }
-
     return ACLLITE_OK;
 }
 
@@ -100,7 +105,8 @@ void SetDisplay() {
         return;
     }
     uint32_t deviceNum;
-    AclLiteError ret = ParseConfig(deviceNum);
+    uint32_t rtspNumPerDevice;
+    AclLiteError ret = ParseConfig(deviceNum, rtspNumPerDevice);
     if (ret != ACLLITE_OK) {
         ACLLITE_LOG_ERROR("Parse config fail in SetDisplay");
     }
@@ -126,59 +132,62 @@ void SetDisplay() {
     }
 }
 
-void CreateInstances(vector<AclLiteThreadParam>& threadTbl, int32_t i,
-                     aclrtContext& context, aclrtRunMode& runMode) {
-    
+void CreateInstances(vector<AclLiteThreadParam>& threadTbl, int32_t deviceId,
+                     aclrtContext& context, aclrtRunMode& runMode, int rtspNumPerDevice) {
     AclLiteThreadParam detectPreThreadParam;
-    if (kDisplay) {
-        detectPreThreadParam.threadInst = new DetectPreprocessThread(kConfigFile, i, runMode, true);
+    for(int index=0; index<rtspNumPerDevice; index++){
+        if (kDisplay) {
+            detectPreThreadParam.threadInst = new DetectPreprocessThread(kConfigFile, deviceId, deviceId*rtspNumPerDevice+index, runMode, true);
+        }
+        else {
+            detectPreThreadParam.threadInst = new DetectPreprocessThread(kConfigFile, deviceId, deviceId*rtspNumPerDevice+index, runMode);
+        }
+        detectPreThreadParam.threadInstName.assign(kDetectPreName[deviceId*rtspNumPerDevice+index].c_str());
+        detectPreThreadParam.context = context;
+        detectPreThreadParam.runMode = runMode;
+        threadTbl.push_back(detectPreThreadParam);
+
+
+        AclLiteThreadParam detectPostThreadParam;
+        detectPostThreadParam.threadInst = new DetectPostprocessThread();
+        detectPostThreadParam.threadInstName.assign(kDetectPostName[deviceId*rtspNumPerDevice+index].c_str());
+        detectPostThreadParam.context = context;
+        detectPostThreadParam.runMode = runMode;
+        threadTbl.push_back(detectPostThreadParam);
+
+        AclLiteThreadParam classifyPreThreadParam;
+        classifyPreThreadParam.threadInst = new ClassifyPreprocessThread(runMode);
+        classifyPreThreadParam.threadInstName.assign(kClassifyPreName[deviceId*rtspNumPerDevice+index].c_str());
+        classifyPreThreadParam.context = context;
+        classifyPreThreadParam.runMode = runMode;
+        threadTbl.push_back(classifyPreThreadParam);
+
+        AclLiteThreadParam classifyPostThreadParam;
+        classifyPostThreadParam.threadInst = new ClassifyPostprocessThread(kConfigFile, deviceId*rtspNumPerDevice+index);
+        classifyPostThreadParam.threadInstName.assign(kClassifyPostName[deviceId*rtspNumPerDevice+index].c_str());
+        classifyPostThreadParam.context = context;
+        classifyPostThreadParam.runMode = runMode;
+        threadTbl.push_back(classifyPostThreadParam);
     }
-    else {
-        detectPreThreadParam.threadInst = new DetectPreprocessThread(kConfigFile, i, runMode);
-    }
-    detectPreThreadParam.threadInstName.assign(kDetectPreName[i].c_str());
-    detectPreThreadParam.context = context;
-    detectPreThreadParam.runMode = runMode;
-    threadTbl.push_back(detectPreThreadParam);
 
     AclLiteThreadParam InferParam;
     InferParam.threadInst = new InferenceThread(runMode);
-    InferParam.threadInstName.assign(kInferName[i].c_str());
+    InferParam.threadInstName.assign(kInferName[deviceId].c_str());
     InferParam.context = context;
     InferParam.runMode = runMode;
     threadTbl.push_back(InferParam);
-
-    AclLiteThreadParam detectPostThreadParam;
-    detectPostThreadParam.threadInst = new DetectPostprocessThread();
-    detectPostThreadParam.threadInstName.assign(kDetectPostName[i].c_str());
-    detectPostThreadParam.context = context;
-    detectPostThreadParam.runMode = runMode;
-    threadTbl.push_back(detectPostThreadParam);
-
-    AclLiteThreadParam classifyPreThreadParam;
-    classifyPreThreadParam.threadInst = new ClassifyPreprocessThread(runMode);
-    classifyPreThreadParam.threadInstName.assign(kClassifyPreName[i].c_str());
-    classifyPreThreadParam.context = context;
-    classifyPreThreadParam.runMode = runMode;
-    threadTbl.push_back(classifyPreThreadParam);
-
-    AclLiteThreadParam classifyPostThreadParam;
-    classifyPostThreadParam.threadInst = new ClassifyPostprocessThread(kConfigFile, i);
-    classifyPostThreadParam.threadInstName.assign(kClassifyPostName[i].c_str());
-    classifyPostThreadParam.context = context;
-    classifyPostThreadParam.runMode = runMode;
-    threadTbl.push_back(classifyPostThreadParam);
 }
 
 void CreateThreadInstance(vector<AclLiteThreadParam>& threadTbl, AclLiteResource& aclDev) {
     uint32_t deviceNum;
+    uint32_t rtspNumPerDevice;
     runMode = aclDev.GetRunMode();
 
-    AclLiteError ret = ParseConfig(deviceNum);
+    AclLiteError ret = ParseConfig(deviceNum, rtspNumPerDevice);
     if (ret != ACLLITE_OK) {
         return;
     }
-    kExitCount = deviceNum;
+    kExitCount = deviceNum * rtspNumPerDevice;
 
     for(int32_t i=0; i < deviceNum; i++){
         ret = aclrtSetDevice(i);
@@ -192,7 +201,7 @@ void CreateThreadInstance(vector<AclLiteThreadParam>& threadTbl, AclLiteResource
             return;
         }
         kContext.push_back(context);
-        CreateInstances(threadTbl, i, context, runMode);
+        CreateInstances(threadTbl, i, context, runMode, rtspNumPerDevice);
     }
 
     if (kDisplay) {
@@ -207,8 +216,10 @@ void CreateThreadInstance(vector<AclLiteThreadParam>& threadTbl, AclLiteResource
 
 void ExitApp(AclLiteApp& app, vector<AclLiteThreadParam>& threadTbl) {
     for (int i = 0; i < threadTbl.size(); i++) {
+        aclrtSetCurrentContext(threadTbl[i].context);
         delete threadTbl[i].threadInst;
     }
+    
     app.Exit();
 
     for(int i = 0; i < kContext.size(); i++) {

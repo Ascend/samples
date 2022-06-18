@@ -429,6 +429,27 @@ AclLiteError ReadJpeg(ImageData& image, const std::string& fileName) {
     return ACLLITE_OK;
 }
 
+AclLiteError ReadPng(ImageData& image, const std::string& fileName) {
+    uint32_t size = 0;
+    void* buf = nullptr;
+    
+    ReadBinFile(fileName, buf, size);
+
+    int32_t ch = 0;
+    acldvppPngGetImageInfo(buf, size,
+              &(image.width), &(image.height), &ch);
+    if(image.width == 0 || image.height == 0){
+        ACLLITE_LOG_ERROR("unsupported format, only Baseline PNG");
+        return ACLLITE_ERROR;
+    }
+    image.data.reset((uint8_t *)buf, [](uint8_t* p) 
+                    { delete[](p); }
+                    );
+    image.size = size;
+
+    return ACLLITE_OK;
+}
+
 void SaveBinFile(const string& filename, const void* data, uint32_t size) {
     FILE *outFileFp = fopen(filename.c_str(), "wb+");
     if (outFileFp == nullptr) {

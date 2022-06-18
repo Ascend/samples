@@ -364,6 +364,15 @@ AclLite公共库主要根据面向对象原则设计，按处理对象主要分�
 
 | 说明项 | 具体描述 |
 |---|---|
+| 函数 | AclLiteError PngD(ImageData& destRgb, ImageData& srcPng) |
+| 功能 | 将png图片解码为rgb图片 | 
+| 参数 | destRgb：解码后的rgb图片<br>srcPng：待解码的png图片 |
+| 返回值 | ACLLITE_OK: 解码成功<br>其他: 解码失败 |
+| 约束 | 该接口对数据输入输出的相关约束请参考“[昇腾社区文档中心](https://www.hiascend.com/document?tag=community-developer)”中的“[JPEGD功能及约束说明](https://support.huaweicloud.com/aclcppdevg-cann51RC1alpha1/aclcppdevg_03_0187.html)”请注意选择配套的CANN版本 |
+| 备注 | acllite PngD()在内部封装了对齐操作，当前使用的对齐参数为128x16，而对齐可能会使输出的解码图片size与原始图片宽高不一致，请注意<br>ImageData数据结构详见[**ImageData**](#ImageData) |
+
+| 说明项 | 具体描述 |
+|---|---|
 | 函数 | AclLiteError JpegD(ImageData& destYuv, ImageData& srcJpeg) |
 | 功能 | 将jpeg图片解码为yuv图片 | 
 | 参数 | destYuv：解码后的yuv图片<br>srcJpeg：待解码的jpeg图片 |
@@ -865,6 +874,114 @@ AclLiteThread类为抽象类，用户线程对象基类，提供线程对象的�
 | 参数 | 无 |
 | 返回值 | status：<br>THREAD_READY = 0 // 线程就绪<br>THREAD_RUNNING = 1 // 线程运行<br>THREAD_EXITING = 2 // 线程退出中<br>THREAD_EXITED = 3 // 线程退出<br>THREAD_ERROR = 4 //线程初始化失败 |
 
+#### 5.4 一个例子：HelloWorld
+```
+#include <unistd.h>
+#include <string>
+
+#include "acllite/AclLiteApp.h"
+#include "acllite/AclLiteThread.h"
+#include "AclLiteResource.h"
+
+#include <sys/time.h>
+
+#define MSG_APP_START 0
+#define MSG_HELLO     1
+#define MSG_READ_FRAME 2
+#define MSG_APP_EXIT 3
+
+// 继承AclLiteThread类，完成具体业务功能，例如预处理线程类，后处理线程类，只要实现Process逻辑即可。
+class HelloThread : public AclLiteThread
+{
+    AclLiteError Init()
+    {
+        ACLLITE_LOG_INFO("Hello thread init ok.");
+        return ACLLITE_OK;
+    }
+    AclLiteError Process(int msgId, shared_ptr<void> msgData)
+    { 
+      
+        shared_ptr<string> str = static_pointer_cast<string>(msgData);
+
+        switch(msgId) {
+            case MSG_APP_START:                
+                SendMessage(SelfInstanceId(), MSG_HELLO, make_shared<string>("hello world"));
+                break;
+            case MSG_HELLO:
+                cout << *str << endl;
+                SendMessage(kMainThreadId, MSG_APP_EXIT, nullptr);
+                break;
+            default:
+                ACLLITE_LOG_ERROR("Preprocess thread receive unknow msg %d", msgId);
+                break;
+        }
+        return ACLLITE_OK;
+    }
+
+};
+
+// 创建线程并将创建的线程保存再线程表中
+void CreateTshreads(vector<AclLiteThreadParam>& threadTbl, AclLiteResource& aclDev) {
+    ACLLITE_LOG_INFO("begin CreateThreadInstance.");
+    AclLiteThreadParam param;
+    param.threadInst = new HelloThread();
+    threadTbl.push_back(param);
+    for (int i = 0; i < threadTbl.size(); i++) {
+        threadTbl[i].context = aclDev.GetContext();
+        threadTbl[i].runMode = aclDev.GetRunMode();
+    }
+
+    ACLLITE_LOG_INFO("end CreateThreadInstance.");
+}
+
+// 主线程处理函数，该函数要传递给app.wait函数，在app.wait中会循环调用该函数；
+// 所以该函数的逻辑：如果收到的消息是应用退出消息，则设置退出标志位！
+int MainThreadProcess(uint32_t msgId, 
+                      shared_ptr<void> msgData, void* userData) {
+
+    if (msgId == MSG_APP_EXIT) {
+        AclLiteApp& app = GetAclLiteAppInstance();
+        app.WaitEnd();
+        ACLLITE_LOG_INFO("Receive exit message, exit now");       
+    }
+
+    return ACLLITE_OK;
+    
+}
+
+int main()
+{
+
+    AclLiteResource aclDev = AclLiteResource();
+    AclLiteError ret = aclDev.Init();
+
+    // 创建线程表，并且创建线程后填充到线程表，后续所有线程都是通过线程表来访问的
+    vector<AclLiteThreadParam> threadTbl;
+    ACLLITE_LOG_INFO("before CreateThreadInstance.");
+    CreateTshreads(threadTbl, aclDev);
+
+    // AclLiteAPP是单例模式，直接返回app实例即可
+    AclLiteApp& app = GetAclLiteAppInstance();
+
+    // 启动app，每个线程都启动起来，开始循环等待消息了。
+    ret = app.Start(threadTbl);
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("Start app failed, error %d", ret);
+        app.Exit();
+        return -1;
+    }
+    
+    ret = SendMessage(threadTbl[0].threadInstId, MSG_APP_START, nullptr);
+
+    // 在主线程中等待结束消息，如果收到结束消息，结束！
+    // 原理：主线程会一直阻塞在当前wait函数，直到收到退出消息，会在MainThreadProcess中设置退出标识；wait中检查到退出标识，结束无线循环。
+    app.Wait(MainThreadProcess, nullptr);
+
+    app.Exit();
+    
+    return -1 ;
+}
+```
 
 ### 6. 其他
 
@@ -1088,6 +1205,15 @@ AclLiteThread类为抽象类，用户线程对象基类，提供线程对象的�
 | 参数 | data：待拷贝数据<br>size：待拷贝数据大小<br>policy：内存拷贝种类<br> memType：目标侧内存类型 |
 | 返回值 | 目标侧内存指针 |
 | 备注 | aclrtMemcpyKind取值见官方文档 |
+
+| 说明项 | 具体描述 |
+|---|---|
+| 函数 | AclLiteError ReadPng(ImageData& image, const std::string& fileName) |
+| 功能 | 读取png图片 | 
+| 参数 | image：存放被读取图片数据<br>fileName：被读取的图片文件路径 |
+| 返回值 | ACLLITE_OK：读取成功<br>非ACLLITE_OK：读取失败 |
+| 约束 | 只支持baseline不支持渐进式的Png图片 |
+| 备注 | ImageData数据结构详见[**ImageData**](#ImageData) |
 
 | 说明项 | 具体描述 |
 |---|---|

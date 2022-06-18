@@ -80,7 +80,7 @@ changemode()
         # chmod -R 550 ${targetdir}
         subdirs=$(ls "${targetdir}" 2> /dev/null)
         for dir in ${subdirs}; do
-            if [[ ${dir} != "Ascend" ]] && [[ ${dir} != "Ascend310" ]] && [[ ${dir} != "Ascend310RC" ]] && [[ ${dir} != "Ascend910" ]] && [[ ${dir} != "Ascend710" ]]  && [[ ${dir} != "aicpu" ]]; then
+            if [[ ${dir} != "Ascend" ]] && [[ ${dir} != "Ascend310" ]] && [[ ${dir} != "Ascend310RC" ]] && [[ ${dir} != "Ascend910" ]] && [[ ${dir} != "Ascend310P" ]]  && [[ ${dir} != "aicpu" ]]; then
                 chmod -R 550 "${targetdir}/${dir}" >/dev/null 2>&1
             fi
         done
@@ -100,7 +100,7 @@ fi
 
 subdirs=$(ls "${targetdir}" 2> /dev/null)
 for dir in ${subdirs}; do
-    if [[ ${dir} != "Ascend" ]] && [[ ${dir} != "Ascend310" ]] && [[ ${dir} != "Ascend310RC" ]] && [[ ${dir} != "Ascend910" ]] && [[ ${dir} != "Ascend710" ]]  && [[ ${dir} != "aicpu" ]]; then
+    if [[ ${dir} != "Ascend" ]] && [[ ${dir} != "Ascend310" ]] && [[ ${dir} != "Ascend310RC" ]] && [[ ${dir} != "Ascend910" ]] && [[ ${dir} != "Ascend310P" ]]  && [[ ${dir} != "aicpu" ]]; then
         chmod -R -w "${targetdir}/${dir}"  >/dev/null 2>&1
     fi
 done

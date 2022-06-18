@@ -1,0 +1,29 @@
+[
+  {
+    "op": "Slice",
+    "input_desc": [
+      {
+        "format": "ND",
+        "shape": [600,3000],
+        "type": "float16"
+      },
+      {
+        "format": "ND",
+        "shape": [2],
+        "type": "int32"
+      },
+      {
+        "format": "ND",
+        "shape": [2],
+        "type": "int32"
+      }
+    ],
+    "output_desc": [
+      {
+        "format": "ND",
+        "shape": [600,3000],
+        "type": "float16"
+      }
+    ]
+  }
+]

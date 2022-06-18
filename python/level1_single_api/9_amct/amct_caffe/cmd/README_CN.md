@@ -36,7 +36,7 @@ wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/amct_acl/classifica
 > 如果环境中没有安装 unrar 工具，可以通过以下命令获取：
 >
 > ```bash
-> sudo apt-get unrar
+> sudo apt-get install unrar
 > ```
 
 执行如下命令将 image 目录下的 jpg 图片转换为 bin 格式数据集：

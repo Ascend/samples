@@ -355,7 +355,7 @@ uint32_t configure_stride_and_buffer_size(hi_vpc_pic_info& pic, uint32_t widthAl
             if (pic.picture_width_stride < minWidthAlignNum) {
                 pic.picture_width_stride = minWidthAlignNum;
             }
-            pic.picture_buffer_size = pic.picture_width_stride * pic.picture_height_stride * 2; // 2 times
+            pic.picture_buffer_size = pic.picture_width_stride * pic.picture_height * 2; // 2 times
             dstBufferSize = width * height * 2; // the real buffer size is 2 times the product of height and width
             break;
         case HI_PIXEL_FORMAT_YUV_SEMIPLANAR_444:
@@ -374,7 +374,7 @@ uint32_t configure_stride_and_buffer_size(hi_vpc_pic_info& pic, uint32_t widthAl
         case HI_PIXEL_FORMAT_VYUY_PACKED_422:
             pic.picture_width_stride = ALIGN_UP(width, widthAlign) * 2; // 2 times
             pic.picture_height_stride = ALIGN_UP(height, heightAlign);
-            pic.picture_buffer_size = pic.picture_width_stride * pic.picture_height_stride;
+            pic.picture_buffer_size = pic.picture_width_stride * pic.picture_height;
             dstBufferSize = width * height * 2; // the real buffer size is 2 times the product of height and width
             break;
         case HI_PIXEL_FORMAT_YUV_PACKED_444:

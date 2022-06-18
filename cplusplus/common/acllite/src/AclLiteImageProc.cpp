@@ -21,6 +21,7 @@
 #include "ResizeHelper.h"
 #include "JpegDHelper.h"
 #include "JpegEHelper.h"
+#include "PngDHelper.h"
 #include "AclLiteImageProc.h"
 #include "CropAndPasteHelper.h"
 
@@ -99,6 +100,11 @@ AclLiteError AclLiteImageProc::Resize(ImageData& dest, ImageData& src,
 AclLiteError AclLiteImageProc::JpegD(ImageData& dest, ImageData& src) {
     JpegDHelper jpegD(stream_, dvppChannelDesc_);
     return jpegD.Process(dest, src);
+}
+
+AclLiteError AclLiteImageProc::PngD(ImageData& dest, ImageData& src) {
+    PngDHelper PngD(stream_, dvppChannelDesc_);
+    return PngD.Process(dest, src);
 }
 
 //CropAndPasteHelper

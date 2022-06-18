@@ -369,6 +369,8 @@ void* CopyData(const void* data, uint32_t size,
  */  
 AclLiteError ReadJpeg(ImageData& image, const std::string& fileName);
 
+AclLiteError ReadPng(ImageData& image, const std::string& fileName);
+
 /**
  * @brief Get all files from file list string
  * @param [in]: pathList: files list string, seperate by ',', 

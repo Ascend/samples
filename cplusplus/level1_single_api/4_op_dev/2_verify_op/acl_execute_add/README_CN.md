@@ -25,7 +25,7 @@
 │               └── generate_data.py    // 生成测试数据的脚本
 ├── src
 │   ├── CMakeLists.txt    // 编译规则文件
-│   ├── common.cpp         // 公共函数，读取二进制文件函数的实现文件  
+│   ├── common.cpp         // 公共函数，读取二进制文件函数的实现文件
 │   ├── main.cpp    // 将单算子编译为om文件并加载om文件执行，此文件中包含算子的相关配置，若验证其他单算子，基于此文件修改
 │   ├── operator_desc.cpp     // 构造算子的输入与输出描述
 │   ├── op_runner.cpp   // 单算子编译与运行函数实现文件
@@ -34,7 +34,7 @@
 ## 环境要求
 
 -   操作系统及架构：CentOS x86\_64、CentOS aarch64、Ubuntu 18.04 x86\_64、Ubuntu 18.04 aarch64、EulerOS x86、EulerOS aarch64
--   芯片：Ascend 310、Ascend 710、Ascend 910
+-   芯片：Ascend 310、Ascend 310P、Ascend 910
 -   python及依赖的库：Python3.7.*x*（3.7.0 ~ 3.7.11）、Python3.8.*x*（3.8.0 ~ 3.8.11）
 -   已完成昇腾AI软件栈的部署。
 -   已参考[custom\_op](../../1_custom_op)完成自定义算子的编译部署。
@@ -61,7 +61,7 @@
      ```
 
      Python3.7.5安装路径请根据实际情况进行替换，您也可以将以上命令写入~/.bashrc文件中，然后执行source ~/.bashrc命令使其立即生效。
-     
+
   3. 开发环境上，设置环境变量，配置AscendCL单算子验证程序编译依赖的头文件与库文件路径。
 
      编译脚本会按环境变量指向的路径查找编译依赖的头文件和库文件，“$HOME/Ascend”请替换“Ascend-cann-toolkit”包的实际安装路径。
@@ -81,27 +81,27 @@
        ```
 
 - 运行环境上环境变量配置
-  
+
   -   若运行环境上安装的“Ascend-cann-toolkit”包，环境变量设置如下：
-  
+
       ```
       . ${HOME}/Ascend/ascend-toolkit/set_env.sh
       ```
-  
+
   -   若运行环境上安装的“Ascend-cann-nnrt”包，环境变量设置如下：
-  
+
       ```
       . ${HOME}/Ascend/nnrt/set_env.sh
       ```
-  
+
   -   若运行环境上安装的“Ascend-cann-nnae”包，环境变量设置如下：
-  
+
       ```
       . ${HOME}/Ascend/nnae/set_env.sh
       ```
-  
+
     “$HOME/Ascend”请替换相关软件包的实际安装路径。
-  
+
 
 
 
@@ -159,10 +159,10 @@
            例如，当开发环境为X86架构，运行环境为AArch64架构时，执行以下命令进行交叉编译。
 
            **cd build/intermediates/host**
-           
+
            **cmake ../../../src -DCMAKE\_CXX\_COMPILER=aarch64-linux-gnu-g++ -DCMAKE\_SKIP\_RPATH=TRUE**
 
-          
+
 
    3. 执行如下命令，生成可执行文件。
 

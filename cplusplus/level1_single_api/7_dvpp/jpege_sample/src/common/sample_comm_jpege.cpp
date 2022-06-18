@@ -62,6 +62,7 @@ extern uint32_t g_set_outfile;
 extern uint32_t g_save;
 extern uint32_t g_is_syn_enc;
 extern uint32_t g_frameCount;
+extern uint32_t g_isZeroCopy;
 extern aclrtContext g_context;
 extern aclrtRunMode g_run_mode;
 
@@ -261,10 +262,6 @@ int32_t alloc_input_buffer(uint32_t inputWidth, uint32_t inputHeight, hi_pixel_f
     inputFrame->v_frame.width_stride[1] = calConfig.mainStride;
 
     inputFrame->v_frame.header_virt_addr[0] = inputBuf; // Compression header virtual address
-    if (inputFrame->v_frame.header_virt_addr[0] == HI_NULL) {
-        SAMPLE_PRT("alloc_input_buffer FAIL!");
-        return HI_FAILURE;
-    }
 
     inputFrame->v_frame.header_virt_addr[1] =
         (hi_void*)((uintptr_t)inputFrame->v_frame.header_virt_addr[0] + calConfig.headYSize);
@@ -405,6 +402,10 @@ int32_t read_yuv_file(FILE *yuv, hi_video_frame_info *videoFrame,
 int32_t jpege_save_stream(FILE* fd, hi_venc_stream* stream)
 {
     for (int32_t i = 0; i < stream->pack_cnt; i++) {
+        if ((stream->pack[i].addr == NULL) || (stream->pack[i].len == 0)) {
+            SAMPLE_PRT("jpeg encode error!\n");
+            return HI_FAILURE;
+        }
         if (g_run_mode == ACL_HOST) {
             uint32_t dataLen = stream->pack[i].len - stream->pack[i].offset;
             char* pcData = new char[dataLen];
@@ -463,24 +464,200 @@ int32_t jpege_save_stream_to_file(hi_venc_chn vencChn, int32_t chnImgCnt, hi_ven
     return ret;
 }
 
+int32_t alloc_output_buffer(hi_video_frame_info *frame, void** outputBuf, hi_u32 *outputBufSize)
+{
+    hi_s32 ret = HI_SUCCESS;
+    // get the size of output buffer
+    hi_venc_jpeg_param stParamJpeg;
+    hi_u32 out_buffer_size = 0;
+    ret = hi_mpi_venc_get_jpege_predicted_size(frame, &stParamJpeg, &out_buffer_size);
+    if (ret != HI_SUCCESS) {
+        SAMPLE_PRT("hi_mpi_venc_get_jpege_predicted_size err 0x%x\n", ret);
+        return ret;
+    }
+
+    // malloc output buffer
+    ret = hi_mpi_dvpp_malloc(0, outputBuf, out_buffer_size);
+    if ((ret != HI_SUCCESS) || (*outputBuf == nullptr)) {
+        SAMPLE_PRT("hi_mpi_dvpp_malloc fail size = %d, ret = %d\n", out_buffer_size, ret);
+        return HI_FAILURE;
+    }
+    *outputBufSize = out_buffer_size;
+
+    return HI_SUCCESS;
+}
+
+int32_t start_sync_encode(hi_venc_chn vencChn, hi_video_frame_info *videoFrame, int32_t supportPerformance)
+{
+    int32_t ret = HI_SUCCESS;
+    int i = 0;
+    hi_venc_stream stream;
+    hi_u64 getStreamTime, elapseTime;
+    double sumTime = 0;
+    stream.pack = (hi_venc_pack*)malloc(sizeof(hi_venc_pack));
+    if (stream.pack == NULL) {
+        SAMPLE_PRT("malloc memory failed!\n");
+        return HI_FAILURE;
+    }
+
+    void* outputBuf = nullptr;
+    hi_u32 outputBufSize = 0;
+    if (g_isZeroCopy) {
+        ret = alloc_output_buffer(videoFrame, &outputBuf, &outputBufSize);
+        if (ret != HI_SUCCESS) {
+            free(stream.pack);
+            stream.pack = NULL;
+            return HI_FAILURE;
+        }
+        SAMPLE_PRT("output buffer addr:0x%p, size:%u\n", outputBuf, outputBufSize);
+    }
+    for (i = 0; i < g_per_count; ++i) {
+        // send frame
+        if (g_isZeroCopy) {
+            hi_img_stream out_stream;
+            out_stream.addr = (hi_u8 *)outputBuf;
+            out_stream.len = outputBufSize;
+            SAMPLE_GET_TIMESTAMP_US(videoFrame->v_frame.pts);
+            ret = hi_mpi_venc_send_jpege_frame(vencChn, videoFrame, &out_stream, 10000);
+        } else {
+            SAMPLE_GET_TIMESTAMP_US(videoFrame->v_frame.pts);
+            ret = hi_mpi_venc_send_frame(vencChn, videoFrame, 10000);
+        }
+        if (ret != HI_SUCCESS) {
+            SAMPLE_PRT("send frame failed, ret:0x%x\n", ret);
+            break;
+        }
+        g_jpege_send_frame_cnt[vencChn]++;
+
+        // get stream
+        stream.pack_cnt = 1;
+        ret = hi_mpi_venc_get_stream(vencChn, &stream, -1);
+        if (ret != HI_SUCCESS) {
+            SAMPLE_PRT("hi_mpi_venc_get_stream failed with %#x!\n", ret);
+            break;
+        }
+        SAMPLE_GET_TIMESTAMP_US(getStreamTime);
+        elapseTime = getStreamTime - videoFrame->v_frame.pts;
+        sumTime = sumTime + (double)elapseTime;
+        SAMPLE_PRT("Jpege chn: %d getStream %llu encTime: %llu\n",
+            vencChn, g_jpege_send_frame_cnt[vencChn], elapseTime);
+        fflush(stdout);
+
+        if (g_save) {
+            ret = jpege_save_stream_to_file(vencChn, g_jpege_send_frame_cnt[vencChn], &stream);
+            if (ret != HI_SUCCESS) {
+                SAMPLE_PRT("jpege_save_stream_to_file failed with %#x!\n", ret);
+                break;
+            }
+        }
+        // release stream
+        ret = hi_mpi_venc_release_stream(vencChn, &stream);
+        if (ret != HI_SUCCESS) {
+            SAMPLE_PRT("hi_mpi_venc_release_stream failed with %#x!\n", ret);
+            break;
+        }
+    }
+
+    // performance statistics
+    if (supportPerformance && (i == g_per_count)) {
+        double avgTime = sumTime / g_per_count;
+        double fps = 1000000 / avgTime;
+        SAMPLE_PRT("Jpege chn: %d actualFrameRate %.4lf,averageTime %.4lf us,encodeFrame %llu\n",
+            vencChn, fps, avgTime, g_jpege_send_frame_cnt[vencChn]);
+        fflush(stdout);
+    }
+
+    if (g_isZeroCopy) {
+        // free output buffer
+        ret = hi_mpi_dvpp_free(outputBuf);
+        if (ret != HI_SUCCESS) {
+            SAMPLE_PRT("hi_mpi_dvpp_free failed, ret = %d!\n", ret);
+        }
+    }
+
+    free(stream.pack);
+    stream.pack = NULL;
+
+    return HI_SUCCESS;
+}
+
+void sync_encode(FILE *fpYuv, HiSampleJpegeSendFramePara* jpegeSendPara)
+{
+    int32_t ret = HI_SUCCESS;
+    hi_venc_chn vencChn = jpegeSendPara->vencChn;
+    hi_video_frame_info *videoFrame = nullptr;
+
+    uint32_t width = jpegeSendPara->inputPara.width;
+    uint32_t height = jpegeSendPara->inputPara.height;
+    uint32_t align = jpegeSendPara->inputPara.align;
+    hi_pixel_format pixelFormat = jpegeSendPara->inputPara.pixelFormat;
+    hi_data_bit_width bitWidth = jpegeSendPara->inputPara.bitWidth;
+    hi_compress_mode cmpMode = jpegeSendPara->inputPara.cmpMode;
+    hi_video_frame_info* tmp = nullptr;
+
+    int32_t count = 0;
+    hi_s64 yuvFileReadOff = 0;
+
+    while (jpegeSendPara->threadStart == HI_TRUE) {
+        tmp = (hi_video_frame_info *)malloc(sizeof(hi_video_frame_info));
+        if (tmp == NULL) {
+            SAMPLE_PRT("chn %d malloc input buffer failed \n", vencChn);
+            jpegeSendPara->threadStart = HI_FALSE;
+            break;
+        }
+
+        // 2. alloc input buffer
+        ret = alloc_input_buffer(width, height, pixelFormat, bitWidth, cmpMode, align, tmp);
+        if (ret != HI_SUCCESS) {
+            SAMPLE_PRT("chn %d alloc_input_buffer failed \n", vencChn);
+            if (tmp != NULL) {
+                free(tmp);
+                tmp = NULL;
+                SAMPLE_PRT("free hi_video_frame_info \n");
+            }
+            jpegeSendPara->threadStart = HI_FALSE;
+            break;
+        }
+
+        do {
+            // 3. read input file
+            videoFrame = tmp;
+            ret = read_yuv_file(fpYuv, videoFrame, pixelFormat, &yuvFileReadOff, vencChn, count);
+            if (ret != HI_SUCCESS) {
+                SAMPLE_PRT("read yuv file fail, offset %lld \n", yuvFileReadOff);
+                break;
+            }
+            count++;
+
+            // 4. start_encode
+            ret = start_sync_encode(vencChn, videoFrame, jpegeSendPara->supportPerformance);
+            if (ret != HI_SUCCESS) {
+                SAMPLE_PRT("send frame fail \n");
+                break;
+            }
+        } while(false);
+
+        if (videoFrame->v_frame.header_virt_addr[0] != nullptr) {
+            hi_mpi_dvpp_free((void*)(videoFrame->v_frame.header_virt_addr[0]));
+            SAMPLE_PRT("hi_mpi_dvpp_free input buffer \n");
+        }
+
+        if (tmp != NULL) {
+            free(tmp);
+            tmp = NULL;
+            SAMPLE_PRT("free hi_video_frame_info \n");
+        }
+
+        jpegeSendPara->threadStart = HI_FALSE;
+    }
+    fflush(stdout);
+}
+
 void* jpege_sync_enc(void *p)
 {
-    int32_t ret = 0;
-    hi_video_frame_info *videoFrame = nullptr;
     hi_char inputFileName[64];
-    hi_venc_chn vencChn;
     FILE *fpYuv = NULL;
-    hi_s64 yuvFileReadOff = 0;
     HiSampleJpegeSendFramePara* jpegeSendPara = nullptr;
-    int32_t count = 0;
-    uint32_t width = 0;
-    uint32_t height = 0;
-    uint32_t align = 0;
-    hi_pixel_format pixelFormat;
-    hi_data_bit_width bitWidth;
-    hi_compress_mode cmpMode;
-    hi_video_frame_info* tmp = nullptr;
-    int i = 0;
 
     aclError acl_ret = aclrtSetCurrentContext(g_context);
     if (acl_ret != ACL_SUCCESS) {
@@ -488,137 +665,23 @@ void* jpege_sync_enc(void *p)
         return NULL;
     }
 
-    jpegeSendPara = (HiSampleJpegeSendFramePara*) p;
-    vencChn = jpegeSendPara->vencChn;
+    if (p == nullptr) {
+        SAMPLE_PRT("input param is nullptr");
+        return NULL;
+    }
 
-    // 1. open file fp
+    jpegeSendPara = (HiSampleJpegeSendFramePara*) p;
+
+    // open file fp
     snprintf(inputFileName, sizeof(inputFileName), "%s", jpegeSendPara->inputPara.inputFileName);
 
     fpYuv = fopen(inputFileName, "rb");
     if (fpYuv == NULL) {
-        jpegeSendPara->threadStart = HI_FALSE;
         SAMPLE_PRT("can't open file %s in send stream thread!\n", inputFileName);
         return NULL;
     }
 
-    width = jpegeSendPara->inputPara.width;
-    height = jpegeSendPara->inputPara.height;
-    align = jpegeSendPara->inputPara.align;
-    pixelFormat = jpegeSendPara->inputPara.pixelFormat;
-    bitWidth = jpegeSendPara->inputPara.bitWidth;
-    cmpMode = jpegeSendPara->inputPara.cmpMode;
-
-    while (jpegeSendPara->threadStart == HI_TRUE) {
-        // 2. alloc input buffer
-        tmp = (hi_video_frame_info *)malloc(sizeof(hi_video_frame_info));
-        if (tmp == NULL) {
-            SAMPLE_PRT("chn %d malloc input buffer failed \n", vencChn);
-            fflush(stdout);
-            fclose(fpYuv);
-            return NULL;
-        }
-        ret = alloc_input_buffer(width, height, pixelFormat, bitWidth, cmpMode, align, tmp);
-        if (ret != HI_SUCCESS) {
-            SAMPLE_PRT("chn %d alloc_input_buffer failed \n", vencChn);
-            fflush(stdout);
-            fclose(fpYuv);
-            free(tmp);
-            tmp = NULL;
-            return NULL;
-        }
-
-        // 3. read input file
-        videoFrame = tmp;
-        ret = read_yuv_file(fpYuv, videoFrame, pixelFormat, &yuvFileReadOff, vencChn, count);
-        if (ret != HI_SUCCESS) {
-            jpegeSendPara->threadStart = HI_FALSE;
-            fflush(stdout);
-            fclose(fpYuv);
-            free(tmp);
-            tmp = NULL;
-            sleep(5);
-            // release input buffer
-            ret = hi_mpi_dvpp_free((void*)(videoFrame->v_frame.header_virt_addr[0]));
-            if (ret != HI_SUCCESS) {
-                SAMPLE_PRT("hi_mpi_dvpp_free failed!\n");
-                return NULL;
-            }
-            return NULL;
-        }
-
-        count++;
-
-        // 4. send image
-        hi_venc_stream stream;
-        hi_u64 getStreamTime, elapseTime;
-        double sumTime = 0;
-        stream.pack = (hi_venc_pack*)malloc(sizeof(hi_venc_pack));
-        if (stream.pack == NULL) {
-            SAMPLE_PRT("malloc memory failed!\n");
-            return NULL;
-        }
-        for (i = 0; i < g_per_count; ++i) {
-            videoFrame->v_frame.time_ref = (g_jpege_send_frame_cnt[vencChn]) * 2;
-            SAMPLE_GET_TIMESTAMP_US(videoFrame->v_frame.pts);
-            ret = hi_mpi_venc_send_frame(vencChn, videoFrame, 10000);
-            if (ret != HI_SUCCESS) {
-                hi_mpi_dvpp_free((void*)(videoFrame->v_frame.header_virt_addr[0]));
-                SAMPLE_PRT("hi_mpi_venc_send_frame failed, ret:0x%x\n", ret);
-                free(stream.pack);
-                stream.pack = NULL;
-                return NULL;
-            }
-            g_jpege_send_frame_cnt[vencChn]++;
-            // get frame
-            stream.pack_cnt = 1;
-            ret = hi_mpi_venc_get_stream(vencChn, &stream, -1);
-            if (ret != HI_SUCCESS) {
-                hi_mpi_dvpp_free((void*)(videoFrame->v_frame.header_virt_addr[0]));
-                SAMPLE_PRT("hi_mpi_venc_get_stream failed with %#x!\n", ret);
-                free(stream.pack);
-                stream.pack = NULL;
-                return NULL;
-            }
-            SAMPLE_GET_TIMESTAMP_US(getStreamTime);
-            elapseTime = getStreamTime - videoFrame->v_frame.pts;
-            sumTime = sumTime + (double)elapseTime;
-            SAMPLE_PRT("Jpege chn: %d getStream %llu encTime: %llu\n",
-                vencChn, g_jpege_send_frame_cnt[vencChn], elapseTime);
-            fflush(stdout);
-
-            if (g_save) {
-                jpege_save_stream_to_file(vencChn, g_jpege_send_frame_cnt[vencChn], &stream);
-            }
-            // release output buffer
-            ret = hi_mpi_venc_release_stream(vencChn, &stream);
-            if (ret != HI_SUCCESS) {
-                hi_mpi_dvpp_free((void*)(videoFrame->v_frame.header_virt_addr[0]));
-                SAMPLE_PRT("hi_mpi_venc_release_stream failed with %#x!\n", ret);
-                free(stream.pack);
-                stream.pack = NULL;
-                return NULL;
-            }
-        }
-        // performance statistics
-        if (jpegeSendPara->supportPerformance) {
-            double avgTime = sumTime / g_per_count;
-            double fps = 1000000 / avgTime;
-            SAMPLE_PRT("Jpege chn: %d actualFrameRate %.4lf,averageTime %.4lf us,encodeFrame %llu\n",
-                vencChn, fps, avgTime, g_jpege_send_frame_cnt[vencChn]);
-            fflush(stdout);
-        }
-        hi_mpi_dvpp_free((void*)(videoFrame->v_frame.header_virt_addr[0]));
-        free(stream.pack);
-        stream.pack = NULL;
-
-        if (tmp != NULL) {
-            free(tmp);
-            tmp = NULL;
-        }
-
-        jpegeSendPara->threadStart = HI_FALSE;
-        break;
-    }
+    sync_encode(fpYuv, jpegeSendPara);
 
     if (fpYuv != NULL) {
         fclose(fpYuv);
@@ -629,7 +692,7 @@ void* jpege_sync_enc(void *p)
 }
 
 /*
-* function:    jpege_start_send_frame(hi_venc_chn vencChn[], int32_t cnt, int32_t per, HiSampleVencSendFrameInput* inputPara)
+* function:    jpege_start_sync_enc(hi_venc_chn vencChn[], int32_t cnt, int32_t per, HiSampleVencSendFrameInput* inputPara)
 * Description: Create A Thread for jpeg encode in sychronize mode
 * input:       vencChn:chnl_id, cnt:number of frames, per:whether performance test or not,
                inputPara:Input file parameters
@@ -686,7 +749,7 @@ int32_t jpege_start_send_frame(hi_venc_chn vencChn[], int32_t cnt, int32_t per, 
         g_jpege_send_frame_para[i].supportPerformance = per;
         // The performance test uses the method of applying for all memory before encoding
         if (g_jpege_send_frame_para[i].supportPerformance) {
-            ret = pthread_create(&g_jpege_send_frame_pid[i], 0, jpege_snap_send_frame_dc_performace,
+            ret = pthread_create(&g_jpege_send_frame_pid[i], 0, jpege_snap_send_frame_dc_performance,
                 (void*)&g_jpege_send_frame_para[i]);
             if (ret != HI_SUCCESS) {
                 SAMPLE_PRT("thread %u create failed !\n", i);
@@ -706,6 +769,145 @@ int32_t jpege_start_send_frame(hi_venc_chn vencChn[], int32_t cnt, int32_t per, 
     return ret;
 }
 
+int32_t send_one_frame(hi_venc_chn vencChn, hi_video_frame_info *videoFrame)
+{
+    int32_t ret = HI_SUCCESS;
+    if (g_isZeroCopy) {
+        void* outputBuf = nullptr;
+        hi_u32 outputBufSize = 0;
+        ret = alloc_output_buffer(videoFrame, &outputBuf, &outputBufSize);
+        if (ret != HI_SUCCESS) {
+            return HI_FAILURE;
+        }
+        SAMPLE_PRT("output buffer addr:0x%p, size:%u\n", outputBuf, outputBufSize);
+
+        hi_img_stream out_stream;
+        out_stream.addr = (hi_u8 *)outputBuf;
+        out_stream.len = outputBufSize;
+
+        if (g_start_send_time_array[vencChn] == 0) {
+            SAMPLE_GET_TIMESTAMP_US(g_start_send_time_array[vencChn]);
+        }
+        SAMPLE_GET_TIMESTAMP_US(videoFrame->v_frame.pts);
+        ret = hi_mpi_venc_send_jpege_frame(vencChn, videoFrame, &out_stream, 10000);
+        if (ret != HI_SUCCESS) {
+            SAMPLE_PRT("hi_mpi_venc_send_jpege_frame failed, ret:0x%x\n", ret);
+            // free output buffer
+            (void)hi_mpi_dvpp_free(outputBuf);
+            return HI_FAILURE;
+        }
+    } else {
+        if (g_start_send_time_array[vencChn] == 0) {
+            SAMPLE_GET_TIMESTAMP_US(g_start_send_time_array[vencChn]);
+        }
+        SAMPLE_GET_TIMESTAMP_US(videoFrame->v_frame.pts);
+        ret = hi_mpi_venc_send_frame(vencChn, videoFrame, 10000);
+        if (ret != HI_SUCCESS) {
+            SAMPLE_PRT("hi_mpi_venc_send_frame failed, ret:0x%x\n", ret);
+            return HI_FAILURE;
+        }
+    }
+    g_jpege_send_frame_cnt[vencChn]++;
+    return HI_SUCCESS;
+}
+
+int32_t start_async_send_frame(hi_venc_chn vencChn, hi_video_frame_info *videoFrame, int32_t supportPerformance)
+{
+    int32_t ret = HI_SUCCESS;
+    int32_t i = 0;
+    if (supportPerformance) { // performance statistic
+        for (i = 0; i < g_per_count; ++i) {
+            ret = send_one_frame(vencChn, videoFrame);
+            if (ret != HI_SUCCESS) {
+                break;
+            }
+        }
+    } else {
+        ret = send_one_frame(vencChn, videoFrame);
+    }
+
+    return ret;
+}
+
+void async_send_frame(FILE *fpYuv, HiSampleJpegeSendFramePara* jpegeSendPara)
+{
+    int32_t ret = HI_SUCCESS;
+    hi_venc_chn vencChn = jpegeSendPara->vencChn;
+    hi_video_frame_info *videoFrame = nullptr;
+
+    uint32_t width = jpegeSendPara->inputPara.width;
+    uint32_t height = jpegeSendPara->inputPara.height;
+    uint32_t align = jpegeSendPara->inputPara.align;
+    hi_pixel_format pixelFormat = jpegeSendPara->inputPara.pixelFormat;
+    hi_data_bit_width bitWidth = jpegeSendPara->inputPara.bitWidth;
+    hi_compress_mode cmpMode = jpegeSendPara->inputPara.cmpMode;
+    hi_video_frame_info* tmp = nullptr;
+
+    int32_t count = 0;
+    hi_s64 yuvFileReadOff = 0;
+
+    while (jpegeSendPara->threadStart == HI_TRUE) {
+        // 2. alloc input buffer
+        tmp = (hi_video_frame_info *)malloc(sizeof(hi_video_frame_info));
+        if (tmp == NULL) {
+            SAMPLE_PRT("malloc input buffer failed \n");
+            jpegeSendPara->threadStart = HI_FALSE;
+            break;
+        }
+        ret = alloc_input_buffer(width, height, pixelFormat, bitWidth, cmpMode, align, tmp);
+        if (ret != HI_SUCCESS) {
+            SAMPLE_PRT("alloc_input_buffer failed \n");
+            if (tmp != NULL) {
+                free(tmp);
+                tmp = NULL;
+                SAMPLE_PRT("free hi_video_frame_info \n");
+            }
+            jpegeSendPara->threadStart = HI_FALSE;
+            break;
+        }
+
+        bool isAbnormal = false;
+        do {
+            // 3. read file
+            videoFrame = tmp;
+            ret = read_yuv_file(fpYuv, videoFrame, pixelFormat, &yuvFileReadOff, vencChn, count);
+            if (ret != HI_SUCCESS) {
+                SAMPLE_PRT("read yuv file fail, offset %lld \n", yuvFileReadOff);
+                isAbnormal = true;
+                break;
+            }
+
+            count++;
+
+            // 4. send image
+            ret = start_async_send_frame(vencChn, videoFrame, jpegeSendPara->supportPerformance);
+            if (ret != HI_SUCCESS) {
+                SAMPLE_PRT("async send frame fail \n");
+                isAbnormal = true;
+                break;
+            }
+        } while(false);
+
+        // free input buffer
+        if (isAbnormal && (videoFrame->v_frame.header_virt_addr[0] != nullptr)) {
+            hi_mpi_dvpp_free((void*)(videoFrame->v_frame.header_virt_addr[0]));
+            SAMPLE_PRT("hi_mpi_dvpp_free input buffer \n");
+        }
+
+        if (tmp != NULL) {
+            free(tmp);
+            tmp = NULL;
+            SAMPLE_PRT("free hi_video_frame_info \n");
+        }
+        if (jpegeSendPara->supportPerformance || (count == g_frameCount) || isAbnormal) {
+            jpegeSendPara->threadStart = HI_FALSE;
+        } else {
+            sleep(3); // 3s is set to prevent the buffer from being full because the data is transmitted too fast.
+        }
+    }
+    fflush(stdout);
+}
+
 /*
 * function:    jpege_snap_send_frame(void* p)
 * Description: Start Send Input Data
@@ -716,22 +918,9 @@ int32_t jpege_start_send_frame(hi_venc_chn vencChn[], int32_t cnt, int32_t per, 
 */
 void* jpege_snap_send_frame(void* p)
 {
-    int32_t ret = HI_SUCCESS;
-    hi_video_frame_info *videoFrame = nullptr;
     hi_char inputFileName[64];
-    hi_venc_chn vencChn;
     FILE *fpYuv = nullptr;
-    hi_s64 yuvFileReadOff = 0;
     HiSampleJpegeSendFramePara* jpegeSendPara = nullptr;
-    int32_t count = 0;
-    uint32_t width = 0;
-    uint32_t height = 0;
-    uint32_t align = 0;
-    hi_pixel_format pixelFormat;
-    hi_data_bit_width bitWidth;
-    hi_compress_mode cmpMode;
-    hi_video_frame_info* tmp = nullptr;
-    int32_t i = 0;
 
     aclError acl_ret = aclrtSetCurrentContext(g_context);
     if (acl_ret != ACL_SUCCESS) {
@@ -739,8 +928,12 @@ void* jpege_snap_send_frame(void* p)
         return NULL;
     }
 
+    if (p == nullptr) {
+        SAMPLE_PRT("input param is nullptr");
+        return NULL;
+    }
+
     jpegeSendPara = (HiSampleJpegeSendFramePara*) p;
-    vencChn = jpegeSendPara->vencChn;
 
     snprintf(inputFileName, sizeof(inputFileName), "%s", jpegeSendPara->inputPara.inputFileName);
 
@@ -751,102 +944,7 @@ void* jpege_snap_send_frame(void* p)
         return NULL;
     }
 
-    width = jpegeSendPara->inputPara.width;
-    height = jpegeSendPara->inputPara.height;
-    align = jpegeSendPara->inputPara.align;
-    pixelFormat = jpegeSendPara->inputPara.pixelFormat;
-    bitWidth = jpegeSendPara->inputPara.bitWidth;
-    cmpMode = jpegeSendPara->inputPara.cmpMode;
-
-    while (jpegeSendPara->threadStart == HI_TRUE) {
-        // 2. alloc input buffer
-        tmp = (hi_video_frame_info *)malloc(sizeof(hi_video_frame_info));
-        if (tmp == NULL) {
-            SAMPLE_PRT("malloc input buffer failed \n");
-            fflush(stdout);
-            fclose(fpYuv);
-            return NULL;
-        }
-        ret = alloc_input_buffer(width, height, pixelFormat, bitWidth, cmpMode, align, tmp);
-        if (ret != HI_SUCCESS) {
-            SAMPLE_PRT("alloc_input_buffer failed \n");
-            fflush(stdout);
-            fclose(fpYuv);
-            free(tmp);
-            tmp = NULL;
-            return NULL;
-        }
-
-        // 3. read file
-        videoFrame = tmp;
-        ret = read_yuv_file(fpYuv, videoFrame, pixelFormat, &yuvFileReadOff, vencChn, count);
-        if (ret != HI_SUCCESS) {
-            SAMPLE_PRT("read yuv file fail, offset %lld \n", yuvFileReadOff);
-            jpegeSendPara->threadStart = HI_FALSE;
-            fflush(stdout);
-            fclose(fpYuv);
-            free(tmp);
-            tmp = NULL;
-            sleep(5);
-            // release input buffer
-            ret = hi_mpi_dvpp_free((void*)(videoFrame->v_frame.header_virt_addr[0]));
-            if (ret != HI_SUCCESS) {
-                SAMPLE_PRT("hi_mpi_dvpp_free failed!\n");
-                return NULL;
-            }
-            return NULL;
-        }
-
-        count++;
-
-        // 4. send image
-        if (jpegeSendPara->supportPerformance) { // performace statistic
-            for (i = 0; i < g_per_count; ++i) {
-                videoFrame->v_frame.time_ref = (g_jpege_send_frame_cnt[vencChn]) * 2;
-                if (g_start_send_time_array[vencChn] == 0) {
-                    SAMPLE_GET_TIMESTAMP_US(g_start_send_time_array[vencChn]);
-                }
-                SAMPLE_GET_TIMESTAMP_US(videoFrame->v_frame.pts);
-                ret = hi_mpi_venc_send_frame(vencChn, videoFrame, 10000);
-                if (ret != HI_SUCCESS) {
-                    SAMPLE_PRT("hi_mpi_venc_send_frame failed, ret:0x%x\n", ret);
-                    free(tmp);
-                    tmp = NULL;
-                    fclose(fpYuv);
-                    fpYuv = NULL;
-                    return NULL;
-                }
-                g_jpege_send_frame_cnt[vencChn]++;
-            }
-        } else {
-            videoFrame->v_frame.time_ref = (g_jpege_send_frame_cnt[vencChn]) * 2;
-            if (g_start_send_time_array[vencChn] == 0) {
-                SAMPLE_GET_TIMESTAMP_US(g_start_send_time_array[vencChn]);
-            }
-            SAMPLE_GET_TIMESTAMP_US(videoFrame->v_frame.pts);
-            ret = hi_mpi_venc_send_frame(vencChn, videoFrame, 10000);
-            if (ret != HI_SUCCESS) {
-                SAMPLE_PRT("hi_mpi_venc_send_frame failed, ret:0x%x\n", ret);
-                free(tmp);
-                tmp = NULL;
-                fclose(fpYuv);
-                fpYuv = NULL;
-                return NULL;
-            }
-
-            g_jpege_send_frame_cnt[vencChn]++;
-        }
-
-        if (tmp != NULL) {
-            free(tmp);
-            tmp = NULL;
-        }
-        if (jpegeSendPara->supportPerformance || (count == g_frameCount)) {
-            jpegeSendPara->threadStart = HI_FALSE;
-        } else {
-            sleep(3); // 3s is set to prevent the buffer from being full because the data is transmitted too fast.
-        }
-    }
+    async_send_frame(fpYuv, jpegeSendPara);
 
     if (fpYuv != NULL) {
         fclose(fpYuv);
@@ -856,79 +954,36 @@ void* jpege_snap_send_frame(void* p)
     return NULL;
 }
 
-/*
-* function:    jpege_snap_send_frame_dc_performace(void* p)
-* Description: Start sending input data(Used for DC performance test)
-* input:       p:start address of the function
-* output:      none
-* return:      none
-* others:      none
-*/
-void* jpege_snap_send_frame_dc_performace(void* p)
+int32_t alloc_input_buffer_for_dc_performance(FILE *fpYuv, HiSampleJpegeSendFramePara* jpegeSendPara,
+    hi_video_frame_info **tmp, hi_video_frame_info **videoFrame)
 {
     int32_t ret = HI_SUCCESS;
-    hi_char inputFileName[64];
-    hi_venc_chn vencChn;
+    hi_venc_chn vencChn = jpegeSendPara->vencChn;
+
+    uint32_t width = jpegeSendPara->inputPara.width;
+    uint32_t height = jpegeSendPara->inputPara.height;
+    uint32_t align = jpegeSendPara->inputPara.align;
+    hi_pixel_format pixelFormat = jpegeSendPara->inputPara.pixelFormat;
+    hi_data_bit_width bitWidth = jpegeSendPara->inputPara.bitWidth;
+    hi_compress_mode cmpMode = jpegeSendPara->inputPara.cmpMode;
+
     int32_t count = 0;
-    hi_u64 sendTimeBefore = 0;
-    hi_u64 sendTimeAfter = 0;
     hi_s64 yuvFileReadOff = 0;
-    uint32_t width = 0;
-    uint32_t height = 0;
-    uint32_t align = 0;
-    int32_t delay = 0;
-    int32_t totalMem = 0;
-    hi_pixel_format pixelFormat;
-    hi_data_bit_width bitWidth;
-    hi_compress_mode cmpMode;
-    FILE *fpYuv = NULL;
-    HiSampleJpegeSendFramePara* jpegeSendPara = nullptr;
-    hi_video_frame_info *videoFrame[g_mem_count];
-    hi_video_frame_info *tmp[g_mem_count];
+    int m = 0;
 
-    aclError acl_ret = aclrtSetCurrentContext(g_context);
-    if (acl_ret != ACL_SUCCESS) {
-        SAMPLE_PRT("set current context failed");
-        return NULL;
-    }
-
-    jpegeSendPara = (HiSampleJpegeSendFramePara*)p;
-    vencChn = jpegeSendPara->vencChn;
-
-    // 1. open the input file handle
-    snprintf(inputFileName, sizeof(inputFileName), "%s", jpegeSendPara->inputPara.inputFileName);
-
-    fpYuv = fopen(inputFileName, "rb");
-    if (fpYuv == NULL) {
-        jpegeSendPara->threadStart = HI_FALSE;
-        SAMPLE_PRT("can't open file in send stream thread!\n");
-        return NULL;
-    }
-
-    width = jpegeSendPara->inputPara.width;
-    height = jpegeSendPara->inputPara.height;
-    align = jpegeSendPara->inputPara.align;
-    pixelFormat = jpegeSendPara->inputPara.pixelFormat;
-    bitWidth = jpegeSendPara->inputPara.bitWidth;
-    cmpMode = jpegeSendPara->inputPara.cmpMode;
-
-    totalMem = 12 * 1024 * 1024 / 24;
-
-    for (int m = 0; m < g_mem_count; ++m) {
+    for (m = 0; m < g_mem_count; ++m) {
         // 2. alloc input Buffer
         tmp[m] = (hi_video_frame_info *)malloc(sizeof(hi_video_frame_info));
         if (tmp[m] == NULL) {
             SAMPLE_PRT("malloc input buffer failed \n");
-            fflush(stdout);
-            fclose(fpYuv);
-            return NULL;
+            break;
         }
         ret = alloc_input_buffer(width, height, pixelFormat, bitWidth, cmpMode, align, tmp[m]);
         if (ret != HI_SUCCESS) {
             SAMPLE_PRT("alloc_input_buffer failed \n");
-            fflush(stdout);
-            fclose(fpYuv);
-            return NULL;
+            free(tmp[m]);
+            tmp[m] = NULL;
+            break;
         }
 
         // 3. read input file
@@ -937,63 +992,125 @@ void* jpege_snap_send_frame_dc_performace(void* p)
         yuvFileReadOff = 0;
         if (ret != HI_SUCCESS) {
             SAMPLE_PRT("read yuv file fail, offset %lld \n", yuvFileReadOff);
-            jpegeSendPara->threadStart = HI_FALSE;
-            fflush(stdout);
-            fclose(fpYuv);
             free(tmp[m]);
             tmp[m] = NULL;
 
-            sleep(1);
             // release input buffer
             ret = hi_mpi_dvpp_free((void*)(videoFrame[m]->v_frame.header_virt_addr[0]));
             if (ret != HI_SUCCESS) {
                 SAMPLE_PRT("hi_mpi_dvpp_free failed!\n");
-                return NULL;
             }
-            return NULL;
+            break;
         }
+    }
+
+    fflush(stdout);
+
+    if (m == g_mem_count) {
+        return HI_SUCCESS;
+    }
+
+    for (int i = 0; i < m; ++i) {
+        if (tmp[i] != NULL) {
+            free(tmp[m]);
+            tmp[m] = NULL;
+        }
+        if (videoFrame[i]->v_frame.header_virt_addr[0] != NULL) {
+            ret = hi_mpi_dvpp_free((void*)(videoFrame[i]->v_frame.header_virt_addr[0]));
+            if (ret != HI_SUCCESS) {
+                SAMPLE_PRT("hi_mpi_dvpp_free failed!\n");
+            }
+        }
+    }
+    return HI_FAILURE;
+}
+
+void send_frame_for_dc_performance(FILE *fpYuv, HiSampleJpegeSendFramePara* jpegeSendPara)
+{
+    int32_t ret = HI_SUCCESS;
+    hi_venc_chn vencChn = jpegeSendPara->vencChn;
+    int32_t delay = 0;
+    hi_video_frame_info *videoFrame[g_mem_count] = {NULL};
+    hi_video_frame_info *tmp[g_mem_count] = {NULL};
+
+    ret = alloc_input_buffer_for_dc_performance(fpYuv, jpegeSendPara, tmp, videoFrame);
+    if (ret != HI_SUCCESS) {
+        SAMPLE_PRT("alloc input buffer failed!\n");
+        return;
     }
 
     delay = 30; // 单位：s
     delay_exec(g_start_send_time, delay); // 所有线程等待并发
     SAMPLE_PRT("chn %d start send!\n", vencChn);
-    fflush(stdout);
 
+    bool isAbnormal = false;
     while (jpegeSendPara->threadStart == HI_TRUE) {
-        count++;
-        // yuvFileReadOff = 0; // 可用于一直循环读取一张图片的测试
-
+        isAbnormal = false;
         // 4. 发送图像
         for (int j = 0; j < g_mem_count; ++j){
-            for (int i = 0; i < g_per_count; ++i) {
-                videoFrame[j]->v_frame.time_ref = (g_jpege_send_frame_cnt[vencChn]) * 2;
-                if (g_start_send_time_array[vencChn] == 0) {
-                    SAMPLE_GET_TIMESTAMP_US(g_start_send_time_array[vencChn]);
-                }
-                SAMPLE_GET_TIMESTAMP_US(sendTimeBefore);
-                SAMPLE_GET_TIMESTAMP_US(videoFrame[j]->v_frame.pts);
-                ret = hi_mpi_venc_send_frame(vencChn, videoFrame[j], 10000);
-                SAMPLE_GET_TIMESTAMP_US(sendTimeAfter);
-                SAMPLE_PRT("chn_:%d, m_sendFrame:%llu, sendTimeBefore = %llu , sendTimeAfter = %llu , cost = %llu \n",
-                    vencChn, g_jpege_send_frame_cnt[vencChn], sendTimeBefore,
-                    sendTimeAfter, sendTimeAfter - sendTimeBefore);
-                fflush(stdout);
-                if (ret != HI_SUCCESS) {
-                    SAMPLE_PRT("hi_mpi_venc_send_frame failed, ret:0x%x\n", ret);
-                }
-                g_jpege_send_frame_cnt[vencChn]++;
+            ret = start_async_send_frame(vencChn, videoFrame[j], jpegeSendPara->supportPerformance);
+            if (ret != HI_SUCCESS) {
+                isAbnormal = true;
+                break;
             }
         }
         jpegeSendPara->threadStart = HI_FALSE;
-        break;
+    }
 
-        for (int n = 0; n < g_mem_count; ++n) {
-            if (tmp[n] != NULL) {
-                free(tmp[n]);
-                tmp[n] = NULL;
+    fflush(stdout);
+    for (int n = 0; n < g_mem_count; ++n) {
+        if (tmp[n] != NULL) {
+            free(tmp[n]);
+            tmp[n] = NULL;
+        }
+
+        if (isAbnormal && (videoFrame[n]->v_frame.header_virt_addr[0] != NULL)) {
+            ret = hi_mpi_dvpp_free((void*)(videoFrame[n]->v_frame.header_virt_addr[0]));
+            if (ret != HI_SUCCESS) {
+                SAMPLE_PRT("hi_mpi_dvpp_free failed!\n");
             }
         }
     }
+}
+
+/*
+* function:    jpege_snap_send_frame_dc_performance(void* p)
+* Description: Start sending input data(Used for DC performance test)
+* input:       p:start address of the function
+* output:      none
+* return:      none
+* others:      none
+*/
+void* jpege_snap_send_frame_dc_performance(void* p)
+{
+    int32_t ret = HI_SUCCESS;
+    hi_char inputFileName[64];
+    FILE *fpYuv = NULL;
+    HiSampleJpegeSendFramePara* jpegeSendPara = nullptr;
+
+    aclError acl_ret = aclrtSetCurrentContext(g_context);
+    if (acl_ret != ACL_SUCCESS) {
+        SAMPLE_PRT("set current context failed");
+        return NULL;
+    }
+
+    if (p == nullptr) {
+        SAMPLE_PRT("input param is nullptr");
+        return NULL;
+    }
+
+    jpegeSendPara = (HiSampleJpegeSendFramePara*)p;
+
+    // 1. open the input file handle
+    snprintf(inputFileName, sizeof(inputFileName), "%s", jpegeSendPara->inputPara.inputFileName);
+
+    fpYuv = fopen(inputFileName, "rb");
+    if (fpYuv == NULL) {
+        SAMPLE_PRT("can't open file in send stream thread!\n");
+        return NULL;
+    }
+
+    send_frame_for_dc_performance(fpYuv, jpegeSendPara);
 
     if (fpYuv != NULL) {
         fclose(fpYuv);
@@ -1001,6 +1118,22 @@ void* jpege_snap_send_frame_dc_performace(void* p)
     }
 
     return NULL;
+}
+
+uint32_t get_out_ring_buf_size(uint32_t width, uint32_t height)
+{
+    uint32_t bufSize = 0;
+    if (g_isZeroCopy == 0) {
+        uint32_t align_up_width = ALIGN_UP(width, 16);
+        uint32_t align_up_height = ALIGN_UP(height, 16);
+        if (width > 4096) {
+            bufSize = ALIGN_UP(align_up_width * align_up_height * 4, 64); // 4 buffer blocks for huge input
+        } else {
+            bufSize = ALIGN_UP(align_up_width * align_up_height * 5, 64); // 5:number of buffer blocks, 64-aligned
+        }
+        bufSize = (bufSize < 384000) ? 384000 : bufSize; // 384000 = 320 * 240 * 5
+    }
+    return bufSize;
 }
 
 /*
@@ -1014,21 +1147,12 @@ void* jpege_snap_send_frame_dc_performace(void* p)
 int32_t jpege_snap_start(hi_venc_chn vencChn, hi_video_size* size, hi_bool supportDc, uint32_t level)
 {
     int32_t ret = HI_SUCCESS;
-    uint32_t align_up_width;
-    uint32_t align_up_height;
     uint32_t bufSize = 0;
     hi_venc_start_param recvParam;
     hi_venc_chn_attr vencChnAttr;
 
     // 1: create channel
-    align_up_width = ALIGN_UP(size->width, 16);
-    align_up_height = ALIGN_UP(size->height, 16);
-    if (size->width > 4096) {
-        bufSize = ALIGN_UP(align_up_width * align_up_height * 4, 64); // 4 buffer blocks for huge input
-    } else {
-        bufSize = ALIGN_UP(align_up_width * align_up_height * 5, 64); // 5:number of buffer blocks, 64-aligned
-    }
-    bufSize = (bufSize < 384000) ? 384000 : bufSize; // 384000 = 320 * 240 * 5
+    bufSize = get_out_ring_buf_size(size->width, size->height);
     SAMPLE_PRT("vencChn = %d, bufSize = %u !\n", vencChn, bufSize);
 
     vencChnAttr.venc_attr.type = HI_PT_JPEG;
@@ -1202,7 +1326,7 @@ void* jpege_snap_process_epoll(void* p)
 
     jpegePara = (HiSampleJpegeGetStreamPara*)p;
     chnTotal = jpegePara->chnlCnt;
-    SAMPLE_PRT("one thread get nulti-channel stream\n");
+    SAMPLE_PRT("one thread get multi-channel stream\n");
 
     // 3: notify user to obtain the output stream
     while (jpegePara->threadStart == HI_TRUE) { // When the thread does not receive a stop signal
@@ -1237,6 +1361,7 @@ void* jpege_snap_process_epoll(void* p)
             ret = hi_mpi_venc_get_stream(vencChn, &stream, -1);
             if (ret != HI_SUCCESS) {
                 SAMPLE_PRT("hi_mpi_venc_get_stream failed with %#x!\n", ret);
+                hi_mpi_dvpp_free((void*)(stream.pack[0].input_addr));
                 free(stream.pack);
                 stream.pack = NULL;
                 return NULL;
@@ -1248,6 +1373,7 @@ void* jpege_snap_process_epoll(void* p)
                 ret = jpege_save_stream_to_file(vencChn, chnImgCnt[vencChn]++, &stream);
                 if (ret != HI_SUCCESS) {
                     SAMPLE_PRT("save snap picture failed!\n");
+                    hi_mpi_dvpp_free((void*)(stream.pack[0].input_addr));
                     free(stream.pack);
                     stream.pack = NULL;
                     return NULL;
@@ -1273,6 +1399,14 @@ void* jpege_snap_process_epoll(void* p)
                 free(stream.pack);
                 stream.pack = NULL;
                 return NULL;
+            }
+
+            if (g_isZeroCopy) {
+                // free output buffer
+                ret = hi_mpi_dvpp_free(stream.pack[0].addr);
+                if (ret != HI_SUCCESS) {
+                    SAMPLE_PRT("hi_mpi_dvpp_free failed, ret = %d!\n", ret);
+                }
             }
 
             free(stream.pack);
@@ -1365,27 +1499,36 @@ void* jpege_snap_process(void* p)
         if (jpegePara->orSave) {
             ret = jpege_save_stream_to_file(vencChn, chnImgCnt++, &stream);
             if (ret != HI_SUCCESS) {
+                hi_mpi_dvpp_free((void*)(stream.pack[0].input_addr));
                 free(stream.pack);
                 stream.pack = NULL;
                 return NULL;
             }
         }
-
         if (jpegePara->supportPerformance) {
             inputAddr[vencChn].insert(stream.pack[0].input_addr);
         } else {
             ret = hi_mpi_dvpp_free((void*)(stream.pack[0].input_addr));
             if (ret != HI_SUCCESS) {
                 SAMPLE_PRT("hi_mpi_dvpp_free failed!\n");
+                return NULL;
             }
         }
-        // 释放输出buffer
+        // release stream
         ret = hi_mpi_venc_release_stream(vencChn, &stream);
         if (ret != HI_SUCCESS) {
             SAMPLE_PRT("hi_mpi_venc_release_stream failed with %#x!\n", ret);
             free(stream.pack);
             stream.pack = NULL;
             return NULL;
+        }
+
+        if (g_isZeroCopy) {
+            // free output buffer
+            ret = hi_mpi_dvpp_free(stream.pack[0].addr);
+            if (ret != HI_SUCCESS) {
+                SAMPLE_PRT("hi_mpi_dvpp_free failed, ret = %d!\n", ret);
+            }
         }
 
         free(stream.pack);
@@ -1399,7 +1542,6 @@ void* jpege_snap_process(void* p)
                 usleep(500);
             }
         }
-
     }
 
     // 释放输入内存

@@ -63,6 +63,8 @@ uint32_t g_select_one_thread = 0;
 uint32_t g_is_syn_enc = 0;
 // Frame count of input file
 uint32_t g_frameCount = 1;
+// Zero copy
+uint32_t g_isZeroCopy = 0;
 
 aclrtContext g_context = NULL;
 // ACL_HOST or ACL_DEVICE
@@ -128,11 +130,12 @@ void get_option(int argc, char **argv)
             {"per_count"       , 1, 0, 'O'},
             {"mem_count"       , 1, 0, 'Q'},
             {"one_thread"      , 1, 0, 'T'},
-            {"sync_enc"       , 1, 0, 'S'},
+            {"sync_enc"        , 1, 0, 'S'},
             {"frame_count"     , 1, 0, 'n'},
+            {"zero_copy"       , 1, 0, 'z'},
             {NULL, 0, 0, 0}
         };
-        c = getopt_long(argc, argv, "W:H:w:h:f:b:c:i:o:l:s:B:p:O:Q:T:S:n", longOptions, &optionIndex);
+        c = getopt_long(argc, argv, "W:H:w:h:f:b:c:i:o:l:s:B:p:O:Q:T:S:n:z", longOptions, &optionIndex);
         if (c == -1) {
             break;
         }
@@ -191,6 +194,9 @@ void get_option(int argc, char **argv)
                 break;
             case 'n':
                 g_frameCount = atoi(optarg);
+                break;
+            case 'z':
+                g_isZeroCopy = atoi(optarg);
                 break;
             default:
                 SAMPLE_PRT("bad arg!\n");
@@ -296,9 +302,9 @@ hi_s32 jpeg_encode(void)
     hi_s32 i;
     hi_s32 ret;
     hi_video_size size[MAX_JPEGE_CHN];
-    hi_s32       chnNum;
-    hi_venc_chn     vencChn[MAX_JPEGE_CHN];
-    hi_bool      supportDc = HI_FALSE;
+    hi_s32 chnNum;
+    hi_venc_chn vencChn[MAX_JPEGE_CHN];
+    hi_bool supportDc = HI_FALSE;
 
     if (g_chn_num_start + g_chn_num > MAX_JPEGE_CHN) {
         SAMPLE_PRT("g_chn_num_start:%d + g_chn_num:%d > MAX_JPEGE_CHN: %d \n",

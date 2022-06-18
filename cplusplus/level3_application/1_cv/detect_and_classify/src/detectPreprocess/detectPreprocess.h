@@ -28,7 +28,7 @@
 
 class DetectPreprocessThread : public AclLiteThread {
 public:
-    DetectPreprocessThread(const char*& configFile, int32_t i, aclrtRunMode& runMode, bool display=false);
+    DetectPreprocessThread(const char*& configFile, int32_t deviceId, int32_t channelId, aclrtRunMode& runMode, bool display=false);
     ~DetectPreprocessThread();
 
     AclLiteError Init();
@@ -45,11 +45,11 @@ private:
     AclLiteError ReadStream(shared_ptr<CarDetectDataMsg> &carDetectDataMsg);
     AclLiteError ProcessPic(shared_ptr<CarDetectDataMsg> &carDetectDataMsg);
     AclLiteError ProcessStreamFrame(shared_ptr<CarDetectDataMsg> &carDetectDataMsg);
-    AclLiteError GetPicsDirConfig(std::string& picsDirPath, uint32_t deviceId);
-    AclLiteError GetVideoConfig(std::string& videoPath, uint32_t deviceId);
-    AclLiteError GetRtspConfig(std::string& rtspPath, uint32_t deviceId);
-    AclLiteError GetInputDataType(std::string& inputType, uint32_t deviceId);
-    AclLiteError GetInputDataPath(std::string& inputDataPath, uint32_t deviceId);
+    AclLiteError GetPicsDirConfig(std::string& picsDirPath, uint32_t channelId);
+    AclLiteError GetVideoConfig(std::string& videoPath, uint32_t channelId);
+    AclLiteError GetRtspConfig(std::string& rtspPath, uint32_t channelId);
+    AclLiteError GetInputDataType(std::string& inputType, uint32_t channelId);
+    AclLiteError GetInputDataPath(std::string& inputDataPath, uint32_t channelId);
 
 private:
     bool display_;
@@ -59,9 +59,11 @@ private:
     AclLiteVideoProc* cap_;
     aclrtRunMode runMode_;
     uint32_t deviceId_;
+    uint32_t channelId_;
     uint32_t modelWidth_;
     uint32_t modelHeight_;
     int frameCnt_;
+    bool isSkip_;
     int selfThreadId_;
     int inferThreadId_;
     int detectPostThreadId_;

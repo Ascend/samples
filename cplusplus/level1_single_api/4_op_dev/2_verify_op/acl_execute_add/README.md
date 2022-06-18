@@ -32,7 +32,7 @@ Note: The generation of a single-operator model file depends only on the operato
 ## Environment Requirements
 
 -   OS and architecture: CentOS x86\_64, CentOS AArch64, Ubuntu 18.04 x86\_64, Ubuntu 18.04 aarch64,  EulerOS x86, EulerOS AArch64
--   SoC: Ascend 310, Ascend 710, or Ascend 910
+-   SoC: Ascend 310, Ascend 310P, or Ascend 910
 -   Python version and dependency library: Python 3.7.*x* (3.7.0 to 3.7.11) and Python 3.8.*x* (3.8.0 to 3.8.11).
 -   Ascend AI Software Stack deployed
 -   Custom operator built and deployed by referring to  [custom\_op](../../1_custom_op)
@@ -100,7 +100,7 @@ Note: The generation of a single-operator model file depends only on the operato
 
     Replace  **$HOME/Ascend**  with the actual component installation path.
 
-## Build and Run 
+## Build and Run
 
 1.  Generate the single-operator offline model file of the Add operator.
     1.  Log in to the development environment as a running user \(for example,  **HwHiAiUser**\) and go to the  **acl\_execute\_add/run/out**  directory of the sample project.
@@ -138,7 +138,7 @@ Note: The generation of a single-operator model file depends only on the operato
        **mkdir -p build/intermediates/host**
 
    2.  Go to the  **build/intermediates/host**  directory and run the  **cmake**  command.
-       
+
        Replace  **../../../src**  with the actual directory of  **CMakeLists.txt**.
 
        Set **DCMAKE_SKIP_RPATH** to  **TRUE**,  **rpath**  (path specified by  **NPU_HOST_LIB**) is not added to the executable generated after build. The executable automatically looks up for dynamic libraries in the path  included in  **LD_LIBRARY_PATH**.
@@ -154,7 +154,7 @@ Note: The generation of a single-operator model file depends only on the operato
            For example, if the development environment is x86 and the running environment is AArch64 , run the following command:
 
            **cd build/intermediates/host**
-           
+
            **cmake ../../../src -DCMAKE\_CXX\_COMPILER=aarch64-linux-gnu-g++ -DCMAKE\_SKIP\_RPATH=TRUE**
 
 

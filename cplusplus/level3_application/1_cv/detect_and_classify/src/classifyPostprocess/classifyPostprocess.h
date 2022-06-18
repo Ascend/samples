@@ -33,16 +33,17 @@ using namespace ascend::presenter;
 
 class ClassifyPostprocessThread : public AclLiteThread {
 public:
-    ClassifyPostprocessThread(const char*& configFile, int deviceId);
+    ClassifyPostprocessThread(const char*& configFile, int channelId);
     ~ClassifyPostprocessThread();
 
     AclLiteError Init();
     AclLiteError Process(int msgId, shared_ptr<void> msgData);
 
 private:
-    AclLiteError GetOutputFrameResolution(int& videoWidth, int& videoHeight, uint32_t deviceId);
-    AclLiteError GetOutputDataType(std::string& outputType, uint32_t deviceId);
+    AclLiteError GetOutputFrameResolution(int& videoWidth, int& videoHeight, uint32_t channelId);
+    AclLiteError GetOutputDataType(std::string& outputType, uint32_t channelId);
     AclLiteError SetOutputVideo();
+    AclLiteError PrintResult(shared_ptr<CarDetectDataMsg> &carDetectDataMsg);
     AclLiteError DrawResultOnPic(shared_ptr<CarDetectDataMsg> &carDetectDataMsg);
     AclLiteError DrawResultOnVideo(shared_ptr<CarDetectDataMsg> &carDetectDataMsg);
     AclLiteError SendImage(shared_ptr<CarDetectDataMsg> &carDetectDataMsg);
@@ -54,7 +55,7 @@ private:
     string outputType_;
     int outputFrameWidth_;
     int outputFrameHeight_;
-    int deviceId_;
+    int channelId_;
     cv::VideoWriter outputVideo_;
 };
 

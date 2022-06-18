@@ -51,7 +51,15 @@ AclLiteError ResizeHelper::InitResizeInputDesc(ImageData& inputImage) {
         return ACLLITE_ERROR_INVALID_ARGS;
     }
 
-    uint32_t inputBufferSize = YUV420SP_SIZE(alignWidth, alignHeight);
+    uint32_t inputBufferSize = 0;
+    if (inputImage.format == PIXEL_FORMAT_YUV_SEMIPLANAR_420) {
+        inputBufferSize = YUV420SP_SIZE(alignWidth, alignHeight);
+    } else if (inputImage.format == PIXEL_FORMAT_RGB_888) {
+        inputBufferSize = RGBU8_IMAGE_SIZE(alignWidth, alignHeight);
+    } else {
+        ACLLITE_LOG_WARNING("Dvpp only support yuv and rgb format.");
+    }
+
     vpcInputDesc_ = acldvppCreatePicDesc();
     if (vpcInputDesc_ == nullptr) {
         ACLLITE_LOG_ERROR("Create dvpp pic desc failed");

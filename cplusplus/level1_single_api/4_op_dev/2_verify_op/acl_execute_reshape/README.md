@@ -2,7 +2,7 @@
 
 ## Overview
 
-This sample verifies the function of the  [custom operator ReshapeCust](../../1_custom_op/doc/Reshape_EN.md)  by converting the custom operator file into a single-operator offline model file and loading the file using AscendCL for execution. 
+This sample verifies the function of the  [custom operator ReshapeCust](../../1_custom_op/doc/Reshape_EN.md)  by converting the custom operator file into a single-operator offline model file and loading the file using AscendCL for execution.
 
 Note: The generation of a single-operator model file depends only on the operator code implementation file, operator prototype definition, and operator information library, but does not depend on the operator adaptation plugin.
 
@@ -32,7 +32,7 @@ Note: The generation of a single-operator model file depends only on the operato
 ## Environment Requirements
 
 - OS and architecture: CentOS x86\_64, CentOS AArch64, EulerOS x86, EulerOS AArch64
--   SoC: Ascend 310, Ascend 710, or Ascend 910
+-   SoC: Ascend 310, Ascend 310P, or Ascend 910
 -   Python version and dependency library: Python 3.7.*x* (3.7.0 to 3.7.11) and Python 3.8.*x* (3.8.0 to 3.8.11).
 -   Ascend AI Software Stack deployed
 -   Custom operator built and deployed by referring to  [custom\_op](../../1_custom_op)
@@ -102,7 +102,7 @@ Note: The generation of a single-operator model file depends only on the operato
 
 
 
-## Build and Run \(Ascend 310 EP/Ascend 710/Ascend 910\)
+## Build and Run \(Ascend 310 EP/Ascend 310P/Ascend 910\)
 
 1.  Generate the single-operator offline model file of the ReshapeCust operator.
     1.  Log in to the development environment as a running user \(for example,  **HwHiAiUser**\) and go to the  **acl\_execute\_reshape/run/out**  directory of the sample project.
@@ -151,7 +151,7 @@ Note: The generation of a single-operator model file depends only on the operato
            For example, if the development environment is x86 and the running environment is AArch64 , run the following command:
 
            **cd build/intermediates/host**
-           
+
            **cmake ../../../src -DCMAKE\_CXX\_COMPILER=aarch64-linux-gnu-g++ -DCMAKE\_SKIP\_RPATH=TRUE**
 
       The parameters are described as follows:

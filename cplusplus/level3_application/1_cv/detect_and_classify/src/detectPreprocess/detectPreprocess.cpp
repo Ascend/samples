@@ -29,7 +29,7 @@ uint32_t kModelWidth = 416;
 uint32_t kModelHeight = 416;
 }
 
-DetectPreprocessThread::DetectPreprocessThread(const char*& configFile, int32_t i, aclrtRunMode& runMode, bool display) :
+DetectPreprocessThread::DetectPreprocessThread(const char*& configFile, int32_t deviceId, int32_t channelId, aclrtRunMode& runMode, bool display) :
 display_(display),
 configFile_(configFile),
 cap_(nullptr),
@@ -43,7 +43,8 @@ classifyPreThreadId_(INVALID_INSTANCE_ID),
 classifyPostThreadId_(INVALID_INSTANCE_ID),
 presentAgentDisplayThreadId_(INVALID_INSTANCE_ID),
 frameCnt_(0),
-deviceId_(i){
+deviceId_(deviceId),
+channelId_(channelId){
 }
 
 DetectPreprocessThread::~DetectPreprocessThread() {
@@ -89,8 +90,8 @@ AclLiteError DetectPreprocessThread::OpenVideoCapture() {
     return ACLLITE_OK;
 }
 
-AclLiteError DetectPreprocessThread::GetPicsDirConfig(std::string& picsDirPath, uint32_t deviceId) {
-    std::string picsDirPathKey = "picsDirPath_" + to_string(deviceId);
+AclLiteError DetectPreprocessThread::GetPicsDirConfig(std::string& picsDirPath, uint32_t channelId) {
+    std::string picsDirPathKey = "picsDirPath_" + to_string(channelId);
     std::map<std::string, std::string> config;
     if(!ReadConfig(config, configFile_)) {
         return ACLLITE_ERROR;
@@ -101,15 +102,15 @@ AclLiteError DetectPreprocessThread::GetPicsDirConfig(std::string& picsDirPath, 
         if (mIter->first == picsDirPathKey) {
             picsDirPath.assign(mIter->second.c_str());
             ACLLITE_LOG_INFO("pics directory %d path: %s", 
-                             deviceId, picsDirPath.c_str());
+                             channelId, picsDirPath.c_str());
         }
     }
 
     return ACLLITE_OK;
 }
 
-AclLiteError DetectPreprocessThread::GetInputDataType(std::string& inputType, uint32_t deviceId) {
-    std::string inputTypeKey = "inputType_" + to_string(deviceId);
+AclLiteError DetectPreprocessThread::GetInputDataType(std::string& inputType, uint32_t channelId) {
+    std::string inputTypeKey = "inputType_" + to_string(channelId);
     std::map<std::string, std::string> config;
     if(!ReadConfig(config, configFile_)) {
         return ACLLITE_ERROR;
@@ -120,20 +121,20 @@ AclLiteError DetectPreprocessThread::GetInputDataType(std::string& inputType, ui
         if (mIter->first == inputTypeKey) {
             inputType.assign(mIter->second.c_str());
             ACLLITE_LOG_INFO("device %d input type is : %s", 
-                             deviceId, inputType.c_str());
+                             channelId, inputType.c_str());
         }
     }
     if (inputType.empty() || (inputType != "video" &&
         inputType != "pic" && inputType != "rtsp")) {
-        ACLLITE_LOG_ERROR("device %d input type is invalid", deviceId);
+        ACLLITE_LOG_ERROR("device %d input type is invalid", channelId);
         return ACLLITE_ERROR;     
     }
 
     return ACLLITE_OK;
 }
 
-AclLiteError DetectPreprocessThread::GetInputDataPath(std::string& inputDataPath, uint32_t deviceId) {
-    std::string inputDataPathKey = "inputDataPath_" + to_string(deviceId);
+AclLiteError DetectPreprocessThread::GetInputDataPath(std::string& inputDataPath, uint32_t channelId) {
+    std::string inputDataPathKey = "inputDataPath_" + to_string(channelId);
     std::map<std::string, std::string> config;
     if (!ReadConfig(config, configFile_)) {
         return ACLLITE_ERROR;
@@ -144,11 +145,11 @@ AclLiteError DetectPreprocessThread::GetInputDataPath(std::string& inputDataPath
         if (mIter->first == inputDataPathKey) {
             inputDataPath.assign(mIter->second.c_str());
             ACLLITE_LOG_INFO("device %d input data path is : %s", 
-                             deviceId, inputDataPath.c_str());
+                             channelId, inputDataPath.c_str());
         }
     }
     if (inputDataPath.empty()) {
-        ACLLITE_LOG_ERROR("device %d input data path is invalid", deviceId);
+        ACLLITE_LOG_ERROR("device %d input data path is invalid", channelId);
         return ACLLITE_ERROR;     
     }
 
@@ -157,13 +158,13 @@ AclLiteError DetectPreprocessThread::GetInputDataPath(std::string& inputDataPath
 
 AclLiteError DetectPreprocessThread::Init() {
 
-    AclLiteError aclRet = GetInputDataPath(inputDataPath_, deviceId_);
+    AclLiteError aclRet = GetInputDataPath(inputDataPath_, channelId_);
     if (aclRet != ACLLITE_OK) {
         ACLLITE_LOG_ERROR("GetInputDataPath failed, error %d", aclRet);
         return ACLLITE_ERROR;
     }
 
-    aclRet = GetInputDataType(inputType_, deviceId_);
+    aclRet = GetInputDataType(inputType_, channelId_);
     if (aclRet != ACLLITE_OK) {
         ACLLITE_LOG_ERROR("GetInputDataType failed, error %d", aclRet);
         return ACLLITE_ERROR;
@@ -188,9 +189,9 @@ AclLiteError DetectPreprocessThread::Init() {
     //Get the relevant thread instance id
     selfThreadId_ = SelfInstanceId();
     inferThreadId_ = GetAclLiteThreadIdByName(kInferName[deviceId_]);
-    detectPostThreadId_ = GetAclLiteThreadIdByName(kDetectPostName[deviceId_]);
-    classifyPreThreadId_ = GetAclLiteThreadIdByName(kClassifyPreName[deviceId_]);
-    classifyPostThreadId_ = GetAclLiteThreadIdByName(kClassifyPostName[deviceId_]);
+    detectPostThreadId_ = GetAclLiteThreadIdByName(kDetectPostName[channelId_]);
+    classifyPreThreadId_ = GetAclLiteThreadIdByName(kClassifyPreName[channelId_]);
+    classifyPostThreadId_ = GetAclLiteThreadIdByName(kClassifyPostName[channelId_]);
     if (display_){
         presentAgentDisplayThreadId_ = GetAclLiteThreadIdByName(kPresentAgentDisplayName.c_str());
     }
@@ -246,8 +247,8 @@ AclLiteError DetectPreprocessThread::ReadPic(shared_ptr<CarDetectDataMsg> &carDe
     carDetectDataMsg->classifyPreThreadId = classifyPreThreadId_;
     carDetectDataMsg->classifyPostThreadId = classifyPostThreadId_;
     carDetectDataMsg->presentAgentDisplayThreadId = presentAgentDisplayThreadId_;
-
     carDetectDataMsg->deviceId = deviceId_;
+    carDetectDataMsg->channelId = channelId_;
     carDetectDataMsg->frameNum = frameCnt_;
     carDetectDataMsg->isLastFrame = 0;
 
@@ -259,7 +260,6 @@ AclLiteError DetectPreprocessThread::ReadPic(shared_ptr<CarDetectDataMsg> &carDe
     AclLiteError ret = ReadJpeg(carDetectDataMsg->imageFrame, picFile);
     carDetectDataMsg->frame = cv::imread(picFile);
     frameCnt_++;
-    
     return ACLLITE_OK;
 }
 
@@ -269,11 +269,10 @@ AclLiteError DetectPreprocessThread::ReadStream(shared_ptr<CarDetectDataMsg> &ca
     carDetectDataMsg->classifyPreThreadId = classifyPreThreadId_;
     carDetectDataMsg->classifyPostThreadId = classifyPostThreadId_;
     carDetectDataMsg->presentAgentDisplayThreadId = presentAgentDisplayThreadId_;
-
     carDetectDataMsg->deviceId = deviceId_;
+    carDetectDataMsg->channelId = channelId_;
     carDetectDataMsg->frameNum = frameCnt_;
     carDetectDataMsg->isLastFrame = 0;
-
     AclLiteError ret = cap_->Read(carDetectDataMsg->imageFrame);
     if (ret != ACLLITE_OK) {
         if(ret == ACLLITE_ERROR_DECODE_FINISH) {
@@ -371,14 +370,14 @@ AclLiteError DetectPreprocessThread::MsgProcess(shared_ptr<CarDetectDataMsg> &ca
         if (ret != ACLLITE_OK) {
             ACLLITE_LOG_ERROR("Process pic failed, error %d", ret);
             return ACLLITE_ERROR;
-        }        
+        }
     }
     else {
         ret = ProcessStreamFrame(carDetectDataMsg);
         if (ret != ACLLITE_OK) {
             ACLLITE_LOG_ERROR("Process stream frame failed, error %d", ret);
             return ACLLITE_ERROR;
-        }        
+        }
     }
 
     return ACLLITE_OK;
@@ -418,7 +417,8 @@ AclLiteError DetectPreprocessThread::MsgSend(shared_ptr<CarDetectDataMsg> &carDe
             carDetectDataMsgEnd->classifyPreThreadId = classifyPreThreadId_;
             carDetectDataMsgEnd->classifyPostThreadId = classifyPostThreadId_;
             carDetectDataMsgEnd->presentAgentDisplayThreadId = presentAgentDisplayThreadId_;
-            carDetectDataMsgEnd->deviceId = carDetectDataMsg->deviceId;
+            carDetectDataMsgEnd->deviceId = deviceId_;
+            carDetectDataMsgEnd->channelId = channelId_;
             carDetectDataMsgEnd->frameNum = carDetectDataMsg->frameNum;
             carDetectDataMsgEnd->isLastFrame = carDetectDataMsg->isLastFrame;
             while(1)
@@ -440,6 +440,5 @@ AclLiteError DetectPreprocessThread::MsgSend(shared_ptr<CarDetectDataMsg> &carDe
                 }
             }
     }
-
     return ACLLITE_OK;
 }

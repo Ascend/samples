@@ -93,7 +93,7 @@ AclLiteError InferenceThread::Init() {
 
 AclLiteError InferenceThread::DetectModelExecute(shared_ptr<CarDetectDataMsg> carDetectDataMsg) {
     if (carDetectDataMsg->isLastFrame == 1) {
-        ACLLITE_LOG_INFO("it is lastframe in Detect Inference");
+        ACLLITE_LOG_INFO("it is channel %d's lastframe in Detect Inference", carDetectDataMsg->channelId);
         return ACLLITE_OK;
     }
     aclFloat16 new_shapeHeight = aclFloatToFloat16((float)kDetectModelHeight);
@@ -195,7 +195,7 @@ int InferenceThread::CopyImageData(uint8_t *buffer,
     ret = CopyDataToDeviceEx(buffer, bufferSize, image.data.get(), dataSize, 
                              runMode_);
     if (ret) {
-        ACLLITE_LOG_ERROR("Copy data to device failed");
+        ACLLITE_LOG_ERROR("Copy face data to device failed");
         return kInvalidSize;
     }
 
@@ -205,7 +205,7 @@ int InferenceThread::CopyImageData(uint8_t *buffer,
 AclLiteError InferenceThread::ClassifyModelExecute(shared_ptr<CarDetectDataMsg> carDetectDataMsg) {
     
     if (carDetectDataMsg->isLastFrame == 1) {
-        ACLLITE_LOG_INFO("it is lastframe in Classify Inference");
+        ACLLITE_LOG_INFO("it is channel %d's lastframe in Classify Inference", carDetectDataMsg->channelId);
         return ACLLITE_OK;
     }
     

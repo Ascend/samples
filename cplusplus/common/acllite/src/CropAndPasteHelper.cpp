@@ -85,7 +85,14 @@ AclLiteError CropAndPasteHelper::InitCropAndPasteInputDesc(ImageData& inputImage
         return ACLLITE_ERROR;
     }
 
-    uint32_t inputBufferSize = YUV420SP_SIZE(alignWidth, alignHeight);
+    uint32_t inputBufferSize = 0;
+    if (inputImage.format == PIXEL_FORMAT_YUV_SEMIPLANAR_420) {
+        inputBufferSize = YUV420SP_SIZE(alignWidth, alignHeight);
+    } else if (inputImage.format == PIXEL_FORMAT_RGB_888) {
+        inputBufferSize = RGBU8_IMAGE_SIZE(alignWidth, alignHeight);
+    } else {
+        ACLLITE_LOG_WARNING("Dvpp only support yuv and rgb format.");
+    }
 
     vpcInputDesc_ = acldvppCreatePicDesc();
     if (vpcInputDesc_ == nullptr) {
@@ -94,7 +101,7 @@ AclLiteError CropAndPasteHelper::InitCropAndPasteInputDesc(ImageData& inputImage
     }
 
     acldvppSetPicDescData(vpcInputDesc_, inputImage.data.get());
-    acldvppSetPicDescFormat(vpcInputDesc_, PIXEL_FORMAT_YUV_SEMIPLANAR_420);
+    acldvppSetPicDescFormat(vpcInputDesc_, inputImage.format);
     acldvppSetPicDescWidth(vpcInputDesc_, inputImage.width);
     acldvppSetPicDescHeight(vpcInputDesc_, inputImage.height);
     acldvppSetPicDescWidthStride(vpcInputDesc_, alignWidth);

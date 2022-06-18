@@ -23,7 +23,9 @@
 # 入门学习
 
 ### 昇腾产品形态说明
+
 以昇腾 AI 处理器的PCIe的工作模式进行区分，如果PCIe工作在主模式，可以扩展外设，则称为RC模式；如果PCIe工作在从模式，则称为EP模式。  
+
 - 昇腾 AI 处理器的工作模式如下：
   − 昇腾310 AI处理器有EP和RC两种模式。
   − 昇腾310P AI处理器只有EP模式。
@@ -41,6 +43,7 @@ EP模式通常由Host侧作为主端，Device侧作为从端。客户的AI业务
 两种模式的产品及架构如图1所示。
 
 Host和Device的概念说明如下：
+
 - Host：是指与昇腾AI处理器所在硬件设备相连接的X86服务器、ARM服务器，利用昇腾AI处理器提供的NN（Neural-Network）计算能力完成业务。
 - Device：是指安装了昇腾AI处理器的硬件设备，利用PCIe接口与服务器连接，为服务器提供NN计算能力。
 
@@ -49,27 +52,30 @@ Host和Device的概念说明如下：
 ![输入图片说明](https://images.gitee.com/uploads/images/2022/0217/154812_7f97b90d_5400693.png "屏幕截图.png")
 
 ### CANN逻辑架构
+
 图2逻辑架构
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2022/0217/154918_d5412a59_5400693.png "屏幕截图.png")
 
 1. 昇腾计算语言接口
-    昇腾计算语言（Ascend Computing Language，AscendCL）接口是昇腾计算开放编程框架，是对低层昇腾计算服务接口的封装。它提供Device（设备）管理、Context（上下文）管理、Stream（流）管理、内存管理、模型加载与执行、算子加载与执行、媒体数据处理、Graph（图）管理等API库，供用户开发人工智能应用调用。
+   昇腾计算语言（Ascend Computing Language，AscendCL）接口是昇腾计算开放编程框架，是对低层昇腾计算服务接口的封装。它提供Device（设备）管理、Context（上下文）管理、Stream（流）管理、内存管理、模型加载与执行、算子加载与执行、媒体数据处理、Graph（图）管理等API库，供用户开发人工智能应用调用。
 2. 昇腾计算服务层
-    本层主要提供昇腾计算库，例如神经网络（Neural Network，NN）库、线性代数计算库（Basic Linear Algebra Subprograms，BLAS）等；昇腾计算调优引擎库，例如算子调优、子图调优、梯度调优、模型压缩以及AI框架适配器。
+   本层主要提供昇腾计算库，例如神经网络（Neural Network，NN）库、线性代数计算库（Basic Linear Algebra Subprograms，BLAS）等；昇腾计算调优引擎库，例如算子调优、子图调优、梯度调优、模型压缩以及AI框架适配器。
 3. 昇腾计算编译引擎
-    本层主要提供图编译器（Graph Compiler）和TBE算子开发支持。前者将用户输入中间表达（Intermediate Representation，IR）的计算图编译成NPU运行的模型。后者提供用户开发自定义算子所需的工具。
+   本层主要提供图编译器（Graph Compiler）和TBE算子开发支持。前者将用户输入中间表达（Intermediate Representation，IR）的计算图编译成NPU运行的模型。后者提供用户开发自定义算子所需的工具。
 4. 昇腾计算执行引擎
-    本层负责模型和算子的执行，提供如运行时（Runtime）库（执行内存分配、模型管理、数据收发等）、图执行器（Graph Executor）、数字视觉预处理（Digital Vision Pre-Processing，DVPP）、人工智能预处理（Artificial Intelligence Pre-Processing，AIPP）、华为集合通信库（Huawei Collective Communication Library，HCCL）等功能单元。
+   本层负责模型和算子的执行，提供如运行时（Runtime）库（执行内存分配、模型管理、数据收发等）、图执行器（Graph Executor）、数字视觉预处理（Digital Vision Pre-Processing，DVPP）、人工智能预处理（Artificial Intelligence Pre-Processing，AIPP）、华为集合通信库（Huawei Collective Communication Library，HCCL）等功能单元。
 5. 昇腾计算基础层
-    本层主要为其上各层提供基础服务，如共享虚拟内存（Shared Virtual Memory，SVM）、设备虚拟化（Virtual Machine，VM）、主机-设备通信（Host Device Communication，HDC）等。
+   本层主要为其上各层提供基础服务，如共享虚拟内存（Shared Virtual Memory，SVM）、设备虚拟化（Virtual Machine，VM）、主机-设备通信（Host Device Communication，HDC）等。
 
 
 
 # 样例介绍
 
 ### 简介
+
 目标识别是计算机视觉领域中的一项关键技术，随着深度学习技术的发展，目标识别的应用场景也越来越广泛。当前, 目标识别主要有以下几个应用场景:
+
 - 安全领域：指纹识别、物体识别等。
 - 交通领域：车牌号识别、无人驾驶、交通标志识别等。
 - 医疗领域：心电图、B超、健康管理、营养学等。
@@ -78,9 +84,11 @@ Host和Device的概念说明如下：
 为了提升开发者基于CANN进行目标识别相关应用程序的开发效率，降低开发门槛，本样例提供了通用目标识别应用代码，支持对图片，离线视频以及RTSP视频流进行识别，开发者可以方便的基于此样例进行扩展，定制自己的AI应用。
 
 ### 应用流程
+
 本样例基于CANN，实现了在昇腾AI处理器上对输入图片或者视频进行目标识别，通用业务流程如下所示：
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2022/0217/155208_63329a39_5400693.png "屏幕截图.png")
+
 - AscendCL初始化
   调用aclInit接口实现初始化AscendCL。
 - 运行管理资源申请
@@ -96,6 +104,7 @@ Host和Device的概念说明如下：
 
 
 ### 获取样例
+
 单击Gitee或Github，进入Samples开源仓，按照Samples仓根目录下的README中的"版本说明"，获取配套的Samples版本.
 
 ### 目录结构
@@ -131,21 +140,27 @@ Host和Device的概念说明如下：
 │   └── main.cpp               //主函数，图片分类功能的实现文件  
 └── CMakeLists.txt             //编译脚本入口，调用src目录下的CMakeLists文件
 ```
+
 # 环境准备
+
 ## 硬件和操作系统要求
+
 本样例已在满足如下条件的硬件环境中进行测试，若环境不符合如下要求，样例可能运行失败
-| 产品型号  | 支持的操作系统  |
-|---|---|
-| Atlas 200 DK 开发者套件（型号 3000）  | Ubuntu 18.04  |
-| Atlas 300I Pro 推理卡  | Ubuntu 18.04 /  CentOS 7.6 |
+
+| 产品型号                             | 支持的操作系统             |
+| ------------------------------------ | -------------------------- |
+| Atlas 200 DK 开发者套件（型号 3000） | Ubuntu 18.04               |
+| Atlas 300I Pro 推理卡                | Ubuntu 18.04 /  CentOS 7.6 |
 
 ## CANN软件要求
+
 本样例支持的CANN版本为：5.0.4.alpha001及以上版本，CANN软件的获取请参见[昇腾社区软件下载](https://www.hiascend.com/software/cann/community)，CANN软件的安装请参见[昇腾社区文档中心](https://www.hiascend.com/document?tag=community-develope)的“CANN软件安装”。
 请注意，安装CANN软件前，需要已完成驱动和固件的安装。
 
 
  **说明:** 
 准备好基础CANN环境后，您需要参见如下内容完成环境变量配置、公共库文件准备、文件目录创建、依赖安装等，进行这些准备前，您需要了解两个基本概念：开发环境与运行环境，以便更好的理解后续的操作：
+
 - 开发环境指编译开发代码的环境，运行环境指运行推理程序的环境，运行环境必须带昇腾AI处理器。
 - 开发环境与运行环境合设场景指带昇腾AI处理器的机器既作为开发环境又作为运行环境，此种场景下，代码开发与代码运行在同一台机器上。
 - 开发环境与运行环境分设场景指开发者使用其他独立机器进行代码开发与编译，而不使用带有昇腾AI处理器的机器。
@@ -155,11 +170,13 @@ Host和Device的概念说明如下：
 ### 开发环境与运行环境合设场景
 
   1. 配置环境变量。
+
      - 以安装用户在任意目录下执行以下命令，打开.bashrc文件。
-       
+
        `vi ~/.bashrc`  
+
      - 在文件最后一行后面添加如下内容。
-     
+
        ```
        export CPU_ARCH=`arch`  # 使用arch命令自动获取当前操作系统架构
        export THIRDPART_PATH=${HOME}/Ascend/thirdpart/${CPU_ARCH}  # 存储第三方库文件的路径，例如依赖安装中的OpenCV、FFmpeg等
@@ -170,12 +187,15 @@ Host和Device的概念说明如下：
      - 执行命令保存文件并退出。
 
        `:wq!`  
+
      - 执行命令使其立即生效。
 
        `source ~/.bashrc`
+
   2. 创建第三方依赖文件夹。
 
      `mkdir -p ${THIRDPART_PATH}`
+
   3. 下载samples仓源码。
 
      ```
@@ -191,15 +211,17 @@ Host和Device的概念说明如下：
 ### 开发环境与运行环境分设场景
 
  需要分别在开发环境与运行环境上进行如下准备工作。
+
   - 开发环境
+
     1. 配置环境变量。
-    
+
        - 以安装用户在任意目录下执行以下命令，打开.bashrc文件。
-         
+
          `vi ~/.bashrc`  
 
        - 在文件后一行后面添加如下内容。
-       
+
          ```
          # 配置为运行环境的操作系统架构，取值为aarch64或者x86_64
          export CPU_ARCH=[aarch64/x86_64]
@@ -208,17 +230,21 @@ Host和Device的概念说明如下：
          # CANN软件安装后文件存储路径，最后一级请根据运行环境的操作系统架构设置，运行环境架构为AArch64，这里填arm64-linux；运行环境为X86，则这里填x86_64-linux，此处以运行环境架构为AArch64为例
          export INSTALL_DIR=${HOME}/Ascend/ascend-toolkit/latest/arm64-linux
          ```
+
        - 执行命令保存文件并退出。
 
          `:wq!`  
+
        - 执行命令使其立即生效。
-        
+
          `source ~/.bashrc`
+
     2. 创建第三方依赖文件夹。
 
        `mkdir -p ${THIRDPART_PATH}`
+
     3. 下载samples仓源码。
-       
+
        ```
        cd ${HOME}      # 此处以将samples源码仓下载到用户家目录为例，开发者可自定义下载路径
        sudo apt-get install git
@@ -228,32 +254,40 @@ Host和Device的概念说明如下：
     4. 将samples源码仓中的公共库拷贝到前面创建的第三方依赖文件夹中。
 
        `cp -r ${HOME}/samples/common ${THIRDPART_PATH}`
+
   - 运行环境
+
     1. 配置环境变量。
-    
+
        - 以安装用户在任意目录下执行以下命令，打开.bashrc文件。
-         
+
          `vi ~/.bashrc`  
+
        - 在文件后一行后面添加如下内容。
-       
+
          ```
          export CPU_ARCH=`arch`  # 使用arch命令自动获取当前操作系统架构
          export THIRDPART_PATH=${HOME}/Ascend/thirdpart/${CPU_ARCH}  # 存储第三方库文件的路径，例如依赖安装中的OpenCV、FFmpeg等
          export LD_LIBRARY_PATH=${HOME}/Ascend/thirdpart/${CPU_ARCH}/lib:$LD_LIBRARY_PATH  # 运行时链接库文件
          export INSTALL_DIR=${HOME}/Ascend/ascend-toolkit/latest # CANN软件安装后文件存储路径
          ```
+
         - 执行命令保存文件并退出。
-          
+
           `:wq!`  
+
         - 执行命令使其立即生效。 
-         
+
           `source ~/.bashrc`
+
     2. 创建第三方依赖文件夹，作为后续依赖的安装路径。
-       
+
        `mkdir -p ${THIRDPART_PATH}`
 
 ## 依赖安装
+
 ### OpenCV
+
 本样例使用OpenCV接口的作用是进行输入视频文件的读取，以及所有类型输出数据的后处理，数据后处理包括目标标注、不同类型数据的输出，为此必选依赖。
 
 - 开发环境与运行环境合设场景
@@ -261,15 +295,19 @@ Host和Device的概念说明如下：
   在环境上执行如下命令安装OpenCV：
 
   `sudo apt-get install libopencv-dev`
+
 - 开发环境与运行环境分设场景
 
   - 若开发环境与运行环境操作系统架构相同，请分别在开发环境与运行环境上执行如下命令安装OpenCV:
 
     `sudo apt-get install libopencv-dev`
+
   - 若开发环境与运行环境操作系统架构不同，例如开发环境架构为X86，运行环境架构为AArch64，此种场景下，需要在开发环境上通过源码的方式对OpenCV进行交叉编译、安装，但此种方式操作复杂，所以此处采用直接在运行环境上安装opencv，然后将安装后的文件拷贝到开发环境的方式，详细步骤如下：
+
     1. 在运行环境上执行如下命令安装OpenCV，需要确保运行环境已接入互联网。
 
        `sudo apt-get install libopencv-dev`
+
     2. 在开发环境上执行如下命令，拷贝运行环境上对应的库文件。
 
        ```
@@ -282,6 +320,7 @@ Host和Device的概念说明如下：
        # 拷贝opencv相关头文件。
        sudo scp -r HwHiAiUser@X.X.X.X:/usr/include/opencv* /usr/include
        ```
+
 ### FFmpeg
 
 本样例中，FFmpeg的作用是在输入数据类型为RTSP视频流或者离线视频的情况下，进行数据切帧的操作，如果您的业务不包含输入时RTSP视频流或者离线视频的场景，该第三方库实际上并不会被调用，可以不安装此依赖。
@@ -305,6 +344,7 @@ Host和Device的概念说明如下：
 - 开发环境与运行环境分设场景
 
   此种场景下，需要在开发环境上以源码的方式安装FFmpeg，详细步骤如下所示：
+
   1. 下载FFmpeg。
 
      ```
@@ -314,7 +354,9 @@ Host和Device的概念说明如下：
      tar -zxvf ffmpeg-4.1.3.tar.gz
      cd ffmpeg-4.1.3
      ```
+
   2. 安装FFmpeg。
+
      - 若运行环境的操作系统架构为X86，在开发环境上执行如下命令安装FFmpeg。
 
        ```
@@ -324,7 +366,7 @@ Host和Device的概念说明如下：
        ```
 
      - 若运行环境的操作系统架构为AArch64，在开发环境上执行如下命令安装FFmpeg。
-       
+
        ```
        ./configure --enable-shared --enable-pic --enable-static --disable-x86asm --cross-prefix=aarch64-linux-gnu- --enable-cross-compile --    arch=aarch64 --target-os=linux --prefix=${THIRDPART_PATH}
        make -j8
@@ -364,6 +406,7 @@ PresentAgent是为了将带有推理结果的图片数据发送到网页进行�
 - 开发环境与运行环境分设场景
 
   此种场景下，需要在开发环境上以源码的方式安装Protobuf以及PresentAgent，详细步骤如下所示：
+
   1. 安装Protobuf相关依赖。
 
      ```
@@ -376,7 +419,9 @@ PresentAgent是为了将带有推理结果的图片数据发送到网页进行�
      python3.6 -m pip install tornado==5.1.0 protobuf Cython numpy --user
      python3.7 -m pip install tornado==5.1.0 protobuf Cython numpy --user
      ```
+
   2. 安装Protobuf。
+
      - 若运行环境的操作系统架构为X86，在开发环境上执行如下命令安装Protobuf。
 
        ```
@@ -392,7 +437,7 @@ PresentAgent是为了将带有推理结果的图片数据发送到网页进行�
        ```
 
      - 若运行环境的操作系统架构为AArch64，在开发环境上执行如下命令安装Protobuf。
-       
+
        ```
        # 下载protobuf源码
        cd ${HOME}
@@ -410,6 +455,7 @@ PresentAgent是为了将带有推理结果的图片数据发送到网页进行�
        make -j8
        make install
        ```
+
   3. 生成PresentAgent的proto文件，并安装PresentAgent。
 
      ```
@@ -425,7 +471,7 @@ PresentAgent是为了将带有推理结果的图片数据发送到网页进行�
      sudo scp -r ${THIRDPART_PATH}/* HwHiAiUser@X.X.X.X:${THIRDPART_PATH}
      ```
 
-### AclLite库
+### AclLite
 
 AclLite库是对AscendCL DVPP图像和视频处理相关接口，AscendCL设备管理、资源管理、模型推理等接口进行了封装，旨在为用户提供一组更简易的公共接口。本样例是基于AclLite接口进行的开发，所以需要下载并编译安装AclLite库。
 
@@ -435,82 +481,105 @@ AclLite库是对AscendCL DVPP图像和视频处理相关接口，AscendCL设备�
 
      此处已将samples仓下载到$HOME路径下为例，若之前步骤已经下载过此源码包，则此处无需重复下载，直接进行第2个步骤即可。
      可以使用以下两种方式下载，请选择其中一种即可   
+
       - 命令行下载
-         ```       
-         cd ${HOME}     
-         git clone https://github.com/Ascend/samples.git
-         ```   
+
+        ```       
+        cd ${HOME}     
+        git clone https://github.com/Ascend/samples.git
+        ```
+
       - 压缩包下载   
-         ``` 
-          # 1. samples仓右上角选择 【克隆/下载】 下拉框并选择 【下载ZIP】。    
-          # 2. 将ZIP包上传到普通用户家目录中，【例如：${HOME}/ascend-samples-master.zip】。     
-          # 3. 执行以下命令，解压zip包。     
-          cd ${HOME}    
-          unzip ascend-samples-master.zip
-          ```
+
+        ``` 
+         # 1. samples仓右上角选择 【克隆/下载】 下拉框并选择 【下载ZIP】。    
+         # 2. 将ZIP包上传到普通用户家目录中，【例如：${HOME}/ascend-samples-master.zip】。     
+         # 3. 执行以下命令，解压zip包。     
+         cd ${HOME}    
+         unzip ascend-samples-master.zip
+        ```
 
   2.进入acllite目录
+
   ```
   cd ${HOME}/samples/cplusplus/common/acllite
   ```
+
   3.执行编译安装命令。
+
   ```
   make 
   make install
   ```
+
   安装完成后，编译生成的libacllite.so会被拷贝到`${THIRDPART_PATH}/lib`路径下；头文件会被拷贝到`${THIRDPART_PATH}/include/acllite`路径。  
+
+   **须知：若开发者定制了AclLite库中代码，则需要重新编译。** 
 
 
 - 开发环境与运行环境分设场景
 
   1. 获取samples仓源码包   
- 
+
      此处已将samples仓下载到$HOME路径下为例，若之前步骤已经下载过此源码包，则此处无需重复下载，直接进行第2个步骤即可。
      可以使用以下两种方式下载，请选择其中一种即可   
+
       - 命令行下载
-         ```    
-         # 开发环境，非root用户命令行中执行以下命令下载源码仓。    
-         cd ${HOME}     
-         git clone https://github.com/Ascend/samples.git
-         ```   
+
+        ```    
+        # 开发环境，非root用户命令行中执行以下命令下载源码仓。    
+        cd ${HOME}     
+        git clone https://github.com/Ascend/samples.git
+        ```
+
       - 压缩包下载   
-         ``` 
-          # 1. samples仓右上角选择 【克隆/下载】 下拉框并选择 【下载ZIP】。    
-          # 2. 将ZIP包上传到开发环境中的普通用户家目录中，【例如：${HOME}/ascend-samples-master.zip】。     
-          # 3. 开发环境中，执行以下命令，解压zip包。     
-          cd ${HOME}    
-          unzip ascend-samples-master.zip
-          ```
+
+        ``` 
+         # 1. samples仓右上角选择 【克隆/下载】 下拉框并选择 【下载ZIP】。    
+         # 2. 将ZIP包上传到开发环境中的普通用户家目录中，【例如：${HOME}/ascend-samples-master.zip】。     
+         # 3. 开发环境中，执行以下命令，解压zip包。     
+         cd ${HOME}    
+         unzip ascend-samples-master.zip
+        ```
 
   2. 进入acllite目录
+
     ```
     cd ${HOME}/samples/cplusplus/common/acllite
     ```
+
   3. 执行编译安装命令。
+
     ```
     make 
     make install
     ```
+
     安装完成后，编译生成的libacllite.so会被拷贝到开发环境的`${THIRDPART_PATH}/lib`路径下；头文件会拷贝到开发环境的`${THIRDPART_PATH}/include/acllite`路径。
- 
+
   4. 运行环境库文件部署。
-     
+
      a. 将开发环境中的libacllite.so拷贝到运行环境的`${THIRDPART_PATH}/lib`路径。
 
-     b. 在运行环境下切换到 root用户，打开`/etc/ld.so.conf.d/mind_so.conf` ，将`${THIRDPART_PATH}/lib`追加到文件末尾，保存后退出，执行命令ldconfig。
+     b. 在运行环境下切换到 root用户，打开`/etc/ld.so.conf.d/mind_so.conf` ，将`${THIRDPART_PATH}/lib`追加到文件末尾，保存后退出，执行命令ldconfig。 
+     **须知：若开发者定制了AclLite库中代码，则需要重新编译，并重新将库文件拷贝到运行环境。** 
 
 
 # 模型及数据准备
 
 样例运行前，请参见本章节准备样例依赖的模型文件及测试数据文件。
-### 准备模型
-#### <a name="model-list">模型列表</a>
-| **模型名称** | **模型说明**                                | **模型下载路径**                                             |
-| ------------ | ------------------------------------------- | ------------------------------------------------------------ |
-| yolov3       | 图片检测推理模型。是基于onnx的Yolov5模型。 | 请参考[https://github.com/Ascend/ModelZoo-PyTorch/tree/master/ACL_PyTorch/built-in/cv/Yolov5_for_Pytorch](https://github.com/Ascend/ModelZoo-PyTorch/tree/master/ACL_PyTorch/built-in/cv/Yolov5_for_Pytorch)中的“原始模型”章节下载原始模型网络文件、权重文件以及配置文件。 |
-| color        | 车辆颜色分类推理模型。是基于tensorflow的CNN模型。 | 请参考[https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/ATC_CarColor_tensorflow_AE](https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/ATC_CarColor_tensorflow_AE)中的“原始模型”章节下载原始模型网络文件。 |
 
-#### 模型转换
+### 准备模型
+
+#### <a name="model-list">模型列表</a>
+
+| **模型名称** | **模型说明**                                      | **模型详细描述**                                             |
+| ------------ | ------------------------------------------------- | ------------------------------------------------------------ |
+| yolov3       | 图片检测推理模型。是基于onnx的Yolov3模型。        | 模型详细描述请参见[https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/yolov/ATC_yolov3_onnx_AE](https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/yolov/ATC_yolov3_onnx_AE)。您可以参见readme中的“原始模型”章节下载原始模型网络文件和配置文件，也可以直接参见下方的[模型转换](#model_convert)章节使用wget命令下载。 |
+| color        | 车辆颜色分类推理模型。是基于tensorflow的CNN模型。 | 模型详细描述请参见[https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/ATC_CarColor_tensorflow_AE](https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/ATC_CarColor_tensorflow_AE)。您可以参见readme中的“原始模型”章节下载原始模型网络文件和配置文件，也可以直接参见下方的[模型转换](#model_convert)章节使用wget命令下载。 |
+
+#### <a name="model_convert">模型转换</a>
+
 需要将下载的原始模型转换为适配昇腾AI处理器的离线om模型，并放置到样例代码中的“model”目录下。
 
 为方便操作，此处直接给出了原始模型的下载命令以及模型转换命令，可直接拷贝执行。当然，您也可以参见[模型列表](#model-list)中的下载地址中对应的README进行手工操作，并了解更多细节。
@@ -534,6 +603,7 @@ atc --input_shape="input_1:10,224,224,3" --output=./color_dvpp_10batch --soc_ver
 ```
 
 ### 准备数据
+
 样例编译时会自动下载测试数据，无需手工下载。
 
 若您想自行下载测试数据，可参见如下命令：
@@ -543,6 +613,7 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
 wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOV3_carColor_sample/data/car2.mp4 --no-check-certificate
 wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOV3_carColor_sample/data/car1.jpg --no-check-certificate
 ```
+
 样例数据下载完后请存储在样例工程的data目录下。
 
 
@@ -552,66 +623,124 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
 环境及模型、数据准备完成后，您可参考本章节进行样例的编译运行。
 
 1. 在通用目标识别样例工程的根目录下执行以下命令，进行样例编译。
+
    ```
    cd scripts 
    bash sample_build.sh
    ```
+
    编译完成后，会在out文件夹下生成可执行文件main。
 
 2. 修改scripts目录下的params.conf文件，配置样例的输入数据类型及结果展示类型。
+
    ```
    [base_options]
-   device_num=1   // Device数量    
-
-   [device_0_options]    //Device0的配置参数
-   inputType_0=pic       // Device0的输入数据类型
-   outputType_0=pic    // Device0的输出数据类型
-   inputDataPath_0=../data/pic   // Device0的输入数据路径
+   device_num=1    # Device数量    
+   RtspNumPerDevice=1      # 每个Device上的输入路数
    
-   #outputFrameWidth_0=1280  //outputType_0为video时，需要配置此参数，代表输出视频的宽
-   #outputFrameHeight_0=720  //outputType_0为video时，需要配置此参数，代表输出视频的高
-
-   #[device_1_options]    //Device1的配置参数
+   [device_0_options]    # Device0的配置参数
+   inputType_0=pic       # Device0的输入数据类型
+   outputType_0=pic    # Device0的输出数据类型
+   inputDataPath_0=../data/pic   # Device0的输入数据路径
+   
+   #outputFrameWidth_0=1280  # outputType_0为video时，需要配置此参数，代表输出视频的宽
+   #outputFrameHeight_0=720  # outputType_0为video时，需要配置此参数，代表输出视频的高
+   
+   #[device_1_options]    # Device1的配置参数
    #inputType_1=video
    #outputType_1=presentagent
    #inputDataPath_1=../data/car2.mp4
    #outputFrameWidth_1=2368
    #outputFrameHeight_1=1080
-
+   
    .......
    ```
+
    参数说明：
+
    - device_num，表示运行此样例的Device数量，device_X_options表示每一个Device上的配置，其中X为Device ID。需要注意，device_num的优先级高于device_X_options的个数，例如，若device_num配置为1，但配置了两个Device的详细信息，即device_0_options与device_1_options，那么实际生效的只有device_0_options，若device_num配置为2，则device_0_options与device_1_options都会生效。
-   - inputType_X，表示DeviceX的输入数据类型，其中X为Device ID，此参数当前支持的配置项有：
+
+   - RtspNumPerDevice，表示每个Device上开启的路数，默认值为1。当有多个输入流的时候（多个离线视频/多个RTSP输入流），可通过此参数开启多路特性，提升推理性能。
+
+   - inputType_X，表示DeviceX的输入数据类型，其中X需要从“1”开始递增，此参数当前支持的配置项有：
+
      - pic：表示输入数据为图片，当前此样例支持的图片格式为JPEG压缩图片
      - video：表示输入数据为MP4视频文件
-     - rtsp：表示输入数据为rtsp流
-   - outputType_X，表示DeviceX的输出数据类型，其中X为Device ID，此参数当前支持的配置项有：
-     - pic：表示输出结果为图片
-     - video：表示输出结果为MP4视频文件
-     - presentagent：表示用PresentAgent展示推理结果
 
-   - inputDataPath_X：表示DeviceX的输入数据路径，其中X为Device ID，此参数的配置规则如下：
+  - rtsp：表示输入数据为rtsp流
+
+   - outputType_X，表示DeviceX的输出数据类型，其中X需要从“1”开始递增，此参数当前支持的配置项有：
+
+     - pic：表示输出结果为图片
+
+  - video：表示输出结果为MP4视频文件
+
+    - presentagent：表示用PresentAgent展示推理结果
+
+    - stdout：表示将推理结果打屏输出。
+
+      **注意：若开启了多路视频特性，不支持使用presentagent在线展示；可配置为video或stdout，若路数较多，建议使用stdout打屏显示，否则性能可能会较低。**
+
+   - inputDataPath_X：表示DeviceX的输入数据路径，其中X需要从“1”开始递增，此参数的配置规则如下：
+
      - 若输入数据类型是图片,则填写图片所在文件夹的相对路径，只支持填入一个路径
      - 若输入数据类型是mp4视频文件，则填写视频文件的相对路径，只支持填入一个路径
      - 若输入数据类型是rtsp流，则填写rtsp流地址，只支持填入一个地址
 
+​        Device数量为2，每个Device开启两路输入的配置示例如下所示，请注意每个input与output配置的序号都是从0开始递增的：     
+​       
+
+```
+ [base_options]
+ device_num=2   # Device数量    
+ RtspNumPerDevice=2      # 每个Device上的输入路数
+
+ [device_0_options]    # Device0的配置参数
+ inputType_0=video       # Device0的第一路输入数据类型
+ outputType_0=video     # Device0的第一路输出数据类型
+ inputDataPath_0=../data/video0.mp4   # Device0的第一路输入数据路径
+ outputFrameWidth_0=1280  # outputType_0为video时，需要配置此参数，代表输出视频的宽
+ outputFrameHeight_0=720  # outputType_0为video时，需要配置此参数，代表输出视频的高
+ 
+ inputType_1 = video  # Device0的第二路输入数据类型
+ outputType_1 = video   # Device0的第二路输出数据类型
+ inputDataPath_1 =../data/video2.mp4
+ outputFrameWidth_1=1280
+ outputFrameHeight_1=720
+
+
+ #[device_1_options]    # Device1的配置参数
+ inputType_2=video       # Device1的第一路输入数据类型
+ outputType_2=video      # Device1的第一路输出数据类型
+ inputDataPath_2=../data/video3.mp4    # Device1的第一路输入数据路径
+ outputFrameWidth_2=1280   # outputType_0为video时，需要配置此参数，代表输出视频的宽
+ outputFrameHeight_2=720  # outputType_0为video时，需要配置此参数，代表输出视频的高
+ 
+ inputType_3 = video  # Device1的第二路输入数据类型
+ outputType_3 = video   # Device1的第二路输出数据类型
+ inputDataPath_3 =../data/video4.mp4
+ outputFrameWidth_3=1280
+ outputFrameHeight_3=720
+```
+
 3. 若输出类型配置的为“presentagent”，运行可执行文件前您需要参考此步骤启动PresentServer，若配置的其他输出类型，则此步骤可跳过。
-   
+
    1. 配置PresentServer配置文件“present_start.conf”,配置文件参数如下：
-      
+
       在通用目标识别样例根目录下执行如下命令打开配置文件：
-      ```
+
+   ```
       cd scripts
       vim present_start.conf
-      ```
-   
+   ```
+
       配置文件如下所示：
         ```
         [present_serer_options]
         # A socket server address to communicate with presenter agent
         presenter_server_ip=192.168.1.2
         
+
         # The port of presenter agent and server communicate with
         presenter_server_port=7006
         
@@ -627,23 +756,26 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
         [display]
         display_channel=0
         ```
+
       - 其中presenter_server_ip为数据发送IP，presenter_view_ip为网页展示IP，两者的IP需要保持一致，配置参考如下：
         - 对于Atlas 200 DK开发者板，请填写Atlas 200 DK的与windows主机通信的IP地址即可，例如“192.168.1.2”
         - 对于Atlas 300加速卡（例如，ai1s云端推理环境），请填写ai1s的内网IP地址。
       - presenter_server_port：PresenterServer的访问端口，请配置为PresentAgent的默认端口号7006即可。
 
    2. 启动PresentServer服务。
-      
+
       在通用目标识别样例根目录下执行如下命令启动PresentServer：
+
       ```
       cd display
       bash run_presenter_server.sh ../scripts/present_start.conf
       ```
+
       其中run_presenter_server.sh为PresentServer的启动脚本，present_start.conf为上一步骤中修改的PresentServer的配置文件。
       其中PresentServer后，界面会提示PresentServer服务所使用的IP地址及端口号。
 
    3. <a name="start_presentserver">访问PresentServer展示界面。</a>
-      
+
       1. 在windows系统中通过浏览器访问PresentServer网页界面。
 
          - 对于Atlas 200 DK开发者板，请使用启动PresenterServer服务时提示的URL访问即可。
@@ -654,26 +786,31 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
       2. 等待PresentAgent传输数据给服务端，单击“Refresh“刷新，当有数据时相应Channel的Status会变成绿色。
 
       3. 然后单击右侧对应的View Name链接，查看结果。
-   
+
          **说明** ：PresentServer当前仅支持显示前四路，如果业务有修改展示路数的需要，除代码开发适配外，还需要对网页UI代码进行修改：
+
          - 修改文件：
 
            display/presenterserver/display/ui/templates/view.html
+
          - 核心代码：
 
            ![输入图片说明](https://images.gitee.com/uploads/images/2022/0218/173836_91cde736_8083019.png "微信图片_20220218173816.png")
 
 4. 运行样例。
+
    ```
    cd ../out
    ./main
    ```
+
 5. 查看运行结果。
 
    样例将根据配置的输出数据类型，输出不同文件：
+
    - 若输出数据类型配置为pic
      输出数据存储在out文件夹下，为名称类似于**device_X_out_pic_Y.jpg** 的图片，其中X代表第x路，Y代表第y张图片。
-     
+
    - 若输出数据类型配置为video
      输出数据存储在out文件夹下，为名称类似于：**out_testX.mp4** 的视频，其中X代表第x路。
 
@@ -689,13 +826,17 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
 若现有样例中的模型无法满足用户的诉求，可按照本节中的步骤进行模型替换。
 
 ### 生成需要替换的离线模型
+
 1. 将需要替换的原始框架模型保存到样例目录的model文件夹下。
+
 2. 使用ATC工具，将原始框架模型转换为离线om模型。
 
    ATC工具的详细描述及使用约束可参见[Ascend文档中心](https://www.hiascend.com/document?tag=community-developer)的“推理应用开发”的“ATC模型转换”。
 
 ### 样例解析
+
 当前样例为多线程两模型串接样例，在模型替换的场景下，样例代码的如下部分需要进行修改：
+
 - 模型推理相关代码需要进行修改。
 - 若模型的输入数据要求与样例中模型对输入数据的要求不一致，则需要进行预处理部分代码的修改。
 - 若模型的输出数据与样例中模型的输出数据不同或对数据的处理方式不同，则需要进行后处理部分代码的修改。
@@ -703,15 +844,16 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
 针对预处理及后处理的相关代码定制，本节不进行介绍，详细定制方法请参见[数据预处理](#data-preprocess)与[数据后处理](#data-postprocess)，本节主要介绍模型替换场景下如何对模型推理部分的代码进行修改，以及替换模型后，如何打通预处理-推理-后处理的代码流程。
 
 下面我们从线程层面，分析当前样例的业务逻辑，如下所示：  
-|**线程**                 | **主要代码文件**                     | **线程功能介绍**                   |
-|----------------------------- | ------------------------------- | ------------------------------ |
-|主线程|src/main.cpp|主线程，0号线程，负责拉起所有线程，并等待收到结束信号后退出。|
-|检测模型预处理线程|src/detectPreprocess/detectPreprocess.cpp|检测模型预处理线程，线程的个数等于Device的个数，负责初始化消息数据，将解码后的图片数据处理为模型可以接受的数据并保存为消息数据，然后将消息数据标记为MSG_DETECT_PREPROC_DATA，并发送给推理线程，推理线程会根据数据是否为最后一帧，进行区分处理。|
-|检测模型后处理线程|src/detectPostprocess/detectPostprocess.cpp|检测模型后处理线程，线程的个数等于Device的个数，负责接受来自推理线程的被标记为MSG_DETECT_INFER_OUTPUT的消息数据，并对其进行检测模型的后处理，将消息数据标记为MSG_DETECT_POSTPROC_DATA后发送给分类模型预处理线程。|
-|分类模型预处理线程|src/classifyPreprocess/classifyPreprocess.cpp|分类模型预处理线程，线程的个数等于Device的个数，负责接受来自检测模型后处理线程的被标记为MSG_DETECT_POSTPROC_DATA的消息数据，并对其进行分类模型的预处理，将消息数据标记为MSG_CLASSIFY_PREPROC_DATA后发送给推理线程。|
-|分类模型后处理线程|src/classifyPostprocess/classifyPostprocess.cpp|分类模型后处理线程，线程的个数等于Device的个数，负责接受来自推理线程的被标记为MSG_CLASSIFY_INFER_OUTPUT的消息数据，并对其进行分类模型的后处理，如果采用网页展示的形式输出推理结果，则会将消息数据标记为MSG_PRESENT_AGENT_DISPLAY继续发送给presentserver展示线程；其他场景下则单纯输出推理结果文件，并在接受到最后一帧数据时给主线程发送终止信号。|
-|推理线程|src/inference/inference.h|推理线程，线程的个数等于Device的个数，负责接受被标记为MSG_DETECT_PREPROC_DATA和MSG_CLASSIFY_PREPROC_DATA的消息数据，并送给模型做推理，推理完成后再将数据发送给对应的后处理线程。|
-|presentserver展示线程|src/presentagentDisplay/presentagentDisplay.cpp|非必须，当且仅当样例采用presentserver展示的方式输出推理结果时被拉起。接受来自分类模型后处理线程的被标记为MSG_PRESENT_AGENT_DISPLAY的数据，并发送到网页，并在接受到最后一帧数据时给主线程发送终止信号。|
+
+| **线程**              | **主要代码文件**                                | **线程功能介绍**                                             |
+| --------------------- | ----------------------------------------------- | ------------------------------------------------------------ |
+| 主线程                | src/main.cpp                                    | 主线程，0号线程，负责拉起所有线程，并等待收到结束信号后退出。 |
+| 检测模型预处理线程    | src/detectPreprocess/detectPreprocess.cpp       | 检测模型预处理线程，线程的个数等于Device的个数，负责初始化消息数据，将解码后的图片数据处理为模型可以接受的数据并保存为消息数据，然后将消息数据标记为MSG_DETECT_PREPROC_DATA，并发送给推理线程，推理线程会根据数据是否为最后一帧，进行区分处理。 |
+| 检测模型后处理线程    | src/detectPostprocess/detectPostprocess.cpp     | 检测模型后处理线程，线程的个数等于Device的个数，负责接受来自推理线程的被标记为MSG_DETECT_INFER_OUTPUT的消息数据，并对其进行检测模型的后处理，将消息数据标记为MSG_DETECT_POSTPROC_DATA后发送给分类模型预处理线程。 |
+| 分类模型预处理线程    | src/classifyPreprocess/classifyPreprocess.cpp   | 分类模型预处理线程，线程的个数等于Device的个数，负责接受来自检测模型后处理线程的被标记为MSG_DETECT_POSTPROC_DATA的消息数据，并对其进行分类模型的预处理，将消息数据标记为MSG_CLASSIFY_PREPROC_DATA后发送给推理线程。 |
+| 分类模型后处理线程    | src/classifyPostprocess/classifyPostprocess.cpp | 分类模型后处理线程，线程的个数等于Device的个数，负责接受来自推理线程的被标记为MSG_CLASSIFY_INFER_OUTPUT的消息数据，并对其进行分类模型的后处理，如果采用网页展示的形式输出推理结果，则会将消息数据标记为MSG_PRESENT_AGENT_DISPLAY继续发送给presentserver展示线程；其他场景下则单纯输出推理结果文件，并在接受到最后一帧数据时给主线程发送终止信号。 |
+| 推理线程              | src/inference/inference.h                       | 推理线程，线程的个数等于Device的个数，负责接受被标记为MSG_DETECT_PREPROC_DATA和MSG_CLASSIFY_PREPROC_DATA的消息数据，并送给模型做推理，推理完成后再将数据发送给对应的后处理线程。 |
+| presentserver展示线程 | src/presentagentDisplay/presentagentDisplay.cpp | 非必须，当且仅当样例采用presentserver展示的方式输出推理结果时被拉起。接受来自分类模型后处理线程的被标记为MSG_PRESENT_AGENT_DISPLAY的数据，并发送到网页，并在接受到最后一帧数据时给主线程发送终止信号。 |
 
 通过以上表格可知，线程间主要以消息数据的形式进行交互，因此在替换模型的场景下，既要以替换后的模型初始化AclLiteModel类对象，也要保证替换模型后的推理线程可以与预处理/后处理线程进行消息数据的正确交互。
 
@@ -726,6 +868,7 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
    代码文件：src/inference/inference.h
 
    参考代码：
+
    ```
     ...
     // AclLiteModel detectModel_; --> AclLiteModel targetModel_;
@@ -733,11 +876,13 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
     AclLiteModel classifyModel_;
     ...
    ```
+
    修改推理线程类对象的构造函数，将构造函数中初始化数据成员AclLiteModel类实例的文件路径，修改为替换后的模型文件路径。
 
    代码文件：src/inference/inference.cpp
 
    参考代码：
+
    ```
    ...
    namespace{
@@ -748,7 +893,7 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
    const char* kClassifyModelPath = "../model/color_dvpp_10batch.om";
    ...
    }
-
+   
    //inferenceThread constructed function
    //detectModel_(kDetectModelPath), --> targetModel_(kTargetModelPath)
    InferenceThread::InferenceThread(aclrtRunMode& runMode) :
@@ -761,19 +906,19 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
        classifyInputSize_ = 0;
        classifyInputBuf_ = nullptr;
    }
-
+   
    ...
-
+   
    // init 
    AclLiteError InferenceThread::Init() {
-
+   
        // AclLiteError ret = detectModel_.Init(); --> AclLiteError ret = targetModel_.Init();
        AclLiteError ret = detectModel_.Init();
        if (ret != ACLLITE_OK) {
            ACLLITE_LOG_ERROR("detect Model init failed, error:%d", ret);
            return ret;
        }
-
+   
        ...
     
        return ACLLITE_OK;
@@ -788,6 +933,7 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
    src/inference/inference.cpp
 
    参考代码：
+
    ```
    AclLiteError InferenceThread::InitModelInput() {   
        //prepare classify model input2 data & size
@@ -804,11 +950,12 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
        return ACLLITE_OK;
    }
    ```
+
    ```
    AclLiteError InferenceThread::DetectModelExecute(shared_ptr<CarDetectDataMsg> carDetectDataMsg) {
-
+   
        ......
-
+   
        //prepare detectmodel input2 data & size
        aclFloat16 new_shapeHeight = aclFloatToFloat16((float)kDetectModelHeight);
        aclFloat16 new_shapeWidth = aclFloatToFloat16((float)kDetectModelWidth);
@@ -824,7 +971,7 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
            ACLLITE_LOG_ERROR("Copy image info to device failed");
            return ACLLITE_ERROR;
        }
-
+   
        ......
    }
    ```
@@ -836,14 +983,16 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
    本步骤中仅展示当前样例中消息数据的接口以及检测模型执行推理接口的逻辑，以供用户参考：
 
    消息数据结构： 
-   | **结构体**                 | **代码文件**                 | **注释**                   |
-   |----------------------------- | ------------------------------- | ------------------------------ |
+
+   | **结构体**       | **代码文件**    | **注释**                                                     |
+   | ---------------- | --------------- | ------------------------------------------------------------ |
    | CarDetectDataMsg | inc/CarParams.h | inferThreadId：推理线程ID，标识消息将发送的线程。<br>detectPostThreadId：检测模型后处理线程ID，标识消息将发送的线程。<br>classifyPreThreadId：分类模型预处理线程ID，标识消息将发送的线程。<br>classifyPostThreadId：分类模型后处理线程ID，标识消息将发送的线程。<br>presentAgentDisplayThreadId：页面展示线程ID，标识消息将发送的线程。<br>deviceId：设备ID，区分设备配置参数。<br>isLastFrame：是否为最后一帧数据，0为不是，1为是。<br>frameNum：数据帧数，表示为该路第x帧数据。<br>imageFrame：自定义结构体数据，存放将原始图片解码为YUV420SP_U8格式后的数据，数据存放在dvpp内存上。<br>resizedFrame：自定义结构体数据，存放缩放至检测模型所需分辨率大小的图片数据，数据存放在dvpp内存上。<br>frame：OpenCV的Mat类数据，存放BGR格式的原始图片数据，分辨率与原图一致。用于后续将两模型推理结果画在其中。<br>detectInferData：检测模型推理结果。<br>carInfo：自定义结构体数据，用于存放检测模型的推理结果及分类模型需要使用的图片数据。<br>flag：判断是否有车辆被检测到，0为无，1为有。<br>classifyInferData：分类模型推理结果。 |
-   | CarInfo | inc/CarParams.h | cropedImgs：自定义结构体数据，存放从imageFrame抠出的有车辆区域。<br>resizedImgs：自定义结构体数据，将cropedImgs缩放至车辆颜色分类模型所需分辨率大小的图片数据。<br>rectangle：检测框，存放检测区域左上右下两点的坐标。<br>detect_result：检测模型推理结果。<br>carColor_result：车辆颜色分类模型推理结果。 |
+   | CarInfo          | inc/CarParams.h | cropedImgs：自定义结构体数据，存放从imageFrame抠出的有车辆区域。<br>resizedImgs：自定义结构体数据，将cropedImgs缩放至车辆颜色分类模型所需分辨率大小的图片数据。<br>rectangle：检测框，存放检测区域左上右下两点的坐标。<br>detect_result：检测模型推理结果。<br>carColor_result：车辆颜色分类模型推理结果。 |
 
    代码文件：src/inference/inference.cpp
 
    参考代码：
+
    ```
    AclLiteError InferenceThread::DetectModelExecute(shared_ptr<CarDetectDataMsg> carDetectDataMsg) {
        // if last frame 
@@ -851,9 +1000,9 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
            ACLLITE_LOG_INFO("it is lastframe in Detect Inference");
            return ACLLITE_OK;
        }
-
+   
        ......
-
+   
        // create input
        AclLiteError ret = detectModel_.CreateInput(carDetectDataMsg->resizedFrame.data.get(), 
                                                    carDetectDataMsg->resizedFrame.size, 
@@ -870,10 +1019,10 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
        }
        // destroy input
        detectModel_.DestroyInput();
-
+   
        return ACLLITE_OK;
    }
-
+   
    ```
 
 4. 修改推理完成后的消息发送接口。
@@ -883,13 +1032,14 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
    代码文件：inc/CarParams.h
 
    参考代码：
+
    ```
    ···
-
+   
    //const int MSG_DETECT_PREPROC_DATA = 3; --> const int MSG_TARGET_PREPROC_DATA = X;
    //const int MSG_DETECT_INFER_OUTPUT = 4; --> const int MSG_TARGET_INFER_OUTPUT = Y;
    //const int MSG_DETECT_POSTPROC_DATA = 5; --> const int MSG_TARGET_POSTPROC_DATA = Z;
-
+   
    const int MSG_APP_START = 1;
    const int MSG_READ_FRAME = 2;
    const int MSG_DETECT_PREPROC_DATA = 3;
@@ -908,6 +1058,7 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
    代码文件：src/inference/inference.cpp
 
    参考代码：
+
    ```
    // function name: DetectMsgSend --> TargetMsgSend
    AclLiteError InferenceThread::DetectMsgSend(shared_ptr<CarDetectDataMsg> carDetectDataMsg) {
@@ -930,7 +1081,7 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
                return ret;
            }
        }
-
+   
        return ACLLITE_OK;
    }
    ```
@@ -940,6 +1091,7 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
    代码文件：src/inference/inference.cpp
 
    参考代码：
+
    ```
    AclLiteError InferenceThread::Process(int msgId, shared_ptr<void> data) {
        switch(msgId) {
@@ -949,7 +1101,7 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
            //    TargetModelExecute(static_pointer_cast<CarDetectDataMsg>(data));
            //    TargetMsgSend(static_pointer_cast<CarDetectDataMsg>(data));
            //    break;        
-
+   
            case MSG_DETECT_PREPROC_DATA:
                DetectModelExecute(static_pointer_cast<CarDetectDataMsg>(data));
                DetectMsgSend(static_pointer_cast<CarDetectDataMsg>(data));
@@ -963,7 +1115,7 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
                ACLLITE_LOG_INFO("Inference thread ignore msg %d", msgId);
                break;
        }
-
+   
        return ACLLITE_OK;
    }
    ```
@@ -976,6 +1128,7 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
    代码文件：src/detectPreprocess/detectPreprocess.cpp
 
    参考代码：
+
    ```
    AclLiteError DetectPreprocessThread::MsgSend(shared_ptr<CarDetectDataMsg> &carDetectDataMsg) {
        AclLiteError ret;
@@ -1047,6 +1200,7 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
    代码文件：src/classifyPostprocess/classifyPostprocess.cpp
 
    参考代码：
+
    ```
    AclLiteError ClassifyPostprocessThread::Process(int msgId, 
                                 shared_ptr<void> data) {
@@ -1076,6 +1230,7 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
    代码文件：src/classifyPreprocess/classifyPreprocess.cpp、src/detectPostprocess/detectPostprocess.cpp
 
    参考代码：
+
    ```
    AclLiteError DetectPostprocessThread::MsgSend(shared_ptr<CarDetectDataMsg> carDetectDataMsg) {
        while(1) 
@@ -1128,7 +1283,7 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
 ### 模型增删
 
 在模型增加或删除的场景中，可以参考以上板块内容，主要参考以下步骤进行开发：
- 
+
  - 增加模型时，开发对应的预处理线程和后处理线程文件，并在推理线程中添加对应的模型推理接口；删除模型时，去除该模型对应的预处理线程后处理线程文件，并在推理线程中删去对应的模型推理接口；
 
  - 完成以上开发后，根据自身业务，在```CarParams.h```中增加/删除，新增/删去的线程文件的线程号；并通过这些线程号，使得消息数据的能够在线程之间被识别和收发，使得更新后的各业务线程被串联，从而保证了线程嵌入/移出样例的原业务流程。
@@ -1150,17 +1305,19 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
 - 数据准备
 
   在data文件夹下，存放待测试数据，若文件夹不存在则需手动创建。
-测试数据下载完成后，将数据文件路径填写至配置文件中，细设置方法及说明请见[样例编译运行](#compile-run)。
+  测试数据下载完成后，将数据文件路径填写至配置文件中，细设置方法及说明请见[样例编译运行](#compile-run)。
 
 
 
 ### <a name="picture-process">图片</a>
 
 #### 简介
+
 本样例使用的模型支持的输入图片约束如下：
+
 | **模型**                                        | **输入图片编码格式** | **输入图片分辨率** |
 | ----------------------------------------------- | -------------------- | ------------------ |
-| 图片检测推理模型。基于onnx的yolov3模型         | BGR                  | 宽：416 高：416    |
+| 图片检测推理模型。基于onnx的yolov3模型          | BGR                  | 宽：416 高：416    |
 | 车辆颜色分类推理模型。基于tensorflow的CNN模型。 | RGB                  | 宽：224 高：224    |
 
 若您想直接使用样例中的模型，但输入图片不符合模型要求；或者是想使用自己的模型，而模型对输入图片的要求也与样例模型不一致。在这两者任一场景下，都可以参考本章节，对输入图片的预处理流程进行改造，使其符合实际业务要求。
@@ -1172,14 +1329,16 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
 输入模型的图片数据要求为非压缩的、指定编码格式的图片数据，若您的原始图片是经过压缩的（例如后缀为.jpg、.jpeg的图片），此种场景下，则需要将压缩后的图片数据解码为指定的某种编码格式的数据，然后再进行后续的操作。
 
 ##### 样例解析
+
 本样例中，输入数据是后缀为.jpg的压缩图片，所以首先使用DVPP的JPEGD功能将图片解码为YUV420SP_U8格式，然后再对图片进行缩放、抠图等操作。解码相关操作的代码示例如下：
+
 1. 打开图片所在文件夹，并将图片文件名存储到vector中。
 
    代码文件：src/detectPreprocess/detectPreprocess.cpp
 
    代码示例：
     <a name="OpenPicsDir"></a>
-   
+
     ```
     AclLiteError DetectPreprocessThread::OpenPicsDir() {
         # inputDataPath_ : pics directory path
@@ -1194,12 +1353,13 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
         return ACLLITE_OK;
     }
     ```
-   
+
 2. 根据vector中的图片文件名，将图片读入。
 
    代码文件：src/detectPreprocess/detectPreprocess.cpp
 
    代码示例：
+
     ```
     AclLiteError DetectPreprocessThread::ReadPic(shared_ptr<CarDetectDataMsg> &carDetectDataMsg) {
         // set msg data value 
@@ -1233,11 +1393,11 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
 3. 使用DVPP的JPEGD功能将读入的jpg图片数据，解压缩为YUV420SP_U8格式的数据。
 
    其中```DetectPreprocessThread::ProcessPic```接口是对JPEGD功能的调用接口，```JpegDHelper::Process```接口是对AscendCL的```acldvppJpegDecodeAsync```接口的封装，JPEGD的功能描述可参见[Ascend文档中心](#https://www.hiascend.com/document?tag=community-developer)的“推理应用开发”的“高级功能 > 媒体数据预处理V1 > JPEGD图片解码”。
-   
+
    - 代码文件：src/detectPreprocess/detectPreprocess.cpp
 
      代码示例：
-     
+
      ```
      AclLiteError DetectPreprocessThread::ProcessPic(shared_ptr<CarDetectDataMsg> &carDetectDataMsg) {
          // if last pic
@@ -1262,10 +1422,11 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
          return ACLLITE_OK;
      }
      ```
-     
+
    - 代码文件：acllite/src/JpegDHelper.cpp
 
      代码示例：
+
      ```
      AclLiteError JpegDHelper::Process(ImageData& dest, ImageData& src) {
          // init ouput pic data desc
@@ -1282,7 +1443,7 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
              ACLLITE_LOG_ERROR("acldvppJpegDecodeAsync failed, error: %d", aclRet);
              return ACLLITE_ERROR_JPEGD_ASYNC;
          }
-   
+     
          aclRet = aclrtSynchronizeStream(stream_);
          if (aclRet != ACL_SUCCESS) {
              ACLLITE_LOG_ERROR("Sync stream failed, error: %d", aclRet);
@@ -1300,18 +1461,20 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
          return ACLLITE_OK;
      }
      ```
-   
+
    关键功能接口列表：
-   | **功能场景**                       | **代码文件**                                    | **接口/结构体**                                 |
-   | ---------------------------------- | ----------------------------------------------- | ----------------------------------------------- |
-   | 识别配置文件中文件夹的所有图片文件 | src/detectPreprocess/detectPreprocess.cpp       | OpenPicsDir                                     |
-   | 车辆检测模型读取Jpg图片            | acllite/src/AclLiteUtils.cpp                            | ReadJpeg                                        |
-   | 车辆检测模型读取Jpg图片接口调用处  | src/detectPreprocess/detectPreprocess.cpp       | ReadPic                                         |
+
+   | **功能场景**                       | **代码文件**                                                 | **接口/结构体**                                 |
+   | ---------------------------------- | ------------------------------------------------------------ | ----------------------------------------------- |
+   | 识别配置文件中文件夹的所有图片文件 | src/detectPreprocess/detectPreprocess.cpp                    | OpenPicsDir                                     |
+   | 车辆检测模型读取Jpg图片            | acllite/src/AclLiteUtils.cpp                                 | ReadJpeg                                        |
+   | 车辆检测模型读取Jpg图片接口调用处  | src/detectPreprocess/detectPreprocess.cpp                    | ReadPic                                         |
    | JPEGD功能接口                      | acllite/src/JpegDHelper.cpp<br>acllite/src/AclLiteImageProc.cpp | JpegDHelper::Process<br>AclLiteImageProc::JpegD |
-   | JPEGD功能调用                      | src/detectPreprocess/detectPreprocess.cpp       | DetectPreprocessThread::ProcessPic              |
+   | JPEGD功能调用                      | src/detectPreprocess/detectPreprocess.cpp                    | DetectPreprocessThread::ProcessPic              |
 
 
 ##### 定制开发
+
 下面介绍几种常见场景下，如何基于本样例进行解码功能的定制开发。
 
 - 输入图片数据为YUV420SP_U8格式的文件，但后续需要使用DVPP的VPC功能对图片的大小进行调整。
@@ -1327,6 +1490,7 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
      代码文件：src/detectPreprocess/detectPreprocess.cpp
 
      代码示例：
+
      ```
         AclLiteError DetectPreprocessThread::ReadPic(shared_ptr<CarDetectDataMsg> &carDetectDataMsg) {
             // set msg data value 
@@ -1366,6 +1530,7 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
   2. 将读取后的数据封装为ImageData类型的数据，代码示例如下：
 
      ImageData定义如下，存储在“acllite/inc/AclLiteType.h”文件中：
+
      ```
      struct ImageData {
          acldvppPixelFormat format;
@@ -1377,8 +1542,9 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
          std::shared_ptr<uint8_t> data = nullptr;
       ;
      ```
-     
+
      将上一步读取的数据封装为ImageData类型的代码参考如下：
+
      ```
      ...
      // dest：dst ImageData
@@ -1402,11 +1568,13 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
                  );
      ...
      ```
+
   3. 由于后续需要使用dvpp功能，使用DVPP功能则数据必须在DVPP内存上，因此需要将数据拷贝至DVPP内存后，再调用相关功能接口进行操作，此处介绍数据拷贝的代码示例。
-     
+
      代码文件：src/detectPreprocess/detectPreprocess.cpp
 
      代码示例：
+
      ```
      AclLiteError DetectPreprocessThread::ProcessPic(shared_ptr<CarDetectDataMsg> &carDetectDataMsg) {
          ...
@@ -1419,11 +1587,13 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
          ...
       }
      ```
+
   4. 本样例使用多线程+消息队列实现线程通信，若您不使用样例中的ImageData数据结构存储数据，则需要对消息数据中的数据成员进行替换，而且也需要对可能涉及到的接口的参数类型进行修改。
 
      消息数据定义代码文件：acllite/inc/CarParams.h
 
      代码示例：
+
      ```
      ...
      struct CarDetectDataMsg {
@@ -1452,18 +1622,19 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
      ```
 
     关键功能接口列表 ：   
+
   | **功能场景**                       | **代码文件**                              | **接口/结构体**                                       |
   | ---------------------------------- | ----------------------------------------- | ----------------------------------------------------- |
   | 识别配置文件中文件夹的所有图片文件 | src/detectPreprocess/detectPreprocess.cpp | OpenPicsDir                                           |
-  | 读取bin文件                        | acllite/src/AclLiteUtils.cpp                      | ReadBinFile                                           |
+  | 读取bin文件                        | acllite/src/AclLiteUtils.cpp              | ReadBinFile                                           |
   | 车辆检测模型读取bin文件接口替换处  | src/detectPreprocess/detectPreprocess.cpp | ReadPic                                               |
-  | 结构体ImageData                    | acllite/inc/AclLiteType.h                         | ImageData：封装图片数据及图片相关参数的结构体         |
-  | 结构体CarDetectDataMsg             | acllite/inc/params.h                              | CarDetectDataMsg：基础的消息的结构体                  |
+  | 结构体ImageData                    | acllite/inc/AclLiteType.h                 | ImageData：封装图片数据及图片相关参数的结构体         |
+  | 结构体CarDetectDataMsg             | acllite/inc/params.h                      | CarDetectDataMsg：基础的消息的结构体                  |
   | 结构体CarInfo                      | inc/params.h                              | CarInfo：车辆检测模型推理的中间结果及抠出的车辆区域等 |
 
 
 - 若您的图片数据既不是jpg文件，也不是YUV420SP_U8格式文件，但后续仍然需要使用DVPP的VPC功能对图片的进行缩放或者抠图等处理。
-  
+
   此种场景下，您可以使用OpenCV等第三方图像处理接口进行读取和解码操作，并使图片数据满足DVPP对图片进行缩放抠图等操作的约束，详细约束可参见[昇腾文档中心](#https://www.hiascend.com/document?tag=community-developer)相关文档。
 
   如下为使用OpenCV进行图片预处理的示例：
@@ -1471,12 +1642,13 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
   1. 打开图片所在文件夹，并将图片文件名存储到vector中。
 
      该部分代码可直接参考 [OpenPicsDir](#OpenPicsDir) 进行复用。
-  
+
   2. 根据vector中的图片文件名，用OpenCV将图片读入并转换图片编码格式，并将Mat转换为ImageData类型数据。
 
      代码文件：src/detectPreprocess/detectPreprocess.cpp
 
      代码示例如下：
+
      ```
      AclLiteError DetectPreprocessThread::ReadPic(shared_ptr<CarDetectDataMsg> &carDetectDataMsg) {
          ...     
@@ -1496,7 +1668,7 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
          carDetectDataMsg->imageFrame.data.reset((uint8_t *)yuvMat.data, [](uint8_t* p) 
                                                  { delete[](p); }
                                                  );
-
+     
          // read jpg pic to Mat, which is used to record model inference result
          carDetectDataMsg->frame = cv::imread(picFile);
          ...
@@ -1508,7 +1680,7 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
      代码文件：src/detectPreprocess/detectPreprocess.cpp
 
      代码示例如下：
-     
+
      ```
      AclLiteError DetectPreprocessThread::ProcessPic(shared_ptr<CarDetectDataMsg> &carDetectDataMsg) {
          ...
@@ -1527,7 +1699,7 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
   | **业务场景**                                                 | **代码文件**                              | **接口/结构体**                                       |
   | ------------------------------------------------------------ | ----------------------------------------- | ----------------------------------------------------- |
   | 接口开发完成后替换处，该接口旨在实现从文件读取数据，并设置消息数据参数 | src/detectPreprocess/detectPreprocess.cpp | ReadPic                                               |
-  | 结构体ImageData                                              | acllite/inc/AclLiteType.h                         | ImageData：封装图片数据及图片相关参数的结构体         |
+  | 结构体ImageData                                              | acllite/inc/AclLiteType.h                 | ImageData：封装图片数据及图片相关参数的结构体         |
   | 结构体CarDetectDataMsg                                       | inc/params.h                              | CarDetectDataMsg：基础的消息的结构体                  |
   | 结构体CarInfo                                                | inc/params.h                              | CarInfo：车辆检测模型推理的中间结果及抠出的车辆区域等 |
 
@@ -1546,12 +1718,14 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
 本样例涉及两个模型，故有两套预处理流程。其中图片检测模型预处理流程为：缩放（resize）；车辆颜色分类模型预处理流程为：抠图（crop）-> 缩放（resize）。由于抠图和缩放两功能属并列关系，因此按功能划分，分别介绍两个功能的实现流程。
 
 - 缩放功能实现流程参考如下：
+
   1. 创建一个AclLiteImageProc类对象并将其初始化，该类内部主要负责管理DVPP图片处理相关功能的调用。
 
      代码文件：src/detectPreprocess/detectPreprocess.cpp
 
      代码示例：
             
+
      ```
      AclLiteError DetectPreprocessThread::Init() {
                 
@@ -1568,12 +1742,14 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
          return ACLLITE_OK;
       }        
      ```
+
   2. 通过AclLiteImageProc类对象，调用缩放功能相关功能接口，修改图片大小使其满足模型需要。
 
      代码文件：src/detectPreprocess/detectPreprocess.cpp
 
      代码示例：
             
+
      ```
      AclLiteError DetectPreprocessThread::ProcessPic(shared_ptr<CarDetectDataMsg> &carDetectDataMsg) {
          // if last frame
@@ -1604,20 +1780,23 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
      ```
 
    关键功能接口列表：
+
   | **业务场景**                               | **代码文件**                                                 | **接口/结构体**                                              |
   | ------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
   | 创建并初始化一个AclLiteImageProc类对象     | acllite/src/AclLiteImageProc.cpp<br> src/detectPreprocess/detectPreprocess.cpp | AclLiteImageProc::Init<br>DetectPreprocessThread::Init       |
   | 通过AclLiteImageProc类对象并使用缩放功能   | acllite/src/AclLiteImageProc.cpp<br> src/detectPreprocess/detectPreprocess.cpp | AclLiteImageProc::Resize<br>DetectPreprocessThread::ProcessPic |
-  | 缩放功能的封装                             | acllite/src/ResizeHelper.cpp                                         | ResizeHelper::Process                                        |
-  | AclLiteImageProc类对DVPP图片处理功能的管理 | acllite/src/AclLiteImageProc.cpp                                     | AclLiteImageProc::Resize                                     |
+  | 缩放功能的封装                             | acllite/src/ResizeHelper.cpp                                 | ResizeHelper::Process                                        |
+  | AclLiteImageProc类对DVPP图片处理功能的管理 | acllite/src/AclLiteImageProc.cpp                             | AclLiteImageProc::Resize                                     |
 
 - 抠图功能实现流程参考如下：
+
   1. 创建一个AclLiteImageProc类对象并将其初始化，该类内部主要负责管理DVPP图片处理相关功能的调用。
 
      代码文件：src/classifyPreprocess/classifyPreprocess.cpp
 
      代码示例：
             
+
      ```
      AclLiteError ClassifyPreprocessThread::Init() {
             
@@ -1635,6 +1814,7 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
      代码文件：src/classifyPreprocess/classifyPreprocess.cpp
 
      代码示例：
+
      ```
      AclLiteError ClassifyPreprocessThread::MsgProcess(shared_ptr<CarDetectDataMsg> carDetectDataMsg) {
          // if last frame
@@ -1663,7 +1843,7 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
          }
                 
          ...
-
+     
          return ACLLITE_OK;
      } 
      ```
@@ -1690,14 +1870,15 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
          return ret;
      }
      ```
-  
+
    关键功能接口列表：
+
   | **业务场景**                               | **代码文件**                                                 | **接口/结构体**                                              |
   | ------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
   | 创建并初始化一个AclLiteImageProc类对象     | acllite/src/AclLiteImageProc.cpp<br> src/detectPreprocess/detectPreprocess.cpp | AclLiteImageProc::Init()<br>DetectPreprocessThread::Init()   |
   | 通过AclLiteImageProc类对象并使用抠图功能   | acllite/src/AclLiteImageProc.cpp<br>src/classifyPreprocess/classifyPreprocess.cpp | AclLiteError AclLiteImageProc::Crop<br>ClassifyPreprocessThread::Crop |
-  | 抠图功能的封装                             | acllite/src/CropAndPasteHelper.cpp                                   | CropAndPasteHelper::Process                                  |
-  | AclLiteImageProc类对DVPP图片处理功能的管理 | acllite/src/AclLiteImageProc.cpp                                     | AclLiteImageProc::Crop                                       |
+  | 抠图功能的封装                             | acllite/src/CropAndPasteHelper.cpp                           | CropAndPasteHelper::Process                                  |
+  | AclLiteImageProc类对DVPP图片处理功能的管理 | acllite/src/AclLiteImageProc.cpp                             | AclLiteImageProc::Crop                                       |
 
 ##### 定制开发
 
@@ -1707,46 +1888,48 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
 
 - 若您的模型对输入图片的大小要求与样例代码中的模型要求不一致，您可以直接复用样例代码，仅对相关接口的参数进行调整，详细操作如下。
 
-   - 修改代码ProportionPasteCenter接口，将坐标点参数修改为期望缩放的区域坐标。
+  - 修改代码ProportionPasteCenter接口，将坐标点参数修改为期望缩放的区域坐标。
 
-     请注意，对于ProportionPasteCenter接口，可参考下表，修改参数rbHorz, rbVert至替换后模型所需宽高即可。
+    请注意，对于ProportionPasteCenter接口，可参考下表，修改参数rbHorz, rbVert至替换后模型所需宽高即可。
 
-     | 说明项 | 具体描述                                                     |
-     | ------ | ------------------------------------------------------------ |
-     | 函数   | AclLiteError ProportionPasteCenter(ImageData& dest, ImageData& src, uint32_t ltHorz, uint32_t ltVert, uint32_t rbHorz, uint32_t rbVert) |
-     | 功能   | 将图片等比例缩放到指定大小，且位于输出图片中央                                         |
-     | 参数   | dest: 缩放后的图片<br>src: 待缩放图片<br>rbHorz: 缩放目标大小的宽度<br>rbVert: 缩放目标大小的高度 |
-     | 备注   | ProportionPasteCenter()在内部封装了对齐操作，会对传入图片的宽高及坐标偏移值做自动化处理  
+    | 说明项 | 具体描述                                                     |
+    | ------ | ------------------------------------------------------------ |
+    | 函数   | AclLiteError ProportionPasteCenter(ImageData& dest, ImageData& src, uint32_t ltHorz, uint32_t ltVert, uint32_t rbHorz, uint32_t rbVert) |
+    | 功能   | 将图片等比例缩放到指定大小，且位于输出图片中央               |
+    | 参数   | dest: 缩放后的图片<br>src: 待缩放图片<br>rbHorz: 缩放目标大小的宽度<br>rbVert: 缩放目标大小的高度 |
 
-   - 修改代码resize接口，将width与height调整为模型要求的宽与高即可。
+    | 备注   | ProportionPasteCenter()在内部封装了对齐操作，会对传入图片的宽高及坐标偏移值做自动化处理  
 
-     请注意，对于resize接口，可参考下表，修改参数width, height至替换后模型所需宽高即可。
+  - 修改代码resize接口，将width与height调整为模型要求的宽与高即可。
 
-     | 说明项 | 具体描述                                                     |
-     | ------ | ------------------------------------------------------------ |
-     | 函数   | AclLiteError Resize(ImageData& dest,ImageData& src, uint32_t width, uint32_t height) |
-     | 功能   | 将图片缩放到指定大小                                         |
-     | 参数   | dest: 缩放后的图片<br>src: 待缩放图片<br>width: 缩放目标大小的宽度<br>height: 缩放目标大小的高度 |
-     | 备注   | resize()在内部封装了对齐操作，使用的对齐参数为16x2           |
+    请注意，对于resize接口，可参考下表，修改参数width, height至替换后模型所需宽高即可。
 
-   - 修改代码文件中的crop接口，将坐标点参数修改为期望抠取的区域坐标。
+    | 说明项 | 具体描述                                                     |
+    | ------ | ------------------------------------------------------------ |
+    | 函数   | AclLiteError Resize(ImageData& dest,ImageData& src, uint32_t width, uint32_t height) |
+    | 功能   | 将图片缩放到指定大小                                         |
+    | 参数   | dest: 缩放后的图片<br>src: 待缩放图片<br>width: 缩放目标大小的宽度<br>height: 缩放目标大小的高度 |
+    | 备注   | resize()在内部封装了对齐操作，使用的对齐参数为16x2           |
 
-     请注意，对于crop接口，可参考下表，修改参数ltHorz, ltVert, rbHorz, rbVert，重新选定待抠图区域即可。
+  - 修改代码文件中的crop接口，将坐标点参数修改为期望抠取的区域坐标。
 
-     | 说明项 | 具体描述                                                     |
-     | ------ | ------------------------------------------------------------ |
-     | 函数   | AclLiteError Crop(ImageData& dest, ImageData& src, uint32_t ltHorz, uint32_t ltVert, uint32_t rbHorz, uint32_t rbVert) |
-     | 功能   | 抠图贴图，从原图抠出(ltHorz, ltVert)、(rbHorz, rbVert)两点确定的矩形区域,并贴至贴图区域(0, 0)(rbHorz-ltHorz, ltVert-rbVert) |
-     | 参数   | dest：抠图贴图后图片数据<br>src：待处理图片数据<br>ltHorz：左上点的X坐标<br>ltVert：左上点的Y坐标<br>rbHorz：右下点的X坐标<br>rbVert：右下点的Y坐标 |
-     | 备注   | Crop()在内部封装了对齐操作，会对传入图片的宽高及坐标偏移值做自动化处理 |
+    请注意，对于crop接口，可参考下表，修改参数ltHorz, ltVert, rbHorz, rbVert，重新选定待抠图区域即可。
+
+    | 说明项 | 具体描述                                                     |
+    | ------ | ------------------------------------------------------------ |
+    | 函数   | AclLiteError Crop(ImageData& dest, ImageData& src, uint32_t ltHorz, uint32_t ltVert, uint32_t rbHorz, uint32_t rbVert) |
+    | 功能   | 抠图贴图，从原图抠出(ltHorz, ltVert)、(rbHorz, rbVert)两点确定的矩形区域,并贴至贴图区域(0, 0)(rbHorz-ltHorz, ltVert-rbVert) |
+    | 参数   | dest：抠图贴图后图片数据<br>src：待处理图片数据<br>ltHorz：左上点的X坐标<br>ltVert：左上点的Y坐标<br>rbHorz：右下点的X坐标<br>rbVert：右下点的Y坐标 |
+    | 备注   | Crop()在内部封装了对齐操作，会对传入图片的宽高及坐标偏移值做自动化处理 |
 
 - 若您的模型对图片的要求与样例不一致，且不使用DVPP提供的图片预处理功能，则需要利用第三方库文件自行开发与如下接口功能相似的接口并进行替换。
-   | **业务场景**               | **代码文件**                                                 | **接口/结构体**                                              |
-   | -------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-   | 开发缩放功能接口的替换接口 | acllite/src/CropAndPasteHelper.cpp                              | CropAndPasteHelper::Process                                        |
-   | 缩放接口的替换点           | src/detectPreprocess/detectPreprocess.cpp<br>src/classifyPreprocess/classifyPreprocess.cpp | DetectPreprocessThread::ProcessPic<br>ClassifyPreprocessThread::Resize |
-   | 开发抠图功能接口的替换接口 | acllite/src/CropAndPasteHelper.cpp                                   | CropAndPasteHelper::ProportionProcess                                  |
-   | 抠图接口的替换点           | src/classifyPreprocess/classifyPreprocess.cpp                | ClassifyPreprocessThread::Crop                               |
+
+  | **业务场景**               | **代码文件**                                                 | **接口/结构体**                                              |
+  | -------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+  | 开发缩放功能接口的替换接口 | acllite/src/CropAndPasteHelper.cpp                           | CropAndPasteHelper::Process                                  |
+  | 缩放接口的替换点           | src/detectPreprocess/detectPreprocess.cpp<br>src/classifyPreprocess/classifyPreprocess.cpp | DetectPreprocessThread::ProcessPic<br>ClassifyPreprocessThread::Resize |
+  | 开发抠图功能接口的替换接口 | acllite/src/CropAndPasteHelper.cpp                           | CropAndPasteHelper::ProportionProcess                        |
+  | 抠图接口的替换点           | src/classifyPreprocess/classifyPreprocess.cpp                | ClassifyPreprocessThread::Crop                               |
 
 
 #### <a name="format_trans">格式转换</a>
@@ -1754,6 +1937,7 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
 CANN提供了DVPP进行图片预处理，但基于处理性能的考虑，DVPP对数据的输入、输出有一定的限制，且其输出格式通常为YUV420SP等格式。若DVPP的输出数据格式与模型要求的格式不一致，您可以使用CANN提供的AIPP功能对输入到模型的数据进行格式转换，AIPP作为对模型预处理的补充，可以满足更广泛场景的需要。
 
 AIPP的功能需要在将开源模型转换为om离线模型时开启，如下所示：
+
 ```
 atc --input_shape="input_1:10,224,224,3" --insert_op_conf=./aipp.cfg --output=./color_dvpp_10batch --soc_version=Ascend310 --framework=3 --model=./color.pb
 ```
@@ -1761,32 +1945,34 @@ atc --input_shape="input_1:10,224,224,3" --insert_op_conf=./aipp.cfg --output=./
 其中insert_op_conf参数的输入就是AIPP的配置文件，AIPP的提供的所有功能都通过此配置文件承载。本节主要介绍如何通过AIPP实现数据格式的转换（又称色域转换），AIPP其他的功能请参考参见[Ascend文档中心](#https://www.hiascend.com/document?tag=community-developer)的“ATC模型转换”的“高级功能 > AIPP使能”。
 
 ##### <a name="sample-analysis">样例解析</a>
+
 - 本样例使用了AIPP功能将DVPP输出的YUV420SP_U8格式转换为RGB格式，AIPP配置文件的关键参数样例如下所示：
 
-        ```
-        aipp_op {
-            aipp_mode: static
-            input_format : YUV420SP_U8
-            csc_switch : true
-            rbuv_swap_switch : false
-            matrix_r0c0 : 256
-            matrix_r0c1 : 454
-            matrix_r0c2 : 0
-            matrix_r1c0 : 256
-            matrix_r1c1 : -88
-            matrix_r1c2 : -183
-            matrix_r2c0 : 256
-            matrix_r2c1 : 0
-            matrix_r2c2 : 359
-            input_bias_0 : 0
-            input_bias_1 : 128
-            input_bias_2 : 128
-        }
-        ```
+      ```
+      aipp_op {
+          aipp_mode: static
+          input_format : YUV420SP_U8
+          csc_switch : true
+          rbuv_swap_switch : false
+          matrix_r0c0 : 256
+          matrix_r0c1 : 454
+          matrix_r0c2 : 0
+          matrix_r1c0 : 256
+          matrix_r1c1 : -88
+          matrix_r1c2 : -183
+          matrix_r2c0 : 256
+          matrix_r2c1 : 0
+          matrix_r2c2 : 359
+          input_bias_0 : 0
+          input_bias_1 : 128
+          input_bias_2 : 128
+      }
+      ```
+
   每一种格式转换都有官方模板供直接使用，详细可参见[Ascend文档中心](#https://www.hiascend.com/document?tag=community-developer)的“ATC模型转换”的“高级功能 > AIPP使能 > 配置文件模板”。
 
 - 使用ATC工具进行离线模型转换时加载AIPP配置文件，即可对输入到模型中的数据进行格式转换。
-  
+
   例如图片检测推理模型的模型转换：
 
   atc --model=./yolov3_t.onnx --framework=5 --output=yolov3 --input_shape="images:1,3,416,416;img_info:1,4" --soc_version=Ascend310 --input_fp16_nodes="img_info" --**insert_op_conf=aipp_onnx.cfg** 
@@ -1794,16 +1980,20 @@ atc --input_shape="input_1:10,224,224,3" --insert_op_conf=./aipp.cfg --output=./
 ##### 定制开发
 
 1. 若您经过DVPP预处理后（或其他预处理），输入到模型的数据编码格式与模型要求不一致，您可以直接在模型转换时通过AIPP功能实现格式的转换，无需进行代码层面的修改。
+
    1. 首先获取使用AIPP功能前及AIPP功能需要输出的图片排布格式，然后参见[Ascend文档中心](#https://www.hiascend.com/document?tag=community-developer)的“ATC模型转换”的“高级功能 > AIPP使能 > 配置文件模板”，选择相应的色域转换模板填入自行创建的AIPP配置文件，文件名为xxx.cfg。
+
    2. 使用ATC工具转换模型，并导入上一步准备好的AIPP配置文件。
       ATC转换命令的参考格式如下，其中insert_op_conf参数中配置的即为上一步骤创建的AIPP配置文件：
+
       ```
       atc --model=<model_file_path> --weight=<weight_file_path> --framework=<framework_ID> --insert_op_conf=<AIPP_file_path> --output=<om_file_path> --soc_version=<soc_version>
       ```
+
       例如，[样例解析](#sample-analysis)中的模型，若不导入AIPP配置文件，则模型只能接受RGB格式的图片数据，导入AIPP配置文件后，模型可接受YUV420SP_U8格式的数据。
-   
+
 2. 若您经过DVPP预处理后（或其他预处理），输入到模型的数据编码格式与模型要求不一致，若不使用AIPP功能，则您需要自行基于第三方库开发色域转换的功能接口，并添加到原预处理业务逻辑中。
-    关键修改点列表：
+   关键修改点列表：
 
    | **业务场景**                 | **代码文件**                                  | **接口/结构体**                      |
    | ---------------------------- | --------------------------------------------- | ------------------------------------ |
@@ -1812,8 +2002,11 @@ atc --input_shape="input_1:10,224,224,3" --insert_op_conf=./aipp.cfg --output=./
 
 
 #### 图片预处理涉及代码文件汇总
+
 本样例为两模型串接样例，且消息数据结构体相对复杂。在此以表格形式，分别梳理两模型预处理模块业务逻辑及样例消息数据结构。
+
 - 消息数据结构： 
+
   | **结构体**       | **代码文件**    | **注释**                                                     |
   | ---------------- | --------------- | ------------------------------------------------------------ |
   | CarDetectDataMsg | inc/CarParams.h | inferThreadId：推理线程ID，标识消息将发送的线程。<br>detectPostThreadId：检测模型后处理线程ID，标识消息将发送的线程。<br>classifyPreThreadId：分类模型预处理线程ID，标识消息将发送的线程。<br>classifyPostThreadId：分类模型后处理线程ID，标识消息将发送的线程。<br>presentAgentDisplayThreadId：页面展示线程ID，标识消息将发送的线程。<br>deviceId：设备ID，区分设备配置参数。<br>isLastFrame：是否为最后一帧数据，0为不是，1为是。<br>frameNum：数据帧数，表示为该路第x帧数据。<br>imageFrame：自定义结构体数据，存放将原始图片解码为YUV420SP_U8格式后的数据，数据存放在dvpp内存上。<br>resizedFrame：自定义结构体数据，存放缩放至检测模型所需分辨率大小的图片数据，数据存放在dvpp内存上。<br>frame：OpenCV的Mat类数据，存放BGR格式的原始图片数据，分辨率与原图一致。用于后续将两模型推理结果画在其中。<br>detectInferData：检测模型推理结果。<br>carInfo：自定义结构体数据，用于存放检测模型的推理结果及分类模型需要使用的图片数据。<br>flag：判断是否有车辆被检测到，0为无，1为有。<br>classifyInferData：分类模型推理结果。 |
@@ -1849,10 +2042,12 @@ atc --input_shape="input_1:10,224,224,3" --insert_op_conf=./aipp.cfg --output=./
 ### 离线视频
 
 #### 简介
+
 输入是视频文件的场景下，最终传入模型进行处理的仍是一帧帧的图片。本样例使用的模型支持的输入数据约束如下：
+
 | **模型**                                      | **输入图片编码格式** | **输入图片分辨率** |
 | --------------------------------------------- | -------------------- | ------------------ |
-| 图片检测推理模型。基于onnx的yolov3模型       | BGR                  | 宽：416 高：416    |
+| 图片检测推理模型。基于onnx的yolov3模型        | BGR                  | 宽：416 高：416    |
 | 车辆颜色分类推理模型。基于tensorflow的CNN模型 | RGB                  | 宽：224 高：224    |
 
 若您想直接使用样例中的模型，但使用的离线视频文件不符合模型要求；或者是想使用自己的模型，而模型对输入数据的要求与样例的模型不一致。在这两者任一场景下，都可以参考本章节，对输入视频的预处理流程进行改造，使其符合实际业务要求。
@@ -1879,6 +2074,7 @@ atc --input_shape="input_1:10,224,224,3" --insert_op_conf=./aipp.cfg --output=./
      代码文件：src/detectPreprocess/detectPreprocess.cpp
 
      打开视频文件所在路径并读取视频文件的代码示例：
+
      ```
      AclLiteError DetectPreprocessThread::Init() {
          // get input data path
@@ -1937,11 +2133,13 @@ atc --input_shape="input_1:10,224,224,3" --insert_op_conf=./aipp.cfg --output=./
          return ACLLITE_OK;
      }
      ```
+
    - 通过AclLiteVideoProc类对象，调用"读"接口，从视频文件切下一帧数据并对其进行解码，从而获得一帧YUV420SP数据。
 
      代码文件：src/detectPreprocess/detectPreprocess.cpp
 
      代码示例：
+
      ```
      AclLiteError DetectPreprocessThread::ReadStream(shared_ptr<CarDetectDataMsg> &carDetectDataMsg) {
          ···
@@ -1964,8 +2162,9 @@ atc --input_shape="input_1:10,224,224,3" --insert_op_conf=./aipp.cfg --output=./
          return ACLLITE_OK;
      }
      ```
+
 3. 对解码后的视频帧数据进行预处理
-   
+
    上一步将视频数据解码成了一帧帧图片数据，若解码后的图片数据仍与模型需要不符，则需要继续对图片数据进行预处理，详细方法可参见[图片预处理](#picture-process)，对数据进行抠图、缩放等处理。
 
 #### 定制点分析
@@ -1978,26 +2177,28 @@ atc --input_shape="input_1:10,224,224,3" --insert_op_conf=./aipp.cfg --output=./
 
 2. 若输入的视频文件不满足VDEC功能约束，则需要您自行使用第三方库，开发对应功能的接口并进行替换，涉及代码参考如下。
 
-    视频预处理涉及代码文件汇总
-    
-    | **接口**                                   | **代码文件**                              | **接口任务**                                    |
-    | ------------------------------------------ | ----------------------------------------- | ----------------------------------------------- |
-    | DetectPreprocessThread::OpenVideoCapture() | src/detectPreprocess/detectPreprocess.cpp | 创建并初始化一个AclLiteVideoProc类对象          |
-    | DetectPreprocessThread::ReadStream         | src/detectPreprocess/detectPreprocess.cpp | 从输入视频读取一帧帧yuv数据，并设置消息数据初值 |
-    | VideoCapture::Read                         | acllite/srcsrc/VideoCapture.cpp           | 从解码队列中读取解码完成数据                    |
-    | VideoCapture::FrameDecodeThreadFunction    | acllite/srcsrc/VideoCapture.cpp           | 调用ffmpeg切帧+vdec解码功能接口                 |
-    | FFmpegDecoder::Decode                      | acllite/srcsrc/VideoCapture.cpp           | FFmpeg切帧功能封装                              |
-    | VdecHelper::Process                        | acllite/srcsrc/VdecHelper.cpp             | VDEC功能的封装                                  |
+   视频预处理涉及代码文件汇总
+
+   | **接口**                                   | **代码文件**                              | **接口任务**                                    |
+   | ------------------------------------------ | ----------------------------------------- | ----------------------------------------------- |
+   | DetectPreprocessThread::OpenVideoCapture() | src/detectPreprocess/detectPreprocess.cpp | 创建并初始化一个AclLiteVideoProc类对象          |
+   | DetectPreprocessThread::ReadStream         | src/detectPreprocess/detectPreprocess.cpp | 从输入视频读取一帧帧yuv数据，并设置消息数据初值 |
+   | VideoCapture::Read                         | acllite/srcsrc/VideoCapture.cpp           | 从解码队列中读取解码完成数据                    |
+   | VideoCapture::FrameDecodeThreadFunction    | acllite/srcsrc/VideoCapture.cpp           | 调用ffmpeg切帧+vdec解码功能接口                 |
+   | FFmpegDecoder::Decode                      | acllite/srcsrc/VideoCapture.cpp           | FFmpeg切帧功能封装                              |
+   | VdecHelper::Process                        | acllite/srcsrc/VdecHelper.cpp             | VDEC功能的封装                                  |
 
 
 
 ### RTSP视频流
 
 #### 简介
+
 本样例使用的模型支持的输入数据约束如下：
+
 | **模型**                                      | **输入图片编码格式** | **输入图片分辨率** |
 | --------------------------------------------- | -------------------- | ------------------ |
-| 图片检测推理模型。基于onnx的yolov3模型       | BGR                  | 宽：416 高：416    |
+| 图片检测推理模型。基于onnx的yolov3模型        | BGR                  | 宽：416 高：416    |
 | 车辆颜色分类推理模型。基于tensorflow的CNN模型 | RGB                  | 宽：224 高：224    |
 
 若您想直接使用样例中的模型，但使用的rtsp流不符合模型要求；或者是想使用自己的模型，而模型对输入数据的要求与样例的模型不一致。在这两者任一场景下，都可以参考本章节，对输入视频的预处理流程进行改造，使其符合实际业务要求。
@@ -2026,6 +2227,7 @@ atc --input_shape="input_1:10,224,224,3" --insert_op_conf=./aipp.cfg --output=./
      代码文件：src/detectPreprocess/detectPreprocess.cpp
 
      读取rtsp视频流的代码示例：
+
      ```
      AclLiteError DetectPreprocessThread::Init() {
          // get input data path
@@ -2053,8 +2255,9 @@ atc --input_shape="input_1:10,224,224,3" --insert_op_conf=./aipp.cfg --output=./
         
      }
      ```
-   
+
      读取视频流函数OpenVideoCapture的实现示例：
+
      ```
      AclLiteError DetectPreprocessThread::OpenVideoCapture() {
          // create instance 
@@ -2081,11 +2284,13 @@ atc --input_shape="input_1:10,224,224,3" --insert_op_conf=./aipp.cfg --output=./
          return ACLLITE_OK;
      }
      ```
+
    - 通过AclLiteVideoProc类对象，调用"读"接口，从rtsp流切下一帧数据并解码，从而获得一帧YUV420SP数据。
 
      代码文件：src/detectPreprocess/detectPreprocess.cpp
 
      代码示例：
+
      ```
      AclLiteError DetectPreprocessThread::ReadStream(shared_ptr<CarDetectDataMsg> &carDetectDataMsg) {
          ···
@@ -2114,6 +2319,7 @@ atc --input_shape="input_1:10,224,224,3" --insert_op_conf=./aipp.cfg --output=./
    上一步将视频数据解码成了一帧帧图片数据，若解码后的图片数据仍与模型需要不符，则需要继续对图片数据进行预处理，详细方法可参见[图片预处理](#picture-process)，对数据进行抠图、缩放等处理。
 
 #### 定制点分析
+
 此处仅分析RTSP视频流的读取及解码的定制点，视频流解码成一帧帧图片后的后续定制，请参见[图片预处理](#picture-process)。
 
 1. 若输入的rtsp视频流满足VDEC功能约束。
@@ -2122,25 +2328,28 @@ atc --input_shape="input_1:10,224,224,3" --insert_op_conf=./aipp.cfg --output=./
 
 2. 若输入的rtsp视频流不满足VDEC功能约束，则需要您自行使用第三方库，开发对应功能的接口并进行替换，涉及代码参考如下。
 
-    rtsp流预处理涉及代码文件汇总
-    
-    | **接口**                                   | **代码文件**                              | **接口任务**                                    |
-    | ------------------------------------------ | ----------------------------------------- | ----------------------------------------------- |
-    | DetectPreprocessThread::OpenVideoCapture() | src/detectPreprocess/detectPreprocess.cpp | 创建并初始化一个AclLiteVideoProc类对象          |
-    | DetectPreprocessThread::ReadStream         | src/detectPreprocess/detectPreprocess.cpp | 从输入视频读取一帧帧yuv数据，并设置消息数据初值 |
-    | VideoCapture::Read                         | acllite/srcsrc/VideoCapture.cpp           | 从解码队列中读取解码完成数据                    |
-    | VideoCapture::FrameDecodeThreadFunction    | acllite/srcsrc/VideoCapture.cpp           | 调用ffmpeg切帧+vdec解码功能接口                 |
-    | FFmpegDecoder::Decode                      | acllite/srcsrc/VideoCapture.cpp           | FFmpeg切帧功能封装                              |
-    | VdecHelper::Process                        | acllite/srcsrc/VdecHelper.cpp             | VDEC功能的封装                                  |
+   rtsp流预处理涉及代码文件汇总
+
+   | **接口**                                   | **代码文件**                              | **接口任务**                                    |
+   | ------------------------------------------ | ----------------------------------------- | ----------------------------------------------- |
+   | DetectPreprocessThread::OpenVideoCapture() | src/detectPreprocess/detectPreprocess.cpp | 创建并初始化一个AclLiteVideoProc类对象          |
+   | DetectPreprocessThread::ReadStream         | src/detectPreprocess/detectPreprocess.cpp | 从输入视频读取一帧帧yuv数据，并设置消息数据初值 |
+   | VideoCapture::Read                         | acllite/srcsrc/VideoCapture.cpp           | 从解码队列中读取解码完成数据                    |
+   | VideoCapture::FrameDecodeThreadFunction    | acllite/srcsrc/VideoCapture.cpp           | 调用ffmpeg切帧+vdec解码功能接口                 |
+   | FFmpegDecoder::Decode                      | acllite/srcsrc/VideoCapture.cpp           | FFmpeg切帧功能封装                              |
+   | VdecHelper::Process                        | acllite/srcsrc/VdecHelper.cpp             | VDEC功能的封装                                  |
 
 
 ## <a name="data-postprocess">数据后处理</a>
+
 ### 简介
+
 数据后处理指获得模型推理结果后，如何对数据进行进一步处理，例如将推理结果画框标注、以及将带有推理结果的图片数据以不同形式保存等。
 
 CANN未提供封装的数据后处理相关接口，需要用户根据模型推理结果和业务需要自行实现。
 
 ### 样例解析
+
 本样例中，用户可以通过配置输出数据类型，选择不同的数据输出格式，例如如视频、图片等。下面我们详细介绍样例代码是如何实现通过读参数，使样例自动地选择后处理方式的，并对不同后处理方式的实现进行简单介绍。
 
 1. 配置输出类型相关参数。
@@ -2150,12 +2359,13 @@ CANN未提供封装的数据后处理相关接口，需要用户根据模型推�
    - pic：表示输出结果为图片
    - video：表示输出结果为MP4视频文件
    - presentagent：表示用PresentAgent展示推理结果
-   
+
    如果outputType_X为video，还需要另外配置```outputFrameWidth_X```、```outputFrameHeight_0```。
 
    如果outputType_X为presentagent，则运行样例前需要先启动present server。
 
    配置示例如下所示：
+
     ```
     [base_options]
     device_num=1
@@ -2174,6 +2384,7 @@ CANN未提供封装的数据后处理相关接口，需要用户根据模型推�
     #outputFrameWidth_1=2368
     #outputFrameHeight_1=1080
     ```
+
    此配置文件中的详细参数说明可参见[样例编译运行](#compile-run) 。 
 
 2. 模型后处理模块识别输出类型参数。
@@ -2182,9 +2393,10 @@ CANN未提供封装的数据后处理相关接口，需要用户根据模型推�
 
    - 存储后处理数据类型的变量到类的私有数据成员，以供后续访问。
    - 如果后处理数据类型为video，还需要另外调用接口，存储输出视频的分辨率到到类的私有数据成员，以供后续访问。
-   
+
    代码文件：src/classifyPostprocess/classifyPostprocess.cpp
    代码示例：
+
     ```
     AclLiteError ClassifyPostprocessThread::GetOutputDataType(std::string& outputType, uint32_t deviceId) {
         std::string outputTypeKey = "outputType_" + to_string(deviceId);
@@ -2211,7 +2423,9 @@ CANN未提供封装的数据后处理相关接口，需要用户根据模型推�
         return ACLLITE_OK;
     }
     ```
+
     输出数据类型为video时，获取并存储输出视频的分辨率。
+
     ```
     AclLiteError ClassifyPostprocessThread::GetOutputFrameResolution(int& frameWidth, int& frameHeight, uint32_t deviceId) {
         std::string outputFrameWidthKey = "outputFrameWidth_" + to_string(deviceId);
@@ -2243,16 +2457,18 @@ CANN未提供封装的数据后处理相关接口，需要用户根据模型推�
 3. 提取并解析模型推理结果：
 
    不同的模型需要分别编写并调用推理结果解析接口。
+
    - 车辆检测模型
 
      代码文件：src/detectPostprocess/detectPostprocess.cpp
 
      代码示例： 
+
      ```
      AclLiteError DetectPostprocessThread::InferOutputProcess(shared_ptr<CarDetectDataMsg> carDetectDataMsg) {
          if (carDetectDataMsg->isLastFrame) 
              return ACLLITE_OK;
-    
+      
          float* detectData = (float *)carDetectDataMsg->detectInferData[kBBoxDataBufId].data.get();
          if(detectData == nullptr){
              ACLLITE_LOG_ERROR("detect inferoutput is null\n");
@@ -2260,7 +2476,7 @@ CANN未提供封装的数据后处理相关接口，需要用户根据模型推�
          }
          uint32_t* boxNum = (uint32_t *)carDetectDataMsg->detectInferData[kBoxNumDataBufId].data.get();
          uint32_t totalBox = boxNum[0];
-
+     
          for (uint32_t i = 0; i < totalBox; i++) {
              uint32_t score = uint32_t(detectData[totalBox * SCORE + i] * 100);
              if (score < 60) {
@@ -2285,6 +2501,7 @@ CANN未提供封装的数据后处理相关接口，需要用户根据模型推�
    - 颜色分类模型
      代码文件：src/classifyPostprocess/classifyPostprocess.cpp
      代码示例：
+
      ```
      AclLiteError ClassifyPostprocessThread::InferOutputProcess(shared_ptr<CarDetectDataMsg> carDetectDataMsg) {
          ...
@@ -2294,7 +2511,7 @@ CANN未提供封装的数据后处理相关接口，需要用户根据模型推�
          }
          float* outData = NULL;
          outData = reinterpret_cast<float*>(data);
-
+     
          for(int i = 0; i < carDetectDataMsg->carInfo.size(); i++){
              int maxConfidentIndex = i * kEachResultTensorNum;
              for(int j = 0; j < kEachResultTensorNum; j++){
@@ -2309,7 +2526,7 @@ CANN未提供封装的数据后处理相关接口，需要用户根据模型推�
              // get color
              carDetectDataMsg->carInfo[i].carColor_result = kCarColorClass[colorIndex];
          }
-    
+      
      ...
      }
      ```
@@ -2319,6 +2536,7 @@ CANN未提供封装的数据后处理相关接口，需要用户根据模型推�
    代码文件：src/classifyPostprocess/classifyPostprocess.cpp
 
    代码示例：
+
     ```
     AclLiteError ClassifyPostprocessThread::InferOutputProcess(shared_ptr<CarDetectDataMsg> carDetectDataMsg) {
         ...
@@ -2358,10 +2576,11 @@ CANN未提供封装的数据后处理相关接口，需要用户根据模型推�
 
   1. 根据替换后模型的后处理逻辑，开发对应的推理结果解析接口。
   2. 在后处理模块的消息处理函数中，替换调用新开发的后处理解析接口。
-  
+
   代码文件：src/classifyPostprocess/classifyPostprocess.cpp
 
   代码示例：
+
   ```
   AclLiteError DetectPostprocessThread::Process(int msgId, shared_ptr<void> data) {
       AclLiteError ret = ACLLITE_OK;
@@ -2381,11 +2600,13 @@ CANN未提供封装的数据后处理相关接口，需要用户根据模型推�
   ```
 
 - 增加/修改输出数据类型的场景。
+
   1. 修改获取输出类型的接口，增加/修改对有效参数的识别：
 
      代码文件：src/classifyPostprocess/classifyPostprocess.cpp
 
      代码示例：
+
      ```
      AclLiteError ClassifyPostprocessThread::GetOutputDataType(std::string& outputType, uint32_t deviceId) {
          std::string outputTypeKey = "outputType_" + to_string(deviceId);
@@ -2418,6 +2639,7 @@ CANN未提供封装的数据后处理相关接口，需要用户根据模型推�
      代码文件：src/classifyPostprocess/classifyPostprocess.cpp
 
      代码示例：
+
      ```
      AclLiteError ClassifyPostprocessThread::SetOutputVideo() {
          stringstream sstream;
@@ -2427,7 +2649,7 @@ CANN未提供封装的数据后处理相关接口，需要用户根据模型推�
          return ACLLITE_OK;
      }
      ```
-    
+
      ```
      AclLiteError ClassifyPostprocessThread::GetOutputFrameResolution(int& frameWidth, int& frameHeight, uint32_t deviceId) {
          std::string outputFrameWidthKey = "outputFrameWidth_" + to_string(deviceId);
@@ -2460,6 +2682,7 @@ CANN未提供封装的数据后处理相关接口，需要用户根据模型推�
      代码文件：src/classifyPostprocess/classifyPostprocess.cpp
 
      代码示例：
+
      ```
      AclLiteError ClassifyPostprocessThread::InferOutputProcess(shared_ptr<CarDetectDataMsg> carDetectDataMsg) {
          ...
@@ -2489,7 +2712,9 @@ CANN未提供封装的数据后处理相关接口，需要用户根据模型推�
          return ACLLITE_OK;
      }
      ```
+
      输出图片类型数据：
+
      ```
      AclLiteError ClassifyPostprocessThread::DrawResultOnPic(shared_ptr<CarDetectDataMsg> &carDetectDataMsg) {
          ···
@@ -2500,7 +2725,9 @@ CANN未提供封装的数据后处理相关接口，需要用户根据模型推�
          return ACLLITE_OK;
      }
      ```
+
      输出视频类型数据：
+
      ```
      AclLiteError ClassifyPostprocessThread::DrawResultOnVideo(shared_ptr<CarDetectDataMsg> &carDetectDataMsg) {  
          ...
@@ -2511,7 +2738,9 @@ CANN未提供封装的数据后处理相关接口，需要用户根据模型推�
          return ACLLITE_OK;
      }
      ```
+
      将带有推理结果的图片数据发送给presentagent展示线程：
+
      ```
      AclLiteError ClassifyPostprocessThread::SendImage(shared_ptr<CarDetectDataMsg> &carDetectDataMsg) {
          ...
@@ -2524,22 +2753,26 @@ CANN未提供封装的数据后处理相关接口，需要用户根据模型推�
          return ACLLITE_OK;
      }
      ```
-  
+
 ### 后处理业务流程代码及接口说明
+
 - 车辆检测模型：
-  | **接口**            | **代码文件**               | **接口功能**      |
-  |---------------------|---------------------------|-------------------|
-  |Process|src/detectPostprocess/detectPostprocess.cpp|消息数据处理接口，线程主干接口，用来处理检测模型线程发送的数据|
-  |InferOutputProcess|src/detectPostprocess/detectPostprocess.cpp|检测解析模型的推理结果|
-  |MsgSend|src/detectPostprocess/detectPostprocess.cpp|将存放解析完推理结果数据的消息发送给分类模型预处理线程|
+
+  | **接口**           | **代码文件**                                | **接口功能**                                                 |
+  | ------------------ | ------------------------------------------- | ------------------------------------------------------------ |
+  | Process            | src/detectPostprocess/detectPostprocess.cpp | 消息数据处理接口，线程主干接口，用来处理检测模型线程发送的数据 |
+  | InferOutputProcess | src/detectPostprocess/detectPostprocess.cpp | 检测解析模型的推理结果                                       |
+  | MsgSend            | src/detectPostprocess/detectPostprocess.cpp | 将存放解析完推理结果数据的消息发送给分类模型预处理线程       |
 
 - 颜色分类模型：
-  | **接口**            | **代码文件**               | **接口功能**      |
-  |---------------------- | ------------------------------|------------------|
-  |GetOutputDataType|src/classifyPostprocess/classifyPostprocess.cpp|识别输出数据类型的配置参数|
-  |GetOutputFrameResolution|src/classifyPostprocess/classifyPostprocess.cpp|输出数据类型为video时，识别输出视频的分辨率参数|
-  |SetOutputVideo|src/classifyPostprocess/classifyPostprocess.cpp|设置输出视频的文件名|
-  |InferOutputProcess|src/classifyPostprocess/classifyPostprocess.cpp|解析模型推理结果并根据输出数据类型调用不同的数据输出接口|
+
+  | **接口**                 | **代码文件**                                    | **接口功能**                                             |
+  | ------------------------ | ----------------------------------------------- | -------------------------------------------------------- |
+  | GetOutputDataType        | src/classifyPostprocess/classifyPostprocess.cpp | 识别输出数据类型的配置参数                               |
+  | GetOutputFrameResolution | src/classifyPostprocess/classifyPostprocess.cpp | 输出数据类型为video时，识别输出视频的分辨率参数          |
+  | SetOutputVideo           | src/classifyPostprocess/classifyPostprocess.cpp | 设置输出视频的文件名                                     |
+  | InferOutputProcess       | src/classifyPostprocess/classifyPostprocess.cpp | 解析模型推理结果并根据输出数据类型调用不同的数据输出接口 |
+
   |DrawResultOnPic|src/classifyPostprocess/classifyPostprocess.cpp|将模型推理结果绘制在原图上并保存为图片|+
   |DrawResultOnVideo|src/classifyPostprocess/classifyPostprocess.cpp|将模型推理结果绘制在原图上并保存为视频|
   |SendImage|src/classifyPostprocess/classifyPostprocess.cpp|将模型推理结果绘制在原图上并将数据发送给presentagent展示线程|
@@ -2547,7 +2780,9 @@ CANN未提供封装的数据后处理相关接口，需要用户根据模型推�
 
 
 ## 动态Batch
+
 ### 简介
+
 Batch即为每次模型推理处理的图片数，动态Batch代表执行推理时，模型每次处理的图片数量是不固定的。
 例如，检测出目标后再执行目标识别网络的场景，由于目标个数不固定导致目标识别网络每次处理的图片个数不固定。如果每次推理都按照最大的BatchSize进行计算，会造成计算资源浪费。因此，存在推理需要支持动态Batch的场景。
 
@@ -2572,10 +2807,13 @@ Batch即为每次模型推理处理的图片数，动态Batch代表执行推理�
    ATC工具提供了转换参数```--dynamic_batch_size```，用于使能转换后的离线om模型支持动态Batch的特性。
    ```--dynamic_batch_size```参数需要与```--input_shape```参数配合使用，其中```--input_shape```设置模型支持的shape信息，动态Batch场景下，输入shape中的“Batch”设置为“-1”，代表Batch数不固定；而```--dynamic_batch_size```参数则用于设置动态Batch场景下“Batch”支持的档位数。
    例如：
+
    ```
    atc --model=<model_path> --weight=<weight_path> --framework=<origin_framework_ID> --output=<offlinemodel_path> --soc_version=<soc_version> --input_shape="data:-1,3,224,224"  --dynamic_batch_size="1,2,4,8"  
    ```
+
    其中，“--input_shape”中的“-1”表示第一维(Batch)的大小不固定，则需要设置支持的BatchSize，```-dynamic_batch_size="1,2,4,8"```表示输入shape的Batch支持取值分别为1、2、4、8四个档位，则在模型编译时，支持的输入组合档数分别为：
+
    - 第0档：data(1,3,224,224)
    - 第1档：data(2,3,224,224)
    - 第2档：data(4,3,224,224)
@@ -2588,6 +2826,7 @@ Batch即为每次模型推理处理的图片数，动态Batch代表执行推理�
    用户需要根据本次推理的实际batch数，生成本次推理的模型输入。
 
    以下代码样例主要展示业务逻辑，出于代码简单易读性考虑，此处假设图片数据格式默认符合模型所需格式，且每张图片的大小一致，为batch=1时模型所需的图片大小。在实际实现和调用接口时，需结合业务场景进行设计开发：
+
    ```
    // read pic
    void ReadPicture(const string &picturePath)
@@ -2606,7 +2845,7 @@ Batch即为每次模型推理处理的图片数，动态Batch代表执行推理�
        binFile.read(static_cast<char *>(pictureData), pictureDataSize);
        binFile.close();
    }
-
+   
    // copy all batch pic 
    void CopyData(int batchSize, uint32_t pos)
    {
@@ -2614,7 +2853,7 @@ Batch即为每次模型推理处理的图片数，动态Batch代表执行推理�
        {
            string fileName = "xxx" + (to_string(i)) ;
            ReadPicture(fileName);
-
+   
            aclError ret;
            if (pictureDeviceData == nullptr)
            {
@@ -2633,7 +2872,7 @@ Batch即为每次模型推理处理的图片数，动态Batch代表执行推理�
        }
        totalDataSize = pictureDataSize * fileCount;
    }
-
+   
    void CreateModelInput()
    {
        aclError ret;
@@ -2659,12 +2898,13 @@ Batch即为每次模型推理处理的图片数，动态Batch代表执行推理�
                ret = aclmdlAddDatasetBuffer(input_, inputBuffer);
            }
        }
-
+   
    }
    ```
 
 
    每次推理前，设置此次推理batch数：
+
    ```
    int  ModelSetDynamicInfo(int batchSize)
    {
@@ -2681,7 +2921,9 @@ Batch即为每次模型推理处理的图片数，动态Batch代表执行推理�
 3. 对模型的后处理函数进行改造，使其能够识别每次推理的batch数，并根据输出的batch数解析模型推理结果。
 
    此处提供一个多batch和非多batch的后处理函数对比，以供参考:
+
    - batch=1：
+
      ```
      void PrintResult()
      {
@@ -2696,7 +2938,7 @@ Batch即为每次模型推理处理的图片数，动态Batch代表执行推理�
          {
              outFloatData = reinterpret_cast < float * > (outputDeviceData);
          }
-    
+      
          // print top-five label
          map<float, unsigned int, greater<float>> resultMap;
          for (unsigned int j = 0; j < outputDataSize / (sizeof(float) * 2); ++j)
@@ -2712,13 +2954,14 @@ Batch即为每次模型推理处理的图片数，动态Batch代表执行推理�
              {
                  break;
              }
-
+     
              printf("top %d: index[%d] value[%lf] \n", cnt, it->second, it->first);
          }
      }
      ```
 
    - batch=n：
+
      ```
      void PrintResult(int batchSize)
      {
@@ -2751,7 +2994,7 @@ Batch即为每次模型推理处理的图片数，动态Batch代表执行推理�
                  {
                      break;
                  }
-
+     
                  printf("top %d: index[%d] value[%lf] \n", cnt, it->second, it->first);
              }
          }
@@ -2759,7 +3002,9 @@ Batch即为每次模型推理处理的图片数，动态Batch代表执行推理�
      ```
 
 ## 动态分辨率
+
 ### 简介
+
 动态分辨率，表示用户执行推理时，模型支持的图片的分辨率可变。适用于执行推理时，每次处理的图片宽和高不固定的场景。
 
 当前通用目标识别样例未覆盖动态分辨率的场景，若您需要支持动态分辨率，需要自行对样例代码进行改造，本节介绍动态分辨率的实现流程及关键样例代码，有助于您针对样例代码进行动态分辨率场景的改造。
@@ -2767,6 +3012,7 @@ Batch即为每次模型推理处理的图片数，动态Batch代表执行推理�
  **须知：** 动态分辨率与动态Batch场景不支持同时存在。
 
 ### 流程说明
+
 动态分辨率场景下，首先需要将模型转换为支持该特性的离线模型文件，并设置支持的不同档位的分辨率参数；
 
 然后在执行模型推理前，需要使用AscendCL的aclmdlSetDynamicHWSize接口设置本次模型推理时的图片分辨率大小。并根据分辨率大小创建对应分辨率大小的InputDataSet；
@@ -2774,6 +3020,7 @@ Batch即为每次模型推理处理的图片数，动态Batch代表执行推理�
 最后也需对模型的后处理函数进行改造，使其能识别每次推理输出的图片分辨率并进行结果解析。
 
 ### 实现步骤
+
 下面仅介绍动态分辨率场景需要关注的步骤的实现，其他未体现步骤同非动态分辨率场景。
 
 1. 将原始框架模型转换为支持动态分辨率特性的离线om模型。
@@ -2782,19 +3029,23 @@ Batch即为每次模型推理处理的图片数，动态Batch代表执行推理�
    “--dynamic_image_size”参数需要与```--input_shape```配合使用，动态分辨率场景下，```--input_shape```的Height与Width设置为“-1”，代表高宽不固定，“--dynamic_image_size”参数则设置模型支持的图片分辨率组合，每组参数之间使用英文分号分隔，组内参数使用英文逗号分隔，例如“height1,width1;height2,width2”。
 
    调用示例：
+
    ```
    atc --model=<model_path> --weight=<weight_path> --framework=<origin_framework_ID> --output=<offlinemodel_path> --soc_version=<soc_version> ----input_shape="data:1（batches）,3（channels）,-1,-1"  --dynamic_image_size="416,416;1280,640"  
    ```
+
    则在模型编译时，支持的输入shape组合档数分别为：
+
    - 第0档：data(1,3,416,416)
    - 第1档：data(1,3,1280,640)
-   
-   
+
+
    ATC工具的动态分辨率功能详细描述及使用约束可参见[Ascend文档中心](https://www.hiascend.com/document?tag=community-developer)的“推理应用开发”的“ATC模型转换 > 参数说明 > 基础功能参数 > 输入选项 > --dynamic_image_size”，如在模型转换时出现问题，您可以到[modelzoo仓创建issue](https://github.com/Ascend/modelzoo/issues)。
 
 2. 模型推理前设置此次模型推理时的图片size大小。
 
    以下代码仅供参考：
+
    ```
    int  ModelSetDynamicInfo()
    {
@@ -2825,6 +3076,7 @@ Batch即为每次模型推理处理的图片数，动态Batch代表执行推理�
    此处提供一个固定分辨率和动态分辨率的后处理函数对比，以供参考:
 
    - 分辨率固定：
+
    ```
      AclLiteError DetectPostprocessThread::InferOutputProcess(shared_ptr<CarDetectDataMsg> carDetectDataMsg) {
          if (carDetectDataMsg->isLastFrame) 
@@ -2860,9 +3112,10 @@ Batch即为每次模型推理处理的图片数，动态Batch代表执行推理�
          }
          return ACLLITE_OK;
      }
-     ```
+   ```
 
    - 分辨率可变：
+
      ```
      AclLiteError DetectPostprocessThread::InferOutputProcess(shared_ptr<CarDetectDataMsg> carDetectDataMsg) {
          float* detectData = (float *)carDetectDataMsg->detectInferData[kBBoxDataBufId].data.get();
@@ -2877,7 +3130,7 @@ Batch即为每次模型推理处理的图片数，动态Batch代表执行推理�
          // modelWidth modelHeight flexible
          float widthScale = (float)(carDetectDataMsg->imageFrame.width) / modelWidth;
          float heightScale = (float)(carDetectDataMsg->imageFrame.height) / modelHeight;
-
+     
          // get box location
          for (uint32_t i = 0; i < totalBox; i++) {
              uint32_t score = uint32_t(detectData[totalBox * SCORE + i] * 100);
@@ -2896,74 +3149,90 @@ Batch即为每次模型推理处理的图片数，动态Batch代表执行推理�
          return ACLLITE_OK;
      }
      ```
-     
+
 # 性能提升
+
 ## 多路多线程
+
 ### 简介
 
-本节主要介绍如何对样例进行多路、多线程的定制开发，其中多路和多线程，都是用于提升设备资源利用率的手段。
+本节主要介绍如何对样例进行多Device、多路、多线程的定制开发，这些都是用于提升设备资源利用率的手段。
 
-多路是指每一路都使用不同的Device，一定程度上保证了Device的利用率；多线程则保证了每一路Device的计算资源的利用率，本样例中涉及两个模型，对每个模型的预处理及后处理环节，样例分别拉起了一个业务线程；而推理操作相对预处理及后处理耗时较小，我们则只拉起一个推理线程，通过让两个模型的预处理线程都只往唯一的推理线程发送消息数据，提升了对推理资源的利用率。在实际使用场景中，您可以通过实际测得的数据，适当调整各环节的线程数目，以便进一步地提升资源利用率。
+多路是每一个Device都可以处理不同路数的视频，例如若有两个视频流同时输入，则可以开启多路特性同时处理，一定程度上保证了Device的利用率；多线程则保证了每一路Device的计算资源的利用率，本样例中涉及两个模型，对每个模型的预处理及后处理环节，样例分别拉起了一个业务线程；而推理操作相对预处理及后处理耗时较小，我们则只拉起一个推理线程，通过让两个模型的预处理线程都只往唯一的推理线程发送消息数据，提升了对推理资源的利用率。在实际使用场景中，您可以通过实际测得的数据，适当调整各环节的线程数目，以便进一步地提升资源利用率。
 
 - 对于样例的多路修改，可以通过配置文件“scripts/params.conf”中的参数“device_num”做修改，实现对样例运行总路数的设置。其中每一路都表示一个完整的预处理—推理—后处理流程，每一路支持设置不同的输入及输出数据类型，但样例能够配置的最大路数等于硬件的Device个数。
 - 当前一路业务，有预处理线程数2个、推理线程数1个、后处理线程数2个，累计线程数5个。如果最终的输出数据通过Present Agent进行网页展示，则还会另外拉起一个展示线程。
   对于样例的多线程修改，请参考本节的[定制点分析-修改/新增/删除线程的场景](#thread-modify) 中的内容。此外，样例中Present Agent展示功能为一个独立模块，需要根据实际场景单独判断展示线程是否被拉起。 
 
 ### 样例解析
+
 下面详细介绍本样例的多路多线程的实现方式。
 
-1. 设置多路参数。
+1. 设置多Device、多路参数。
 
-   通过配置文件“scripts/params.conf”进行多路参数的配置。
-   - 设置路数：配置文件中的“device_num”代表设置的路数，当device_num >= 2且为正整数时，代表样例为多路输入。
-   - 设置各路的配置项：根据device_num值，填写相应个数的[device_X_options]下的配置，X即为Device的ID。
-   
+   通过配置文件“scripts/params.conf”进行多Device、多路参数的配置。
+
+   - 设置多Device：通过参数device_num设置执行推理的设备数。
+
+   - 设置每一个Device支持的路数：通过参数RtspNumPerDevice设置每个Device支持的路数，若同时有多个视频输入，可通过此参数开启同时处理多路输入，提升推理性能。
+
    **参数配置约束：** 
-   - 配置的路数需要小于等于设备的最大Device数。
-   - 目前仅支持前四路的输出数据类型填写presentagent，即采用Present Agent网页展示的方式输出推理结果，如果有需要修改，请参见[Present Agent网页展示流程](#other)了解Present Agent展示部分的业务代码逻辑，从而进行修改。
+
+   - 配置的device_num需要小于等于设备的最大Device数。
+   - 若开启了多路特性，即每个Device同时处理多路视频，输出方式不支持配置为presentagent。
 
 2. 读取配置文件中配置的路数，并拉起每一路的业务线程。
+
    - 功能：读取并解析配置文件中参数
 
      代码文件：src/main.cpp
 
      关键代码：
+
      ```
-     AclLiteError ParseConfig(uint32_t& deviceNum) {
+     AclLiteError ParseConfig(uint32_t& deviceNum, uint32_t& rtspNumPerDevice) {
          map<string, string> config;
          if(!ReadConfig(config, kConfigFile)) {
              return ACLLITE_ERROR;
          }
-         // set lookup value
+     
          regex deviceNumRegex(kRegexDeviceNum.c_str());
+         regex RtspNumPerDeviceRegex(kRegexRtspNumPerDevice.c_str());
          map<string, string>::const_iterator mIter = config.begin();
          for (; mIter != config.end(); ++mIter) {
              if (regex_match(mIter->first, deviceNumRegex)) {
                  deviceNum = stoi(mIter->second);
                  ACLLITE_LOG_INFO("Data config item: %s=%s", 
                                 mIter->first.c_str(), mIter->second.c_str());
+             }else if(regex_match(mIter->first, RtspNumPerDeviceRegex)){
+               rtspNumPerDevice = stoi(mIter->second);
+                 ACLLITE_LOG_INFO("Data config item: %s=%s", 
+                                mIter->first.c_str(), mIter->second.c_str());
              }
          }
-    
-         return ACLLITE_OK;
+      return ACLLITE_OK;
      }
      ```
+
+  ```
    - 功能：根据读取到的路数，创建对应个数的线程实例
-
+   
      代码文件：src/main.cpp
-
+   
      关键代码：
-     ```
+  ```
+
      void CreateThreadInstance(vector<AclLiteThreadParam>& threadTbl, AclLiteResource& aclDev) {
          uint32_t deviceNum;
+         uint32_t rtspNumPerDevice;
          runMode = aclDev.GetRunMode();
-         // get device num
-         AclLiteError ret = ParseConfig(deviceNum);
+     
+         AclLiteError ret = ParseConfig(deviceNum, rtspNumPerDevice);
          if (ret != ACLLITE_OK) {
              return;
          }
-         kExitCount = deviceNum;
-         // set each way device and context
+         kExitCount = deviceNum * rtspNumPerDevice;
+     
          for(int32_t i=0; i < deviceNum; i++){
              ret = aclrtSetDevice(i);
              if (ret != ACL_ERROR_NONE) {
@@ -2976,18 +3245,19 @@ Batch即为每次模型推理处理的图片数，动态Batch代表执行推理�
                  return;
              }
              kContext.push_back(context);
-             // create each way thread instance
-             CreateInstances(threadTbl, i, context, runMode);
+             CreateInstances(threadTbl, i, context, runMode, rtspNumPerDevice);
          }
-         ...
+      ...
      }
-     ```
+
+  ```
    - 功能：判断是否需要使用Present Agent进行结果展示
-
+   
      代码文件：src/main.cpp
-
+   
      关键代码：
-     ```
+  ```
+
      void SetDisplay() {
          uint32_t deviceNum;
          AclLiteError ret = ParseConfig(deviceNum);
@@ -3013,15 +3283,17 @@ Batch即为每次模型推理处理的图片数，动态Batch代表执行推理�
                  kDisplay = true;
                  break;
              }
-         }
+      }
      }
-     ```
+
+  ```
    - 功能：若需要Present Agent进行结果展示展示，需要创建展示线程
-
+   
      创建展示线程的代码文件：src/main.cpp
-
+   
      关键代码：
-     ```
+  ```
+
      void CreateThreadInstance(vector<AclLiteThreadParam>& threadTbl, AclLiteResource& aclDev) {
          ...
          if (kDisplay) {
@@ -3030,7 +3302,7 @@ Batch即为每次模型推理处理的图片数，动态Batch代表执行推理�
              presentAgentDisplayThreadParam.threadInstName.assign(kPresentAgentDisplayName.c_str());
              presentAgentDisplayThreadParam.context = context;
              presentAgentDisplayThreadParam.runMode = runMode;
-             threadTbl.push_back(presentAgentDisplayThreadParam);
+          threadTbl.push_back(presentAgentDisplayThreadParam);
          }
      }
      ```
@@ -3038,7 +3310,7 @@ Batch即为每次模型推理处理的图片数，动态Batch代表执行推理�
 3. 拉起所有线程，并发送启动信号。
 
    代码文件：src/main.cpp
-   
+
    ```
    void StartApp(AclLiteResource& aclDev) {
        vector<AclLiteThreadParam> threadTbl;
@@ -3058,21 +3330,21 @@ Batch即为每次模型推理处理的图片数，动态Batch代表执行推理�
    ```
 
 ### 定制点分析
+
 主要包括路数修改和线程修改两种定制场景，由于两者为并列关系，我们分别对两种场景独立分析。
 
 - 路数修改场景。
   路数的修改可通过修改配置文件“scripts/params.conf”中的参数实现。具体方式及约束可参考文档[样例编译运行](#compile-run)。
 
-  此外，由于样例仅支持前4路通过Present Agent进行展示，若超过4路的场景也需要通过Present Agent进行展示，则需要对present agent模块代码及CarParams.h文件进行修改，对present agent的修改及原因请见 [Present Agent网页展示流程](#other)，对CarParams.h的修改请见 [CarParams.h](#car_params.h)。
-
 - <a name="thread-modify">修改/新增/删除线程的场景</a>
   本篇将以样例中的InferenceThread为例，介绍如何从AclLiteThread类继承派生出一个业务子类inference，并将其初始化值传入列表中，并根据列表初始化一个AclLiteApp类对象，即一个管理多线程应用的对象的完整流程。
-  
+
   1. 继承AclLiteThread类，生成一个业务子类InferenceThread。
 
      代码文件：src/inference/inference.h
 
      关键代码：
+
      ```
      // subclass InferenceThread 
      class InferenceThread : public AclLiteThread {
@@ -3103,8 +3375,9 @@ Batch即为每次模型推理处理的图片数，动态Batch代表执行推理�
          uint32_t imageInfoSize_;
          void*    imageInfoBuf_;         
      };
-  
+     
      ```
+
   2. Process函数实现。
 
      Process为数据处理主函数，负责分析接收到的消息数据，并发往对应接口做处理，处理完后再发往业务下端的线程，保证线程间的串连。在基类AclLiteThread中， 该接口为虚函数，因此必须在子类InferenceThread中对该接口进行实现。实现样例如下：
@@ -3112,6 +3385,7 @@ Batch即为每次模型推理处理的图片数，动态Batch代表执行推理�
      代码文件：src/inference/inference.cpp
 
      关键代码：
+
      ```
      AclLiteError InferenceThread::Process(int msgId, shared_ptr<void> data) {
          switch(msgId) {
@@ -3133,19 +3407,19 @@ Batch即为每次模型推理处理的图片数，动态Batch代表执行推理�
                  ACLLITE_LOG_INFO("Inference thread ignore msg %d", msgId);
                  break;
        }
-  
+     
          return ACLLITE_OK;
         
      }
-  
+     
      ```
-  
+
   3. 为实现的子类InferenceThread，提供一个或多个对应的消息数据ID，以便在线程间通信时，区分消息数据收/发来源。
 
      代码文件：<a name="car_params.h">inc/CarParams.h</a>
 
      关键代码：
-     
+
      ```
      ...
      namespace {
@@ -3157,19 +3431,20 @@ Batch即为每次模型推理处理的图片数，动态Batch代表执行推理�
      }
      ...
      ```
-     
+
   4. 为实现的子类InferenceThread，提供一组对应的字符串变量，以便在创建线程时，保证线程名全局唯一。
 
      代码文件：inc/CarParams.h
 
      关键代码：
+
      ```
      namespace {
      ...
      const std::vector<std::string> kInferName = {"inference_0", "inference_1", "inference_2", "inference_3"};
      }
      ...
-  
+     
      ```
 
  5. 设置初始化InferenceThread对象的参数值，并将参数添加到线程初始化参数表中。
@@ -3177,6 +3452,7 @@ Batch即为每次模型推理处理的图片数，动态Batch代表执行推理�
     代码文件：src/main.cpp
 
     关键代码：
+
     ```
     void CreateInstances(vector<AclLiteThreadParam>& threadTbl, int32_t i,
                          aclrtContext& context, aclrtRunMode& runMode) {
@@ -3191,11 +3467,13 @@ Batch即为每次模型推理处理的图片数，动态Batch代表执行推理�
         ...
     }
     ```
+
   6. 设置好初始化线程的参数列表，创建AclLiteApp类对象及线程并向各线程发送消息拉起线程。
 
      代码文件：src/main.cpp
 
      关键代码：
+
      ```
      void StartApp(AclLiteResource& aclDev) {
          vector<AclLiteThreadParam> threadTbl;
@@ -3209,20 +3487,21 @@ Batch即为每次模型推理处理的图片数，动态Batch代表执行推理�
              ExitApp(app, threadTbl);
              return;
          }
-
+     
          for (int i = 0; i < threadTbl.size(); i++) {
              //activate threads
              ret = SendMessage(threadTbl[i].threadInstId, MSG_APP_START, nullptr);
          }
-
+     
          app.Wait(MainThreadProcess, nullptr);
          ExitApp(app, threadTbl);
-
+     
          return;
      }
      ```
 
 ### <a name="other">Present Agent网页展示流程</a>
+
 存在场景需要对Present Agent展示页面做修改时，可以参考本节了解Present Agent网页展示业务流程。
 
 1. 判断是否需要拉起网页展示线程：
@@ -3230,6 +3509,7 @@ Batch即为每次模型推理处理的图片数，动态Batch代表执行推理�
    代码文件：src/main.cpp
 
    关键代码：
+
    ```
    void SetDisplay() {
        //if need display
@@ -3281,7 +3561,7 @@ Batch即为每次模型推理处理的图片数，动态Batch代表执行推理�
        detection_results.emplace_back(one_result);
        ...
    }
-
+   
    ```
 
 3. Present Agent网页的前端代码会将展示页面分为若干块（当前为四块）。
@@ -3289,6 +3569,7 @@ Batch即为每次模型推理处理的图片数，动态Batch代表执行推理�
    代码文件：display/presenterserver/display/ui/templates/view.html
 
    关键代码：
+
    ```
    // set canvas resolution，canvas_x，canvas_y
    canvas.setAttribute("width",1280)
@@ -3316,21 +3597,24 @@ Batch即为每次模型推理处理的图片数，动态Batch代表执行推理�
    代码文件：display/presenterserver/display/ui/templates/view.html
 
    关键代码：
+
    ```
    var channel_tmp = rectangles[0].slice(4,5).toString();
    var current_channel = parseInt(channel_tmp.split("device-")[1].trim())
    ```
+
 5. 因此，当需要修改展示路数时，可以自行参考上方代码及备注，设置网页展示区域及宽高，自行划块。
 
 6. Present Agent网页展示业务代码
 
-   | **业务说明**            | **业务代码文件**               | **业务接口**      |
-   |---------------------- | ------------------------------|------------------|
-   | 标记推理数据 | src/presentagentDisplay/presentagentDisplay.cpp | DisplayMsgPackage() |
-   | 网页识别标记 | display/presenterserver/display/ui/templates/view.html |...<br>var channel_tmp = rectangles[0].slice(4,5).toString();<br>var current_channel = parseInt(channel_tmp.split("device-")[1].trim())<br>... |
-   | 展示页面划块，并根据标记贴图至指定区域 | display/presenterserver/display/ui/templates/view.html |...<br>canvas.setAttribute("width",1280)<br>canvas.setAttribute("height",720)<br>...<br>if(current_channel == 0){<br> ctx.drawImage(img,40,20, wantedWidth, img.height*scale_factor)<br>}<br>                  else if(current_channel == 1){<br>ctx.drawImage(img,680,20, wantedWidth, img.height*scale_factor)<br>}<br>else if(current_channel == 2){<br>ctx.drawImage(img,40,380, wantedWidth, img.height*scale_factor)<br>}<br>else{<br>ctx.drawImage(img,680,380, wantedWidth, img.height*scale_factor)<br>}<br>... |
+   | **业务说明**                           | **业务代码文件**                                       | **业务接口**                                                 |
+   | -------------------------------------- | ------------------------------------------------------ | ------------------------------------------------------------ |
+   | 标记推理数据                           | src/presentagentDisplay/presentagentDisplay.cpp        | DisplayMsgPackage()                                          |
+   | 网页识别标记                           | display/presenterserver/display/ui/templates/view.html | ...<br>var channel_tmp = rectangles[0].slice(4,5).toString();<br>var current_channel = parseInt(channel_tmp.split("device-")[1].trim())<br>... |
+   | 展示页面划块，并根据标记贴图至指定区域 | display/presenterserver/display/ui/templates/view.html | ...<br>canvas.setAttribute("width",1280)<br>canvas.setAttribute("height",720)<br>...<br>if(current_channel == 0){<br> ctx.drawImage(img,40,20, wantedWidth, img.height*scale_factor)<br>}<br>                  else if(current_channel == 1){<br>ctx.drawImage(img,680,20, wantedWidth, img.height*scale_factor)<br>}<br>else if(current_channel == 2){<br>ctx.drawImage(img,40,380, wantedWidth, img.height*scale_factor)<br>}<br>else{<br>ctx.drawImage(img,680,380, wantedWidth, img.height*scale_factor)<br>}<br>... |
 
 ## 模型压缩
+
 昇腾模型压缩工具（Ascend Model Compression Toolkit，简称AMCT），是一个对昇腾AI处理器亲和的深度学习模型压缩工具包，提供了量化、稀疏等多种模型压缩特性，压缩后模型体积变小、达到轻量化，部署到昇腾AI处理器上后可使能低比特运算，在不影响精度的前提下提高存储、计算效率，从而达到性能提升的目标。
 
 AMCT工具支持对Caffe、TensorFlow、PyTorch、ONNX、MindSpore等框架的原始网络模型进行压缩，例如，可将fp32/fp16的类型量化为int8类型，在保证模型精度不损失的情况下，得到性能更好的模型。
@@ -3341,6 +3625,7 @@ AMCT工具支持对Caffe、TensorFlow、PyTorch、ONNX、MindSpore等框架的�
 针对轻量级模型，使用AMCT工具收益较小，且可能存在精度达不到预期的情况。
 
 ## 模型调优
+
 CANN提供了自动化调优工具Auto Tune，可充分利用硬件资源对模型中的算子进行自动调优，从而提升模型执行的性能。
 Auto Tune工具的使用方式简单，只需要在生成离线模型时打开auto_tune_mode开关，即可使用Auto Tune调优工具。调优后的结果会放在自定义知识库中，后续执行模型时只需要加载自定义知识库即可享受调优后的算子性能。
 

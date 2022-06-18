@@ -152,7 +152,7 @@ typedef struct {
     function announce
 *******************************************************/
 void* jpege_snap_send_frame(void* p);
-void* jpege_snap_send_frame_dc_performace(void* p);
+void* jpege_snap_send_frame_dc_performance(void* p);
 int32_t jpege_snap_start(hi_venc_chn vencChn, hi_video_size* size, hi_bool supportDc, uint32_t level);
 void* jpege_snap_process_epoll(void* p);
 void* jpege_snap_process(void* p);

@@ -38,18 +38,18 @@ const vector<cv::Scalar> kColors{
   cv::Scalar(139, 85, 26) };
 }
 
-ClassifyPostprocessThread::ClassifyPostprocessThread(const char*& configFile, int deviceId): 
+ClassifyPostprocessThread::ClassifyPostprocessThread(const char*& configFile, int channelId): 
 configFile_(configFile),
-deviceId_(deviceId) {
+channelId_(channelId) {
 }
 
 ClassifyPostprocessThread::~ClassifyPostprocessThread() {
     configFile_ = nullptr;
 }
 
-AclLiteError ClassifyPostprocessThread::GetOutputFrameResolution(int& frameWidth, int& frameHeight, uint32_t deviceId) {
-    std::string outputFrameWidthKey = "outputFrameWidth_" + to_string(deviceId);
-    std::string outputFrameHeightKey = "outputFrameHeight_" + to_string(deviceId);
+AclLiteError ClassifyPostprocessThread::GetOutputFrameResolution(int& frameWidth, int& frameHeight, uint32_t channelId) {
+    std::string outputFrameWidthKey = "outputFrameWidth_" + to_string(channelId);
+    std::string outputFrameHeightKey = "outputFrameHeight_" + to_string(channelId);
 
     std::map<std::string, std::string> config;
     if(!ReadConfig(config, configFile_)) {
@@ -61,19 +61,19 @@ AclLiteError ClassifyPostprocessThread::GetOutputFrameResolution(int& frameWidth
         if (mIter->first == outputFrameWidthKey) {
             frameWidth = atoi(mIter->second.c_str());
             ACLLITE_LOG_INFO("video %d width %d", 
-                             deviceId, frameWidth);
+                             channelId, frameWidth);
         } else if (mIter->first == outputFrameHeightKey) {
             frameHeight = atoi(mIter->second.c_str());
             ACLLITE_LOG_INFO("video %d height %d", 
-                             deviceId, frameHeight);
+                             channelId, frameHeight);
         }
     }
 
     return ACLLITE_OK;
 }
 
-AclLiteError ClassifyPostprocessThread::GetOutputDataType(std::string& outputType, uint32_t deviceId) {
-    std::string outputTypeKey = "outputType_" + to_string(deviceId);
+AclLiteError ClassifyPostprocessThread::GetOutputDataType(std::string& outputType, uint32_t channelId) {
+    std::string outputTypeKey = "outputType_" + to_string(channelId);
     std::map<std::string, std::string> config;
     if(!ReadConfig(config, configFile_)) {
         return ACLLITE_ERROR;
@@ -84,12 +84,13 @@ AclLiteError ClassifyPostprocessThread::GetOutputDataType(std::string& outputTyp
         if (mIter->first == outputTypeKey) {
             outputType.assign(mIter->second.c_str());
             ACLLITE_LOG_INFO("device %d output type is : %s", 
-                             deviceId, outputType.c_str());
+                             channelId, outputType.c_str());
         }
     }
     if (outputType.empty() || (outputType != "video" &&
-        outputType != "pic" && outputType != "presentagent")) {
-        ACLLITE_LOG_ERROR("device %d output type is invalid", deviceId);
+        outputType != "pic" && outputType != "presentagent" &&
+        outputType != "stdout")) {
+        ACLLITE_LOG_ERROR("device %d output type is invalid", channelId);
         return ACLLITE_ERROR;     
     }
 
@@ -99,20 +100,20 @@ AclLiteError ClassifyPostprocessThread::GetOutputDataType(std::string& outputTyp
 AclLiteError ClassifyPostprocessThread::SetOutputVideo() {
     stringstream sstream;
     sstream.str("");
-    sstream << "../out/output/out_test" << deviceId_<<".mp4";
+    sstream << "../out/output/out_test" << channelId_<<".mp4";
     outputVideo_.open(sstream.str(), cv::VideoWriter::fourcc('m', 'p', '4', 'v'), 25.0, cv::Size(outputFrameWidth_,outputFrameHeight_));
     return ACLLITE_OK;
 }
 
 AclLiteError ClassifyPostprocessThread::Init() {
 
-    AclLiteError ret = GetOutputDataType(outputType_, deviceId_);
+    AclLiteError ret = GetOutputDataType(outputType_, channelId_);
     if (ret != ACLLITE_OK) {
         return ACLLITE_ERROR;
     }
 
     if (outputType_ == "video") {
-        ret = GetOutputFrameResolution(outputFrameWidth_, outputFrameHeight_, deviceId_);
+        ret = GetOutputFrameResolution(outputFrameWidth_, outputFrameHeight_, channelId_);
         if (ret != ACLLITE_OK) {
             ACLLITE_LOG_ERROR("Set output frame resolution failed, error %d", ret);
             return ACLLITE_ERROR;
@@ -168,6 +169,19 @@ AclLiteError ClassifyPostprocessThread::DisplayMsgSend(shared_ptr<CarDetectDataM
     return ACLLITE_OK;
 }
 
+AclLiteError ClassifyPostprocessThread::PrintResult(shared_ptr<CarDetectDataMsg> &carDetectDataMsg) {
+    cout<<"[rtsp video "<<carDetectDataMsg->channelId<<"]: { ";
+    for (int i = 0; i < carDetectDataMsg->carInfo.size(); ++i) {
+        cout<<"[car"<<i<<",("<<carDetectDataMsg->carInfo[i].rectangle.lt.x
+        <<","<<carDetectDataMsg->carInfo[i].rectangle.lt.y<<"),("
+        <<carDetectDataMsg->carInfo[i].rectangle.rb.x
+        <<","<<carDetectDataMsg->carInfo[i].rectangle.rb.y<<"),"
+        <<carDetectDataMsg->carInfo[i].carColor_result<<"] ";
+    }
+    cout<<"}"<<endl;
+    return ACLLITE_OK;
+}
+
 AclLiteError ClassifyPostprocessThread::DrawResultOnPic(shared_ptr<CarDetectDataMsg> &carDetectDataMsg) {
     
     for (int i = 0; i < carDetectDataMsg->carInfo.size(); ++i) {
@@ -183,7 +197,7 @@ AclLiteError ClassifyPostprocessThread::DrawResultOnPic(shared_ptr<CarDetectData
 
     stringstream sstream;
     sstream.str("");
-    sstream << "../out/output/device_" << carDetectDataMsg->deviceId << "_out_pic_" << carDetectDataMsg->frameNum << ".jpg";
+    sstream << "../out/output/device_" << carDetectDataMsg->channelId << "_out_pic_" << carDetectDataMsg->frameNum << ".jpg";
     cv::imwrite(sstream.str(), carDetectDataMsg->frame);
     return ACLLITE_OK;
 }
@@ -230,7 +244,9 @@ AclLiteError ClassifyPostprocessThread::SendImage(shared_ptr<CarDetectDataMsg> &
 
 AclLiteError ClassifyPostprocessThread::InferOutputProcess(shared_ptr<CarDetectDataMsg> carDetectDataMsg) {
     if (carDetectDataMsg->isLastFrame == 1) {
-        outputVideo_.release();
+        if(outputType_ == "video"){
+            outputVideo_.release();
+        }
         if (outputType_ != "presentagent"){
             SendMessage(carDetectDataMsg->classifyPostThreadId, MSG_ENCODE_FINISH, nullptr);
             ACLLITE_LOG_INFO("it is lastframe in classifyPost without presentagent");
@@ -248,6 +264,7 @@ AclLiteError ClassifyPostprocessThread::InferOutputProcess(shared_ptr<CarDetectD
     }
 
     if (carDetectDataMsg->flag == 1 ) {
+        //there is no car detected
         if (outputType_ == "video") {
             outputVideo_ << carDetectDataMsg->frame;
             return ACLLITE_OK;            
@@ -294,6 +311,13 @@ AclLiteError ClassifyPostprocessThread::InferOutputProcess(shared_ptr<CarDetectD
         ret = SendImage(carDetectDataMsg);
         if (ret != ACLLITE_OK) {
             ACLLITE_LOG_ERROR("Send image to presentAgent failed, error %d", ret);
+            return ACLLITE_ERROR;
+        }
+    }
+    else if (outputType_ == "stdout") {
+        ret = PrintResult(carDetectDataMsg);
+        if (ret != ACLLITE_OK) {
+            ACLLITE_LOG_ERROR("stdout result on screen failed, error %d", ret);
             return ACLLITE_ERROR;
         }
     }

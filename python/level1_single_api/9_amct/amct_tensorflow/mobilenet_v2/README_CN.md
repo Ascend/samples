@@ -22,7 +22,7 @@
   + [calibration/](./data/calibration/)
   + [classification.jpg](./data/classification.jpg)
 + [model](./model/)
-  + [mobilenetv2_tf.pb](./model/mobilenetv2_tf.pb)
+  + [mobilenet_v2_1.0_224_frozen.pb](./model/mobilenet_v2_1.0_224_frozen.pb)
 + [src](./src/)
   + [mobilenet_v2_calibration.py](./src/mobilenet_v2_calibration.py)
 
@@ -73,7 +73,7 @@ Quantized Model Prediction:
   + [classification.jpg](./data/classification.jpg)
   + [record_quantized.txt](./data/record_quantized.txt)
 + [model](./model/)
-  + [mobilenetv2_tf.pb](./model/mobilenetv2_tf.pb)
+  + [mobilenet_v2_1.0_224_frozen.pb](./model/mobilenet_v2_1.0_224_frozen.pb)
 + [src](./src/)
   + [mobilenet_v2_convert_model.py](./src/mobilenet_v2_convert_model.py)
 
@@ -168,7 +168,7 @@ Quantized Model Prediction:
 执行量化示例前，请先检查当前目录下是否包含以下文件及目录：
 
 + [model](./model/)
-  + [mobilenetv2_tf.pb](./model/mobilenetv2_tf.pb)
+  + [mobilenet_v2_1.0_224_frozen.pb](./model/mobilenet_v2_1.0_224_frozen.pb)
 + [src](./src/)
   + [mobilenet_v2_accuracy_based_auto_calibration.py](./src/mobilenet_v2_accuracy_based_auto_calibration.py)
 

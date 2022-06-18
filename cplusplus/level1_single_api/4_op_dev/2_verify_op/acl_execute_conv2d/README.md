@@ -2,7 +2,7 @@
 
 ## Overview
 
-This sample verifies the function of the  [custom operator Conv2dTik](../../1_custom_op/doc/Conv2d_EN.md)  by converting the custom operator file into a single-operator offline model file and loading the file using AscendCL for execution. 
+This sample verifies the function of the  [custom operator Conv2dTik](../../1_custom_op/doc/Conv2d_EN.md)  by converting the custom operator file into a single-operator offline model file and loading the file using AscendCL for execution.
 
 Note: The generation of a single-operator model file depends only on the operator code implementation file, operator prototype definition, and operator information library, but does not depend on the operator adaptation plugin.
 
@@ -33,7 +33,7 @@ Note: The generation of a single-operator model file depends only on the operato
 ## Environment Requirements
 
 -   OS and architecture: CentOS x86\_64, CentOS AArch64, Ubuntu 18.04 x86\_64, Ubuntu 18.04 aarch64
--   SoC: Ascend 310 or Ascend 710
+-   SoC: Ascend 310 or Ascend 310P
 -   Python version and dependency library: Python 3.7.*x* (3.7.0 to 3.7.11) and Python 3.8.*x* (3.8.0 to 3.8.11).
 -   Ascend AI Software Stack deployed
 -   Custom operator built and deployed by referring to  [custom\_op](../../1_custom_op)
@@ -102,7 +102,7 @@ Note: The generation of a single-operator model file depends only on the operato
     Replace  **$HOME/Ascend**  with the actual component installation path.
 
 
-## Build and Run 
+## Build and Run
 
 1.  Generate the single-operator offline model file of the Conv2dTik operator.
     1.  Log in to the development environment as a running user \(for example,  **HwHiAiUser**\) and go to the  **acl\_execute\_conv2d/run/out**  directory of the sample project.
@@ -151,7 +151,7 @@ Note: The generation of a single-operator model file depends only on the operato
            For example, if the development environment is x86 and the running environment is AArch64 , run the following command:
 
            **cd build/intermediates/host**
-           
+
            **cmake ../../../src -DCMAKE\_CXX\_COMPILER=aarch64-linux-gnu-g++ -DCMAKE\_SKIP\_RPATH=TRUE**
 
          The parameters are described as follows:

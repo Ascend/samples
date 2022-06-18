@@ -24,7 +24,7 @@
 │               └── generate_conv2d.py    // 生成测试数据的脚本
 ├── src
 │   ├── CMakeLists.txt    // 编译规则文件
-│   ├── common.cpp         // 公共函数，读取二进制文件函数的实现文件  
+│   ├── common.cpp         // 公共函数，读取二进制文件函数的实现文件
 │   ├── main.cpp    // 将单算子编译为om文件并加载om文件执行，此文件中包含算子的相关配置，若验证其他单算子，基于此文件修改
 │   ├── operator_desc.cpp     // 构造算子的输入与输出描述
 │   ├── op_runner.cpp   // 单算子编译与运行函数实现文件
@@ -33,7 +33,7 @@
 ## 环境要求
 
 -   操作系统及架构：CentOS x86\_64、CentOS aarch64、Ubuntu 18.04 x86\_64、Ubuntu 18.04 aarch64、
--   芯片：Ascend 310、Ascend 710
+-   芯片：Ascend 310、Ascend 310P
 -   python及依赖的库：Python3.7.*x*（3.7.0 ~ 3.7.11）、Python3.8.*x*（3.8.0 ~ 3.8.11）
 -   已完成昇腾AI软件栈的部署。
 -   已参考[custom\_op](../../1_custom_op)完成自定义算子的编译部署。

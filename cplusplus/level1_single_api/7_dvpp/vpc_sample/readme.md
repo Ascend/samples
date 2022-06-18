@@ -1,7 +1,7 @@
 # readme<a name="ZH-CN_TOPIC_0000001073131184"></a>
 
 ### 本样例为大家学习昇腾软件栈提供参考，非商业目的！
-### 本样例适配5.0.3及以上版本，支持产品为710设备。
+### 本样例适配5.0.3及以上版本，支持产品为310P设备。
 
 
 ## 功能描述<a name="section09679311389"></a>
@@ -32,7 +32,7 @@ DVPP中的VPC功能模块，实现图片的抠图、缩放、边界填充、色�
 
     EP标准形态编译器：g++
 
-- 芯片：Ascend710
+- 芯片：Ascend310P
 
 - 已完成昇腾AI软件栈在开发环境、运行环境上的部署。
 
@@ -268,8 +268,6 @@ DVPP中的VPC功能模块，实现图片的抠图、缩放、边界填充、色�
     -   padding\_mode：填充模式。
         -   0：添加有颜色的常数值边界。设置该模式时，可以通过padding\_val\_r、padding\_val\_g、padding\_val\_b参数设置颜色。
         -   1：重复最后一个元素。举例: aaaaaa|abcdefgh|hhhhhhh。
-        -   2：带边界元素的镜像。举例：ba|abcde-fgh|hg。
-        -   3：不带边界元素的镜像。举例：cb|abcde-fgh|gf。
     -   multi\_count：剪裁缩放图片数量。支持多张图片。
 
 
@@ -404,8 +402,6 @@ DVPP中的VPC功能模块，实现图片的抠图、缩放、边界填充、色�
     -   padding\_mode：填充模式。
         -   0：添加有颜色的常数值边界。设置该模式时，可以通过padding\_val\_r、padding\_val\_g、padding\_val\_b参数设置颜色。
         -   1：重复最后一个元素。举例: aaaaaa|abcdefgh|hhhhhhh。
-        -   2：带边界元素的镜像。举例：ba|abcde-fgh|hg。
-        -   3：不带边界元素的镜像。举例：cb|abcde-fgh|gf。
     -   in\_image\_num：输入图片数量。支持多张图片。
     -   multi\_count：剪裁缩放图片数量。支持多张图片。
 
@@ -436,7 +432,7 @@ DVPP中的VPC功能模块，实现图片的抠图、缩放、边界填充、色�
 -   输出图像：宽384像素、高300像素、格式为yuv420SP NV12的图片，图片名称为384x300_nv12.yuv。
 -   参数说明如下：
     -   test_type、in_image_file、out_image_file、img_width、img_height、in_format参数说明请参见[3](#li163081446761)。
-    -   in_width_align：输入图片的宽对齐值，例如输入图片的高为382，满足1对齐。
-    -   in_height_align：输入图片的高对齐值，例如输入图片的宽为300，满足1对齐。
+    -   in_width_align：输入图片的宽对齐值，例如输入图片的宽为382，满足1对齐。
+    -   in_height_align：输入图片的高对齐值，例如输入图片的高为300，满足1对齐。
     -   out_width_align：输出图片的宽对齐值，例如输入图片的宽为382，通过此参数设置输出图片的宽需满足16对齐，则输出图片的宽为384。
     -   out_height_align：输出图片的高对齐值，例如输入图片的高为300，通过此参数设置输出图片的高需满足2对齐，则输出图片的高为300，因为300已满足2对齐。
