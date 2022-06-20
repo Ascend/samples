@@ -8,4 +8,4 @@ This catalog is a sample of media data processing functions supported by Atlas f
 
 | sample  | description  | support chip |
 |---|---|---|
-| [venc_image](./venc_image)  | Media data processing (video encoding)  |  Ascend310，Ascend710 |
+| [venc_image](./venc_image)  | Media data processing (video encoding)  |  Ascend310，Ascend310P |

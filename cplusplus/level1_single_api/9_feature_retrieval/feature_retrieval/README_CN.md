@@ -24,12 +24,12 @@
 ## 环境要求<a name="zh-cn_topic_0230709958_section1256019267915"></a>
 
 -   操作系统及架构：CentOS x86\_64、CentOS aarch64、Ubuntu 18.04 x86\_64、EulerOS x86、EulerOS aarch64
--   芯片：Ascend 710
+-   芯片：Ascend 310P
 -   已完成昇腾AI软件栈的部署。
 
 ## 配置环境变量<a name="section053142383519"></a>
 
--   Ascend 710
+-   Ascend 310P
     1.  开发环境上，设置环境变量，配置AscendCL单算子验证程序编译依赖的头文件与库文件路径。
 
         编译脚本会按环境变量指向的路径查找编译依赖的头文件和库文件，“$HOME/Ascend”请替换“Ascend-cann-toolkit”包的实际安装路径。
@@ -62,7 +62,7 @@
         export LD_LIBRARY_PATH=$HOME/Ascend/nnrt/latest/acllib/lib64
         ```
 
-## 编译运行（Ascend 710）<a name="section170442411445"></a>
+## 编译运行（Ascend 310P）<a name="section170442411445"></a>
 
 1.  进入样例工程的目录。
     1.  以运行用户（例如HwHiAiUser）登录开发环境，并进入样例工程的目录。

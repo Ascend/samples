@@ -65,7 +65,7 @@
 
 -   操作系统及架构：CentOS 7.6 x86\_64、CentOS aarch64、Ubuntu 18.04 x86\_64、EulerOS x86、EulerOS aarch64
 -   编译器：g++或aarch64-linux-gnu-g++
--   芯片：Ascend 310、Ascend 710、Ascend 910
+-   芯片：Ascend 310、Ascend 310P、Ascend 910
 -   python及依赖的库：python3.7.5
 -   已在环境上部署昇腾AI软件栈
 

@@ -96,7 +96,7 @@
 
 -   操作系统及架构：CentOS 7.6 x86\_64、CentOS aarch64、Ubuntu 18.04 x86\_64、EulerOS x86、EulerOS aarch64
 -   编译器：g++或aarch64-linux-gnu-g++
--   芯片：Ascend 310、Ascend 710、Ascend 910
+-   芯片：Ascend 310、Ascend 310P、Ascend 910
 -   python及依赖的库：python3.7.5
 -   已在环境上部署昇腾AI软件栈
 
@@ -189,7 +189,7 @@
         -   --framework：原始框架类型。0：表示Caffe；1：表示MindSpore；3：表示TensorFlow；5：表示ONNX。
         -   --soc\_version：
             -   昇腾310 AI处理器，此处配置为Ascend310。
-            -   昇腾710 AI处理器，此处配置为Ascend710。
+            -   昇腾310P AI处理器，此处配置为Ascend310P。
             -   昇腾910 AI处理器，此处配置为Ascend910A或Ascend910B或Ascend910ProA或Ascend910ProB或Ascend910PremiumA，其中，Pro或Premium表示芯片性能提升等级、A或B表示PartialGood等级，请根据实际情况选择。
 
         -   --insert\_op\_conf：插入AIPP（AI Preprocessing）算子的配置文件路径，用于在AI Core上完成图像预处理，包括改变图像尺寸、色域转换（转换图像格式）、减均值/乘系数（改变图像像素），数据处理之后再进行真正的模型推理。

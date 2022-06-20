@@ -59,7 +59,7 @@ function main() {
 
         # 转模型
         cd ${project_path}/
-        atc --singleop=${project_path}/run/out/test_data/config/gemm.json --soc_version=Ascend710 --output=${HOME}/models/${project_name}           
+        atc --singleop=${project_path}/run/out/test_data/config/gemm.json --soc_version=Ascend310P --output=${HOME}/models/${project_name}           
         if [ $? -ne 0 ];then
             echo "ERROR: convert model failed"
             return ${inferenceError}

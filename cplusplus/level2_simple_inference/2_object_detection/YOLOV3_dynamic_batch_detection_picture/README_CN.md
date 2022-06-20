@@ -80,7 +80,7 @@
 
 -   操作系统及架构：CentOS 7.6 x86\_64、CentOS aarch64、Ubuntu 18.04 x86\_64、EulerOS x86、EulerOS aarch64
 -   编译器：g++或aarch64-linux-gnu-g++
--   芯片：Ascend 310、Ascend 710、Ascend 910
+-   芯片：Ascend 310、Ascend 310P、Ascend 910
 -   python及依赖的库：python3.7.5
 -   已在环境上部署昇腾AI软件栈
 
@@ -182,7 +182,7 @@
         -   --dynamic\_image\_size：设置输入图片的动态分辨率参数，适用于执行推理时，每次处理图片宽和高不固定的场景。
         -   --soc\_version：
             -   昇腾310 AI处理器，此处配置为Ascend310。
-            -   昇腾710 AI处理器，此处配置为Ascend710。
+            -   昇腾310P AI处理器，此处配置为Ascend310P。
             -   昇腾910 AI处理器，此处配置为Ascend910A或Ascend910B或Ascend910ProA或Ascend910ProB或Ascend910PremiumA，其中，Pro或Premium表示芯片性能提升等级、A或B表示PartialGood等级，请根据实际情况选择。
         -   --output：生成的yolov3\_dynamic\_batch.om或者yolov3\_dynamic\_hw.om文件存放在“样例目录/model“目录下。建议使用命令中的默认设置，否则在编译代码前，您还需要修改sample\_process.cpp中的omModelPath参数值。
 

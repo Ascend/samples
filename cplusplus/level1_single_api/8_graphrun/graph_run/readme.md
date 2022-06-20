@@ -29,7 +29,7 @@
 
 -   操作系统及架构：Euleros x86系统、Euleros aarch64系统
 -   编译器：g++
--   芯片：Ascend910系列、Ascend710系列
+-   芯片：Ascend910系列、Ascend310P系列
 -   python及依赖的库：python3.7.5
 -   已完成昇腾AI软件栈在运行环境上的部署
 

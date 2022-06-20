@@ -25,7 +25,7 @@ ResNet-50模型的基本介绍如下：
 
 -   操作系统及架构：CentOS 7.6 x86\_64、CentOS aarch64、Ubuntu 18.04 x86\_64、EulerOS x86、EulerOS aarch64
 -   编译器：g++ 或 aarch64-linux-gnu-g++
--   芯片：Ascend 310、Ascend 710、Ascend 910
+-   芯片：Ascend 310、Ascend 310P、Ascend 910
 -   python及依赖的库：python3.7.5、Pillow库
 -   已在环境上部署昇腾AI软件栈，并配置对应的的环境变量，请参见[Link](https://gitee.com/link?target=https%3A%2F%2Fwww.hiascend.com%2Fdocument)中对应版本的CANN安装指南。
 
@@ -111,7 +111,7 @@ resnet50_firstapp
     -   --soc\_version：昇腾AI处理器的版本。
 
         -   昇腾310 AI处理器，此处配置为Ascend310。
-        -   昇腾710 AI处理器，此处配置为Ascend710。
+        -   昇腾310P AI处理器，此处配置为Ascend310P。
         -   昇腾910 AI处理器，此处配置为Ascend910A或Ascend910B或Ascend910ProA或Ascend910ProB或Ascend910PremiumA，其中，Pro或Premium表示芯片性能提升等级、A或B表示PartialGood等级，请根据实际情况选择。
 
         配置为Ascend610。

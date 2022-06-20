@@ -81,7 +81,7 @@ The directory structure of the sample is as follows:
 
 -   OS and architecture: CentOS 7.6 x86\_64, CentOS AArch64, Ubuntu 18.04 x86\_64, EulerOS x86, EulerOS AArch64
 -   Compiler: g++ or aarch64-linux-gnu-g++
--   Processor: Ascend 310, Ascend 710, or Ascend 910
+-   Processor: Ascend 310, Ascend 310P, or Ascend 910
 -   Python version and dependency library: Python 3.7.5
 -   Ascend AI Software Stack deployed
 
@@ -183,7 +183,7 @@ The directory structure of the sample is as follows:
         -   --**dynamic\_image\_size**: dynamic image size profiles. Applies to the scenario where image size per inference batch is unfixed.
         -   --**soc\_version**:
             -   For Ascend 310 AI Processors, set this parameter to **Ascend310**.
-            -   For Ascend 710 AI Processors, set this parameter to **Ascend710**.
+            -   For Ascend 310P AI Processors, set this parameter to **Ascend310P**.
             -   For Ascend 910 AI Processors, set this parameter to **Ascend910A**, **Ascend910B**, **Ascend910ProA**, **Ascend910ProB**, or **Ascend910PremiumA** as required. "Pro" and "Premium" indicate the performance improvement levels of processors, and "A" and "B" indicate the PartialGood levels.
         -   --**output**: directory for storing the generated **yolov3\_dynamic\_batch.om** or **yolov3\_dynamic\_hw.om** file, that is, **/model** under the sample directory. The default path in the command example is recommended. To specify another path, change the value of **omModelPath** in **sample\_process.cpp** before building the code.
 

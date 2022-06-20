@@ -20,7 +20,7 @@ Slice算子功能：从tensor中提取切片。此操作从tensor“x”(第一�
 ## 环境要求
 
 -   操作系统及架构：CentOS x86\_64、CentOS aarch64、Ubuntu 18.04 x86\_64、Ubuntu 18.04 aarch64、EulerOS x86、EulerOS aarch64
--   芯片：Ascend 310、Ascend 710、Ascend 910
+-   芯片：Ascend 310、Ascend 310P、Ascend 910
 -   python及依赖的库：Python3.7.*x*（3.7.0 ~ 3.7.11）、Python3.8.*x*（3.8.0 ~ 3.8.11）
 -   已完成昇腾AI软件栈的部署。
 -   已完成自定义算子的编译部署。

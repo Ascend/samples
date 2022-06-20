@@ -70,7 +70,7 @@ The sample directory is organized as follows:
 
 -   OS and architecture: CentOS x86\_64, CentOS AArch64, Ubuntu 18.04 x86\_64, Ubuntu 18.04 aarch64,  EulerOS x86, EulerOS AArch64
 -   Compiler: g++ or aarch64-linux-gnu-g++
--   SoC: Ascend 310 AI Processor, Ascend 710 AI Processor, Ascend 910 AI Processor
+-   SoC: Ascend 310 AI Processor, Ascend 310P AI Processor, Ascend 910 AI Processor
 -   Python version and dependency library: Python 3.7.5
 -   Ascend AI Software Stack deployed
 

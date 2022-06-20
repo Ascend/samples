@@ -65,7 +65,7 @@ The sample directory is organized as follows:
 
 -   OS and architecture: CentOS x86\_64, CentOS AArch64, Ubuntu 18.04 x86\_64, Ubuntu 18.04 aarch64,  EulerOS x86, EulerOS AArch64
 -   Compiler: g++ or aarch64-linux-gnu-g++
--   SoC: Ascend 310 AI Processor, Ascend 710 AI Processor, Ascend 910 AI Processor
+-   SoC: Ascend 310 AI Processor, Ascend 310P AI Processor, Ascend 910 AI Processor
 -   Python version and dependency library: Python 3.7.5
 -   Ascend AI Software Stack deployed
 
@@ -148,9 +148,9 @@ The sample directory is organized as follows:
         ```
 
         -   **--singleop**: directory of the single-operator definition file \(.json\)
-        -   **--soc\_version**: SoC version, either  **Ascend310**  or  **Ascend710**.
+        -   **--soc\_version**: SoC version, either  **Ascend310**  or  **Ascend310P**.
             -   Ascend 310 AI Processor, set this parameter to **Ascend310**.
-            -   Ascend 710 AI Processor, set this parameter to **Ascend710**.
+            -   Ascend 310P AI Processor, set this parameter to **Ascend310P**.
             -   Ascend 910 AI Processor, set this parameter to **Ascend910A** or **Ascend910B** or **Ascend910ProA** or **Ascend910ProB** or **Ascend910PremiumA**. **Pro** or **Premium** indicate the performance improvement level. **A** or **B** indicate PartialGood level. Select a value based on the site requirements.
         -   **--output**: directory for storing the generated .om file, that is, the  **run/out/op\_models**  directory.
 

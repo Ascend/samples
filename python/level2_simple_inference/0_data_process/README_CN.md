@@ -8,4 +8,4 @@
 
 | 样例  | 说明  | 支持芯片 |
 |---|---|---|
-| [venc_image](./venc_image)  | 媒体数据处理（视频编码）  | Ascend310，Ascend710 |
+| [venc_image](./venc_image)  | 媒体数据处理（视频编码）  | Ascend310，Ascend310P |

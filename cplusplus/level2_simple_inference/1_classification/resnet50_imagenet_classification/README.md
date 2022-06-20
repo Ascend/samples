@@ -93,7 +93,7 @@ The sample directory is organized as follows:
 
 -   OS and architecture: CentOS x86\_64, CentOS AArch64, Ubuntu 18.04 x86\_64, Ubuntu 18.04 aarch64,  EulerOS x86, EulerOS AArch64
 -   Compiler: g++ or aarch64-linux-gnu-g++
--   SoC: Ascend 310 AI Processor, Ascend 710 AI Processor, Ascend 910 AI Processor
+-   SoC: Ascend 310 AI Processor, Ascend 310P AI Processor, Ascend 910 AI Processor
 -   Python and its dependency library: Python 3.7.5 and Pillow
 -   Ascend AI Software Stack deployed
 
@@ -186,7 +186,7 @@ The sample directory is organized as follows:
         -   **--framework**: source framework type, selected from  **0**  \(Caffe\),  **1**  \(MindSpore\),  **3**  \(TensorFlow\), and  **5**  \(ONNX\).
         -   **--soc\_version**: 
             -   Ascend 310 AI Processor, set this parameter to **Ascend310**.
-            -   Ascend 710 AI Processor, set this parameter to **Ascend710**.
+            -   Ascend 310P AI Processor, set this parameter to **Ascend310P**.
             -   Ascend 910 AI Processor, set this parameter to **Ascend910A** or **Ascend910B** or **Ascend910ProA** or **Ascend910ProB** or **Ascend910PremiumA**. **Pro** or **Premium** indicate the performance improvement level. **A** or **B** indicate PartialGood level. Select a value based on the site requirements.
         -   **--input\_format**: input format.
         -   **--input\_fp16\_nodes**: input nodes to specify as FP16 nodes.
@@ -332,7 +332,7 @@ The sample directory is organized as follows:
         -   **--model**: directory of the source model file.
         -   **--weight**: directory of the weight file.
         -   **--framework**: source framework type, selected from  **0**  \(Caffe\),  **1**  \(MindSpore\),  **3**  \(TensorFlow\), and  **5**  \(ONNX\).
-        -   **--soc\_version**: SoC version, either  **Ascend310**  or  **Ascend710**.
+        -   **--soc\_version**: SoC version, either  **Ascend310**  or  **Ascend310P**.
         -   **--input\_format**: input format.
         -   **--input\_fp16\_nodes**: input nodes to specify as FP16 nodes.
         -   **--output\_type**  and  **--out\_nodes**: specify the data type of the first output as float32.

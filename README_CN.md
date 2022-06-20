@@ -11,19 +11,20 @@ CANN AscendCL（Ascend Computing Language）提供Device管理、Context管理�
 **请在[硬件平台页面](https://www.hiascend.com/hardware/firmware-drivers?tag=community)选择您使用的产品后，通过下拉框选择支持的CANN版本并查看配套关系。**
 
 - **当前分支样例版本适配说明如下：**    
-    | CANN版本 | 驱动版本 |
-    |---|---|
-    | [>=5.1.RC1.alpha005](https://www.hiascend.com/software/cann/community) | [1.0.13.alpha](https://www.hiascend.com/en/hardware/firmware-drivers?tag=community) | 
- 
+    | CANN版本 |
+    |---|
+    | [>=5.1.RC2.alpha006](https://www.hiascend.com/software/cann/community) |
+
 - **历史版本请参考下表使用对应发行版：**      
-    | CANN版本 | 驱动版本 | cann-samples获取方式 |
-    |---|---|---|
-    | [5.0.4.alpha002/5.0.4.alpha003/<br>5.0.4.alpha005/5.0.5.alpha001/<br>5.1.RC1.alpha001/5.1.RC1.alpha002/<br>5.1.RC1.alpha003](https://www.hiascend.com/software/cann/community) | [1.0.12.alpha](https://www.hiascend.com/en/hardware/firmware-drivers?tag=community) | [tag v0.6.0](https://github.com/Ascend/samples/tree/v0.6.0/)，[下载Release 0.6.0发行版](https://github.com/Ascend/samples/releases/v0.6.0) |
-    | [5.0.2.alpha005/5.0.3.alpha001/<br>5.0.3.alpha002/5.0.3.alpha003/<br>5.0.3.alpha005](https://www.hiascend.com/software/cann/community) | [1.0.11.alpha](https://www.hiascend.com/en/hardware/firmware-drivers?tag=community) | [tag v0.5.0](https://github.com/Ascend/samples/tree/v0.5.0/)，[下载Release 0.5.0发行版](https://github.com/Ascend/samples/releases/v0.5.0) |
-    | [5.0.2.alpha003](https://www.hiascend.com/software/cann/community) | [1.0.10.alpha](https://www.hiascend.com/en/hardware/firmware-drivers?tag=community) | [tag v0.4.0](https://github.com/Ascend/samples/tree/v0.4.0/)，[下载Release 0.4.0发行版](https://github.com/Ascend/samples/releases/v0.4.0) |
-    | [3.3.0.alpha001/3.3.0.alpha005/<br>3.3.0.alpha006/5.0.2.alpha001/<br>5.0.2.alpha002](https://www.hiascend.com/software/cann/community) | [1.0.9.alpha](https://www.hiascend.com/en/hardware/firmware-drivers?tag=community) | [tag v0.3.0](https://github.com/Ascend/samples/tree/v0.3.0/)，[下载Release 0.3.0发行版](https://github.com/Ascend/samples/releases/v0.3.0) |
-    | [3.2.0.alpha001](https://www.hiascend.com/software/cann/community) | [1.0.8.alpha](https://www.hiascend.com/en/hardware/firmware-drivers?tag=community) | [tag v0.2.0](https://github.com/Ascend/samples/tree/v0.2.0/)，[下载Release 0.2.0发行版](https://github.com/Ascend/samples/releases/v0.2.0) |
-    | [3.1.0.alpha001](https://www.hiascend.com/software/cann/community) | [1.0.7.alpha](https://www.hiascend.com/en/hardware/firmware-drivers?tag=community) | [tag v0.1.0](https://github.com/Ascend/samples/tree/v0.1.0/)，[下载Release 0.1.0发行版](https://github.com/Ascend/samples/releases/v0.1.0) |
+    | CANN版本 | cann-samples获取方式 |
+    |---|---|
+    | [5.1.RC2.alpha005/5.1.RC2.alpha003<br>/5.1.RC2.alpha002/5.1.RC2.alpha001<br>/5.1.RC1.alpha006/5.1.RC1.alpha005](https://www.hiascend.com/software/cann/community) | [tag v0.7.0](https://github.com/Ascend/samples/tree/v0.7.0/)，[下载Release 0.7.0发行版](https://github.com/Ascend/samples/releases/v0.7.0) 
+    | [5.0.4.alpha002/5.0.4.alpha003/<br>5.0.4.alpha005/5.0.5.alpha001/<br>5.1.RC1.alpha001/5.1.RC1.alpha002/<br>5.1.RC1.alpha003](https://www.hiascend.com/software/cann/community) | [tag v0.6.0](https://github.com/Ascend/samples/tree/v0.6.0/)，[下载Release 0.6.0发行版](https://github.com/Ascend/samples/releases/v0.6.0) |
+    | [5.0.2.alpha005/5.0.3.alpha001/<br>5.0.3.alpha002/5.0.3.alpha003/<br>5.0.3.alpha005](https://www.hiascend.com/software/cann/community) | [tag v0.5.0](https://github.com/Ascend/samples/tree/v0.5.0/)，[下载Release 0.5.0发行版](https://github.com/Ascend/samples/releases/v0.5.0) |
+    | [5.0.2.alpha003](https://www.hiascend.com/software/cann/community) | [tag v0.4.0](https://github.com/Ascend/samples/tree/v0.4.0/)，[下载Release 0.4.0发行版](https://github.com/Ascend/samples/releases/v0.4.0) |
+    | [3.3.0.alpha001/3.3.0.alpha005/<br>3.3.0.alpha006/5.0.2.alpha001/<br>5.0.2.alpha002](https://www.hiascend.com/software/cann/community) | [tag v0.3.0](https://github.com/Ascend/samples/tree/v0.3.0/)，[下载Release 0.3.0发行版](https://github.com/Ascend/samples/releases/v0.3.0) |
+    | [3.2.0.alpha001](https://www.hiascend.com/software/cann/community) | [tag v0.2.0](https://github.com/Ascend/samples/tree/v0.2.0/)，[下载Release 0.2.0发行版](https://github.com/Ascend/samples/releases/v0.2.0) |
+    | [3.1.0.alpha001](https://www.hiascend.com/software/cann/community) | [tag v0.1.0](https://github.com/Ascend/samples/tree/v0.1.0/)，[下载Release 0.1.0发行版](https://github.com/Ascend/samples/releases/v0.1.0) |
 
 - **历史版本操作说明**      
   **tag**：对某一时间点的代码仓打标签，在发布某个软件版本（比如 v0.1.0 等等）时使用tag标签，给仓库中的项目添加tag。可以理解为某一时刻的不会变化的分支。   
