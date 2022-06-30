@@ -165,7 +165,7 @@ void DvppProcess::DestroyDecodeResource()
 
 Result DvppProcess::InitResizeInputDesc()
 {
-    uint32_t jpegOutWidthStride = decodeOutputWidthStride_; // 128-byte alignment on 310, 64-byte alignment on 710
+    uint32_t jpegOutWidthStride = decodeOutputWidthStride_; // 128-byte alignment on 310, 64-byte alignment on 310P
     uint32_t jpegOutHeightStride = AlignSize(decodeOutputHeight_, 16); // 16-byte alignment
     uint32_t jpegOutBufferSize = jpegOutWidthStride * jpegOutHeightStride * 3 / 2; // yuv format size
     resizeInputDesc_ = acldvppCreatePicDesc();

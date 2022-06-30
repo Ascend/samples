@@ -256,9 +256,4 @@ void VencProcess::DestroyResource()
         (void)aclvencDestroyFrameConfig(vencFrameConfig_);
         vencFrameConfig_ = nullptr;
     }
-
-    if (inBufferDev_ != nullptr) {
-        (void)acldvppFree(inBufferDev_);
-        inBufferDev_ = nullptr;
-    }
 }

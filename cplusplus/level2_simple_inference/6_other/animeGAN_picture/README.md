@@ -87,10 +87,10 @@ bash sample_build.sh
    cd $HOME/samples/cplusplus/level2_simple_inference/6_other/animeGAN_picture/scripts
    ```
 
-2. <a name="step_2"></a>Execute the script to run the sample.        
+2. <a name="step_2"></a>Execute the script to run the sample(sample. 256).
 
    ```
-   bash sample_run.sh
+   bash sample_run.sh 256
    ```
 
 ### Result Viewing

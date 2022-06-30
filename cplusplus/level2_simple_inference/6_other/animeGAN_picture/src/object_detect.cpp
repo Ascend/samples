@@ -121,6 +121,39 @@ AclLiteError ObjectDetect::init() {
     return ACLLITE_OK;
 }
 
+AclLiteError ObjectDetect::preprocess_cv(const string& imageFile) {
+    // read image using OPENCV
+    cv::Mat mat = cv::imread(imageFile, CV_LOAD_IMAGE_COLOR);
+    imgOrignWidth_ = mat.cols;
+    imgOrignHeight_ = mat.rows;
+    //resize
+    cv::Mat resizeMat;
+    cv::resize(mat, resizeMat, cv::Size(modelWidth_, modelHeight_));
+
+    // deal image
+    resizeMat.convertTo(resizeMat, CV_32FC3);
+    resizeMat = resizeMat / 127.5 -1;
+    cv::cvtColor(resizeMat, resizeMat, CV_BGR2RGB);
+
+    if (mat.empty()) {
+        return ACLLITE_ERROR;
+    }
+
+    if (runMode_ == ACL_HOST) {
+        aclError ret = aclrtMemcpy(imageInfoBuf_, imageInfoSize_,
+                                   resizeMat.ptr<uint8_t>(), imageInfoSize_,
+                                   ACL_MEMCPY_HOST_TO_DEVICE);
+        if (ret != ACL_SUCCESS) {
+            ACLLITE_LOG_ERROR("Copy resized image data to device failed.");
+            return ACLLITE_ERROR;
+        }
+    } else {
+        memcpy(imageInfoBuf_, resizeMat.ptr<uint8_t>(), imageInfoSize_);
+    }
+
+    return ACLLITE_OK;
+}
+
 AclLiteError ObjectDetect::preprocess(ImageData& resizedImage, ImageData& srcImage) {
     imgOrignWidth_ = srcImage.width;
     imgOrignHeight_ = srcImage.height;

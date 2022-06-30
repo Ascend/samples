@@ -180,10 +180,7 @@
         -   --input\_format：模型输入数据的Format。
         -   --dynamic\_batch\_size：设置动态Batch档位参数，适用于执行推理时，每次处理图片数量不固定的场景。
         -   --dynamic\_image\_size：设置输入图片的动态分辨率参数，适用于执行推理时，每次处理图片宽和高不固定的场景。
-        -   --soc\_version：
-            -   昇腾310 AI处理器，此处配置为Ascend310。
-            -   昇腾310P AI处理器，此处配置为Ascend310P。
-            -   昇腾910 AI处理器，此处配置为Ascend910A或Ascend910B或Ascend910ProA或Ascend910ProB或Ascend910PremiumA，其中，Pro或Premium表示芯片性能提升等级、A或B表示PartialGood等级，请根据实际情况选择。
+        -   --soc\_version：昇腾AI处理器的版本。进入“CANN软件安装目录/compiler/data/platform_config”目录，".ini"文件的文件名即为昇腾AI处理器的版本，请根据实际情况选择。
         -   --output：生成的yolov3\_dynamic\_batch.om或者yolov3\_dynamic\_hw.om文件存放在“样例目录/model“目录下。建议使用命令中的默认设置，否则在编译代码前，您还需要修改sample\_process.cpp中的omModelPath参数值。
 
             ```

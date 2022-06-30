@@ -37,6 +37,7 @@ public:
     ~ObjectDetect();
 
     AclLiteError init();
+    AclLiteError preprocess_cv(const string& imageFile);
     AclLiteError preprocess(ImageData& resizedImage, ImageData& srcImage);
     AclLiteError inference(vector<InferenceOutput>& inferenceOutput, ImageData& resizedImage);
     AclLiteError postprocess(vector<InferenceOutput>& inferenceOutput, const string& imageFile, const ImageData& resizedImage);

@@ -82,12 +82,16 @@ function main()
     return 1
   fi
 
+    if [ ! -f "${ModelPath}/../data/car0.mp4" ];then
+    wget -O ${ModelPath}/../data/car0.mp4 https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOV3_carColor_sample/data/car0.mp4 --no-check-certificate
+  fi
+
   if [ ! -f "${ModelPath}/../data/car1.mp4" ];then
     wget -O ${ModelPath}/../data/car1.mp4 https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOV3_carColor_sample/data/car1.mp4 --no-check-certificate
   fi
 
-  if [ ! -f "${ModelPath}/../data/car2.mp4" ];then
-    wget -O ${ModelPath}/../data/car2.mp4 https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOV3_carColor_sample/data/car2.mp4 --no-check-certificate
+  if [ ! -f "${ModelPath}/../data/car1.jpg" ];then
+    wget -O ${ModelPath}/../data/car1.jpg wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOV3_carColor_sample/data/car1.jpg --no-check-certificate
   fi
 
   find_model yolov3.om

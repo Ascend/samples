@@ -17,7 +17,7 @@ function main()
    wget -O ${ModelPath}/../data/mountain.jpg https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/animeGAN_picture/testImage.jpg --no-check-certificate
   fi
 
-  find_model AnimeGANv2_256.om
+  find_model AnimeGANv2_*.om
   if [ $? -ne 0 ];then
     return 1
   fi

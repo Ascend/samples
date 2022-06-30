@@ -134,6 +134,10 @@ Result VideoEncode::DoVencProcess(ImageData& image)
         return FAILED;
     }
 
+    if (inBufferDev != nullptr) {
+        (void)acldvppFree(inBufferDev);
+        inBufferDev = nullptr;
+    }
     return SUCCESS;
 }
 

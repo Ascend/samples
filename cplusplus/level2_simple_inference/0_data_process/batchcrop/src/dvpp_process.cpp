@@ -106,7 +106,7 @@ void DvppProcess::CalYuv400InputBufferSize(uint32_t inWidthStride, uint32_t inHe
 {
     auto socVersion = aclrtGetSocName();
     INFO_LOG("Current soc version is %s", socVersion);
-    if (strncmp(socVersion, "Ascend310P", sizeof("Ascend310P") - 1) == 0) {
+    if (strncmp(socVersion, "Ascend310P3", sizeof("Ascend310P3") - 1) == 0) {
         inBufferSize = inWidthStride * inHeightStride;
     } else {
         inBufferSize = inWidthStride * inHeightStride * 3 / 2;

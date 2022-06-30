@@ -172,7 +172,7 @@ Result DvppProcess::InitResizeInputDesc()
     uint32_t heightAlignment = 16;
     uint32_t sizeAlignment = 3;
     uint32_t sizeNum = 2;
-    uint32_t jpegOutWidthStride = decodeOutputWidthStride_; // 128-byte alignment on 310, 64-byte alignment on 710
+    uint32_t jpegOutWidthStride = decodeOutputWidthStride_; // 128-byte alignment on 310, 64-byte alignment on 310P
     uint32_t jpegOutHeightStride = AlignSize(decodeOutputHeight_, heightAlignment); // 16-byte alignment
     if (jpegOutWidthStride == 0 || jpegOutHeightStride == 0) {
         ERROR_LOG("InitResizeInputDesc AlignSize failed");
@@ -367,7 +367,7 @@ Result DvppProcess::InitCropInputDesc()
     uint32_t heightAlignment = 16;
     uint32_t sizeAlignment = 3;
     uint32_t sizeNum = 2;
-    uint32_t jpegOutWidthStride = decodeOutputWidthStride_; // 128-byte alignment on 310, 64-byte alignment on 710
+    uint32_t jpegOutWidthStride = decodeOutputWidthStride_; // 128-byte alignment on 310, 64-byte alignment on 310P
     uint32_t jpegOutHeightStride = AlignSize(decodeOutputHeight_, heightAlignment); // 16-byte alignment
     if (jpegOutWidthStride == 0 || jpegOutHeightStride == 0) {
         ERROR_LOG("InitCropInputDesc AlignSize failed");
@@ -504,7 +504,7 @@ Result DvppProcess::InitCropAndPasteInputDesc()
     uint32_t sizeAlignment = 3;
     uint32_t sizeNum = 2;
 
-    uint32_t jpegOutWidthStride = decodeOutputWidthStride_; // 128-byte alignment on 310, 64-byte alignment on 710
+    uint32_t jpegOutWidthStride = decodeOutputWidthStride_; // 128-byte alignment on 310, 64-byte alignment on 310P
     uint32_t jpegOutHeightStride = AlignSize(decodeOutputHeight_, heightAlignment);
     if (jpegOutWidthStride == 0 || jpegOutHeightStride == 0) {
         ERROR_LOG("InitCropAndPasteInputDesc AlignSize failed");

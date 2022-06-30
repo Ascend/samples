@@ -194,10 +194,7 @@
         -   --model：原始模型文件路径。
         -   --weight：权重文件路径。
         -   --framework：原始框架类型。0：表示Caffe；1：表示MindSpore；3：表示TensorFlow；5：表示ONNX。
-        -   --soc\_version：
-            -   昇腾310 AI处理器，此处配置为Ascend310。
-            -   昇腾310P AI处理器，此处配置为Ascend310P。
-            -   昇腾910 AI处理器，此处配置为Ascend910A或Ascend910B或Ascend910ProA或Ascend910ProB或Ascend910PremiumA，其中，Pro或Premium表示芯片性能提升等级、A或B表示PartialGood等级，请根据实际情况选择。
+        -   --soc\_version：昇腾AI处理器的版本。进入“CANN软件安装目录/compiler/data/platform_config”目录，".ini"文件的文件名即为昇腾AI处理器的版本，请根据实际情况选择。
 
         -   --input\_format：模型输入数据的Format。
         -   --input\_fp16\_nodes：指定输入数据类型为FP16的输入节点名称。

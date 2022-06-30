@@ -79,10 +79,10 @@ bash sample_build.sh
    cd $HOME/samples/cplusplus/level2_simple_inference/6_other/animeGAN_picture/scripts
    ```
 
-2. <a name="step_2"></a>执行运行脚本，开始样例运行。         
+2. <a name="step_2"></a>执行运行脚本，开始样例运行（以256为例）。
 
    ```
-   bash sample_run.sh
+   bash sample_run.sh 256
    ```
 
 ### 查看结果

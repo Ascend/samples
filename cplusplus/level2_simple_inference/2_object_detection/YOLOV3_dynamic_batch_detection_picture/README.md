@@ -181,10 +181,7 @@ The directory structure of the sample is as follows:
         -   --**input\_format**: input format.
         -   --**dynamic\_batch\_size**: dynamic batch size profiles. Applies to the scenario where image count per inference batch is unfixed.
         -   --**dynamic\_image\_size**: dynamic image size profiles. Applies to the scenario where image size per inference batch is unfixed.
-        -   --**soc\_version**:
-            -   For Ascend 310 AI Processors, set this parameter to **Ascend310**.
-            -   For Ascend 310P AI Processors, set this parameter to **Ascend310P**.
-            -   For Ascend 910 AI Processors, set this parameter to **Ascend910A**, **Ascend910B**, **Ascend910ProA**, **Ascend910ProB**, or **Ascend910PremiumA** as required. "Pro" and "Premium" indicate the performance improvement levels of processors, and "A" and "B" indicate the PartialGood levels.
+        -   --**soc\_version**: Version of the Ascend AI processor. Go to the CANN software installation directory/compiler/data/platform_config directory. The name of the .ini file is the version of the Ascend AI processor. Select the version as required.  
         -   --**output**: directory for storing the generated **yolov3\_dynamic\_batch.om** or **yolov3\_dynamic\_hw.om** file, that is, **/model** under the sample directory. The default path in the command example is recommended. To specify another path, change the value of **omModelPath** in **sample\_process.cpp** before building the code.
 
             ```

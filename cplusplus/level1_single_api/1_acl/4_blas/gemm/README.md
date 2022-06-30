@@ -148,10 +148,7 @@ The sample directory is organized as follows:
         ```
 
         -   **--singleop**: directory of the single-operator definition file \(.json\)
-        -   **--soc\_version**: SoC version, either  **Ascend310**  or  **Ascend310P**.
-            -   Ascend 310 AI Processor, set this parameter to **Ascend310**.
-            -   Ascend 310P AI Processor, set this parameter to **Ascend310P**.
-            -   Ascend 910 AI Processor, set this parameter to **Ascend910A** or **Ascend910B** or **Ascend910ProA** or **Ascend910ProB** or **Ascend910PremiumA**. **Pro** or **Premium** indicate the performance improvement level. **A** or **B** indicate PartialGood level. Select a value based on the site requirements.
+        -   **--soc\_version**: Version of the Ascend AI processor. Go to the CANN software installation directory/compiler/data/platform_config directory. The name of the .ini file is the version of the Ascend AI processor. Select the version as required. 
         -   **--output**: directory for storing the generated .om file, that is, the  **run/out/op\_models**  directory.
 
 

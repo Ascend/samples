@@ -106,7 +106,7 @@ void DvppProcess::DestroyOutputPara()
 
 Result DvppProcess::InitResizeInputDesc(PicDesc& srcImage)
 {
-    uint32_t vdecOutWidthStride = AlignSize(srcImage.width, 128); // 128-byte alignment on 310, 64-byte alignment on 710
+    uint32_t vdecOutWidthStride = AlignSize(srcImage.width, 128); // 128-byte alignment on 310, 64-byte alignment on 310P
     uint32_t vdecOutHeightStride = AlignSize(srcImage.height, 16); // 16-byte alignment
     uint32_t vdecOutBufferSize = vdecOutWidthStride * vdecOutHeightStride * 3 / 2; // yuv format size
     resizeInputDesc_ = acldvppCreatePicDesc();

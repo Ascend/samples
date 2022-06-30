@@ -148,10 +148,7 @@
         ```
 
         -   --singleop：单算子定义文件（\*.json文件）。
-        -   --soc\_version：
-            -   昇腾310 AI处理器，此处配置为Ascend310。
-            -   昇腾310P AI处理器，此处配置为Ascend310P。
-            -   昇腾910 AI处理器，此处配置为Ascend910A或Ascend910B或Ascend910ProA或Ascend910ProB或Ascend910PremiumA，其中，Pro或Premium表示芯片性能提升等级、A或B表示PartialGood等级，请根据实际情况选择。
+        -   --soc\_version：昇腾AI处理器的版本。进入“CANN软件安装目录/compiler/data/platform_config”目录，".ini"文件的文件名即为昇腾AI处理器的版本，请根据实际情况选择。
 
         -   --output：生成的om文件必须放在“run/out/op\_models“目录下。
 

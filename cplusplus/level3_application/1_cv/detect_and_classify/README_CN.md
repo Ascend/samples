@@ -609,8 +609,8 @@ atc --input_shape="input_1:10,224,224,3" --output=./color_dvpp_10batch --soc_ver
 若您想自行下载测试数据，可参见如下命令：
 
 ```
+wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOV3_carColor_sample/data/car0.mp4 --no-check-certificate
 wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOV3_carColor_sample/data/car1.mp4 --no-check-certificate
-wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOV3_carColor_sample/data/car2.mp4 --no-check-certificate
 wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOV3_carColor_sample/data/car1.jpg --no-check-certificate
 ```
 
@@ -666,18 +666,14 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
 
      - pic：表示输入数据为图片，当前此样例支持的图片格式为JPEG压缩图片
      - video：表示输入数据为MP4视频文件
-
-  - rtsp：表示输入数据为rtsp流
+     - rtsp：表示输入数据为rtsp流
 
    - outputType_X，表示DeviceX的输出数据类型，其中X需要从“1”开始递增，此参数当前支持的配置项有：
 
      - pic：表示输出结果为图片
-
-  - video：表示输出结果为MP4视频文件
-
-    - presentagent：表示用PresentAgent展示推理结果
-
-    - stdout：表示将推理结果打屏输出。
+     - video：表示输出结果为MP4视频文件
+     - stdout：表示将推理结果打屏输出。
+     - presentagent：表示用PresentAgent展示推理结果
 
       **注意：若开启了多路视频特性，不支持使用presentagent在线展示；可配置为video或stdout，若路数较多，建议使用stdout打屏显示，否则性能可能会较低。**
 
@@ -687,41 +683,40 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
      - 若输入数据类型是mp4视频文件，则填写视频文件的相对路径，只支持填入一个路径
      - 若输入数据类型是rtsp流，则填写rtsp流地址，只支持填入一个地址
 
-​        Device数量为2，每个Device开启两路输入的配置示例如下所示，请注意每个input与output配置的序号都是从0开始递增的：     
-​       
+   Device数量为2，每个Device开启两路输入的配置示例如下所示，请注意每个input与output配置的序号都是从0开始递增的：         
 
-```
- [base_options]
- device_num=2   # Device数量    
- RtspNumPerDevice=2      # 每个Device上的输入路数
+    ```
+    [base_options]
+    device_num=2   # Device数量    
+    RtspNumPerDevice=2      # 每个Device上的输入路数
 
- [device_0_options]    # Device0的配置参数
- inputType_0=video       # Device0的第一路输入数据类型
- outputType_0=video     # Device0的第一路输出数据类型
- inputDataPath_0=../data/video0.mp4   # Device0的第一路输入数据路径
- outputFrameWidth_0=1280  # outputType_0为video时，需要配置此参数，代表输出视频的宽
- outputFrameHeight_0=720  # outputType_0为video时，需要配置此参数，代表输出视频的高
+    [device_0_options]    # Device0的配置参数
+    inputType_0=video       # Device0的第一路输入数据类型
+    outputType_0=video     # Device0的第一路输出数据类型
+    inputDataPath_0=../data/video0.mp4   # Device0的第一路输入数据路径
+    outputFrameWidth_0=1280  # outputType_0为video时，需要配置此参数，代表输出视频的宽
+    outputFrameHeight_0=720  # outputType_0为video时，需要配置此参数，代表输出视频的高
  
- inputType_1 = video  # Device0的第二路输入数据类型
- outputType_1 = video   # Device0的第二路输出数据类型
- inputDataPath_1 =../data/video2.mp4
- outputFrameWidth_1=1280
- outputFrameHeight_1=720
+    inputType_1 = video  # Device0的第二路输入数据类型
+    outputType_1 = video   # Device0的第二路输出数据类型
+    inputDataPath_1 =../data/video2.mp4
+    outputFrameWidth_1=1280
+    outputFrameHeight_1=720
 
 
- #[device_1_options]    # Device1的配置参数
- inputType_2=video       # Device1的第一路输入数据类型
- outputType_2=video      # Device1的第一路输出数据类型
- inputDataPath_2=../data/video3.mp4    # Device1的第一路输入数据路径
- outputFrameWidth_2=1280   # outputType_0为video时，需要配置此参数，代表输出视频的宽
- outputFrameHeight_2=720  # outputType_0为video时，需要配置此参数，代表输出视频的高
+    #[device_1_options]    # Device1的配置参数
+    inputType_2=video       # Device1的第一路输入数据类型
+    outputType_2=video      # Device1的第一路输出数据类型
+    inputDataPath_2=../data/video3.mp4    # Device1的第一路输入数据路径
+    outputFrameWidth_2=1280   # outputType_0为video时，需要配置此参数，代表输出视频的宽
+    outputFrameHeight_2=720  # outputType_0为video时，需要配置此参数，代表输出视频的高
  
- inputType_3 = video  # Device1的第二路输入数据类型
- outputType_3 = video   # Device1的第二路输出数据类型
- inputDataPath_3 =../data/video4.mp4
- outputFrameWidth_3=1280
- outputFrameHeight_3=720
-```
+    inputType_3 = video  # Device1的第二路输入数据类型
+    outputType_3 = video   # Device1的第二路输出数据类型
+    inputDataPath_3 =../data/video4.mp4
+    outputFrameWidth_3=1280
+    outputFrameHeight_3=720
+    ```
 
 3. 若输出类型配置的为“presentagent”，运行可执行文件前您需要参考此步骤启动PresentServer，若配置的其他输出类型，则此步骤可跳过。
 
@@ -809,10 +804,10 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
    样例将根据配置的输出数据类型，输出不同文件：
 
    - 若输出数据类型配置为pic
-     输出数据存储在out文件夹下，为名称类似于**device_X_out_pic_Y.jpg** 的图片，其中X代表第x路，Y代表第y张图片。
+     输出数据存储在out/output文件夹下，为名称类似于**device_X_out_pic_Y.jpg** 的图片，其中X代表第x路，Y代表第y张图片。
 
    - 若输出数据类型配置为video
-     输出数据存储在out文件夹下，为名称类似于：**out_testX.mp4** 的视频，其中X代表第x路。
+     输出数据存储在out/output文件夹下，为名称类似于：**out_testX.mp4** 的视频，其中X代表第x路。
 
    - 若输出数据类型配置为presentagent
      请参见[访问PresentServer展示界面](#start_presentserver)查看推理结果。
@@ -1392,7 +1387,7 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
 
 3. 使用DVPP的JPEGD功能将读入的jpg图片数据，解压缩为YUV420SP_U8格式的数据。
 
-   其中```DetectPreprocessThread::ProcessPic```接口是对JPEGD功能的调用接口，```JpegDHelper::Process```接口是对AscendCL的```acldvppJpegDecodeAsync```接口的封装，JPEGD的功能描述可参见[Ascend文档中心](#https://www.hiascend.com/document?tag=community-developer)的“推理应用开发”的“高级功能 > 媒体数据预处理V1 > JPEGD图片解码”。
+   其中```DetectPreprocessThread::ProcessPic```接口是对JPEGD功能的调用接口，```JpegDHelper::Process```接口是对AscendCL的```acldvppJpegDecodeAsync```接口的封装，JPEGD的功能描述可参见[Ascend文档中心](https://www.hiascend.com/document?tag=community-developer)的“推理应用开发”的“高级功能 > 媒体数据预处理V1 > JPEGD图片解码”。
 
    - 代码文件：src/detectPreprocess/detectPreprocess.cpp
 
@@ -1635,7 +1630,7 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
 
 - 若您的图片数据既不是jpg文件，也不是YUV420SP_U8格式文件，但后续仍然需要使用DVPP的VPC功能对图片的进行缩放或者抠图等处理。
 
-  此种场景下，您可以使用OpenCV等第三方图像处理接口进行读取和解码操作，并使图片数据满足DVPP对图片进行缩放抠图等操作的约束，详细约束可参见[昇腾文档中心](#https://www.hiascend.com/document?tag=community-developer)相关文档。
+  此种场景下，您可以使用OpenCV等第三方图像处理接口进行读取和解码操作，并使图片数据满足DVPP对图片进行缩放抠图等操作的约束，详细约束可参见[昇腾文档中心](https://www.hiascend.com/document?tag=community-developer)相关文档。
 
   如下为使用OpenCV进行图片预处理的示例：
 
@@ -1711,7 +1706,7 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
 
 当解码后的图片数据需要进行二次处理以满足业务或模型需要时，例如当图片数据分辨率不满足模型需要，或者是需要抠取图片某块区域，此时可使用DVPP的VPC功能对图片数据进行处理。
 
-本节仅对VPC（Vision Preprocessing Core）功能中的抠图与缩放功能进行介绍，VPC的使用约束及其他VPC功能的描述可参见[Ascend文档中心](#https://www.hiascend.com/document?tag=community-developer)的“推理应用开发”的“AscendCL API参考 > 媒体数据预处理V1 > VPC功能”。
+本节仅对VPC（Vision Preprocessing Core）功能中的抠图与缩放功能进行介绍，VPC的使用约束及其他VPC功能的描述可参见[Ascend文档中心](https://www.hiascend.com/document?tag=community-developer)的“推理应用开发”的“AscendCL API参考 > 媒体数据预处理V1 > VPC功能”。
 
 ##### 样例解析
 
@@ -1942,7 +1937,7 @@ AIPP的功能需要在将开源模型转换为om离线模型时开启，如下�
 atc --input_shape="input_1:10,224,224,3" --insert_op_conf=./aipp.cfg --output=./color_dvpp_10batch --soc_version=Ascend310 --framework=3 --model=./color.pb
 ```
 
-其中insert_op_conf参数的输入就是AIPP的配置文件，AIPP的提供的所有功能都通过此配置文件承载。本节主要介绍如何通过AIPP实现数据格式的转换（又称色域转换），AIPP其他的功能请参考参见[Ascend文档中心](#https://www.hiascend.com/document?tag=community-developer)的“ATC模型转换”的“高级功能 > AIPP使能”。
+其中insert_op_conf参数的输入就是AIPP的配置文件，AIPP的提供的所有功能都通过此配置文件承载。本节主要介绍如何通过AIPP实现数据格式的转换（又称色域转换），AIPP其他的功能请参考参见[Ascend文档中心](https://www.hiascend.com/document?tag=community-developer)的“ATC模型转换”的“高级功能 > AIPP使能”。
 
 ##### <a name="sample-analysis">样例解析</a>
 
@@ -1969,7 +1964,7 @@ atc --input_shape="input_1:10,224,224,3" --insert_op_conf=./aipp.cfg --output=./
       }
       ```
 
-  每一种格式转换都有官方模板供直接使用，详细可参见[Ascend文档中心](#https://www.hiascend.com/document?tag=community-developer)的“ATC模型转换”的“高级功能 > AIPP使能 > 配置文件模板”。
+  每一种格式转换都有官方模板供直接使用，详细可参见[Ascend文档中心](https://www.hiascend.com/document?tag=community-developer)的“ATC模型转换”的“高级功能 > AIPP使能 > 配置文件模板”。
 
 - 使用ATC工具进行离线模型转换时加载AIPP配置文件，即可对输入到模型中的数据进行格式转换。
 
@@ -1981,7 +1976,7 @@ atc --input_shape="input_1:10,224,224,3" --insert_op_conf=./aipp.cfg --output=./
 
 1. 若您经过DVPP预处理后（或其他预处理），输入到模型的数据编码格式与模型要求不一致，您可以直接在模型转换时通过AIPP功能实现格式的转换，无需进行代码层面的修改。
 
-   1. 首先获取使用AIPP功能前及AIPP功能需要输出的图片排布格式，然后参见[Ascend文档中心](#https://www.hiascend.com/document?tag=community-developer)的“ATC模型转换”的“高级功能 > AIPP使能 > 配置文件模板”，选择相应的色域转换模板填入自行创建的AIPP配置文件，文件名为xxx.cfg。
+   1. 首先获取使用AIPP功能前及AIPP功能需要输出的图片排布格式，然后参见[Ascend文档中心](https://www.hiascend.com/document?tag=community-developer)的“ATC模型转换”的“高级功能 > AIPP使能 > 配置文件模板”，选择相应的色域转换模板填入自行创建的AIPP配置文件，文件名为xxx.cfg。
 
    2. 使用ATC工具转换模型，并导入上一步准备好的AIPP配置文件。
       ATC转换命令的参考格式如下，其中insert_op_conf参数中配置的即为上一步骤创建的AIPP配置文件：

@@ -470,6 +470,13 @@ int32_t alloc_output_buffer(hi_video_frame_info *frame, void** outputBuf, hi_u32
     // get the size of output buffer
     hi_venc_jpeg_param stParamJpeg;
     hi_u32 out_buffer_size = 0;
+    hi_u32 i;
+    stParamJpeg.qfactor = 100;
+    for (i = 0; i < HI_VENC_JPEG_QT_COEF_NUM; i++) {
+        stParamJpeg.y_qt[i] = 255;
+        stParamJpeg.cb_qt[i] = 255;
+        stParamJpeg.cr_qt[i] = 255;
+    }
     ret = hi_mpi_venc_get_jpege_predicted_size(frame, &stParamJpeg, &out_buffer_size);
     if (ret != HI_SUCCESS) {
         SAMPLE_PRT("hi_mpi_venc_get_jpege_predicted_size err 0x%x\n", ret);
@@ -1030,8 +1037,8 @@ void send_frame_for_dc_performance(FILE *fpYuv, HiSampleJpegeSendFramePara* jpeg
     int32_t ret = HI_SUCCESS;
     hi_venc_chn vencChn = jpegeSendPara->vencChn;
     int32_t delay = 0;
-    hi_video_frame_info *videoFrame[g_mem_count] = {NULL};
-    hi_video_frame_info *tmp[g_mem_count] = {NULL};
+    hi_video_frame_info *videoFrame[g_mem_count];
+    hi_video_frame_info *tmp[g_mem_count];
 
     ret = alloc_input_buffer_for_dc_performance(fpYuv, jpegeSendPara, tmp, videoFrame);
     if (ret != HI_SUCCESS) {
