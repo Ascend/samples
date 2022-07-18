@@ -63,16 +63,18 @@ Note: The generation of a single-operator model file depends only on the operato
 
   3. In the development environment, set environment variables and configure the header search path and library search path on which the build of the AscendCL single-operator verification program depends.
 
-     The build script searches for the required header files and libraries through the paths specified by the environment variables. Replace  **$HOME/Ascend**  with the actual Ascend-CANN-Toolkit installation path.
+     After setting the following environment variables, the compilation script will find the header file that the compilation depends on according to the directory "{DDK_PATH}/acllib/include/acl", and the library file that the compilation depends on according to the directory pointed to by the {NPU_HOST_LIB} environment variable. Please replace  **$HOME/Ascend**  with the actual component installation path.
 
-     - If the development environment operating system architecture is x86, the configuration example is as follows:
+     -  If the operating system architecture of the  development environment is the same as that of the running environment, run the following command:
 
-       ```
-        export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux
+        ```
+        export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest
         export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
-       ```
+        ```
 
-     - If the running environment operating system architecture is AArch64, the configuration example is as follows:
+     - If the operating system architecture of the  development environment is different from that of the running environment, a cross compiler is requird.
+
+       For example, if the development environment is x86 and the running environment is AArch64 , the configuration example is as follows:
 
        ```
         export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux

@@ -43,7 +43,7 @@ VdecHelper::VdecHelper(int channelId, uint32_t width, uint32_t height,
     aclRet = aclrtGetCurrentContext(&context_);
     if ((aclRet != ACL_SUCCESS) || (context_ == nullptr)) {
         ACLLITE_LOG_ERROR("VdecHelper : Get current acl context error:%d", aclRet);
-    }       
+    }
     
     ACLLITE_LOG_INFO("VDEC width %d, height %d", frameWidth_, frameHeight_);
 }
@@ -122,7 +122,6 @@ void VdecHelper::UnsubscribReportThread() {
 
 AclLiteError VdecHelper::Init() {
     ACLLITE_LOG_INFO("Vdec process init start...");
-    
     aclError aclRet = aclrtCreateStream(&stream_);
     if (aclRet != ACL_SUCCESS) {
         ACLLITE_LOG_ERROR("Vdec create stream failed, errorno:%d", aclRet);

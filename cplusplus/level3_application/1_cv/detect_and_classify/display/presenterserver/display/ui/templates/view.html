@@ -75,7 +75,8 @@ function startViewVideo(){
                 $('#fpswapper').show();
                 rectangles = data['rectangle_list']
             }
-            var wantedWidth = 1024/2
+            // var wantedWidth = 1024/2
+            var wantedWidth = 1024
             var img = new Image()
             img.src = src
             img.onload=function(){
@@ -89,7 +90,8 @@ function startViewVideo(){
                     var channel_tmp = rectangles[0].slice(4,5).toString();
                     var current_channel = parseInt(channel_tmp.split("device-")[1].trim())
                     if(current_channel == 0){
-                    ctx.drawImage(img,40,20, wantedWidth, img.height*scale_factor)
+                    // ctx.drawImage(img,40,20, wantedWidth, img.height*scale_factor)
+                    ctx.drawImage(img,0,0, wantedWidth, img.height*scale_factor)
                     }
                     else if(current_channel == 1){
                     ctx.drawImage(img,680,20, wantedWidth, img.height*scale_factor)

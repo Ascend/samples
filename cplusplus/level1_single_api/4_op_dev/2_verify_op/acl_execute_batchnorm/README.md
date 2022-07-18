@@ -19,26 +19,24 @@
 1. 以HwHiAiUser（运行用户）登录开发环境。
 
 2. 设置环境变量，配置编译依赖的头文件与库文件路径。
+   
+   设置以下环境变量后，编译脚本会根据“{DDK_PATH}环境变量值/acllib/include/acl”目录查找编译依赖的头文件，根据{NPU_HOST_LIB}环境变量指向的目录查找编译依赖的库文件。“$HOME/Ascend”请替换“Ascend-cann-toolkit”包的实际安装路径。
 
-   设置DDK\_PATH、NPU\_HOST\_LIB环境变量，编译脚本会按环境变量指向的路径查找编译依赖的头文件和库文件，环境变量请设置为实际ACLlib组件的头文件与库文件路径。
+     - 当开发环境与运行环境的操作系统架构相同时，配置示例如下所示：
 
-   - 当运行环境操作系统架构是x86时，配置示例如下所示：
+       ```
+       export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest
+       export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
+       ```
 
-     ```
-     export DDK_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/x86_64-linux
-     export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
-     ```
+     - 当开发环境与运行环境的操作系统架构不同时，配置示例如下所示：
+       
+       例如，当开发环境为X86架构、运行环境为AArch64架构时，则涉及交叉编译，需在开发环境上安装AArch64架构的软件包，将{DDK_PATH}环境变量的路径指向AArch64架构的软件包安装目录（如下所示），便于使用与运行环境架构相同的软件包中的头文件和库文件来编译代码。
 
-     请将DDK_PATH替换为ACLlib组件的实际安装路径。
-
-   - 当运行环境操作系统架构时arm64时，配置示例如下所示：
-
-     ```
-     export DDK_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/arm64-linux
-     export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
-     ```
-
-     请将DDK_PATH替换为ACLlib组件的实际安装路径。
+       ```
+       export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux
+       export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
+       ```
 
 3. 在样例工程根目录“acl\_execute\_batchnorm”下执行如下命令创建目录用于存放编译文件，例如，创建的目录为“build/intermediates/host“。
 

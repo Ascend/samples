@@ -419,12 +419,13 @@ AclLiteError CropAndPasteHelper::ProportionCenterProcess(ImageData& resizedImage
 
     dx = (dx >> 1) << 1;
     dy = (dy >> 1) << 1;
+
     // must even
-    uint32_t pasteLeftOffset = dx;
+    uint32_t pasteLeftOffset = ALIGN_UP16(dx);
     // must even
     uint32_t pasteTopOffset = dy;
     // must odd
-    uint32_t pasteRightOffset = size_.width - dx;
+    uint32_t pasteRightOffset = size_.width - dx + pasteLeftOffset - dx;
     // must odd
     uint32_t pasteBottomOffset = size_.height - dy;
 

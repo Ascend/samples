@@ -55,7 +55,7 @@ extern "C" {
 
 #define INVALID_CHANNEL_ID -1
 #define INVALID_STREAM_FORMAT -1
-#define VIDEO_CHANNEL_MAX  23
+#define VIDEO_CHANNEL_MAX  32
 #define RTSP_TRANSPORT_UDP "udp"
 #define RTSP_TRANSPORT_TCP "tcp"
 
@@ -151,7 +151,7 @@ class VideoCapture : public AclLiteVideoCapBase {
     /**
      * @brief VideoCapture constructor
      */
-    VideoCapture(const std::string& videoName, aclrtContext context = nullptr);
+    VideoCapture(const std::string& videoName, int32_t deviceId = 0, aclrtContext context = nullptr);
 
     /**
      * @brief VideoCapture destructor
@@ -203,6 +203,7 @@ private:
     bool isJam_;
     StreamType streamType_;
     DecodeStatus status_;
+    int32_t deviceId_;
     aclrtContext context_;
     aclrtRunMode runMode_;
     int channelId_;

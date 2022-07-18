@@ -40,6 +40,8 @@
 #define NUM 1
 #define INVALID -1
 using namespace std;
+struct timespec time0 = {0, 0};
+struct timespec time1 = {0, 0};
 
 namespace {
 uint32_t kExitCount = 0;
@@ -132,17 +134,20 @@ void SetDisplay() {
     }
 }
 
-void CreateInstances(vector<AclLiteThreadParam>& threadTbl, int32_t deviceId,
+void CreateThreadInstance(vector<AclLiteThreadParam>& threadTbl, int32_t deviceId,
                      aclrtContext& context, aclrtRunMode& runMode, int rtspNumPerDevice) {
     AclLiteThreadParam detectPreThreadParam;
     for(int index=0; index<rtspNumPerDevice; index++){
+
+        int channelId = deviceId*rtspNumPerDevice+index;
         if (kDisplay) {
-            detectPreThreadParam.threadInst = new DetectPreprocessThread(kConfigFile, deviceId, deviceId*rtspNumPerDevice+index, runMode, true);
+            detectPreThreadParam.threadInst = new DetectPreprocessThread(kConfigFile, deviceId, channelId, runMode, true);
         }
         else {
-            detectPreThreadParam.threadInst = new DetectPreprocessThread(kConfigFile, deviceId, deviceId*rtspNumPerDevice+index, runMode);
+            detectPreThreadParam.threadInst = new DetectPreprocessThread(kConfigFile, deviceId, channelId, runMode);
         }
-        detectPreThreadParam.threadInstName.assign(kDetectPreName[deviceId*rtspNumPerDevice+index].c_str());
+        string DetectPreName = kDetectPreName + to_string(channelId);
+        detectPreThreadParam.threadInstName.assign(DetectPreName.c_str());
         detectPreThreadParam.context = context;
         detectPreThreadParam.runMode = runMode;
         threadTbl.push_back(detectPreThreadParam);
@@ -150,21 +155,24 @@ void CreateInstances(vector<AclLiteThreadParam>& threadTbl, int32_t deviceId,
 
         AclLiteThreadParam detectPostThreadParam;
         detectPostThreadParam.threadInst = new DetectPostprocessThread();
-        detectPostThreadParam.threadInstName.assign(kDetectPostName[deviceId*rtspNumPerDevice+index].c_str());
+        string DetectPostName = kDetectPostName + to_string(channelId);
+        detectPostThreadParam.threadInstName.assign(DetectPostName.c_str());
         detectPostThreadParam.context = context;
         detectPostThreadParam.runMode = runMode;
         threadTbl.push_back(detectPostThreadParam);
 
         AclLiteThreadParam classifyPreThreadParam;
         classifyPreThreadParam.threadInst = new ClassifyPreprocessThread(runMode);
-        classifyPreThreadParam.threadInstName.assign(kClassifyPreName[deviceId*rtspNumPerDevice+index].c_str());
+        string ClassifyPreName = kClassifyPreName + to_string(channelId);
+        classifyPreThreadParam.threadInstName.assign(ClassifyPreName.c_str());
         classifyPreThreadParam.context = context;
         classifyPreThreadParam.runMode = runMode;
         threadTbl.push_back(classifyPreThreadParam);
 
         AclLiteThreadParam classifyPostThreadParam;
-        classifyPostThreadParam.threadInst = new ClassifyPostprocessThread(kConfigFile, deviceId*rtspNumPerDevice+index);
-        classifyPostThreadParam.threadInstName.assign(kClassifyPostName[deviceId*rtspNumPerDevice+index].c_str());
+        classifyPostThreadParam.threadInst = new ClassifyPostprocessThread(kConfigFile, channelId);
+        string ClassifyPostName = kClassifyPostName + to_string(channelId);
+        classifyPostThreadParam.threadInstName.assign(ClassifyPostName.c_str());
         classifyPostThreadParam.context = context;
         classifyPostThreadParam.runMode = runMode;
         threadTbl.push_back(classifyPostThreadParam);
@@ -172,13 +180,14 @@ void CreateInstances(vector<AclLiteThreadParam>& threadTbl, int32_t deviceId,
 
     AclLiteThreadParam InferParam;
     InferParam.threadInst = new InferenceThread(runMode);
-    InferParam.threadInstName.assign(kInferName[deviceId].c_str());
+    string InferName = kInferName + to_string(deviceId);
+    InferParam.threadInstName.assign(InferName.c_str());
     InferParam.context = context;
     InferParam.runMode = runMode;
     threadTbl.push_back(InferParam);
 }
 
-void CreateThreadInstance(vector<AclLiteThreadParam>& threadTbl, AclLiteResource& aclDev) {
+void CreateALLThreadInstance(vector<AclLiteThreadParam>& threadTbl, AclLiteResource& aclDev) {
     uint32_t deviceNum;
     uint32_t rtspNumPerDevice;
     runMode = aclDev.GetRunMode();
@@ -201,7 +210,7 @@ void CreateThreadInstance(vector<AclLiteThreadParam>& threadTbl, AclLiteResource
             return;
         }
         kContext.push_back(context);
-        CreateInstances(threadTbl, i, context, runMode, rtspNumPerDevice);
+        CreateThreadInstance(threadTbl, i, context, runMode, rtspNumPerDevice);
     }
 
     if (kDisplay) {
@@ -219,7 +228,6 @@ void ExitApp(AclLiteApp& app, vector<AclLiteThreadParam>& threadTbl) {
         aclrtSetCurrentContext(threadTbl[i].context);
         delete threadTbl[i].threadInst;
     }
-    
     app.Exit();
 
     for(int i = 0; i < kContext.size(); i++) {
@@ -230,7 +238,7 @@ void ExitApp(AclLiteApp& app, vector<AclLiteThreadParam>& threadTbl) {
 
 void StartApp(AclLiteResource& aclDev) {
     vector<AclLiteThreadParam> threadTbl;
-    CreateThreadInstance(threadTbl, aclDev);
+    CreateALLThreadInstance(threadTbl, aclDev);
     AclLiteApp& app = CreateAclLiteAppInstance();
     AclLiteError ret = app.Start(threadTbl);
     if (ret != ACLLITE_OK) {
@@ -239,11 +247,17 @@ void StartApp(AclLiteResource& aclDev) {
         return;
     }
 
+    //time print
+    clock_gettime(CLOCK_REALTIME, &time0);
     for (int i = 0; i < threadTbl.size(); i++) {
         ret = SendMessage(threadTbl[i].threadInstId, MSG_APP_START, nullptr);
     }
-
     app.Wait(MainThreadProcess, nullptr);
+
+    clock_gettime(CLOCK_REALTIME, &time1);
+    cout<<"/*****************************/"<<endl;
+    cout << "process time is: " << (time1.tv_sec - time0.tv_sec)*1000 + (time1.tv_nsec - time0.tv_nsec)/1000000 << "ms" << endl;
+    cout<<"/*****************************/"<<endl;
     ExitApp(app, threadTbl);
 
     return;
@@ -264,6 +278,7 @@ int main(int argc, char *argv[]) {
     }
 
     StartApp(aclDev);
+    
     
     return ACLLITE_OK;
 }

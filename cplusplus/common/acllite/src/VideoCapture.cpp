@@ -46,6 +46,7 @@
 #include "VideoCapture.h"
 
 using namespace std;
+#define DEVICE_MAX  4
 
 namespace {
     const int64_t kUsec = 1000000;
@@ -59,7 +60,7 @@ namespace {
     const int kDefaultFps = 1;
     const int kReadSlow = 2;
 
-    ChannelIdGenerator channelIdGenerator;
+    ChannelIdGenerator channelIdGenerator[DEVICE_MAX] = {};
 
     const int kNoFlag = 0; // no flag
     const int kInvalidVideoIndex = -1; // invalid video index
@@ -293,12 +294,13 @@ void FFmpegDecoder::GetVideoInfo() {
     return;
 }                                                                   
 
-VideoCapture::VideoCapture(const std::string& videoName, aclrtContext context) :
+VideoCapture::VideoCapture(const std::string& videoName, int32_t deviceId, aclrtContext context) :
   isStop_(false),
   isReleased_(false),
   isJam_(false),
   streamType_(STREAM_VIDEO),
   status_(DECODE_UNINIT),
+  deviceId_(deviceId),
   context_(context),
   channelId_(INVALID_CHANNEL_ID),
   streamFormat_(H264_MAIN_LEVEL),
@@ -346,7 +348,7 @@ void VideoCapture::DestroyResource() {
         }       
     }while(1);
     //5. release channel id
-    channelIdGenerator.ReleaseChannelId(channelId_);
+    channelIdGenerator[deviceId_].ReleaseChannelId(channelId_);
 
     isReleased_ = true;
 }
@@ -359,7 +361,7 @@ AclLiteError VideoCapture::InitResource() {
         if ((aclRet != ACL_SUCCESS) || (context_ == nullptr)) {
             ACLLITE_LOG_ERROR("Get current acl context error:%d", aclRet);
             return ACLLITE_ERROR_GET_ACL_CONTEXT;
-        }       
+        }
     }
     //Get current run mode
     aclRet = aclrtGetRunMode(&runMode_);
@@ -373,7 +375,7 @@ AclLiteError VideoCapture::InitResource() {
 
 AclLiteError VideoCapture::InitVdecDecoder() {
     //Generate a unique channel id for video decoder
-    channelId_ = channelIdGenerator.GenerateChannelId();
+    channelId_ = channelIdGenerator[deviceId_].GenerateChannelId();
     if (channelId_ == INVALID_CHANNEL_ID) {
         ACLLITE_LOG_ERROR("Decoder number excessive %d", VIDEO_CHANNEL_MAX);
         return ACLLITE_ERROR_TOO_MANY_VIDEO_DECODERS;

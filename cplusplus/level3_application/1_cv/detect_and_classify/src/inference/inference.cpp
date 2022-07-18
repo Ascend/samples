@@ -34,8 +34,8 @@ uint32_t kDetectModelHeight = 416;
 const char* kDetectModelPath = "../model/yolov3.om";
 uint32_t kClassifyModelWidth = 224;
 uint32_t kClassifyModelHeight = 224;
-const char* kClassifyModelPath = "../model/color_dvpp_10batch.om";
-const int32_t kBatch = 10;
+const char* kClassifyModelPath = "../model/color_dynamic_batch.om";
+const int32_t kBatch = 8;
 const int kInvalidSize = -1;
 }
 
@@ -56,7 +56,7 @@ InferenceThread::~InferenceThread() {
 }
 
 AclLiteError InferenceThread::InitModelInput() {
-    classifyInputSize_ = YUV420SP_SIZE(kClassifyModelWidth, kClassifyModelHeight) * batchSize_;
+    classifyInputSize_ = YUV420SP_SIZE(kClassifyModelWidth, kClassifyModelHeight) * kBatch;
     void* buf = nullptr;
     aclError aclRet = aclrtMalloc(&buf, classifyInputSize_, 
                                   ACL_MEM_MALLOC_HUGE_FIRST);
@@ -110,7 +110,6 @@ AclLiteError InferenceThread::DetectModelExecute(shared_ptr<CarDetectDataMsg> ca
         ACLLITE_LOG_ERROR("Copy image info to device failed");
         return ACLLITE_ERROR;
     }
-
     AclLiteError ret = detectModel_.CreateInput(carDetectDataMsg->resizedFrame.data.get(), 
                                                 carDetectDataMsg->resizedFrame.size, 
                                                 imageInfoBuf_, imageInfoSize_);
@@ -214,7 +213,30 @@ AclLiteError InferenceThread::ClassifyModelExecute(shared_ptr<CarDetectDataMsg> 
     }
 
     int carcnt = carDetectDataMsg->carInfo.size();
-    int batchNum = max(carcnt, batchSize_) / batchSize_;
+    int batchNum = 0;
+    if(carcnt == 1)
+    {
+        batchNum = 1;
+        batchSize_ = 1;
+    }else if (carcnt == 2)
+    {
+        batchNum = 1;
+        batchSize_ = 2;
+    }else if(carcnt >2  && carcnt <= 4)
+    {
+        batchNum = 1;
+        batchSize_ = 4;
+    }else if(carcnt >4  && carcnt <= 8)
+    {
+        batchNum = 1;
+        batchSize_ = 8;
+    }else if(carcnt > 8)
+    {
+        batchSize_ = 8;
+        batchNum =  carcnt / batchSize_;
+        if(carcnt % batchSize_ !=0)
+            batchNum ++;
+    }
     
     for (int i = 0; i < batchNum; i++) {
         //Copy one batch preprocessed image data to device
@@ -226,7 +248,7 @@ AclLiteError InferenceThread::ClassifyModelExecute(shared_ptr<CarDetectDataMsg> 
         }
         //Inference one batch data
         AclLiteError ret = classifyModel_.Execute(carDetectDataMsg->classifyInferData, 
-                                                  classifyInputBuf_, classifyInputSize_);
+                                                  classifyInputBuf_, classifyInputSize_, batchSize_);
         if (ret != ACLLITE_OK) {
             ACLLITE_LOG_ERROR("Execute model inference failed\n");
             break;

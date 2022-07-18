@@ -38,12 +38,13 @@ public:
                              void* input2, uint32_t input2size);
     AclLiteError CreateInput(std::vector<DataInfo>& inputData);
     AclLiteError Execute(std::vector<InferenceOutput>& inferOutputs, 
-                         void *data, uint32_t size);
+                         void *data, uint32_t size, uint32_t batchsize=0);
     AclLiteError Execute(std::vector<InferenceOutput>& inferOutputs);
     size_t GetModelInputSize(int index);
     void DestroyInput();
 
 private:
+    int SetDynamicBatchSize(uint64_t batchSize);
     AclLiteError LoadModelFromFile(const std::string& modelPath);
     AclLiteError LoadModelFromMem();
     AclLiteError SetDesc();

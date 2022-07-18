@@ -64,8 +64,8 @@ AclLiteVideoProc::AclLiteVideoProc(uint32_t cameraId, uint32_t width,
 #endif
 }
 
-AclLiteVideoProc::AclLiteVideoProc(const string& videoPath, aclrtContext context){
-    cap_ = new VideoCapture(videoPath, context);
+AclLiteVideoProc::AclLiteVideoProc(const string& videoPath, int32_t deviceId, aclrtContext context){
+    cap_ = new VideoCapture(videoPath, deviceId, context);
     Open();
 }
 

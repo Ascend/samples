@@ -27,15 +27,9 @@ ResNet-50模型的基本介绍如下：
 -   编译器：g++ 或 aarch64-linux-gnu-g++
 -   芯片：Ascend 310、Ascend 310P、Ascend 910
 -   python及依赖的库：python3.7.5、Pillow库
--   已在环境上部署昇腾AI软件栈，并配置对应的的环境变量，请参见[Link](https://gitee.com/link?target=https%3A%2F%2Fwww.hiascend.com%2Fdocument)中对应版本的CANN安装指南。
-
-请检查以下条件要求是否满足，如不满足请按照备注进行相应处理。如果CANN版本升级，请同步检查第三方依赖是否需要重新安装（5.0.4及以上版本第三方依赖和5.0.4以下版本有差异，需要重新安装）。
-| 条件 | 要求 | 备注 |
-|---|---|---|
-| CANN版本 | >=5.0.4 | 请参考CANN样例仓介绍中的[安装步骤](https://github.com/Ascend/samples#%E5%AE%89%E8%A3%85)完成CANN安装，如果CANN低于要求版本请根据[版本说明](https://github.com/Ascend/samples/blob/master/README_CN.md#%E7%89%88%E6%9C%AC%E8%AF%B4%E6%98%8E)切换samples仓到对应CANN版本 |
-| 硬件要求 | Atlas200DK/Atlas300([ai1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366))  | 当前已在Atlas200DK和Atlas300测试通过，产品说明请参考[硬件平台](https://ascend.huawei.com/zh/#/hardware/product) ，其他产品可能需要另做适配|
-| 第三方依赖 | 安装准备 | 需要按照第三方依赖的[安装准备](../../../environment)，完成环境变量的设置 |
-
+-   已在环境上部署昇腾AI软件栈，并配置对应的的环境变量，请参见[Link](https://www.hiascend.com/document)中对应版本的CANN安装指南。  
+    
+    以下步骤中，开发环境指编译开发代码的环境，运行环境指运行算子、推理或训练等程序的环境，运行环境上必须带昇腾AI处理器。开发环境和运行环境可以合设在同一台服务器上，也可以分设，分设场景下，开发环境下编译出来的可执行文件，在运行环境下执行时，若开发环境和运行环境上的操作系统架构不同，则需要在开发环境中执行交叉编译。
 
 ## 下载样例<a name="zh-cn_topic_0000001225510872_section127115612012"></a>
 
@@ -73,21 +67,21 @@ ResNet-50模型的基本介绍如下：
 ```
 resnet50_firstapp
 ├── data
-│   ├── dog1_1024_683.jpg            // 测试图片，需按下文的指导获取图片，放到该目录下
+│   ├── dog1_1024_683.jpg               // 测试图片，需按下文的指导获取图片，放到该目录下
 
 ├── model
-│   ├── resnet50.caffemodel          // ResNet-50网络的预训练模型文件（*.caffemodel）
+│   ├── resnet50.caffemodel             // ResNet-50网络的预训练模型文件（*.caffemodel）
                                         // 需按下文的指导获取图片，放到该目录下
-│   ├── resnet50.prototxt            // ResNet-50网络的模型文件（*.prototxt） 
+│   ├── resnet50.prototxt               // ResNet-50网络的模型文件（*.prototxt） 
                                         // 需按下文的指导获取图片，放到该目录下                  
 
 ├── script
-│   ├── transferPic.py               // 将测试图片预处理为符合模型要求的图片
+│   ├── transferPic.py                  // 将测试图片预处理为符合模型要求的图片
                                         // 包括将*.jpg转换为*.bin，同时将图片从1024*683的分辨率缩放为224*224
 
 ├── src
-│   ├── CMakeLists.txt              // 编译脚本
-│   ├── main.cpp                    // 主函数，图片分类功能的实现文件
+│   ├── CMakeLists.txt                  // 编译脚本
+│   ├── main.cpp                        // 主函数，图片分类功能的实现文件
 ```
 
 ## 准备模型<a name="zh-cn_topic_0000001225510872_zh-cn_topic_0000001086737739_section1031118381687"></a>
@@ -112,29 +106,45 @@ resnet50_firstapp
 
     关于各参数的详细解释，请参见《ATC工具使用指南》《ATC工具使用指南》《ATC工具使用指南》。
 
-
 ## 准备测试图片<a name="zh-cn_topic_0000001225510872_zh-cn_topic_0000001086737739_section367813220018"></a>
 
 单击[Link](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/dog1_1024_683.jpg)获取测试图片，放到“resnet50_firstapp/data“目录下。
 
 此处获取的是一个\*.jpg图片，与模型对图片的要求不符，为了不影响您学习入门知识，我们提供了resnet50_firstapp/script/transferPic.py脚本用于将该测试图片转换为模型要求的图片（RGB格式、分辨率为224\*224）。
 
+
 ## 编译及运行应用<a name="zh-cn_topic_0000001225510872_section7235555174011"></a>
 
 1.  编译代码。
 
     以运行用户登录开发环境，切换到resnet50_firstapp目录下，执行以下命令。
-    执行前需按照 **环境要求** ，配置好环境变量。
+    如下为设置环境变量的示例，
+
+    \$\{SAMPLE_DIR\}表示样例所在的目录，
+
+    \$\{INSTALL_DIR\}表示CANN软件安装目录，
+
+    例如，$HOME/Ascend/ascend-toolkit/latest/{arch-os},arch表示操作系统架构（需根据运行环境的架构选择），{os}表示操作系统（需根据运行环境的操作系统选择）。
+    
 
     ```
+    export APP_SOURCE_PATH=${SAMPLE_DIR}/resnet50_firstapp
+    export DDK_PATH=${INSTALL_DIR}
+    export NPU_HOST_LIB=${INSTALL_DIR}/acllib/lib64/stub
+    chmod +x sample_build.sh
     ./sample_build.sh
     ```
+    >**说明：** 
+    >如果执行脚本报错“ModuleNotFoundError: No module named 'PIL'”，则表示缺少Pillow库，请使用 **pip3 install Pillow --user** 命令安装Pillow库。
+
+
 
 2.  运行应用。
 
     以运行用户将resnet50_firstapp目录上传至运行环境，以运行用户登录运行环境，切换到resnet50_firstapp目录下，执行以下命令。
 
     ```
+    chmod +x sample_run.sh
     ./sample_run.sh
     ```
 
@@ -156,5 +166,4 @@ resnet50_firstapp
     >"163": \["bloodhound", "sleuthhound"\]
     >"166": \["Walker hound", "Walker foxhound"\]
     >"167": \["English foxhound"\]
-
 

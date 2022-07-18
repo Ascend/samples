@@ -576,7 +576,7 @@ AclLite库是对AscendCL DVPP图像和视频处理相关接口，AscendCL设备�
 | **模型名称** | **模型说明**                                      | **模型详细描述**                                             |
 | ------------ | ------------------------------------------------- | ------------------------------------------------------------ |
 | yolov3       | 图片检测推理模型。是基于onnx的Yolov3模型。        | 模型详细描述请参见[https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/yolov/ATC_yolov3_onnx_AE](https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/yolov/ATC_yolov3_onnx_AE)。您可以参见readme中的“原始模型”章节下载原始模型网络文件和配置文件，也可以直接参见下方的[模型转换](#model_convert)章节使用wget命令下载。 |
-| color        | 车辆颜色分类推理模型。是基于tensorflow的CNN模型。 | 模型详细描述请参见[https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/ATC_CarColor_tensorflow_AE](https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/ATC_CarColor_tensorflow_AE)。您可以参见readme中的“原始模型”章节下载原始模型网络文件和配置文件，也可以直接参见下方的[模型转换](#model_convert)章节使用wget命令下载。 |
+| carcolor        | 车辆颜色分类推理模型。是基于tensorflow的CNN模型。 | 模型详细描述请参见[https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/ATC_CarColor_tensorflow_AE](https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/ATC_CarColor_tensorflow_AE)。您可以参见readme中的“原始模型”章节下载原始模型网络文件和配置文件，也可以直接参见下方的[模型转换](#model_convert)章节使用wget命令下载。 |
 
 #### <a name="model_convert">模型转换</a>
 
@@ -599,7 +599,7 @@ atc --model=./yolov3_t.onnx --framework=5 --output=yolov3 --input_shape="images:
 wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOV3_carColor_sample/data/color.pb
 wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOV3_carColor_sample/data/aipp.cfg
 # 执行模型转换命令，生成color的适配昇腾AI处理器的离线模型文件
-atc --input_shape="input_1:10,224,224,3" --output=./color_dvpp_10batch --soc_version=Ascend310 --framework=3 --model=./color.pb --insert_op_conf=./aipp.cfg
+atc --input_shape="input_1:-1,224,224,3" --output=./color_dynamic_batch --soc_version=Ascend310 --framework=3 --model=./color.pb --insert_op_conf=./aipp.cfg --dynamic_batch_size="1,2,4,8"
 ```
 
 ### 准备数据
@@ -638,15 +638,15 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
    device_num=1    # Device数量    
    RtspNumPerDevice=1      # 每个Device上的输入路数
    
-   [device_0_options]    # Device0的配置参数
-   inputType_0=pic       # Device0的输入数据类型
-   outputType_0=pic    # Device0的输出数据类型
-   inputDataPath_0=../data/pic   # Device0的输入数据路径
+   [options_param_0]    # 第1路的配置参数
+   inputType_0=pic       # 第1路的输入数据类型
+   outputType_0=pic    # 第1路的输出数据类型
+   inputDataPath_0=../data/pic   # 第1路的输入数据路径
    
    #outputFrameWidth_0=1280  # outputType_0为video时，需要配置此参数，代表输出视频的宽
    #outputFrameHeight_0=720  # outputType_0为video时，需要配置此参数，代表输出视频的高
    
-   #[device_1_options]    # Device1的配置参数
+   #[options_param_1]    # 第2路的配置参数
    #inputType_1=video
    #outputType_1=presentagent
    #inputDataPath_1=../data/car2.mp4
@@ -662,27 +662,28 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
 
    - RtspNumPerDevice，表示每个Device上开启的路数，默认值为1。当有多个输入流的时候（多个离线视频/多个RTSP输入流），可通过此参数开启多路特性，提升推理性能。
 
-   - inputType_X，表示DeviceX的输入数据类型，其中X需要从“1”开始递增，此参数当前支持的配置项有：
+   - inputType_X，表示第X+1路的输入数据类型，其中X需要从“0”开始递增，此参数当前支持的配置项有：
 
      - pic：表示输入数据为图片，当前此样例支持的图片格式为JPEG压缩图片
      - video：表示输入数据为MP4视频文件
      - rtsp：表示输入数据为rtsp流
 
-   - outputType_X，表示DeviceX的输出数据类型，其中X需要从“1”开始递增，此参数当前支持的配置项有：
+   - outputType_X，表示第X+1路的输出数据类型，其中X需要从“0”开始递增，此参数当前支持的配置项有：
 
      - pic：表示输出结果为图片
      - video：表示输出结果为MP4视频文件
      - stdout：表示将推理结果打屏输出。
      - presentagent：表示用PresentAgent展示推理结果
 
-      **注意：若开启了多路视频特性，不支持使用presentagent在线展示；可配置为video或stdout，若路数较多，建议使用stdout打屏显示，否则性能可能会较低。**
+      **注意：当前presentagent仅支持单路展示。若开启了多路视频特性，不支持使用presentagent在线展示；可配置为video或stdout，若路数较多，建议使用stdout打屏显示，否则性能可能会较低。**
 
-   - inputDataPath_X：表示DeviceX的输入数据路径，其中X需要从“1”开始递增，此参数的配置规则如下：
+   - inputDataPath_X：表示第X+1路的输入数据路径，其中X需要从“0”开始递增，此参数的配置规则如下：
 
      - 若输入数据类型是图片,则填写图片所在文件夹的相对路径，只支持填入一个路径
      - 若输入数据类型是mp4视频文件，则填写视频文件的相对路径，只支持填入一个路径
      - 若输入数据类型是rtsp流，则填写rtsp流地址，只支持填入一个地址
 
+   其中options_param_X设置的路数会自动根据base_options分配到各个Device上，如果options_param_X设置的路数与base_options不匹配，则会报错。
    Device数量为2，每个Device开启两路输入的配置示例如下所示，请注意每个input与output配置的序号都是从0开始递增的：         
 
     ```
@@ -690,29 +691,31 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
     device_num=2   # Device数量    
     RtspNumPerDevice=2      # 每个Device上的输入路数
 
-    [device_0_options]    # Device0的配置参数
-    inputType_0=video       # Device0的第一路输入数据类型
-    outputType_0=video     # Device0的第一路输出数据类型
-    inputDataPath_0=../data/video0.mp4   # Device0的第一路输入数据路径
+    [options_param_0]    # 第1路的配置参数
+    inputType_0=video       # 第1路的输入数据类型
+    outputType_0=video     # 第1路的输出数据类型
+    inputDataPath_0=../data/video0.mp4   # 第1路的输入数据路径
     outputFrameWidth_0=1280  # outputType_0为video时，需要配置此参数，代表输出视频的宽
     outputFrameHeight_0=720  # outputType_0为video时，需要配置此参数，代表输出视频的高
  
-    inputType_1 = video  # Device0的第二路输入数据类型
-    outputType_1 = video   # Device0的第二路输出数据类型
+    [options_param_1]    # 第2路的配置参数
+    inputType_1 = video  # 第2路的输入数据类型
+    outputType_1 = video   # 第2路的输出数据类型
     inputDataPath_1 =../data/video2.mp4
     outputFrameWidth_1=1280
     outputFrameHeight_1=720
 
 
-    #[device_1_options]    # Device1的配置参数
-    inputType_2=video       # Device1的第一路输入数据类型
-    outputType_2=video      # Device1的第一路输出数据类型
-    inputDataPath_2=../data/video3.mp4    # Device1的第一路输入数据路径
+    [options_param_2]    
+    inputType_2=video       # 第3路的输入数据类型
+    outputType_2=video      # 第3路的输出数据类型
+    inputDataPath_2=../data/video3.mp4    # 第3路的输入数据路径
     outputFrameWidth_2=1280   # outputType_0为video时，需要配置此参数，代表输出视频的宽
     outputFrameHeight_2=720  # outputType_0为video时，需要配置此参数，代表输出视频的高
  
-    inputType_3 = video  # Device1的第二路输入数据类型
-    outputType_3 = video   # Device1的第二路输出数据类型
+    [options_param_3]
+    inputType_3 = video  # 第4路的输入数据类型
+    outputType_3 = video   # 第4路的输出数据类型
     inputDataPath_3 =../data/video4.mp4
     outputFrameWidth_3=1280
     outputFrameHeight_3=720
@@ -762,7 +765,7 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
       在通用目标识别样例根目录下执行如下命令启动PresentServer：
 
       ```
-      cd display
+      cd ../display
       bash run_presenter_server.sh ../scripts/present_start.conf
       ```
 
@@ -843,10 +846,10 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
 | **线程**              | **主要代码文件**                                | **线程功能介绍**                                             |
 | --------------------- | ----------------------------------------------- | ------------------------------------------------------------ |
 | 主线程                | src/main.cpp                                    | 主线程，0号线程，负责拉起所有线程，并等待收到结束信号后退出。 |
-| 检测模型预处理线程    | src/detectPreprocess/detectPreprocess.cpp       | 检测模型预处理线程，线程的个数等于Device的个数，负责初始化消息数据，将解码后的图片数据处理为模型可以接受的数据并保存为消息数据，然后将消息数据标记为MSG_DETECT_PREPROC_DATA，并发送给推理线程，推理线程会根据数据是否为最后一帧，进行区分处理。 |
-| 检测模型后处理线程    | src/detectPostprocess/detectPostprocess.cpp     | 检测模型后处理线程，线程的个数等于Device的个数，负责接受来自推理线程的被标记为MSG_DETECT_INFER_OUTPUT的消息数据，并对其进行检测模型的后处理，将消息数据标记为MSG_DETECT_POSTPROC_DATA后发送给分类模型预处理线程。 |
-| 分类模型预处理线程    | src/classifyPreprocess/classifyPreprocess.cpp   | 分类模型预处理线程，线程的个数等于Device的个数，负责接受来自检测模型后处理线程的被标记为MSG_DETECT_POSTPROC_DATA的消息数据，并对其进行分类模型的预处理，将消息数据标记为MSG_CLASSIFY_PREPROC_DATA后发送给推理线程。 |
-| 分类模型后处理线程    | src/classifyPostprocess/classifyPostprocess.cpp | 分类模型后处理线程，线程的个数等于Device的个数，负责接受来自推理线程的被标记为MSG_CLASSIFY_INFER_OUTPUT的消息数据，并对其进行分类模型的后处理，如果采用网页展示的形式输出推理结果，则会将消息数据标记为MSG_PRESENT_AGENT_DISPLAY继续发送给presentserver展示线程；其他场景下则单纯输出推理结果文件，并在接受到最后一帧数据时给主线程发送终止信号。 |
+| 检测模型预处理线程    | src/detectPreprocess/detectPreprocess.cpp       | 检测模型预处理线程，线程的个数等于设置的路数，负责初始化消息数据，将解码后的图片数据处理为模型可以接受的数据并保存为消息数据，然后将消息数据标记为MSG_DETECT_PREPROC_DATA，并发送给推理线程，推理线程会根据数据是否为最后一帧，进行区分处理。 |
+| 检测模型后处理线程    | src/detectPostprocess/detectPostprocess.cpp     | 检测模型后处理线程，线程的个数等于设置的路数，负责接受来自推理线程的被标记为MSG_DETECT_INFER_OUTPUT的消息数据，并对其进行检测模型的后处理，将消息数据标记为MSG_DETECT_POSTPROC_DATA后发送给分类模型预处理线程。 |
+| 分类模型预处理线程    | src/classifyPreprocess/classifyPreprocess.cpp   | 分类模型预处理线程，线程的个数等于设置的路数，负责接受来自检测模型后处理线程的被标记为MSG_DETECT_POSTPROC_DATA的消息数据，并对其进行分类模型的预处理，将消息数据标记为MSG_CLASSIFY_PREPROC_DATA后发送给推理线程。 |
+| 分类模型后处理线程    | src/classifyPostprocess/classifyPostprocess.cpp | 分类模型后处理线程，线程的个数等于设置的路数，负责接受来自推理线程的被标记为MSG_CLASSIFY_INFER_OUTPUT的消息数据，并对其进行分类模型的后处理，如果采用网页展示的形式输出推理结果，则会将消息数据标记为MSG_PRESENT_AGENT_DISPLAY继续发送给presentserver展示线程；其他场景下则单纯输出推理结果文件，并在接受到最后一帧数据时给主线程发送终止信号。 |
 | 推理线程              | src/inference/inference.h                       | 推理线程，线程的个数等于Device的个数，负责接受被标记为MSG_DETECT_PREPROC_DATA和MSG_CLASSIFY_PREPROC_DATA的消息数据，并送给模型做推理，推理完成后再将数据发送给对应的后处理线程。 |
 | presentserver展示线程 | src/presentagentDisplay/presentagentDisplay.cpp | 非必须，当且仅当样例采用presentserver展示的方式输出推理结果时被拉起。接受来自分类模型后处理线程的被标记为MSG_PRESENT_AGENT_DISPLAY的数据，并发送到网页，并在接受到最后一帧数据时给主线程发送终止信号。 |
 
@@ -2349,11 +2352,11 @@ CANN未提供封装的数据后处理相关接口，需要用户根据模型推�
 
 1. 配置输出类型相关参数。
 
-   样例目录下的“scripts/params.conf”配置文件，提供了outputType_x参数，用于配置对应DeviceX的输出数据类型，其中X为Device ID，此参数当前支持的配置项有：pic，video，presentagent。
+   样例目录下的“scripts/params.conf”配置文件，提供了outputType_x参数，用于配置第X+1路的输出数据类型，此参数当前支持的配置项有：pic，video，presentagent。
 
-   - pic：表示输出结果为图片
-   - video：表示输出结果为MP4视频文件
-   - presentagent：表示用PresentAgent展示推理结果
+   - pic：表示输出结果为图片。
+   - video：表示输出结果为MP4视频文件。
+   - presentagent：表示用PresentAgent展示推理结果，当前仅支持一路展示。
 
    如果outputType_X为video，还需要另外配置```outputFrameWidth_X```、```outputFrameHeight_0```。
 
@@ -2364,15 +2367,16 @@ CANN未提供封装的数据后处理相关接口，需要用户根据模型推�
     ```
     [base_options]
     device_num=1
-    
-    [device0_options]
+    RtspNumPerDevice=1 
+
+    [options_param_0]
     inputType_0=video  #pic ; video ; rtsp
     outputType_0=video  #pic ; video ; presentagent 
     inputDataPath_0=../data/mp4/car1.mp4
     outputFrameWidth_0=1280
     outputFrameHeight_0=720
     
-    #[device1_options]
+    #[options_param_1]
     #inputType_1 = video
     #outputType_1 = presentagent
     #inputDataPath_1=../data/car2.mp4
@@ -3169,12 +3173,12 @@ Batch即为每次模型推理处理的图片数，动态Batch代表执行推理�
 
    - 设置多Device：通过参数device_num设置执行推理的设备数。
 
-   - 设置每一个Device支持的路数：通过参数RtspNumPerDevice设置每个Device支持的路数，若同时有多个视频输入，可通过此参数开启同时处理多路输入，提升推理性能。
+   - 设置路数：通过参数RtspNumPerDevice设置每个Device支持的路数，同时需要匹配设置对应路的数据。
 
    **参数配置约束：** 
 
    - 配置的device_num需要小于等于设备的最大Device数。
-   - 若开启了多路特性，即每个Device同时处理多路视频，输出方式不支持配置为presentagent。
+   - 若开启了多路特性，即每个Device同时处理多路视频，输出方式仅支持单路配置为presentagent。
 
 2. 读取配置文件中配置的路数，并拉起每一路的业务线程。
 
@@ -3497,7 +3501,7 @@ Batch即为每次模型推理处理的图片数，动态Batch代表执行推理�
 
 ### <a name="other">Present Agent网页展示流程</a>
 
-存在场景需要对Present Agent展示页面做修改时，可以参考本节了解Present Agent网页展示业务流程。
+存在场景需要对Present Agent展示页面做分块展示修改时，可以参考本节了解Present Agent网页展示业务流程。
 
 1. 判断是否需要拉起网页展示线程：
 
@@ -3607,6 +3611,8 @@ Batch即为每次模型推理处理的图片数，动态Batch代表执行推理�
    | 标记推理数据                           | src/presentagentDisplay/presentagentDisplay.cpp        | DisplayMsgPackage()                                          |
    | 网页识别标记                           | display/presenterserver/display/ui/templates/view.html | ...<br>var channel_tmp = rectangles[0].slice(4,5).toString();<br>var current_channel = parseInt(channel_tmp.split("device-")[1].trim())<br>... |
    | 展示页面划块，并根据标记贴图至指定区域 | display/presenterserver/display/ui/templates/view.html | ...<br>canvas.setAttribute("width",1280)<br>canvas.setAttribute("height",720)<br>...<br>if(current_channel == 0){<br> ctx.drawImage(img,40,20, wantedWidth, img.height*scale_factor)<br>}<br>                  else if(current_channel == 1){<br>ctx.drawImage(img,680,20, wantedWidth, img.height*scale_factor)<br>}<br>else if(current_channel == 2){<br>ctx.drawImage(img,40,380, wantedWidth, img.height*scale_factor)<br>}<br>else{<br>ctx.drawImage(img,680,380, wantedWidth, img.height*scale_factor)<br>}<br>... |
+
+**为方便展示，基础代码提供的是单路展示功能，并没有将画面进行分块。**
 
 ## 模型压缩
 

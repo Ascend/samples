@@ -238,11 +238,27 @@ AclLiteError AclLiteModel::CreateInput(vector<DataInfo>& inputData) {
         ACLLITE_LOG_ERROR("Create input failed for no input data");
         return ACLLITE_ERROR_INVALID_ARGS;
     }
+
+    size_t dynamicIdx = 0;
+    auto ret = aclmdlGetInputIndexByName(modelDesc_, ACL_DYNAMIC_TENSOR_NAME, &dynamicIdx);
+    if ((ret == ACL_SUCCESS) && (dynamicIdx == (dataNum - 1))) {
+        size_t dataLen = aclmdlGetInputSizeByIndex(modelDesc_, dynamicIdx);
+        void *data = nullptr;
+        ret = aclrtMalloc(&data, dataLen, ACL_MEM_MALLOC_HUGE_FIRST);
+        if (ret != ACL_SUCCESS) {
+            ACLLITE_LOG_ERROR("malloc device memory failed, errorCode = %d.", static_cast<int32_t>(ret));
+            return ACLLITE_ERROR_INVALID_ARGS;
+        }
+        DataInfo batchInput;
+        batchInput.data = data;
+        batchInput.size = dataLen;
+        inputData.push_back(batchInput);
+    }
+
     if (dataNum != inputData.size()) {
         ACLLITE_LOG_ERROR("Create input failed for wrong input nums");
         return ACLLITE_ERROR_INVALID_ARGS;
     }
-
     input_ = aclmdlCreateDataset();
     if (input_ == nullptr) {
         ACLLITE_LOG_ERROR("Create input failed for create dataset failed");
@@ -331,12 +347,32 @@ AclLiteError AclLiteModel::AddDatasetBuffer(aclmdlDataset *dataset,
     return ACLLITE_OK;
 }
 
+AclLiteError AclLiteModel::SetDynamicBatchSize(uint64_t batchSize){
+    size_t index;
+    aclError ret = aclmdlGetInputIndexByName(modelDesc_, ACL_DYNAMIC_TENSOR_NAME, &index);
+    if (ret != ACL_SUCCESS) {
+        ACLLITE_LOG_ERROR("get input index by name[%s] failed, errorCode = %d.",
+            ACL_DYNAMIC_TENSOR_NAME, static_cast<int32_t>(ret));
+        return ACLLITE_ERROR;
+    }
+    ret = aclmdlSetDynamicBatchSize(modelId_, input_, index, batchSize);
+    if (ret != ACL_SUCCESS) {
+        ACLLITE_LOG_ERROR("set dynamic batch size[%lu] failed, errorCode = %d.",
+            batchSize, static_cast<int32_t>(ret));
+        return ACLLITE_ERROR;
+    }
+    return ACLLITE_OK;
+}
+
 AclLiteError AclLiteModel::Execute(vector<InferenceOutput>& inferOutputs, 
-                               void *data, uint32_t size) {
-    AclLiteError ret = CreateInput(data, size);                                        
+                               void *data, uint32_t size, uint32_t batchsize) {
+    AclLiteError ret = CreateInput(data, size);
     if (ret != ACLLITE_OK) {
         ACLLITE_LOG_ERROR("Create mode input dataset failed");
         return ret;
+    }
+    if(batchsize){
+        SetDynamicBatchSize(batchsize);
     }
 
     ret = Execute(inferOutputs);

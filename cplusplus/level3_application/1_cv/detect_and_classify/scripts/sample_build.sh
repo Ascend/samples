@@ -91,7 +91,7 @@ function main()
   fi
 
   if [ ! -f "${ModelPath}/../data/car1.jpg" ];then
-    wget -O ${ModelPath}/../data/car1.jpg wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOV3_carColor_sample/data/car1.jpg --no-check-certificate
+    wget -O ${ModelPath}/../data/car1.jpg https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOV3_carColor_sample/data/car1.jpg --no-check-certificate
   fi
 
   find_model yolov3.om
@@ -99,7 +99,7 @@ function main()
     return 1
   fi
   
-  find_model color_dvpp_10batch.om
+  find_model color_dynamic_batch.om
   if [ $? -ne 0 ];then
     return 1
   fi

@@ -1,53 +1,24 @@
-#!/bin/bash
-ScriptPath="$( cd "$(dirname "$BASH_SOURCE")" ; pwd -P )"
-ModelPath="${ScriptPath}/model"
+model_name="MyFirstApp_build"
 
-common_script_dir=${THIRDPART_PATH}/common
-. ${common_script_dir}/sample_common.sh
+cd ${APP_SOURCE_PATH}/data
 
-function main()
-{
-  echo "[INFO] Sample preparation"
+python3 ../script/transferPic.py
 
-  target_kernel
-  if [ $? -ne 0 ];then
-    return 1
-  fi
+if [ -d ${APP_SOURCE_PATH}/build/intermediates/host ];then
+	rm -rf ${APP_SOURCE_PATH}/build/intermediates/host
+fi
 
-  wget -O ${ModelPath}/../data/dog1_1024_683.jpg https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/dog1_1024_683.jpg --no-check-certificate
+mkdir -p ${APP_SOURCE_PATH}/build/intermediates/host
+cd ${APP_SOURCE_PATH}/build/intermediates/host
 
-  cd ${ScriptPath}/data
-  python3 ../script/transferPic.py
+cmake ../../../src -DCMAKE_CXX_COMPILER=g++ -DCMAKE_SKIP_RPATH=TRUE
 
-  find_model resnet50.om
-  if [ $? -ne 0 ];then
-    return 1
-  fi
+make
 
-
-  if [ -d ${ScriptPath}/build/intermediates/host ];then
-    rm -rf ${ScriptPath}/build/intermediates/host
-  fi
- 
-  mkdir -p ${ScriptPath}/build/intermediates/host
-  cd ${ScriptPath}/build/intermediates/host
-
-  # Start compiling
-  cmake ../../../src -DCMAKE_CXX_COMPILER=g++ -DCMAKE_SKIP_RPATH=TRUE
-  if [ $? -ne 0 ];then
-    echo "[ERROR] cmake error, Please check your environment!"
-    return 1
-  fi
-  make
-  if [ $? -ne 0 ];then
-    echo "[ERROR] build failed, Please check your environment!"
-    return 1
-  fi
-
-#  if [ $? -ne 0 ];then
-#    return 1
-#  fi
-
-  echo "[INFO] Sample preparation is complete"
-}
-main
+if [ $? == 0 ];then
+	echo "make for app ${model_name} Successfully"
+	exit 0
+else
+	echo "make for app ${model_name} failed"
+	exit 1
+fi

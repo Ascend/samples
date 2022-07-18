@@ -68,13 +68,13 @@ AclLiteError DetectPreprocessThread::OpenPicsDir() {
 
 AclLiteError DetectPreprocessThread::OpenVideoCapture() {
     if (IsRtspAddr(inputDataPath_)) {
-        cap_ = new AclLiteVideoProc(inputDataPath_);
+        cap_ = new AclLiteVideoProc(inputDataPath_ , deviceId_);
     } else if (IsVideoFile(inputDataPath_)) {
         if (!IsPathExist(inputDataPath_)) {
             ACLLITE_LOG_ERROR("The %s is inaccessible", inputDataPath_.c_str());
             return ACLLITE_ERROR;
         }
-        cap_ = new AclLiteVideoProc(inputDataPath_);
+        cap_ = new AclLiteVideoProc(inputDataPath_ , deviceId_);
     } else {
         ACLLITE_LOG_ERROR("Invalid param. The arg should be accessible rtsp,"
                           " video file or camera id");
@@ -188,10 +188,10 @@ AclLiteError DetectPreprocessThread::Init() {
 
     //Get the relevant thread instance id
     selfThreadId_ = SelfInstanceId();
-    inferThreadId_ = GetAclLiteThreadIdByName(kInferName[deviceId_]);
-    detectPostThreadId_ = GetAclLiteThreadIdByName(kDetectPostName[channelId_]);
-    classifyPreThreadId_ = GetAclLiteThreadIdByName(kClassifyPreName[channelId_]);
-    classifyPostThreadId_ = GetAclLiteThreadIdByName(kClassifyPostName[channelId_]);
+    inferThreadId_ = GetAclLiteThreadIdByName(kInferName + to_string(deviceId_));
+    detectPostThreadId_ = GetAclLiteThreadIdByName(kDetectPostName + to_string(channelId_));
+    classifyPreThreadId_ = GetAclLiteThreadIdByName(kClassifyPreName + to_string(channelId_));
+    classifyPostThreadId_ = GetAclLiteThreadIdByName(kClassifyPostName + to_string(channelId_));
     if (display_){
         presentAgentDisplayThreadId_ = GetAclLiteThreadIdByName(kPresentAgentDisplayName.c_str());
     }

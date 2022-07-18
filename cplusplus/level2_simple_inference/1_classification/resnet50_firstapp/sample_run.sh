@@ -1,5 +1,5 @@
-#!/bin/bash
-ScriptPath="$( cd "$(dirname "$BASH_SOURCE")" ; pwd -P )"
+model_name="MyFirstApp_run"
 
-cd ${ScriptPath}/out
+cd ${APP_SOURCE_PATH}/out
+
 ./main
