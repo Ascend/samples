@@ -1,8 +1,8 @@
-tf_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/bert_text_classification/bert_text_classification.pb"
+tf_model="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/bert_text_classification/bert_text_classification.pb"
 model_name="bert_text_classification"
 
 project_name="python_bert_text_classification"
-data_source="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/bert_text_classification/"
+data_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/bert_text_classification/"
 data_name="sample.txt"
 
 script_path_temp="$( cd "$(dirname $BASH_SOURCE)" ; pwd -P)"

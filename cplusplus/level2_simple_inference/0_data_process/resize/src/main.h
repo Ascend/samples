@@ -1,12 +1,12 @@
-/**
-* @file utils.h
-*
-* Copyright (C) 2020. Huawei Technologies Co., Ltd. All rights reserved.
+/*
+* Copyright (C) Huawei Technologies Co., Ltd. 2020-2022. All rights reserved.
 *
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
+#ifndef MAIN_H
+#define MAIN_H
 #pragma once
 #include <iostream>
 #include <unistd.h>
@@ -17,24 +17,24 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <map>
+#include <cstdint>
 #include "acl/acl.h"
 #include "acl/ops/acl_dvpp.h"
-#include <cstdint>
 
 #define INFO_LOG(fmt, args...) fprintf(stdout, "[INFO]  " fmt "\n", ##args)
 #define WARN_LOG(fmt, args...) fprintf(stdout, "[WARN]  " fmt "\n", ##args)
 #define ERROR_LOG(fmt, args...) fprintf(stdout, "[ERROR] " fmt "\n", ##args)
 
-typedef enum Result {
+enum Result {
     SUCCESS = 0,
     FAILED = 1
-} Result;
+};
 
-typedef struct PicDesc {
+struct PicDesc {
     std::string picName;
     int width;
     int height;
-}PicDesc;
+};
 
 aclrtRunMode runMode;
-
+#endif

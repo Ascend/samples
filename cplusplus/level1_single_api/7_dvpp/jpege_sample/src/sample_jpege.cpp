@@ -41,7 +41,7 @@ uint32_t g_height = 128;
 // Input file format, 1(yuv420sp nv12),2(yuv420sp nv21),7(yuv422packed YUYV),8(yuv422packed UYVY)
 // 9(yuv422packed YVYU), 10(yuv422packed VYUY)
 uint32_t g_format = 1;
-// The number of channel, Value range:[1, 24]
+// The number of channel, Value range:[1, MAX_JPEGE_CHN]
 uint32_t g_chn_num = 1;
 // PIcture bitwidth, Only support 8bit
 uint32_t g_bitwidth = 8;
@@ -49,7 +49,7 @@ uint32_t g_bitwidth = 8;
 uint32_t g_level = 100;
 // Save Code Stream, 0:do not save, Non-zero:save
 uint32_t g_save = 1;
-// The start channel id, Value range:[0, 47]
+// The start channel id, Value range:[0, MAX_JPEGE_CHN - 1]
 uint32_t g_chn_num_start = 0;
 // 0:function test, Non-zero:performance test
 uint32_t g_performance = 0;

@@ -1,5 +1,5 @@
 /**
-* Copyright 2020 Huawei Technologies Co., Ltd
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2022. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 * File sample_process.h
 * Description: handle acl resource
 */
+#ifndef INFERENCETHREAD_H
+#define INFERENCETHREAD_H
 #pragma once
 
 #include <iostream>
@@ -27,10 +29,8 @@
 #include "AclLiteThread.h"
 #include "CarParams.h"
 
-using namespace std;
-
 /**
-* ClassifyProcess
+* InferenceThread
 */
 class InferenceThread : public AclLiteThread {
 public:
@@ -38,18 +38,18 @@ public:
     ~InferenceThread();
 
     AclLiteError Init();
-    AclLiteError Process(int msgId, shared_ptr<void> data);
+    AclLiteError Process(int msgId, std::shared_ptr<void> data);
 private:
     AclLiteError InitModelInput();
-    AclLiteError DetectMsgSend(shared_ptr<CarDetectDataMsg> carDetectDataMsg);
-    AclLiteError DetectModelExecute(shared_ptr<CarDetectDataMsg> carDetectDataMsg);
-    AclLiteError ClassifyModelExecute(shared_ptr<CarDetectDataMsg> carDetectDataMsg); //wait
-    AclLiteError ClassifyMsgSend(shared_ptr<CarDetectDataMsg> carDetectDataMsg);
-    int CopyOneBatchImages(uint8_t* buffer, uint32_t bufferSize, 
-                           vector<CarInfo> &carImgs, int batchIdx);
+    AclLiteError DetectMsgSend(std::shared_ptr<CarDetectDataMsg> carDetectDataMsg);
+    AclLiteError DetectModelExecute(std::shared_ptr<CarDetectDataMsg> carDetectDataMsg);
+    AclLiteError ClassifyModelExecute(std::shared_ptr<CarDetectDataMsg> carDetectDataMsg);
+    AclLiteError ClassifyMsgSend(std::shared_ptr<CarDetectDataMsg> carDetectDataMsg);
+    int CopyOneBatchImages(uint8_t* buffer, uint32_t bufferSize,
+                           std::vector<CarInfo> &carImgs, int batchIdx);
     int CopyImageData(uint8_t *buffer, uint32_t bufferSize, ImageData& image);
     void DestroyResource();
-private:   
+private:
     AclLiteModel detectModel_;
     AclLiteModel classifyModel_;
     aclrtRunMode runMode_;
@@ -57,6 +57,7 @@ private:
     uint32_t classifyInputSize_;
     uint8_t* classifyInputBuf_;
     uint32_t imageInfoSize_;
-    void*    imageInfoBuf_;         
+    void* imageInfoBuf_;
 };
 
+#endif

@@ -1,5 +1,5 @@
 /**
-* Copyright 2020 Huawei Technologies Co., Ltd
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2022. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -21,31 +21,25 @@
 
 using namespace std;
 
-AclLiteResource::AclLiteResource():
-  isReleased_(false),
-  useDefaultCtx_(true),
-  deviceId_(0),  
-  runMode_(ACL_HOST), 
-  context_(nullptr),
-  aclConfig_("") {   
+AclLiteResource::AclLiteResource():isReleased_(false), useDefaultCtx_(true), deviceId_(0),
+    runMode_(ACL_HOST), context_(nullptr), aclConfig_("")
+{
 }
 
-AclLiteResource::AclLiteResource(int32_t devId, 
-                     const string& aclConfigPath, 
-                     bool useDefaultCtx):
-  isReleased_(false),
-  useDefaultCtx_(useDefaultCtx),
-  deviceId_(devId),  
-  runMode_(ACL_HOST),
-  context_(nullptr),
-  aclConfig_(aclConfigPath) {  
-}   
+AclLiteResource::AclLiteResource(int32_t devId, const string& aclConfigPath,
+    bool useDefaultCtx):isReleased_(false),
+    useDefaultCtx_(useDefaultCtx), deviceId_(devId),
+    runMode_(ACL_HOST), context_(nullptr), aclConfig_(aclConfigPath)
+{
+}
 
-AclLiteResource::~AclLiteResource() {
+AclLiteResource::~AclLiteResource()
+{
     Release();
 }
 
-AclLiteError AclLiteResource::Init() {
+AclLiteError AclLiteResource::Init()
+{
     // ACL init
     aclError ret = aclInit(aclConfig_.c_str());
     if (ret != ACL_SUCCESS) {
@@ -85,11 +79,12 @@ AclLiteError AclLiteResource::Init() {
     return ACLLITE_OK;
 }
 
-void AclLiteResource::Release() {
+void AclLiteResource::Release()
+{
     if (isReleased_) {
         return;
     }
-    
+
     aclError ret;
     if ((!useDefaultCtx_) && (context_ != nullptr)) {
         ret = aclrtDestroyContext(context_);
@@ -99,7 +94,7 @@ void AclLiteResource::Release() {
         context_ = nullptr;
     }
     ACLLITE_LOG_INFO("destroy context ok");
-    
+
     ret = aclrtResetDevice(deviceId_);
     if (ret != ACL_SUCCESS) {
         ACLLITE_LOG_ERROR("reset device failed, errorCode is : %d", ret);

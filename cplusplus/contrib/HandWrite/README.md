@@ -51,9 +51,9 @@ Check whether the following requirements are met. If not, perform operations acc
     # To facilitate download, the commands for downloading the original model and converting the model are provided here. You can directly copy and run the commands. You can also refer to the above table to download the model from ModelZoo and manually convert it.    
     
     cd  $HOME/samples/cplusplus/contrib/HandWrite/model    
-    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/handwrite/resnet.caffemodel  
-    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/handwrite/resnet.prototxt
-    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/handwrite/insert_op.cfg
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/handwrite/resnet.caffemodel  
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/handwrite/resnet.prototxt
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/handwrite/insert_op.cfg
     atc --model=./resnet.prototxt --weight=./resnet.caffemodel --framework=0 --output=resnet --soc_version=Ascend310 --insert_op_conf=./insert_op.cfg --input_shape="data:1,3,112,112" --input_format=NCHW
     ```
 

@@ -14,7 +14,7 @@ function main()
   fi
   
   if [ ! -f "${ModelPath}/../data/dog.png" ];then
-    wget -O ${ModelPath}/../data/dog.png https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/colorization/dog.png --no-check-certificate
+    wget -O ${ModelPath}/../data/dog.png https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/colorization/dog.png --no-check-certificate
   fi
 
   find_model colorization.om

@@ -1,8 +1,8 @@
-tf_model="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/animeGAN/AnimeGAN_256_256.pb"
-aipp_cfg="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/animeGAN/aipp_256_256.cfg"
+tf_model="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/animeGAN/AnimeGAN_256_256.pb"
+aipp_cfg="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/animeGAN/aipp_256_256.cfg"
 model_name="AnimeGANv2_256"
 
-data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/animeGAN/test_video/"
+data_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/animeGAN/test_video/"
 data_name="test_video.mp4"
 project_name="animeGAN_video"
 

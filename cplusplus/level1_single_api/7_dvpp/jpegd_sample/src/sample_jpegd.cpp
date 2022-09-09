@@ -50,9 +50,6 @@ int32_t main(int32_t argc, char *argv[])
         return HI_FAILURE;
     }
 
-    signal(SIGINT, jpegd_handle_signal);
-    signal(SIGTERM, jpegd_handle_signal);
-
     s32Ret = get_option(argc, &(*argv));
     if (s32Ret != HI_SUCCESS) {
         SAMPLE_PRT("get_option failed!\n");

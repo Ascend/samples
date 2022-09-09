@@ -1,7 +1,7 @@
 version=$1
-model_data="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/yuefuzuoshi/poetry.data-00000-of-00001"
-model_meta="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/yuefuzuoshi/poetry.meta"
-model_index="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/yuefuzuoshi/poetry.index"
+model_data="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/yuefuzuoshi/poetry.data-00000-of-00001"
+model_meta="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/yuefuzuoshi/poetry.meta"
+model_index="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/yuefuzuoshi/poetry.index"
 script_path="$( cd "$(dirname $BASH_SOURCE)" ; pwd -P)"
 project_path=${script_path}/..
 project_name="ModelZoo_Yuefu_TF"

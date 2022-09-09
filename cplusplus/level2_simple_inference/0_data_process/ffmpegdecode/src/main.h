@@ -1,11 +1,12 @@
 /**
-*
-* Copyright (C) 2020. Huawei Technologies Co., Ltd. All rights reserved.
-*
+* Copyright (c) Huawei Technologies Co., Ltd. 2022-2022. All rights reserved.
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
+#ifndef VOS_INCLUDE_TIMER_H
+#define VOS_INCLUDE_TIMER_H
+
 #pragma once
 #include <iostream>
 #include <unistd.h>
@@ -24,11 +25,11 @@
 #include "acllite/AclLiteError.h"
 #include "acllite/AclLiteResource.h"
 
-#define INVALID_STREAM_FORMAT -1
+#define INVALID_STREAM_FORMAT (-1)
 #define RTSP_TRANSPORT_UDP "udp"
 #define RTSP_TRANSPORT_TCP "tcp"
 #define VIDEO_CHANNEL_MAX  23
-#define INVALID_CHANNEL_ID -1
+#define INVALID_CHANNEL_ID (-1)
 
 enum StreamType {
     STREAM_VIDEO = 0,
@@ -57,3 +58,4 @@ typedef enum Result {
 }Result;
 
 
+#endif

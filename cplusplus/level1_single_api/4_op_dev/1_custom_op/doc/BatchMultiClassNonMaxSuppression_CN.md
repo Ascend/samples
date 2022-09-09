@@ -2,7 +2,7 @@
 
 ## 概述<a name="section10369751135417"></a>
 
-注：对融合规则无任何了解的，请先参看开发流程：[https://support.huaweicloud.com/devg-fr-tensorflow/atlasfrdg\_25\_0011.html](https://support.huaweicloud.com/devg-fr-tensorflow/atlasfrdg_25_0011.html)，上述链接给了完整的scope说明，下面仅给出当前样例的关键代码。
+注：对融合规则无任何了解的，请先参看：[https://www.hiascend.com/document](https://www.hiascend.com/document)中的《TensorFlow Parser Scope融合规则开发》手册，上述手册给了完整的scope说明，下面仅给出当前样例的关键代码。
 
 基于Tensorflow构建的神经网络其计算图通常由大量的小算子组成。为了实现高性能的网络推理计算，往往需要对这些小算子进行融合，使得融合后的大算子可以充分利用硬件加速资源。而融合规则开发时，当难以通过FE融合实现时，可考虑GE的scope融合实现（Scope融合是为了将某一个scope内的所有小算子进行替换成功能等价的大算子而提供的一个必要映射手段）。
 

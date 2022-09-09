@@ -1,9 +1,9 @@
-mindspore_model="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_mindspore/googlenet.air"
+mindspore_model="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/googlenet_mindspore/googlenet.air"
 model_name="googlenet"   
     
-data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_mindspore/"
+data_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/googlenet_mindspore/"
 data_name="airplane.jpg"
-verify_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_mindspore/"
+verify_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/googlenet_mindspore/"
 verify_name="airplane_verify.jpg"
 project_name="googlenet_mindspore_picture"
 

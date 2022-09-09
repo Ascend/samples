@@ -48,15 +48,15 @@ Check whether the following requirements are met. If not, perform operations acc
     ```
     # To facilitate download, the commands for downloading the original model and converting the model are provided here. You can directly copy and run the commands. You can also refer to the above table to download the model from ModelZoo and manually convert it.    
     cd $HOME/samples/python/level2_simple_inference/1_classification/googlenet_onnx_picture/model
-    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/classification/googlenet.onnx   
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_onnx_picture/insert_op.cfg
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/classification/googlenet.onnx   
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/googlenet_onnx_picture/insert_op.cfg
     atc --model=./googlenet.onnx --framework=5 --output=googlenet_yuv --soc_version=Ascend310 --insert_op_conf=insert_op.cfg --input_shape="actual_input_1:1,3,224,224" --input_format=NCHW
     ```
 3. Obtain the test image required by the sample.
     ```
     Run the following commands to go to the **data** folder of the sample and download the corresponding test image:
     cd $HOME/samples/python/level2_simple_inference/1_classification/googlenet_onnx_picture/data
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_imagenet_picture/test_image/test1.jpg
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/googlenet_imagenet_picture/test_image/test1.jpg
     cd ../src
     ```
 

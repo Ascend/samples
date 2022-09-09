@@ -1,9 +1,9 @@
-mindspore_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/lenet/mnist.air"
+mindspore_model="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/lenet/mnist.air"
 model_name="mnist"
 
-data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/lenet_mindspore/test_image/"
+data_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/lenet_mindspore/test_image/"
 data_name="test1.png"
-verify_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/lenet_mindspore/verify_file/"
+verify_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/lenet_mindspore/verify_file/"
 verify_name="verify_test1.txt"
 project_name="lenet_mindspore_picture"
 

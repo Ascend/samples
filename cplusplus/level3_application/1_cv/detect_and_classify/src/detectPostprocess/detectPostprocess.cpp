@@ -1,5 +1,5 @@
 /**
-* Copyright 2020 Huawei Technologies Co., Ltd
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2022. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -29,11 +29,11 @@ namespace {
 const uint32_t kBBoxDataBufId = 0;
 const uint32_t kBoxNumDataBufId = 1;
 const static std::vector<std::string> yolov3Label = { "person", "bicycle", "car", "motorbike",
-    "aeroplane","bus", "train", "truck", "boat",
+    "aeroplane", "bus", "train", "truck", "boat",
     "traffic light", "fire hydrant", "stop sign", "parking meter",
     "bench", "bird", "cat", "dog", "horse",
     "sheep", "cow", "elephant", "bear", "zebra",
-    "giraffe", "backpack", "umbrella", "handbag","tie",
+    "giraffe", "backpack", "umbrella", "handbag", "tie",
     "suitcase", "frisbee", "skis", "snowboard", "sports ball",
     "kite", "baseball bat", "baseball glove", "skateboard", "surfboard",
     "tennis racket", "bottle", "wine glass", "cup",
@@ -43,9 +43,9 @@ const static std::vector<std::string> yolov3Label = { "person", "bicycle", "car"
     "sofa", "potted plant", "bed", "dining table", "toilet",
     "TV monitor", "laptop", "mouse", "remote", "keyboard",
     "cell phone", "microwave", "oven", "toaster", "sink",
-    "refrigerator", "book", "clock", "vase","scissors",
+    "refrigerator", "book", "clock", "vase", "scissors",
     "teddy bear", "hair drier", "toothbrush" };
-enum BBoxIndex { TOPLEFTX = 0, TOPLEFTY, BOTTOMRIGHTX, BOTTOMRIGHTY, SCORE, LABEL };   
+enum BBoxIndex { TOPLEFTX = 0, TOPLEFTY, BOTTOMRIGHTX, BOTTOMRIGHTY, SCORE, LABEL };
 uint32_t kModelWidth = 416;
 uint32_t kModelHeight = 416;
 }
@@ -56,13 +56,15 @@ DetectPostprocessThread::DetectPostprocessThread() {
 DetectPostprocessThread::~DetectPostprocessThread() {
 }
 
-AclLiteError DetectPostprocessThread::Init() {
+AclLiteError DetectPostprocessThread::Init()
+{
     return ACLLITE_OK;
 }
 
-AclLiteError DetectPostprocessThread::Process(int msgId, shared_ptr<void> data) {
+AclLiteError DetectPostprocessThread::Process(int msgId, shared_ptr<void> data)
+{
     AclLiteError ret = ACLLITE_OK;
-    switch(msgId) {
+    switch (msgId) {
         case MSG_DETECT_INFER_OUTPUT:
             InferOutputProcess(static_pointer_cast<CarDetectDataMsg>(data));
             MsgSend(static_pointer_cast<CarDetectDataMsg>(data));
@@ -75,21 +77,17 @@ AclLiteError DetectPostprocessThread::Process(int msgId, shared_ptr<void> data) 
     return ret;
 }
 
-AclLiteError DetectPostprocessThread::MsgSend(shared_ptr<CarDetectDataMsg> carDetectDataMsg) {
-    while(1) 
-    {
-        AclLiteError ret = SendMessage(carDetectDataMsg->classifyPreThreadId, MSG_DETECT_POSTPROC_DATA, carDetectDataMsg);
-        if(ret == ACLLITE_ERROR_ENQUEUE)
-        {
+AclLiteError DetectPostprocessThread::MsgSend(shared_ptr<CarDetectDataMsg> carDetectDataMsg)
+{
+    while (1) {
+        AclLiteError ret = SendMessage(carDetectDataMsg->classifyPreThreadId,
+            MSG_DETECT_POSTPROC_DATA, carDetectDataMsg);
+        if (ret == ACLLITE_ERROR_ENQUEUE) {
             usleep(500);
             continue;
-        }
-        else if(ret == ACLLITE_OK)
-        {
+        } else if (ret == ACLLITE_OK) {
             break;
-        }
-        else
-        {
+        } else {
             ACLLITE_LOG_ERROR("Send read frame message failed, error %d", ret);
             return ret;
         }
@@ -98,12 +96,13 @@ AclLiteError DetectPostprocessThread::MsgSend(shared_ptr<CarDetectDataMsg> carDe
     return ACLLITE_OK;
 }
 
-AclLiteError DetectPostprocessThread::InferOutputProcess(shared_ptr<CarDetectDataMsg> carDetectDataMsg) {
-    if (carDetectDataMsg->isLastFrame) 
+AclLiteError DetectPostprocessThread::InferOutputProcess(shared_ptr<CarDetectDataMsg> carDetectDataMsg)
+{
+    if (carDetectDataMsg->isLastFrame)
         return ACLLITE_OK;
     
     float* detectData = (float *)carDetectDataMsg->detectInferData[kBBoxDataBufId].data.get();
-    if(detectData == nullptr){
+    if (detectData == nullptr) {
         ACLLITE_LOG_ERROR("detect inferoutput is null\n");
         return ACLLITE_ERROR;
     }
@@ -116,7 +115,7 @@ AclLiteError DetectPostprocessThread::InferOutputProcess(shared_ptr<CarDetectDat
             continue;
         }
         uint32_t objIndex = (uint32_t)detectData[totalBox * LABEL + i];
-        if (objIndex == 2){
+        if (objIndex == 2) {
             CarInfo carInfo;
             carInfo.rectangle.lt.x = detectData[totalBox * TOPLEFTX + i];
             carInfo.rectangle.lt.y = detectData[totalBox * TOPLEFTY + i];

@@ -91,7 +91,6 @@ typedef struct hiPNGD_THREAD_PARAM_S {
 /*******************************************************
     function announce
 *******************************************************/
-void pngd_handle_signal(int32_t signo);
 void pngd_init_start_time();
 void pngd_usage(char *sPrgNm);
 int32_t get_option(int32_t argc, char **argv);

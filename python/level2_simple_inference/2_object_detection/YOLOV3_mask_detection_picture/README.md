@@ -46,11 +46,11 @@ Check whether the following requirements are met. If not, perform operations acc
     | **Model**               | **Description**                                 | **How to Obtain**                                            |
     | --------------------------- | --------------------------------------------- | ------------------------------------------------------------ |
     | mask_detection.pb           | TensorFlow-YOLOV3-based mask detection model.        | Download the model by referring to the [README.md](https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/yolov3_resnet18/ATC_yolo3_resnet18_tf_AE). |
-    | mask_detection_quanzited.pb | Quantized mask detection model based on TensorFlow-YOLOV3.| Click [here](https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com:443/003_Atc_Models/AE/ATC%20Model/YOLOV3-RESNET18%20/yolo3_resnet18_quantized.pb) to download. (The operation for converting an OM offline model is the same as that for converting an unquantized PB model. For details about how to convert a model, visit https://github.com/Ascend/samples/wikis/%E4%BD%BF%E7%94%A8AMCT%E5%B7%A5%E5%85%B7%E9%87%8F%E5%8C%96YOLOV3%E6%A8%A1%E5%9E%8B?sort_id=4402780. If you use a quantized model, replace the model name in the sample.) |
+    | mask_detection_quanzited.pb | Quantized mask detection model based on TensorFlow-YOLOV3.| Click [here](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com:443/003_Atc_Models/AE/ATC%20Model/YOLOV3-RESNET18%20/yolo3_resnet18_quantized.pb) to download. (The operation for converting an OM offline model is the same as that for converting an unquantized PB model. For details about how to convert a model, visit https://github.com/Ascend/samples/wikis/%E4%BD%BF%E7%94%A8AMCT%E5%B7%A5%E5%85%B7%E9%87%8F%E5%8C%96YOLOV3%E6%A8%A1%E5%9E%8B?sort_id=4402780. If you use a quantized model, replace the model name in the sample.) |
     ```
     # To facilitate download, the commands for downloading the original model and converting the model are provided here. You can directly copy and run the commands. You can also refer to the above table to download the model from ModelZoo and manually convert it.    
     cd ${HOME}/samples/python/level2_simple_inference/2_object_detection/YOLOV3_mask_detection_picture/model    
-    wget https://obs-model-ascend.obs.cn-east-2.myhuaweicloud.com/mask_detection/mask_detection.pb     
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/mask_detection/mask_detection.pb     
     atc --input_shape="images:1,352,640,3" --input_format=NHWC --output="./mask_detection" --soc_version=Ascend310 --framework=3 --model="./mask_detection.pb"
     ```
 
@@ -58,7 +58,7 @@ Check whether the following requirements are met. If not, perform operations acc
     ```
     # Run the following commands to go to the data folder of the sample and download the corresponding test image:
     cd $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV3_mask_detection_picture/data
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/YOLOV3_mask_detection_picture-python/mask.jpg
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/YOLOV3_mask_detection_picture-python/mask.jpg
     cd ../src
     ```
 

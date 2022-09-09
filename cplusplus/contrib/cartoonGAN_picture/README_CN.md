@@ -45,7 +45,7 @@
       由于版本问题，此模型在3.1.0版本不能正确转换。因此3.1.0版本直接获取om模型。     
       ``` 
         cd $HOME/samples/cplusplus/contrib/cartoonGAN_picture/model
-        wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/cartoonGAN_picture/cplus/cartoonization.om
+        wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/cartoonGAN_picture/cplus/cartoonization.om
       ```
 
     - 3.0.0版本       
@@ -56,7 +56,7 @@
         ```
         # 为了方便下载，在这里直接给出原始模型下载及模型转换命令,可以直接拷贝执行。也可以参照上表在modelzoo中下载并手工转换，以了解更多细节。     
         cd $HOME/samples/cplusplus/contrib/cartoonGAN_picture/model     
-        wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/cartoon/cartoonization.pb
+        wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/cartoon/cartoonization.pb
         atc --output_type=FP32 --input_shape="train_real_A:1,256,256,3" --input_format=NHWC --output="./cartoonization" --soc_version=Ascend310 --framework=3 --save_original_model=false --model="./cartoonization.pb" --precision_mode=allow_fp32_to_fp16
         ```
 

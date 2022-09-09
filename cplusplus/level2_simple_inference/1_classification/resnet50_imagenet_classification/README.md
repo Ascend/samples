@@ -12,53 +12,6 @@ Specifically,
     Convert the Caffe ResNet-50 model file into an offline model that adapts to the Ascend AI Processor in advance.
 
 
-## Principles<a name="section3558105154116"></a>
-
-This sample involves the following key functions:
-
--   Initialization
-    -   **aclInit**: initializes AscendCL.
-    -   **aclFinalize**: deinitializes AscendCL.
-
--   Device management
-    -   **aclrtSetDevice**: sets the compute device.
-    -   **aclrtGetRunMode**: obtains the run mode of the  Ascend AI Software Stack. The internal processing varies with the run mode.
-    -   **aclrtResetDevice**: resets the compute device and cleans up all resources associated with the device.
-
--   **Context management**
-    -   **aclrtCreateContext**: creates a context.
-    -   **aclrtDestroyContext**: destroys a context.
-
--   Stream management
-    -   **aclrtCreateStream**: creates a stream.
-    -   **aclrtDestroyStream**: destroys a stream.
-
--   Memory management
-    -   **aclrtMalloc**: allocates device memory.
-    -   **aclrtFree**: frees device memory.
-
--   Data transfer
-
-    **aclrtMemcpy**: copies memory.
-
--   Model inference
-    -   **aclmdlLoadFromFileWithMem**: loads a model from an .om file.
-    -   **aclmdlExecute**: performs synchronous model inference.
-    -   **aclmdlUnload**: unloads a model.
-
--   Data postprocessing
-
-    Provides sample code to process the model inference result and display the class indexes with top 5 confidence values of each image.
-
-    The sample provides a user-defined API  **DumpModelOutputResult**, which is used to write the model inference result to a file \(after the executable file is executed, the inference result file is generated in the directory of the executable file in the  operating environment\). This API is not called by default. To call this API, you need to add the following code before the  **OutputModelResult**  call in  **sample\_process.cpp**  in advance.
-
-    ```
-    // Print the top 5 confidence values with indexes using DumpModelOutputResult
-    // if want to dump output result to file in the current directory
-    modelProcess.DumpModelOutputResult();
-    modelProcess.OutputModelResult();
-    ```
-
 
 ## Directory Structure<a name="section14723181815424"></a>
 
@@ -95,85 +48,32 @@ The sample directory is organized as follows:
 -   Compiler: g++ or aarch64-linux-gnu-g++
 -   SoC: Ascend 310 AI Processor, Ascend 310P AI Processor, Ascend 910 AI Processor
 -   Python and its dependency library: Python 3.7.5 and Pillow
--   Ascend AI Software Stack deployed
+-   The Ascend AI software stack has been deployed on the environment and the corresponding environment variables have been configured. Please refer to the corresponding version of the CANN installation guide in [Link](https://www.hiascend.com/document).
+    
+     In the following steps, the development environment refers to the environment for compiling and developing code, and the operating environment refers to the environment for running programs such as operators, inference, or training. 
 
-## Environment Variables<a name="section1313218510108"></a>
-
-- Configuring Environment Variables in the Development Environment
-
-  1. The CANN portfolio provides a process-level environment variable setting script to automatically set environment variables. The following commands are used as examples
-
-     ```
-     . ${HOME}/Ascend/ascend-toolkit/set_env.sh
-     ```
-
-     Replace  **$HOME/Ascend**  with the actual Ascend-CANN-Toolkit installation path.
-
-  2. Operator building requires Python installation. The following takes Python 3.7.5 as an example. Run the following commands as a running user to set the environment variables related to Python 3.7.5.
-
-     ```
-     # Set tje Python3.7.5 library path.
-     export LD_LIBRARY_PATH=/usr/local/python3.7.5/lib:$LD_LIBRARY_PATH
-     # If multiple Python 3 versions exist in the user environment, specify Python 3.7.5.
-     export PATH=/usr/local/python3.7.5/bin:$PATH
-     ```
-
-     Replace the Python 3.7.5 installation path as required. You can also write the preceding commands to the ~/.bashrc file and run the source ~/.bashrc command to make the modification take effect immediately.
-
-  3. In the development environment, set environment variables and configure the header search path and library search path on which the build of the AscendCL single-operator verification program depends.
-
-     The build script searches for the required header files and libraries through the paths specified by the environment variables. Replace  **$HOME/Ascend**  with the actual Ascend-CANN-Toolkit installation path.
-
-     - If the development environment operating system architecture is x86, the configuration example is as follows:
-
-       ```
-        export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux
-        export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
-       ```
-
-     - If the running environment operating system architecture is AArch64, the configuration example is as follows:
-
-       ```
-        export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux
-        export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
-       ```
-
-- Configuring Environment Variables in the Running Environment
-
-  - If Ascend-CANN-Toolkit is installed in the running environment, set the environment variable as follows:
-
-    ```
-    . ${HOME}/Ascend/ascend-toolkit/set_env.sh
-    ```
-
-  - If Ascend-CANN-NNRT is installed in the running environment, set the environment variable as follows:
-
-    ```
-    . ${HOME}/Ascend/nnrt/set_env.sh
-    ```
-
-  - If Ascend-CANN-NNAE is installed in the running environment, set the environment variable as follows:
-
-    ```
-    . ${HOME}/Ascend/nnae/set_env.sh
-    ```
-
-    Replace  **$HOME/Ascend**  with the actual component installation path.
+     The operating environment must have an Ascend AI processor. The development environment and the running environment can be co-located on the same server, or they can be set up separately. In separate scenarios, the executable files compiled in the development environment are executed in the running environment. If the operating system architecture of the development environment and the running environment is Different, you need to perform cross-compilation in the development environment.
 
 
+## Prepare models and pictures <a name="section1593012514400">
+1.  To configure CANN basic environment variables and Python environment variables, see [Link](../../../environment/environment_variable_configuration.md).
 
-## Build and Run <a name="section1593012514493"></a>
+2.  Log in to the  development environment  as the running user.
 
-1.  Convert your model.
-    1.  Log in to the  development environment  as the running user.
+3.  After downloading the sample warehouse code and uploading it to the environment, please go to the "cplusplus/level2_simple_inference/1_classification/resnet50_imagenet_classification" sample directory.
+     
+     Please note that the sample directories below refer to the "cplusplus/level2_simple_inference/1_classification/resnet50_imagenet_classification" directory.
 
-    2.  Prepare data.
+4. Prepare the ResNet-50 models.
+
+    1.  Get the ResNet-50 original models.
 
         Download the .prototxt model file and .caffemodel pre-trained model file of the ResNet-50 network and upload the files to  **/caffe\_model**  under the sample directory in the  development environment  as the running user. If the directory does not exist, create it.
 
-        Click [link](https://github.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/resnet50/ATC_resnet50_caffe_AE), find the download links in the  **README.md**  file.
+         - Model file (\*.prototxt) of ResNet-50 network: click [Link](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/resnet50/resnet50.prototxt) to download the file.
+         - Weight file for ResNet-50 network (\*.caffemodel): Click [Link](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/resnet50/resnet50.caffemodel) to download the file.
 
-    3.  Convert the ResNet-50 network to an .om  offline model adapted to Ascend AI ProcessorHiSilicon SoC.
+    2.  Convert the ResNet-50 network to an .om  offline model adapted to Ascend AI ProcessorHiSilicon SoC.
 
         Go to the sample directory and run the following command (take Ascend310 as an example):
 
@@ -194,16 +94,64 @@ The sample directory is organized as follows:
             const char* omModelPath = "../model/resnet50.om";
             ```
 
+5.  Prepare test input images.
+    1.  Obtain the input images of the sample from the following link and upload the obtained images to  **/data**  under the sample directory in the  development environment  as the running user. If the directory does not exist, create it.
 
+        [https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/aclsample/dog1\_1024\_683.jpg](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/aclsample/dog1_1024_683.jpg)
+
+        [https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/aclsample/dog2\_1024\_683.jpg](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/aclsample/dog2_1024_683.jpg)
+
+    2.  Go to the  **/data**  directory under the sample directory, run the  **transferPic.py**  script to convert the two .jpg images into .bin files, and resize the image from 1024 x 683 to 224 x 224. Find the generated .bin files in  **/data**  under the sample directory.
+
+        ```
+        python3.7.5 ../script/transferPic.py
+        ```
+
+        If the error message "ModuleNotFoundError: No module named'PIL'" is displayed during script execution, the Pillow library does not exist. In this case, run the  **pip3.7.5 install Pillow --user**  command to install the Pillow library.
+
+
+
+## Build and Run <a name="section1593012514493"></a>
+
+1.  To configure CANN basic environment variables and Python environment variables, see [Link](../../../environment/environment_variable_configuration.md).
 
 2.  Build the code.
-    1.  Go to the sample directory and create a directory for storing build outputs. For example, the directory created in this sample is  **build/intermediates/host**.
+
+    1.  Log in to the  development environment  as the running user.
+
+    2.  After downloading the sample warehouse code and uploading it to the environment, please go to the "cplusplus/level2_simple_inference/1_classification/resnet50_imagenet_classification" sample directory.
+     
+        Please note that the sample directories below refer to the "cplusplus/level2_simple_inference/1_classification/resnet50_imagenet_classification" directory.
+
+    3.  Set environment variables and configure the paths of header files and library files that the program depends on for compilation.
+  
+        After the following environment variables are set, the compilation script will look for the compiled-dependent header files according to the "{DDK_PATH} environment variable value/acllib/include/acl" directory, and the compiled-independent library files according to the directory pointed to by the {NPU_HOST_LIB} environment variable. Replace "$HOME/Ascend" with the actual installation path of the "Ascend-cann-toolkit" package.
+  
+        - When the operating system architecture of the development environment and the operating environment are the same, the configuration example is as follows:
+  
+           ````
+           export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest
+           export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
+           ````
+  
+        - When the OS architecture of the development environment and the runtime environment are different, the configuration example is as follows:
+           
+           For example, when the development environment is the X86 architecture and the running environment is the AArch64 architecture, cross-compilation is involved, and the AArch64 architecture software package needs to be installed on the development environment, and the path of the {DDK_PATH} environment variable points to the AArch64 architecture software package installation directory ( shown below), which facilitates compiling code using header and library files from packages with the same architecture as the runtime environment.
+  
+           ````
+           export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux
+           export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
+           ````
+       
+          You can log in to the corresponding environment and run the "uname -a" command to query the architecture of its operating system.
+
+    4.  Go to the sample directory and create a directory for storing build outputs. For example, the directory created in this sample is  **build/intermediates/host**.
 
         ```
         mkdir -p build/intermediates/host
         ```
 
-    2.  Go to the  **build/intermediates/host**  directory and run the  **cmake**  command.
+    5.  Go to the  **build/intermediates/host**  directory and run the  **cmake**  command.
 
         Replace  **../../../src**  with the actual directory of  **CMakeLists.txt**.
 
@@ -225,31 +173,13 @@ The sample directory is organized as follows:
             ```
 
 
-    3.  Run the  **make **command. The  **main**  executable file is generated in  **/out**  under the sample directory.
+    6.  Run the  **make **command. The  **main**  executable file is generated in  **/out**  under the sample directory.
 
         ```
         make
         ```
 
-
-3.  Prepare input images.
-    1.  Obtain the input images of the sample from the following link and upload the obtained images to  **/data**  under the sample directory in the  development environment  as the running user. If the directory does not exist, create it.
-
-        [https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/dog1\_1024\_683.jpg](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/dog1_1024_683.jpg)
-
-        [https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/dog2\_1024\_683.jpg](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/dog2_1024_683.jpg)
-
-    2.  Log in to the  development environment  as the running user.
-    3.  Go to the  **/data**  directory under the sample directory, run the  **transferPic.py**  script to convert the two .jpg images into .bin files, and resize the image from 1024 x 683 to 224 x 224. Find the generated .bin files in  **/data**  under the sample directory.
-
-        ```
-        python3.7.5 ../script/transferPic.py
-        ```
-
-        If the error message "ModuleNotFoundError: No module named'PIL'" is displayed during script execution, the Pillow library does not exist. In this case, run the  **pip3.7.5 install Pillow --user**  command to install the Pillow library.
-
-
-4.  Run the app.
+3.  Run the app.
     1.  As the running user, upload the sample folder in the  development environment  to the  operating environment  \(host\), for example,  **$HOME/acl\_resnet50**.
     2.  Log in to the  operating environment  \(host\) as the running user.
     3.  Go to the directory where the executable file  **main**  is located \(for example,  **$HOME/acl\_resnet50/out**\) and grant execute permission on the  **main**  file in the directory.
@@ -297,154 +227,57 @@ The sample directory is organized as follows:
         [INFO] end to reset device is 0
         ```
 
-
-
-## Build and Run \(Atlas 200 DK\)<a name="section38761446597"></a>
-
-1.  Convert your model.
-    1.  Log in to the  development environment  as the running user.
-    2.  Set environment variables.
-
-        Replace  _**$\{install\_path\}**_  with the  Ascend-CANN-Toolkit  installation path.
-
-        ```
-        export PATH=${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
-        export ASCEND_OPP_PATH=${install_path}/opp
-        ```
-
-    3.  Prepare data.
-
-        Download the .prototxt model file and .caffemodel pre-trained model file of the ResNet-50 network and upload the files to  **/caffe\_model**  under the sample directory in the  development environment  as the running user. If the directory does not exist, create it.
-
-        Click [link](https://github.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/resnet50/ATC_resnet50_caffe_AE), find the download links in the  **README.md**  file.
-
-    4.  Convert the ResNet-50 network to an .om  offline model adapted to Ascend AI ProcessorHiSilicon SoC.
-
-        Go to the sample directory and run the following command:
-
-        ```
-        atc --model=caffe_model/resnet50.prototxt --weight=caffe_model/resnet50.caffemodel --framework=0 --output=model/resnet50 --soc_version=${soc_version} --input_format=NCHW --input_fp16_nodes=data -output_type=FP32 --out_nodes=prob:0
-        ```
-
-        -   **--model**: directory of the source model file.
-        -   **--weight**: directory of the weight file.
-        -   **--framework**: source framework type, selected from  **0**  \(Caffe\),  **1**  \(MindSpore\),  **3**  \(TensorFlow\), and  **5**  \(ONNX\).
-        -   **--soc\_version**: Version of the Ascend AI processor. Go to the CANN software installation directory/compiler/data/platform_config directory. The name of the .ini file is the version of the Ascend AI processor. Select the version as required.
-        -   **--input\_format**: input format.
-        -   **--input\_fp16\_nodes**: input nodes to specify as FP16 nodes.
-        -   **--output\_type**  and  **--out\_nodes**: specify the data type of the first output as float32.
-        -   **--output**: directory for storing the generated  **resnet50.om**  file, that is,  **/model**  under the sample directory. The default path in the command example is recommended. To specify another path, you need to change the value of  **omModelPath**  in  **sample\_process.cpp**  before building the code.
-
-            ```
-            const char* omModelPath = "../model/resnet50.om";
-            ```
+        >**Description:**
+         >The correspondence between category labels and categories is related to the dataset used for training the model. The model used in this example is trained based on the imagenet dataset. You can check the correspondence between the labels and categories of the imagenet dataset on the Internet. For example, click [Link](https://blog.csdn.net/weixin_44676081/article/details/106755135) to view.
+         >The corresponding relationship between the category ID and category in the current on-screen information is as follows:
+         >"161": \["basset", "basset hound"\],
+         >"267": \["standard poodle"\].
 
 
 
-2.  Build the code.
-    1.  Log in to the development environment as the running user.
-    2.  Go to the  **acl\_resnet50/data**  directory, run the  **transferPic.py**  script to convert the .jpg image to a .bin file, and resize the image from 1024 x 683 to 224 x 224. Find the generated .bin files in  **/data**  under the sample directory.
+## Key Interfaces<a name="section3558105154116"></a>
 
-        ```
-        python3.7.5 ../script/transferPic.py
-        ```
+This sample involves the following key functions and key interfaces:
 
-        If the error message "ModuleNotFoundError: No module named'PIL'" is displayed during script execution, the Pillow library does not exist. In this case, run the  **pip3.7.5 install Pillow --user**  command to install the Pillow library.
+-   Initialization
+    -   **aclInit**: initializes AscendCL.
+    -   **aclFinalize**: deinitializes AscendCL.
 
-    3.  Go to the sample directory and create a directory for storing build outputs. For example, the directory created in this sample is  **build/intermediates/minirc**.
+-   Device management
+    -   **aclrtSetDevice**: sets the compute device.
+    -   **aclrtGetRunMode**: obtains the run mode of the  Ascend AI Software Stack. The internal processing varies with the run mode.
+    -   **aclrtResetDevice**: resets the compute device and cleans up all resources associated with the device.
 
-        ```
-        mkdir -p build/intermediates/minirc
-        ```
+-   Context management
+    -   **aclrtCreateContext**: creates a context.
+    -   **aclrtDestroyContext**: destroys a context.
 
-    4.  Go to the  **build/intermediates/minirc**  directory and run the  **cmake**  command.
+-   Stream management
+    -   **aclrtCreateStream**: creates a stream.
+    -   **aclrtDestroyStream**: destroys a stream.
 
-        Replace  **../../../src**  with the actual directory of  **CMakeLists.txt**.
+-   Memory management
+    -   **aclrtMalloc**: allocates device memory.
+    -   **aclrtFree**: frees device memory.
 
-        ```
-        cd build/intermediates/minirc
-        cmake ../../../src -DCMAKE_CXX_COMPILER=aarch64-linux-gnu-g++ -DCMAKE_SKIP_RPATH=TRUE
-        ```
+-   Data transfer
 
-    5.  Run the  **make **command. The  **main**  executable file is generated in  **/out**  under the sample directory.
+    **aclrtMemcpy**: copies memory.
 
-        ```
-        make
-        ```
+-   Model inference
+    -   **aclmdlLoadFromFileWithMem**: loads a model from an .om file.
+    -   **aclmdlExecute**: performs synchronous model inference.
+    -   **aclmdlUnload**: unloads a model.
 
+-   Data postprocessing
 
-3.  Prepare input images.
-    1.  Obtain the input images of the sample from the following link and upload the obtained images to  **/data**  under the sample directory in the  development environment  as the running user. If the directory does not exist, create it.
+    Provides sample code to process the model inference result and display the class indexes with top 5 confidence values of each image.
 
-        [https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/dog1\_1024\_683.jpg](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/dog1_1024_683.jpg)
+    The sample provides a user-defined API  **DumpModelOutputResult**, which is used to write the model inference result to a file \(after the executable file is executed, the inference result file is generated in the directory of the executable file in the  operating environment\). This API is not called by default. To call this API, you need to add the following code before the  **OutputModelResult**  call in  **sample\_process.cpp**  in advance.
 
-        [https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/dog2\_1024\_683.jpg](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/dog2_1024_683.jpg)
-
-    2.  Log in to the  development environment  as the running user.
-    3.  Go to the  **/data**  directory under the sample directory, run the  **transferPic.py**  script to convert the two .jpg images into .bin files, and resize the image from 1024 x 683 to 224 x 224. Find the generated .bin files in  **/data**  under the sample directory.
-
-        ```
-        python3.7.5 ../script/transferPic.py
-        ```
-
-        If the error message "ModuleNotFoundError: No module named'PIL'" is displayed during script execution, the Pillow library does not exist. In this case, run the  **pip3.7.5 install Pillow --user**  command to install the Pillow library.
-
-
-4.  Run the app.
-    1.  As the running user, upload the sample folder in the  development environment  to the  board environment, for example,  **$HOME/acl\_resnet50**.
-    2.  Log in to the  board environment  as the running user.
-    3.  Set environment variables.
-
-        The following is an example only. Replace the path with the actual one.
-
-        ```
-        export LD_LIBRARY_PATH=$HOME/Ascend/acllib/lib64
-        ```
-
-    4.  Go to the directory where the executable file  **main**  is located \(for example,  **$HOME/acl\_resnet50/out**\) and grant execute permission on the  **main**  file in the directory.
-
-        ```
-        chmod +x main
-        ```
-
-    5.  Go to the directory where the executable file  **main**  is located \(for example,  **$HOME/acl\_resnet50/out**\) and run the executable file.
-
-        ```
-        ./main
-        ```
-
-        The following messages indicate that the file is successfully executed. In the displayed information, index indicates the category ID, value indicates the maximum confidence level of the category. These values may vary according to the version and environment.
-
-        ```
-        [INFO] acl init success
-        [INFO] open device 0 success
-        [INFO] create context success
-        [INFO] create stream success
-        [INFO] load model ../model/resnet50.om success
-        [INFO] create model description success
-        [INFO] create model output success
-        [INFO] start to process file:../data/dog1_1024_683.bin
-        [INFO] model execute success
-        [INFO] top 1: index[161] value[xxxxxx]
-        [INFO] top 2: index[xxx] value[xxxxxx]
-        [INFO] top 3: index[xxx] value[xxxxxx]
-        [INFO] top 4: index[xxx] value[xxxxxx]
-        [INFO] top 5: index[xxx] value[xxxxxx]
-        [INFO] output data success
-        [INFO] start to process file:../data/dog2_1024_683.bin
-        [INFO] model execute success
-        [INFO] top 1: index[267] value[xxxxxx]
-        [INFO] top 2: index[xxx] value[xxxxxx]
-        [INFO] top 3: index[xxx] value[xxxxxx]
-        [INFO] top 4: index[xxx] value[xxxxxx]
-        [INFO] top 5: index[xxx] value[xxxxxx]
-        [INFO] output data success
-        [INFO] Unload model success, modelId is 1
-        [INFO] execute sample success
-        [INFO] end to destroy stream 
-        [INFO] end to destroy context
-        [INFO] end to reset device is 0
-        ```
-
-
-
+    ```
+    // Print the top 5 confidence values with indexes using DumpModelOutputResult
+    // if want to dump output result to file in the current directory
+    modelProcess.DumpModelOutputResult();
+    modelProcess.OutputModelResult();
+    ```

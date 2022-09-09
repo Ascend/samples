@@ -1,8 +1,8 @@
-mindspore_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/deeplabv3/deeplabv3_quant.air"
-aipp_cfg="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/deeplabv3/aipp.cfg"
+mindspore_model="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/deeplabv3/deeplabv3_quant.air"
+aipp_cfg="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/deeplabv3/aipp.cfg"
 model_name="deeplab_quant"
 
-data_source="https://modelzoo-train-atc.obs.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/deeplabv3/cpluscplus_test_video/"
+data_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/deeplabv3/cpluscplus_test_video/"
 data_name="test_deeplab.mp4"
 project_name="deeplabv3_multi_thread_multi_device_presenter"
 conf_file_name="deeplabv3.conf"

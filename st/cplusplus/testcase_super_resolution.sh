@@ -1,10 +1,10 @@
-caffe_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/super_resolution/SRCNN/SRCNN.caffemodel"
-caffe_prototxt="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/super_resolution/SRCNN/SRCNN.prototxt"
+caffe_model="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/super_resolution/SRCNN/SRCNN.caffemodel"
+caffe_prototxt="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/super_resolution/SRCNN/SRCNN.prototxt"
 model_name="SRCNN_768_768"
 
-data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/super_resolution/test_image/"
+data_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/super_resolution/test_image/"
 data_name="butterfly_GT.bmp"
-verify_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/super_resolution/verify_image/"
+verify_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/super_resolution/verify_image/"
 verify_name="butterfly_GT_SRCNN.png"
 project_name="cplusplus_Super_Resolution"
 

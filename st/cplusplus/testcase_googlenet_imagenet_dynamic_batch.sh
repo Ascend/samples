@@ -1,12 +1,12 @@
-caffe_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/classification/googlenet.caffemodel"
-caffe_prototxt="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/classification/googlenet.prototxt"
-aipp_cfg="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_imagenet_dynamic_batch/insert_op.cfg"
+caffe_model="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/classification/googlenet.caffemodel"
+caffe_prototxt="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/classification/googlenet.prototxt"
+aipp_cfg="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/googlenet_imagenet_dynamic_batch/insert_op.cfg"
 model_name="googlenet_dynamicbatch"
 
-data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_imagenet_dynamic_batch/"
+data_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/googlenet_imagenet_dynamic_batch/"
 data_name="dog1_1024_683.bin" 
 data_name2="dog2_1024_683.bin"
-verify_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_imagenet_dynamic_batch/verify_image/"
+verify_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/googlenet_imagenet_dynamic_batch/verify_image/"
 verify_name="verify_test1.txt"
 project_name="cplusplus_googlenet_imagenet_dynamic_batch"
 

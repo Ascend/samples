@@ -1,10 +1,10 @@
-caffe_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/hpa/hpa.caffemodel"
-caffe_prototxt="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/hpa/hpa.prototxt"
+caffe_model="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/hpa/hpa.caffemodel"
+caffe_prototxt="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/hpa/hpa.prototxt"
 model_name="deploy_vel"
 
-data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/hpa_classification/test_image/"
+data_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/hpa_classification/test_image/"
 data_name="test.jpeg"
-verify_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/hpa_classification/verify_image/"
+verify_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/hpa_classification/verify_image/"
 verify_name="verify.jpeg"
 project_name="human_protein_map_classification"
 

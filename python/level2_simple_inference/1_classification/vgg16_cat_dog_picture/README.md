@@ -48,15 +48,15 @@ Check whether the following requirements are met. If not, perform operations acc
     ```
     # To facilitate download, the commands for downloading the original model and converting the model are provided here. You can directly copy and run the commands. You can also refer to the above table to download the model from ModelZoo and manually convert it.    
     cd $HOME/samples/python/level2_simple_inference/1_classification/vgg16_cat_dog_picture/model
-    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/vgg16_cat_dog/vgg16_cat_dog.pb    
-    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/vgg16_cat_dog/insert_op.cfg
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/vgg16_cat_dog/vgg16_cat_dog.pb    
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/vgg16_cat_dog/insert_op.cfg
     atc --output_type=FP32 --input_shape="input_1:1,224,224,3"  --input_format=NHWC --output="vgg16_cat_dog" --soc_version=Ascend310 --insert_op_conf=insert_op.cfg --framework=3 --model="./vgg16_cat_dog.pb"
     ```
 3. Obtain the test image required by the sample.
     ```
     Run the following commands to go to the data folder of the sample and download the corresponding test image:
     cd $HOME/samples/python/level2_simple_inference/1_classification/vgg16_cat_dog_picture/data
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/vgg16_cat_dog/test_image/cat.jpg
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/vgg16_cat_dog/test_image/cat.jpg
     cd ../src
     ```
 

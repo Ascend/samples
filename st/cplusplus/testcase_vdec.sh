@@ -1,6 +1,6 @@
-data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/vdec/"
+data_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/vdec/"
 data_name="vdec_h265_1frame_rabbit_1280x720.h265"
-verify_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/vdec/verify_image/"
+verify_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/vdec/verify_image/"
 verify_name="image1.yuv"
 project_name="cplusplus_vdec"
 

@@ -4,7 +4,7 @@ ModelPath="${ScriptPath}/../model"
 common_script_dir=${THIRDPART_PATH}/common
 . ${common_script_dir}/sample_common.sh
 
-data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/gesturedetection/test_image/"
+data_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/gesturedetection/test_image/"
 project_name="cplusplus_Gesturedetection"
 
 project_path=${ScriptPath}/..

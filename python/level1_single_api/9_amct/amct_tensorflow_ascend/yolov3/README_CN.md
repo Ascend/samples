@@ -10,10 +10,10 @@
 [昇腾社区-ModelZoo](https://ascend.huawei.com/zh/#/software/modelzoo/detail/C/210261e64adc42d2b3d84c447844e4c7)
 下载 YOLOv3 模型文件。解压并将其中的 single/pb/yolov3_tensorflow_1.5.pb 放到[pre_model](./pre_model)目录下。
 ##### 数据集准备
-可以对量化前后的模型进行推理，以测试量化对精度的影响，推理过程中需要使用和模型相匹配的数据集。请下载[测试图片](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/yolo_v3_calibration/detection.jpg)，并将该图片放到 [data](./data/) 目录下。
+可以对量化前后的模型进行推理，以测试量化对精度的影响，推理过程中需要使用和模型相匹配的数据集。请下载[测试图片](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/yolo_v3_calibration/detection.jpg)，并将该图片放到 [data](./data/) 目录下。
 ##### 校准集准备
 计算量化因子（scale, offset, shift_bit）的过程被称为“校准(calibration)”，使用一个或多个 batch 对量化后的网络模型进行推理即可完成校准，校准过程使用的数据为校准集。校准集要与模型匹配才能保证精度，一般选用测试集的一部分。请下载
-[校准集](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/yolo_v3_calibration/calibration.jpg)，解压后将图片放到 [data](./data/) 目录下。
+[校准集](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/yolo_v3_calibration/calibration.jpg)，解压后将图片放到 [data](./data/) 目录下。
 
 #### 目录结构与说明
 执行量化示例前，请先检查当前目录下是否包含以下文件及目录：  

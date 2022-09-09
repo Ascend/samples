@@ -68,15 +68,15 @@ This dependency is used only in this sample, so you need to install libeigen3-de
 2. Convert the model.    
     |  **Model** |  **Description** |  **How to Obtain** |
     |---|---|---|
-    |  dbnet| TensorFlow-based text recognition model. |  [Download URL](https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/dbnet/dbnet.pb)|
-    | crnn_static| TensorFlow-based letter recognition model. | [Download URL](https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/crnn_static/crnn_static.pb)|
+    |  dbnet| TensorFlow-based text recognition model. |  [Download URL](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/dbnet/dbnet.pb)|
+    | crnn_static| TensorFlow-based letter recognition model. | [Download URL](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/crnn_static/crnn_static.pb)|
 
     ```
     # To facilitate download, the commands for downloading the original model and converting the model are provided here. You can directly copy and run the commands. You can also refer to the above table to download the model from ModelZoo and manually convert it.    
     
     cd $HOME/samples/cplusplus/contrib/TextRecognize/model    
-    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/crnn_static/crnn_static.pb  
-    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/dbnet/dbnet.pb
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/crnn_static/crnn_static.pb  
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/dbnet/dbnet.pb
     atc --model=./dbnet.pb --framework=3 --output=./dbnet --soc_version=Ascend310 --output_type=FP32 --input_shape="input_images:1,736,1312,3" --input_format=NHWC
     atc --model=./crnn_static.pb --framework=3 --output=./crnn_static --soc_version=Ascend310 --input_shape="new_input:1,32,100,3" --input_format=NHWC
     ```

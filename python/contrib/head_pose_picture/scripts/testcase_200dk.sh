@@ -1,7 +1,7 @@
 ﻿#!/bin/bash
-yolo_tf_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/head_pose_picture/yolo_model.pb"
-whenet_tf_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/head_pose_picture/WHENet_b2_a1_modified.pb"
-images_link="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/head_pose_picture"
+yolo_tf_model="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/head_pose_picture/yolo_model.pb"
+whenet_tf_model="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/head_pose_picture/WHENet_b2_a1_modified.pb"
+images_link="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/head_pose_picture"
 
 yolo_model_name="yolo_model"
 whenet_model_name="WHENet_b2_a1_modified"

@@ -150,7 +150,7 @@ void AclLiteApp::Wait() {
         usleep(kWaitInterval);
         if (waitEnd_) break;
     }
-    threadList_[kMainThreadId]->SetStatus(THREAD_EXITED);
+    threadList_[g_MainThreadId]->SetStatus(THREAD_EXITED);
 }
 
 bool AclLiteApp::CheckThreadAbnormal() {
@@ -185,7 +185,7 @@ void AclLiteApp::Wait(AclLiteMsgProcess msgProcess, void* param) {
             break;
         }
     }
-    threadList_[kMainThreadId]->SetStatus(THREAD_EXITED);
+    threadList_[g_MainThreadId]->SetStatus(THREAD_EXITED);
 }
 
 void AclLiteApp::Exit() {
@@ -194,7 +194,7 @@ void AclLiteApp::Exit() {
 
 void AclLiteApp::ReleaseThreads() {
     if (isReleased_) return;
-    threadList_[kMainThreadId]->SetStatus(THREAD_EXITED);
+    threadList_[g_MainThreadId]->SetStatus(THREAD_EXITED);
 
     for (uint32_t i = 1; i < threadList_.size(); i++) {
         if ((threadList_[i] != nullptr) && 

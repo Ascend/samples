@@ -14,7 +14,7 @@ function main()
   fi
 
   if [ ! -f "${DataPath}/vdec_h265_1frame_rabbit_1280x720.h265" ];then
-    wget -O ${DataPath}/vdec_h265_1frame_rabbit_1280x720.h265 https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/vdec/vdec_h265_1frame_rabbit_1280x720.h265 --no-check-certificate
+    wget -O ${DataPath}/vdec_h265_1frame_rabbit_1280x720.h265 https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/vdec/vdec_h265_1frame_rabbit_1280x720.h265 --no-check-certificate
   fi
 
   build

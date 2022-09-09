@@ -1249,16 +1249,6 @@ void print_parameter()
     printf("/**********************************************************/\n");
 }
 
-// Exception exit processing function
-void vdec_handle_signal(int32_t signo)
-{
-    for (int32_t i = g_start_chn_num; i < g_start_chn_num + g_chn_num; i++) {
-        g_send_exit_state[i] = 1;
-    }
-    g_exit = 1;
-    printf("Program Exit Abnormally!\n");
-}
-
 void init_outbuffer_lock()
 {
     // Lock init

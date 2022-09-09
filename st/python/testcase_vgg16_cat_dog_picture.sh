@@ -1,10 +1,10 @@
-tf_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/vgg16_cat_dog/vgg16_cat_dog.pb"
-aipp_cfg="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/vgg16_cat_dog/insert_op.cfg"
+tf_model="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/vgg16_cat_dog/vgg16_cat_dog.pb"
+aipp_cfg="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/vgg16_cat_dog/insert_op.cfg"
 model_name="vgg16_cat_dog"
     
-data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/vgg16_cat_dog/test_image/"
+data_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/vgg16_cat_dog/test_image/"
 data_name="cat.jpg"
-verify_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/vgg16_cat_dog/verify_image/"
+verify_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/vgg16_cat_dog/verify_image/"
 verify_name="cat.jpg"
 project_name="vgg16_cat_dog"
 

@@ -1,10 +1,10 @@
-tf_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/SingleImageDehaze/output_graph.pb"
+tf_model="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/SingleImageDehaze/output_graph.pb"
 model_name="deploy_vel"
 
 project_name="SingleImageDehaze"
-data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/SingleImageDehaze/test_image/"
+data_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/SingleImageDehaze/test_image/"
 data_name="10992_04_0.8209.png"
-verify_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/SingleImageDehaze/verify_image/"
+verify_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/SingleImageDehaze/verify_image/"
 verify_name="out_10992_04_0.8209.png"
 
 script_path_temp="$( cd "$(dirname $BASH_SOURCE)" ; pwd -P)"

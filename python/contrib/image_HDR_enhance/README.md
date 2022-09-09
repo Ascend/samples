@@ -52,14 +52,14 @@ Check whether the following requirements are met. If not, perform operations acc
     ```
     # To facilitate download, the commands for downloading the original model and converting the model are provided here. You can directly copy and run the commands. You can also refer to the above table to download the model from ModelZoo and manually convert it.    
     cd ${HOME}/samples/python/contrib/image_HDR_enhance/model    
-    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/image_HDR_enhance/image_HDR_enhance.pb   
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/image_HDR_enhance/image_HDR_enhance.pb   
     atc --model=./image_HDR_enhance.pb --framework=3 --output=image_HDR_enhance --soc_version=Ascend310  --input_shape="input:1,512,512,3" --input_format=NHWC --output_type=FP32
     ```
 3. Obtain the test image required by the sample and switch the folder.
     ```
     # Run the following commands to go to the data folder of the sample and download the corresponding test images:
     cd ${HOME}/samples/python/contrib/image_HDR_enhance/data
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/image_HDR_enhance/data1.png
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/image_HDR_enhance/data1.png
     cd ../src
     ```
 

@@ -49,11 +49,11 @@
 2. 获取此应用中所需要的原始网络模型。
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
-    | mnist | 图片分类推理模型。是基于mindspore的lenet模型。 | https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/lenet/mnist.air |
+    | mnist | 图片分类推理模型。是基于mindspore的lenet模型。 | https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/lenet/mnist.air |
     ```
     # 为了方便下载，在这里直接给出原始模型下载及模型转换命令,可以直接拷贝执行。
     cd ${HOME}/samples/python/level2_simple_inference/1_classification/lenet_mindspore_picture/model    
-    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/lenet/mnist.air
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/lenet/mnist.air
     atc --framework=1 --model=mnist.air  --output=mnist --soc_version=Ascend310
     ```
 
@@ -61,7 +61,7 @@
     ```
     # 为了方便下载，在这里直接给出原始模型下载及模型转换命令,可以直接拷贝执行。
     cd ${HOME}/samples/python/level2_simple_inference/1_classification/lenet_mindspore_picture/data    
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/lenet_mindspore/test_image/test1.png
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/lenet_mindspore/test_image/test1.png
     ```
 
 ### 样例运行

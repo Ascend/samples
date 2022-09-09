@@ -56,7 +56,7 @@ Check whether the following requirements are met. If not, perform operations acc
     ```
     # To facilitate download, the commands for downloading the original model and converting the model are provided here. You can directly copy and run the commands. You can also refer to the above table to download the model from ModelZoo and manually convert it.    
     cd ${HOME}/samples/cplusplus/level2_simple_inference/6_other/DeblurGAN_GOPRO_Blur2Sharp/model     
-    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/DeblurGAN/DeblurrGAN-pad-01051648.pb       
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/DeblurGAN/DeblurrGAN-pad-01051648.pb       
     atc --input_shape="blur:1,720,1280,3" --input_format=NHWC --output="./blurtosharp_pad_1280_720" --soc_version=Ascend310 --framework=3 --model="./DeblurrGAN-pad-01051648.pb"
     ```
 ### Sample Deployment

@@ -13,7 +13,7 @@ function main()
     return 1
   fi
 
-  wget -O ${ModelPath}/../data/bicycle.jpg https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/VGG_SSD_coco_detection_CV_without_AIPP/bicycle.jpg --no-check-certificate
+  wget -O ${ModelPath}/../data/bicycle.jpg https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/VGG_SSD_coco_detection_CV_without_AIPP/bicycle.jpg --no-check-certificate
   
   find_model vgg_ssd.om
   if [ $? -ne 0 ];then

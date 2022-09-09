@@ -35,9 +35,9 @@ extern "C" {
 #define MAX_ALIGN                   1024
 #define SEG_CMP_LENGTH              256
 #define FILE_NAME_LEN               128
-#define MAX_JPEGE_CHN               128
+#define MAX_JPEGE_CHN               256
 #define USER_DATA_LEN               128
-#define VENC_MAX_CHN_NUM            128
+#define VENC_MAX_CHN_NUM            256
 #define MAX_MBUF_DATA_LEN           (4*1024*1024)
 #define JPEGE_ALIGN                 128
 

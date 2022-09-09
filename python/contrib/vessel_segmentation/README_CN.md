@@ -51,8 +51,8 @@
     ```
     # 为了方便下载，在这里直接给出原始模型下载及模型转换命令,可以直接拷贝执行。也可以参照上表在modelzoo中下载并手工转换，以了解更多细节。  
     cd ${HOME}/samples/python/contrib/vessel_segmentation/model    
-    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/retina-unet/vel_hw_iter_5000.caffemodel   
-    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/retina-unet/deploy_vel_ascend.prototxt
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/retina-unet/vel_hw_iter_5000.caffemodel   
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/retina-unet/deploy_vel_ascend.prototxt
     atc --model=./deploy_vel_ascend.prototxt --weight=./vel_hw_iter_5000.caffemodel --framework=0 --output=./vessel --soc_version=Ascend310 --input_format=NCHW --input_fp16_nodes=data -output_type=FP32
     ```
 
@@ -60,9 +60,9 @@
     ```
     执行以下命令，进入样例的data文件夹中，下载对应的测试图片。
     cd $HOME/samples/python/contrib/gesture_recognition_picture/data
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/vessel_segmentation/test_image/test1.png
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/vessel_segmentation/test_image/test2.png   
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/vessel_segmentation/test_image/test3.png
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/vessel_segmentation/test_image/test1.png
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/vessel_segmentation/test_image/test2.png   
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/vessel_segmentation/test_image/test3.png
     cd ../src
     ```
 

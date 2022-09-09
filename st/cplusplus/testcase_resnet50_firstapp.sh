@@ -1,8 +1,8 @@
-caffe_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/resnet50/resnet50.caffemodel"
-caffe_prototxt="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/resnet50/resnet50.prototxt"
+caffe_model="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/resnet50/resnet50.caffemodel"
+caffe_prototxt="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/resnet50/resnet50.prototxt"
 model_name="resnet50"
 
-data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/"
+data_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/aclsample/"
 data_name2="dog1_1024_683.bin" 
 project_name="resnet50_firstapp"
 

@@ -13,7 +13,7 @@
 #include "AclLiteThreadMgr.h"
 
 namespace {
-    int kMainThreadId = 0;
+    int g_MainThreadId = 0;
 }
 
 typedef int (*AclLiteMsgProcess)(uint32_t msgId, shared_ptr<void> msgData, void* userData);

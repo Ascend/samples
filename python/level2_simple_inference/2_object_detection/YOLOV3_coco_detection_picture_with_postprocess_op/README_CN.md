@@ -48,10 +48,10 @@
     ```
     # 为了方便下载，在这里直接给出原始模型下载及模型转换命令,可以直接拷贝执行。也可以参照上表在modelzoo中下载并手工转换，以了解更多细节。     
     cd ${HOME}/samples/python/level2_simple_inference/2_object_detection/YOLOV3_coco_detection_picture_with_postprocess_op/model    
-    wget https://c7xcode.obs.myhuaweicloud.com/models/YOLOV3_coco_detection_picture_with_postprocess_op/yolov3_tensorflow_1.5.pb    
-    wget https://c7xcode.obs.myhuaweicloud.com/models/YOLOV3_coco_detection_picture_with_postprocess_op/aipp_nv12.cfg
-    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/Yolov3/yolov3.caffemodel
-    wget https://c7xcode.obs.myhuaweicloud.com/models/YOLOV3_coco_detection_picture_with_postprocess_op/yolov3_modify.prototxt
+    wget https://obs-9be7.obs.myhuaweicloud.com/models/YOLOV3_coco_detection_picture_with_postprocess_op/yolov3_tensorflow_1.5.pb    
+    wget https://obs-9be7.obs.myhuaweicloud.com/models/YOLOV3_coco_detection_picture_with_postprocess_op/aipp_nv12.cfg
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/Yolov3/yolov3.caffemodel
+    wget https://obs-9be7.obs.myhuaweicloud.com/models/YOLOV3_coco_detection_picture_with_postprocess_op/yolov3_modify.prototxt
     atc --model=yolov3_tensorflow_1.5.pb --framework=3 --output=yolov3_tf_aipp --output_type=FP32 --soc_version=Ascend310 --input_shape="input:1,416,416,3" --out_nodes="yolov3/yolov3_head/Conv_6/BiasAdd:0;yolov3/yolov3_head/Conv_14/BiasAdd:0;yolov3/yolov3_head/Conv_22/BiasAdd:0" --log=info --insert_op_conf=aipp_nv12.cfg
     atc --model=yolov3_modify.prototxt --weight=yolov3.caffemodel --framework=0 --output=yolov3_output_op --soc_version=Ascend310
     ```
@@ -59,7 +59,7 @@
     ```
     # 执行以下命令，进入样例的data文件夹中，下载对应的测试图片。
     cd $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV3_coco_detection_picture_with_postprocess_op/data
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/YOLOV3_coco_detection_picture_with_postprocess_op/data/test.jpg
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/YOLOV3_coco_detection_picture_with_postprocess_op/data/test.jpg
     cd ../src
     ```
 
@@ -82,7 +82,7 @@
 
 ### 查看结果
 
-运行完成后，会在样例工程的out/output目录下生成推理后的图片，显示对比结果如下所示。
+运行完成后，会在样例工程的out/目录下生成推理后的图片，显示对比结果如下所示。
 ![输入图片说明](https://images.gitee.com/uploads/images/2021/1101/094212_c40eac47_5400693.png "屏幕截图.png")
 
 ### 常见错误

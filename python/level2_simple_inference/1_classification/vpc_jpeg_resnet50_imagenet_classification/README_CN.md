@@ -162,10 +162,10 @@ resnet50_imagenet_classification
     1.  登录运行环境。
     2.  准备输入图片。
         请从以下链接获取该样例的输入图片，并以运行用户将获取的文件上传至开发环境的“vpc_jpeg_resnet50_imagenet_classification/data”目录下。如果目录不存在，需自行创建。  
-        https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/dvpp_vpc_8192x8192_nv12.yuv  
-        https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/persian_cat_1024_1536_283.jpg  
-        https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/wood_rabbit_1024_1061_330.jpg  
-        https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/wood_rabbit_1024_1068_nv12.yuv  
+        https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/aclsample/dvpp_vpc_8192x8192_nv12.yuv  
+        https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/aclsample/persian_cat_1024_1536_283.jpg  
+        https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/aclsample/wood_rabbit_1024_1061_330.jpg  
+        https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/aclsample/wood_rabbit_1024_1068_nv12.yuv  
     3.  参照[环境变量配置](#env)完成运行环境的配置。
     4.  在vpc_jpeg_resnet50_imagenet_classification路径下请用户根据场景选择对应的命令执行：  
         执行解码+缩放+推理：

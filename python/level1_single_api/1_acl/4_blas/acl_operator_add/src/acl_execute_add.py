@@ -17,6 +17,7 @@ import os
 import acl
 
 from constant import ACL_MEMCPY_HOST_TO_DEVICE, \
+    ACL_MEMCPY_DEVICE_TO_HOST, \
     ACL_MEM_MALLOC_NORMAL_ONLY, ACL_FORMAT_ND, \
     acl_dtype, NPY_INT, ACL_SUCCESS
 
@@ -220,7 +221,7 @@ class Operator(object):
                                 factor_size,
                                 self.device_outputs[index],
                                 factor_size,
-                                ACL_MEMCPY_HOST_TO_DEVICE)
+                                ACL_MEMCPY_DEVICE_TO_HOST)
             check_ret("acl.rt.memcpy", ret)
 
             print("shape:", tuple(self.shape))

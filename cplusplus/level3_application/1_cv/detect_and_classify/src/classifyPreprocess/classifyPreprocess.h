@@ -1,5 +1,5 @@
 /**
-* Copyright 2020 Huawei Technologies Co., Ltd
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2022. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 * File sample_process.h
 * Description: handle acl resource
 */
+#ifndef CLASSIFYPREPROCESSTHREAD_H
+#define CLASSIFYPREPROCESSTHREAD_H
 #pragma once
 #include <iostream>
 #include <mutex>
@@ -32,13 +34,13 @@ public:
     ~ClassifyPreprocessThread();
 
     AclLiteError Init();
-    AclLiteError Process(int msgId, shared_ptr<void> msgData);
+    AclLiteError Process(int msgId, std::shared_ptr<void> msgData);
     
 private:
-    AclLiteError Crop(vector<CarInfo> &carImgs, ImageData &orgImg);
-    AclLiteError Resize(vector<CarInfo> &carImgs);
-    AclLiteError MsgProcess(shared_ptr<CarDetectDataMsg> carDetectDataMsg);
-    AclLiteError MsgSend(shared_ptr<CarDetectDataMsg> carDetectDataMsg);
+    AclLiteError Crop(std::vector<CarInfo> &carImgs, ImageData &orgImg);
+    AclLiteError Resize(std::vector<CarInfo> &carImgs);
+    AclLiteError MsgProcess(std::shared_ptr<CarDetectDataMsg> carDetectDataMsg);
+    AclLiteError MsgSend(std::shared_ptr<CarDetectDataMsg> carDetectDataMsg);
 private:
     aclrtRunMode runMode_;
     uint32_t modelWidth_;
@@ -46,3 +48,4 @@ private:
     AclLiteImageProc dvpp_;
 };
 
+#endif

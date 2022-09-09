@@ -1,5 +1,5 @@
-/**
-* Copyright 2020 Huawei Technologies Co., Ltd
+/*
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -12,11 +12,11 @@
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 * See the License for the specific language governing permissions and
 * limitations under the License.
-
-* File model_process.h
-* Description: handle model process
 */
-#pragma once
+
+#ifndef VGG_SSD_COCO_DETECTION_CV_WITHOUT_AIPP_INC_MODEL_PROCESS_H
+#define VGG_SSD_COCO_DETECTION_CV_WITHOUT_AIPP_INC_MODEL_PROCESS_H
+
 #include <iostream>
 #include "utils.h"
 #include "acl/acl.h"
@@ -98,10 +98,11 @@ public:
     aclmdlDesc * GetModelDesc();
 
 private:
-    bool loadFlag_;  // model load flag
-    uint32_t modelId_;
-    aclmdlDesc *modelDesc_;
-    aclmdlDataset *input_;
-    aclmdlDataset *output_;
+    bool g_loadFlag;  // model load flag
+    uint32_t g_modelId;
+    aclmdlDesc *g_modelDesc;
+    aclmdlDataset *g_input;
+    aclmdlDataset *g_output;
 };
 
+#endif

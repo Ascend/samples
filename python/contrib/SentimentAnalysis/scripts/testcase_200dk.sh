@@ -1,4 +1,4 @@
-data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/200dk/SentimentAnalysis.zip"
+data_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/200dk/SentimentAnalysis.zip"
 project_name="SentimentAnalysis"
 script_path="$( cd "$(dirname $BASH_SOURCE)" ; pwd -P)"
 project_path=${script_path}/..

@@ -12,7 +12,7 @@ DVPP中的VDEC功能模块，实现H264码流格式的视频解码。
 
 样例中的关键接口调用流程如下：
 
-![输入图片说明](https://support.huaweicloud.com/aclcppdevg-cann51RC1alpha2/figure/zh-cn_image_0000001213233496.png)
+![输入图片说明](vdec.png)
 
 ## 目录结构<a name="section86232112399"></a>
 
@@ -39,6 +39,8 @@ DVPP中的VDEC功能模块，实现H264码流格式的视频解码。
 ## 准备测试数据<a name="section13765133092318"></a>
 
 请从[https://github.com/Ascend/tools/tree/master/dvpp_sample_input_data](https://github.com/Ascend/tools/tree/master/dvpp_sample_input_data)获取该样例的输入图片、视频数据。
+
+如果使用wget方式下载图片或视频，请先进入[https://github.com/Ascend/tools/tree/master/dvpp_sample_input_data](https://github.com/Ascend/tools/tree/master/dvpp_sample_input_data)页面，单击对应的图片或视频，进入查看图片或视频的页面后，单击页面右侧的“原始数据”，在浏览器的地址栏中才是获取图片或视频的地址，再使用wget命令从该地址中获取图片或视频。
 
 ## 编译运行<a name="section3789175815018"></a>
 

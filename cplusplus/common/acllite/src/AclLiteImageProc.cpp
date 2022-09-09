@@ -1,5 +1,5 @@
 /**
-* Copyright 2020 Huawei Technologies Co., Ltd
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2022. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -27,18 +27,18 @@
 
 using namespace std;
 
-AclLiteImageProc::AclLiteImageProc():
-  isReleased_(false),
-  stream_(nullptr),
-  dvppChannelDesc_(nullptr),
-  isInitOk_(false) {
+AclLiteImageProc::AclLiteImageProc():isReleased_(false), stream_(nullptr),
+    dvppChannelDesc_(nullptr), isInitOk_(false)
+{
 }
 
-AclLiteImageProc::~AclLiteImageProc() {
+AclLiteImageProc::~AclLiteImageProc()
+{
     DestroyResource();
 }
 
-void AclLiteImageProc::DestroyResource() {
+void AclLiteImageProc::DestroyResource()
+{
     if (isReleased_) {
         return;
     }
@@ -66,7 +66,8 @@ void AclLiteImageProc::DestroyResource() {
     isReleased_ = true;
 }
 
-AclLiteError AclLiteImageProc::Init() {
+AclLiteError AclLiteImageProc::Init()
+{
     aclError aclRet = aclrtCreateStream(&stream_);
     if (aclRet != ACL_SUCCESS) {
         ACLLITE_LOG_ERROR("Create venc stream failed, error %d", aclRet);
@@ -87,31 +88,35 @@ AclLiteError AclLiteImageProc::Init() {
 
     isInitOk_ = true;
     ACLLITE_LOG_INFO("dvpp init resource ok");
-    
+
     return ACLLITE_OK;
 }
 
 AclLiteError AclLiteImageProc::Resize(ImageData& dest, ImageData& src,
-                                      uint32_t width, uint32_t height) {
+                                      uint32_t width, uint32_t height)
+{
     ResizeHelper resizeOp(stream_, dvppChannelDesc_, width, height);
     return resizeOp.Process(dest, src);
 }
 
-AclLiteError AclLiteImageProc::JpegD(ImageData& dest, ImageData& src) {
+AclLiteError AclLiteImageProc::JpegD(ImageData& dest, ImageData& src)
+{
     JpegDHelper jpegD(stream_, dvppChannelDesc_);
     return jpegD.Process(dest, src);
 }
 
-AclLiteError AclLiteImageProc::PngD(ImageData& dest, ImageData& src) {
+AclLiteError AclLiteImageProc::PngD(ImageData& dest, ImageData& src)
+{
     PngDHelper PngD(stream_, dvppChannelDesc_);
     return PngD.Process(dest, src);
 }
 
-//CropAndPasteHelper
+// CropAndPasteHelper
 AclLiteError AclLiteImageProc::Crop(ImageData& dest, ImageData& src,
                                     uint32_t ltHorz, uint32_t ltVert,
-                                    uint32_t rbHorz, uint32_t rbVert) {
-    CropAndPasteHelper crop(stream_, dvppChannelDesc_, 
+                                    uint32_t rbHorz, uint32_t rbVert)
+{
+    CropAndPasteHelper crop(stream_, dvppChannelDesc_,
                             ltHorz, ltVert, rbHorz, rbVert);
     return crop.Process(dest, src);
 }
@@ -119,30 +124,34 @@ AclLiteError AclLiteImageProc::Crop(ImageData& dest, ImageData& src,
 AclLiteError AclLiteImageProc::CropPaste(ImageData& dest, ImageData& src,
                                          uint32_t width, uint32_t height,
                                          uint32_t ltHorz, uint32_t ltVert,
-                                         uint32_t rbHorz, uint32_t rbVert) {
-    CropAndPasteHelper crop(stream_, dvppChannelDesc_, 
-                            width, height, ltHorz, 
+                                         uint32_t rbHorz, uint32_t rbVert)
+{
+    CropAndPasteHelper crop(stream_, dvppChannelDesc_,
+                            width, height, ltHorz,
                             ltVert, rbHorz, rbVert);
     return crop.ProcessCropPaste(dest, src);
 }
 
 AclLiteError AclLiteImageProc::ProportionPaste(ImageData& dest, ImageData& src,
                                                uint32_t ltHorz, uint32_t ltVert,
-                                               uint32_t rbHorz, uint32_t rbVert) {
-    CropAndPasteHelper crop(stream_, dvppChannelDesc_, 
+                                               uint32_t rbHorz, uint32_t rbVert)
+{
+    CropAndPasteHelper crop(stream_, dvppChannelDesc_,
                             ltHorz, ltVert, rbHorz, rbVert);
     return crop.ProportionProcess(dest, src);
 }
 
 AclLiteError AclLiteImageProc::ProportionPasteCenter(ImageData& dest, ImageData& src,
-                                               uint32_t ltHorz, uint32_t ltVert,
-                                               uint32_t rbHorz, uint32_t rbVert) {
-    CropAndPasteHelper crop(stream_, dvppChannelDesc_, 
+                                                     uint32_t ltHorz, uint32_t ltVert,
+                                                     uint32_t rbHorz, uint32_t rbVert)
+{
+    CropAndPasteHelper crop(stream_, dvppChannelDesc_,
                             ltHorz, ltVert, rbHorz, rbVert);
     return crop.ProportionCenterProcess(dest, src);
 }
 
-AclLiteError AclLiteImageProc::JpegE(ImageData& dest, ImageData& src) {
+AclLiteError AclLiteImageProc::JpegE(ImageData& dest, ImageData& src)
+{
     JpegEHelper jpegE(stream_, dvppChannelDesc_);
     return jpegE.Process(dest, src);
 }

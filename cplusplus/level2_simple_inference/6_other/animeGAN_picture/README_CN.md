@@ -48,16 +48,16 @@
     #这里为大家提供了三种shape的模型，下方提供转换命令
     cd ${HOME}/samples/cplusplus/level2_simple_inference/6_other/animeGAN_picture/model    
     #AnimeGAN_256_256.pb
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/animeGAN_picture/AnimeGAN_256_256.pb
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/animeGAN_picture/aipp_256_256.cfg
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/animeGAN_picture/AnimeGAN_256_256.pb
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/animeGAN_picture/aipp_256_256.cfg
     atc --model="./AnimeGAN_256_256.pb" --output_type=FP32 --input_shape="test:1,256,256,3" --input_format=NHWC --output="AnimeGANv2_256" --soc_version=Ascend310 --framework=3 --precision_mode=allow_fp32_to_fp16 --insert_op_conf=aipp_256_256.cfg
     #AnimeGAN_512_512.pb
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/animeGAN_picture/AnimeGAN_512_512.pb
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/animeGAN_picture/aipp_512_512.cfg
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/animeGAN_picture/AnimeGAN_512_512.pb
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/animeGAN_picture/aipp_512_512.cfg
     atc --model="./AnimeGAN_512_512.pb" --output_type=FP32 --input_shape="test:1,512,512,3" --input_format=NHWC --output="AnimeGANv2_512" --soc_version=Ascend310 --framework=3 --precision_mode=allow_fp32_to_fp16 --insert_op_conf=aipp_512_512.cfg
     #AnimeGAN_1024_1024.pb
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/animeGAN_picture/AnimeGAN_1024_1024.pb
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/animeGAN_picture/aipp_1024_1024.cfg
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/animeGAN_picture/AnimeGAN_1024_1024.pb
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/animeGAN_picture/aipp_1024_1024.cfg
     atc --model="./AnimeGAN_1024_1024.pb" --output_type=FP32 --input_shape="test:1,1024,1024,3" --input_format=NHWC --output="AnimeGANv2_1024" --soc_version=Ascend310 --framework=3 --precision_mode=allow_fp32_to_fp16 --insert_op_conf=aipp_1024_1024.cfg
     ```
 

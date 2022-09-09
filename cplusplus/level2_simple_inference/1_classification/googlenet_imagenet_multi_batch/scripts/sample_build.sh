@@ -14,8 +14,8 @@ function main()
     return 1
   fi
 
-  wget -O ${ModelPath}/../data/dog1_1024_683.bin  https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_imagenet_multi_batch/dog1_1024_683.bin --no-check-certificate
-  wget -O ${ModelPath}/../data/dog2_1024_683.bin  https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_imagenet_multi_batch/dog2_1024_683.bin --no-check-certificate
+  wget -O ${ModelPath}/../data/dog1_1024_683.bin  https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/googlenet_imagenet_multi_batch/dog1_1024_683.bin --no-check-certificate
+  wget -O ${ModelPath}/../data/dog2_1024_683.bin  https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/googlenet_imagenet_multi_batch/dog2_1024_683.bin --no-check-certificate
 
   find_model googlenet_multibatch.om
   if [ $? -ne 0 ];then

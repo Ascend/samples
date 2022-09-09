@@ -5,10 +5,10 @@
 ### 1.1 量化前提
 
 + **模型准备**  
-请下载 [ResNet-101](https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/resnet-101_nuq/resnet101-5d3b4d8f.pth) 模型文件到 [model](./model/) 目录。
+请下载 [ResNet-101](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/resnet-101_nuq/resnet101-5d3b4d8f.pth) 模型文件到 [model](./model/) 目录。
 
 + **数据集准备**  
-使用昇腾模型压缩工具对模型完成量化后，需要对模型进行推理，以测试量化数据的精度。推理过程中需要使用和模型相匹配的数据集。请下载[测试图片](https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/resnet-101_nuq/images.zip)，解压后将 “images” 文件夹放到 [data](./data/) 目录下。
+使用昇腾模型压缩工具对模型完成量化后，需要对模型进行推理，以测试量化数据的精度。推理过程中需要使用和模型相匹配的数据集。请下载[测试图片](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/resnet-101_nuq/images.zip)，解压后将 “images” 文件夹放到 [data](./data/) 目录下。
 
 + **校准集准备**  
 校准集用来产生量化因子，保证精度。本 sample 校准集与数据集相同。
@@ -64,10 +64,10 @@ INFO - [AMCT]:[Utils]: The model file is saved in ./outputs/calibration/resnet-1
 ### 2.1 量化前提
 
 + **模型准备**  
-请下载 [ResNet-101](https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/resnet-101_nuq/resnet101-5d3b4d8f.pth) 模型文件到 [model](./model/) 目录。
+请下载 [ResNet-101](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/resnet-101_nuq/resnet101-5d3b4d8f.pth) 模型文件到 [model](./model/) 目录。
 
 + **数据集准备**  
-使用昇腾模型压缩工具对模型完成量化后，需要对模型进行推理，以测试量化数据的精度。推理过程中需要使用和模型相匹配的数据集。请下载[测试图片](https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/resnet-101_nuq/images.zip)，解压后将 “images” 文件夹放到 [data](./data/) 目录下。
+使用昇腾模型压缩工具对模型完成量化后，需要对模型进行推理，以测试量化数据的精度。推理过程中需要使用和模型相匹配的数据集。请下载[测试图片](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/resnet-101_nuq/images.zip)，解压后将 “images” 文件夹放到 [data](./data/) 目录下。
 
 + **校准集准备**  
 校准集用来产生量化因子，保证精度。本 sample 校准集与数据集相同。
@@ -126,7 +126,7 @@ INFO - [AMCT]:[Utils]: The model file is saved in ./outputs/nuq/resnet-101_fake_
 ### 3.1 量化前提
 
 + **模型准备**  
-请下载 [ResNet-101](https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/resnet-101_nuq/resnet101-5d3b4d8f.pth) 模型文件到 [model](./model/) 目录。
+请下载 [ResNet-101](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/resnet-101_nuq/resnet101-5d3b4d8f.pth) 模型文件到 [model](./model/) 目录。
 
 + **数据集准备**  
 由于量化感知训练需要使用大量数据对量化参数进行进一步优化，因此量化感知训练数据需要与原始模型训练数据一致。ResNet-101 的数据集是在 ImageNet 的子集 ILSVRC-2012-CLS 上训练而来，因此需要用户自己准备 ImagenetPytorch 格式的数据集（获取方式请参见[此处](https://github.com/pytorch/examples/tree/master/imagenet)）。
@@ -208,7 +208,7 @@ INFO - [AMCT]:[Utils]: The model file is saved in ./outputs/nuq/resnet-101_fake_
 ### 4.1 前提
 
 + **模型准备**  
-请下载 [ResNet-101](https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/resnet-101_nuq/resnet101-5d3b4d8f.pth) 模型文件到 [model](./model/) 目录。
+请下载 [ResNet-101](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/resnet-101_nuq/resnet101-5d3b4d8f.pth) 模型文件到 [model](./model/) 目录。
 
 + **数据集准备**  
 由于稀疏后要恢复模型精度需要重训练，即使用大量数据对量化参数进行进一步优化，因此稀疏后训练数据需要与原始模型训练数据一致。ResNet-101 的数据集是在 ImageNet 的子集 ILSVRC-2012-CLS 上训练而来，因此需要用户自己准备 ImagenetPytorch 格式的数据集（获取方式请参见[此处](https://github.com/pytorch/examples/tree/master/imagenet)）。
@@ -276,7 +276,7 @@ INFO - [AMCT]:[Utils]: The model file is saved in ./outputs/nuq/resnet-101_fake_
 稀疏成功后，在当前目录会生成日志文件 [./amct_log/amct_pytorch.log](./amct_log/amct_pytorch.log) 和 [./outputs/prune_retrain](./outputs/prune_retrain/) 文件夹，该文件夹内包含以下内容：
 
 + [tmp](./outputs/prune_retrain/tmp/): 临时文件夹
-  + [record.txt](./outputs/prune_retrain/tmp/record.txt): 记录文件记录稀疏信息。关于该文件的原型定义请参见[量化因子记录文件说明](https://support.huaweicloud.com/content/dam/cloudbu-site/archive/china/zh-cn/support/docs/auxiliarydevtool-cann330alphaXinfer/atlasamcttf_16_0014.html)。
+  + [record.txt](./outputs/prune_retrain/tmp/record.txt): 记录文件记录稀疏信息。
   + [model_best.pth.tar](./outputs/prune_retrain/tmp/model_best.pth.tar): PyTorch 模型稀疏后训练过程中生成的 checkpoint 中间文件。
 
 
@@ -285,7 +285,7 @@ INFO - [AMCT]:[Utils]: The model file is saved in ./outputs/nuq/resnet-101_fake_
 ### 5.1 前提
 
 + **模型准备**  
-请下载 [ResNet-101](https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/resnet-101_nuq/resnet101-5d3b4d8f.pth) 模型文件到 [model](./model/) 目录。
+请下载 [ResNet-101](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/resnet-101_nuq/resnet101-5d3b4d8f.pth) 模型文件到 [model](./model/) 目录。
 
 + **数据集准备**  
 由于组合压缩恢复模型精度需要重训练，即使用大量数据对量化参数进行进一步优化，因此组合压缩训练数据需要与原始模型训练数据一致。ResNet-101 的数据集是在 ImageNet 的子集 ILSVRC-2012-CLS 上训练而来，因此需要用户自己准备 ImagenetPytorch 格式的数据集（获取方式请参见[此处](https://github.com/pytorch/examples/tree/master/imagenet)）。
@@ -353,7 +353,7 @@ INFO - [AMCT]:[Utils]: The model file is saved in ./outputs/nuq/resnet-101_fake_
 组合压缩成功后，在当前目录会生成量化日志文件 [./amct_log/amct_pytorch.log](./amct_log/amct_pytorch.log) 和 [./outputs/retrain](./outputs/retrain/) 文件夹，该文件夹内包含以下内容：
 
 + [tmp](./outputs/retrain/tmp/): 临时文件夹
-  + [record.txt](./outputs/retrain/tmp/record.txt): 量化因子记录文件记录量化因子。关于该文件的原型定义请参见[量化因子记录文件说明](https://support.huaweicloud.com/content/dam/cloudbu-site/archive/china/zh-cn/support/docs/auxiliarydevtool-cann330alphaXinfer/atlasamcttf_16_0014.html)。
+  + [record.txt](./outputs/retrain/tmp/record.txt): 量化因子记录文件记录量化因子。
   + [model_best.pth.tar](./outputs/retrain/tmp/model_best.pth.tar): PyTorch 模型组合压缩训练过程中生成的 checkpoint 中间文件。
 + [resnet-101_deploy_model.onnx](./outputs/retrain/resnet-101_deploy_model.onnx): 组合压缩部署模型，即组合压缩后的可在昇腾 AI 处理器部署的模型文件。
 + [resnet-101_fake_quant_model.onnx](./outputs/retrain/resnet-101_fake_quant_model.onnx): 组合压缩仿真模型，即组合压缩后的可在 ONNX 执行框架 ONNX Runtime 进行精度仿真的模型

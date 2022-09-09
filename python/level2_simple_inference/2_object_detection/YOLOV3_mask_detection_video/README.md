@@ -48,8 +48,8 @@ Check whether the following requirements are met. If not, perform operations acc
     ```
     # To facilitate download, the commands for downloading the original model and converting the model are provided here. You can directly copy and run the commands. You can also refer to the above table to download the model from ModelZoo and manually convert it.    
     cd ${HOME}/samples/python/level2_simple_inference/2_object_detection/YOLOV3_mask_detection_video/model    
-    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOV3-RESNET18%20/yolo3_resnet18.pb    
-    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOV3-RESNET18%20/insert_op.cfg
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOV3-RESNET18%20/yolo3_resnet18.pb    
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOV3-RESNET18%20/insert_op.cfg
     atc --model="./yolo3_resnet18.pb" --output_type=FP32 --input_shape="images:1,352,640,3" --insert_op_conf=./insert_op.cfg --input_format=NHWC --output="./yolo3_resnet18_yuv" --framework=3  --soc_version=Ascend310
     ```
 
@@ -57,7 +57,7 @@ Check whether the following requirements are met. If not, perform operations acc
     ```
     Run the following commands to go to the data folder of the sample and download the corresponding test image:
     cd $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV3_mask_detection_video/data
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/mask_detection_video/mask.h264
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/mask_detection_video/mask.h264
     cd ../scripts
     ```
 ### Sample Running

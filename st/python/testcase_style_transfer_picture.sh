@@ -1,9 +1,9 @@
-tf_model="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/style_transfer_picture/xingkong1.pb"
+tf_model="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/style_transfer_picture/xingkong1.pb"
 model_name="xingkong1_fp32_nchw_no_aipp"
 
-data_source="https://c7xcode.obs.myhuaweicloud.com/models/style_transfer_picture/data/"
+data_source="https://obs-9be7.obs.myhuaweicloud.com/models/style_transfer_picture/data/"
 data_name="test.jpg"
-verify_source="https://c7xcode.obs.myhuaweicloud.com/models/style_transfer_picture/verify/"
+verify_source="https://obs-9be7.obs.myhuaweicloud.com/models/style_transfer_picture/verify/"
 verify_name="verify_test.jpg"
 verify_name2="verify2_test.jpg"
 project_name="python_style_transfer"

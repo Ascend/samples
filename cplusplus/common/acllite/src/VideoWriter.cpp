@@ -1,7 +1,7 @@
 /**
  * ============================================================================
  *
- * Copyright (C) 2018, Hisilicon Technologies Co., Ltd. All Rights Reserved.
+ * Copyright (c) Huawei Technologies Co., Ltd. 2020-2022. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,9 +30,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * ============================================================================
  */
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstring>
+#include <cstdlib>
 #include <malloc.h>
 #include <unistd.h>
 #include <sys/prctl.h>
@@ -40,50 +40,49 @@
 #include <fstream>
 #include <memory>
 #include <thread>
-#include <cstring>
 #include <iostream>
 #include "AclLiteUtils.h"
 #include "VideoWriter.h"
 
-using namespace std;                
+using namespace std;
 
-VideoWriter::VideoWriter(VencConfig& vencConfig, aclrtContext context):
-  isReleased_(false),
-  status_(STATUS_VENC_INIT),
-  context_(context), 
-  dvppVenc_(nullptr),
-  vencInfo_(vencConfig) {
+VideoWriter::VideoWriter(VencConfig& vencConfig, aclrtContext context)
+    :isReleased_(false), status_(STATUS_VENC_INIT), context_(context),
+    dvppVenc_(nullptr), vencInfo_(vencConfig)
+{
 }
 
-VideoWriter::~VideoWriter() {
+VideoWriter::~VideoWriter()
+{
     DestroyResource();
 }
 
-void VideoWriter::DestroyResource() {
-    if (isReleased_) return;    
-    
+void VideoWriter::DestroyResource()
+{
+    if (isReleased_) return;
     dvppVenc_->DestroyResource();
-    //release dvpp venc
+    // release dvpp venc
     delete dvppVenc_;
     dvppVenc_ = nullptr;
     isReleased_ = true;
 }
 
-AclLiteError VideoWriter::InitResource() {
+AclLiteError VideoWriter::InitResource()
+{
     aclError aclRet;
     if (context_ == nullptr) {
         aclRet = aclrtGetCurrentContext(&context_);
         if ((aclRet != ACL_SUCCESS) || (context_ == nullptr)) {
             ACLLITE_LOG_ERROR("Get current acl context error:%d", aclRet);
             return ACLLITE_ERROR_GET_ACL_CONTEXT;
-        }       
+        }
     }
-    //Get current run mode
+    // Get current run mode
     aclRet = aclrtGetRunMode(&runMode_);
     if (aclRet != ACL_SUCCESS) {
         ACLLITE_LOG_ERROR("acl get run mode failed");
         return ACLLITE_ERROR_GET_RUM_MODE;
-    } 
+    }
 
     dvppVenc_ = new VencHelper(vencInfo_);
     AclLiteError ret = dvppVenc_->Init();
@@ -91,46 +90,47 @@ AclLiteError VideoWriter::InitResource() {
         ACLLITE_LOG_ERROR("Video encoder init failed");
         return ACLLITE_ERROR;
     }
-    return ACLLITE_OK;  
+    return ACLLITE_OK;
 }
 
-AclLiteError VideoWriter::Open() {
-    //Init acl resource
+AclLiteError VideoWriter::Open()
+{
+    // Init acl resource
     AclLiteError ret = InitResource();
     if (ret != ACLLITE_OK) {
         ACLLITE_LOG_ERROR("Init resource failed");
         return ACLLITE_ERROR;
     }
-    //Set init ok
+    // Set init ok
     string outvideo = vencInfo_.outFile;
     ACLLITE_LOG_INFO("Encoded Video %s init ok", outvideo.c_str());
-    
     return ACLLITE_OK;
 }
 
-//check decoder status
-bool VideoWriter::IsOpened() { 
+// check decoder status
+bool VideoWriter::IsOpened()
+{
     string outvideo = vencInfo_.outFile;
     status_ = dvppVenc_->GetStatus();
     ACLLITE_LOG_INFO("Video %s encode status %d", outvideo.c_str(), status_);
     return (status_ == STATUS_VENC_INIT) || (status_ == STATUS_VENC_WORK);
 }
 
-//read encoded frame
-AclLiteError VideoWriter::Read(ImageData& image) {
-
+// read encoded frame
+AclLiteError VideoWriter::Read(ImageData& image)
+{
     AclLiteError ret = dvppVenc_->Process(image);
-    if (ret != ACLLITE_OK){
+    if (ret != ACLLITE_OK) {
         ACLLITE_LOG_ERROR("fail to read encode image");
-        return ret;        
+        return ret;
     }
-
     return ACLLITE_OK;
 }
 
-AclLiteError VideoWriter::Set(StreamProperty key, int value) {
+AclLiteError VideoWriter::Set(StreamProperty key, int value)
+{
     AclLiteError ret = ACLLITE_OK;
-    switch(key) {
+    switch (key) {
         case OUTPUT_IMAGE_FORMAT:
             ret = SetImageFormat(value);
             break;
@@ -148,9 +148,10 @@ AclLiteError VideoWriter::Set(StreamProperty key, int value) {
     return ret;
 }
 
-uint32_t VideoWriter::Get(StreamProperty key) {
+uint32_t VideoWriter::Get(StreamProperty key)
+{
     uint32_t value = 0;
-    switch(key){
+    switch (key) {
         case FRAME_WIDTH:
             value = vencInfo_.maxWidth;
             break;
@@ -165,31 +166,32 @@ uint32_t VideoWriter::Get(StreamProperty key) {
     return value;
 }
 
-AclLiteError VideoWriter::SetAclContext() {
+AclLiteError VideoWriter::SetAclContext()
+{
     if (context_ == nullptr) {
         ACLLITE_LOG_ERROR("Video decoder context is null");
         return ACLLITE_ERROR_SET_ACL_CONTEXT;
     }
-    
     aclError ret = aclrtSetCurrentContext(context_);
     if (ret != ACL_SUCCESS) {
         ACLLITE_LOG_ERROR("Video decoder set context failed, error: %d", ret);
         return ACLLITE_ERROR_SET_ACL_CONTEXT;
     }
-    
-    return ACLLITE_OK;   
+    return ACLLITE_OK;
 }
 
-AclLiteError VideoWriter::Close() {
+AclLiteError VideoWriter::Close()
+{
     DestroyResource();
     return ACLLITE_OK;
 }
 
-AclLiteError VideoWriter::SetImageFormat(uint32_t format) {
+AclLiteError VideoWriter::SetImageFormat(uint32_t format)
+{
     if ((format != PIXEL_FORMAT_YUV_SEMIPLANAR_420) ||
         (format != PIXEL_FORMAT_YVU_SEMIPLANAR_420)) {
         ACLLITE_LOG_ERROR("Set video encoded image format to %d failed, "
-                          "only support %d(YUV420SP NV12) and %d(YUV420SP NV21)", 
+                          "only support %d(YUV420SP NV12) and %d(YUV420SP NV21)",
                           format,
                           (int)PIXEL_FORMAT_YUV_SEMIPLANAR_420,
                           (int)PIXEL_FORMAT_YVU_SEMIPLANAR_420);
@@ -202,18 +204,18 @@ AclLiteError VideoWriter::SetImageFormat(uint32_t format) {
     return ACLLITE_OK;
 }
 
-AclLiteError VideoWriter::SetStreamFormat(uint32_t format){
-
+AclLiteError VideoWriter::SetStreamFormat(uint32_t format)
+{
     if ((format != H265_MAIN_LEVEL) ||
         (format != H264_MAIN_LEVEL) ||
         (format != H264_HIGH_LEVEL) ||
         (format != H264_BASELINE_LEVEL)) {
         ACLLITE_LOG_ERROR("Set video stream format to %d failed, "
                           "only support "
-                          "%d(H265 MP), " 
+                          "%d(H265 MP), "
                           "%d(H264 BP), "
                           "%d(H264 MP) and"
-                          "%d(H264 HP)", 
+                          "%d(H264 HP)",
                           format,
                           (int)H265_MAIN_LEVEL,
                           (int)H264_BASELINE_LEVEL,

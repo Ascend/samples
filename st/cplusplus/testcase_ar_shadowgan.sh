@@ -1,8 +1,8 @@
-tf_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/ARshadowGAN/model.pb"
+tf_model="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/ARshadowGAN/model.pb"
 model_name="model"
 
-data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/arshadow/data/"
-verify_source='https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/arshadow/verify_image/'
+data_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/arshadow/data/"
+verify_source='https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/arshadow/verify_image/'
 project_name="ARshadow"
 verify_name="result_0.jpg"
 data_name1="test_A.png.bin"

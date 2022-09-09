@@ -147,7 +147,7 @@ vdec_resnet50_classification
 2.  运行应用
     1.  登录运行环境。
     2.  准备输入视频码流。
-        从[Link](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/vdec_h265_1frame_rabbit_1280x720.h265)上获取输入视频码流文件vdec_h265_1frame_rabbit_1280x720.h265，并以HwHiAiUser（运行用户）上传至开发环境的“vdec_resnet50_classification/data”目录下。  
+        从[Link](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/aclsample/vdec_h265_1frame_rabbit_1280x720.h265)上获取输入视频码流文件vdec_h265_1frame_rabbit_1280x720.h265，并以HwHiAiUser（运行用户）上传至开发环境的“vdec_resnet50_classification/data”目录下。  
     3.  参照[环境变量配置](#env)完成运行环境的配置。
     4.  在vdec_resnet50_classification路径下执行如下命令：
         ```

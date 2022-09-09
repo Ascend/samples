@@ -1,13 +1,13 @@
-json_model="https://c7xcode.obs.myhuaweicloud.com/models/imageinpainting_hifill/matmul_27648.json"
-pb1="https://c7xcode.obs.myhuaweicloud.com/models/imageinpainting_hifill/hifill.pb"
+json_model="https://obs-9be7.obs.myhuaweicloud.com/models/imageinpainting_hifill/matmul_27648.json"
+pb1="https://obs-9be7.obs.myhuaweicloud.com/models/imageinpainting_hifill/hifill.pb"
 model_name1="0_BatchMatMul_0_0_1_1_1024_1024_0_0_1_1_1024_27648_0_0_1_1_1024_27648"
 model_name2="hifill"
 
-data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/imageinpainting_hifill/data/"
+data_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/imageinpainting_hifill/data/"
 data_name="test.jpg"
-mask_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/imageinpainting_hifill/mask/"
+mask_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/imageinpainting_hifill/mask/"
 mask_name="test.jpg"
-verify_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/imageinpainting_hifill/verify_image/"
+verify_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/imageinpainting_hifill/verify_image/"
 verify_name="verify_test.jpg"
 project_name="imageinpainting_hifill"
 

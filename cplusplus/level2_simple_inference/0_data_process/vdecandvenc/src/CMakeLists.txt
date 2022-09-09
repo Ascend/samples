@@ -65,9 +65,7 @@ link_directories(
 add_executable(main
 	${COMMON_SRC}
         utils.cpp
-        video_encode.cpp
-        venc_process.cpp
-        do_process.cpp
+        video_encoder.cpp
         main.cpp)
 
 

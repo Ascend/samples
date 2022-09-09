@@ -41,8 +41,8 @@ git clone https://github.com/Ascend/samples.git
 
 | **Model**  |  **How to Obtain** |
 | ---------- |  ----------------- |
-| OpenPose_light.om | `wget -nc --no-check-certificate 'https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/body_pose_picture/OpenPose_light.om' -O model/OpenPose_light.om`  |
-| OpenPose_light.pb | `wget -nc --no-check-certificate 'https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/body_pose_picture/OpenPose_light.pb' -O model/OpenPose_light.pb`  |
+| OpenPose_light.om | `wget -nc --no-check-certificate 'https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/body_pose_picture/OpenPose_light.om' -O model/OpenPose_light.om`  |
+| OpenPose_light.pb | `wget -nc --no-check-certificate 'https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/body_pose_picture/OpenPose_light.pb' -O model/OpenPose_light.pb`  |
 
 ![Icon-note.gif](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif) **NOTE**
 >
@@ -84,8 +84,8 @@ git clone https://github.com/Ascend/samples.git
 ### Download Sample Inputs
 ```
 cd $HOME/samples/python/contrib/body_pose_picture/
-wget -nc --no-check-certificate 'https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/body_pose_picture/test.jpg' -O data/test.jpg
-wget -nc --no-check-certificate 'https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/body_pose_picture/yoga.mp4' -O data/yoga.mp4
+wget -nc --no-check-certificate 'https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/body_pose_picture/test.jpg' -O data/test.jpg
+wget -nc --no-check-certificate 'https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/body_pose_picture/yoga.mp4' -O data/yoga.mp4
 ```
 
 ### Test single image

@@ -308,12 +308,10 @@ void* venc_send_proc(void* args)
     hi_s64 lastTime = 0;
     hi_char acThreadName[32] = {0};
 
-    if (g_run_mode == MODE_HOST) {
-        aclError aclRet = aclrtSetCurrentContext(g_context);
-        if (aclRet != ACL_SUCCESS) {
-            HMEV_HISDK_PRT(ERROR, "set current context failed:%d", aclRet);
-            return NULL;
-        }
+    aclError aclRet = aclrtSetCurrentContext(g_context);
+    if (aclRet != ACL_SUCCESS) {
+        HMEV_HISDK_PRT(ERROR, "set current context failed:%d", aclRet);
+        return NULL;
     }
 
     HMEV_HISDK_PRT(DEBUG, "venc_send_proc");
@@ -634,7 +632,6 @@ void venc_get_option(int argc, char** argv)
             {"InputFileName", 1, 0, 'i'},
             {"OutputFileName", 1, 0, 'o'}, // use format:xxx_%d.265 %d for different channels
             {"PixelFormat", 1, 0, 'p'}, // 1:NV12 2:NV21
-            {"OneStreamBuffer", 1, 0, 'O'}, // 0:multi packs 1:single pack
             {"Profile", 1, 0, 'l'}, // profile level H.264[0,2] H.265:0
             {"PerfTest", 1, 0, 'P'}, // 0:function test 1:performance test
             {"PerfFrameNum", 1, 0, 'm'}, // performance test input frame numbers
@@ -643,7 +640,7 @@ void venc_get_option(int argc, char** argv)
             {"StartChnlId", 1, 0, 'd'}, // specify the start channel id for current process in multi-process test
             {0, 0, 0, 0},
         };
-        int c = getopt_long(argc, argv, "w:h:r:n:c:b:f:H:i:o:p:O:l:P:m:s:g:d:", longOptions, &optionIndex);
+        int c = getopt_long(argc, argv, "w:h:r:n:c:b:f:H:i:o:p:l:P:m:s:g:d:", longOptions, &optionIndex);
         if (c == -1) {
             break;
         }

@@ -17,7 +17,7 @@
 
 部署此Sample前，需要准备好以下环境：
 
-- 请确认已按照[官方文档](https://support.huaweicloud.com/instg-cli-cann/atlascli_03_0001.html)准备好环境。
+- 请确认已按照[官方文档](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/60RC1alpha02/softwareinstall/instg/atlasdeploy_03_0002.html)准备好环境。
 
 - 已完成对应产品的开发环境和运行环境安装。
 
@@ -29,7 +29,7 @@
 
        **cd $HOME**
 
-       **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/yuefuzuoshi/ModelZoo_Yuefu_TF.zip**
+       **wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/yuefuzuoshi/ModelZoo_Yuefu_TF.zip**
 
         开发环境中，执行以下命令，解压zip包。
 
@@ -44,9 +44,9 @@
 
     下载模型文件
 
-    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/yuefuzuoshi/poetry.data-00000-of-00001**    
-    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/yuefuzuoshi/poetry.meta**    
-    **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/yuefuzuoshi/poetry.index**    
+    **wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/yuefuzuoshi/poetry.data-00000-of-00001**    
+    **wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/yuefuzuoshi/poetry.meta**    
+    **wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/yuefuzuoshi/poetry.index**    
         
  ### 样例部署
 **以下以开发环境与运行环境合一部署为例。**   
@@ -54,7 +54,7 @@
   1. 修改device_table_1p.json中的device_id和device_ip。    
      使用命令   
           **cat /etc/hccn.conf**      
-     查看服务器上device的IP列表，如果没有配置，可以参考[修改NPU卡IP地址](https://support.huaweicloud.com/instg-cli-cann/atlascli_03_0084.html)进行配置。    
+     查看服务器上device的IP列表，如果没有配置，可以参考[修改NPU卡IP地址](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/60RC1alpha02/softwareinstall/instg/atlasdeploy_03_0060.html)进行配置。    
      **将device_table_1p.json文件中的第16行的device_id和第17行的device_ip改成以上查到的device设备和IP。**    
   2. 修改运行脚本main_1p.sh，配置参数。    
     **DEVICE_ID改成上面修改的对应的device_id。**    

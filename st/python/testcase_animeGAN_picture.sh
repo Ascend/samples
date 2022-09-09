@@ -1,12 +1,12 @@
-tf_model="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/animeGAN/AnimeGAN_512_512.pb"
+tf_model="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/animeGAN/AnimeGAN_512_512.pb"
 model_name="AnimeGANv2_512"
 
-data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/animeGAN/test_image/"
+data_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/animeGAN/test_image/"
 data_name="test.jpg"
-verify_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/animeGAN/verify_image/"
+verify_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/animeGAN/verify_image/"
 verify_name="verify_test.jpg"
 project_name="animeGAN_picture"
-aipp_cfg="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/animeGAN/aipp_512_512.cfg"
+aipp_cfg="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/animeGAN/aipp_512_512.cfg"
 
 script_path_temp="$( cd "$(dirname $BASH_SOURCE)" ; pwd -P)"
 project_path=${script_path_temp}/../../python/level2_simple_inference/6_other/animeGAN_picture

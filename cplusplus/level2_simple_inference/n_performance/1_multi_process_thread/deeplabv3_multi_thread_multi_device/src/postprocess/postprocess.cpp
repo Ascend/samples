@@ -61,7 +61,7 @@ AclLiteError PostprocessThread::Process(int msgId, shared_ptr<void> data) {
             cout << "postprocess time is: " << (time6.tv_sec - time5.tv_sec)*1000 + (time6.tv_nsec - time5.tv_nsec)/1000000 << "ms" << endl;
             break;
         case MSG_ENCODE_FINISH:
-            SendMessage(kMainThreadId, MSG_APP_EXIT, nullptr);
+            SendMessage(g_MainThreadId, MSG_APP_EXIT, nullptr);
             break;
         default:
             ACLLITE_LOG_INFO("PostprocessThread thread ignore msg %d", msgId);

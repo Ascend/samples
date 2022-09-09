@@ -18,30 +18,30 @@
 */
 
 #include <iostream>
-#include <stdlib.h>
+#include <cstdlib>
 #include <dirent.h>
 #include "main.h"
 using namespace std;
 
-/* Run managed resource applications, including Device, Context, and Stream*/
+/* Run managed resource applications, including Device, Context, and Stream */
 Result Initparam(int argc, char *argv[])
 {
     DIR *dir;
     if ((dir = opendir("./output")) == NULL)
         system("mkdir ./output");
-    if(argc!=9)	{
+    if (argc != 9) {
         ERROR_LOG("./crop infile w h outfile outl outt outw outh");
         return FAILED;
-	}
-    int inw,inh,outl,outt,outw,outh;
-	inw = atoi(argv[2]);
-	inh = atoi(argv[3]);
-	outl = atoi(argv[5]);
-	outt = atoi(argv[6]);
-	outw = atoi(argv[7]);
-	outh = atoi(argv[8]);
-	inPicDesc={argv[1],inw,inh};
-	outPicDesc={argv[4],outl,outt,outw,outh};
+    }
+    int inw, inh, outl, outt, outw, outh;
+    inw = atoi(argv[2]);
+    inh = atoi(argv[3]);
+    outl = atoi(argv[5]);
+    outt = atoi(argv[6]);
+    outw = atoi(argv[7]);
+    outh = atoi(argv[8]);
+    inPicDesc={argv[1],inw,inh};
+    outPicDesc={argv[4], outl, outt, outw, outh};
     return SUCCESS;
 }
 
@@ -63,8 +63,7 @@ uint32_t SaveDvppOutputData(const char *fileName, const void *devPtr, uint32_t d
         aclrtMemcpy(hostPtr, dataSize, devPtr, dataSize, ACL_MEMCPY_DEVICE_TO_HOST);
         fwrite(hostPtr, sizeof(char), dataSize, outFileFp);
         (void)aclrtFreeHost(hostPtr);
-    }
-    else{
+    } else {
         fwrite(devPtr, sizeof(char), dataSize, outFileFp);
     }
     fflush(outFileFp);
@@ -149,22 +148,24 @@ int main(int argc, char *argv[])
     aclrtCreateStream(&stream_);
     aclrtGetRunMode(&runMode);
 
-    /* 3.Initialization parameters: width and height of the original image, crop width and height. Initialize folder: Output folder*/
+    /* 3.Initialization parameters: width and height of the original image, crop width and height. 
+     * Initialize folder: Output folder */
     Initparam(argc, argv);
     const int orimodelInputWidth = outPicDesc.width; // cur model shape is 224 * 224
     const int orimodelInputHeight = outPicDesc.height;
     const int modelInputLeft = outPicDesc.left; // cur model shape is 224 * 224
     const int modelInputTop = outPicDesc.top;
 
-	/* 4. Channel description information when creating image data processing channels, dvppChannelDesc_ is acldvppChannelDesc type*/
+    /* 4. Channel description information when creating image data processing channels, 
+     * dvppChannelDesc_ is acldvppChannelDesc type */
     dvppChannelDesc_ = acldvppCreateChannelDesc();
 
     /* 5. Create the image data processing channel. */
     acldvppCreateChannel(dvppChannelDesc_);
 
     // GetPicDevBuffer4JpegD
-    int modelInputWidth = (orimodelInputWidth+15)/16*16;
-    int modelInputHeight = (orimodelInputHeight+1)/2*2;
+    int modelInputWidth = (orimodelInputWidth + 15) / 16 * 16;
+    int modelInputHeight = (orimodelInputHeight + 1) / 2 * 2;
     uint32_t inputBuffSize = 0;
     char* inputBuff = ReadBinFile(inPicDesc.picName, inputBuffSize);
     void *inBufferDev = nullptr;
@@ -172,8 +173,7 @@ int main(int argc, char *argv[])
     acldvppMalloc(&inBufferDev, inBufferSize);
     if (runMode == ACL_HOST) {
         aclrtMemcpy(inBufferDev, inBufferSize, inputBuff, inputBuffSize, ACL_MEMCPY_HOST_TO_DEVICE);
-    }
-    else {
+    } else {
         aclrtMemcpy(inBufferDev, inBufferSize, inputBuff, inputBuffSize, ACL_MEMCPY_DEVICE_TO_DEVICE);
     }
     delete[] inputBuff;
@@ -188,7 +188,7 @@ int main(int argc, char *argv[])
     acldvppRoiConfig  *cropArea_ = acldvppCreateRoiConfig(cropLeftOffset, cropRightOffset,
         cropTopOffset, cropBottomOffset);
 
-    /* processdecode*/
+    /* processdecode */
     inputWidth = inPicDesc.width;
     inputHeight = inPicDesc.height;
     uint32_t widthAlignment = 16;
@@ -210,7 +210,7 @@ int main(int argc, char *argv[])
 
     uint32_t vpcOutBufferSize_ = modelInputWidth * modelInputHeight * sizeAlignment / sizeNum;
     acldvppMalloc(&vpcOutBufferDev_, vpcOutBufferSize_);
-     acldvppPicDesc *vpcOutputDesc_ = acldvppCreatePicDesc();
+    acldvppPicDesc *vpcOutputDesc_ = acldvppCreatePicDesc();
     acldvppSetPicDescData(vpcOutputDesc_, vpcOutBufferDev_);
     acldvppSetPicDescFormat(vpcOutputDesc_, PIXEL_FORMAT_YUV_SEMIPLANAR_420);
     acldvppSetPicDescWidth(vpcOutputDesc_, modelInputWidth);
@@ -224,7 +224,7 @@ int main(int argc, char *argv[])
 
     aclrtSynchronizeStream(stream_);
 
-    /* DestroycropResource*/
+    /* DestroycropResource */
     (void)acldvppDestroyRoiConfig(cropArea_);
     cropArea_ = nullptr;
     (void)acldvppDestroyPicDesc(vpcInputDesc_);
@@ -233,6 +233,10 @@ int main(int argc, char *argv[])
     vpcOutputDesc_ = nullptr;
 
     SaveDvppOutputData(outPicDesc.picName.c_str(), vpcOutBufferDev_, vpcOutBufferSize_);
+    if (vpcOutBufferDev_ != nullptr) {
+        (void)acldvppFree(vpcOutBufferDev_);
+	vpcOutBufferDev_ = nullptr;
+    }
     DestroyResource();
     return SUCCESS;
 }

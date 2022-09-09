@@ -45,11 +45,11 @@
 2. 获取此应用中所需要的原始网络模型。
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
-    |  resnet50 | 图片分类推理模型。是基于MindSpore的resnet50模型。  |  [https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/resnet50_mindspore/resnet-90_1875.air](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/resnet50_mindspore/resnet-90_1875.air) |
+    |  resnet50 | 图片分类推理模型。是基于MindSpore的resnet50模型。  |  [https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/resnet50_mindspore/resnet-90_1875.air](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/resnet50_mindspore/resnet-90_1875.air) |
     ```
     # 为了方便下载，在这里直接给出原始模型下载及模型转换命令,可以直接拷贝执行。也可以参照上表在modelzoo中下载并手工转换，以了解更多细节。     
     cd ${HOME}/samples/python/level2_simple_inference/1_classification/resnet50_mindspore_picture/model    
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/resnet50_mindspore/resnet-90_1875.air     
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/resnet50_mindspore/resnet-90_1875.air     
     atc --model=./resnet-90_1875.air --framework=1 --output=./resnet50 --soc_version=Ascend310
     ```
 
@@ -57,8 +57,8 @@
     ```
     # 执行以下命令，进入样例的data文件夹中，下载对应的测试图片。
     cd ${HOME}/samples/python/level2_simple_inference/1_classification/resnet50_mindspore_picture/data
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/data/airplane.jpg
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/data/car.jpg
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/data/airplane.jpg
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/data/car.jpg
     ```
 ### 样例运行
 

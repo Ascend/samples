@@ -1,11 +1,11 @@
-caffe_model1="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/gesturedetection/pose_iter_440000.caffemodel"
-caffe_prototxt1="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/gesturedetection/pose_deploy.prototxt"
-aipp_cfg="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/gesturedetection/insert_op.cfg"
-pb1="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/gesturedetection/stgcn_fps30_sta_ho_ki4.pb"
+caffe_model1="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/gesturedetection/pose_iter_440000.caffemodel"
+caffe_prototxt1="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/gesturedetection/pose_deploy.prototxt"
+aipp_cfg="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/gesturedetection/insert_op.cfg"
+pb1="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/gesturedetection/stgcn_fps30_sta_ho_ki4.pb"
 model_name_1="pose_deploy"
 model_name_2="stgcn_fps30_sta_ho_ki4"
 
-data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/gesturedetection/test_image/"
+data_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/gesturedetection/test_image/"
 project_name="cplusplus_Gesturedetection"
 
 script_path_temp="$( cd "$(dirname $BASH_SOURCE)" ; pwd -P)"

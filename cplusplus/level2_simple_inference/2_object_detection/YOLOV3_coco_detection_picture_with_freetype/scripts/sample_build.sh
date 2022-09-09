@@ -14,7 +14,7 @@ function main()
   fi
 
   if [ ! -f "${ModelPath}/../data/dog_1024_688.jpg" ];then
-    wget -O ${ModelPath}/../data/dog_1024_688.jpg https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/YOLOV3_coco_detection_picture_with_freetype/dog_1024_688.jpg --no-check-certificate
+    wget -O ${ModelPath}/../data/dog_1024_688.jpg https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/YOLOV3_coco_detection_picture_with_freetype/dog_1024_688.jpg --no-check-certificate
   fi
   
   find_model yolov3.om

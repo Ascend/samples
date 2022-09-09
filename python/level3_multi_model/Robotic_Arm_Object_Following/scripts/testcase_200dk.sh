@@ -1,7 +1,7 @@
-pb_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOV3_ascend_logo_following/yolov3_ascend_logo.pb"
-aipp_cfg="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOV3_ascend_logo_following/insert_op.cfg"
+pb_model="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOV3_ascend_logo_following/yolov3_ascend_logo.pb"
+aipp_cfg="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOV3_ascend_logo_following/insert_op.cfg"
 model_name="yolov3_ascend_logo"
-test_image="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOV3_ascend_logo_following/test_image.jpg"
+test_image="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOV3_ascend_logo_following/test_image.jpg"
 
 version=$1
 project_name="python_Robotic_Arm_Object_Following-python"

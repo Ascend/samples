@@ -1,5 +1,5 @@
 /**
-* Copyright 2020 Huawei Technologies Co., Ltd
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2022. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 * File utils.h
 * Description: handle file operations
 */
+#ifndef ACLLITE_VIDEO_PROC_H
+#define ACLLITE_VIDEO_PROC_H
 #pragma once
 
 #include <unistd.h>
@@ -25,9 +27,9 @@
 class AclLiteVideoProc {
 public:
     AclLiteVideoProc();
-    AclLiteVideoProc(uint32_t cameraId, uint32_t width = 1280, 
+    AclLiteVideoProc(uint32_t cameraId, uint32_t width = 1280,
                       uint32_t height = 720, uint32_t fps = 15);
-    AclLiteVideoProc(const std::string& videoPath, int32_t deviceId = 0, 
+    AclLiteVideoProc(const std::string& videoPath, int32_t deviceId = 0,
                       aclrtContext context = nullptr);
     AclLiteVideoProc(VencConfig& vencConfig,
                      aclrtContext context = nullptr);
@@ -43,5 +45,6 @@ private:
     AclLiteError Open();
  
 private:
-    AclLiteVideoCapBase* cap_;    
+    AclLiteVideoCapBase* cap_;
 };
+#endif

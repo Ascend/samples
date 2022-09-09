@@ -17,9 +17,9 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <map>
+#include <cstdint>
 #include "acl/acl.h"
 #include "acl/ops/acl_dvpp.h"
-#include <cstdint>
 
 #define INFO_LOG(fmt, args...) fprintf(stdout, "[INFO]  " fmt "\n", ##args)
 #define WARN_LOG(fmt, args...) fprintf(stdout, "[WARN]  " fmt "\n", ##args)
@@ -38,8 +38,8 @@ typedef struct PicDesc {
 
 typedef struct CropPicDesc {
     std::string picName;
-	int left;
-	int top;
+    int left;
+    int top;
     int width;
     int height;
 }CropPicDesc;

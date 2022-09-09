@@ -14,7 +14,7 @@ function main()
   fi
 
   if [ ! -f "${DataPath}/dog1_1024_683.jpg" ];then
-    wget -O ${DataPath}/dog1_1024_683.jpg https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/jpegd/dog1_1024_683.jpg --no-check-certificate
+    wget -O ${DataPath}/dog1_1024_683.jpg https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/jpegd/dog1_1024_683.jpg --no-check-certificate
   fi
 
   build

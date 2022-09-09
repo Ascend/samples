@@ -1,7 +1,7 @@
 /**
 * @file VencHelper.cpp
 *
-* Copyright (C) 2020. Huawei Technologies Co., Ltd. All rights reserved.
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2022. All rights reserved.
 *
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -9,33 +9,37 @@
 */
 #include <cstdint>
 #include <iostream>
-#include <errno.h>
-#include <string.h>
+#include <cerrno>
+#include <cstring>
 
 #include "VencHelper.h"
 
 using namespace std;
 namespace {
+    uint32_t kKeyFrameInterval = 16;
+    uint32_t kRcMode = 2;
+    uint32_t kMaxBitRate = 10000;
     uint32_t kVencQueueSize = 256;
     uint32_t kImageEnQueueRetryTimes = 3;
     uint32_t kEnqueueWait = 10000;
     uint32_t kOutqueueWait = 10000;
     uint32_t kAsyncWait = 10000;
-    bool g_RunFlag = true;
+    bool g_runFlag = true;
 }
 
-VencHelper::VencHelper(VencConfig &vencInfo):
-  vencInfo_(vencInfo),
-  status_(STATUS_VENC_INIT),
-  vencProc_(nullptr),
-  frameImageQueue_(kVencQueueSize) {  
+VencHelper::VencHelper(VencConfig &vencInfo)
+    :vencInfo_(vencInfo), status_(STATUS_VENC_INIT),
+    vencProc_(nullptr), frameImageQueue_(kVencQueueSize)
+{
 }
 
-VencHelper::~VencHelper() {
+VencHelper::~VencHelper()
+{
     DestroyResource();
 }
 
-AclLiteError VencHelper::Init() {
+AclLiteError VencHelper::Init()
+{
     if (status_ != STATUS_VENC_INIT) {
         return ACLLITE_ERROR;
     }
@@ -47,16 +51,17 @@ AclLiteError VencHelper::Init() {
             return ACLLITE_ERROR_GET_ACL_CONTEXT;
         }
     }
-    
+
     thread asyncVencTh = thread(VencHelper::AsyncVencThreadEntry, (void*)this);
     asyncVencTh.detach();
-    while(status_ == STATUS_VENC_INIT) {
+    while (status_ == STATUS_VENC_INIT) {
         usleep(kAsyncWait);
     }
     return (status_ == STATUS_VENC_WORK)? ACLLITE_OK : ACLLITE_ERROR_VENC_STATUS;
 }
 
-void VencHelper::AsyncVencThreadEntry(void* arg) {
+void VencHelper::AsyncVencThreadEntry(void* arg)
+{
     VencHelper* thisPtr =  (VencHelper*)arg;
     DvppVenc venc(thisPtr->vencInfo_);
 
@@ -68,8 +73,8 @@ void VencHelper::AsyncVencThreadEntry(void* arg) {
     }
 
     thisPtr->SetStatus(STATUS_VENC_WORK);
-    while(thisPtr->GetStatus() == STATUS_VENC_WORK) {
-        shared_ptr<ImageData> image = thisPtr->GetEncodeImage();        
+    while (thisPtr->GetStatus() == STATUS_VENC_WORK) {
+        shared_ptr<ImageData> image = thisPtr->GetEncodeImage();
         if (image == nullptr) {
             usleep(kOutqueueWait);
             continue;
@@ -87,12 +92,13 @@ void VencHelper::AsyncVencThreadEntry(void* arg) {
     thisPtr->SetStatus(STATUS_VENC_EXIT);
 }
 
-AclLiteError VencHelper::Process(ImageData& image) {
+AclLiteError VencHelper::Process(ImageData& image)
+{
     if (status_ != STATUS_VENC_WORK) {
         ACLLITE_LOG_ERROR("The venc(status %d) is not working", status_);
         return ACLLITE_ERROR_VENC_STATUS;
     }
-    shared_ptr<ImageData> imagePtr = make_shared<ImageData>();    
+    shared_ptr<ImageData> imagePtr = make_shared<ImageData>();
     imagePtr->format = image.format;
     imagePtr->width = image.width;
     imagePtr->height = image.height;
@@ -105,46 +111,45 @@ AclLiteError VencHelper::Process(ImageData& image) {
         if (frameImageQueue_.Push(imagePtr)) {
             return ACLLITE_OK;
         }
-        usleep(kEnqueueWait); 
+        usleep(kEnqueueWait);
     }
     ACLLITE_LOG_ERROR("Venc(%s) lost image for queue full", vencInfo_.outFile.c_str());
 
     return ACLLITE_ERROR_VENC_QUEUE_FULL;
 }
 
-shared_ptr<ImageData> VencHelper::GetEncodeImage() {
+shared_ptr<ImageData> VencHelper::GetEncodeImage()
+{
     shared_ptr<ImageData> image = frameImageQueue_.Pop();
     return image;
 }
 
-void VencHelper::DestroyResource() {
+void VencHelper::DestroyResource()
+{
     vencProc_->Finish();
 }
 
-DvppVenc::DvppVenc(VencConfig& vencInfo):
-  vencInfo_(vencInfo), 
-  threadId_(0),
-  vencChannelDesc_(nullptr), 
-  vencFrameConfig_(nullptr),
-  inputPicDesc_(nullptr), 
-  vencStream_(nullptr), 
-  outFp_(nullptr), 
-  isFinished_(false){
+DvppVenc::DvppVenc(VencConfig& vencInfo)
+    :vencInfo_(vencInfo), threadId_(0), vencChannelDesc_(nullptr), vencFrameConfig_(nullptr),
+    inputPicDesc_(nullptr), vencStream_(nullptr), outFp_(nullptr), isFinished_(false)
+{
 }
 
-DvppVenc::~DvppVenc(){
+DvppVenc::~DvppVenc()
+{
     DestroyResource();
 }
 
 void DvppVenc::Callback(acldvppPicDesc *input,
-                        acldvppStreamDesc *output, void *userData) {
+                        acldvppStreamDesc *output, void *userData)
+{
     void* data = acldvppGetStreamDescData(output);
     uint32_t retCode = acldvppGetStreamDescRetCode(output);
     if (retCode == 0) {
-        //encode success, then process output pic
+        // encode success, then process output pic
         uint32_t size = acldvppGetStreamDescSize(output);
-        DvppVenc* venc = (DvppVenc*)userData;  
-        AclLiteError ret = venc->SaveVencFile(data, size);     
+        DvppVenc* venc = (DvppVenc*)userData;
+        AclLiteError ret = venc->SaveVencFile(data, size);
         if (ret != ACLLITE_OK) {
             ACLLITE_LOG_ERROR("Save venc file failed, error %d", ret);
         } else {
@@ -157,37 +162,38 @@ void DvppVenc::Callback(acldvppPicDesc *input,
     acldvppDestroyPicDesc(input);
 }
 
-AclLiteError DvppVenc::SaveVencFile(void* vencData, uint32_t size) {   
+AclLiteError DvppVenc::SaveVencFile(void* vencData, uint32_t size)
+{
     AclLiteError atlRet = ACLLITE_OK;
     void* data = vencData;
     if (vencInfo_.runMode == ACL_HOST) {
         data = CopyDataToHost(vencData, size, vencInfo_.runMode, MEMORY_NORMAL);
     }
-    
     size_t ret = fwrite(data, 1, size, outFp_);
     if (ret != size) {
         ACLLITE_LOG_ERROR("Save venc file %s failed, need write %u bytes, "
-                        "but only write %zu bytes, error: %s",
-                        vencInfo_.outFile.c_str(), size, ret, strerror(errno));
+                          "but only write %zu bytes, error: %s",
+                          vencInfo_.outFile.c_str(), size, ret, strerror(errno));
         atlRet = ACLLITE_ERROR_WRITE_FILE;
     } else {
-        fflush(outFp_); 
+        fflush(outFp_);
     }
 
     if (vencInfo_.runMode == ACL_HOST) {
-        delete[]((uint8_t *)data);   
+        delete[]((uint8_t *)data);
     }
 
     return atlRet;
 }
 
-AclLiteError DvppVenc::Init() {
+AclLiteError DvppVenc::Init()
+{
     outFp_ = fopen(vencInfo_.outFile.c_str(), "wb+");
     if (outFp_ == nullptr) {
-        ACLLITE_LOG_ERROR("Open file %s failed, error %s", 
+        ACLLITE_LOG_ERROR("Open file %s failed, error %s",
                           vencInfo_.outFile.c_str(), strerror(errno));
         return ACLLITE_ERROR_OPEN_FILE;
-    } 
+    }
 
     return InitResource();
 }
@@ -205,7 +211,7 @@ void* DvppVenc::SubscribleThreadFunc(aclrtContext sharedContext)
         return ((void*)(-1));
     }
 
-    while (g_RunFlag) {
+    while (g_runFlag) {
         // Notice: timeout 1000ms
         (void)aclrtProcessReport(1000);
     }
@@ -222,8 +228,8 @@ AclLiteError DvppVenc::InitResource()
     }
 
     // create process callback thread
-    AclLiteError ret = pthread_create(&threadId_, nullptr, 
-                             &DvppVenc::SubscribleThreadFunc, vencInfo_.context);                             
+    AclLiteError ret = pthread_create(&threadId_, nullptr,
+    &DvppVenc::SubscribleThreadFunc, vencInfo_.context);
     if (ret != ACLLITE_OK) {
         ACLLITE_LOG_ERROR("Create venc subscrible thread failed, error %d", ret);
         return ACLLITE_ERROR_CREATE_THREAD;
@@ -232,7 +238,7 @@ AclLiteError DvppVenc::InitResource()
     ret = CreateVencChannel();
     if (ret != ACLLITE_OK) {
         ACLLITE_LOG_ERROR("Create venc channel failed, error %d", ret);
-        return ret; 
+        return ret;
     }
 
     aclRet = aclrtCreateStream(&vencStream_);
@@ -245,7 +251,7 @@ AclLiteError DvppVenc::InitResource()
     if (aclRet != ACL_SUCCESS) {
         ACLLITE_LOG_ERROR("Venc subscrible report failed, error %d", aclRet);
         return ACLLITE_ERROR_SUBSCRIBE_REPORT;
-    }      
+    }
 
     ret = CreateFrameConfig();
     if (ret != ACLLITE_OK) {
@@ -257,7 +263,8 @@ AclLiteError DvppVenc::InitResource()
     return ACLLITE_OK;
 }
 
-AclLiteError DvppVenc::CreateVencChannel() {
+AclLiteError DvppVenc::CreateVencChannel()
+{
     // create vdec channelDesc
     vencChannelDesc_ = aclvencCreateChannelDesc();
     if (vencChannelDesc_ == nullptr) {
@@ -271,7 +278,9 @@ AclLiteError DvppVenc::CreateVencChannel() {
     aclvencSetChannelDescPicFormat(vencChannelDesc_, vencInfo_.format);
     aclvencSetChannelDescPicWidth(vencChannelDesc_, vencInfo_.maxWidth);
     aclvencSetChannelDescPicHeight(vencChannelDesc_, vencInfo_.maxHeight);
-    aclvencSetChannelDescKeyFrameInterval(vencChannelDesc_, 16);
+    aclvencSetChannelDescKeyFrameInterval(vencChannelDesc_, kKeyFrameInterval);
+    aclvencSetChannelDescRcMode(vencChannelDesc_, kRcMode);
+    aclvencSetChannelDescMaxBitRate(vencChannelDesc_, kMaxBitRate);
 
     aclError ret = aclvencCreateChannel(vencChannelDesc_);
     if (ret != ACL_SUCCESS) {
@@ -281,7 +290,8 @@ AclLiteError DvppVenc::CreateVencChannel() {
     return ACLLITE_OK;
 }
 
-AclLiteError DvppVenc::CreateFrameConfig() {
+AclLiteError DvppVenc::CreateFrameConfig()
+{
     vencFrameConfig_ = aclvencCreateFrameConfig();
     if (vencFrameConfig_ == nullptr) {
         ACLLITE_LOG_ERROR("Create frame config");
@@ -349,14 +359,15 @@ AclLiteError DvppVenc::CreateInputPicDesc(ImageData& image)
     acldvppSetPicDescWidth(inputPicDesc_, image.width);
     acldvppSetPicDescHeight(inputPicDesc_, image.height);
     acldvppSetPicDescWidthStride(inputPicDesc_, ALIGN_UP16(image.width));
-    acldvppSetPicDescHeightStride(inputPicDesc_, ALIGN_UP2(image.height));  
+    acldvppSetPicDescHeightStride(inputPicDesc_, ALIGN_UP2(image.height));
     acldvppSetPicDescData(inputPicDesc_, image.data.get());
     acldvppSetPicDescSize(inputPicDesc_, image.size);
 
     return ACLLITE_OK;
 }
 
-void DvppVenc::Finish() {
+void DvppVenc::Finish()
+{
     if (isFinished_) {
         return;
     }

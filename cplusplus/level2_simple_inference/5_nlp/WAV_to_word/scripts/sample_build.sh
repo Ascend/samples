@@ -14,10 +14,10 @@ function main()
   fi
   
   if [ ! -f "${ModelPath}/../data/nihao.wav" ];then
-    wget -O ${ModelPath}/../data/nihao.wav https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/WAV_to_word/nihao.wav --no-check-certificate
+    wget -O ${ModelPath}/../data/nihao.wav https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/WAV_to_word/nihao.wav --no-check-certificate
   fi
   if [ ! -f "${ModelPath}/../data/xinpian.wav" ];then
-    wget -O ${ModelPath}/../data/xinpian.wav https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/WAV_to_word/xinpian.wav --no-check-certificate
+    wget -O ${ModelPath}/../data/xinpian.wav https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/WAV_to_word/xinpian.wav --no-check-certificate
   fi
 
   find_model voice.om

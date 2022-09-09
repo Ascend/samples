@@ -51,7 +51,7 @@ Check whether the following requirements are met. If not, perform operations acc
     ```
     # To facilitate download, the commands for downloading the original model and converting the model are provided here. You can directly copy and run the commands. You can also refer to the above table to download the model from ModelZoo and manually convert it.    
     cd ${HOME}/samples/python/level2_simple_inference/2_object_detection/YOLOV4_coco_detection_car_video/model    
-    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOv4_onnx/yolov4_dynamic_bs.onnx    
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOv4_onnx/yolov4_dynamic_bs.onnx    
     atc --model=./yolov4_dynamic_bs.onnx --framework=5 --output=yolov4_bs1 --input_format=NCHW --soc_version=Ascend310 --input_shape="input:1,3,608,608" --out_nodes="Conv_434:0;Conv_418:0;Conv_402:0"
     ```
 
@@ -59,7 +59,7 @@ Check whether the following requirements are met. If not, perform operations acc
     ```
     # Run the following commands to go to the **data** folder of the sample and download the corresponding test video:
     cd $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV4_coco_detection_car_video/data
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/YOLOV4_coco_detection_car_video/test_video/test.mp4
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/YOLOV4_coco_detection_car_video/test_video/test.mp4
     cd ../src
     ```
 

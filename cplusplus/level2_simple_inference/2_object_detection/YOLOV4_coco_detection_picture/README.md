@@ -45,7 +45,7 @@ Check whether the following requirements are met. If not, perform operations acc
 2. Convert the model.
     | **Model**| **Description**                                    | **How to Obtain**                                            |
    | ------------ | ------------------------------------------------ | ------------------------------------------------------------ |
-   | YOLOv4      | Image detection inference model. It is a YOLOv4 model based on TensorFlow.| [https://nkxiaolei88.obs.cn-north-1.myhuaweicloud.com/ATC%20Model/YoloV4/yolov4_no_postprocess.pb](https://nkxiaolei88.obs.cn-north-1.myhuaweicloud.com/ATC%20Model/YoloV4/yolov4_no_postprocess.pb)|
+   | YOLOv4      | Image detection inference model. It is a YOLOv4 model based on TensorFlow.| [https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/nkxiaolei/YoloV4/yolov4_no_postprocess.pb](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/nkxiaolei/YoloV4/yolov4_no_postprocess.pb)|
 
    ```
    # To facilitate download, the commands for downloading the original model and converting the model are provided here. You can directly copy and run the commands. You can also refer to the above table to download the model from ModelZoo and manually convert it.    

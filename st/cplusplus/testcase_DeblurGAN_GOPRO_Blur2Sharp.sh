@@ -1,9 +1,9 @@
-tf_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/DeblurGAN/DeblurrGAN-pad-01051648.pb"
+tf_model="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/DeblurGAN/DeblurrGAN-pad-01051648.pb"
 model_name="blurtosharp_pad_1280_720"
 
-data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/DeblurGAN_GOPRO_Blur2Sharp/test_image/"
+data_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/DeblurGAN_GOPRO_Blur2Sharp/test_image/"
 data_name="data.jpg"
-verify_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/DeblurGAN_GOPRO_Blur2Sharp/verify_image/"
+verify_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/DeblurGAN_GOPRO_Blur2Sharp/verify_image/"
 verify_name="verify_data.jpg"
 project_name="cplusplus_DeblurGAN_GOPRO_Blur2Sharp"
 

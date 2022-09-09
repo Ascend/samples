@@ -1,7 +1,7 @@
 /**
 * @file VdecHelper.cpp
 *
-* Copyright (C) 2020. Huawei Technologies Co., Ltd. All rights reserved.
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2022. All rights reserved.
 *
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -17,43 +17,38 @@ namespace {
     const uint32_t kFrameHeightMax = 4096;
 }
 
-bool g_ReportExit = false;
-
-VdecHelper::VdecHelper(int channelId, uint32_t width, uint32_t height, 
-                       int type, aclvdecCallback callback, uint32_t outFormat)
-:channelId_(channelId)
-,format_(outFormat)
-,enType_(type)
-,frameWidth_(width)
-,frameHeight_(height)
-,callback_(callback)
-,isExit_(false)
-,isReleased_(false){
+VdecHelper::VdecHelper(int channelId, uint32_t width, uint32_t height,
+    int type, aclvdecCallback callback, uint32_t outFormat)
+    :channelId_(channelId), format_(outFormat), enType_(type),
+    frameWidth_(width), frameHeight_(height), callback_(callback),
+    isExit_(false), isReleased_(false)
+{
     alignWidth_ = ALIGN_UP16(frameWidth_);
     alignHeight_ = ALIGN_UP2(frameHeight_);
     outputPicSize_ = YUV420SP_SIZE(alignWidth_, alignHeight_);
-
     vdecChannelDesc_ = nullptr;
     inputStreamDesc_ = nullptr;
     outputPicDesc_ = nullptr;
     outputPicBuf_ = nullptr;
-    
     aclError aclRet;
     ACLLITE_LOG_INFO("get current context");
     aclRet = aclrtGetCurrentContext(&context_);
     if ((aclRet != ACL_SUCCESS) || (context_ == nullptr)) {
         ACLLITE_LOG_ERROR("VdecHelper : Get current acl context error:%d", aclRet);
     }
-    
     ACLLITE_LOG_INFO("VDEC width %d, height %d", frameWidth_, frameHeight_);
 }
 
-VdecHelper::~VdecHelper(){
+VdecHelper::~VdecHelper()
+{
     DestroyResource();
 }
 
-void VdecHelper::DestroyResource(){
-    if (isReleased_) return;
+void VdecHelper::DestroyResource()
+{
+    if (isReleased_) {
+        return;
+    }
 
     aclError ret;
     if (vdecChannelDesc_ != nullptr) {
@@ -78,7 +73,8 @@ void VdecHelper::DestroyResource(){
     isReleased_ = true;
 }
 
-void* VdecHelper::SubscribeReportThreadFunc(void *arg) {
+void* VdecHelper::SubscribeReportThreadFunc(void *arg)
+{
     ACLLITE_LOG_INFO("Start vdec subscribe thread...");
 
     // Notice: create context for this thread
@@ -99,19 +95,20 @@ void* VdecHelper::SubscribeReportThreadFunc(void *arg) {
     return (void*)ACLLITE_OK;
 }
 
-void VdecHelper::UnsubscribReportThread() {
+void VdecHelper::UnsubscribReportThread()
+{
     if ((subscribeThreadId_ == 0) || (stream_ == nullptr)) return;
 
     (void)aclrtUnSubscribeReport(static_cast<uint64_t>(subscribeThreadId_),
-                                                       stream_);
+                                 stream_);
     // destory thread
     isExit_ = true;
 
     void *res = nullptr;
     int joinThreadErr = pthread_join(subscribeThreadId_, &res);
     if (joinThreadErr) {
-        ACLLITE_LOG_ERROR("Join thread failed, threadId = %lu, err = %d", 
-                        subscribeThreadId_, joinThreadErr);
+        ACLLITE_LOG_ERROR("Join thread failed, threadId = %lu, err = %d",
+                          subscribeThreadId_, joinThreadErr);
     } else {
         if ((uint64_t)res != 0) {
             ACLLITE_LOG_ERROR("thread run failed. ret is %lu.", (uint64_t)res);
@@ -120,7 +117,8 @@ void VdecHelper::UnsubscribReportThread() {
     ACLLITE_LOG_INFO("Destory report thread success.");
 }
 
-AclLiteError VdecHelper::Init() {
+AclLiteError VdecHelper::Init()
+{
     ACLLITE_LOG_INFO("Vdec process init start...");
     aclError aclRet = aclrtCreateStream(&stream_);
     if (aclRet != ACL_SUCCESS) {
@@ -128,14 +126,14 @@ AclLiteError VdecHelper::Init() {
         return ACLLITE_ERROR_CREATE_STREAM;
     }
     ACLLITE_LOG_INFO("Vdec create stream ok");
-         
-    int ret = pthread_create(&subscribeThreadId_, nullptr, 
+
+    int ret = pthread_create(&subscribeThreadId_, nullptr,
                              SubscribeReportThreadFunc, (void *)this);
     if (ret) {
         ACLLITE_LOG_ERROR("Start vdec subscribe thread failed, return:%d", ret);
         return ACLLITE_ERROR_CREATE_THREAD;
     }
-    (void)aclrtSubscribeReport(static_cast<uint64_t>(subscribeThreadId_), 
+    (void)aclrtSubscribeReport(static_cast<uint64_t>(subscribeThreadId_),
                                stream_);
 
     ret = CreateVdecChannelDesc();
@@ -147,7 +145,8 @@ AclLiteError VdecHelper::Init() {
     return ACLLITE_OK;
 }
 
-AclLiteError VdecHelper::CreateVdecChannelDesc() {
+AclLiteError VdecHelper::CreateVdecChannelDesc()
+{
     vdecChannelDesc_ = aclvdecCreateChannelDesc();
     if (vdecChannelDesc_ == nullptr) {
         ACLLITE_LOG_ERROR("Create vdec channel desc failed");
@@ -158,8 +157,8 @@ AclLiteError VdecHelper::CreateVdecChannelDesc() {
     aclError ret = aclvdecSetChannelDescChannelId(vdecChannelDesc_,
                                                   channelId_);
     if (ret != ACL_SUCCESS) {
-        ACLLITE_LOG_ERROR("Set vdec channel id to %d failed, errorno:%d", 
-                      channelId_, ret);
+        ACLLITE_LOG_ERROR("Set vdec channel id to %d failed, errorno:%d",
+                          channelId_, ret);
         return ACLLITE_ERROR_SET_VDEC_CHANNEL_ID;
     }
 
@@ -176,14 +175,14 @@ AclLiteError VdecHelper::CreateVdecChannelDesc() {
         return ACLLITE_ERROR_SET_VDEC_CALLBACK;
     }
 
-    ret = aclvdecSetChannelDescEnType(vdecChannelDesc_, 
+    ret = aclvdecSetChannelDescEnType(vdecChannelDesc_,
                                       static_cast<acldvppStreamFormat>(enType_));
     if (ret != ACL_SUCCESS) {
         ACLLITE_LOG_ERROR("Set vdec channel entype failed, errorno:%d", ret);
         return ACLLITE_ERROR_SET_VDEC_ENTYPE;
     }
 
-    ret = aclvdecSetChannelDescOutPicFormat(vdecChannelDesc_, 
+    ret = aclvdecSetChannelDescOutPicFormat(vdecChannelDesc_,
                                             static_cast<acldvppPixelFormat>(format_));
     if (ret != ACL_SUCCESS) {
         ACLLITE_LOG_ERROR("Set vdec channel pic format failed, errorno:%d", ret);
@@ -203,15 +202,15 @@ AclLiteError VdecHelper::CreateVdecChannelDesc() {
 }
 
 AclLiteError VdecHelper::CreateInputStreamDesc(shared_ptr<FrameData> frameData)
-{  
-   inputStreamDesc_ = acldvppCreateStreamDesc();
+{
+    inputStreamDesc_ = acldvppCreateStreamDesc();
     if (inputStreamDesc_ == nullptr) {
         ACLLITE_LOG_ERROR("Create input stream desc failed");
         return ACLLITE_ERROR_CREATE_STREAM_DESC;
     }
 
     aclError ret;
-    //to the last data,send an endding signal to dvpp vdec
+    // to the last data,send an endding signal to dvpp vdec
     if (frameData->isFinished) {
         ret = acldvppSetStreamDescEos(inputStreamDesc_, 1);
         if (ret != ACL_SUCCESS) {
@@ -221,7 +220,7 @@ AclLiteError VdecHelper::CreateInputStreamDesc(shared_ptr<FrameData> frameData)
         return ACLLITE_OK;
     }
 
-    ret = acldvppSetStreamDescData(inputStreamDesc_, frameData->data);                                   
+    ret = acldvppSetStreamDescData(inputStreamDesc_, frameData->data);
     if (ret != ACL_SUCCESS) {
         ACLLITE_LOG_ERROR("Set input stream data failed, errorno:%d", ret);
         return ACLLITE_ERROR_SET_STREAM_DESC_DATA;
@@ -245,7 +244,7 @@ AclLiteError VdecHelper::CreateOutputPicDesc(size_t size)
     aclError ret = acldvppMalloc(&outputPicBuf_, size);
     if (ret != ACL_SUCCESS) {
         ACLLITE_LOG_ERROR("Malloc vdec output buffer failed when create "
-                      "vdec output desc, errorno:%d", ret);
+                          "vdec output desc, errorno:%d", ret);
         return ACLLITE_ERROR_MALLOC_DVPP;
     }
 
@@ -267,7 +266,7 @@ AclLiteError VdecHelper::CreateOutputPicDesc(size_t size)
         return ACLLITE_ERROR_SET_PIC_DESC_SIZE;
     }
 
-    ret = acldvppSetPicDescFormat(outputPicDesc_, 
+    ret = acldvppSetPicDescFormat(outputPicDesc_,
                                   static_cast<acldvppPixelFormat>(format_));
     if (ret != ACL_SUCCESS) {
         ACLLITE_LOG_ERROR("Set vdec output pic format failed, errorno:%d", ret);
@@ -279,19 +278,19 @@ AclLiteError VdecHelper::CreateOutputPicDesc(size_t size)
 
 AclLiteError VdecHelper::Process(shared_ptr<FrameData> frameData, void* userData)
 {
-    //create input desc
+    // create input desc
     AclLiteError atlRet = CreateInputStreamDesc(frameData);
     if (atlRet != ACLLITE_OK) {
         ACLLITE_LOG_ERROR("Create stream desc failed");
         return atlRet;
     }
-    //create out desc
+    // create out desc
     atlRet = CreateOutputPicDesc(outputPicSize_);
     if (atlRet != ACLLITE_OK) {
         ACLLITE_LOG_ERROR("Create pic desc failed");
         return atlRet;
     }
-    //send data to dvpp vdec to decode
+    // send data to dvpp vdec to decode
     aclError ret = aclvdecSendFrame(vdecChannelDesc_, inputStreamDesc_,
                                     outputPicDesc_, nullptr, userData);
     if (ret != ACL_SUCCESS) {
@@ -302,11 +301,12 @@ AclLiteError VdecHelper::Process(shared_ptr<FrameData> frameData, void* userData
     return ACLLITE_OK;
 }
 
-AclLiteError VdecHelper::SetFormat(uint32_t format) {
+AclLiteError VdecHelper::SetFormat(uint32_t format)
+{
     if ((format != PIXEL_FORMAT_YUV_SEMIPLANAR_420) ||
         (format != PIXEL_FORMAT_YVU_SEMIPLANAR_420)) {
         ACLLITE_LOG_ERROR("Set video decode output image format to %d failed, "
-            "only support %d(YUV420SP NV12) and %d(YUV420SP NV21)", 
+            "only support %d(YUV420SP NV12) and %d(YUV420SP NV21)",
             format,
             (int)PIXEL_FORMAT_YUV_SEMIPLANAR_420,
             (int)PIXEL_FORMAT_YVU_SEMIPLANAR_420);
@@ -319,31 +319,28 @@ AclLiteError VdecHelper::SetFormat(uint32_t format) {
     return ACLLITE_OK;
 }
 
-AclLiteError VdecHelper::VideoParamCheck() {
-    if ((frameWidth_ == 0) || (frameWidth_ > kFrameWidthMax)){
+AclLiteError VdecHelper::VideoParamCheck()
+{
+    if ((frameWidth_ == 0) || (frameWidth_ > kFrameWidthMax)) {
         ACLLITE_LOG_ERROR("video frame width %d is invalid, the legal range is [0, %d]",
-        frameWidth_,
-        kFrameWidthMax);
+                          frameWidth_, kFrameWidthMax);
         return ACLLITE_ERROR_VDEC_INVALID_PARAM;
     }
-    if ((frameHeight_ == 0) || (frameHeight_ > kFrameHeightMax)){
+    if ((frameHeight_ == 0) || (frameHeight_ > kFrameHeightMax)) {
         ACLLITE_LOG_ERROR("video frame height %d is invalid, the legal range is [0, %d]",
-        frameHeight_,
-        kFrameHeightMax);
+                          frameHeight_, kFrameHeightMax);
         return ACLLITE_ERROR_VDEC_INVALID_PARAM;
     }
     if ((format_ != PIXEL_FORMAT_YUV_SEMIPLANAR_420) &&
-        (format_ != PIXEL_FORMAT_YVU_SEMIPLANAR_420)){
+        (format_ != PIXEL_FORMAT_YVU_SEMIPLANAR_420)) {
         ACLLITE_LOG_ERROR("video decode image format %d invalid, "
-            "only support %d(YUV420SP NV12) and %d(YUV420SP NV21)", 
-            format_,
-            (int)PIXEL_FORMAT_YUV_SEMIPLANAR_420,
-            (int)PIXEL_FORMAT_YVU_SEMIPLANAR_420);
+                          "only support %d(YUV420SP NV12) and %d(YUV420SP NV21)",
+                          format_, (int)PIXEL_FORMAT_YUV_SEMIPLANAR_420,
+                          (int)PIXEL_FORMAT_YVU_SEMIPLANAR_420);
         return ACLLITE_ERROR_VDEC_INVALID_PARAM;
     }
-    if(enType_ > (uint32_t)H264_HIGH_LEVEL){
-        ACLLITE_LOG_ERROR("Input video stream format %d invalid",
-        enType_);
+    if (enType_ > (uint32_t)H264_HIGH_LEVEL) {
+        ACLLITE_LOG_ERROR("Input video stream format %d invalid", enType_);
         return ACLLITE_ERROR_VDEC_INVALID_PARAM;
     }
 

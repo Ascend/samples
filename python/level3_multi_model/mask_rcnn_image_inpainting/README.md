@@ -59,14 +59,14 @@ python3.6 -m pip install matplotlib==3.3.4 --user
     ```
     # To facilitate download, the commands for downloading the original model and converting the model are provided here. You can directly copy and run the commands. You can also refer to the above table to download and manually convert the model.    
     cd ${HOME}/samples/python/level3_multi_model/mask_rcnn_image_inpainting/model    
-    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/mask_rcnn/maskrcnn_mindspore.air
-    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/mask_rcnn/aipp_rgb.cfg     
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/mask_rcnn/maskrcnn_mindspore.air
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/mask_rcnn/aipp_rgb.cfg     
     atc --input_format=NCHW --framework=1 --model="maskrcnn_mindspore.air" --input_shape="x:1, 3, 768, 1280; im_info: 1, 4" --output="maskrcnn_mindspore_rgb" --insert_op_conf="aipp_rgb.cfg" --precision_mode=allow_fp32_to_fp16 --soc_version=Ascend310 --op_select_implmode=high_precision
     
-    wget https://c7xcode.obs.myhuaweicloud.com/models/imageinpainting_hifill/hifill.pb
+    wget https://obs-9be7.obs.myhuaweicloud.com/models/imageinpainting_hifill/hifill.pb
     atc --output_type=FP32 --input_shape="img:1,512,512,3;mask:1,512,512,1" --input_format=NHWC --output="./hifill" --soc_version=Ascend310 --framework=3 --save_original_model=false --model="./hifill.pb"
     
-    wget https://c7xcode.obs.myhuaweicloud.com/models/imageinpainting_hifill/matmul_27648.json
+    wget https://obs-9be7.obs.myhuaweicloud.com/models/imageinpainting_hifill/matmul_27648.json
     atc --singleop=./matmul_27648.json --output=./0_BatchMatMul_0_0_1_1_1024_1024_0_0_1_1_1024_27648_0_0_1_1_1024_27648 --soc_version=Ascend310
     ```
 
@@ -74,7 +74,7 @@ python3.6 -m pip install matplotlib==3.3.4 --user
     ```
     # Run the following commands to go to the data folder of the sample and download the corresponding test images:
     cd $HOME/samples/python/level3_multi_model/mask_rcnn_image_inpainting/data
-    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/mask_rcnn/photo1.jpg
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/mask_rcnn/photo1.jpg
     ```
 ### Sample Running
 

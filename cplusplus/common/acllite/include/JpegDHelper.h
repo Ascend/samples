@@ -1,5 +1,5 @@
 /**
-* Copyright 2020 Huawei Technologies Co., Ltd
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2022. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 * File AclLiteImageProc.h
 * Description: handle dvpp process
 */
+#ifndef JPEGD_HELPER_H
+#define JPEGD_HELPER_H
 #pragma once
 #include <cstdint>
 
@@ -57,7 +59,7 @@ public:
     * @param [in] inputWidth:width of pic
     * @param [in] inputHeight:height of pic
     */
-    void SetInput4JpegD(uint8_t* inDevBuffer, int inDevBufferSize, 
+    void SetInput4JpegD(uint8_t* inDevBuffer, int inDevBufferSize,
                         int inputWidth, int inputHeight);
     AclLiteError InitDecodeOutputDesc(ImageData& inputImage);
     /**
@@ -80,6 +82,7 @@ private:
 private:
     aclrtStream stream_;
     void* decodeOutBufferDev_; // decode output buffer
-    acldvppPicDesc *decodeOutputDesc_; //decode output desc
+    acldvppPicDesc *decodeOutputDesc_; // decode output desc
     acldvppChannelDesc *dvppChannelDesc_;
 };
+#endif

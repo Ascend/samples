@@ -1,5 +1,5 @@
-/**
-* Copyright 2020 Huawei Technologies Co., Ltd
+/*
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -12,18 +12,17 @@
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 * See the License for the specific language governing permissions and
 * limitations under the License.
-
-* File utils.h
-* Description: handle file operations
 */
-#pragma once
+#ifndef VGG_SSD_COCO_DETECTION_CV_WITHOUT_AIPP_INC_UTILS_H
+#define VGG_SSD_COCO_DETECTION_CV_WITHOUT_AIPP_INC_UTILS_H
+
 #include <iostream>
 #include <vector>
 #include <memory>
-#include "acl/acl.h"
+#include <string>
 #include <opencv2/opencv.hpp>
 #include <opencv2/imgproc.hpp>
-
+#include "acl/acl.h"
 #include "opencv2/imgproc/types_c.h"
 
 #define INFO_LOG(fmt, args...) fprintf(stdout, "[INFO]  " fmt "\n", ##args)
@@ -35,25 +34,23 @@
 #define RGB_IMAGE_SIZE_F32(width, height) ((width) * (height) * 3 * 4)
 #define IMAGE_CHAN_SIZE_F32(width, height) ((width) * (height) * 4)
 
-using namespace std;
-
-typedef enum Result {
+enum Result {
     SUCCESS = 0,
     FAILED = 1
-} Result;
+};
 
-typedef struct PicDesc {
+struct PicDesc {
     std::string picName;
     int width;
     int height;
-}PicDesc;
+};
 
 struct ImageDesc {
-  uint32_t img_width = 0;
-  uint32_t img_height = 0;
-  int32_t size = 0;
-  std::string input_path = "";
-  std::shared_ptr<u_int8_t> data;
+    uint32_t img_width = 0;
+    uint32_t img_height = 0;
+    int32_t size = 0;
+    std::string input_path = "";
+    std::shared_ptr<u_int8_t> data;
 };
 
 const std::string kImagePathSeparator = ",";
@@ -77,7 +74,7 @@ public:
     * @return device buffer of pic
     */
 
-    static Result PostProcess(const string &path, aclmdlDataset *modelOutput, aclmdlDesc* modelDesc);
+    static Result PostProcess(const std::string &path, aclmdlDataset *modelOutput, aclmdlDesc* modelDesc);
 
     static bool IsDirectory(const std::string &path);
 
@@ -89,7 +86,7 @@ public:
 
     static void GetPathFiles(const std::string &path, std::vector<std::string> &file_vec);
 
-    static bool PreProcess(shared_ptr<ImageDesc>& imageData, const string& imageFile);
+    static bool PreProcess(std::shared_ptr<ImageDesc>& imageData, const std::string& imageFile);
 
     static void* CopyDataToDevice(void* data, uint32_t dataSize, aclrtMemcpyKind policy);
 
@@ -97,5 +94,6 @@ public:
 
     static void* CopyDataDeviceToDevice(void* deviceData, uint32_t dataSize);
 
-    static void ImageNchw(shared_ptr<ImageDesc>& imageData, std::vector<cv::Mat>& nhwcImageChs, uint32_t size);
+    static void ImageNchw(std::shared_ptr<ImageDesc>& imageData, std::vector<cv::Mat>& nhwcImageChs, uint32_t size);
 };
+#endif

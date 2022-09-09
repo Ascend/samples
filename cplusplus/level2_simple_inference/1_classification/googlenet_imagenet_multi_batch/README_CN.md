@@ -50,9 +50,9 @@
     # 为了方便下载，在这里直接给出原始模型下载及模型转换命令,可以直接拷贝执行。也可以参照上表在modelzoo中下载并手工转换，以了解更多细节。     
     
     cd ${HOME}/samples/cplusplus/level2_simple_inference/1_classification/googlenet_imagenet_multi_batch/model    
-    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/classification/googlenet.caffemodel    
-    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/classification/googlenet.prototxt
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_imagenet_multi_batch/insert_op.cfg
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/classification/googlenet.caffemodel    
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/classification/googlenet.prototxt
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/googlenet_imagenet_multi_batch/insert_op.cfg
     atc --model="./googlenet.prototxt" --weight="./googlenet.caffemodel" --framework=0 --output="googlenet_multibatch" --soc_version=Ascend310 --insert_op_conf=./insert_op.cfg --input_shape="data:2,3,224,224" --input_format=NCHW
     ```
 

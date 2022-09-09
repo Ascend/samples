@@ -12,7 +12,7 @@ DVPP中的PNGD功能模块，实现.png图片的解码。
 
 样例中的关键接口调用流程如下：
 
-![输入图片说明](https://support.huaweicloud.com/aclcppdevg-cann51RC1alpha2/figure/zh-cn_image_0000001257793397.png)
+![输入图片说明](pngd.png)
 
 ## 目录结构<a name="section86232112399"></a>
 
@@ -38,6 +38,8 @@ DVPP中的PNGD功能模块，实现.png图片的解码。
 ## 准备测试数据<a name="section13765133092318"></a>
 
 请从[https://github.com/Ascend/tools/tree/master/dvpp_sample_input_data](https://github.com/Ascend/tools/tree/master/dvpp_sample_input_data)获取该样例的输入图片、视频数据。
+
+如果使用wget方式下载图片或视频，请先进入[https://github.com/Ascend/tools/tree/master/dvpp_sample_input_data](https://github.com/Ascend/tools/tree/master/dvpp_sample_input_data)页面，单击对应的图片或视频，进入查看图片或视频的页面后，单击页面右侧的“原始数据”，在浏览器的地址栏中才是获取图片或视频的地址，再使用wget命令从该地址中获取图片或视频。
 
 ## 编译运行<a name="section3789175815018"></a>
 
@@ -112,9 +114,6 @@ DVPP中的PNGD功能模块，实现.png图片的解码。
         - 1：开启
       - delay\_time：发送前的等待时间，所有通道等待输入所定的秒之后，一齐发送码流。该参数用于性能测试时减小通道之间因为启动时间不同步引起的性能参数差异，非性能模式下无效。
       - wait\_time：最大等待时间，以秒为单位。超出设定时间后进入退出流程。
-      - performance\_mode：性能测试开关。开启性能测试开关之后，"write\_file"保存解码文件功能将自动关闭。
-        - 0：默认参数，关闭
-        - 1：开启
       - whole_dir：兼容性测试的输入文件夹路径。设置后将交给PNGD解码该文件夹下所有以.jpg或.JPEG为后缀的文件，不设置则不会触发该模式。
 
 

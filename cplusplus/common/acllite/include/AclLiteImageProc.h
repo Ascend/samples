@@ -1,5 +1,5 @@
 /**
-* Copyright 2020 Huawei Technologies Co., Ltd
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2022. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -15,6 +15,8 @@
 
 * File AclLiteImageProc.h
 */
+#ifndef ACLLITE_IMAGE_PROC_H
+#define ACLLITE_IMAGE_PROC_H
 #pragma once
 #include <cstdint>
 #include "AclLiteUtils.h"
@@ -33,7 +35,7 @@ public:
     ~AclLiteImageProc();
 
     AclLiteError Init();
-    AclLiteError Resize(ImageData& dest,ImageData& src, 
+    AclLiteError Resize(ImageData& dest, ImageData& src,
                         uint32_t width, uint32_t height);
     AclLiteError JpegD(ImageData& destYuv, ImageData& srcJpeg);
     AclLiteError JpegE(ImageData& destJpeg, ImageData& srcYuv);
@@ -47,7 +49,7 @@ public:
                            uint32_t rbHorz, uint32_t rbVert);
     AclLiteError ProportionPaste(ImageData& dest, ImageData& src,
                                  uint32_t ltHorz, uint32_t ltVert,
-                                 uint32_t rbHorz, uint32_t rbVert); 
+                                 uint32_t rbHorz, uint32_t rbVert);
     AclLiteError ProportionPasteCenter(ImageData& dest, ImageData& src,
                                                uint32_t ltHorz, uint32_t ltVert,
                                                uint32_t rbHorz, uint32_t rbVert);
@@ -59,3 +61,4 @@ protected:
     acldvppChannelDesc *dvppChannelDesc_;
     int isInitOk_;
 };
+#endif

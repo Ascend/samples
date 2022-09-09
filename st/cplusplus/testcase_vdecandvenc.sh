@@ -1,6 +1,6 @@
-data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/vdecandvenc/"
+data_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/vdecandvenc/"
 data_name="person.mp4"
-verify_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/vdecandvenc/verify_source/"
+verify_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/vdecandvenc/verify_source/"
 verify_name="dvpp_venc.h264"
 project_name="cplusplus_vdecandvenc"
 

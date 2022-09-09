@@ -50,8 +50,8 @@ Check whether the following requirements are met. If not, perform operations acc
    ```
    # To facilitate download, the commands for downloading the original model and converting the model are provided here. You can directly copy and run the commands. You can also refer to the above table to download the model from ModelZoo and manually convert it.    
    cd ${HOME}/samples/cplusplus/level2_simple_inference/2_object_detection/YOLOV3_VOC_detection_picture/model     
-   wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/YOLOV3_VOC_detection_picture/yolov3_tf.pb
-   wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/YOLOV3_VOC_detection_picture/insert_op.cfg
+   wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/YOLOV3_VOC_detection_picture/yolov3_tf.pb
+   wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/YOLOV3_VOC_detection_picture/insert_op.cfg
    atc --output_type=FP32 --input_shape="input/input_data:1,416,416,3" --input_fp16_nodes="" --input_format=NHWC --output=./yolov3 --soc_version=Ascend310 --insert_op_conf=./insert_op.cfg --framework=3 --save_original_model=false --model=./yolov3_tf.pb
    ```
 

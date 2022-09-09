@@ -48,15 +48,15 @@
     ```
     # 为了方便下载，在这里直接给出原始模型下载及模型转换命令,可以直接拷贝执行。也可以参照上表在modelzoo中下载并手工转换，以了解更多细节。     
     cd $HOME/samples/python/level2_simple_inference/1_classification/googlenet_onnx_picture/model
-    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/classification/googlenet.onnx   
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_onnx_picture/insert_op.cfg
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/classification/googlenet.onnx   
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/googlenet_onnx_picture/insert_op.cfg
     atc --model=./googlenet.onnx --framework=5 --output=googlenet_yuv --soc_version=Ascend310 --insert_op_conf=insert_op.cfg --input_shape="actual_input_1:1,3,224,224" --input_format=NCHW
     ```
 3. 获取样例需要的测试图片。
     ```
     执行以下命令，进入样例的data文件夹中，下载对应的测试图片。
     cd $HOME/samples/python/level2_simple_inference/1_classification/googlenet_onnx_picture/data
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_imagenet_picture/test_image/test1.jpg
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/googlenet_imagenet_picture/test_image/test1.jpg
     cd ../src
     ```
 

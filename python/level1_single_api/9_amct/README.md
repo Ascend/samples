@@ -4,7 +4,7 @@ English|[中文](README_CN.md)
 
 ## Directory structure and description
 
-Ascend Model Compression Toolkit (AMCT) is a toolkit that compresses models through model compression techniques (such as fusion, quantization, tensor decomposition, etc.). After compression, the model volume becomes smaller and is deployed to Ascend AI After the processing device is installed, low-bit operations can be enabled to improve calculation efficiency and achieve the goal of performance improvement. For more information, please reference to [开发辅助工具指南 (推理) 01](https://support.huawei.com/enterprise/zh/doc/EDOC1100191944?idPath=23710424%7C251366513%7C22892968%7C251168373)。
+Ascend Model Compression Toolkit (AMCT) is a toolkit that compresses models through model compression techniques (such as fusion, quantization, tensor decomposition, etc.). After compression, the model volume becomes smaller and is deployed to Ascend AI After the processing device is installed, low-bit operations can be enabled to improve calculation efficiency and achieve the goal of performance improvement. For more information, please reference to [昇腾社区](https://www.hiascend.com/document)。
 
 This catalog contains usage examples of the basic functions of AMCT tools. Since AMCT has developed tools based on different deep learning frameworks, this warehouse uses multiple folders to manage samples of different tools.
 | directory  | description  |

@@ -44,5 +44,8 @@ if __name__ == "__main__":
         elif ret == 1:
             print("failed to process image {}".format(image_name))
             count_ng = count_ng + 1
-    print("{} images in total, {} images process successfully, {} images process failed"
-          .format(count_ok + count_ng, count_ok, count_ng))
+    if count_ng == 0:
+        print("{} images in total, {} images process successfully" .format(count_ok + count_ng, count_ok))
+    else:
+        print("{} images in total, {} images process successfully, {} images process failed"
+            .format(count_ok + count_ng, count_ok, count_ng))

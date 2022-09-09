@@ -1,16 +1,16 @@
-ms_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/mask_rcnn/maskrcnn_mindspore.air"
-ms_cfg="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/mask_rcnn/aipp_rgb.cfg"
+ms_model="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/mask_rcnn/maskrcnn_mindspore.air"
+ms_cfg="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/mask_rcnn/aipp_rgb.cfg"
 model_name1="maskrcnn_mindspore_rgb"
 
-js_model="https://c7xcode.obs.myhuaweicloud.com/models/imageinpainting_hifill/matmul_27648.json"
+js_model="https://obs-9be7.obs.myhuaweicloud.com/models/imageinpainting_hifill/matmul_27648.json"
 mat_mul_name="0_BatchMatMul_0_0_1_1_1024_1024_0_0_1_1_1024_27648_0_0_1_1_1024_27648"
 
-offline_model="https://c7xcode.obs.myhuaweicloud.com/models/imageinpainting_hifill/hifill.om"
+offline_model="https://obs-9be7.obs.myhuaweicloud.com/models/imageinpainting_hifill/hifill.om"
 
-data_source="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/mask_rcnn/"
+data_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/mask_rcnn/"
 data_name="photo1.jpg"
 
-verify_source="https://c7xcode.obs.myhuaweicloud.com/models/YOLOV3_coco_detection_picture_with_postprocess_op/verify/"
+verify_source="https://obs-9be7.obs.myhuaweicloud.com/models/YOLOV3_coco_detection_picture_with_postprocess_op/verify/"
 verify_name="verify_test.jpg"
 
 project_name="python_mask_rcnn_image_inpainting"

@@ -77,6 +77,7 @@ vector<void *> g_out_buffer_pool[VDEC_MAX_CHN_NUM];
 pthread_mutex_t g_out_buffer_pool_lock[VDEC_MAX_CHN_NUM];
 
 static uint64_t g_end_get_time[VDEC_MAX_CHN_NUM] = {0};
+static uint64_t g_send_frame_cnt[VDEC_MAX_CHN_NUM] = {0};
 static uint64_t g_get_frame_cnt[VDEC_MAX_CHN_NUM] = {0};
 static uint64_t g_start_send_time[VDEC_MAX_CHN_NUM] = {0};
 static VDEC_THREAD_PARAM_S g_jpegd_thread_param[VDEC_MAX_CHN_NUM];
@@ -116,17 +117,6 @@ static inline void jpegd_get_time_stamp_us(uint64_t *val)
     struct timeval stTimeVal;
     gettimeofday(&stTimeVal, nullptr);
     *val = (uint64_t)stTimeVal.tv_sec * MULTIPLE_S_TO_US + stTimeVal.tv_usec;
-}
-
-void jpegd_handle_signal(int32_t signo)
-{
-    if (SIGINT == signo || SIGTSTP == signo || SIGTERM == signo) {
-        for (uint32_t idxChn = g_start_channel; idxChn < g_start_channel + g_chn_num; idxChn++) {
-            g_jpegd_thread_param[idxChn].enSendThreadCtrl = THREAD_CTRL_STOP;
-            g_jpegd_thread_param[idxChn].enGetThreadCtrl  = THREAD_CTRL_STOP;
-        }
-        SAMPLE_PRT("\033[0;31mprogram exit abnormally!\033[0;39m\n");
-    }
 }
 
 void jpegd_usage(char *sPrgNm)
@@ -635,11 +625,9 @@ void *jpegd_send_stream_compatible(void *pArgs)
     DIR *currentDir = nullptr;
     struct dirent *dirp;
 
-    if (g_run_mode == ACL_HOST) {
-        if (aclrtSetCurrentContext(g_context)) {
-            SAMPLE_PRT("set context error\n");
-            return (void *)(HI_FAILURE);
-        }
+    if (aclrtSetCurrentContext(g_context)) {
+        SAMPLE_PRT("set context error\n");
+        return (void *)(HI_FAILURE);
     }
 
     prctl(PR_SET_NAME, "JpegSendStreamComp", 0, 0, 0);
@@ -856,6 +844,7 @@ void *jpegd_send_stream_compatible(void *pArgs)
             }
 
             errCnt = 0;
+            g_send_frame_cnt[pstJpegdThreadParam->s32ChnId]++;
             SAMPLE_PRT("[chn:%d] hi_mpi_vdec_send_stream Send [%u] Again ok! addr:%#lx, len:%u\n",
                 pstJpegdThreadParam->s32ChnId, bufAllocCount,
                 (uint64_t)(uintptr_t)stStream.addr, stStream.len);
@@ -911,11 +900,9 @@ void *jpegd_send_stream_performance(void *pArgs)
     hi_vdec_pic_info outPicInfo;
     VDEC_THREAD_PARAM_S *pstJpegdThreadParam = (VDEC_THREAD_PARAM_S *)pArgs;
 
-    if (g_run_mode == ACL_HOST) {
-        if (aclrtSetCurrentContext(g_context)) {
-            SAMPLE_PRT("set context error\n");
-            return (void *)(HI_FAILURE);
-        }
+    if (aclrtSetCurrentContext(g_context)) {
+        SAMPLE_PRT("set context error\n");
+        return (void *)(HI_FAILURE);
     }
 
     std::ostringstream pthreadName;
@@ -1055,6 +1042,7 @@ void *jpegd_send_stream_performance(void *pArgs)
         }
 
         errCnt = 0;
+        g_send_frame_cnt[pstJpegdThreadParam->s32ChnId]++;
 
         if ((pstJpegdThreadParam->s32CircleSend == 0) ||
             (pstJpegdThreadParam->s32CircleSend == 1)) {
@@ -1095,11 +1083,9 @@ void *jpegd_send_stream(void *pArgs)
     hi_vdec_chn_status stStatus{};
     VDEC_THREAD_PARAM_S *pstJpegdThreadParam = (VDEC_THREAD_PARAM_S *)pArgs;
 
-    if (g_run_mode == ACL_HOST) {
-        if (aclrtSetCurrentContext(g_context)) {
-            SAMPLE_PRT("set context error\n");
-            return (void *)(HI_FAILURE);
-        }
+    if (aclrtSetCurrentContext(g_context)) {
+        SAMPLE_PRT("set context error\n");
+        return (void *)(HI_FAILURE);
     }
 
     std::ostringstream pthreadName;
@@ -1117,17 +1103,6 @@ void *jpegd_send_stream(void *pArgs)
     fileSize = ftell(fpStrm);
 
     fflush(stdout);
-
-    if (pstJpegdThreadParam->enPixFormat == HI_PIXEL_FORMAT_UNKNOWN) {
-        outBufferSize = ALIGN_UP(g_width, JPEGD_ALIGN_W) * ALIGN_UP(g_height, JPEGD_ALIGN_H) * 3;
-    } else {
-        hi_pic_buf_attr buf_attr{g_width, g_height, 0,
-                                 HI_DATA_BIT_WIDTH_8, pstJpegdThreadParam->enPixFormat, HI_COMPRESS_MODE_NONE};
-        outBufferSize = hi_vdec_get_pic_buf_size(HI_PT_JPEG, &buf_attr);
-    }
-    SAMPLE_PRT("[chn:%d] outBufferSize:%u. pixFormat:%d stream file:%s, filesize:%d Start!\n",
-               pstJpegdThreadParam->s32ChnId, outBufferSize, pstJpegdThreadParam->enPixFormat,
-               g_input_file_name, fileSize);
 
     jpegd_get_time_stamp_us(&g_start_send_time[pstJpegdThreadParam->s32ChnId]);
 
@@ -1172,8 +1147,9 @@ void *jpegd_send_stream(void *pArgs)
                 return (void *)(HI_FAILURE);
             }
 
-            // Host端 hi_mpi_dvpp_get_image_info 使用host侧的内存
-            stStream.addr  = (uint8_t *)&fileData[0];
+            stStream.addr  = (uint8_t *)&fileData[0]; // Host端 hi_mpi_dvpp_get_image_info 使用host侧的内存
+        } else {
+            stStream.addr = (uint8_t *)pu8Buf; // Device端 hi_mpi_dvpp_get_image_info 使用Device侧的内存
         }
 
         stStream.pts       = pstJpegdThreadParam->u64PtsInit;
@@ -1182,18 +1158,25 @@ void *jpegd_send_stream(void *pArgs)
         stStream.end_of_stream = HI_FALSE;
         stStream.need_display  = HI_TRUE;
 
-        if (g_run_mode == ACL_HOST) {
-            s32Ret = hi_mpi_dvpp_get_image_info(HI_PT_JPEG, &stStream, &stImgInfo);
-            if (s32Ret != HI_SUCCESS) {
-                SAMPLE_PRT("[chn:%d] hi_mpi_dvpp_get_image_info faild!\n",
-                           pstJpegdThreadParam->s32ChnId);
-                hi_mpi_dvpp_free((void*)pu8Buf);
-                break;
-            }
+        s32Ret = hi_mpi_dvpp_get_image_info(HI_PT_JPEG, &stStream, &stImgInfo);
+        if (s32Ret != HI_SUCCESS) {
+            SAMPLE_PRT("[chn:%d] hi_mpi_dvpp_get_image_info faild!\n",
+                        pstJpegdThreadParam->s32ChnId);
+            hi_mpi_dvpp_free((void*)pu8Buf);
+            break;
         }
+
         // hi_mpi_vdec_send_stream 接口使用Device侧的内存
         stStream.addr = (uint8_t *)pu8Buf;
 
+        // 计算输出buffer大小，如果原格式解码，则使用获取到的，指定格式，则需要再根据格式计算
+        if (pstJpegdThreadParam->enPixFormat == HI_PIXEL_FORMAT_UNKNOWN) {
+            outBufferSize = stImgInfo.img_buf_size;
+        } else {
+            hi_pic_buf_attr buf_attr{stImgInfo.width, stImgInfo.height, 0,
+                                    HI_DATA_BIT_WIDTH_8, pstJpegdThreadParam->enPixFormat, HI_COMPRESS_MODE_NONE};
+            outBufferSize = hi_vdec_get_pic_buf_size(HI_PT_JPEG, &buf_attr);
+        }
         s32Ret = hi_mpi_dvpp_malloc(0, &outBuffer, outBufferSize);
         if (s32Ret != 0) {
             SAMPLE_PRT("[chn:%d] hi_mpi_dvpp_malloc %u Failed.\n",
@@ -1233,8 +1216,8 @@ void *jpegd_send_stream(void *pArgs)
 
         outPicInfo.vir_addr    = (uint64_t)outBuffer;
         outPicInfo.buffer_size = outBufferSize;
-        outPicInfo.width      = g_width;
-        outPicInfo.height     = g_height;
+        outPicInfo.width      = stImgInfo.width;
+        outPicInfo.height     = stImgInfo.height;
         outPicInfo.pixel_format = pstJpegdThreadParam->enPixFormat;
 
         do {
@@ -1269,6 +1252,7 @@ void *jpegd_send_stream(void *pArgs)
         }
 
         errCnt = 0;
+        g_send_frame_cnt[pstJpegdThreadParam->s32ChnId]++;
         SAMPLE_PRT("[chn:%d] hi_mpi_vdec_send_stream Send[%u] ok! addr:%#lx, len:%u, outBuffer:0x%lx, size:%u\n",
                    pstJpegdThreadParam->s32ChnId, bufAllocCount,
                    (uint64_t)(uintptr_t)stStream.addr, stStream.len,
@@ -1462,11 +1446,9 @@ void *jpegd_get_pic(void *pArgs)
     hi_vdec_supplement_info stSupplement{};
     VDEC_THREAD_PARAM_S *pstJpegdThreadParam = (VDEC_THREAD_PARAM_S *)pArgs;
 
-    if (g_run_mode == ACL_HOST) {
-        if (aclrtSetCurrentContext(g_context)) {
-            SAMPLE_PRT("set context error\n");
-            return (void *)(HI_FAILURE);
-        }
+    if (aclrtSetCurrentContext(g_context)) {
+        SAMPLE_PRT("set context error\n");
+        return (void *)(HI_FAILURE);
     }
 
     std::ostringstream pthreadName;
@@ -1481,7 +1463,8 @@ void *jpegd_get_pic(void *pArgs)
 
     SAMPLE_PRT("[chn:%d] jpegd_get_pic Start\n", pstJpegdThreadParam->s32ChnId);
     while (1) {
-        if (pstJpegdThreadParam->enGetThreadCtrl == THREAD_CTRL_STOP) {
+        if ((pstJpegdThreadParam->enGetThreadCtrl == THREAD_CTRL_STOP) &&
+            (g_send_frame_cnt[pstJpegdThreadParam->s32ChnId] <= g_get_frame_cnt[pstJpegdThreadParam->s32ChnId])) {
             SAMPLE_PRT("[chn:%d] jpegd_get_pic break out\n", pstJpegdThreadParam->s32ChnId);
             break;
         }
@@ -1549,11 +1532,9 @@ void *jpegd_get_pic_performance(void *pArgs)
     hi_vdec_supplement_info stSupplement{};
     VDEC_THREAD_PARAM_S *pstJpegdThreadParam = (VDEC_THREAD_PARAM_S *)pArgs;
 
-    if (g_run_mode == ACL_HOST) {
-        if (aclrtSetCurrentContext(g_context)) {
-            SAMPLE_PRT("set context error\n");
-            return (void *)(HI_FAILURE);
-        }
+    if (aclrtSetCurrentContext(g_context)) {
+        SAMPLE_PRT("set context error\n");
+        return (void *)(HI_FAILURE);
     }
 
     std::ostringstream pthreadName;
@@ -1736,10 +1717,6 @@ int32_t jpegd_destroy()
 
 int32_t setup_acl_device()
 {
-    if (g_run_mode != ACL_HOST) {
-        return HI_SUCCESS;
-    }
-
     aclError aclRet = aclInit(nullptr);
     if (aclRet != ACL_SUCCESS) {
         SAMPLE_PRT("aclInit fail with %d.\n", aclRet);
@@ -1780,10 +1757,6 @@ int32_t setup_acl_device()
 
 void destroy_acl_device()
 {
-    if (g_run_mode != ACL_HOST) {
-        return;
-    }
-
     if (g_context) {
         aclrtDestroyContext(g_context);
         g_context = nullptr;

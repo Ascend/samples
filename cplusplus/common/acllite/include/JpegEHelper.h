@@ -1,5 +1,5 @@
 /**
-* Copyright 2020 Huawei Technologies Co., Ltd
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2022. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 * File AclLiteImageProc.h
 * Description: handle dvpp process
 */
+#ifndef JPEGE_HELPER_H
+#define JPEGE_HELPER_H
 #pragma once
 #include <cstdint>
 
@@ -24,7 +26,7 @@
 #include "AclLiteUtils.h"
 #include "AclLiteImageProc.h"
 
-class JpegEHelper{
+class JpegEHelper {
 public:
     /**
     * @brief Constructor
@@ -57,7 +59,8 @@ private:
     aclrtStream stream_;
     void* encodeOutBufferDev_; // encode output buffer
     acldvppJpegeConfig* jpegeConfig_;
-    acldvppPicDesc* encodeInputDesc_; //encode input desc
+    acldvppPicDesc* encodeInputDesc_; // encode input desc
     acldvppChannelDesc* dvppChannelDesc_;
     uint32_t encodeOutBufferSize_;
 };
+#endif

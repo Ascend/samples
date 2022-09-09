@@ -22,7 +22,6 @@
 int32_t get_option(int32_t argc, char **argv);
 int32_t check_option();
 void print_parameter();
-void vdec_handle_signal(int32_t signo);
 int32_t vdec_create();
 void vdec_destroy();
 int32_t create_send_stream_thread();

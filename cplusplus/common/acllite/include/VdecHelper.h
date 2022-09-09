@@ -1,14 +1,14 @@
 /**
 * @file VdecHelper.h
 *
-* Copyright (C) 2020. Huawei Technologies Co., Ltd. All rights reserved.
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2022. All rights reserved.
 *
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
-#ifndef _VDEC_PROCESS_H_
-#define _VDEC_PROCESS_H_
+#ifndef VDEC_PROCESS_H
+#define VDEC_PROCESS_H
 
 #include <cstdint>
 #include <iostream>
@@ -17,7 +17,7 @@
 
 class VdecHelper {
 public:
-    VdecHelper(int channel, uint32_t width, uint32_t height, 
+    VdecHelper(int channel, uint32_t width, uint32_t height,
                 int type, aclvdecCallback callback,
                 uint32_t outFormat = PIXEL_FORMAT_YUV_SEMIPLANAR_420);
     ~VdecHelper();
@@ -29,8 +29,14 @@ public:
     AclLiteError Process(std::shared_ptr<FrameData> frameData, void* userData);
     AclLiteError SetFormat(uint32_t format);
     AclLiteError VideoParamCheck();
-    bool IsExit() { return isExit_; }
-    aclrtContext GetContext(){return context_ ;}
+    bool IsExit()
+    {
+        return isExit_;
+    }
+    aclrtContext GetContext()
+    {
+        return context_ ;
+    }
 
 private:
     AclLiteError CreateVdecChannelDesc();
@@ -44,7 +50,7 @@ private:
     /* 1：YUV420 semi-planner（nv12）
        2：YVU420 semi-planner（nv21）
     */
-    uint32_t format_; 
+    uint32_t format_;
 
     /* 0：H265 main level
      * 1：H264 baseline level
@@ -70,7 +76,6 @@ private:
     pthread_t subscribeThreadId_;
     bool isExit_;
     bool isReleased_;
-    
 };
 
 #endif

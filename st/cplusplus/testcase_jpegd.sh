@@ -1,4 +1,4 @@
-data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/jpegd/"
+data_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/jpegd/"
 data_name="dog1_1024_683.jpg"
 project_name="cplusplus_jpegd"
 

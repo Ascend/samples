@@ -46,14 +46,14 @@ Check whether the following requirements are met. If not, perform operations acc
     ```
     # To facilitate download, the command for downloading the offline model is provided here.    
     cd $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV4_coco_detection_picture/model
-    wget  https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOv4_onnx/yolov4_bs1.om
+    wget  https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOv4_onnx/yolov4_bs1.om
     
     ```
 3. Obtain the test images required by the sample.
     ```
     # Run the following commands to go to the **data** folder of the sample and download the corresponding test images:
     cd $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV4_coco_detection_picture/data
-    wget https://c7xcode.obs.myhuaweicloud.com/models/YOLOV4_coco_detection_picture-python/test.jpg
+    wget https://obs-9be7.obs.myhuaweicloud.com/models/YOLOV4_coco_detection_picture-python/test.jpg
     cd ../src
     ```
 

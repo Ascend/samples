@@ -77,7 +77,7 @@ venc_image
 1.  运行应用
     1.  登录运行环境。
     2.  准备输入数据。
-        从[Link](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/dvpp_venc_128x128_nv12.yuv)上获取输入图片文件dvpp_venc_128x128_nv12.yuv，并以HwHiAiUser（运行用户）上传至开发环境的“venc_image/data”目录下。  
+        从[Link](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/aclsample/dvpp_venc_128x128_nv12.yuv)上获取输入图片文件dvpp_venc_128x128_nv12.yuv，并以HwHiAiUser（运行用户）上传至开发环境的“venc_image/data”目录下。  
     3.  参照[环境变量配置](#env)完成运行环境的配置。
     4.  在venc_image路径下执行如下命令：
         ```

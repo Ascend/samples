@@ -1,7 +1,7 @@
 /**
  * ============================================================================
  *
- * Copyright (C) 2018, Hisilicon Technologies Co., Ltd. All Rights Reserved.
+ * Copyright (c) Huawei Technologies Co., Ltd. 2020-2022. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,31 +30,30 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * ============================================================================
  */
-#include <stdio.h>
-#include <stdarg.h>
-#include <time.h>
+#include <cstdio>
+#include <cstdarg>
+#include <ctime>
 #include <memory>
 #include <sys/time.h>
 #include <unistd.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
 #include "AclLiteUtils.h"
-
-using namespace std;
-
 extern "C" {
 #include "peripheral_api.h"
 #include "CameraCapture.h"
 
-CameraResolution gCameraResTbl[] = {{1920, 1080},
-                                  {1280, 720},
-                                  {704, 576},
-                                  {704, 288},
-                                  {352, 288}};
+using namespace std;
+CameraResolution gCameraResTbl[] = {
+    {1920, 1080}, {1280, 720},
+    {704, 576}, {704, 288},
+    {352, 288}
+};
 
-CameraCapture::CameraCapture(uint32_t width, uint32_t height, uint32_t fps) 
-: width_(width), height_(height), 
-size_(YUV420SP_SIZE(width_, height_)), fps_(fps) {    
+CameraCapture::CameraCapture(uint32_t width, uint32_t height, uint32_t fps)
+    :width_(width), height_(height),
+    size_(YUV420SP_SIZE(width_, height_)), fps_(fps)
+{
     MediaLibInit();
     if (IsAccessible(CAMERA_ID_0)) {
         id_ = CAMERA_ID_0;
@@ -65,17 +64,19 @@ size_(YUV420SP_SIZE(width_, height_)), fps_(fps) {
         ACLLITE_LOG_ERROR("No camera accessable in device");
     }
 
-    if (id_ != CAMERA_ID_INVALID) 
+    if (id_ != CAMERA_ID_INVALID)
         ACLLITE_LOG_INFO("No specified carmera id, use camera%d", id_);
 }
 
-CameraCapture::CameraCapture(uint32_t id, uint32_t width, uint32_t height, uint32_t fps) 
-: id_(id), width_(width), height_(height), 
-size_(YUV420SP_SIZE(width_, height_)), fps_(fps){
+CameraCapture::CameraCapture(uint32_t id, uint32_t width, uint32_t height, uint32_t fps)
+    :id_(id), width_(width), height_(height),
+    size_(YUV420SP_SIZE(width_, height_)), fps_(fps)
+{
     MediaLibInit();
 }
 
-bool CameraCapture::IsAccessible(uint32_t id) { 
+bool CameraCapture::IsAccessible(uint32_t id)
+{
     CameraStatus status = QueryCameraStatus(id);
     if (status == CAMERA_STATUS_OPEN) {
         return true;
@@ -96,7 +97,8 @@ bool CameraCapture::IsAccessible(uint32_t id) {
     return false;
 }
 
-bool CameraCapture::IsValidWidth(int width) {
+bool CameraCapture::IsValidWidth(int width)
+{
     for (uint32_t i = 0; i < SIZEOF_ARRAY(gCameraResTbl); i++) {
         if (gCameraResTbl[i].width == width)
             return true;
@@ -105,7 +107,8 @@ bool CameraCapture::IsValidWidth(int width) {
     return false;
 }
 
-bool CameraCapture::IsValidHeight(int height) {
+bool CameraCapture::IsValidHeight(int height)
+{
     for (uint32_t i = 0; i < SIZEOF_ARRAY(gCameraResTbl); i++) {
         if (gCameraResTbl[i].height == height)
             return true;
@@ -114,11 +117,15 @@ bool CameraCapture::IsValidHeight(int height) {
     return false;
 }
 
-bool CameraCapture::IsValidFps(int fps) {
-    return (fps > 0) && (fps <= 20);
+bool CameraCapture::IsValidFps(int fps)
+{
+    int minFps = 0;
+    int maxFps = 20;
+    return (fps > minFps) && (fps <= maxFps);
 }
 
-AclLiteError CameraCapture::SetProperty() {
+AclLiteError CameraCapture::SetProperty()
+{
     int ret = SetCameraProperty(id_, CAMERA_PROP_FPS, &(fps_));
     if (ret == LIBMEDIA_STATUS_FAILED) {
         ACLLITE_LOG_ERROR("Set camera fps failed");
@@ -145,7 +152,8 @@ AclLiteError CameraCapture::SetProperty() {
     return ACLLITE_OK;
 }
 
-AclLiteError CameraCapture::Open() {   
+AclLiteError CameraCapture::Open()
+{
     if (id_ == CAMERA_ID_INVALID) {
         ACLLITE_LOG_ERROR("No camera is accessiable");
         return ACLLITE_ERROR_CAMERA_NO_ACCESSABLE;
@@ -157,7 +165,7 @@ AclLiteError CameraCapture::Open() {
         return ACLLITE_ERROR_CAMERA_NO_ACCESSABLE;
     }
 
-    if ((status != CAMERA_STATUS_OPEN) && 
+    if ((status != CAMERA_STATUS_OPEN) &&
         (LIBMEDIA_STATUS_FAILED == OpenCamera(id_))) {
         ACLLITE_LOG_ERROR("Open camera %d failed.", id_);
         return ACLLITE_ERROR_OPEN_CAMERA;
@@ -174,7 +182,8 @@ AclLiteError CameraCapture::Open() {
     return ACLLITE_OK;
 }
 
-bool CameraCapture::IsOpened() {
+bool CameraCapture::IsOpened()
+{
     if (id_ == CAMERA_ID_INVALID) {
         return false;
     }
@@ -182,7 +191,8 @@ bool CameraCapture::IsOpened() {
     return (CAMERA_STATUS_OPEN == QueryCameraStatus(id_));
 }
 
-AclLiteError CameraCapture::Read(ImageData& image) {
+AclLiteError CameraCapture::Read(ImageData& image)
+{
     if (id_ == CAMERA_ID_INVALID) {
         return ACLLITE_ERROR_CAMERA_NO_ACCESSABLE;
     }
@@ -191,7 +201,7 @@ AclLiteError CameraCapture::Read(ImageData& image) {
     void* buffer = nullptr;
     aclError aclRet = acldvppMalloc(&buffer, size);
     if ((aclRet != ACL_SUCCESS) || (buffer == nullptr)) {
-        ACLLITE_LOG_ERROR("Malloc dvpp memory failed, error:%d", aclRet);                       
+        ACLLITE_LOG_ERROR("Malloc dvpp memory failed, error:%d", aclRet);
         return ACLLITE_ERROR_MALLOC_DVPP;
     }
 
@@ -209,73 +219,76 @@ AclLiteError CameraCapture::Read(ImageData& image) {
     image.size = (uint32_t)size_;
     image.data = SHARED_PTR_DVPP_BUF(buffer);
 
-    return ACLLITE_OK;   
+    return ACLLITE_OK;
 }
 
-uint32_t CameraCapture::Get(StreamProperty key) {
+uint32_t CameraCapture::Get(StreamProperty key)
+{
     uint32_t value = 0;
 
-    switch(key){
+    switch (key) {
         case FRAME_WIDTH:
-        value = width_;
-        break;
+            value = width_;
+            break;
         case FRAME_HEIGHT:
-        value = height_;
-        break;
+            value = height_;
+            break;
         case VIDEO_FPS:
-        value = fps_;
-        break;
+            value = fps_;
+            break;
         default:
-        ACLLITE_LOG_ERROR("Unsurpport property %d to get for camera", key);
-        break;
+            ACLLITE_LOG_ERROR("Unsurpport property %d to get for camera", key);
+            break;
     }
 
     return value;
 }
 
-AclLiteError CameraCapture::Set(StreamProperty key, int value) {
+AclLiteError CameraCapture::Set(StreamProperty key, int value)
+{
     AclLiteError ret = ACLLITE_OK;
 
-    switch(key){
+    switch (key) {
         case FRAME_WIDTH:
-        {
-            if (IsValidWidth(value)) {
-                width_ = value;
-            } else {
-                ret = ACLLITE_ERROR_INVALID_PROPERTY_VALUE;
+            {
+                if (IsValidWidth(value)) {
+                    width_ = value;
+                } else {
+                    ret = ACLLITE_ERROR_INVALID_PROPERTY_VALUE;
+                }
+                break;
             }
-            break;
-        }
         case FRAME_HEIGHT:
-        {
-            if (IsValidHeight(value)) {
-                height_ = value;
-            } else {
-                ret = ACLLITE_ERROR_INVALID_PROPERTY_VALUE;
+            {
+                if (IsValidHeight(value)) {
+                    height_ = value;
+                } else {
+                    ret = ACLLITE_ERROR_INVALID_PROPERTY_VALUE;
+                }
+                break;
             }
-            break;
-        }
         case VIDEO_FPS:
-        {
-            if (IsValidFps(value)) {
-                fps_ = value;
-            } else {
-                ret = ACLLITE_ERROR_INVALID_PROPERTY_VALUE;
+            {
+                if (IsValidFps(value)) {
+                    fps_ = value;
+                } else {
+                    ret = ACLLITE_ERROR_INVALID_PROPERTY_VALUE;
+                }
+                break;
             }
-            break;
-        }
         default:
-        {
-            ret = ACLLITE_ERROR_UNSURPPORT_PROPERTY;
-            ACLLITE_LOG_ERROR("Unsurpport property %d to set for camera", key);
-            break;
-        }
+            {
+                ret = ACLLITE_ERROR_UNSURPPORT_PROPERTY;
+                ACLLITE_LOG_ERROR("Unsurpport property %d to set for camera", key);
+                break;
+            }
     }
 
     return ret;
 }
 
-AclLiteError CameraCapture::Close() {
+AclLiteError CameraCapture::Close()
+{
     if (id_ == CAMERA_ID_INVALID) {
         return ACLLITE_ERROR_CAMERA_NO_ACCESSABLE;
     }
@@ -286,5 +299,4 @@ AclLiteError CameraCapture::Close() {
 
     return ACLLITE_OK;
 }
-
 }

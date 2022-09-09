@@ -57,7 +57,7 @@ This sample consists of five modules: center control, checkerboard comprehension
     
     | **Model Name**             | **Model Description**           | **Download Link**                                            |
     | ------------------------- | ----------------------- | ------------------------------------------------------------ |
-    | chess_ckpt_0804_vgg_99.om | VGG16 chess classification model | https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/robot_play_chess/chess_ckpt_0804_vgg_99.om |
+    | chess_ckpt_0804_vgg_99.om | VGG16 chess classification model | https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/robot_play_chess/chess_ckpt_0804_vgg_99.om |
 
     ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **NOTE** 
     

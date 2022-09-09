@@ -50,9 +50,6 @@ int32_t main(int32_t argc, char *argv[])
         return HI_FAILURE;
     }
 
-    signal(SIGINT, pngd_handle_signal);
-    signal(SIGTERM, pngd_handle_signal);
-
     ret = get_option(argc, &(*argv));
     if (ret != HI_SUCCESS) {
         SAMPLE_PRT("get_option failed!\n");

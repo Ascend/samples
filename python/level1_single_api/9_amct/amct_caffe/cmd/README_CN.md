@@ -17,8 +17,8 @@ python3.7.5 ./src/download_models.py --close_certificate_verify
 > 若用户环境无法连接网络,请先在可连通网络的服务器下载相应文件后上传到 [model](./model/) 路径下：
 >
 > ```bash
-> wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/resnet_50/ResNet-50-deploy.prototxt
-> wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/resnet_50/ResNet-50-model.caffemodel
+> wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/resnet_50/ResNet-50-deploy.prototxt
+> wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/resnet_50/ResNet-50-model.caffemodel
 > ```
 
 ## 2. 准备校准数据集
@@ -30,7 +30,7 @@ python3.7.5 ./src/download_models.py --close_certificate_verify
 ```bash
 cd data
 mkdir image
-wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/amct_acl/classification/calibration.rar
+wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/amct_acl/classification/calibration.rar
 ```
 
 > 如果环境中没有安装 unrar 工具，可以通过以下命令获取：

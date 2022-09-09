@@ -1,5 +1,5 @@
-/**
-* Copyright 2020 Huawei Technologies Co., Ltd
+/*
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -12,19 +12,16 @@
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 * See the License for the specific language governing permissions and
 * limitations under the License.
-
-* File sample_process.cpp
-* Description: handle acl resource
 */
-#include "sample_process.h"
 #include <iostream>
+#include "sample_process.h"
 #include "model_process.h"
 #include "acl/acl.h"
 #include "utils.h"
 
 using namespace std;
 
-SampleProcess::SampleProcess():deviceId_(0), context_(nullptr), stream_(nullptr)
+SampleProcess::SampleProcess():g_deviceId(0), g_context(nullptr), g_stream(nullptr)
 {
 }
 
@@ -36,7 +33,6 @@ SampleProcess::~SampleProcess()
 
 Result SampleProcess::InitResource()
 {
-    // TODO:
     // ACL init
     const char *aclConfigPath = "../src/acl.json";
     aclError ret = aclInit(aclConfigPath);
@@ -48,15 +44,15 @@ Result SampleProcess::InitResource()
     INFO_LOG("acl init success");
 
     // open device
-    ret = aclrtSetDevice(deviceId_);
+    ret = aclrtSetDevice(g_deviceId);
     if (ret != ACL_SUCCESS) {
-        ERROR_LOG("acl open device %d failed", deviceId_);
+        ERROR_LOG("acl open device %d failed", g_deviceId);
         return FAILED;
     }
-    INFO_LOG("open device %d success", deviceId_);
+    INFO_LOG("open device %d success", g_deviceId);
 
     // create context (set current)
-    ret = aclrtCreateContext(&context_, deviceId_);
+    ret = aclrtCreateContext(&g_context, g_deviceId);
     if (ret != ACL_SUCCESS) {
         ERROR_LOG("acl create context failed");
         return FAILED;
@@ -64,13 +60,12 @@ Result SampleProcess::InitResource()
     INFO_LOG("create context success");
 
     // create stream
-    ret = aclrtCreateStream(&stream_);
+    ret = aclrtCreateStream(&g_stream);
     if (ret != ACL_SUCCESS) {
         ERROR_LOG("acl create stream failed");
         return FAILED;
     }
     INFO_LOG("create stream success");
-
 
     return SUCCESS;
 }
@@ -151,7 +146,6 @@ Result SampleProcess::MainProcess(string input_path)
             ERROR_LOG("pull model output data failed");
             return FAILED;
         }
-
     }
     return SUCCESS;
 }
@@ -160,35 +154,33 @@ void SampleProcess::DestroyResource()
 {
     // clear resources.
     aclError ret;
-    if (stream_ != nullptr) {
-        ret = aclrtDestroyStream(stream_);
+    if (g_stream != nullptr) {
+        ret = aclrtDestroyStream(g_stream);
         if (ret != ACL_SUCCESS) {
             ERROR_LOG("destroy stream failed");
         }
-        stream_ = nullptr;
+        g_stream = nullptr;
     }
     INFO_LOG("end to destroy stream");
 
-    if (context_ != nullptr) {
-        ret = aclrtDestroyContext(context_);
+    if (g_context != nullptr) {
+        ret = aclrtDestroyContext(g_context);
         if (ret != ACL_SUCCESS) {
             ERROR_LOG("destroy context failed");
         }
-        context_ = nullptr;
+        g_context = nullptr;
     }
     INFO_LOG("end to destroy context");
 
-    ret = aclrtResetDevice(deviceId_);
+    ret = aclrtResetDevice(g_deviceId);
     if (ret != ACL_SUCCESS) {
         ERROR_LOG("reset device failed");
     }
-    INFO_LOG("end to reset device is %d", deviceId_);
+    INFO_LOG("end to reset device is %d", g_deviceId);
 
-    //TODO:
     ret = aclFinalize();
     if (ret != ACL_SUCCESS) {
         ERROR_LOG("finalize acl failed");
     }
     INFO_LOG("end to finalize acl");
-
 }

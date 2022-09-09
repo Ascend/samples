@@ -46,14 +46,14 @@
     ```
     # 为了方便下载，在这里直接给出离线模型     
     cd $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV4_coco_detection_picture/model
-    wget  https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOv4_onnx/yolov4_bs1.om
+    wget  https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOv4_onnx/yolov4_bs1.om
     
     ```
 3. 获取样例需要的测试图片。
     ```
     # 执行以下命令，进入样例的data文件夹中，下载对应的测试图片。
     cd $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV4_coco_detection_picture/data
-    wget https://c7xcode.obs.myhuaweicloud.com/models/YOLOV4_coco_detection_picture-python/test.jpg
+    wget https://obs-9be7.obs.myhuaweicloud.com/models/YOLOV4_coco_detection_picture-python/test.jpg
     cd ../src
     ```
 

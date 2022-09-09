@@ -54,8 +54,8 @@ Check whether the following requirements are met. If not, perform operations acc
 
     # To facilitate download, the commands for downloading the original model and converting the model are provided here. You can directly copy and run the commands. You can also refer to the above table to download the model from ModelZoo and manually convert it.    
     cd $HOME/samples/python/contrib/portrait_picture/model
-    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/PortraitNet%20/portrait.pb   
-    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/PortraitNet%20/insert_op.cfg
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/PortraitNet%20/portrait.pb   
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/PortraitNet%20/insert_op.cfg
     atc --model=./portrait.pb  --insert_op_conf=./insert_op.cfg  --output="./portrait" --output_type=FP32 --input_shape="Inputs/x_input:1,224,224,3" --framework=3 --soc_version=Ascend310
 
 
@@ -64,8 +64,8 @@ Check whether the following requirements are met. If not, perform operations acc
     ```
     # Run the following commands to go to the data folder of the sample and download the corresponding test image:
     cd $HOME/samples/python/contrib/portrait_picture/model
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/Portrait/background.jpg
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/Portrait/ori.jpg
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/Portrait/background.jpg
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/Portrait/ori.jpg
     ```
 
 ### Sample Running

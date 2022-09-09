@@ -7,7 +7,7 @@ function main()
 {
     echo "[INFO] The sample starts to run"
 
-    running_command="./main ../data/detection.mp4"
+    running_command="./main ../data/dvpp_vpc_1920x1080_nv12.yuv"
     # start runing
     running
     if [ $? -ne 0 ];then

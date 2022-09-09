@@ -98,7 +98,7 @@ AclLiteError ClassifyPostprocessThread::Process(int msgId,
             //cout << "preprocess time is: " << (time10.tv_sec - time9.tv_sec)*1000 + (time10.tv_nsec - time9.tv_nsec)/1000000 << "ms" << endl;
             break;
         case MSG_ENCODE_FINISH:
-            SendMessage(kMainThreadId, MSG_APP_EXIT, nullptr);
+            SendMessage(g_MainThreadId, MSG_APP_EXIT, nullptr);
             break;
         default:
             ACLLITE_LOG_INFO("Classify Postprocess thread ignore msg %d", msgId);

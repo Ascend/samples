@@ -49,7 +49,7 @@ Check whether the following requirements are met. If not, perform operations acc
     ```
     # To facilitate download, the commands for downloading the original model and converting the model are provided here. You can directly copy and run the commands. You can also refer to the above table to download the model from ModelZoo and manually convert it.    
     cd $HOME/samples/cplusplus/contrib/ar_shadowgan/model     
-    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/ARshadowGAN/model.pb
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/ARshadowGAN/model.pb
     atc --output_type=FP32 --input_shape="placeholder/input_image:1,256,256,3;placeholder/input_mask:1,256,256,1" --input_format=NHWC --output=model --soc_version=Ascend310 --framework=3 --model=./model.pb --precision_mode=allow_fp32_to_fp16
     ```
 

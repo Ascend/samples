@@ -1,5 +1,5 @@
 /**
-* Copyright 2020 Huawei Technologies Co., Ltd
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2022. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 * File AclLiteImageProc.h
 * Description: handle dvpp process
 */
+#ifndef RESIZE_HELPER_H
+#define RESIZE_HELPER_H
 #pragma once
 #include <cstdint>
 
@@ -84,3 +86,4 @@ private:
     uint32_t vpcOutBufferSize_;  // vpc output size
     Resolution size_;
 };
+#endif

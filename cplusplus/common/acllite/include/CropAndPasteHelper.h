@@ -1,5 +1,5 @@
 /**
-* Copyright 2020 Huawei Technologies Co., Ltd
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2022. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 * File AclLiteImageProc.h
 * Description: handle dvpp process
 */
+#ifndef CROPANDPASTE_HELPER_H
+#define CROPANDPASTE_HELPER_H
 #pragma once
 #include <cstdint>
 
@@ -23,7 +25,7 @@
 #include "acl/ops/acl_dvpp.h"
 
 class CropAndPasteHelper {
-    public:
+public:
     /**
     * @brief Constructor
     * @param [in] stream: stream
@@ -38,7 +40,7 @@ class CropAndPasteHelper {
     */
     CropAndPasteHelper(aclrtStream &stream, acldvppChannelDesc *dvppChannelDesc,
                        uint32_t width, uint32_t height,
-                       uint32_t lt_horz, uint32_t lt_vert, 
+                       uint32_t lt_horz, uint32_t lt_vert,
                        uint32_t rb_horz, uint32_t rb_vert);
 
     /**
@@ -94,3 +96,4 @@ private:
     uint32_t originalImageHeight_ = 0;
     Resolution size_;
 };
+#endif

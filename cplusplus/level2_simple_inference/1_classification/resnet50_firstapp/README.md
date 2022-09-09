@@ -87,8 +87,8 @@ resnet50_firstapp
 ## 准备模型<a name="zh-cn_topic_0000001225510872_zh-cn_topic_0000001086737739_section1031118381687"></a>
 
 1.  获取ResNet-50开源模型，放到“resnet50_firstapp/model“目录下。
-    -   ResNet-50网络的模型文件（\*.prototxt）：单击[Link](https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/resnet50/resnet50.prototxt)下载该文件。
-    -   ResNet-50网络的预训练模型文件（\*.caffemodel）：单击[Link](https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/resnet50/resnet50.caffemodel)下载该文件。
+    -   ResNet-50网络的模型文件（\*.prototxt）：单击[Link](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/resnet50/resnet50.prototxt)下载该文件。
+    -   ResNet-50网络的权重文件（\*.caffemodel）：单击[Link](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/resnet50/resnet50.caffemodel)下载该文件。
 
 2.  执行模型转换。
 
@@ -108,7 +108,7 @@ resnet50_firstapp
 
 ## 准备测试图片<a name="zh-cn_topic_0000001225510872_zh-cn_topic_0000001086737739_section367813220018"></a>
 
-单击[Link](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/dog1_1024_683.jpg)获取测试图片，放到“resnet50_firstapp/data“目录下。
+单击[Link](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/aclsample/dog1_1024_683.jpg)获取测试图片，放到“resnet50_firstapp/data“目录下。
 
 此处获取的是一个\*.jpg图片，与模型对图片的要求不符，为了不影响您学习入门知识，我们提供了resnet50_firstapp/script/transferPic.py脚本用于将该测试图片转换为模型要求的图片（RGB格式、分辨率为224\*224）。
 
@@ -159,11 +159,11 @@ resnet50_firstapp
     ```
 
     >**说明：** 
-    >类别标签和类别的对应关系与训练模型时使用的数据集有关，本样例使用的模型是基于imagenet数据集进行训练的，您可以在互联网上查阅对应数据集的标签及类别的对应关系。
+    >类别标签和类别的对应关系与训练模型时使用的数据集有关，本样例使用的模型是基于imagenet数据集进行训练的，您可以在互联网上查阅对应数据集的标签及类别的对应关系，例如，可单击[Link](https://blog.csdn.net/weixin_44676081/article/details/106755135)查看。
     >当前屏显信息中的类别标识与类别的对应关系如下：
-    >"161": \["basset", "basset hound"\]
-    >"162": \["beagle"\]
-    >"163": \["bloodhound", "sleuthhound"\]
-    >"166": \["Walker hound", "Walker foxhound"\]
-    >"167": \["English foxhound"\]
+    >"161": \["basset", "basset hound"\]、
+    >"162": \["beagle"\]、
+    >"163": \["bloodhound", "sleuthhound"\]、
+    >"166": \["Walker hound", "Walker foxhound"\]、
+    >"167": \["English foxhound"\]。
 

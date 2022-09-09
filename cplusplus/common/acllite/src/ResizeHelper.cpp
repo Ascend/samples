@@ -1,5 +1,5 @@
 /**
-* Copyright 2020 Huawei Technologies Co., Ltd
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2022. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -25,24 +25,22 @@
 using namespace std;
 
 ResizeHelper::ResizeHelper(aclrtStream& stream, acldvppChannelDesc *dvppChannelDesc,
-                       uint32_t width, uint32_t height):
-  stream_(stream),
-  vpcOutBufferDev_(nullptr),
-  vpcInputDesc_(nullptr),
-  vpcOutputDesc_(nullptr),
-  resizeConfig_(nullptr),
-  dvppChannelDesc_(dvppChannelDesc),
-  inDevBuffer_(nullptr),
-  vpcOutBufferSize_(0) {
+                           uint32_t width, uint32_t height)
+    :stream_(stream), vpcOutBufferDev_(nullptr), vpcInputDesc_(nullptr),
+    vpcOutputDesc_(nullptr), resizeConfig_(nullptr), dvppChannelDesc_(dvppChannelDesc),
+    inDevBuffer_(nullptr), vpcOutBufferSize_(0)
+{
     size_.width = width;
     size_.height = height;
 }
 
-ResizeHelper::~ResizeHelper() {
+ResizeHelper::~ResizeHelper()
+{
     DestroyResizeResource();
 }
 
-AclLiteError ResizeHelper::InitResizeInputDesc(ImageData& inputImage) {
+AclLiteError ResizeHelper::InitResizeInputDesc(ImageData& inputImage)
+{
     uint32_t alignWidth = inputImage.alignWidth;
     uint32_t alignHeight = inputImage.alignHeight;
     if (alignWidth == 0 || alignHeight == 0) {
@@ -77,7 +75,8 @@ AclLiteError ResizeHelper::InitResizeInputDesc(ImageData& inputImage) {
     return ACLLITE_OK;
 }
 
-AclLiteError ResizeHelper::InitResizeOutputDesc() {
+AclLiteError ResizeHelper::InitResizeOutputDesc()
+{
     int resizeOutWidth = size_.width;
     int resizeOutHeight = size_.height;
     int resizeOutWidthStride = ALIGN_UP16(resizeOutWidth);
@@ -113,7 +112,8 @@ AclLiteError ResizeHelper::InitResizeOutputDesc() {
     return ACLLITE_OK;
 }
 
-AclLiteError ResizeHelper::InitResizeResource(ImageData& inputImage) {
+AclLiteError ResizeHelper::InitResizeResource(ImageData& inputImage)
+{
     resizeConfig_ = acldvppCreateResizeConfig();
     if (resizeConfig_ == nullptr) {
         ACLLITE_LOG_ERROR("Dvpp resize init failed for create config failed");
@@ -124,18 +124,19 @@ AclLiteError ResizeHelper::InitResizeResource(ImageData& inputImage) {
     if (ret != ACLLITE_OK) {
         ACLLITE_LOG_ERROR("InitResizeInputDesc failed");
         return ret;
-    } 
+    }
     
     ret = InitResizeOutputDesc();
     if (ret != ACLLITE_OK) {
         ACLLITE_LOG_ERROR("InitResizeOutputDesc failed");
         return ret;
-    } 
+    }
 
-    return ACLLITE_OK;  
+    return ACLLITE_OK;
 }
 
-AclLiteError ResizeHelper::Process(ImageData& resizedImage, ImageData& srcImage) {
+AclLiteError ResizeHelper::Process(ImageData& resizedImage, ImageData& srcImage)
+{
     AclLiteError atlRet = InitResizeResource(srcImage);
     if (atlRet != ACLLITE_OK) {
         ACLLITE_LOG_ERROR("Dvpp resize failed for init error");
@@ -168,7 +169,8 @@ AclLiteError ResizeHelper::Process(ImageData& resizedImage, ImageData& srcImage)
     return ACLLITE_OK;
 }
 
-void ResizeHelper::DestroyResizeResource() {
+void ResizeHelper::DestroyResizeResource()
+{
     if (resizeConfig_ != nullptr) {
         (void)acldvppDestroyResizeConfig(resizeConfig_);
         resizeConfig_ = nullptr;

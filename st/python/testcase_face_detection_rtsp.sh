@@ -1,11 +1,11 @@
-caffe_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/facedection/face_detection_fp32.caffemodel"
-caffe_prototxt="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/facedection/face_detection.prototxt"
+caffe_model="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/facedection/face_detection_fp32.caffemodel"
+caffe_prototxt="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/facedection/face_detection.prototxt"
 model_name="face_detection"
-aipp_cfg="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/face_detection-python/insert_op.cfg"
+aipp_cfg="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/face_detection-python/insert_op.cfg"
 presenter_server_name="face_detection"
 
 
-data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/face_detection_rtsp/"
+data_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/face_detection_rtsp/"
 data_name="person.h264"
 project_name="python_face_detection_rtsp"
 conf_file_name="face_detection.conf"

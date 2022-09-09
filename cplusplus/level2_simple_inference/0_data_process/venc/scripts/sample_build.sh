@@ -13,8 +13,8 @@ function main()
     return 1
   fi
 
-  if [ ! -f "${DataPath}/detection.mp4" ];then
-    wget -O ${DataPath}/detection.mp4 https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/venc/detection.mp4 --no-check-certificate
+  if [ ! -f "${DataPath}/dvpp_vpc_1920x1080_nv12.yuv" ];then
+    wget -O ${DataPath}/dvpp_vpc_1920x1080_nv12.yuv https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/venc/dvpp_vpc_1920x1080_nv12.yuv --no-check-certificate
   fi
 
   build

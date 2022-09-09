@@ -45,12 +45,12 @@ Check whether the following requirements are met. If not, perform operations acc
 2. Obtain the source model required by the application.  
     | **Model**| **Description**                                      | **How to Obtain**                                            |
     | ------------ | -------------------------------------------------- | ------------------------------------------------------------ |
-    | GoogLeNet | Image classification inference model. It is a GoogLeNet model based on MindSpore. | [https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_mindspore/googlenet.air](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_mindspore/googlenet.air) |
+    | GoogLeNet | Image classification inference model. It is a GoogLeNet model based on MindSpore. | [https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/googlenet_mindspore/googlenet.air](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/googlenet_mindspore/googlenet.air) |
 
     ```
     # To facilitate download, the commands for downloading the original model and converting the model are provided here. You can directly copy and run the commands. You can also refer to the above table to download the model from ModelZoo and manually convert it.    
     cd $HOME/samples/python/level2_simple_inference/1_classification/googlenet_mindspore_picture/model
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_mindspore/googlenet.air 
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/googlenet_mindspore/googlenet.air 
     atc --model=./googlenet.air --framework=1 --output=./googlenet --soc_version=Ascend310
     ```
 
@@ -58,7 +58,7 @@ Check whether the following requirements are met. If not, perform operations acc
     ```
     Run the following commands to go to the data folder of the sample and download the corresponding test image:
     cd $HOME/samples/python/level2_simple_inference/1_classification/googlenet_mindspore_picture/data
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_mindspore/airplane.jpg
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/googlenet_mindspore/airplane.jpg
     cd ../src
     ```
 

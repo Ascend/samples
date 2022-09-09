@@ -1,5 +1,5 @@
 /**
-* Copyright 2020 Huawei Technologies Co., Ltd
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2022. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -29,18 +29,18 @@ uint32_t kModelWidth = 224;
 uint32_t kModelHeight = 224;
 }
 
-ClassifyPreprocessThread::ClassifyPreprocessThread(aclrtRunMode& runMode) : 
-runMode_(runMode),
-modelWidth_(kModelWidth),
-modelHeight_(kModelHeight){
+ClassifyPreprocessThread::ClassifyPreprocessThread(aclrtRunMode& runMode)
+    :runMode_(runMode), modelWidth_(kModelWidth), modelHeight_(kModelHeight)
+{
 }
 
-ClassifyPreprocessThread::~ClassifyPreprocessThread() {
+ClassifyPreprocessThread::~ClassifyPreprocessThread()
+{
     dvpp_.DestroyResource();
 }
 
-AclLiteError ClassifyPreprocessThread::Init() {
-
+AclLiteError ClassifyPreprocessThread::Init()
+{
     AclLiteError aclRet = dvpp_.Init();
     if (aclRet) {
         ACLLITE_LOG_ERROR("Dvpp init failed, error %d", aclRet);
@@ -49,10 +49,10 @@ AclLiteError ClassifyPreprocessThread::Init() {
     return ACLLITE_OK;
 }
 
-AclLiteError ClassifyPreprocessThread::Process(int msgId, 
-                             shared_ptr<void> data) {
+AclLiteError ClassifyPreprocessThread::Process(int msgId, shared_ptr<void> data)
+{
     AclLiteError ret = ACLLITE_OK;
-    switch(msgId) {
+    switch (msgId) {
         case MSG_DETECT_POSTPROC_DATA:
             ret = MsgProcess(static_pointer_cast<CarDetectDataMsg>(data));
             ret = MsgSend(static_pointer_cast<CarDetectDataMsg>(data));
@@ -65,7 +65,8 @@ AclLiteError ClassifyPreprocessThread::Process(int msgId,
     return ret;
 }
 
-AclLiteError ClassifyPreprocessThread::Crop(vector<CarInfo> &carImgs, ImageData &orgImg) {
+AclLiteError ClassifyPreprocessThread::Crop(vector<CarInfo> &carImgs, ImageData &orgImg)
+{
     static int cnt = 0;
     AclLiteError ret = ACLLITE_OK;
     for (int i = 0; i < carImgs.size(); i++) {
@@ -74,10 +75,10 @@ AclLiteError ClassifyPreprocessThread::Crop(vector<CarInfo> &carImgs, ImageData 
                          carImgs[i].rectangle.rb.x, carImgs[i].rectangle.rb.y);
         if (ret) {
             ACLLITE_LOG_ERROR("Crop image failed, error: %d, orgImg width %d, "
-                              "height %d, size %d, crop area (%d, %d) (%d, %d)", 
+                              "height %d, size %d, crop area (%d, %d) (%d, %d)",
                               ret, orgImg.width, orgImg.height,
-                              carImgs[i].cropedImgs.size, carImgs[i].rectangle.lt.x, 
-                              carImgs[i].rectangle.lt.y, carImgs[i].rectangle.rb.x, 
+                              carImgs[i].cropedImgs.size, carImgs[i].rectangle.lt.x,
+                              carImgs[i].rectangle.lt.y, carImgs[i].rectangle.rb.x,
                               carImgs[i].rectangle.rb.y);
             return ACLLITE_ERROR;
         }
@@ -85,10 +86,11 @@ AclLiteError ClassifyPreprocessThread::Crop(vector<CarInfo> &carImgs, ImageData 
     return ret;
 }
 
-AclLiteError ClassifyPreprocessThread::Resize(vector<CarInfo> &carImgs) {
+AclLiteError ClassifyPreprocessThread::Resize(vector<CarInfo> &carImgs)
+{
     AclLiteError ret = ACLLITE_OK;
     for (size_t i = 0; i < carImgs.size(); i++) {
-        AclLiteError ret = dvpp_.Resize(carImgs[i].resizedImgs, carImgs[i].cropedImgs, 
+        AclLiteError ret = dvpp_.Resize(carImgs[i].resizedImgs, carImgs[i].cropedImgs,
                                         kModelWidth, kModelHeight);
         if (ret) {
             ACLLITE_LOG_ERROR("ColorRecognition Resize image failed");
@@ -98,12 +100,13 @@ AclLiteError ClassifyPreprocessThread::Resize(vector<CarInfo> &carImgs) {
     return ret;
 }
 
-AclLiteError ClassifyPreprocessThread::MsgProcess(shared_ptr<CarDetectDataMsg> carDetectDataMsg) {
-    if(carDetectDataMsg->isLastFrame == 1)
+AclLiteError ClassifyPreprocessThread::MsgProcess(shared_ptr<CarDetectDataMsg> carDetectDataMsg)
+{
+    if (carDetectDataMsg->isLastFrame == 1)
         return ACLLITE_OK;
     
     carDetectDataMsg->flag = 0;
-    //No car detected
+    // No car detected
     if (carDetectDataMsg->carInfo.size() == 0) {
         carDetectDataMsg->flag = 1;
         return ACLLITE_OK;
@@ -116,37 +119,31 @@ AclLiteError ClassifyPreprocessThread::MsgProcess(shared_ptr<CarDetectDataMsg> c
         return ACLLITE_ERROR;
     }
 
-    //crop
+    // crop
     ret = Crop(carDetectDataMsg->carInfo, imageDevice);
     if (ret) {
         ACLLITE_LOG_ERROR("Crop all the data failed, all the data failed");
         return ACLLITE_ERROR;
     }
-    //resize
+    // resize
     ret = Resize(carDetectDataMsg->carInfo);
     if (ret) {
         ACLLITE_LOG_ERROR("Resize all the data failed, all the data failed");
-        return ACLLITE_ERROR;              
+        return ACLLITE_ERROR;
     }
     return ACLLITE_OK;
 }
 
-AclLiteError ClassifyPreprocessThread::MsgSend(shared_ptr<CarDetectDataMsg> carDetectDataMsg) {
-
-    while(1) 
-    {
+AclLiteError ClassifyPreprocessThread::MsgSend(shared_ptr<CarDetectDataMsg> carDetectDataMsg)
+{
+    while (1) {
         AclLiteError ret = SendMessage(carDetectDataMsg->inferThreadId, MSG_CLASSIFY_PREPROC_DATA, carDetectDataMsg);
-        if(ret == ACLLITE_ERROR_ENQUEUE)
-        {
+        if (ret == ACLLITE_ERROR_ENQUEUE) {
             usleep(500);
             continue;
-        }
-        else if(ret == ACLLITE_OK)
-        {
+        } else if(ret == ACLLITE_OK) {
             break;
-        }
-        else
-        {
+        } else {
             ACLLITE_LOG_ERROR("Send read frame message failed, error %d", ret);
             return ret;
         }

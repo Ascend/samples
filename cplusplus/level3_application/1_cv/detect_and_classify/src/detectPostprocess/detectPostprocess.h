@@ -1,5 +1,5 @@
 /**
-* Copyright 2020 Huawei Technologies Co., Ltd
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2022. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 * File sample_process.h
 * Description: handle acl resource
 */
+#ifndef DETECTPOSTPROCESSTHREAD_H
+#define DETECTPOSTPROCESSTHREAD_H
 #pragma once
 
 #include <iostream>
@@ -27,20 +29,19 @@
 #include "AclLiteThread.h"
 #include "CarParams.h"
 
-using namespace std;
-
-class DetectPostprocessThread: public AclLiteThread {
+class DetectPostprocessThread : public AclLiteThread {
 public:
     DetectPostprocessThread();
     ~DetectPostprocessThread();
 
     AclLiteError Init();
-    AclLiteError Process(int msgId, shared_ptr<void> data); 
+    AclLiteError Process(int msgId, std::shared_ptr<void> data);
 
 private:
-    AclLiteError InferOutputProcess(shared_ptr<CarDetectDataMsg> carDetectDataMsg);
-    AclLiteError MsgSend(shared_ptr<CarDetectDataMsg> carDetectDataMsg);
+    AclLiteError InferOutputProcess(std::shared_ptr<CarDetectDataMsg> carDetectDataMsg);
+    AclLiteError MsgSend(std::shared_ptr<CarDetectDataMsg> carDetectDataMsg);
 
 private:
 };
 
+#endif

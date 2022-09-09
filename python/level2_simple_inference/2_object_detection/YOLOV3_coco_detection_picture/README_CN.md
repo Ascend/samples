@@ -47,9 +47,9 @@
     ```
     # 为了方便下载，在这里直接给出原始模型下载及模型转换命令,可以直接拷贝执行。也可以参照上表在modelzoo中下载并手工转换，以了解更多细节。     
     cd ${HOME}/samples/python/level2_simple_inference/2_object_detection/YOLOV3_coco_detection_picture/model    
-    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/Yolov3/yolov3.caffemodel    
-    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/Yolov3/yolov3.prototxt
-    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/Yolov3/aipp_nv12.cfg
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/Yolov3/yolov3.caffemodel    
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/Yolov3/yolov3.prototxt
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/Yolov3/aipp_nv12.cfg
     atc --model=yolov3.prototxt --weight=yolov3.caffemodel --framework=0 --output=yolov3_yuv --soc_version=Ascend310 --insert_op_conf=aipp_nv12.cfg
     ```
 
@@ -57,7 +57,7 @@
     ```
     执行以下命令，进入样例的data文件夹中，下载对应的测试图片。
     cd $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV3_coco_detection_picture/data
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/YOLOV3_coco_detection_picture/dog1_1024_683.jpg
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/YOLOV3_coco_detection_picture/dog1_1024_683.jpg
     cd ../src
     ```
 
@@ -80,7 +80,7 @@
 
 ### 查看结果
 
-运行完成后，会在样例工程的out/output目录下生成推理后的图片，显示对比结果如下所示。
+运行完成后，会在样例工程的out/目录下生成推理后的图片，显示对比结果如下所示。
 ![输入图片说明](https://images.gitee.com/uploads/images/2021/1103/150340_e045f400_8070502.png "屏幕截图.png")
 
 ### 常见错误

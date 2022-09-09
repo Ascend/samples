@@ -129,6 +129,10 @@ add_library(${AICPU_KERNEL_TARGET} SHARED ${KERNELS_SRCS})
 set(AICPU_SOC_VERSION $ENV{AICPU_SOC_VERSION})
 message(STATUS "AICPU_SOC_VERSION=${AICPU_SOC_VERSION}")
 
+if((AICPU_SOC_VERSION STREQUAL Ascend910B) OR (AICPU_SOC_VERSION STREQUAL Ascend910C) OR (AICPU_SOC_VERSION STREQUAL Ascend310B))
+set(AICPU_SOC_VERSION Ascend)
+endif()
+
 if(EXISTS "${ASCEND_AICPU_PATH}/opp/op_impl/built-in/aicpu/aicpu_kernel/lib/${AICPU_SOC_VERSION}/libascend_protobuf.a")
     target_link_libraries(${AICPU_KERNEL_TARGET} PRIVATE
         -Wl,--whole-archive

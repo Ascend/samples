@@ -22,7 +22,7 @@ python3.7.5 ./src/download_prototxt.py  \
 
 ```bash
 cd model
-wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/resnet_50/ResNet-50-model.caffemodel
+wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/resnet_50/ResNet-50-model.caffemodel
 ```
 
 若执行成功，将会下载 `ResNet-50-deploy.prototxt`, `ResNet_50_train_val.prototxt` 与 `ResNet-50-model.caffemodel` 到该路径下。
@@ -39,7 +39,7 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
 
 ```bash
 cd data
-wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/amct_caffe/imagenet_calibration.tar.gz
+wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/amct_caffe/imagenet_calibration.tar.gz
 tar -xvf imagenet_calibration.tar.gz
 ```
 

@@ -108,7 +108,6 @@ typedef struct hiSAMPLE_VDEC_ATTR {
 /*******************************************************
     function announce
 *******************************************************/
-void jpegd_handle_signal(int32_t signo);
 void jpegd_init_start_time();
 void jpegd_usage(char *sPrgNm);
 int32_t get_option(int32_t argc, char **argv);

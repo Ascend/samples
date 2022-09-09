@@ -1,9 +1,9 @@
-tf_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/3D_gesture_recognition/3d_gesture_recognition.pb"
+tf_model="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/3D_gesture_recognition/3d_gesture_recognition.pb"
 model_name="3d_gesture_recognition"
 
-data_source="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/3D_gesture_recognition/testdata/"
+data_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/3D_gesture_recognition/testdata/"
 data_name="test_float32_actiontype7.bin"
-verify_source="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/3D_gesture_recognition/verifytxt/"
+verify_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/3D_gesture_recognition/verifytxt/"
 verify_name="test_float32_actiontype7.txt"
 project_name="3d_gesture_recognition"
 

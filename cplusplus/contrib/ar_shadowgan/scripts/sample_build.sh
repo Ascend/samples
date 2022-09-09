@@ -13,10 +13,10 @@ function main()
     return 1
   fi
   if [ ! -f "${ModelPath}/../data/test_A.png.bin" ];then
-    wget -O ${ModelPath}/../data/test_A.png.bin https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/arshadow/data/test_A.png.bin --no-check-certificate
+    wget -O ${ModelPath}/../data/test_A.png.bin https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/arshadow/data/test_A.png.bin --no-check-certificate
   fi
   if [ ! -f "${ModelPath}/../data/test_B.png.bin" ];then
-    wget -O ${ModelPath}/../data/test_B.png.bin https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/arshadow/data/test_B.png.bin --no-check-certificate
+    wget -O ${ModelPath}/../data/test_B.png.bin https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/arshadow/data/test_B.png.bin --no-check-certificate
   fi
   find_model model.om
   if [ $? -ne 0 ];then

@@ -26,8 +26,8 @@ python3.7.5 ./src/download_prototxt.py \
 若用户环境无法连接网络。则请先手动下载相应文件上传到创建的 model 路径下：
 
 ```bash
-wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/mobilenetV2/mobilenet_v2_deploy.prototxt
-wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/mobilenetV2/mobilenet_v2.caffemodel
+wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/mobilenetV2/mobilenet_v2_deploy.prototxt
+wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/mobilenetV2/mobilenet_v2.caffemodel
 ```
 
 ### 1.3 数据集
@@ -42,7 +42,7 @@ wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/
 
 ```bash
 cd data
-wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/amct_caffe/imagenet_calibration.tar.gz
+wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/amct_caffe/imagenet_calibration.tar.gz
 tar -xvf imagenet_calibration.tar.gz
 ```
 

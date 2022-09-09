@@ -1,8 +1,8 @@
-onnx_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOv4_onnx/yolov4_dynamic_bs.onnx"
+onnx_model="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOv4_onnx/yolov4_dynamic_bs.onnx"
 model_name="yolov4_bs1"
 project_name="python_YOLOV4_coco_detection_picture-python"
-data_source="https://c7xcode.obs.myhuaweicloud.com/models/YOLOV4_coco_detection_picture-python/"
-verify_source="https://c7xcode.obs.myhuaweicloud.com/models/YOLOV4_coco_detection_picture-python/"
+data_source="https://obs-9be7.obs.myhuaweicloud.com/models/YOLOV4_coco_detection_picture-python/"
+verify_source="https://obs-9be7.obs.myhuaweicloud.com/models/YOLOV4_coco_detection_picture-python/"
 verify_name="out_test.jpg"
 data_name="test.jpg"
 
@@ -22,7 +22,7 @@ function main() {
 
     cd ${project_path}/model
     if [ ! -f "${project_path}/model/yolov4_bs1.om" ];then
-        wget  https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOv4_onnx/yolov4_bs1.om
+        wget  https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOv4_onnx/yolov4_bs1.om
     fi
 
 

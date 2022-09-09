@@ -48,8 +48,8 @@
     ```
     # 为了方便下载，在这里直接给出原始模型下载及模型转换命令,可以直接拷贝执行。也可以参照上表在modelzoo中下载并手工转换，以了解更多细节。     
     cd ${HOME}/samples/python/level2_simple_inference/2_object_detection/YOLOV3_mask_detection_video/model    
-    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOV3-RESNET18%20/yolo3_resnet18.pb    
-    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOV3-RESNET18%20/insert_op.cfg
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOV3-RESNET18%20/yolo3_resnet18.pb    
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOV3-RESNET18%20/insert_op.cfg
     atc --model="./yolo3_resnet18.pb" --output_type=FP32 --input_shape="images:1,352,640,3" --insert_op_conf=./insert_op.cfg --input_format=NHWC --output="./yolo3_resnet18_yuv" --framework=3  --soc_version=Ascend310
     ```
 
@@ -57,7 +57,7 @@
     ```
     执行以下命令，进入样例的data文件夹中，下载对应的测试图片。
     cd $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV3_mask_detection_video/data
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/mask_detection_video/mask.h264
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/mask_detection_video/mask.h264
     cd ../scripts
     ```
 ### 样例运行

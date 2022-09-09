@@ -1,5 +1,5 @@
 /**
-* Copyright 2020 Huawei Technologies Co., Ltd
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2022. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -18,33 +18,78 @@
 */
 #include <cstdint>
 #include <iostream>
-#include <stdlib.h>
+#include <cstdlib>
 #include <dirent.h>
 #include <unistd.h>
 #include "acl/acl.h"
-
-#include "opencv2/opencv.hpp"
 #include "acl/ops/acl_dvpp.h"
 #include "main.h"
 
 using namespace std;
+namespace {
+    int32_t deviceId;
+    aclrtContext context;
+    aclrtStream stream;
+    aclrtRunMode runMode;
+    pthread_t threadId;
 
-int32_t deviceId;
-aclrtContext context;
-aclrtStream stream;
-aclrtRunMode runMode;
-pthread_t threadId;
+    void *g_inBufferDev = nullptr;
+    uint32_t inBufferSize = 0;
+    aclvencChannelDesc *vencChannelDesc = nullptr;
+    acldvppPicDesc *vpcInputDesc = nullptr;
+    aclvencFrameConfig *vencFrameConfig = nullptr;
+    acldvppStreamDesc *outputStreamDesc = nullptr;
+    void *g_codeInputBufferDev = nullptr;
+    acldvppPixelFormat format;
+    int32_t enType = 2;
+    FILE *outFileFp;
+    bool g_runFlag= true;
+    int g_rcMode = 2;
+    int g_maxBitRate = 10000;
+}
 
-aclvencChannelDesc *vencChannelDesc = nullptr;
-acldvppPicDesc *vpcInputDesc = nullptr;
-aclvencFrameConfig *vencFrameConfig = nullptr;
-acldvppStreamDesc *outputStreamDesc = nullptr;
-void *codeInputBufferDev = nullptr;
-acldvppPixelFormat format;
-int32_t enType = 2;
-uint32_t inputBufferSize;
-FILE *outFileFp;
-bool runFlag= true;
+Result ReadBinFile(const string& fileName, void*& data, uint32_t& size)
+{
+    struct stat sBuf;
+    int fileStatus = stat(fileName.data(), &sBuf);
+    if (fileStatus == -1) {
+        ERROR_LOG("failed to get file");
+        return FAILED;
+    }
+    if (S_ISREG(sBuf.st_mode) == 0) {
+        ERROR_LOG("%s is not a file, please enter a file",
+                  fileName.c_str());
+        return FAILED;
+    }
+    std::ifstream binFile(fileName, std::ifstream::binary);
+    if (binFile.is_open() == false) {
+        ERROR_LOG("open file %s failed", fileName.c_str());
+        return FAILED;
+    }
+
+    binFile.seekg(0, binFile.end);
+    uint32_t binFileBufferLen = binFile.tellg();
+    if (binFileBufferLen == 0) {
+        ERROR_LOG("binfile is empty, filename is %s", fileName.c_str());
+        binFile.close();
+        return FAILED;
+    }
+
+    binFile.seekg(0, binFile.beg);
+
+    uint8_t* binFileBufferData = new(std::nothrow) uint8_t[binFileBufferLen];
+    if (binFileBufferData == nullptr) {
+        ERROR_LOG("malloc binFileBufferData failed");
+        binFile.close();
+        return FAILED;
+    }
+    binFile.read((char *)binFileBufferData, binFileBufferLen);
+    binFile.close();
+
+    data = binFileBufferData;
+    size = binFileBufferLen;
+    return SUCCESS;
+}
 
 void *ThreadFunc(aclrtContext sharedContext)
 {
@@ -59,12 +104,11 @@ void *ThreadFunc(aclrtContext sharedContext)
         return ((void*)(-1));
     }
     INFO_LOG("process callback thread start ");
-    while (runFlag) {
+    while (g_runFlag) {
         // Notice: timeout 1000ms
         (void)aclrtProcessReport(1000);
-        //pthread_testcancel();
     }
-    return (void*)0;
+    return nullptr;
 }
 
 bool WriteToFile(FILE *outFileFp_, const void *dataDev, uint32_t dataSize)
@@ -84,16 +128,15 @@ void callback(acldvppPicDesc *input, acldvppStreamDesc *outputStreamDesc, void *
     pthread_setcancelstate(PTHREAD_CANCEL_DISABLE, NULL);
     void *outputDev = acldvppGetStreamDescData(outputStreamDesc);
     uint32_t streamDescSize = acldvppGetStreamDescSize(outputStreamDesc);
-    bool ret;
+    bool ret = true;
 
     if (runMode == ACL_HOST) {
-        void * hostPtr = nullptr;
+        void *hostPtr = nullptr;
         aclrtMallocHost(&hostPtr, streamDescSize);
         aclrtMemcpy(hostPtr, streamDescSize, outputDev, streamDescSize, ACL_MEMCPY_DEVICE_TO_HOST);
         ret = WriteToFile(outFileFp, hostPtr, streamDescSize);
         (void)aclrtFreeHost(hostPtr);
-    }
-    else{
+    } else{
         ret = WriteToFile(outFileFp, outputDev, streamDescSize);
     }
 
@@ -103,7 +146,8 @@ void callback(acldvppPicDesc *input, acldvppStreamDesc *outputStreamDesc, void *
     INFO_LOG("success to callback, stream size:%u", streamDescSize);
 }
 
-Result InitResource(){
+Result InitResource()
+{
     const char *aclConfigPath = "../src/acl.json";
     aclError ret = aclInit(aclConfigPath);
     if (ret != ACL_SUCCESS) {
@@ -126,7 +170,7 @@ Result InitResource(){
     }
     INFO_LOG("create context success");
 
-    //Gets whether the current application is running on host or Device
+    // Gets whether the current application is running on host or Device
     ret = aclrtGetRunMode(&runMode);
     if (ret != ACL_SUCCESS) {
         ERROR_LOG("acl get run mode failed");
@@ -134,78 +178,84 @@ Result InitResource(){
     }
 }
 
-Result Init(int imgWidth, int imgHeight){
-
+Result Init(int imgWidth, int imgHeight)
+{
     InitResource();
 
     pthread_create(&threadId, nullptr, ThreadFunc, context);
     int width = imgWidth;
     int height = imgHeight;
-    uint32_t alignWidth = ALIGN_UP128(width);
+    uint32_t alignWidth = ALIGN_UP16(width);
     uint32_t alignHeight = ALIGN_UP16(height);
     if (alignWidth == 0 || alignHeight == 0) {
         ERROR_LOG("InitCodeInputDesc AlignmentHelper failed. image w %d, h %d, align w%u, h%u",
-        width, height, alignWidth, alignHeight);
+                  width, height, alignWidth, alignHeight);
         return FAILED;
     }
-    //Allocate a large enough memory
-    inputBufferSize = YUV420SP_SIZE(alignWidth, alignHeight);
-    aclError ret = acldvppMalloc(&codeInputBufferDev, inputBufferSize);
+    // Allocate a large enough memory
+    uint32_t inputBufferSize = YUV420SP_SIZE(alignWidth, alignHeight);
+    aclError ret = acldvppMalloc(&g_codeInputBufferDev, inputBufferSize);
+    if (ret != ACL_SUCCESS) {
+        ERROR_LOG("Dvpp malloc InputBufferDev failed");
+        return FAILED;
+    }
 
-    format = static_cast<acldvppPixelFormat>(PIXEL_FORMAT_YVU_SEMIPLANAR_420);
+    format = static_cast<acldvppPixelFormat>(PIXEL_FORMAT_YUV_SEMIPLANAR_420);
     vencFrameConfig = aclvencCreateFrameConfig();
     aclvencSetFrameConfigForceIFrame(vencFrameConfig, 0);
-    if (vencFrameConfig == nullptr) {
-        ERROR_LOG("Dvpp init failed for create config failed");
-        return FAILED;
-    }
 
     vencChannelDesc = aclvencCreateChannelDesc();
     if (vencChannelDesc == nullptr) {
         ERROR_LOG("aclvencCreateChannelDesc failed");
         return FAILED;
     }
-    ret = aclvencSetChannelDescThreadId(vencChannelDesc, threadId);
-    ret = aclvencSetChannelDescCallback(vencChannelDesc, callback);
-    ret = aclvencSetChannelDescEnType(vencChannelDesc, static_cast<acldvppStreamFormat>(enType));
-    ret = aclvencSetChannelDescPicFormat(vencChannelDesc, format);
-    ret = aclvencSetChannelDescKeyFrameInterval(vencChannelDesc, 1);
-    ret = aclvencSetChannelDescPicWidth(vencChannelDesc, width);
-    ret = aclvencSetChannelDescPicHeight(vencChannelDesc, height);
-    ret = aclvencCreateChannel(vencChannelDesc);
+    aclvencSetChannelDescThreadId(vencChannelDesc, threadId);
+    aclvencSetChannelDescCallback(vencChannelDesc, callback);
+    aclvencSetChannelDescEnType(vencChannelDesc, static_cast<acldvppStreamFormat>(enType));
+    aclvencSetChannelDescPicFormat(vencChannelDesc, format);
+    aclvencSetChannelDescKeyFrameInterval(vencChannelDesc, 1);
+    aclvencSetChannelDescPicWidth(vencChannelDesc, width);
+    aclvencSetChannelDescPicHeight(vencChannelDesc, height);
+    aclvencSetChannelDescRcMode(vencChannelDesc, g_rcMode);
+    aclvencSetChannelDescMaxBitRate(vencChannelDesc, g_maxBitRate);
+    aclvencCreateChannel(vencChannelDesc);
 
     vpcInputDesc = acldvppCreatePicDesc();
     if (vpcInputDesc == nullptr) {
         ERROR_LOG("acldvppCreatePicDesc vpcInputDesc failed");
         return FAILED;
     }
-    ret = acldvppSetPicDescFormat(vpcInputDesc, format);
-    ret = acldvppSetPicDescWidth(vpcInputDesc, width);
-    ret = acldvppSetPicDescHeight(vpcInputDesc, height);
-    ret = acldvppSetPicDescWidthStride(vpcInputDesc, alignWidth);
-    ret = acldvppSetPicDescHeightStride(vpcInputDesc, alignHeight);
+    acldvppSetPicDescFormat(vpcInputDesc, format);
+    acldvppSetPicDescWidth(vpcInputDesc, width);
+    acldvppSetPicDescHeight(vpcInputDesc, height);
+    acldvppSetPicDescWidthStride(vpcInputDesc, alignWidth);
+    acldvppSetPicDescHeightStride(vpcInputDesc, alignHeight);
     INFO_LOG("dvpp init resource ok");
     return SUCCESS;
 }
 
-Result Process(cv::Mat& srcImage) {
+Result Process()
+{
     aclError ret;
-    if(runMode == ACL_HOST) {
-        ret = aclrtMemcpy(codeInputBufferDev, inputBufferSize, srcImage.data, inputBufferSize, ACL_MEMCPY_HOST_TO_DEVICE);
-    }
-    else {
-        ret = aclrtMemcpy(codeInputBufferDev, inputBufferSize, srcImage.data, inputBufferSize, ACL_MEMCPY_DEVICE_TO_DEVICE);
+    if (runMode == ACL_HOST) {
+        ret = aclrtMemcpy(g_codeInputBufferDev, inBufferSize,
+        g_inBufferDev, inBufferSize, ACL_MEMCPY_HOST_TO_DEVICE);
+    } else {
+        ret = aclrtMemcpy(g_codeInputBufferDev, inBufferSize,
+        g_inBufferDev, inBufferSize, ACL_MEMCPY_DEVICE_TO_DEVICE);
     }
 
-    ret = acldvppSetPicDescData(vpcInputDesc, codeInputBufferDev);
-    ret = acldvppSetPicDescSize(vpcInputDesc, inputBufferSize);
+    acldvppSetPicDescData(vpcInputDesc, g_codeInputBufferDev);
+    acldvppSetPicDescSize(vpcInputDesc, inBufferSize);
 
-    ret = aclvencSendFrame(vencChannelDesc, vpcInputDesc,
-    static_cast<void *>(outputStreamDesc), vencFrameConfig, nullptr);
+    aclvencSendFrame(vencChannelDesc, vpcInputDesc,
+                     static_cast<void *>(outputStreamDesc), vencFrameConfig, nullptr);
+    (void)acldvppFree(g_codeInputBufferDev);
     return SUCCESS;
 }
 
-void DestroyAclResource(){
+void DestroyAclResource()
+{
     aclError ret;
     if (context != nullptr) {
         ret = aclrtDestroyContext(context);
@@ -229,8 +279,8 @@ void DestroyAclResource(){
     INFO_LOG("end to finalize acl");
 }
 
-void DestroyResource(){
-
+void DestroyResource()
+{
     aclvencSetFrameConfigEos(vencFrameConfig, 1);
     aclvencSetFrameConfigForceIFrame(vencFrameConfig, 0);
     aclvencSendFrame(vencChannelDesc, nullptr, nullptr, vencFrameConfig, nullptr);
@@ -245,9 +295,9 @@ void DestroyResource(){
         vpcInputDesc = nullptr;
     }
 
-    if (codeInputBufferDev != nullptr) {
-        (void)acldvppFree(codeInputBufferDev);
-        codeInputBufferDev = nullptr;
+    if (g_codeInputBufferDev != nullptr) {
+        (void)acldvppFree(g_codeInputBufferDev);
+        g_codeInputBufferDev = nullptr;
     }
 
     if (outputStreamDesc != nullptr) {
@@ -265,7 +315,7 @@ void DestroyResource(){
         vencChannelDesc = nullptr;
     }
 
-    runFlag = false;
+    g_runFlag = false;
     void *res = nullptr;
     pthread_cancel(threadId);
     pthread_join(threadId, &res);
@@ -274,70 +324,40 @@ void DestroyResource(){
     INFO_LOG("end to destroy Resource");
 }
 
-int main(int argc, char *argv[]) {
-    //Check the input when the application executes, which takes the path to the input video file
-    if((argc < 2) || (argv[1] == nullptr)){
+int main(int argc, char *argv[])
+{
+    int paramNum = 2;
+    int paramInputPath = 1;
+    // Check the input when the application executes, which takes the path to the input video file
+    if((argc < paramNum) || (argv[paramInputPath] == nullptr)){
         ERROR_LOG("Please input: ./main <image_dir>");
         return FAILED;
     }
 
-    //Use Opencv to open the video file
-    string videoFile = string(argv[1]);
-    printf("open %s\n", videoFile.c_str());
-    cv::VideoCapture capture(videoFile);
-    if (!capture.isOpened()) {
-        cout << "Movie open Error" << endl;
+    string fileName = string(argv[paramInputPath]);
+    printf("open %s\n", fileName.c_str());
+
+    if (ReadBinFile(fileName, g_inBufferDev, inBufferSize)) {
+        ERROR_LOG("read file %s failed.\n", fileName);
         return FAILED;
     }
-    cout << "Movie open success" << endl;
 
-    int imgHeight = static_cast<int>(capture.get(cv::CAP_PROP_FRAME_HEIGHT));
-    int imgWidth = static_cast<int>(capture.get(cv::CAP_PROP_FRAME_WIDTH));
+    int imgWidth = 1920;
+    int imgHeight = 1080;
+    Init(imgWidth, imgHeight);
 
-    //open the output file
+    // open the output file
     string outputPath = "./output/out_video.h264";
-    outFileFp = fopen(outputPath.c_str(), "ab");
-    if(outFileFp == nullptr)    {
+    outFileFp = fopen(outputPath.c_str(), "wb+");
+    if (outFileFp == nullptr) {
         ERROR_LOG("Failed to open  file %s.", outputPath.c_str());
         return FAILED;
     }
-
-    Init(imgWidth, imgHeight);
-    cv::Mat frame;
-    while(1) {
-        //Read a frame of an image
-        if (!capture.read(frame)) {
-            INFO_LOG("Video capture return false");
-            break;
-        }
-        int cols = frame.cols;
-        int rows = frame.rows;
-        int Yindex = 0;
-        int UVindex = rows * cols;
-        cv::Mat NV21(rows+rows/2, cols, CV_8UC1);
-        int UVRow{ 0 };
-        for (int i=0;i<rows;i++)
-        {
-            for (int j=0;j<cols;j++)
-            {
-                uchar* YPointer = NV21.ptr<uchar>(i);
-                int B = frame.at<cv::Vec3b>(i, j)[0];
-                int G = frame.at<cv::Vec3b>(i, j)[1];
-                int R = frame.at<cv::Vec3b>(i, j)[2];
-                int Y = (77 * R + 150 * G + 29 * B) >> 8;
-                YPointer[j] = Y;
-                uchar* UVPointer = NV21.ptr<uchar>(rows+i/2);
-                if (i%2==0&&(j)%2==0)
-                {
-                    int U = ((-44 * R - 87 * G + 131 * B) >> 8) + 128;
-                    int V = ((131 * R - 110 * G - 21 * B) >> 8) + 128;
-                    UVPointer[j] = V;
-                    UVPointer[j+1] = U;
-                }
-            }
-        }
-        Process(NV21);
+    int framNum = 100;
+    for (int i = 0; i < framNum; i++) {
+        Process();
     }
+
     DestroyResource();
     INFO_LOG("Execute video object detection success");
     return SUCCESS;

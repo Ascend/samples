@@ -26,7 +26,7 @@ CUR_DIR = os.path.realpath(os.path.join(CUR_DIR, '..'))
 
 RESNET50_DEPLOY_PROTOTXT_URL = 'https://raw.githubusercontent.com/KaimingHe/' \
     'deep-residual-networks/master/prototxt/ResNet-50-deploy.prototxt'
-RESNET50_CAFFE_MODEL_URL = 'https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/' \
+RESNET50_CAFFE_MODEL_URL = 'https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/' \
     '003_Atc_Models/AE/ATC%20Model/resnet_50/ResNet-50-model.caffemodel'
 
 def parse_args():

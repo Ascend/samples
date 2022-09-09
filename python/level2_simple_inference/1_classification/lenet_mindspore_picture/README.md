@@ -49,11 +49,11 @@ Check whether the following requirements are met. If not, perform operations acc
 2. Obtain the source model required by the application.
     | **Model**| **Description**                                  | **How to Obtain**                                            |
     | ------------ | ---------------------------------------------- | ------------------------------------------------------------ |
-    | MNIST | Image classification inference model. It is a LeNet model based on MindSpore.| https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/lenet/mnist.air |
+    | MNIST | Image classification inference model. It is a LeNet model based on MindSpore.| https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/lenet/mnist.air |
     ```
     # To facilitate download, the commands for downloading the original model and converting the model are provided here. You can directly copy and run the commands.
     cd ${HOME}/samples/python/level2_simple_inference/1_classification/lenet_mindspore_picture/model    
-    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/lenet/mnist.air
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/lenet/mnist.air
     atc --framework=1 --model=mnist.air  --output=mnist --soc_version=Ascend310
     ```
 
@@ -61,7 +61,7 @@ Check whether the following requirements are met. If not, perform operations acc
     ```
     # To facilitate download, the commands for downloading the original model and converting the model are provided here. You can directly copy and run the commands.
     cd ${HOME}/samples/python/level2_simple_inference/1_classification/lenet_mindspore_picture/data    
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/lenet_mindspore/test_image/test1.png
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/lenet_mindspore/test_image/test1.png
     ```
 
 ### Sample Running

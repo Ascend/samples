@@ -1,5 +1,5 @@
-caffe_model="https://obs-model-ascend.obs.cn-east-2.myhuaweicloud.com/yolov3/yolov3.caffemodel"
-caffe_prototxt="https://obs-model-ascend.obs.cn-east-2.myhuaweicloud.com/yolov3/yolov3.prototxt"
+caffe_model="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/yolov3/yolov3.caffemodel"
+caffe_prototxt="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/yolov3/yolov3.prototxt"
 project_name="cplusplus_YOLOV3_dynamic_batch_detection_picture"
 batch_model_name="yolov3_dynamic_batch"
 hw_model_name="yolov3_dynamic_hw"

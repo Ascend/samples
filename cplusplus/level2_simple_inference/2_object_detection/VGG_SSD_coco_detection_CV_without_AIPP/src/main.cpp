@@ -1,5 +1,5 @@
-/**
-* Copyright 2020 Huawei Technologies Co., Ltd
+/*
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -12,13 +12,10 @@
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 * See the License for the specific language governing permissions and
 * limitations under the License.
-
-* File main.cpp
-* Description: dvpp sample main func
 */
 
 #include <iostream>
-#include <stdlib.h>
+#include <cstdlib>
 #include <dirent.h>
 #include "sample_process.h"
 #include "utils.h"

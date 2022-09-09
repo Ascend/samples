@@ -12,7 +12,7 @@ DVPP 中的VENC功能模块，实现将YUV420SP、YVU420SP格式的视频编码�
 
 样例中的主要接口调用流程如下：
 
-![输入图片说明](https://support.huaweicloud.com/aclcppdevg-cann51RC1alpha2/figure/zh-cn_image_0000001213073514.png)
+![输入图片说明](venc_API_call_sequence.png)
 
 ## 目录结构<a name="section86232112399"></a>
 
@@ -34,6 +34,8 @@ DVPP 中的VENC功能模块，实现将YUV420SP、YVU420SP格式的视频编码�
 ## 准备测试数据<a name="section13765133092318"></a>
 
 请从[https://github.com/Ascend/tools/tree/master/dvpp_sample_input_data](https://github.com/Ascend/tools/tree/master/dvpp_sample_input_data)获取该样例的输入图片、视频数据。
+
+如果使用wget方式下载图片或视频，请先进入[https://github.com/Ascend/tools/tree/master/dvpp_sample_input_data](https://github.com/Ascend/tools/tree/master/dvpp_sample_input_data)页面，单击对应的图片或视频，进入查看图片或视频的页面后，单击页面右侧的“原始数据”，在浏览器的地址栏中才是获取图片或视频的地址，再使用wget命令从该地址中获取图片或视频。
 
 ## 编译运行<a name="section3789175815018"></a>
 
@@ -99,7 +101,7 @@ DVPP 中的VENC功能模块，实现将YUV420SP、YVU420SP格式的视频编码�
 
         - ImgStride：输入视频的跨度（用户不设置默认等于宽度，一帧NV12/NV21数据大小为:跨度x高度x3/2）。
 
-        - ChnNum：创建编码通道的数目,范围\[1, 128\]。
+        - ChnNum：创建编码通道的数目,范围\[1, 256\]。
 
         - CodecType：编码协议类型
 
@@ -140,11 +142,6 @@ DVPP 中的VENC功能模块，实现将YUV420SP、YVU420SP格式的视频编码�
           - 1：NV12
           - 2：NV21
 
-        - OneStreamBuffer：输出获取码流的方式。
-
-          - 0：多包模式
-          - 非0：单包模式
-
         - SaveOutData：是否保存输出解码结果。
 
           - 0：不保存
@@ -154,7 +151,7 @@ DVPP 中的VENC功能模块，实现将YUV420SP、YVU420SP格式的视频编码�
 
         - IFrameGop：I帧间隔\[1, 65536‬\]，1为全I帧，默认65536。
 
-        - StartChnlId：多进程测试指定每个进程起始通道号，范围\[0, 127\]，默认为0。
+        - StartChnlId：多进程测试指定每个进程起始通道号，范围\[0, 255\]，默认为0。
 
         - PerfTest：指定功能测试还是性能测试：
 

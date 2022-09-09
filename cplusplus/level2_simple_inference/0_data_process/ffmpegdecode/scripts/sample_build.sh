@@ -14,7 +14,7 @@ function main()
   fi
 
   if [ ! -f "${DataPath}/cat.mp4" ];then
-    wget -O ${DataPath}/cat.mp4 https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/ffmpegdecode/cat.mp4 --no-check-certificate
+    wget -O ${DataPath}/cat.mp4 https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/ffmpegdecode/cat.mp4 --no-check-certificate
   fi
 
   build

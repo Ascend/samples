@@ -96,12 +96,10 @@ void *HmevLooper::trampoline(void* p)
 // it can be captured and executed
 void HmevLooper::loop()
 {
-    if (g_run_mode == MODE_HOST) {
-        aclError aclRet = aclrtSetCurrentContext(g_context);
-        if (aclRet != ACL_SUCCESS) {
-            HMEV_HISDK_PRT(ERROR, "set current context failed:%d", aclRet);
-            return;
-        }
+    aclError aclRet = aclrtSetCurrentContext(g_context);
+    if (aclRet != ACL_SUCCESS) {
+        HMEV_HISDK_PRT(ERROR, "set current context failed:%d", aclRet);
+        return;
     }
 
     prctl(PR_SET_NAME, m_name.c_str(), 0, 0, 0);

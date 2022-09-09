@@ -1,10 +1,10 @@
-tf_model="https://obs-model-ascend.obs.cn-east-2.myhuaweicloud.com/mask_detection/mask_detection.pb"
+tf_model="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/mask_detection/mask_detection.pb"
 model_name="mask_detection"
 
 project_name="python_YOLOV3_mask_detection_picture"
-data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/YOLOV3_mask_detection_picture-python/test_image/"
+data_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/YOLOV3_mask_detection_picture-python/test_image/"
 data_name="test.jpg"
-verify_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/YOLOV3_mask_detection_picture-python/verify_image/"
+verify_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/YOLOV3_mask_detection_picture-python/verify_image/"
 verify_name="verify_test.jpg"
 
 script_path_temp="$( cd "$(dirname $BASH_SOURCE)" ; pwd -P)"

@@ -14,7 +14,7 @@ function main()
   fi
 
   if [ ! -f "${DataPath}/dvpp_output.yuv" ];then
-    wget -O ${DataPath}/dvpp_output.yuv https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/jpege/dvpp_output.yuv --no-check-certificate
+    wget -O ${DataPath}/dvpp_output.yuv https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/jpege/dvpp_output.yuv --no-check-certificate
   fi
 
   build

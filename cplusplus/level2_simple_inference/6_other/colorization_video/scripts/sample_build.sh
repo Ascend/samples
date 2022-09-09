@@ -13,7 +13,7 @@ function main()
     return 1
   fi
 
-  wget -O ${ModelPath}/../data/black-white_video.mp4 https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/colorization_video/black-white_video.mp4 --no-check-certificate
+  wget -O ${ModelPath}/../data/black-white_video.mp4 https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/colorization_video/black-white_video.mp4 --no-check-certificate
   
   find_model colorization.om
   if [ $? -ne 0 ];then

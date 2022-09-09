@@ -14,7 +14,7 @@ function main()
   fi
 
   if [ ! -f "${ModelPath}/../data/test_deeplab.mp4" ];then
-    wget -O ${ModelPath}/../data/test_deeplab.mp4 https://modelzoo-train-atc.obs.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/deeplabv3/cpluscplus_test_video/test_deeplab.mp4 --no-check-certificate
+    wget -O ${ModelPath}/../data/test_deeplab.mp4 https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/deeplabv3/cpluscplus_test_video/test_deeplab.mp4 --no-check-certificate
   fi
 
   find_model deeplab_quant.om

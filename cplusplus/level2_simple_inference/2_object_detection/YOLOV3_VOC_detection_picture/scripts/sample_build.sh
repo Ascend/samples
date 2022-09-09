@@ -13,7 +13,7 @@ function main()
     return 1
   fi
 
-  wget -O ${ModelPath}/../data/dog.jpg https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/YOLOV3_VOC_detection_picture/dog.jpg --no-check-certificate
+  wget -O ${ModelPath}/../data/dog.jpg https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/YOLOV3_VOC_detection_picture/dog.jpg --no-check-certificate
   
   find_model yolov3.om
   if [ $? -ne 0 ];then

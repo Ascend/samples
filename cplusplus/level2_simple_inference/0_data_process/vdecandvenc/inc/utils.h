@@ -1,12 +1,14 @@
 /**
 * @file utils.h
 *
-* Copyright (C) 2020. Huawei Technologies Co., Ltd. All rights reserved.
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2022. All rights reserved.
 *
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
+#ifndef UTILS_H
+#define UTILS_H
 #pragma once
 #include <iostream>
 #include <unistd.h>
@@ -68,3 +70,4 @@ public:
     static Result CheckFolder(const char* foldName);
 };
 
+#endif

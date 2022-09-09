@@ -445,9 +445,9 @@ ssh HwHiAiUser@192.168.1.2 "tail -n8  .bashrc"
 本实验的输入图片需要自行下载放到工程目录下的./data目录下。
 
 ```
-wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/lenet_mindspore/test_image/test1.png
-wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/lenet_mindspore/test_image/test2.png
-wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/lenet_mindspore/test_image/test3.png
+wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/lenet_mindspore/test_image/test1.png
+wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/lenet_mindspore/test_image/test2.png
+wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/lenet_mindspore/test_image/test3.png
 
 ```
 

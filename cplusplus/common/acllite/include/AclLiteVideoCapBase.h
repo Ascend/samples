@@ -1,5 +1,5 @@
 /**
-* Copyright 2020 Huawei Technologies Co., Ltd
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2022. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 * File utils.h
 * Description: handle file operations
 */
+#ifndef ACLLITE_VIDEO_CAP_BASE_H
+#define ACLLITE_VIDEO_CAP_BASE_H
 #pragma once
 
 #include "AclLiteError.h"
@@ -24,7 +26,7 @@
 #define RTSP_TRANS_UDP ((uint32_t)0)
 #define RTSP_TRANS_TCP ((uint32_t)1)
 
-enum StreamProperty {   
+enum StreamProperty {
     FRAME_WIDTH = 1,
     FRAME_HEIGHT = 2,
     VIDEO_FPS = 3,
@@ -35,12 +37,19 @@ enum StreamProperty {
 
 class AclLiteVideoCapBase {
 public:
-    AclLiteVideoCapBase(){}
-    virtual ~AclLiteVideoCapBase(){}; 
+    AclLiteVideoCapBase() {}
+    virtual ~AclLiteVideoCapBase(){};
     virtual bool IsOpened() = 0;
-    virtual AclLiteError Set(StreamProperty key, uint32_t value) { return ACLLITE_OK; }
-    virtual uint32_t Get(StreamProperty key) { return 0; }
+    virtual AclLiteError Set(StreamProperty key, uint32_t value)
+    {
+        return ACLLITE_OK;
+    }
+    virtual uint32_t Get(StreamProperty key)
+    {
+        return 0;
+    }
     virtual AclLiteError Read(ImageData& frame) = 0;
     virtual AclLiteError Close() = 0;
-    virtual AclLiteError Open() = 0;    
+    virtual AclLiteError Open() = 0;
 };
+#endif

@@ -49,18 +49,18 @@
     ```
     # 为了方便下载，在这里直接给出原始模型下载及模型转换命令,可以直接拷贝执行。也可以参照上表在modelzoo中下载并手工转换，以了解更多细节。     
     cd ${HOME}/samples/python/contrib/gesture_recognition_picture/model    
-    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/gesture_recognition/resnet18_gesture.caffemodel    
-    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/gesture_recognition/resnet18_gesture.prototxt
-    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/gesture_recognition/insert_op.cfg
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/gesture_recognition/resnet18_gesture.caffemodel    
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/gesture_recognition/resnet18_gesture.prototxt
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/gesture_recognition/insert_op.cfg
     atc --model=./resnet18_gesture.prototxt --weight=./resnet18_gesture.caffemodel --framework=0 --output=gesture_yuv --soc_version=Ascend310 --insert_op_conf=./insert_op.cfg --input_shape="data:1,3,224,224" --input_format=NCHW
     ```
 3. 获取样例需要的测试图片。
     ```
     # 执行以下命令，进入样例的data文件夹中，下载对应的测试图片。
     cd $HOME/samples/python/contrib/gesture_recognition_picture/data
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/gesture_recognition/test_image/test1.jpg
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/gesture_recognition/test_image/test2.jpg      
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/gesture_recognition/test_image/test3.jpg
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/gesture_recognition/test_image/test1.jpg
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/gesture_recognition/test_image/test2.jpg      
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/gesture_recognition/test_image/test3.jpg
     cd ../src
     ```
 ### 样例运行

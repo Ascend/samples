@@ -83,7 +83,6 @@ class AclLiteModel(object):
         # recode input data address,if need malloc memory,the memory will be
         # reuseable
         self._init_input_buffer()
-
         log_info("Init model resource success")
 
         return const.SUCCESS
@@ -114,6 +113,14 @@ class AclLiteModel(object):
             self._input_buffer.append(item)
 
     def _gen_input_dataset(self, input_list):
+        dynamicIdx, ret = acl.mdl.get_input_index_by_name(self._model_desc, "ascend_mbatch_shape_data")
+        if ret == const.ACL_SUCCESS:
+            dataLen = acl.mdl.get_input_size_by_index(self._model_desc, dynamicIdx)
+            buf, ret = acl.rt.malloc(dataLen, const.ACL_MEM_MALLOC_NORMAL_ONLY)
+            utils.check_ret("acl.rt.malloc", ret)
+            batch_buffer = {'data': buf, 'size':dataLen}
+            input_list.append(batch_buffer)
+
         ret = const.SUCCESS
         if len(input_list) != self._input_num:
             log_error("Current input data num %d unequal to model "
@@ -208,6 +215,50 @@ class AclLiteModel(object):
             return None
 
         return data
+
+    def _set_dynamic_batch_size(self, batch):
+        dynamicIdx, ret = acl.mdl.get_input_index_by_name(self._model_desc, "ascend_mbatch_shape_data")
+        if ret != const.ACL_SUCCESS:
+            log_error("get_input_index_by_name failed")
+            return const.FAILED
+        batch_dic, ret = acl.mdl.get_dynamic_batch(self._model_desc)
+        if ret != const.ACL_SUCCESS:
+            log_error("get_dynamic_batch failed")
+            return const.FAILED
+        print("[INFO] get dynamic_batch = ", batch_dic)
+        ret = acl.mdl.set_dynamic_batch_size(self._model_id, self._input_dataset, dynamicIdx, batch)
+        if ret != const.ACL_SUCCESS:
+            log_error("set_dynamic_batch_size failed, ret = ", ret)
+            return const.FAILED
+        if batch in batch_dic["batch"]:
+            return const.SUCCESS
+        else:
+            assert ret == ACL_ERROR_GE_DYNAMIC_BATCH_SIZE_INVALID
+            print("[INFO] [dynamic batch] {} is not in {}".format(batch, batch_dic["batch"]))
+            return const.FAILED
+
+    def _execute_with_dynamic_batch_size(self, input_list, batch):
+        ret = self._gen_input_dataset(input_list)
+        if ret == const.FAILED:
+            log_error("Gen model input dataset failed")
+            return None
+
+        ret = self._set_dynamic_batch_size(batch)
+        if ret == const.FAILED:
+            log_error("Set dynamic batch failed")
+            return None
+
+        ret = acl.mdl.execute(self._model_id,
+                              self._input_dataset,
+                              self._output_dataset)
+        if ret != const.ACL_SUCCESS:
+            log_error("Execute model failed for acl.mdl.execute error ", ret)
+            return None
+
+        self._release_dataset(self._input_dataset)
+        self._input_dataset = None
+
+        return self._output_dataset_to_numpy()
 
     def execute(self, input_list):
         """

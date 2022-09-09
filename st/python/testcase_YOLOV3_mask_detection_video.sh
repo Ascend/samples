@@ -1,9 +1,9 @@
-tf_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOV3-RESNET18%20/yolo3_resnet18.pb"
-aipp_cfg="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOV3-RESNET18%20/insert_op.cfg"
+tf_model="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOV3-RESNET18%20/yolo3_resnet18.pb"
+aipp_cfg="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOV3-RESNET18%20/insert_op.cfg"
 model_name="yolo3_resnet18_yuv"
 presenter_server_name="mask_detection_video"
 
-data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/mask_detection_video/"
+data_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/mask_detection_video/"
 data_name="mask.h264"
 project_name="YOLOV3_mask_detection_video"
 conf_file_name="mask_detection.conf"

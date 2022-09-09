@@ -45,12 +45,12 @@
 2. 获取此应用中所需要的原始网络模型。   
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
-    |  googlenet| 图片分类推理模型。是基于MindSpore的googlenet模型。  |  [https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_mindspore/googlenet.air](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_mindspore/googlenet.air) |
+    |  googlenet| 图片分类推理模型。是基于MindSpore的googlenet模型。  |  [https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/googlenet_mindspore/googlenet.air](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/googlenet_mindspore/googlenet.air) |
 
     ```
     # 为了方便下载，在这里直接给出原始模型下载及模型转换命令,可以直接拷贝执行。也可以参照上表在modelzoo中下载并手工转换，以了解更多细节。     
     cd $HOME/samples/python/level2_simple_inference/1_classification/googlenet_mindspore_picture/model
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_mindspore/googlenet.air 
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/googlenet_mindspore/googlenet.air 
     atc --model=./googlenet.air --framework=1 --output=./googlenet --soc_version=Ascend310
     ```
 
@@ -58,7 +58,7 @@
     ```
     执行以下命令，进入样例的data文件夹中，下载对应的测试图片。
     cd $HOME/samples/python/level2_simple_inference/1_classification/googlenet_mindspore_picture/data
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_mindspore/airplane.jpg
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/googlenet_mindspore/airplane.jpg
     cd ../src
     ```
 

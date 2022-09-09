@@ -30,7 +30,7 @@ CUR_DIR = os.path.realpath(os.path.join(CUR_DIR, '..'))
 
 MOBILENET_V2_MODEL_DEFINE_URL = 'https://raw.githubusercontent.com/shicai/' \
     'MobileNet-Caffe/master/mobilenet_v2_deploy.prototxt'
-MOBILENET_V2_CAFFEMODEL_URL = 'https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/' \
+MOBILENET_V2_CAFFEMODEL_URL = 'https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/' \
     '003_Atc_Models/AE/ATC%20Model/mobilenetV2/mobilenet_v2.caffemodel'
 
 

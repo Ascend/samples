@@ -13,7 +13,7 @@ function main()
     return 1
   fi
   if [ ! -f "${ModelPath}/../data/butterfly_GT.bmp" ];then
-    wget -O ${ModelPath}/../data/butterfly_GT.bmp https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/super_resolution/test_image/butterfly_GT.bmp --no-check-certificate
+    wget -O ${ModelPath}/../data/butterfly_GT.bmp https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/super_resolution/test_image/butterfly_GT.bmp --no-check-certificate
   fi
   
   find_model SRCNN_768_768.om

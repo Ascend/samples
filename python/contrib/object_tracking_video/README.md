@@ -47,8 +47,8 @@ pip3 install -r requirements.txt
 
 | **Model**  |  **How to Obtain** |
 | ---------- |  ----------------- |
-| mot_v2.om | `wget -nc --no-check-certificate 'https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/object_tracking_video/mot_v2.om' -O model/mot_v2.om`  |
-| mot_v2.onnx | `wget -nc --no-check-certificate 'https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/object_tracking_video/mot_v2.om' -O model/mot_v2.onnx`  |
+| mot_v2.om | `wget -nc --no-check-certificate 'https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/object_tracking_video/mot_v2.om' -O model/mot_v2.om`  |
+| mot_v2.onnx | `wget -nc --no-check-certificate 'https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/object_tracking_video/mot_v2.om' -O model/mot_v2.onnx`  |
 
    ![Icon-note.gif](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif) **NOTE**
    >- `mot_v2.om` offline model you can use out-of-the-box without model conversion. If you use this then you can skip the next step on model conversion.

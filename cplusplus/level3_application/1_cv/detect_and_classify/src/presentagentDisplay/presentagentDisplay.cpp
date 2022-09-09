@@ -1,5 +1,5 @@
 /**
-* Copyright 2020 Huawei Technologies Co., Ltd
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2022. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -22,24 +22,29 @@
 #include "AclLiteApp.h"
 #include "CarParams.h"
 #include "presentagentDisplay.h"
-
-PresentAgentDisplayThread::PresentAgentDisplayThread(Channel* presenterChannel) :
-presenterChannel_(presenterChannel) {
+using namespace std;
+using namespace ascend::presenter; 
+PresentAgentDisplayThread::PresentAgentDisplayThread(Channel* presenterChannel)
+    :presenterChannel_(presenterChannel)
+{
 }
 
-PresentAgentDisplayThread::~PresentAgentDisplayThread() {
+PresentAgentDisplayThread::~PresentAgentDisplayThread()
+{
     delete presenterChannel_;
 }
 
-AclLiteError PresentAgentDisplayThread::VerifyPresentAgentChannel(){
-    if (presenterChannel_ == nullptr){
+AclLiteError PresentAgentDisplayThread::VerifyPresentAgentChannel()
+{
+    if (presenterChannel_ == nullptr) {
         ACLLITE_LOG_ERROR("Present agent channel is nullptr");
         return ACLLITE_ERROR;
     }
     return ACLLITE_OK;
 }
 
-AclLiteError PresentAgentDisplayThread::Init() {
+AclLiteError PresentAgentDisplayThread::Init()
+{
     AclLiteError ret = VerifyPresentAgentChannel();
     if (ret != ACLLITE_OK) {
         ACLLITE_LOG_ERROR("Present agent channel is invalid");
@@ -49,12 +54,14 @@ AclLiteError PresentAgentDisplayThread::Init() {
     return ACLLITE_OK;
 }
 
-AclLiteError PresentAgentDisplayThread::DisplayMsgPackage(ImageFrame& packageMsg, shared_ptr<CarDetectDataMsg> carDetectDataMsg) {
+AclLiteError PresentAgentDisplayThread::DisplayMsgPackage(ImageFrame& packageMsg,
+    shared_ptr<CarDetectDataMsg> carDetectDataMsg)
+{
     // Jpeg images must serialize the Proto message before they can be sent
     vector<uint8_t> encodeImg;
     vector<int> param = vector<int>(2);
     param[0] = cv::IMWRITE_JPEG_QUALITY;
-    param[1] = 95; //default(95) 0-100
+    param[1] = 95; // default(95) 0-100
     cv::imencode(".jpg", carDetectDataMsg->frame, encodeImg, param);
     // set presentagent identifier
     vector<DetectionResult> detection_results;
@@ -73,13 +80,10 @@ AclLiteError PresentAgentDisplayThread::DisplayMsgPackage(ImageFrame& packageMsg
     return ACLLITE_OK;
 }
 
-AclLiteError PresentAgentDisplayThread::DisplayMsgProcess(shared_ptr<CarDetectDataMsg> carDetectDataMsg) {
+AclLiteError PresentAgentDisplayThread::DisplayMsgProcess(shared_ptr<CarDetectDataMsg> carDetectDataMsg)
+{
     if (carDetectDataMsg->isLastFrame == 1) {
         SendMessage(carDetectDataMsg->presentAgentDisplayThreadId, MSG_ENCODE_FINISH, nullptr);
-        return ACLLITE_OK;
-    }
-
-    if (carDetectDataMsg->flag == 1) {
         return ACLLITE_OK;
     }
 
@@ -99,13 +103,14 @@ AclLiteError PresentAgentDisplayThread::DisplayMsgProcess(shared_ptr<CarDetectDa
     return ACLLITE_OK;
 }
 
-AclLiteError PresentAgentDisplayThread::Process(int msgId, shared_ptr<void> data) {
-    switch(msgId) {
+AclLiteError PresentAgentDisplayThread::Process(int msgId, shared_ptr<void> data)
+{
+    switch (msgId) {
         case MSG_PRESENT_AGENT_DISPLAY:
             DisplayMsgProcess(static_pointer_cast<CarDetectDataMsg>(data));
             break;
         case MSG_ENCODE_FINISH:
-            SendMessage(kMainThreadId, MSG_APP_EXIT, nullptr);
+            SendMessage(g_MainThreadId, MSG_APP_EXIT, nullptr);
             break;
         default:
             ACLLITE_LOG_INFO("Present agent display thread ignore msg %d", msgId);

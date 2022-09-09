@@ -1,5 +1,5 @@
 /**
-* Copyright 2020 Huawei Technologies Co., Ltd
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2022. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -17,21 +17,18 @@
 * Description: handle file operations
 */
 #include "AclLiteThread.h"
-
-AclLiteThread::AclLiteThread():
-  context_(nullptr),
-  runMode_(ACL_HOST),
-  instanceId_(INVALID_INSTANCE_ID),
-  instanceName_(""),
-  baseConfiged_(false) {
+using namespace std;
+AclLiteThread::AclLiteThread():context_(nullptr), runMode_(ACL_HOST),
+    instanceId_(INVALID_INSTANCE_ID), instanceName_(""),
+    baseConfiged_(false)
+{
 }
 
-AclLiteError AclLiteThread::BaseConfig(int instanceId,
-                                   const string& threadName,
-                                   aclrtContext context,
-                                   aclrtRunMode runMode) {
+AclLiteError AclLiteThread::BaseConfig(int instanceId, const string& threadName,
+                                       aclrtContext context, aclrtRunMode runMode)
+{
     if (baseConfiged_) {
-        return ACLLITE_ERROR_INITED_ALREADY; 
+        return ACLLITE_ERROR_INITED_ALREADY;
     }
 
     instanceId_ = instanceId;

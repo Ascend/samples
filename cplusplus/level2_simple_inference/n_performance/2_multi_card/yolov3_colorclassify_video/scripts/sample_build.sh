@@ -14,11 +14,11 @@ function main()
   fi
 
   if [ ! -f "${ModelPath}/../data/car1.mp4" ];then
-    wget -O ${ModelPath}/../data/car1.mp4 https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOV3_carColor_sample/data/car1.mp4 --no-check-certificate
+    wget -O ${ModelPath}/../data/car1.mp4 https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOV3_carColor_sample/data/car1.mp4 --no-check-certificate
   fi
 
   if [ ! -f "${ModelPath}/../data/car2.mp4" ];then
-    wget -O ${ModelPath}/../data/car2.mp4 https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOV3_carColor_sample/data/car2.mp4 --no-check-certificate
+    wget -O ${ModelPath}/../data/car2.mp4 https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOV3_carColor_sample/data/car2.mp4 --no-check-certificate
   fi
 
   find_model yolov3.om

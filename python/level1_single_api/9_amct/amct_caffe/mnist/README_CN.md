@@ -13,15 +13,15 @@
 
 ```bash
 cd model
-wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/mnist/mnist-deploy.prototxt
-wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/mnist/mnist-model.caffemodel
+wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/mnist/mnist-deploy.prototxt
+wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/mnist/mnist-model.caffemodel
 ```
 
 若用户环境无法连接网络。则请在可连通网络的服务器，分别访问如下链接下载相应文件:
 
-[链接 A](https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/mnist/mnist-deploy.prototxt)
+[链接 A](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/mnist/mnist-deploy.prototxt)
 
-[链接 B](https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/mnist/mnist-model.caffemodel)
+[链接 B](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/mnist/mnist-model.caffemodel)
 
 然后上传到刚创建的 model 路径下。
 

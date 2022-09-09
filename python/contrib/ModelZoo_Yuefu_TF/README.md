@@ -29,7 +29,7 @@ Before deploying this sample, ensure that:
 
    ```
    cd $HOME
-   wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/yuefuzuoshi/ModelZoo_Yuefu_TF.zip
+   wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/yuefuzuoshi/ModelZoo_Yuefu_TF.zip
    ```
 
    In the development environment, run the following commands to unzip the package:
@@ -50,9 +50,9 @@ Before deploying this sample, ensure that:
    Download the model files:
 
    ```
-   wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/yuefuzuoshi/poetry.data-00000-of-00001
-   wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/yuefuzuoshi/poetry.meta
-   wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/yuefuzuoshi/poetry.index
+   wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/yuefuzuoshi/poetry.data-00000-of-00001
+   wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/yuefuzuoshi/poetry.meta
+   wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/yuefuzuoshi/poetry.index
    ```
 
  ### Sample Deployment
@@ -61,7 +61,7 @@ Before deploying this sample, ensure that:
 
   (1) Configure **device_id** and **device_ip** in the **device_table_1p.json** file.
 
-  Run the **cat /etc/hccn.conf** command to query the IP address list of the device on the server. If the IP address is not configured, configure it by referring to [Configuring NIC IP Address of a Device](https://support.huaweicloud.com/intl/en-us/instg-cli-cann/atlascli_03_0084.html).
+  Run the **cat /etc/hccn.conf** command to query the IP address list of the device on the server. If the IP address is not configured, configure it by referring to [Configuring NIC IP Address of a Device](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/60RC1alpha02/softwareinstall/instg/atlasdeploy_03_0060.html).
 
   Change the values of **device_id** in line 16 and **device_ip** in line 17 in the **device_table_1p.json** file to the queried device ID and IP address, respectively.
 

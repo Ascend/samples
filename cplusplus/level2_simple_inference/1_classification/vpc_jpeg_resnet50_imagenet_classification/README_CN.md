@@ -14,69 +14,6 @@
 
 该样例中用于推理的模型文件是\*.om文件（适配昇腾AI处理器的离线模型），转换模型时，需配置色域转换参数，用于将YUV420SP格式的图片转换为RGB格式的图片，才能符合模型的输入要求。
 
-## 原理介绍<a name="section6271153719394"></a>
-
-在该样例中，涉及的关键功能点，如下所示：
-
--   **初始化**
-    -   调用aclInit接口初始化AscendCL配置。
-    -   调用aclFinalize接口实现AscendCL去初始化。
-
--   **Device管理**
-    -   调用aclrtSetDevice接口指定用于运算的Device。
-    -   调用aclrtGetRunMode接口获取昇腾AI软件栈的运行模式，根据运行模式的不同，内部处理流程不同。
-    -   调用aclrtResetDevice接口复位当前运算的Device，回收Device上的资源。
-
--   **Context管理**
-    -   调用aclrtCreateContext接口创建Context。
-    -   调用aclrtDestroyContext接口销毁Context。
-
--   **Stream管理**
-    -   调用aclrtCreateStream接口创建Stream。
-    -   调用aclrtDestroyStream接口销毁Stream。
-    -   调用aclrtSynchronizeStream接口阻塞程序运行，直到指定stream中的所有任务都完成。
-
--   **内存管理**
-    -   调用aclrtMallocHost接口申请Host上内存。
-    -   调用aclrtFreeHost释放Host上的内存。
-    -   调用aclrtMalloc接口申请Device上的内存。
-    -   调用aclrtFree接口释放Device上的内存。
-    -   执行数据预处理时，若需要申请Device上的内存存放输入或输出数据，需调用acldvppMalloc申请内存、调用acldvppFree接口释放内存。
-
--   **数据传输**
-
-    调用aclrtMemcpy接口通过内存复制的方式实现数据传输。
-
--   **数据预处理**
-    -   图片编码
-
-        调用acldvppJpegEncodeAsync接口将YUV420SP格式的图片编码为\*.jpg格式的图片。
-
-    -   图片解码
-
-        调用acldvppJpegDecodeAsync接口将\*.jpg图片解码成YUV420SP格式图片。
-
-    -   缩放
-
-        调用acldvppVpcResizeAsync接口对YUV420SP格式的输入图片进行缩放。
-
-    -   抠图
-
-        调用acldvppVpcCropAsync接口按指定区域从输入图片中抠图，再将抠的图片存放到输出内存中，作为输出图片。
-
-    -   抠图贴图
-
-        调用acldvppVpcCropAndPasteAsync接口按指定区域从输入图片中抠图，再将抠的图片贴到目标图片的指定位置，作为输出图片。
-
-
--   **模型推理**
-    -   调用aclmdlLoadFromFileWithMem接口从\*.om文件加载模型。
-    -   调用aclmdlExecute接口执行模型推理。
-
-        推理前，通过\*.om文件中的色域转换参数将YUV420SP格式的图片转换为RGB格式的图片。
-
-    -   调用aclmdlUnload接口卸载模型。
-
 
 ## 目录结构<a name="section1394162513386"></a>
 
@@ -117,31 +54,73 @@
 -   编译器：g++或aarch64-linux-gnu-g++
 -   芯片：Ascend 310、Ascend 310P、Ascend 910
 -   python及依赖的库：python3.7.5
--   已在环境上部署昇腾AI软件栈
+-   已在环境上部署昇腾AI软件栈，并配置对应的的环境变量，请参见[Link](https://www.hiascend.com/document)中对应版本的CANN安装指南。
+    
+    以下步骤中，开发环境指编译开发代码的环境，运行环境指运行算子、推理或训练等程序的环境，运行环境上必须带昇腾AI处理器。开发环境和运行环境可以合设在同一台服务器上，也可以分设，分设场景下，开发环境下编译出来的可执行文件，在运行环境下执行时，若开发环境和运行环境上的操作系统架构不同，则需要在开发环境中执行交叉编译。
 
-## 配置环境变量<a name="section1025910381783"></a>
+  
+## 准备模型和测试数据<a name="section183454368179"></a>
 
-- 开发环境上环境变量配置
+1.  配置CANN基础环境变量和Python环境变量，请参见[Link](../../../environment/environment_variable_configuration_CN.md)。
 
-  1. CANN-Toolkit包提供进程级环境变量配置脚本，供用户在进程中引用，以自动完成CANN基础环境变量的配置，配置示例如下所示
+2.  以运行用户登录开发环境。
 
-     ```
-     . ${HOME}/Ascend/ascend-toolkit/set_env.sh
-     ```
-
-     “$HOME/Ascend”请替换“Ascend-cann-toolkit”包的实际安装路径。
-
-  2. 算子编译依赖Python，以Python3.7.5为例，请以运行用户执行如下命令设置Python3.7.5的相关环境变量。
-
-     ```
-     #用于设置python3.7.5库文件路径
-     export LD_LIBRARY_PATH=/usr/local/python3.7.5/lib:$LD_LIBRARY_PATH
-     #如果用户环境存在多个python3版本，则指定使用python3.7.5版本
-     export PATH=/usr/local/python3.7.5/bin:$PATH
-     ```
-
-     Python3.7.5安装路径请根据实际情况进行替换，您也可以将以上命令写入~/.bashrc文件中，然后执行source ~/.bashrc命令使其立即生效。
+3.  下载sample仓代码并上传至环境后，请先进入“cplusplus/level2_simple_inference/1_classification/vpc_jpeg_resnet50_imagenet_classification”样例目录。
      
+    请注意，下文中的样例目录均指“cplusplus/level2_simple_inference/1_classification/vpc_jpeg_resnet50_imagenet_classification”目录。
+
+4.  准备ResNet-50模型。
+
+    1.  获取ResNet-50原始模型。
+
+        您可以从以下链接中获取ResNet-50网络的模型文件（\*.prototxt）、权重文件（\*.caffemodel），并以运行用户将获取的文件上传至开发环境的“样例目录/caffe\_model“目录下。如果目录不存在，需要自行创建。
+
+        -   ResNet-50网络的模型文件（\*.prototxt）：单击[Link](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/resnet50/resnet50.prototxt)下载该文件。
+        -   ResNet-50网络的权重文件（\*.caffemodel）：单击[Link](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/resnet50/resnet50.caffemodel)下载该文件。 
+
+    2.  将ResNet-50网络转换为适配昇腾AI处理器的离线模型（\*.om文件），转换模型时，需配置色域转换参数，用于将YUV420SP格式的图片转换为RGB格式的图片。
+
+        切换到样例目录，执行如下命令：
+
+        ```
+        atc --model=caffe_model/resnet50.prototxt --weight=caffe_model/resnet50.caffemodel --framework=0 --soc_version=Ascend310 --insert_op_conf=caffe_model/aipp.cfg --output=model/resnet50_aipp 
+        ```
+
+        -   --model：原始模型文件路径。
+        -   --weight：权重文件路径。
+        -   --framework：原始框架类型。0：表示Caffe；1：表示MindSpore；3：表示TensorFlow；5：表示ONNX。
+        -   --soc\_version：昇腾AI处理器的版本。进入“CANN软件安装目录/compiler/data/platform_config”目录，".ini"文件的文件名即为昇腾AI处理器的版本，请根据实际情况选择。
+
+        -   --insert\_op\_conf：插入AIPP（AI Preprocessing）算子的配置文件路径，用于在AI Core上完成图像预处理，包括改变图像尺寸、色域转换（转换图像格式）、减均值/乘系数（改变图像像素），数据处理之后再进行真正的模型推理。
+        -   --output：生成的resnet50\_aipp.om文件存放在“样例目录/model“目录下。建议使用命令中的默认设置，否则在编译代码前，您还需要修改sample\_process.cpp中的omModelPath参数值。
+
+            ```
+            const char* omModelPath = "../model/resnet50_aipp.om";
+            ```
+5.  准备测试图片。
+
+    请从以下链接获取该样例的测试图片，并以运行用户将获取的文件上传至开发环境的“样例目录/data“目录下。如果目录不存在，需自行创建。
+
+    [https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/aclsample/dvpp\_vpc\_8192x8192\_nv12.yuv](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/aclsample/dvpp_vpc_8192x8192_nv12.yuv)
+
+    [https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/aclsample/persian\_cat\_1024\_1536\_283.jpg](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/aclsample/persian_cat_1024_1536_283.jpg)
+
+    [https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/aclsample/wood\_rabbit\_1024\_1061\_330.jpg](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/aclsample/wood_rabbit_1024_1061_330.jpg)
+
+    [https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/aclsample/wood\_rabbit\_1024\_1068\_nv12.yuv](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/aclsample/wood_rabbit_1024_1068_nv12.yuv)
+
+
+## 编译运行<a name="section183454368119"></a>
+
+1.  配置CANN基础环境变量和Python环境变量，请参见[Link](../../../environment/environment_variable_configuration_CN.md)。
+
+2.  编译代码。
+    1.  以运行用户登录开发环境。
+
+    2.  下载sample仓代码并上传至环境后，请先进入“cplusplus/level2_simple_inference/1_classification/vpc_jpeg_resnet50_imagenet_classification”样例目录。
+     
+        请注意，下文中的样例目录均指“cplusplus/level2_simple_inference/1_classification/vpc_jpeg_resnet50_imagenet_classification”目录。
+
     3. 设置环境变量，配置程序编译依赖的头文件与库文件路径。
   
        设置以下环境变量后，编译脚本会根据“{DDK_PATH}环境变量值/acllib/include/acl”目录查找编译依赖的头文件，根据{NPU_HOST_LIB}环境变量指向的目录查找编译依赖的库文件。“$HOME/Ascend”请替换“Ascend-cann-toolkit”包的实际安装路径。
@@ -164,74 +143,13 @@
        
        您可以登录对应的环境，执行“uname -a”命令查询其操作系统的架构。
 
-- 运行环境上环境变量配置
-  
-  -   若运行环境上安装的“Ascend-cann-toolkit”包，环境变量设置如下：
-  
-      ```
-      . ${HOME}/Ascend/ascend-toolkit/set_env.sh
-      ```
-  
-  -   若运行环境上安装的“Ascend-cann-nnrt”包，环境变量设置如下：
-  
-      ```
-      . ${HOME}/Ascend/nnrt/set_env.sh
-      ```
-  
-  -   若运行环境上安装的“Ascend-cann-nnae”包，环境变量设置如下：
-  
-      ```
-      . ${HOME}/Ascend/nnae/set_env.sh
-      ```
-  
-    “$HOME/Ascend”请替换相关软件包的实际安装路径。
-  
-
-
-
-## 编译运行<a name="section183454368119"></a>
-
-1.  模型转换。
-    1.  以运行用户登录开发环境。
-
-    2.  准备数据。
-
-        您可以从以下链接中获取ResNet-50网络的模型文件（\*.prototxt）、预训练模型文件（\*.caffemodel），并以运行用户将获取的文件上传至开发环境的“样例目录/caffe\_model“目录下。如果目录不存在，需要自行创建。
-
-        -   从gitee上获取：单击[Link](https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/resnet50/ATC_resnet50_caffe_AE)，查看README.md，查找获取原始模型的链接。
-        -   从GitHub上获取：单击[Link](https://github.com/ascend/modelzoo/tree/master/contrib/TensorFlow/Research/cv/resnet50/ATC_resnet50_caffe_AE)，查看README.md，查找获取原始模型的链接。
-
-    3.  将ResNet-50网络转换为适配昇腾AI处理器的离线模型（\*.om文件），转换模型时，需配置色域转换参数，用于将YUV420SP格式的图片转换为RGB格式的图片。
-
-        切换到样例目录，执行如下命令：
-
-        ```
-        atc --model=caffe_model/resnet50.prototxt --weight=caffe_model/resnet50.caffemodel --framework=0 --soc_version=Ascend310 --insert_op_conf=caffe_model/aipp.cfg --output=model/resnet50_aipp 
-        ```
-
-        -   --model：原始模型文件路径。
-        -   --weight：权重文件路径。
-        -   --framework：原始框架类型。0：表示Caffe；1：表示MindSpore；3：表示TensorFlow；5：表示ONNX。
-        -   --soc\_version：昇腾AI处理器的版本。进入“CANN软件安装目录/compiler/data/platform_config”目录，".ini"文件的文件名即为昇腾AI处理器的版本，请根据实际情况选择。
-
-        -   --insert\_op\_conf：插入AIPP（AI Preprocessing）算子的配置文件路径，用于在AI Core上完成图像预处理，包括改变图像尺寸、色域转换（转换图像格式）、减均值/乘系数（改变图像像素），数据处理之后再进行真正的模型推理。
-        -   --output：生成的resnet50\_aipp.om文件存放在“样例目录/model“目录下。建议使用命令中的默认设置，否则在编译代码前，您还需要修改sample\_process.cpp中的omModelPath参数值。
-
-            ```
-            const char* omModelPath = "../model/resnet50_aipp.om";
-            ```
-
-
-
-2.  编译代码。
-    1.  以运行用户登录开发环境。
-    2.  切换到样例目录，创建目录用于存放编译文件，例如，本文中，创建的目录为“build/intermediates/host“。
+    4.  切换到样例目录，创建目录用于存放编译文件，例如，本文中，创建的目录为“build/intermediates/host“。
 
         ```
         mkdir -p build/intermediates/host
         ```
 
-    3.  切换到“build/intermediates/host“目录，执行**cmake**生成编译文件。
+    5.  切换到“build/intermediates/host“目录，执行**cmake**生成编译文件。
 
         “../../../src“表示CMakeLists.txt文件所在的目录，请根据实际目录层级修改。
 
@@ -253,26 +171,13 @@
             ```
 
 
-    4.  执行**make**命令，生成的可执行文件main在“样例目录/out“目录下。
+    6.  执行**make**命令，生成的可执行文件main在“样例目录/out“目录下。
 
         ```
         make
         ```
 
-
-3.  准备输入图片。
-
-    请从以下链接获取该样例的输入图片，并以运行用户将获取的文件上传至开发环境的“样例目录/data“目录下。如果目录不存在，需自行创建。
-
-    [https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/dvpp\_vpc\_8192x8192\_nv12.yuv](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/dvpp_vpc_8192x8192_nv12.yuv)
-
-    [https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/persian\_cat\_1024\_1536\_283.jpg](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/persian_cat_1024_1536_283.jpg)
-
-    [https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/wood\_rabbit\_1024\_1061\_330.jpg](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/wood_rabbit_1024_1061_330.jpg)
-
-    [https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/wood\_rabbit\_1024\_1068\_nv12.yuv](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/wood_rabbit_1024_1068_nv12.yuv)
-
-4.  运行应用。
+3.  运行应用。
     1.  以运行用户将开发环境的样例目录及目录下的文件上传到运行环境（Host），例如“$HOME/acl\_vpc\_jpege\_resnet50”。
     2.  以运行用户登录运行环境（Host）。
     3.  切换到可执行文件main所在的目录，例如“$HOME/acl\_vpc\_jpege\_resnet50/out”，给该目录下的main文件加执行权限。
@@ -283,13 +188,16 @@
 
     4.  切换到可执行文件main所在的目录，例如“$HOME/acl\_vpc\_jpege\_resnet50/out”，运行可执行文件。
 
+         >**说明：** 
+         >类别标签和类别的对应关系与训练模型时使用的数据集有关，本样例使用的模型是基于imagenet数据集进行训练的，您可以在互联网上查阅imagenet数据集的标签及类别的对应关系，例如，可单击[Link](https://blog.csdn.net/weixin_44676081/article/details/106755135)查看。
+
         1.  将两张\*.jpg格式的解码成两张YUV420SP NV12格式的图片，缩放，再进行模型推理，分别得到两张图片的推理结果。
 
             ```
             ./main 0
             ```
 
-            执行结果示例如下，提示信息中的classType表示类别标识、top1表示该分类的最大置信度、top5表示最大的5个置信度之和，这些值可能会根据版本、环境有所不同，请以实际情况为准：
+            执行结果示例如下，提示信息中的classType表示类别标签、top1表示该分类的最大置信度、top5表示最大的5个置信度之和，这些值可能会根据版本、环境有所不同，请以实际情况为准：
 
             ```
             [INFO] acl init success
@@ -328,7 +236,7 @@
             ./main 1
             ```
 
-            执行结果示例如下，提示信息中的classType表示类别标识、top1表示该分类的最大置信度、top5表示最大的5个置信度之和，这些值可能会根据版本、环境有所不同，请以实际情况为准：
+            执行结果示例如下，提示信息中的classType表示类别标签、top1表示该分类的最大置信度、top5表示最大的5个置信度之和，这些值可能会根据版本、环境有所不同，请以实际情况为准：
 
             ```
             [INFO] acl init success
@@ -367,7 +275,7 @@
             ./main 2
             ```
 
-            执行结果示例如下，提示信息中的classType表示类别标识、top1表示该分类的最大置信度、top5表示最大的5个置信度之和，这些值可能会根据版本、环境有所不同，请以实际情况为准：
+            执行结果示例如下，提示信息中的classType表示类别标签、top1表示该分类的最大置信度、top5表示最大的5个置信度之和，这些值可能会根据版本、环境有所不同，请以实际情况为准：
 
             ```
             [INFO] acl init success
@@ -391,7 +299,7 @@
             [INFO] call vpcCropAndPaste
             [INFO] Process dvpp success
             [INFO] model execute success
-            [INFO] result : classType[331], top1[0.670898], top5[0.963564]
+            [INFO] result : classType[331], top1[xxxxxx], top5[xxxxxx]
             [INFO]---------------------------------------------
             [INFO] Unload model success, modelId is 1
             [INFO] execute sample success
@@ -457,4 +365,67 @@
         -   dvpp\_vpc\_4000x4000\_nv12.yuv：dvpp\_vpc\_8192x8192\_nv12.yuv图片缩放后的结果图片。
 
 
+
+## 关键接口介绍<a name="section6271153719394"></a>
+
+在该样例中，涉及的关键功能点及其接口介绍，如下所示：
+
+-   **初始化**
+    -   调用aclInit接口初始化AscendCL配置。
+    -   调用aclFinalize接口实现AscendCL去初始化。
+
+-   **Device管理**
+    -   调用aclrtSetDevice接口指定用于运算的Device。
+    -   调用aclrtGetRunMode接口获取昇腾AI软件栈的运行模式，根据运行模式的不同，内部处理流程不同。
+    -   调用aclrtResetDevice接口复位当前运算的Device，回收Device上的资源。
+
+-   **Context管理**
+    -   调用aclrtCreateContext接口创建Context。
+    -   调用aclrtDestroyContext接口销毁Context。
+
+-   **Stream管理**
+    -   调用aclrtCreateStream接口创建Stream。
+    -   调用aclrtDestroyStream接口销毁Stream。
+    -   调用aclrtSynchronizeStream接口阻塞程序运行，直到指定stream中的所有任务都完成。
+
+-   **内存管理**
+    -   调用aclrtMallocHost接口申请Host上内存。
+    -   调用aclrtFreeHost释放Host上的内存。
+    -   调用aclrtMalloc接口申请Device上的内存。
+    -   调用aclrtFree接口释放Device上的内存。
+    -   执行数据预处理时，若需要申请Device上的内存存放输入或输出数据，需调用acldvppMalloc申请内存、调用acldvppFree接口释放内存。
+
+-   **数据传输**
+
+    调用aclrtMemcpy接口通过内存复制的方式实现数据传输。
+
+-   **数据预处理**
+    -   图片编码
+
+        调用acldvppJpegEncodeAsync接口将YUV420SP格式的图片编码为\*.jpg格式的图片。
+
+    -   图片解码
+
+        调用acldvppJpegDecodeAsync接口将\*.jpg图片解码成YUV420SP格式图片。
+
+    -   缩放
+
+        调用acldvppVpcResizeAsync接口对YUV420SP格式的输入图片进行缩放。
+
+    -   抠图
+
+        调用acldvppVpcCropAsync接口按指定区域从输入图片中抠图，再将抠的图片存放到输出内存中，作为输出图片。
+
+    -   抠图贴图
+
+        调用acldvppVpcCropAndPasteAsync接口按指定区域从输入图片中抠图，再将抠的图片贴到目标图片的指定位置，作为输出图片。
+
+
+-   **模型推理**
+    -   调用aclmdlLoadFromFileWithMem接口从\*.om文件加载模型。
+    -   调用aclmdlExecute接口执行模型推理。
+
+        推理前，通过\*.om文件中的色域转换参数将YUV420SP格式的图片转换为RGB格式的图片。
+
+    -   调用aclmdlUnload接口卸载模型。
 

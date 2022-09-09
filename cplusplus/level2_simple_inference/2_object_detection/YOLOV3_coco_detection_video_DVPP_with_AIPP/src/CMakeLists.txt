@@ -40,9 +40,10 @@ endif()
 
 # Header path
 include_directories(
-    $ENV{INSTALL_DIR}/acllib/include/
-    $ENV{THIRDPART_PATH}/include/
     ../inc/
+    $ENV{INSTALL_DIR}/acllib/include/
+	$ENV{THIRDPART_PATH}/include/
+    $ENV{THIRDPART_PATH}/include/acllite
 )
 
 # add host lib path
@@ -53,11 +54,7 @@ link_directories(
 )
 
 add_executable(main
-        utils.cpp
-        dvpp_process.cpp
-        model_process.cpp
         sample_process.cpp
-        decode.cpp
         main.cpp)
 
 if (${CMAKE_HOST_SYSTEM_NAME} MATCHES "Windows")

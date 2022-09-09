@@ -1,10 +1,10 @@
-tf_model="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/YOLOV3_VOC_detection_picture/yolov3_tf.pb"
-aipp_cfg="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/YOLOV3_VOC_detection_picture/insert_op.cfg"
+tf_model="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/YOLOV3_VOC_detection_picture/yolov3_tf.pb"
+aipp_cfg="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/YOLOV3_VOC_detection_picture/insert_op.cfg"
 model_name="yolov3"
 
-data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/YOLOV3_VOC_detection_picture/test_image/"
+data_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/YOLOV3_VOC_detection_picture/test_image/"
 data_name="boat.jpg"
-verify_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/YOLOV3_VOC_detection_picture/verify_image/"
+verify_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/YOLOV3_VOC_detection_picture/verify_image/"
 verify_name="verify_boat.jpg"
 project_name="cplusplus_YOLOV3_VOC_detection_picture"
 

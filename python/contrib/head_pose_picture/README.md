@@ -39,10 +39,10 @@ git clone https://github.com/Ascend/samples.git
 
 | **Model**  |  **How to Obtain** |
 | ---------- |  ----------------- |
-| WHENet_b2_a1_modified.om | `wget -nc --no-check-certificate 'https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/head_pose_picture/moWHENet_b2_a1_modifiedt_v2.om' -O model/moWHENet_b2_a1_modifiedt_v2.om`  |
-| yolo_model.om | `wget -nc --no-check-certificate 'https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/head_pose_picture/yolo_model.om' -O model/yolo_model.om`  |
-| WHENet_b2_a1_modified.pb | `wget -nc --no-check-certificate 'https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/head_pose_picture/WHENet_b2_a1_modified.pb' -O model/WHENet_b2_a1_modified.pb`  |
-| yolo_model.pb | `wget -nc --no-check-certificate 'https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/head_pose_picture/yolo_model.pb' -O model/yolo_model.pb`  |
+| WHENet_b2_a1_modified.om | `wget -nc --no-check-certificate 'https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/head_pose_picture/moWHENet_b2_a1_modifiedt_v2.om' -O model/moWHENet_b2_a1_modifiedt_v2.om`  |
+| yolo_model.om | `wget -nc --no-check-certificate 'https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/head_pose_picture/yolo_model.om' -O model/yolo_model.om`  |
+| WHENet_b2_a1_modified.pb | `wget -nc --no-check-certificate 'https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/head_pose_picture/WHENet_b2_a1_modified.pb' -O model/WHENet_b2_a1_modified.pb`  |
+| yolo_model.pb | `wget -nc --no-check-certificate 'https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/head_pose_picture/yolo_model.pb' -O model/yolo_model.pb`  |
 
    ![Icon-note.gif](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif) **NOTE**
    >- `WHENet_b2_a1_modified.om` and `yolo_model.om` offline models you can use out-of-the-box without model conversion. If you use this then you can skip the next step on model conversion.
@@ -71,7 +71,7 @@ git clone https://github.com/Ascend/samples.git
    - ### Download Sample Image
      ```
      cd $HOME/samples/python/contrib/head_pose_picture/
-     wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/head_pose_picture/test.jpg -O data/test.jpg
+     wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/head_pose_picture/test.jpg -O data/test.jpg
      ```
 
    - ### Test Sample Image

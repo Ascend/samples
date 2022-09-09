@@ -1,7 +1,7 @@
 /**
  * ============================================================================
  *
- * Copyright (C) 2018, Hisilicon Technologies Co., Ltd. All Rights Reserved.
+ * Copyright (c) Huawei Technologies Co., Ltd. 2020-2022. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,6 +30,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * ============================================================================
  */
+#ifndef CAMERA_CAPTURE_H
+#define CAMERA_CAPTURE_H
 #pragma once
 
 #include "AclLiteUtils.h"
@@ -49,7 +51,7 @@ public:
     AclLiteError Read(ImageData& frame);
     AclLiteError Close();
 
-    AclLiteError Open();  
+    AclLiteError Open();
     bool IsAccessible(uint32_t id);
     AclLiteError Set(StreamProperty key, int value);
     uint32_t Get(StreamProperty key);
@@ -68,3 +70,4 @@ private:
     uint32_t size_;
     uint32_t fps_;
 };
+#endif

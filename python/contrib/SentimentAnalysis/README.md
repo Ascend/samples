@@ -16,7 +16,7 @@
 
     ```shell
     cd $HOME/AscendProjects
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/200dk/SentimentAnalysis.zip
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/200dk/SentimentAnalysis.zip
     unzip SentimentAnalysis.zip
     ```
     

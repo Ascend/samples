@@ -1,5 +1,5 @@
 /**
-* Copyright 2020 Huawei Technologies Co., Ltd
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2022. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -18,31 +18,33 @@
 */
 
 #include <iostream>
-#include <stdlib.h>
+#include <cstdlib>
 #include <dirent.h>
 #include <sys/time.h>
-
 #include "acllite/AclLiteVideoProc.h"
-#include "do_process.h"
+#include "video_encoder.h"
 
 using namespace std;
 
-AclLiteVideoProc* OpenVideoCapture(int argc, char *argv[]) {
-    if (argc > 2) {
+AclLiteVideoProc* OpenVideoCapture(int argc, char *argv[])
+{
+    int paramNum = 2;
+    int paramInputPath = 1;
+    if (argc > paramNum) {
         ACLLITE_LOG_ERROR("Too many arg, only allow no arg or one arg, "
                         "which is carmera id, video file or rtsp address");
         return nullptr;
     }
-    if (argc == 1) {
+    if (argc == paramInputPath) {
         return new AclLiteVideoProc();
     }
 
-    string param = string(argv[1]);
+    string param = string(argv[paramInputPath]);
     if (IsDigitStr(param)) {
         int cameraId = atoi(param.c_str());
         if ((cameraId < 0) || (cameraId >= CAMERA_ID_INVALID)) {
             ACLLITE_LOG_ERROR("Invalid camera id arg %s, only allow %d and %d",
-                            param.c_str(), CAMERA_ID_0, CAMERA_ID_1);
+                              param.c_str(), CAMERA_ID_0, CAMERA_ID_1);
             return nullptr;
         }
         return new AclLiteVideoProc(cameraId);
@@ -62,18 +64,13 @@ AclLiteVideoProc* OpenVideoCapture(int argc, char *argv[]) {
     return nullptr;
 }
 
-int main(int argc, char *argv[]) {  
-    DoProcess detect;
-
-    if (ACLLITE_OK != detect.Init()) {
-        ACLLITE_LOG_ERROR("init failed");
-        return ACLLITE_ERROR;
-    }
-
+int main(int argc, char *argv[])
+{
+    VideoEncoder videoEncode;
     AclLiteVideoProc* cap = OpenVideoCapture(argc, argv);
     if (cap == nullptr) return ACLLITE_ERROR;
 
-    if(!cap->IsOpened()) {
+    if (!cap->IsOpened()) {
         delete cap;
         ACLLITE_LOG_ERROR("Failed to open video");
         return ACLLITE_ERROR;
@@ -81,16 +78,19 @@ int main(int argc, char *argv[]) {
 
     uint32_t frame_width = cap->Get(FRAME_WIDTH);
     uint32_t frame_height = cap->Get(FRAME_HEIGHT);
-    detect.Set(frame_width, frame_height);
+    if (ACLLITE_OK != videoEncode.Init(frame_width, frame_height)) {
+        ACLLITE_LOG_ERROR("videoEncode init failed");
+        return ACLLITE_ERROR;
+    }
 
     int i = 0;
-    while(1) {
+    while (1) {
         ImageData image;
         AclLiteError ret = cap->Read(image);
         if (ret != ACLLITE_OK) {
             break;
         }
-        ret = detect.Process(image);
+        ret = videoEncode.VideoEncode(image);
         if (ret != ACLLITE_OK) {
             ACLLITE_LOG_ERROR("process failed, return %d", ret);
             break;

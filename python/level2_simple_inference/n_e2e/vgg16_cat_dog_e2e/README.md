@@ -376,8 +376,8 @@ tf.train.write_graph(min_graph, "model", "vgg16_cat_dog.pb", as_text=False)
    
       ```
       cd $HOME/samples/python/level2_simple_inference/1_classification/vgg16_cat_dog_picture/data
-      wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/vgg16_cat_dog/test_image/cat.jpg
-      wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/vgg16_cat_dog/test_image/dog.jpg
+      wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/vgg16_cat_dog/test_image/cat.jpg
+      wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/vgg16_cat_dog/test_image/dog.jpg
       ```
 
 ### 案例运行

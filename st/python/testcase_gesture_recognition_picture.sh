@@ -1,11 +1,11 @@
-caffe_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/gesture_recognition/resnet18_gesture.caffemodel"
-caffe_prototxt="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/gesture_recognition/resnet18_gesture.prototxt"
-aipp_cfg="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/gesture_recognition/insert_op.cfg"
+caffe_model="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/gesture_recognition/resnet18_gesture.caffemodel"
+caffe_prototxt="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/gesture_recognition/resnet18_gesture.prototxt"
+aipp_cfg="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/gesture_recognition/insert_op.cfg"
 model_name="gesture_yuv"
 
-data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/gesture_recognition/test_image/"
+data_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/gesture_recognition/test_image/"
 data_name="test1.jpg"
-verify_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/gesture_recognition/verify_image/"
+verify_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/gesture_recognition/verify_image/"
 project_name="gesture_recognition_picture"
 verify_name="verify_test1.jpg"
 

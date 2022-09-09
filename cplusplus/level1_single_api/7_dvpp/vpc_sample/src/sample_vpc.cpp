@@ -265,19 +265,15 @@ int32_t test_entry_single_chnl(TEST_FUNC test_func)
         return s32Ret;
     }
 
-    if (g_run_mode == ACL_HOST) {
-        s32Ret = acl_init();
-        if (s32Ret != HI_SUCCESS) {
-            return s32Ret;
-        }
+    s32Ret = acl_init();
+    if (s32Ret != HI_SUCCESS) {
+        return s32Ret;
     }
 
     s32Ret = hi_mpi_sys_init();
     if (s32Ret != HI_SUCCESS) {
         SAMPLE_PRT("hi_mpi_sys_init failed, ret = %#x!\n", s32Ret);
-        if (g_run_mode == ACL_HOST) {
-            acl_deinit();
-        }
+        acl_deinit();
         return s32Ret;
     }
 
@@ -289,9 +285,7 @@ int32_t test_entry_single_chnl(TEST_FUNC test_func)
     if (s32Ret != HI_SUCCESS) {
         SAMPLE_PRT("Call hi_mpi_vpc_sys_create_chn failed, ret = %#x\n", s32Ret);
         hi_mpi_sys_exit();
-        if (g_run_mode == ACL_HOST) {
-            acl_deinit();
-        }
+        acl_deinit();
         return s32Ret;
     }
 
@@ -323,9 +317,7 @@ int32_t test_entry_single_chnl(TEST_FUNC test_func)
     }
 
     hi_mpi_sys_exit();
-    if (g_run_mode == ACL_HOST) {
-        acl_deinit();
-    }
+    acl_deinit();
 
     if (s32Ret == HI_SUCCESS) {
         SAMPLE_PRT("program exit normally!\n");

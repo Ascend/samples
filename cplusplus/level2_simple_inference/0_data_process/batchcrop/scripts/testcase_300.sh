@@ -1,4 +1,4 @@
-data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/"
+data_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/aclsample/"
 
 version=$1
 

@@ -909,7 +909,7 @@ class HelloThread : public AclLiteThread
                 break;
             case MSG_HELLO:
                 cout << *str << endl;
-                SendMessage(kMainThreadId, MSG_APP_EXIT, nullptr);
+                SendMessage(g_MainThreadId, MSG_APP_EXIT, nullptr);
                 break;
             default:
                 ACLLITE_LOG_ERROR("Preprocess thread receive unknow msg %d", msgId);

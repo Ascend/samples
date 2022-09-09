@@ -1,7 +1,7 @@
 /**
  * ============================================================================
  *
- * Copyright (C) 2018, Hisilicon Technologies Co., Ltd. All Rights Reserved.
+ * Copyright (c) Huawei Technologies Co., Ltd. 2020-2022. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,9 +30,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * ============================================================================
  */
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <malloc.h>
 #include <unistd.h>
 #include <sys/prctl.h>
@@ -51,8 +50,8 @@ using namespace std;
 namespace {
     const int64_t kUsec = 1000000;
     const uint32_t kDecodeFrameQueueSize = 256;
-    const int kDecodeQueueOpWait = 10000; //  decode wait 10ms/frame
-    const int kFrameEnQueueRetryTimes = 1000; //  max wait time for the frame to enter in queue
+    const int kDecodeQueueOpWait = 10000; // decode wait 10ms/frame
+    const int kFrameEnQueueRetryTimes = 1000; // max wait time for the frame to enter in queue
     const int kQueueOpRetryTimes = 1000;
     const int kOutputJamWait = 10000;
     const int kInvalidTpye = -1;
@@ -82,19 +81,21 @@ namespace {
     const uint32_t kOneSecUs = 1000 * 1000;
 }
 
-FFmpegDecoder::FFmpegDecoder(const std::string& streamName)
-:streamName_(streamName){
+FFmpegDecoder::FFmpegDecoder(const std::string& streamName):streamName_(streamName)
+{
     rtspTransport_.assign(kTcp.c_str());
     isFinished_ = false;
     isStop_ = false;
     GetVideoInfo();
 }
 
-void FFmpegDecoder::SetTransport(const std::string& transportType) {
+void FFmpegDecoder::SetTransport(const std::string& transportType)
+{
     rtspTransport_.assign(transportType.c_str());
 };
 
-int FFmpegDecoder::GetVideoIndex(AVFormatContext* avFormatContext) {
+int FFmpegDecoder::GetVideoIndex(AVFormatContext* avFormatContext)
+{
     if (avFormatContext == nullptr) { // verify input pointer
         return kInvalidVideoIndex;
     }
@@ -110,16 +111,17 @@ int FFmpegDecoder::GetVideoIndex(AVFormatContext* avFormatContext) {
     return kInvalidVideoIndex;
 }
 
-void FFmpegDecoder::InitVideoStreamFilter(const AVBitStreamFilter*& videoFilter) {
+void FFmpegDecoder::InitVideoStreamFilter(const AVBitStreamFilter*& videoFilter)
+{
     if (videoType_ == AV_CODEC_ID_H264) { // check video type is h264
         videoFilter = av_bsf_get_by_name("h264_mp4toannexb");
-    }
-    else { // the video type is h265
+    } else { // the video type is h265
         videoFilter = av_bsf_get_by_name("hevc_mp4toannexb");
     }
 }
 
-void FFmpegDecoder::SetDictForRtsp(AVDictionary*& avdic) {
+void FFmpegDecoder::SetDictForRtsp(AVDictionary*& avdic)
+{
     ACLLITE_LOG_INFO("Set parameters for %s", streamName_.c_str());
 
     av_dict_set(&avdic, kRtspTransport.c_str(), rtspTransport_.c_str(), kNoFlag);
@@ -132,7 +134,8 @@ void FFmpegDecoder::SetDictForRtsp(AVDictionary*& avdic) {
     ACLLITE_LOG_INFO("Set parameters for %s end", streamName_.c_str());
 }
 
-bool FFmpegDecoder::OpenVideo(AVFormatContext*& avFormatContext) {
+bool FFmpegDecoder::OpenVideo(AVFormatContext*& avFormatContext)
+{
     bool ret = true;
     AVDictionary* avdic = nullptr;
 
@@ -141,14 +144,14 @@ bool FFmpegDecoder::OpenVideo(AVFormatContext*& avFormatContext) {
     ACLLITE_LOG_INFO("Open video %s ...", streamName_.c_str());
     SetDictForRtsp(avdic);
     int openRet = avformat_open_input(&avFormatContext,
-                                       streamName_.c_str(), nullptr,
-                                       &avdic);
+                                      streamName_.c_str(), nullptr,
+                                      &avdic);
     if (openRet < 0) { // check open video result
         char buf_error[kErrorBufferSize];
         av_strerror(openRet, buf_error, kErrorBufferSize);
 
         ACLLITE_LOG_ERROR("Could not open video:%s, return :%d, error info:%s",
-                      streamName_.c_str(), openRet, buf_error);
+                          streamName_.c_str(), openRet, buf_error);
         ret = false;
     }
 
@@ -159,10 +162,11 @@ bool FFmpegDecoder::OpenVideo(AVFormatContext*& avFormatContext) {
     return ret;
 }
 
-bool FFmpegDecoder::InitVideoParams(int videoIndex, 
-                                        AVFormatContext* avFormatContext,
-                                        AVBSFContext*& bsfCtx) {
-    const AVBitStreamFilter* videoFilter;
+bool FFmpegDecoder::InitVideoParams(int videoIndex,
+                                    AVFormatContext* avFormatContext,
+                                    AVBSFContext*& bsfCtx)
+{
+    const AVBitStreamFilter* videoFilter = nullptr;
     InitVideoStreamFilter(videoFilter);
     if (videoFilter == nullptr) { // check video fileter is nullptr
         ACLLITE_LOG_ERROR("Unkonw bitstream filter, videoFilter is nullptr!");
@@ -193,8 +197,9 @@ bool FFmpegDecoder::InitVideoParams(int videoIndex,
     return true;
 }
 
-void FFmpegDecoder::Decode(FrameProcessCallBack callback, 
-                               void *callbackParam) {
+void FFmpegDecoder::Decode(FrameProcessCallBack callback,
+                           void *callbackParam)
+{
     ACLLITE_LOG_INFO("Start ffmpeg decode video %s ...", streamName_.c_str());
     avformat_network_init(); // init network
 
@@ -249,7 +254,8 @@ void FFmpegDecoder::Decode(FrameProcessCallBack callback,
     ACLLITE_LOG_INFO("Ffmpeg decoder %s finished", streamName_.c_str());
 }
 
-void FFmpegDecoder::GetVideoInfo() {
+void FFmpegDecoder::GetVideoInfo()
+{
     avformat_network_init(); // init network
     AVFormatContext* avFormatContext = avformat_alloc_context();
     bool ret = OpenVideo(avFormatContext);
@@ -258,17 +264,16 @@ void FFmpegDecoder::GetVideoInfo() {
         return;
     }
 
-    if (avformat_find_stream_info(avFormatContext,NULL)<0) {
-		ACLLITE_LOG_ERROR("Get stream info of %s failed", streamName_.c_str());
-		return;
-	}
+    if (avformat_find_stream_info(avFormatContext, NULL)<0) {
+        ACLLITE_LOG_ERROR("Get stream info of %s failed", streamName_.c_str());
+        return;
+    }
 
     int videoIndex = GetVideoIndex(avFormatContext);
     if (videoIndex == kInvalidVideoIndex) { // check video index is valid
         ACLLITE_LOG_ERROR("Video index is %d, current media stream has no "
-                        "video info:%s",
-                        kInvalidVideoIndex, streamName_.c_str());
-
+                          "video info:%s",
+                          kInvalidVideoIndex, streamName_.c_str());
         avformat_close_input(&avFormatContext);
         return;
     }
@@ -279,8 +284,7 @@ void FFmpegDecoder::GetVideoInfo() {
     frameHeight_ = inStream->codecpar->height;
     if (inStream->avg_frame_rate.den) {
         fps_ = inStream->avg_frame_rate.num / inStream->avg_frame_rate.den;
-    }
-    else {
+    } else {
         fps_ = kDefaultStreamFps;
     }
 
@@ -290,52 +294,45 @@ void FFmpegDecoder::GetVideoInfo() {
     avformat_close_input(&avFormatContext);
 
     ACLLITE_LOG_INFO("Video %s, type %d, profile %d, width:%d, height:%d, fps:%d",
-                 streamName_.c_str(), videoType_, profile_, frameWidth_, frameHeight_, fps_);
+                     streamName_.c_str(), videoType_, profile_, frameWidth_, frameHeight_, fps_);
     return;
-}                                                                   
+}
 
-VideoCapture::VideoCapture(const std::string& videoName, int32_t deviceId, aclrtContext context) :
-  isStop_(false),
-  isReleased_(false),
-  isJam_(false),
-  streamType_(STREAM_VIDEO),
-  status_(DECODE_UNINIT),
-  deviceId_(deviceId),
-  context_(context),
-  channelId_(INVALID_CHANNEL_ID),
-  streamFormat_(H264_MAIN_LEVEL),
-  frameId_(0),
-  finFrameCnt_(0),
-  lastDecodeTime_(0),
-  fpsInterval_(0),
-  streamName_(videoName), 
-  ffmpegDecoder_(nullptr),
-  dvppVdec_(nullptr),
-  frameImageQueue_(kDecodeFrameQueueSize) {
+VideoCapture::VideoCapture(const std::string& videoName, int32_t deviceId, aclrtContext context)
+    :isStop_(false), isReleased_(false), isJam_(false),
+    streamType_(STREAM_VIDEO), status_(DECODE_UNINIT),
+    deviceId_(deviceId), context_(context),
+    channelId_(INVALID_CHANNEL_ID), streamFormat_(H264_MAIN_LEVEL),
+    frameId_(0), finFrameCnt_(0), lastDecodeTime_(0),
+    fpsInterval_(0), streamName_(videoName), ffmpegDecoder_(nullptr),
+    dvppVdec_(nullptr), frameImageQueue_(kDecodeFrameQueueSize)
+{
     if (IsRtspAddr(videoName)) {
         streamType_ = STREAM_RTSP;
     }
 }
 
-VideoCapture::~VideoCapture() {
+VideoCapture::~VideoCapture()
+{
     DestroyResource();
 }
 
-void VideoCapture::DestroyResource() {
-    if (isReleased_) return;    
-    //1. stop ffmpeg
+void VideoCapture::DestroyResource()
+{
+    if (isReleased_) return;
+    // 1. stop ffmpeg
     isStop_ = true;
     ffmpegDecoder_->StopDecode();
     while ((status_ >= DECODE_START) && (status_ < DECODE_FFMPEG_FINISHED)) {
         usleep(kWaitDecodeFinishInterval);
     }
-    //2. delete ffmpeg decoder
+    // 2. delete ffmpeg decoder
     delete ffmpegDecoder_;
-    ffmpegDecoder_ = nullptr;    
-    //3. release dvpp vdec
+    ffmpegDecoder_ = nullptr;
+    // 3. release dvpp vdec
     delete dvppVdec_;
     dvppVdec_ = nullptr;
-    //4. release image memory in decode output queue
+    // 4. release image memory in decode output queue
     do {
         shared_ptr<ImageData> frame = FrameImageOutQueue(true);
         if (frame == nullptr) {
@@ -345,17 +342,18 @@ void VideoCapture::DestroyResource() {
         if (frame->data != nullptr) {
             acldvppFree(frame->data.get());
             frame->data = nullptr;
-        }       
-    }while(1);
-    //5. release channel id
+        }
+    } while (1);
+    // 5. release channel id
     channelIdGenerator[deviceId_].ReleaseChannelId(channelId_);
 
     isReleased_ = true;
 }
 
-AclLiteError VideoCapture::InitResource() {
+AclLiteError VideoCapture::InitResource()
+{
     aclError aclRet;
-    //use current thread context default
+    // use current thread context default
     if (context_ == nullptr) {
         aclRet = aclrtGetCurrentContext(&context_);
         if ((aclRet != ACL_SUCCESS) || (context_ == nullptr)) {
@@ -363,105 +361,108 @@ AclLiteError VideoCapture::InitResource() {
             return ACLLITE_ERROR_GET_ACL_CONTEXT;
         }
     }
-    //Get current run mode
+    // Get current run mode
     aclRet = aclrtGetRunMode(&runMode_);
     if (aclRet != ACL_SUCCESS) {
         ACLLITE_LOG_ERROR("acl get run mode failed");
         return ACLLITE_ERROR_GET_RUM_MODE;
-    } 
+    }
 
-    return ACLLITE_OK;  
+    return ACLLITE_OK;
 }
 
-AclLiteError VideoCapture::InitVdecDecoder() {
-    //Generate a unique channel id for video decoder
+AclLiteError VideoCapture::InitVdecDecoder()
+{
+    // Generate a unique channel id for video decoder
     channelId_ = channelIdGenerator[deviceId_].GenerateChannelId();
     if (channelId_ == INVALID_CHANNEL_ID) {
         ACLLITE_LOG_ERROR("Decoder number excessive %d", VIDEO_CHANNEL_MAX);
         return ACLLITE_ERROR_TOO_MANY_VIDEO_DECODERS;
     }
 
-    //Create dvpp vdec to decode h26x data
-    dvppVdec_ = new VdecHelper(channelId_, ffmpegDecoder_->GetFrameWidth(), 
-                                ffmpegDecoder_->GetFrameHeight(), 
-                                streamFormat_, VideoCapture::DvppVdecCallback); 
+    // Create dvpp vdec to decode h26x data
+    dvppVdec_ = new VdecHelper(channelId_, ffmpegDecoder_->GetFrameWidth(),
+                               ffmpegDecoder_->GetFrameHeight(),
+                               streamFormat_, VideoCapture::DvppVdecCallback);
     AclLiteError ret = dvppVdec_->Init();
     if (ret != ACLLITE_OK) {
         ACLLITE_LOG_ERROR("Dvpp vdec init failed");
     }
 
-    return ret; 
+    return ret;
 }
 
-AclLiteError VideoCapture::InitFFmpegDecoder() {
-    //Create ffmpeg decoder to parse video stream to h26x frame data
+AclLiteError VideoCapture::InitFFmpegDecoder()
+{
+    // Create ffmpeg decoder to parse video stream to h26x frame data
     ffmpegDecoder_ = new FFmpegDecoder(streamName_);
     if (kInvalidTpye == GetVdecType()) {
-        this->SetStatus(DECODE_ERROR);        
+        this->SetStatus(DECODE_ERROR);
         delete ffmpegDecoder_;
         ACLLITE_LOG_ERROR("Video %s type is invalid", streamName_.c_str());
         return ACLLITE_ERROR_FFMPEG_DECODER_INIT;
-    } 
+    }
 
-    //Get video fps, if no fps, use 1 as default
+    // Get video fps, if no fps, use 1 as default
     int fps =  ffmpegDecoder_->GetFps();
     if (fps == 0) {
         fps = kDefaultFps;
-        ACLLITE_LOG_INFO("Video %s fps is 0, change to %d", 
-                       streamName_.c_str(), fps);
+        ACLLITE_LOG_INFO("Video %s fps is 0, change to %d",
+                         streamName_.c_str(), fps);
     }
-    //Cal the frame interval time(us)
+    // Cal the frame interval time(us)
     fpsInterval_ = kUsec / fps;
 
     return ACLLITE_OK;
 }
 
-AclLiteError VideoCapture::Open() {
-    //Open video stream, if open failed before, return error directly
-    if (status_ == DECODE_ERROR) 
+AclLiteError VideoCapture::Open()
+{
+    // Open video stream, if open failed before, return error directly
+    if (status_ == DECODE_ERROR)
         return ACLLITE_ERROR_OPEN_VIDEO_UNREADY;
-    //If open ok already
+    // If open ok already
     if (status_ != DECODE_UNINIT)
         return ACLLITE_OK;
-    //Init acl resource
+    // Init acl resource
     AclLiteError ret = InitResource();
     if (ret != ACLLITE_OK) {
         this->SetStatus(DECODE_ERROR);
-        ACLLITE_LOG_ERROR("Open %s failed for init resource error: %d", 
-                        streamName_.c_str(), ret);
+        ACLLITE_LOG_ERROR("Open %s failed for init resource error: %d",
+                          streamName_.c_str(), ret);
         return ret;
     }
-    //Init ffmpeg decoder
+    // Init ffmpeg decoder
     ret = InitFFmpegDecoder();
     if (ret != ACLLITE_OK) {
         this->SetStatus(DECODE_ERROR);
-        ACLLITE_LOG_ERROR("Open %s failed for init ffmpeg error: %d", 
-                        streamName_.c_str(), ret);
+        ACLLITE_LOG_ERROR("Open %s failed for init ffmpeg error: %d",
+                          streamName_.c_str(), ret);
         return ret;
     }
-    //Init dvpp vdec decoder
+    // Init dvpp vdec decoder
     ret = InitVdecDecoder();
     if (ret != ACLLITE_OK) {
         this->SetStatus(DECODE_ERROR);
-        ACLLITE_LOG_ERROR("Open %s failed for init vdec error: %d", 
-                        streamName_.c_str(), ret);
+        ACLLITE_LOG_ERROR("Open %s failed for init vdec error: %d",
+                          streamName_.c_str(), ret);
         return ret;
     }
-    //Set init ok
+    // Set init ok
     this->SetStatus(DECODE_READY);
     ACLLITE_LOG_INFO("Video %s decode init ok", streamName_.c_str());
-    
     return ACLLITE_OK;
 }
 
-int VideoCapture::GetVdecType() {
-    //VDEC only support H265 main level，264 baseline level，main level，high level
+int VideoCapture::GetVdecType()
+{
+    // VDEC only support H265 main level，264 baseline level，main level，high level
     int type = ffmpegDecoder_->GetVideoType();
     int profile = ffmpegDecoder_->GetProfile();
-    if (type == AV_CODEC_ID_HEVC) {        
-        streamFormat_ = H265_MAIN_LEVEL;         
+    if (type == AV_CODEC_ID_HEVC) {
+        streamFormat_ = H265_MAIN_LEVEL;
     } else if (type == AV_CODEC_ID_H264) {
-        switch(profile) {
+        switch (profile) {
             case FF_PROFILE_H264_BASELINE:
                 streamFormat_ = H264_BASELINE_LEVEL;
                 break;
@@ -482,7 +483,7 @@ int VideoCapture::GetVdecType() {
                 break;
             default:
                 ACLLITE_LOG_INFO("Not support h264 profile %d, use as mp", profile);
-                streamFormat_ = H264_MAIN_LEVEL; 
+                streamFormat_ = H264_MAIN_LEVEL;
                 break;
         }
     } else {
@@ -493,12 +494,12 @@ int VideoCapture::GetVdecType() {
     return streamFormat_;
 }
 
-//dvpp vdec callback
-void VideoCapture::DvppVdecCallback(acldvppStreamDesc *input, 
-                                   acldvppPicDesc *output, void *userData)
+// dvpp vdec callback
+void VideoCapture::DvppVdecCallback(acldvppStreamDesc *input,
+                                    acldvppPicDesc *output, void *userData)
 {
     VideoCapture* decoder = (VideoCapture*)userData;
-    //Get decoded image parameters
+    // Get decoded image parameters
     shared_ptr<ImageData> image = make_shared<ImageData>();
     image->format = acldvppGetPicDescFormat(output);
     image->width = acldvppGetPicDescWidth(output);
@@ -510,9 +511,9 @@ void VideoCapture::DvppVdecCallback(acldvppStreamDesc *input,
     void* vdecOutBufferDev = acldvppGetPicDescData(output);
     image->data = SHARED_PTR_DVPP_BUF(vdecOutBufferDev);
 
-    //Put the decoded image to queue for read
+    // Put the decoded image to queue for read
     decoder->ProcessDecodedImage(image);
-    //Release resouce
+    // Release resouce
     aclError ret = acldvppDestroyPicDesc(output);
     if (ret != ACL_SUCCESS) {
         ACLLITE_LOG_ERROR("fail to destroy pic desc, error %d", ret);
@@ -523,7 +524,6 @@ void VideoCapture::DvppVdecCallback(acldvppStreamDesc *input,
         if (inputBuf != nullptr) {
             acldvppFree(inputBuf);
         }
-        
         aclError ret = acldvppDestroyStreamDesc(input);
         if (ret != ACL_SUCCESS) {
             ACLLITE_LOG_ERROR("fail to destroy input stream desc");
@@ -531,13 +531,14 @@ void VideoCapture::DvppVdecCallback(acldvppStreamDesc *input,
     }
 }
 
-void VideoCapture::ProcessDecodedImage(shared_ptr<ImageData> frameData) {
+void VideoCapture::ProcessDecodedImage(shared_ptr<ImageData> frameData)
+{
     finFrameCnt_++;
     if (YUV420SP_SIZE(frameData->width, frameData->height) != frameData->size) {
         ACLLITE_LOG_ERROR("Invalid decoded frame parameter, "
-                        "width %d, height %d, size %d, buffer %p",
-                        frameData->width, frameData->height, 
-                        frameData->size, frameData->data.get());
+                          "width %d, height %d, size %d, buffer %p",
+                          frameData->width, frameData->height,
+                          frameData->size, frameData->data.get());
         return;
     }
 
@@ -545,76 +546,75 @@ void VideoCapture::ProcessDecodedImage(shared_ptr<ImageData> frameData) {
 
     if ((status_ == DECODE_FFMPEG_FINISHED) && (finFrameCnt_ >= frameId_)) {
         ACLLITE_LOG_INFO("Last frame decoded by dvpp, change status to %d",
-                       DECODE_DVPP_FINISHED);
+                         DECODE_DVPP_FINISHED);
         this->SetStatus(DECODE_DVPP_FINISHED);
-    }    
+    }
 }
 
-AclLiteError VideoCapture::FrameImageEnQueue(shared_ptr<ImageData> frameData) {
+AclLiteError VideoCapture::FrameImageEnQueue(shared_ptr<ImageData> frameData)
+{
     for (int count = 0; count < kFrameEnQueueRetryTimes; count++) {
-        if (frameImageQueue_.Push(frameData)) 
+        if (frameImageQueue_.Push(frameData))
             return ACLLITE_OK;
-        usleep(kDecodeQueueOpWait); 
+        usleep(kDecodeQueueOpWait);
     }
-    ACLLITE_LOG_ERROR("Video %s lost decoded image for queue full", 
-	                streamName_.c_str());
+    ACLLITE_LOG_ERROR("Video %s lost decoded image for queue full",
+                      streamName_.c_str());
 
     return ACLLITE_ERROR_VDEC_QUEUE_FULL;
 }
 
-//start decoder
-void VideoCapture::StartFrameDecoder() {
+// start decoder
+void VideoCapture::StartFrameDecoder()
+{
     if (status_ == DECODE_READY) {
-
         decodeThread_ = thread(FrameDecodeThreadFunction, (void*)this);
         decodeThread_.detach();
-
         status_ = DECODE_START;
     }
 }
 
-//ffmpeg decoder entry
-void VideoCapture::FrameDecodeThreadFunction(void* decoderSelf) {
-    VideoCapture* thisPtr =  (VideoCapture*)decoderSelf;
+// ffmpeg decoder entry
+void VideoCapture::FrameDecodeThreadFunction(void* decoderSelf)
+{
+    VideoCapture* thisPtr = (VideoCapture*)decoderSelf;
 
     aclError aclRet = thisPtr->SetAclContext();
     if (aclRet != ACL_SUCCESS) {
-        ACLLITE_LOG_ERROR("Set frame decoder context failed, errorno:%d",
-                        aclRet);
+        ACLLITE_LOG_ERROR("Set frame decoder context failed, errorno:%d", aclRet);
         return;
     }
-    //start decode until complete
+    // start decode until complete
     thisPtr->FFmpegDecode();
-    if (thisPtr->IsStop())  {
+    if (thisPtr->IsStop()) {
         thisPtr->SetStatus(DECODE_FINISHED);
         return;
     }
-    thisPtr->SetStatus(DECODE_FFMPEG_FINISHED);  
-    //when ffmpeg decode finish, send eos to vdec
-    shared_ptr<FrameData> videoFrame = make_shared<FrameData>();    
+    thisPtr->SetStatus(DECODE_FFMPEG_FINISHED);
+    // when ffmpeg decode finish, send eos to vdec
+    shared_ptr<FrameData> videoFrame = make_shared<FrameData>();
     videoFrame->isFinished = true;
     videoFrame->data = nullptr;
-    videoFrame->size = 0;   
-    thisPtr->dvppVdec_->Process(videoFrame, decoderSelf); 
-    
-    while((thisPtr->GetStatus() != DECODE_DVPP_FINISHED) && !thisPtr->IsStop()) {
+    videoFrame->size = 0;
+    thisPtr->dvppVdec_->Process(videoFrame, decoderSelf);
+    while ((thisPtr->GetStatus() != DECODE_DVPP_FINISHED) && !thisPtr->IsStop()) {
         usleep(kWaitDecodeFinishInterval);
-    } 
+    }
 }
 
-//callback of ffmpeg decode frame 
-AclLiteError VideoCapture::FrameDecodeCallback(void* decoder, void* frameData, 
-                                            int frameSize) {
+// callback of ffmpeg decode frame
+AclLiteError VideoCapture::FrameDecodeCallback(void* decoder, void* frameData, int frameSize)
+{
     if ((frameData == NULL) || (frameSize == 0)) {
         ACLLITE_LOG_ERROR("Frame data is null");
         return ACLLITE_ERROR_H26X_FRAME;
     }
 
-    //copy data to dvpp memory
+    // copy data to dvpp memory
     VideoCapture* videoDecoder = (VideoCapture*)decoder;
 
     void* buffer = CopyDataToDevice(frameData, frameSize,
-                                    videoDecoder->runMode_, MEMORY_DVPP);  
+                                    videoDecoder->runMode_, MEMORY_DVPP);
     if (buffer == nullptr) {
         ACLLITE_LOG_ERROR("Copy frame h26x data to dvpp failed");
         return ACLLITE_ERROR_COPY_DATA;
@@ -625,33 +625,34 @@ AclLiteError VideoCapture::FrameDecodeCallback(void* decoder, void* frameData,
     videoFrame->frameId = videoDecoder->frameId_;
     videoFrame->data = buffer;
     videoFrame->size = frameSize;
-    //decode data by dvpp vdec 
+    // decode data by dvpp vdec
     AclLiteError ret = videoDecoder->dvppVdec_->Process(videoFrame, decoder);
     if (ret != ACLLITE_OK) {
-        ACLLITE_LOG_ERROR("Dvpp vdec process %dth frame failed, error:%d", 
-                        videoDecoder->frameId_, ret);
+        ACLLITE_LOG_ERROR("Dvpp vdec process %dth frame failed, error:%d",
+                          videoDecoder->frameId_, ret);
         return ret;
     }
 
-    //wait next frame by fps
+    // wait next frame by fps
     videoDecoder->SleeptoNextFrameTime();
     return ACLLITE_OK;
 }
 
-void VideoCapture::SleeptoNextFrameTime() {
-    while(frameImageQueue_.Size() >  kReadSlow) {
+void VideoCapture::SleeptoNextFrameTime()
+{
+    while (frameImageQueue_.Size() >  kReadSlow) {
         if (isStop_) {
             return;
         }
         usleep(kOutputJamWait);
-    }           
+    }
 
     if (streamType_ == STREAM_RTSP) {
         usleep(0);
         return;
     }
 
-    //get current time
+    // get current time
     timeval tv;
     gettimeofday(&tv, 0);
     int64_t now = (int64_t)tv.tv_sec * 1000000 + (int64_t)tv.tv_usec;
@@ -660,44 +661,46 @@ void VideoCapture::SleeptoNextFrameTime() {
         lastDecodeTime_ = now;
         return;
     }
-    //calculate interval
+    // calculate interval
     int64_t lastInterval = (now - lastDecodeTime_);
     int64_t sleepTime = (lastInterval < fpsInterval_)?(fpsInterval_-lastInterval):0;
-    //consume rest time
+    // consume rest time
     usleep(sleepTime);
-    //record start time of next frame
+    // record start time of next frame
     gettimeofday(&tv, 0);
     lastDecodeTime_ = (int64_t)tv.tv_sec * 1000000 + (int64_t)tv.tv_usec;
 
     return;
 }
 
-//check decoder status
-bool VideoCapture::IsOpened() { 
+// check decoder status
+bool VideoCapture::IsOpened()
+{
     ACLLITE_LOG_INFO("Video %s decode status %d", streamName_.c_str(), status_);
     return (status_ == DECODE_READY) || (status_ == DECODE_START);
 }
 
-//read decoded frame
-AclLiteError VideoCapture::Read(ImageData& image) {
-    //return nullptr,if decode fail/finish
+// read decoded frame
+AclLiteError VideoCapture::Read(ImageData& image)
+{
+    // return nullptr,if decode fail/finish
     if (status_ == DECODE_ERROR) {
-        ACLLITE_LOG_ERROR("Read failed for decode %s failed", 
-                        streamName_.c_str()); 
+        ACLLITE_LOG_ERROR("Read failed for decode %s failed",
+                          streamName_.c_str());
         return ACLLITE_ERROR_VIDEO_DECODER_STATUS;
     }
 
     if (status_ == DECODE_FINISHED) {
-        ACLLITE_LOG_INFO("No frame to read for decode %s finished", 
-                        streamName_.c_str()); 
+        ACLLITE_LOG_INFO("No frame to read for decode %s finished",
+                         streamName_.c_str());
         return ACLLITE_ERROR_DECODE_FINISH;
     }
-    //start decode if status is ok
+    // start decode if status is ok
     if (status_ == DECODE_READY) {
         StartFrameDecoder();
         usleep(kDecodeQueueOpWait);
     }
-    //read frame from decode queue
+    // read frame from decode queue
     bool noWait = (status_ == DECODE_DVPP_FINISHED);
     shared_ptr<ImageData> frame = FrameImageOutQueue(noWait);
     if (noWait && (frame == nullptr)) {
@@ -722,7 +725,8 @@ AclLiteError VideoCapture::Read(ImageData& image) {
     return ACLLITE_OK;
 }
 
-shared_ptr<ImageData> VideoCapture::FrameImageOutQueue(bool noWait) {
+shared_ptr<ImageData> VideoCapture::FrameImageOutQueue(bool noWait)
+{
     shared_ptr<ImageData> image = frameImageQueue_.Pop();
 
     if (noWait || (image != nullptr)) return image;
@@ -738,9 +742,10 @@ shared_ptr<ImageData> VideoCapture::FrameImageOutQueue(bool noWait) {
     return nullptr;
 }
 
-AclLiteError VideoCapture::Set(StreamProperty key, int value) {
+AclLiteError VideoCapture::Set(StreamProperty key, int value)
+{
     AclLiteError ret = ACLLITE_OK;
-    switch(key) {
+    switch (key) {
         case OUTPUT_IMAGE_FORMAT:
             ret = dvppVdec_->SetFormat(value);
             break;
@@ -750,33 +755,35 @@ AclLiteError VideoCapture::Set(StreamProperty key, int value) {
         default:
             ret = ACLLITE_ERROR_UNSURPPORT_PROPERTY;
             ACLLITE_LOG_ERROR("Unsurpport property %d to set for video %s",
-                            (int)key, streamName_.c_str());
+                              (int)key, streamName_.c_str());
             break;
     }
 
     return ret;
 }
 
-AclLiteError VideoCapture::SetRtspTransType(uint32_t transCode) {
+AclLiteError VideoCapture::SetRtspTransType(uint32_t transCode)
+{
     AclLiteError ret = ACLLITE_OK;
 
     if (transCode == RTSP_TRANS_UDP)
         ffmpegDecoder_->SetTransport(RTSP_TRANSPORT_UDP);
-    else if (transCode == RTSP_TRANS_TCP)    
+    else if (transCode == RTSP_TRANS_TCP)
         ffmpegDecoder_->SetTransport(RTSP_TRANSPORT_TCP);
     else {
         ret = ACLLITE_ERROR_INVALID_PROPERTY_VALUE;
-        ACLLITE_LOG_ERROR("Unsurport rtsp transport property value %d", 
-                        transCode);
+        ACLLITE_LOG_ERROR("Unsurport rtsp transport property value %d",
+                          transCode);
     }
 
     return ret;
 }
 
-uint32_t VideoCapture::Get(StreamProperty key) {
+uint32_t VideoCapture::Get(StreamProperty key)
+{
     uint32_t value = 0;
 
-    switch(key){
+    switch (key) {
         case FRAME_WIDTH:
             value = ffmpegDecoder_->GetFrameWidth();
             break;
@@ -794,7 +801,8 @@ uint32_t VideoCapture::Get(StreamProperty key) {
     return value;
 }
 
-AclLiteError VideoCapture::SetAclContext() {
+AclLiteError VideoCapture::SetAclContext()
+{
     if (context_ == nullptr) {
         ACLLITE_LOG_ERROR("Video decoder context is null");
         return ACLLITE_ERROR_SET_ACL_CONTEXT;
@@ -806,10 +814,11 @@ AclLiteError VideoCapture::SetAclContext() {
         return ACLLITE_ERROR_SET_ACL_CONTEXT;
     }
     
-    return ACLLITE_OK;   
+    return ACLLITE_OK;
 }
 
-AclLiteError VideoCapture::Close() {
+AclLiteError VideoCapture::Close()
+{
     DestroyResource();
     return ACLLITE_OK;
 }

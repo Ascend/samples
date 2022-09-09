@@ -14,7 +14,7 @@ function main()
   fi
   
   if [ ! -f "${ModelPath}/../data/001_in.png" ];then
-    wget -O ${ModelPath}/../data/001_in.png https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/DeRain/test_image/001_in.png --no-check-certificate
+    wget -O ${ModelPath}/../data/001_in.png https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/DeRain/test_image/001_in.png --no-check-certificate
   fi
 
   find_model DeRain.om

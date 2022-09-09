@@ -14,7 +14,7 @@ function main()
   fi
 
   if [ ! -f "${DataPath}/wood_rabbit_1024_1068_nv12.yuv" ];then
-    wget -O ${DataPath}/wood_rabbit_1024_1068_nv12.yuv https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/crop/wood_rabbit_1024_1068_nv12.yuv --no-check-certificate
+    wget -O ${DataPath}/wood_rabbit_1024_1068_nv12.yuv https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/crop/wood_rabbit_1024_1068_nv12.yuv --no-check-certificate
   fi
 
   build

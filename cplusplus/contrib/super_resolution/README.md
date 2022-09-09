@@ -53,8 +53,8 @@ Check whether the following requirements are met. If not, perform operations acc
    # To facilitate download, the commands for downloading the original model and converting the model are provided here. You can directly copy and run the commands. You can also refer to the above table to download the model from ModelZoo and manually convert it.  
    #The SRCNN model is used as an example.
    cd $HOME/samples/cplusplus/contrib/super_resolution/model     
-   wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/super_resolution/SRCNN/SRCNN.caffemodel
-   wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/super_resolution/SRCNN/SRCNN.prototxt
+   wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/super_resolution/SRCNN/SRCNN.caffemodel
+   wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/super_resolution/SRCNN/SRCNN.prototxt
    #SRCNN model:
    atc --model=./SRCNN.prototxt --weight=./SRCNN.caffemodel --framework=0 --input_format=NCHW --input_shape="data: 1, 1, 768, 768" --output=./SRCNN_768_768 --soc_version=Ascend310 --output_type=FP32
    #FSRCNN model:
@@ -89,7 +89,7 @@ bash sample_build.sh
 
 ### Result Viewing
 After the running is complete, an inferred image is generated in the **out/output** directory of the sample project. The comparison is as follows:    
-![Image of successful running](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/super_resolution/verify_image/image-20211108112404844.png)
+![Image of successful running](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/super_resolution/verify_image/image-20211108112404844.png)
 
 ### Common Errors
 For details about how to rectify the errors, see [Troubleshooting](https://github.com/Ascend/samples/wikis/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D/%E4%BB%8B%E7%BB%8D). If an error is not included in Wiki, submit an issue to the **samples** repository.

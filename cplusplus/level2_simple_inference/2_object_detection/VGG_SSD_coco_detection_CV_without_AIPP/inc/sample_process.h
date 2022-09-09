@@ -1,5 +1,5 @@
-/**
-* Copyright 2020 Huawei Technologies Co., Ltd
+/*
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -12,26 +12,28 @@
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 * See the License for the specific language governing permissions and
 * limitations under the License.
-
-* File sample_process.h
-* Description: handle acl resource
 */
-#pragma once
+
+#ifndef VGG_SSD_COCO_DETECTION_CV_WITHOUT_AIPP_INC_SAMPLE_PROCESS_H
+#define VGG_SSD_COCO_DETECTION_CV_WITHOUT_AIPP_INC_SAMPLE_PROCESS_H
+
+#include <memory>
 #include "utils.h"
 #include "acl/acl.h"
-#include <memory>
+
 
 template<class Type>
-std::shared_ptr<Type> MakeSharedNoThrow() {
-  try {
-    return std::make_shared<Type>();
-  } catch (...) {
-    return nullptr;
-  }
+std::shared_ptr<Type> MakeSharedNoThrow()
+{
+    try {
+        return std::make_shared<Type>();
+    } catch (...) {
+        return nullptr;
+    }
 }
 
 #define MAKE_SHARED_NO_THROW(memory, memory_type) \
-    memory = MakeSharedNoThrow<memory_type>();
+    memory = MakeSharedNoThrow<memory_type>()
 
 /**
 * SampleProcess
@@ -64,7 +66,8 @@ public:
 private:
     void DestroyResource();
 
-    int32_t deviceId_;
-    aclrtContext context_;
-    aclrtStream stream_;
+    int32_t g_deviceId;
+    aclrtContext g_context;
+    aclrtStream g_stream;
 };
+#endif

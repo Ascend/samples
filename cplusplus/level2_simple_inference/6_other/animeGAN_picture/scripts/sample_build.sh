@@ -14,7 +14,7 @@ function main()
   fi
 
   if [ ! -f "${ModelPath}/../data/mountain.jpg" ];then
-   wget -O ${ModelPath}/../data/mountain.jpg https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/animeGAN_picture/testImage.jpg --no-check-certificate
+   wget -O ${ModelPath}/../data/mountain.jpg https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/animeGAN_picture/testImage.jpg --no-check-certificate
   fi
 
   find_model AnimeGANv2_*.om

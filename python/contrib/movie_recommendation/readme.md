@@ -42,7 +42,7 @@
 
 2. 下载原始数据
     ```
-    针对推荐系统，需要对数据特征进行提取，首先下载链接中的代码 链接：https://c7xcode.obs.cn-north-4.myhuaweicloud.com/xidian/feature.tar
+    针对推荐系统，需要对数据特征进行提取，首先下载链接中的代码 链接：https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/xidian/feature.tar
     在安装好npu环境和外部环境以后
     按照如下步骤运行程序
 

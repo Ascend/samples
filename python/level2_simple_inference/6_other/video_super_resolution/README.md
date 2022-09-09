@@ -55,12 +55,12 @@ pip install ffmpeg_python
 2. Obtain the source model required by the application.
     |  **Model Name** |  **Model Description** |  **Download Link** |
     |---|---|---|
-    |  EDVR | Super-resolution inference model for videos. It is an EDVR model based on TensorFlow. |  [https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/video_super_resolution/EDVR_180_320.pb](https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/video_super_resolution/EDVR_180_320.pb)|
+    |  EDVR | Super-resolution inference model for videos. It is an EDVR model based on TensorFlow. |  [https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/video_super_resolution/EDVR_180_320.pb](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/video_super_resolution/EDVR_180_320.pb)|
     
     ```
     # To facilitate download, the commands for downloading the original model and converting the model are provided here. You can directly copy and run the commands.
     cd ${HOME}/samples/python/level2_simple_inference/6_other/video_super_resolution/model     
-    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/video_super_resolution/EDVR_180_320.pb        
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/video_super_resolution/EDVR_180_320.pb        
     atc --input_shape="L_input:1,5,180,320,3" --input_format=ND --output="EDVR_180_320" --soc_version=Ascend310 --framework=3 --model="./EDVR_180_320.pb" --output_type=FP32
     ```
 ```
@@ -69,7 +69,7 @@ pip install ffmpeg_python
 ```
     mkdir -p ${HOME}/samples/python/level2_simple_inference/6_other/video_super_resolution/data
     cd ${HOME}/samples/python/level2_simple_inference/6_other/video_super_resolution/data
-    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/video_super_resolution/low_resolution.mp4  
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/video_super_resolution/low_resolution.mp4  
     ```
 
 ### Sample Running

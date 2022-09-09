@@ -48,7 +48,7 @@
     ```
     # 为了方便下载，在这里直接给出原始模型下载及模型转换命令,可以直接拷贝执行。也可以参照上表在modelzoo中下载并手工转换，以了解更多细节。     
     cd ${HOME}/samples/cplusplus/level2_simple_inference/5_nlp/WAV_to_word/model    
-    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/Wav2word/Wav2word.pb  
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/Wav2word/Wav2word.pb  
     atc --input_shape="the_input:1,1600,200,1" --input_format=NHWC --output=voice --soc_version=Ascend310 --framework=3 --model="./Wav2word.pb"
     ```
 ### 样例部署

@@ -47,8 +47,8 @@ Check whether the following requirements are met. If not, perform operations acc
     ```
     # To facilitate download, the commands for downloading the original model and converting the model are provided here. You can directly copy and run the commands. You can also refer to the above table to download the model from ModelZoo and manually convert it.    
     cd $HOME/samples/python/level2_simple_inference/1_classification/inceptionv3_picture/model
-    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/InceptionV3/inceptionv3.onnx
-    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/InceptionV3/aipp_inceptionv3_pth.config
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/InceptionV3/inceptionv3.onnx
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/InceptionV3/aipp_inceptionv3_pth.config
     atc --model=./inceptionv3.onnx --framework=5 --output=InceptionV3 --soc_version=Ascend310 --insert_op_conf=./aipp_inceptionv3_pth.config --input_shape="actual_input_1:1,3,300,300" --input_format=NCHW
     ```
 
@@ -56,7 +56,7 @@ Check whether the following requirements are met. If not, perform operations acc
     ```
     Run the following commands to go to the data folder of the sample and download the corresponding test image:
     cd $HOME/samples/python/level2_simple_inference/1_classification/inceptionv3_picture/data
-    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/InceptionV3/pic/rabit.jpg
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/InceptionV3/pic/rabit.jpg
     cd ../src
     ```
 

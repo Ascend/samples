@@ -51,7 +51,7 @@
     ```
     # 执行以下命令，进入样例的data文件夹中，下载对应的测试图片。
     cd ${HOME}/samples/python/level2_simple_inference/n_e2e/ssd_mobilenetv2_picture/data
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/YOLOV3_coco_detection_picture/dog1_1024_683.jpg
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/YOLOV3_coco_detection_picture/dog1_1024_683.jpg
     cd ../src
     ```
 ### 样例运行

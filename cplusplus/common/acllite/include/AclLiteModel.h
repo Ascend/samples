@@ -1,5 +1,5 @@
 /**
-* Copyright 2020 Huawei Technologies Co., Ltd
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2022. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 * File model_process.h
 * Description: handle model process
 */
+#ifndef ACLLITE_MODEL_H
+#define ACLLITE_MODEL_H
 #pragma once
 #include <iostream>
 #include "AclLiteUtils.h"
@@ -37,8 +39,8 @@ public:
     AclLiteError CreateInput(void *input1, uint32_t input1size,
                              void* input2, uint32_t input2size);
     AclLiteError CreateInput(std::vector<DataInfo>& inputData);
-    AclLiteError Execute(std::vector<InferenceOutput>& inferOutputs, 
-                         void *data, uint32_t size, uint32_t batchsize=0);
+    AclLiteError Execute(std::vector<InferenceOutput>& inferOutputs,
+                         void *data, uint32_t size, uint32_t batchsize = 0);
     AclLiteError Execute(std::vector<InferenceOutput>& inferOutputs);
     size_t GetModelInputSize(int index);
     void DestroyInput();
@@ -49,18 +51,18 @@ private:
     AclLiteError LoadModelFromMem();
     AclLiteError SetDesc();
     AclLiteError CreateOutput();
-    AclLiteError AddDatasetBuffer(aclmdlDataset* dataset, 
+    AclLiteError AddDatasetBuffer(aclmdlDataset* dataset,
                                   void* buffer, uint32_t bufferSize);
     AclLiteError GetOutputItem(InferenceOutput& out,
                                uint32_t idx);
-    void Unload();    
+    void Unload();
     void DestroyDesc();
     void DestroyOutput();
     
 private:
     bool loadFlag_;    // model load flag
     bool isReleased_;    // model release flag
-    uint32_t modelId_;    //modelid
+    uint32_t modelId_;    // modelid
     size_t outputsNum_;
     size_t modelMemSize_;
     size_t modelWorkSize_;
@@ -70,7 +72,8 @@ private:
     void *modelWorkPtr_;
     void *modelWeightPtr_;
     aclmdlDesc *modelDesc_;
-    aclmdlDataset *input_;    //input dataset
-    aclmdlDataset *output_;    //output dataset
-    std::string modelPath_;    //model path
+    aclmdlDataset *input_;    // input dataset
+    aclmdlDataset *output_;    // output dataset
+    std::string modelPath_;    // model path
 };
+#endif

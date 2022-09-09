@@ -1,5 +1,5 @@
 /**
-* Copyright 2020 Huawei Technologies Co., Ltd
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2022. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 * File sample_process.h
 * Description: handle acl resource
 */
+#ifndef CAR_PARAMS_H
+#define CAR_PARAMS_H
 #pragma once
 
 #include <iostream>
@@ -31,12 +33,7 @@
 #include "opencv2/opencv.hpp"
 #include "opencv2/imgproc/types_c.h"
 #include "opencv2/highgui/highgui.hpp"
-
-#ifndef __ACLLITETYPE_H__
-#define __ACLLITETYPE_H__
 #define RGBF32_CHAN_SIZE(width, height) ((width) * (height) * 4)
-
-using namespace std;
 
 namespace {
 const int MSG_APP_START = 1;
@@ -50,12 +47,12 @@ const int MSG_ENCODE_FINISH = 8;
 const int MSG_PRESENT_AGENT_DISPLAY = 9;
 const int MSG_APP_EXIT = 10;
 
-const string kInferName = "inference";
-const string kDetectPreName = "detectPre";
-const string kDetectPostName = "detectPost";
-const string kClassifyPreName = "classifyPre";
-const string kClassifyPostName = "classifyPost";
-const string kPresentAgentDisplayName = "PresentAgentDisplay";
+const std::string kInferName = "inference";
+const std::string kDetectPreName = "detectPre";
+const std::string kDetectPostName = "detectPost";
+const std::string kClassifyPreName = "classifyPre";
+const std::string kClassifyPostName = "classifyPost";
+const std::string kPresentAgentDisplayName = "PresentAgentDisplay";
 }
 
 struct Rectangle {
@@ -84,9 +81,10 @@ struct CarDetectDataMsg {
     ImageData imageFrame;
     ImageData resizedFrame;
     cv::Mat frame;
-    vector<InferenceOutput> detectInferData;
-    vector<CarInfo> carInfo;
+    std::vector<InferenceOutput> detectInferData;
+    std::vector<CarInfo> carInfo;
     int flag;
-    vector<InferenceOutput> classifyInferData;
+    std::vector<InferenceOutput> classifyInferData;
 };
+
 #endif

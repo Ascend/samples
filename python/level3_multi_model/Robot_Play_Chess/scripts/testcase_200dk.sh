@@ -1,7 +1,7 @@
-pb_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/robot_play_chess/chess_ckpt_0804_vgg_99.pb"
+pb_model="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/robot_play_chess/chess_ckpt_0804_vgg_99.pb"
 
 model_name="chess_ckpt_0804_vgg_99_0"
-test_image="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/robot_play_chess/dis_img_0.jpg"
+test_image="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/robot_play_chess/dis_img_0.jpg"
 
 project_name="python_Robot_Play_Chess"
 version=$1

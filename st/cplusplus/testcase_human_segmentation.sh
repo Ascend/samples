@@ -1,12 +1,12 @@
 conf_file_name="human_segmentation.conf"
 
-tf_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/human_segmentation/human_segmentation.pb"
-aipp_cfg="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/human_segmentation/insert_op.cfg"
+tf_model="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/human_segmentation/human_segmentation.pb"
+aipp_cfg="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/human_segmentation/insert_op.cfg"
 
 model_name="human_segmentation"
 presenter_server_name="human_segmentation"
 conf_file_name="human_segmentation.conf"
-data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/human_segmentation/"
+data_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/human_segmentation/"
 data_name="person.mp4"
 project_name="cplusplus_human_segmentation_video"
 

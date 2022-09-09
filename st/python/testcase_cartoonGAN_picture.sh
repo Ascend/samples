@@ -1,10 +1,10 @@
-tf_model="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/cartoon/cartoonization.pb"
-aipp_cfg="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/cartoonGAN_picture/insert_op.cfg"
+tf_model="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/cartoon/cartoonization.pb"
+aipp_cfg="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/cartoonGAN_picture/insert_op.cfg"
 model_name="cartoonization"
 
-data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/cartoonGAN_picture/test_image/"
+data_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/cartoonGAN_picture/test_image/"
 data_name="test.jpg"
-verify_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/cartoonGAN_picture/verify_image/"
+verify_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/cartoonGAN_picture/verify_image/"
 verify_name="verify_test.jpg"
 project_name="python_cartoonGAN_picture"
 

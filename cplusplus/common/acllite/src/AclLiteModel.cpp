@@ -1,5 +1,5 @@
 /**
-* Copyright 2020 Huawei Technologies Co., Ltd
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2022. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -16,71 +16,45 @@
 * File model_process.cpp
 * Description: handle model process
 */
-#include "AclLiteModel.h"
 #include <iostream>
+#include "AclLiteModel.h"
 #include "AclLiteUtils.h"
 using namespace std;
 
-AclLiteModel::AclLiteModel():
-  loadFlag_(false),
-  isReleased_(false),
-  modelId_(0),
-  outputsNum_(0),
-  modelMemSize_(0),
-  modelWorkSize_(0), 
-  modelWeightSize_(0),
-  modelMemPtr_(nullptr),
-  modelWorkPtr_(nullptr),
-  modelWeightPtr_(nullptr),
-  modelDesc_(nullptr), 
-  input_(nullptr),
-  output_(nullptr),
-  modelPath_("") {
+AclLiteModel::AclLiteModel():loadFlag_(false), isReleased_(false),
+    modelId_(0), outputsNum_(0), modelMemSize_(0),
+    modelWorkSize_(0), modelWeightSize_(0), modelMemPtr_(nullptr),
+    modelWorkPtr_(nullptr), modelWeightPtr_(nullptr), modelDesc_(nullptr),
+    input_(nullptr), output_(nullptr), modelPath_("")
+{
 }
 
-AclLiteModel::AclLiteModel(const string& modelPath):
-  loadFlag_(false),
-  isReleased_(false),
-  modelId_(0),
-  outputsNum_(0),
-  modelMemSize_(0),
-  modelWorkSize_(0), 
-  modelWeightSize_(0),
-  modelMemPtr_(nullptr),
-  modelWorkPtr_(nullptr),
-  modelWeightPtr_(nullptr),
-  modelDesc_(nullptr), 
-  input_(nullptr),
-  output_(nullptr),
-  modelPath_(modelPath) {
+AclLiteModel::AclLiteModel(const string& modelPath):loadFlag_(false), isReleased_(false),
+    modelId_(0), outputsNum_(0), modelMemSize_(0),
+    modelWorkSize_(0), modelWeightSize_(0), modelMemPtr_(nullptr),
+    modelWorkPtr_(nullptr), modelWeightPtr_(nullptr), modelDesc_(nullptr),
+    input_(nullptr), output_(nullptr), modelPath_(modelPath)
+{
 }
 
-AclLiteModel::AclLiteModel(void *modelAddr, size_t modelSize):
-  loadFlag_(false),
-  isReleased_(false),
-  modelId_(0),
-  outputsNum_(0),
-  modelMemSize_(modelSize),
-  modelWorkSize_(0), 
-  modelWeightSize_(0),
-  modelMemPtr_(modelAddr),
-  modelWorkPtr_(nullptr),
-  modelWeightPtr_(nullptr),
-  modelDesc_(nullptr), 
-  input_(nullptr),
-  output_(nullptr),
-  modelPath_("") {
+AclLiteModel::AclLiteModel(void *modelAddr, size_t modelSize): loadFlag_(false), isReleased_(false),
+    modelId_(0), outputsNum_(0), modelMemSize_(modelSize),
+    modelWorkSize_(0), modelWeightSize_(0), modelMemPtr_(modelAddr),
+    modelWorkPtr_(nullptr), modelWeightPtr_(nullptr), modelDesc_(nullptr),
+    input_(nullptr), output_(nullptr), modelPath_("")
+{
 }
 
-AclLiteModel::~AclLiteModel() {
+AclLiteModel::~AclLiteModel()
+{
     DestroyResource();
 }
 
-void AclLiteModel::DestroyResource() {
+void AclLiteModel::DestroyResource()
+{
     if (isReleased_) {
         return;
     }
-    
     Unload();
     DestroyDesc();
     DestroyInput();
@@ -88,12 +62,13 @@ void AclLiteModel::DestroyResource() {
     isReleased_ = true;
 }
 
-AclLiteError AclLiteModel::Init() {
+AclLiteError AclLiteModel::Init()
+{
     aclError aclRet = aclrtGetRunMode(&runMode_);
     if (aclRet != ACL_SUCCESS) {
         ACLLITE_LOG_ERROR("acl get run mode failed");
         return ACLLITE_ERROR_GET_RUM_MODE;
-    } 
+    }
 
     AclLiteError ret = LoadModelFromFile(modelPath_);
     if (ret != ACLLITE_OK) {
@@ -118,19 +93,21 @@ AclLiteError AclLiteModel::Init() {
     return ACLLITE_OK;
 }
 
-AclLiteError AclLiteModel::Init(const string& modelPath) {
+AclLiteError AclLiteModel::Init(const string& modelPath)
+{
     modelPath_.assign(modelPath.c_str());
     return Init();
 }
 
-AclLiteError AclLiteModel::Init(void *modelAddr, size_t modelSize) {
+AclLiteError AclLiteModel::Init(void *modelAddr, size_t modelSize)
+{
     modelMemPtr_ = modelAddr;
     modelMemSize_ = modelSize;
     aclError aclRet = aclrtGetRunMode(&runMode_);
     if (aclRet != ACL_SUCCESS) {
         ACLLITE_LOG_ERROR("acl get run mode failed");
         return ACLLITE_ERROR_GET_RUM_MODE;
-    } 
+    }
 
     AclLiteError ret = LoadModelFromMem();
     if (ret != ACLLITE_OK) {
@@ -155,7 +132,8 @@ AclLiteError AclLiteModel::Init(void *modelAddr, size_t modelSize) {
     return ACLLITE_OK;
 }
 
-AclLiteError AclLiteModel::LoadModelFromFile(const string& modelPath) {
+AclLiteError AclLiteModel::LoadModelFromFile(const string& modelPath)
+{
     if (loadFlag_) {
         ACLLITE_LOG_ERROR("%s is loaded already", modelPath.c_str());
         return ACLLITE_ERROR_LOAD_MODEL_REPEATED;
@@ -163,7 +141,7 @@ AclLiteError AclLiteModel::LoadModelFromFile(const string& modelPath) {
 
     aclError ret = aclmdlLoadFromFile(modelPath.c_str(), &modelId_);
     if (ret != ACL_SUCCESS) {
-        ACLLITE_LOG_ERROR("Load model(%s) from file return %d", 
+        ACLLITE_LOG_ERROR("Load model(%s) from file return %d",
                           modelPath.c_str(), ret);
         return ACLLITE_ERROR_LOAD_MODEL;
     }
@@ -174,7 +152,8 @@ AclLiteError AclLiteModel::LoadModelFromFile(const string& modelPath) {
     return ACLLITE_OK;
 }
 
-AclLiteError AclLiteModel::LoadModelFromMem() {
+AclLiteError AclLiteModel::LoadModelFromMem()
+{
     if (loadFlag_) {
         ACLLITE_LOG_ERROR("Model is loaded already, address : %p", modelMemPtr_);
         return ACLLITE_ERROR_LOAD_MODEL_REPEATED;
@@ -182,28 +161,29 @@ AclLiteError AclLiteModel::LoadModelFromMem() {
 
     aclError ret = aclmdlLoadFromMem(modelMemPtr_, modelMemSize_, &modelId_);
     if (ret != ACL_SUCCESS) {
-        ACLLITE_LOG_ERROR("Load model from : %p failed, return %d", 
-                          modelMemPtr_ , ret);
+        ACLLITE_LOG_ERROR("Load model from : %p failed, return %d",
+                          modelMemPtr_, ret);
         return ACLLITE_ERROR_LOAD_MODEL;
     }
 
     loadFlag_ = true;
     ACLLITE_LOG_INFO("Load model from ：%p success", modelMemPtr_);
 
-    return ACLLITE_OK;        
+    return ACLLITE_OK;
 }
 
-AclLiteError AclLiteModel::SetDesc() {
+AclLiteError AclLiteModel::SetDesc()
+{
     modelDesc_ = aclmdlCreateDesc();
     if (modelDesc_ == nullptr) {
-        ACLLITE_LOG_ERROR("Create model(%s) description failed", 
+        ACLLITE_LOG_ERROR("Create model(%s) description failed",
                           modelPath_.c_str());
         return ACLLITE_ERROR_CREATE_MODEL_DESC;
     }
 
     aclError ret = aclmdlGetDesc(modelDesc_, modelId_);
     if (ret != ACL_SUCCESS) {
-        ACLLITE_LOG_ERROR("Get model(%s) description failed", 
+        ACLLITE_LOG_ERROR("Get model(%s) description failed",
                           modelPath_.c_str());
         return ACLLITE_ERROR_GET_MODEL_DESC;
     }
@@ -220,20 +200,22 @@ void AclLiteModel::DestroyDesc()
     }
 }
 
-AclLiteError AclLiteModel::CreateInput(void *input, uint32_t size) {
+AclLiteError AclLiteModel::CreateInput(void *input, uint32_t size)
+{
     vector<DataInfo> inputData = {{input, size}};
     return CreateInput(inputData);
 }
 
-AclLiteError AclLiteModel::CreateInput(void *input1, uint32_t input1size, 
-                                 void* input2, uint32_t input2size) {
+AclLiteError AclLiteModel::CreateInput(void *input1, uint32_t input1size,
+                                       void* input2, uint32_t input2size)
+{
     vector<DataInfo> inputData = {{input1, input1size}, {input2, input2size}};
     return CreateInput(inputData);
 }
 
-AclLiteError AclLiteModel::CreateInput(vector<DataInfo>& inputData) {
+AclLiteError AclLiteModel::CreateInput(vector<DataInfo>& inputData)
+{
     uint32_t dataNum = aclmdlGetNumInputs(modelDesc_);
-
     if (dataNum == 0) {
         ACLLITE_LOG_ERROR("Create input failed for no input data");
         return ACLLITE_ERROR_INVALID_ARGS;
@@ -269,12 +251,12 @@ AclLiteError AclLiteModel::CreateInput(vector<DataInfo>& inputData) {
         size_t modelInputSize = aclmdlGetInputSizeByIndex(modelDesc_, i);
         if (modelInputSize != inputData[i].size) {
             ACLLITE_LOG_WARNING("Input size verify failed "
-                                "input[%d] size: %ld, provide size : %d", 
+                                "input[%d] size: %ld, provide size : %d",
                                 i, modelInputSize, inputData[i].size);
         }
-        AclLiteError atlRet = AddDatasetBuffer(input_, 
-                                             inputData[i].data,
-                                             inputData[i].size);
+        AclLiteError atlRet = AddDatasetBuffer(input_,
+                                               inputData[i].data,
+                                               inputData[i].size);
         if (atlRet != ACLLITE_OK) {
             ACLLITE_LOG_ERROR("Create input failed for "
                               "add dataset buffer error %d", atlRet);
@@ -304,7 +286,7 @@ AclLiteError AclLiteModel::CreateOutput()
         size_t bufSize = aclmdlGetOutputSizeByIndex(modelDesc_, i);
 
         void *outputBuffer = nullptr;
-        aclError ret = aclrtMalloc(&outputBuffer, bufSize, 
+        aclError ret = aclrtMalloc(&outputBuffer, bufSize,
                                    ACL_MEM_MALLOC_NORMAL_ONLY);
         if (ret != ACL_SUCCESS) {
             ACLLITE_LOG_ERROR("Create output failed for malloc "
@@ -325,8 +307,9 @@ AclLiteError AclLiteModel::CreateOutput()
     return ACLLITE_OK;
 }
 
-AclLiteError AclLiteModel::AddDatasetBuffer(aclmdlDataset *dataset, 
-                                        void* buffer, uint32_t bufferSize) {
+AclLiteError AclLiteModel::AddDatasetBuffer(aclmdlDataset *dataset,
+                                            void* buffer, uint32_t bufferSize)
+{
     aclDataBuffer* dataBuf = aclCreateDataBuffer(buffer, bufferSize);
     if (dataBuf == nullptr) {
         ACLLITE_LOG_ERROR("Create data buffer error");
@@ -347,7 +330,8 @@ AclLiteError AclLiteModel::AddDatasetBuffer(aclmdlDataset *dataset,
     return ACLLITE_OK;
 }
 
-AclLiteError AclLiteModel::SetDynamicBatchSize(uint64_t batchSize){
+AclLiteError AclLiteModel::SetDynamicBatchSize(uint64_t batchSize)
+{
     size_t index;
     aclError ret = aclmdlGetInputIndexByName(modelDesc_, ACL_DYNAMIC_TENSOR_NAME, &index);
     if (ret != ACL_SUCCESS) {
@@ -364,14 +348,15 @@ AclLiteError AclLiteModel::SetDynamicBatchSize(uint64_t batchSize){
     return ACLLITE_OK;
 }
 
-AclLiteError AclLiteModel::Execute(vector<InferenceOutput>& inferOutputs, 
-                               void *data, uint32_t size, uint32_t batchsize) {
+AclLiteError AclLiteModel::Execute(vector<InferenceOutput>& inferOutputs,
+                                   void *data, uint32_t size, uint32_t batchsize)
+{
     AclLiteError ret = CreateInput(data, size);
     if (ret != ACLLITE_OK) {
         ACLLITE_LOG_ERROR("Create mode input dataset failed");
         return ret;
     }
-    if(batchsize){
+    if (batchsize) {
         SetDynamicBatchSize(batchsize);
     }
 
@@ -386,7 +371,8 @@ AclLiteError AclLiteModel::Execute(vector<InferenceOutput>& inferOutputs,
     return ACLLITE_OK;
 }
 
-AclLiteError AclLiteModel::Execute(vector<InferenceOutput>& inferOutputs) {
+AclLiteError AclLiteModel::Execute(vector<InferenceOutput>& inferOutputs)
+{
     aclError ret = aclmdlExecute(modelId_, input_, output_);
     if (ret != ACL_SUCCESS) {
         ACLLITE_LOG_ERROR("Execute model(%s) error:%d", modelPath_.c_str(), ret);
@@ -395,7 +381,7 @@ AclLiteError AclLiteModel::Execute(vector<InferenceOutput>& inferOutputs) {
 
     for (uint32_t i = 0; i < outputsNum_; i++) {
         InferenceOutput out;
-        AclLiteError ret = GetOutputItem(out, i); 
+        AclLiteError ret = GetOutputItem(out, i);
         if (ret != ACLLITE_OK) {
             ACLLITE_LOG_ERROR("Get the %dth interference output failed, "
                               "error: %d", i, ret);
@@ -407,8 +393,8 @@ AclLiteError AclLiteModel::Execute(vector<InferenceOutput>& inferOutputs) {
     return ACLLITE_OK;
 }
 
-AclLiteError AclLiteModel::GetOutputItem(InferenceOutput& out,
-                                     uint32_t idx) {
+AclLiteError AclLiteModel::GetOutputItem(InferenceOutput& out, uint32_t idx)
+{
     aclDataBuffer* dataBuffer = aclmdlGetDatasetBuffer(output_, idx);
     if (dataBuffer == nullptr) {
         ACLLITE_LOG_ERROR("Get the %dth dataset buffer from model "
@@ -430,7 +416,7 @@ AclLiteError AclLiteModel::GetOutputItem(InferenceOutput& out,
         return ACLLITE_ERROR_GET_DATA_BUFFER_SIZE;
     }
 
-    void* data = CopyDataToHost(dataBufferDev, bufferSize, 
+    void* data = CopyDataToHost(dataBufferDev, bufferSize,
                                 runMode_, MEMORY_NORMAL);
     if (data == nullptr) {
         ACLLITE_LOG_ERROR("Copy inference output to host failed");
@@ -458,7 +444,8 @@ void AclLiteModel::DestroyInput()
     input_ = nullptr;
 }
 
-size_t AclLiteModel::GetModelInputSize(int index){
+size_t AclLiteModel::GetModelInputSize(int index)
+{
     size_t modelInputSize = aclmdlGetInputSizeByIndex(modelDesc_, index);
     return modelInputSize;
 }
@@ -484,7 +471,7 @@ void AclLiteModel::DestroyOutput()
 void AclLiteModel::Unload()
 {
     if (!loadFlag_) {
-        ACLLITE_LOG_INFO("Model(%s) had not been loaded or unload already", 
+        ACLLITE_LOG_INFO("Model(%s) had not been loaded or unload already",
                          modelPath_.c_str());
         return;
     }

@@ -1,7 +1,7 @@
-tf_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/Wav2word/Wav2word.pb"
+tf_model="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/Wav2word/Wav2word.pb"
 model_name="voice"
 
-data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/WAV_to_word/"
+data_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/WAV_to_word/"
 data_name="nihao.wav"
 data_name2="xinpian.wav"
 project_name="cplusplus_WAV_to_word"

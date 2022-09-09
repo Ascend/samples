@@ -1,7 +1,7 @@
 /**
  * ============================================================================
  *
- * Copyright (C) 2018, Hisilicon Technologies Co., Ltd. All Rights Reserved.
+ * Copyright (c) Huawei Technologies Co., Ltd. 2020-2022. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,14 +30,14 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * ============================================================================
  */
-#include <stdio.h>
-#include <stdarg.h>
-#include <time.h>
+#include <cstdio>
+#include <cstdarg>
+#include <ctime>
 #include <memory>
 #include <sys/time.h>
 #include <unistd.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
 #include "AclLiteUtils.h"
 #include "AclLiteVideoProc.h"
 #include "VideoCapture.h"
@@ -48,41 +48,49 @@
 
 using namespace std;
 
-AclLiteVideoProc::AclLiteVideoProc():cap_(nullptr) {
+AclLiteVideoProc::AclLiteVideoProc():cap_(nullptr)
+{
 #ifdef ENABLE_BOARD_CAMARE
-    cap_ = new CameraCapture(1280, 720, 15);
+    int capWidth = 1280;
+    int capHeight = 720;
+    int capFps = 15;
+    cap_ = new CameraCapture(capWidth, capHeight, capFps);
     Open();
 #endif
 }
 
-AclLiteVideoProc::AclLiteVideoProc(uint32_t cameraId, uint32_t width, 
-                                     uint32_t height, uint32_t fps)
-:cap_(nullptr) {
+AclLiteVideoProc::AclLiteVideoProc(uint32_t cameraId, uint32_t width,
+                                   uint32_t height, uint32_t fps):cap_(nullptr)
+{
 #ifdef ENABLE_BOARD_CAMARE
     cap_ = new CameraCapture(cameraId, width, height, fps);
     Open();
 #endif
 }
 
-AclLiteVideoProc::AclLiteVideoProc(const string& videoPath, int32_t deviceId, aclrtContext context){
+AclLiteVideoProc::AclLiteVideoProc(const string& videoPath, int32_t deviceId, aclrtContext context)
+{
     cap_ = new VideoCapture(videoPath, deviceId, context);
     Open();
 }
 
-AclLiteVideoProc::AclLiteVideoProc(VencConfig& vencConfig, aclrtContext context){
+AclLiteVideoProc::AclLiteVideoProc(VencConfig& vencConfig, aclrtContext context)
+{
     cap_ = new VideoWriter(vencConfig, context);
     Open();
 }
 
-AclLiteVideoProc::~AclLiteVideoProc() {
+AclLiteVideoProc::~AclLiteVideoProc()
+{
     if (cap_ != nullptr) {
         Close();
         delete cap_;
         cap_ = nullptr;
-    }    
+    }
 }
 
-bool AclLiteVideoProc::IsOpened() {
+bool AclLiteVideoProc::IsOpened()
+{
     if (cap_ != nullptr) {
         return cap_->IsOpened();
     } else {
@@ -90,7 +98,8 @@ bool AclLiteVideoProc::IsOpened() {
     }
 }
 
-AclLiteError AclLiteVideoProc::Set(StreamProperty key, uint32_t value) {
+AclLiteError AclLiteVideoProc::Set(StreamProperty key, uint32_t value)
+{
     if (cap_ != nullptr) {
         return cap_->Set(key, value);
     } else {
@@ -98,7 +107,8 @@ AclLiteError AclLiteVideoProc::Set(StreamProperty key, uint32_t value) {
     }
 }
 
-uint32_t AclLiteVideoProc::Get(StreamProperty key) {
+uint32_t AclLiteVideoProc::Get(StreamProperty key)
+{
     if (cap_ != nullptr) {
         return cap_->Get(key);
     } else {
@@ -106,7 +116,8 @@ uint32_t AclLiteVideoProc::Get(StreamProperty key) {
     }
 }
 
-AclLiteError AclLiteVideoProc::Read(ImageData& frame) {
+AclLiteError AclLiteVideoProc::Read(ImageData& frame)
+{
     if (cap_ != nullptr) {
         return cap_->Read(frame);
     } else {
@@ -114,7 +125,8 @@ AclLiteError AclLiteVideoProc::Read(ImageData& frame) {
     }
 }
 
-AclLiteError AclLiteVideoProc::Close() {
+AclLiteError AclLiteVideoProc::Close()
+{
     if (cap_ != nullptr) {
         return cap_->Close();
     } else {
@@ -122,7 +134,8 @@ AclLiteError AclLiteVideoProc::Close() {
     }
 }
 
-AclLiteError AclLiteVideoProc::Open() {
+AclLiteError AclLiteVideoProc::Open()
+{
     if (cap_ != nullptr) {
         return cap_->Open();
     } else {

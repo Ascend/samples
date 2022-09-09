@@ -9,9 +9,9 @@ function main()
 {
     echo "[INFO] The sample starts to run"
 
-    running_command="./main "
+    running_command="./main"
     # start runing
-    running_picture
+    running
     if [ $? -ne 0 ];then
         return 1
     fi

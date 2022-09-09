@@ -13,8 +13,8 @@ function main()
     return 1
   fi
 
-  wget -O ${ModelPath}/../data/car1.jpg https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOV3_carColor_sample/data/car1.jpg --no-check-certificate
-  wget -O ${ModelPath}/../data/car2.jpg https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOV3_carColor_sample/data/car2.jpg --no-check-certificate
+  wget -O ${ModelPath}/../data/car1.jpg https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOV3_carColor_sample/data/car1.jpg --no-check-certificate
+  wget -O ${ModelPath}/../data/car2.jpg https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOV3_carColor_sample/data/car2.jpg --no-check-certificate
   
   find_model yolov3.om
   if [ $? -ne 0 ];then

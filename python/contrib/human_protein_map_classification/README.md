@@ -49,18 +49,18 @@ Check whether the following requirements are met. If not, perform operations acc
     ```
     # To facilitate download, the commands for downloading the original model and converting the model are provided here. You can directly copy and run the commands. You can also refer to the above table to download the model from ModelZoo and manually convert it.    
     cd ${HOME}/samples/python/contrib/gesture_recognition_picture/model    
-    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/gesture_recognition/resnet18_gesture.caffemodel    
-    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/gesture_recognition/resnet18_gesture.prototxt
-    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/gesture_recognition/insert_op.cfg
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/gesture_recognition/resnet18_gesture.caffemodel    
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/gesture_recognition/resnet18_gesture.prototxt
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/gesture_recognition/insert_op.cfg
     atc --model=./resnet18_gesture.prototxt --weight=./resnet18_gesture.caffemodel --framework=0 --output=gesture_yuv --soc_version=Ascend310 --insert_op_conf=./insert_op.cfg --input_shape="data:1,3,224,224" --input_format=NCHW
     ```
 3. Obtain the test images required by the sample.
     ```
     # Run the following commands to go to the data folder of the sample and download the corresponding test images:
     cd $HOME/samples/python/contrib/gesture_recognition_picture/data
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/gesture_recognition/test_image/test1.jpg
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/gesture_recognition/test_image/test2.jpg      
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/gesture_recognition/test_image/test3.jpg
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/gesture_recognition/test_image/test1.jpg
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/gesture_recognition/test_image/test2.jpg      
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/gesture_recognition/test_image/test3.jpg
     cd ../src
     ```
 ### Sample Running

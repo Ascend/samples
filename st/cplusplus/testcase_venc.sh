@@ -1,5 +1,5 @@
-data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/venc/"
-data_name="detection.mp4"
+data_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/venc/"
+data_name="dvpp_vpc_1920x1080_nv12.yuv"
 verify_name="out_video.h264"
 project_name="cplusplus_venc"
 
@@ -7,7 +7,7 @@ script_path_temp="$( cd "$(dirname $BASH_SOURCE)" ; pwd -P)"
 script_path=${script_path_temp}/../../cplusplus/level2_simple_inference/0_data_process/venc/scripts
 project_path=${script_path}/..
 common_script_dir=${script_path}/../../../../../common/
-run_command="./main ../data/detection.mp4"
+run_command="./main ../data/dvpp_vpc_1920x1080_nv12.yuv"
 
 . ${common_script_dir}/testcase_common.sh
 

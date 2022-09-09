@@ -1,10 +1,10 @@
-caffe_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/colorization/colorization.caffemodel"
-caffe_prototxt="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/colorization/colorization.prototxt"
+caffe_model="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/colorization/colorization.caffemodel"
+caffe_prototxt="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/colorization/colorization.prototxt"
 model_name="colorization_yuv"
 
-data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/colorization_picture-python/"
+data_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/colorization_picture-python/"
 data_name="dog.png"
-verify_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/colorization_picture-python/verify_image/"
+verify_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/colorization_picture-python/verify_image/"
 verify_name="verify_dog.png"
 project_name="python_colorization_picture"
 

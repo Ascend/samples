@@ -15,19 +15,19 @@ function main()
 
 
   if [ ! -f "${ModelPath}/../data/video1.mp4" ];then
-    wget -O ${ModelPath}/../data/video1.mp4 https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/YOLOV3_coco_detection_multi_thread_VENC/test_image/video1.mp4 --no-check-certificate
+    wget -O ${ModelPath}/../data/video1.mp4 https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/YOLOV3_coco_detection_multi_thread_VENC/test_image/video1.mp4 --no-check-certificate
   fi
   
   if [ ! -f "${ModelPath}/../data/video2.mp4" ];then
-    wget -O ${ModelPath}/../data/video2.mp4 https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/YOLOV3_coco_detection_multi_thread_VENC/test_image/video1.mp4 --no-check-certificate
+    wget -O ${ModelPath}/../data/video2.mp4 https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/YOLOV3_coco_detection_multi_thread_VENC/test_image/video1.mp4 --no-check-certificate
   fi
 
   if [ ! -f "${ModelPath}/../data/video3.mp4" ];then
-    wget -O ${ModelPath}/../data/video3.mp4 https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/YOLOV3_coco_detection_multi_thread_VENC/test_image/video1.mp4 --no-check-certificate
+    wget -O ${ModelPath}/../data/video3.mp4 https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/YOLOV3_coco_detection_multi_thread_VENC/test_image/video1.mp4 --no-check-certificate
   fi
 
   if [ ! -f "${ModelPath}/../data/video4.mp4" ];then
-    wget -O ${ModelPath}/../data/video4.mp4 https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/YOLOV3_coco_detection_multi_thread_VENC/test_image/video1.mp4 --no-check-certificate
+    wget -O ${ModelPath}/../data/video4.mp4 https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/YOLOV3_coco_detection_multi_thread_VENC/test_image/video1.mp4 --no-check-certificate
   fi
 
   find_model yolov3.om

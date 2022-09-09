@@ -1,9 +1,9 @@
-onnx_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOv4_onnx/yolov4_dynamic_bs.onnx"
+onnx_model="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOv4_onnx/yolov4_dynamic_bs.onnx"
 model_name="yolov4_bs1"
 project_name="YOLOV4_coco_detection_car_picture"
-data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/YOLOV4_coco_detection_car_picture/test_image/"
+data_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/YOLOV4_coco_detection_car_picture/test_image/"
 data_name="test.jpg"
-verify_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/YOLOV4_coco_detection_car_picture/verify_image/"
+verify_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/YOLOV4_coco_detection_car_picture/verify_image/"
 verify_name="verify_test.jpg"
 
 script_path_temp="$( cd "$(dirname $BASH_SOURCE)" ; pwd -P)"
@@ -28,7 +28,7 @@ function main() {
     #modelconvert
     cd ${project_path}/model
     if [ ! -f "${project_path}/model/yolov4_bs1.om" ];then
-        wget  https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOv4_onnx/yolov4_bs1.om --no-check-certificate
+        wget  https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOv4_onnx/yolov4_bs1.om --no-check-certificate
         if [ $? -ne 0 ];then
             return ${inferenceError}
         fi

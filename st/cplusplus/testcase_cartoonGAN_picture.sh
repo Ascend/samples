@@ -1,9 +1,9 @@
-tf_model="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/cartoon/cartoonization.pb"
+tf_model="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/cartoon/cartoonization.pb"
 model_name="cartoonization"
 
-data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/cartoonGAN_picture/test_image/"
+data_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/cartoonGAN_picture/test_image/"
 data_name="test.jpg"
-verify_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/cartoonGAN_picture/cplus/"
+verify_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/cartoonGAN_picture/cplus/"
 verify_name="verify_test.jpg"
 project_name="cplusplus_contrib_cartoonGAN_picture"
 

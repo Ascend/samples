@@ -46,7 +46,7 @@ Check whether the following requirements are met. If not, perform operations acc
       This model cannot be correctly converted in version 3.1.0. You can directly obtain the OM model for version 3.1.0.    
       ``` 
         cd $HOME/samples/cplusplus/contrib/cartoonGAN_picture/model
-        wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/cartoonGAN_picture/cplus/cartoonization.om
+        wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/cartoonGAN_picture/cplus/cartoonization.om
       ```
 
     - Version 3.0.0      
@@ -57,7 +57,7 @@ Check whether the following requirements are met. If not, perform operations acc
         ```
         # To facilitate download, the commands for downloading the original model and converting the model are provided here. You can directly copy and run the commands. You can also refer to the above table to download the model from ModelZoo and manually convert it.    
         cd $HOME/samples/cplusplus/contrib/cartoonGAN_picture/model     
-        wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/cartoon/cartoonization.pb
+        wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/cartoon/cartoonization.pb
         atc --output_type=FP32 --input_shape="train_real_A:1,256,256,3" --input_format=NHWC --output="./cartoonization" --soc_version=Ascend310 --framework=3 --save_original_model=false --model="./cartoonization.pb" --precision_mode=allow_fp32_to_fp16
         ```
 

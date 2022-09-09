@@ -119,16 +119,6 @@ static inline void pngd_get_time_stamp_us(uint64_t *val)
     *val = (uint64_t)stTimeVal.tv_sec * MULTIPLE_S_TO_US + stTimeVal.tv_usec;
 }
 
-void pngd_handle_signal(int32_t signo)
-{
-    if (SIGINT == signo || SIGTSTP == signo || SIGTERM == signo) {
-        for (uint32_t idxChn = g_start_channel; idxChn < g_start_channel + g_chn_num; idxChn++) {
-            g_pngd_thread_param[idxChn].enSendThreadCtrl = THREAD_CTRL_STOP;
-        }
-        SAMPLE_PRT("\033[0;31mprogram exit abnormally!\033[0;39m\n");
-    }
-}
-
 void pngd_usage(char *sPrgNm)
 {
     aclError aclRet = aclrtGetRunMode(&g_run_mode);
@@ -479,11 +469,9 @@ void *pngd_send_stream_compatible(void *pArgs)
     DIR *currentDir = nullptr;
     struct dirent *dirp;
 
-    if (g_run_mode == ACL_HOST) {
-        if (aclrtSetCurrentContext(g_context)) {
-            SAMPLE_PRT("set context error\n");
-            return (void *)(HI_FAILURE);
-        }
+    if (aclrtSetCurrentContext(g_context)) {
+        SAMPLE_PRT("set context error\n");
+        return (void *)(HI_FAILURE);
     }
 
     prctl(PR_SET_NAME, "PngSendStreamComp", 0, 0, 0);
@@ -695,11 +683,9 @@ void *pngd_send_stream_performance(void *pArgs)
     hi_img_info stImgInfo{};
     PNGD_THREAD_PARAM_S *pstPngdThreadParam = (PNGD_THREAD_PARAM_S *)pArgs;
 
-    if (g_run_mode == ACL_HOST) {
-        if (aclrtSetCurrentContext(g_context)) {
-            SAMPLE_PRT("set context error\n");
-            return (void *)(HI_FAILURE);
-        }
+    if (aclrtSetCurrentContext(g_context)) {
+        SAMPLE_PRT("set context error\n");
+        return (void *)(HI_FAILURE);
     }
 
     std::ostringstream pthreadName;
@@ -884,11 +870,9 @@ void *pngd_send_stream(void *pArgs)
     hi_img_info stImgInfo{};
     PNGD_THREAD_PARAM_S *pstPngdThreadParam = (PNGD_THREAD_PARAM_S *)pArgs;
 
-    if (g_run_mode == ACL_HOST) {
-        if (aclrtSetCurrentContext(g_context)) {
-            SAMPLE_PRT("set context error\n");
-            return (void *)(HI_FAILURE);
-        }
+    if (aclrtSetCurrentContext(g_context)) {
+        SAMPLE_PRT("set context error\n");
+        return (void *)(HI_FAILURE);
     }
 
     std::ostringstream pthreadName;
@@ -1207,11 +1191,9 @@ void *pngd_get_pic(void *pArgs)
     hi_img_stream stStream{};
     PNGD_THREAD_PARAM_S *pstPngdThreadParam = (PNGD_THREAD_PARAM_S *)pArgs;
 
-    if (g_run_mode == ACL_HOST) {
-        if (aclrtSetCurrentContext(g_context)) {
-            SAMPLE_PRT("set context error\n");
-            return (void *)(HI_FAILURE);
-        }
+    if (aclrtSetCurrentContext(g_context)) {
+        SAMPLE_PRT("set context error\n");
+        return (void *)(HI_FAILURE);
     }
 
     std::ostringstream pthreadName;
@@ -1401,10 +1383,6 @@ int32_t pngd_destroy()
 
 int32_t setup_acl_device()
 {
-    if (g_run_mode != ACL_HOST) {
-        return HI_SUCCESS;
-    }
-
     aclError aclRet = aclInit(nullptr);
     if (aclRet != ACL_SUCCESS) {
         SAMPLE_PRT("aclInit fail with %d.\n", aclRet);
@@ -1445,10 +1423,6 @@ int32_t setup_acl_device()
 
 void destroy_acl_device()
 {
-    if (g_run_mode != ACL_HOST) {
-        return;
-    }
-
     if (g_context) {
         aclrtDestroyContext(g_context);
         g_context = nullptr;

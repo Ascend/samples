@@ -14,7 +14,7 @@ function main()
   fi
 
   if [ ! -f "${ModelPath}/../data.tar.gz" ];then
-    wget -O ${ModelPath}/../data.tar.gz https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/deeplabv3/cplusplus_test_image/data.tar.gz --no-check-certificate
+    wget -O ${ModelPath}/../data.tar.gz https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/deeplabv3/cplusplus_test_image/data.tar.gz --no-check-certificate
     tar -zxvf ${ModelPath}/../data.tar.gz -C ${ModelPath}/../ 
   fi
 

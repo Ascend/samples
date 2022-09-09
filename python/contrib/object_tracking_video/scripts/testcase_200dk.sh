@@ -1,13 +1,13 @@
 #!/bin/bash
 om_model='https://docs.google.com/uc?export=download&id=1RU1UBVH5EBbVV4CVAPuNokSzpfx9A3Ug'
 onnx_model='https://docs.google.com/uc?export=download&id=1Esjf7Mj-CTh-VQGNHEcpX2uwJlQEnrJD'
-onnx_model2='https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/object_tracking_video/mot_v2.onnx'
+onnx_model2='https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/object_tracking_video/mot_v2.onnx'
 model_name="mot_v2"
 version=$1
 test_img_link='https://docs.google.com/uc?export=download&id=1WWNPkZ9jIfbufZ8SzpUqQiuPTHo_h-lA'
-test_img_link2='https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/object_tracking_video/test.jpg'
+test_img_link2='https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/object_tracking_video/test.jpg'
 verify_img_link='https://docs.google.com/uc?export=download&id=1g9XOWpkZzCZxtUUCj4PvzAgjesBs-jJJ'
-verify_img_link2='https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/object_tracking_video/verify.jpg'
+verify_img_link2='https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/object_tracking_video/verify.jpg'
 project_name="object_tracking_video"
 script_path="$( cd "$(dirname $BASH_SOURCE)" ; pwd -P)"
 project_path=${script_path}/..

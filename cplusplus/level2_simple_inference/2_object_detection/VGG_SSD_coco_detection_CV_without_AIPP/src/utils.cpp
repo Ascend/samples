@@ -1,5 +1,5 @@
-/**
-* Copyright 2020 Huawei Technologies Co., Ltd
+/*
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -12,30 +12,28 @@
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 * See the License for the specific language governing permissions and
 * limitations under the License.
-
-* File utils.cpp
-* Description: handle file operations
 */
-#include "utils.h"
+
 #include <map>
 #include <iostream>
 #include <fstream>
 #include <unistd.h>
-#include <cstring>
+#include <string>
 #include <dirent.h>
 #include <vector>
-#include <string.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include "utils.h"
 #include "acl/acl.h"
 
 using namespace std;
 
 namespace {
-    const uint32_t kImageRChannelMean = 123;
-    const uint32_t kImageGChannelMean = 117;
-    const uint32_t kImageBChannelMean = 104;
-#define DATE_TYPE_SIZE 4
+    const uint32_t g_imageRChannelMean = 123;
+    const uint32_t g_imageGChannelMean = 117;
+    const uint32_t g_imageBChannelMean = 104;
+    const uint32_t DATE_TYPE_SIZE = 4;
+    const uint32_t g_outDatasetNum = 2;
 }
 aclrtRunMode Utils::runMode_ = ACL_DEVICE;
 
@@ -45,13 +43,13 @@ const static std::vector<std::string> vggssdLabel = {
 "pottedplant","sheep","sofa","train","tvmonitor"
 };
 
-enum BBoxIndex {LABEL=1,SCORE,TOPLEFTX,TOPLEFTY,BOTTOMRIGHTX,BOTTOMRIGHTY,BOXINFOSIZE=8};
+enum BBoxIndex {LABEL = 1, SCORE, TOPLEFTX, TOPLEFTY, BOTTOMRIGHTX, BOTTOMRIGHTY, BOXINFOSIZE = 8};
 
 Result Utils::PostProcess(const string &path, aclmdlDataset *modelOutput, aclmdlDesc* modelDesc)
 {
     size_t outDatasetNum = aclmdlGetDatasetNumBuffers(modelOutput);
-    if (outDatasetNum != 2) {
-        ERROR_LOG("outDatasetNum=%zu must be 2",outDatasetNum);
+    if (outDatasetNum != g_outDatasetNum) {
+        ERROR_LOG("outDatasetNum=%zu must be 2", outDatasetNum);
         return FAILED;
     }
 
@@ -69,7 +67,6 @@ Result Utils::PostProcess(const string &path, aclmdlDataset *modelOutput, aclmdl
         }
     }
 
-
     aclDataBuffer* dataBuffer = aclmdlGetDatasetBuffer(modelOutput, 0);
     if (dataBuffer == nullptr) {
         ERROR_LOG("get model output aclmdlGetDatasetBuffer failed");
@@ -82,29 +79,25 @@ Result Utils::PostProcess(const string &path, aclmdlDataset *modelOutput, aclmdl
     }
 
     void * ptr = nullptr;
-    aclDataType dataType = aclmdlGetOutputDataType(modelDesc,0);
+    aclDataType dataType = aclmdlGetOutputDataType(modelDesc, 0);
 
     cout << "dataType = " << dataType << endl;
 
-    if (dataType == ACL_FLOAT){
+    if (dataType == ACL_FLOAT) {
         ptr = new float(0);
-    }
-    else if(dataType == ACL_INT32 ) {
+    } else if (dataType == ACL_INT32) {
         ptr = new uint32_t(0);
-    }
-    else {
+    } else {
         return FAILED;
     }
 
-    //    uint32_t BBOX_MAX;
     if (runMode_ == ACL_HOST) {
         aclError ret = aclrtMemcpy(ptr, DATE_TYPE_SIZE, data, DATE_TYPE_SIZE, ACL_MEMCPY_DEVICE_TO_HOST);
         if (ret != ACL_SUCCESS) {
             ERROR_LOG("box num aclrtMemcpy failed!");
             return FAILED;
         }
-    }
-    else {
+    } else {
         aclError ret = aclrtMemcpy(ptr, DATE_TYPE_SIZE, data, DATE_TYPE_SIZE, ACL_MEMCPY_DEVICE_TO_DEVICE);
         if (ret != ACL_SUCCESS) {
             ERROR_LOG("box num aclrtMemcpy failed!");
@@ -112,13 +105,11 @@ Result Utils::PostProcess(const string &path, aclmdlDataset *modelOutput, aclmdl
         }
     }
     uint32_t boxNum;
-    if (dataType == ACL_FLOAT){
+    if (dataType == ACL_FLOAT) {
         boxNum = *(float*)ptr;
-    }
-    else if(dataType == ACL_INT32 ) {
+    } else if (dataType == ACL_INT32) {
         boxNum = *(uint32_t*)ptr;
-    }
-    else {
+    } else {
         return FAILED;
     }
 
@@ -144,8 +135,7 @@ Result Utils::PostProcess(const string &path, aclmdlDataset *modelOutput, aclmdl
             ERROR_LOG("box outInfo aclrtMemcpy failed!");
             return FAILED;
         }
-    }
-    else {
+    } else {
         aclError ret = aclrtMemcpy(outInfo, sizeof(outInfo), data, sizeof(outInfo), ACL_MEMCPY_DEVICE_TO_DEVICE);
         if (ret != ACL_SUCCESS) {
             ERROR_LOG("box outInfo aclrtMemcpy failed!");
@@ -157,13 +147,14 @@ Result Utils::PostProcess(const string &path, aclmdlDataset *modelOutput, aclmdl
     int font_face = 0;
     double font_scale = 1;
     int thickness = 2;
+    uint32_t Score1 = 85;
+    uint32_t Score2 = 100;
     cv::Mat resultImage = cv::imread(path, CV_LOAD_IMAGE_COLOR);
 
-    for(uint32_t b=0;b<boxNum;b++) {
-        uint32_t score=uint32_t(outInfo[SCORE+BOXINFOSIZE*b]*100);
-        if(score < 85 || score > 100) continue;
+    for (uint32_t b = 0; b < boxNum; b++) {
+        uint32_t score = uint32_t(outInfo[SCORE+BOXINFOSIZE*b]*100);
+        if (score < Score1 || score > Score2) continue;
 
-        //TODO:
         rect.x=outInfo[TOPLEFTX+BOXINFOSIZE*b]*resultImage.cols;
         rect.y=outInfo[TOPLEFTY+BOXINFOSIZE*b]*resultImage.rows;
         rect.width=outInfo[BOTTOMRIGHTX+BOXINFOSIZE*b]*resultImage.cols-rect.x;
@@ -176,8 +167,16 @@ Result Utils::PostProcess(const string &path, aclmdlDataset *modelOutput, aclmdl
         cv::Point origin;
         origin.x = rect.x;
         origin.y = rect.y;
-        cv::putText(resultImage, text, origin, font_face, font_scale, cv::Scalar(0, 255, 255), thickness, 4, 0);
-        cv::rectangle(resultImage, rect, cv::Scalar(0, 255, 255),1, 8,0);
+        bool bottomLeftOrigin = false;
+        int textLineType = 4;
+        int scalarB = 0;
+        int scalarG = 255;
+        int scalarR = 255;
+        cv::putText(resultImage, text, origin, font_face, font_scale, cv::Scalar(scalarB, scalarG, scalarR), thickness, textLineType, bottomLeftOrigin);
+        int rectshift = 0;
+        int rectLineType = 8;
+        int rectthickness = 1;
+        cv::rectangle(resultImage, rect, cv::Scalar(scalarB, scalarG, scalarR), rectthickness, rectLineType, rectshift);
     }
 
     // generate result image
@@ -188,14 +187,12 @@ Result Utils::PostProcess(const string &path, aclmdlDataset *modelOutput, aclmdl
     sstream << "./output" << kFileSperator
     << kOutputFilePrefix << file_name;
 
-
     string outputPath = sstream.str();
     cv::imwrite(outputPath, resultImage);
 
-    if (dataType == ACL_FLOAT){
+    if (dataType == ACL_FLOAT) {
         delete (float*)ptr;
-    }
-    else if(dataType == ACL_INT32 ) {
+    } else if (dataType == ACL_INT32) {
         delete (uint32_t*)ptr;
     }
 
@@ -203,30 +200,33 @@ Result Utils::PostProcess(const string &path, aclmdlDataset *modelOutput, aclmdl
 }
 
 
-bool Utils::IsDirectory(const string &path) {
-  // get path stat
-  struct stat buf;
-  if (stat(path.c_str(), &buf) != kStatSuccess) {
-    return false;
-  }
+bool Utils::IsDirectory(const string &path)
+{
+    // get path stat
+    struct stat buf;
+    if (stat(path.c_str(), &buf) != kStatSuccess) {
+        return false;
+    }
 
-  // check
-  if (S_ISDIR(buf.st_mode)) {
+    // check
+    if (S_ISDIR(buf.st_mode)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+bool Utils::IsPathExist(const string &path)
+{
+    ifstream file(path);
+    if (!file) {
+        return false;
+    }
     return true;
-  } else {
-    return false;
-  }
 }
 
-bool Utils::IsPathExist(const string &path) {
-  ifstream file(path);
-  if (!file) {
-    return false;
-  }
-  return true;
-}
-
-void Utils::SplitPath(const string &path, vector<string> &path_vec) {
+void Utils::SplitPath(const string &path, vector<string> &path_vec)
+{
     char *char_path = const_cast<char*>(path.c_str());
     const char *char_split = kImagePathSeparator.c_str();
     char *tmp_path = strtok(char_path, char_split);
@@ -236,7 +236,8 @@ void Utils::SplitPath(const string &path, vector<string> &path_vec) {
     }
 }
 
-void Utils::GetAllFiles(const string &path, vector<string> &file_vec) {
+void Utils::GetAllFiles(const string &path, vector<string> &file_vec)
+{
     // split file path
     vector<string> path_vector;
     SplitPath(path, path_vector);
@@ -244,16 +245,16 @@ void Utils::GetAllFiles(const string &path, vector<string> &file_vec) {
     for (string every_path : path_vector) {
         // check path exist or not
         if (!IsPathExist(path)) {
-        ERROR_LOG("Failed to deal path=%s. Reason: not exist or can not access.",
-                every_path.c_str());
-        continue;
+            ERROR_LOG("Failed to deal path=%s. Reason: not exist or can not access.", every_path.c_str());
+            continue;
         }
         // get files in path and sub-path
         GetPathFiles(every_path, file_vec);
     }
 }
 
-void Utils::GetPathFiles(const string &path, vector<string> &file_vec) {
+void Utils::GetPathFiles(const string &path, vector<string> &file_vec)
+{
     struct dirent *dirent_ptr = nullptr;
     DIR *dir = nullptr;
     if (IsDirectory(path)) {
@@ -274,13 +275,13 @@ void Utils::GetPathFiles(const string &path, vector<string> &file_vec) {
                 file_vec.emplace_back(full_path);
             }
         }
-    } 
-    else {
+    } else {
         file_vec.emplace_back(path);
     }
 }
 
-void* Utils::CopyDataToDevice(void* data, uint32_t dataSize, aclrtMemcpyKind policy) {
+void* Utils::CopyDataToDevice(void* data, uint32_t dataSize, aclrtMemcpyKind policy)
+{
     void* buffer = nullptr;
     aclError aclRet = aclrtMalloc(&buffer, dataSize, ACL_MEM_MALLOC_HUGE_FIRST);
     if (aclRet != ACL_SUCCESS) {
@@ -298,16 +299,19 @@ void* Utils::CopyDataToDevice(void* data, uint32_t dataSize, aclrtMemcpyKind pol
     return buffer;
 }
 
-void* Utils::CopyDataDeviceToDevice(void* deviceData, uint32_t dataSize) {
+void* Utils::CopyDataDeviceToDevice(void* deviceData, uint32_t dataSize)
+{
     return CopyDataToDevice(deviceData, dataSize, ACL_MEMCPY_DEVICE_TO_DEVICE);
 }
 
-void* Utils::CopyDataHostToDevice(void* deviceData, uint32_t dataSize) {
+void* Utils::CopyDataHostToDevice(void* deviceData, uint32_t dataSize)
+{
     return CopyDataToDevice(deviceData, dataSize, ACL_MEMCPY_HOST_TO_DEVICE);
 }
 
 
-void Utils::ImageNchw(shared_ptr<ImageDesc>& imageData, std::vector<cv::Mat>& nhwcImageChs, uint32_t size) {
+void Utils::ImageNchw(shared_ptr<ImageDesc>& imageData, std::vector<cv::Mat>& nhwcImageChs, uint32_t size)
+{
     uint8_t* nchwBuf = new uint8_t[size];
     int channelSize = IMAGE_CHAN_SIZE_F32(nhwcImageChs[0].rows, nhwcImageChs[0].cols);
     int pos = 0;
@@ -317,36 +321,35 @@ void Utils::ImageNchw(shared_ptr<ImageDesc>& imageData, std::vector<cv::Mat>& nh
     }
 
     imageData->size = size;
-    imageData->data.reset((uint8_t *)nchwBuf, [](uint8_t* p) { delete[](p);} );
-
+    imageData->data.reset((uint8_t *)nchwBuf, [](uint8_t* p) { delete[](p);});
 }
 
-bool Utils::PreProcess(shared_ptr<ImageDesc>& imageData, const string& imageFile) {
-
-    //TODO:
-    //Read image using opencv
+bool Utils::PreProcess(shared_ptr<ImageDesc>& imageData, const string& imageFile)
+{
+    // Read image using opencv
     cv::Mat image = cv::imread(imageFile, CV_LOAD_IMAGE_COLOR);
     if (image.empty()) {
         ERROR_LOG("Read image %s failed", imageFile.c_str());
         return false;
     }
-    //resize image to model size
+    // resize image to model size
     cv::Mat reiszedImage, rsImageF32;
-    cv::resize(image, reiszedImage, cv::Size(MODEL_INPUT_WIDTH,MODEL_INPUT_HEIGHT));
+    cv::resize(image, reiszedImage, cv::Size(MODEL_INPUT_WIDTH, MODEL_INPUT_HEIGHT));
     reiszedImage.convertTo(rsImageF32, CV_32FC3);
 
-
-    //R G B channel means
+    // R G B channel means
     std::vector<cv::Mat> channels;
     cv::split(rsImageF32, channels);
-    channels[0] -= kImageBChannelMean;
-    channels[1] -= kImageGChannelMean;
-    channels[2] -= kImageRChannelMean;
+    uint8_t channelB = 0;
+    uint8_t channelG = 1;
+    uint8_t channelR = 2;
+    channels[channelB] -= g_imageBChannelMean;
+    channels[channelG] -= g_imageGChannelMean;
+    channels[channelR] -= g_imageRChannelMean;
 
-
-    //Transform NHWC to NCHW
+    // Transform NHWC to NCHW
     uint32_t size = RGB_IMAGE_SIZE_F32(MODEL_INPUT_WIDTH, MODEL_INPUT_HEIGHT);
-    ImageNchw(imageData,channels,size);
+    ImageNchw(imageData, channels, size);
 
     aclError ret = aclrtGetRunMode(&runMode_);
     if (ret != ACL_SUCCESS) {
@@ -354,15 +357,14 @@ bool Utils::PreProcess(shared_ptr<ImageDesc>& imageData, const string& imageFile
     }
 
     void* imageDev;
-    //copy image data to device
+    // copy image data to device
     if (runMode_ == ACL_HOST) {
         imageDev = CopyDataHostToDevice(imageData->data.get(), size);
         if (imageDev == nullptr) {
             ERROR_LOG("Copy image info to device failed");
             return FAILED;
         }
-    }
-    else {
+    } else {
         imageDev = CopyDataDeviceToDevice(imageData->data.get(), size);
         if (imageDev == nullptr) {
             ERROR_LOG("Copy image info to device failed");
@@ -371,10 +373,7 @@ bool Utils::PreProcess(shared_ptr<ImageDesc>& imageData, const string& imageFile
     }
 
     imageData->size = size;
-    imageData->data.reset((uint8_t *)imageDev,
-    [](uint8_t* p) { aclrtFree(p);} );
+    imageData->data.reset((uint8_t *)imageDev, [](uint8_t* p) { aclrtFree(p);});
 
     return true;
 }
-
-

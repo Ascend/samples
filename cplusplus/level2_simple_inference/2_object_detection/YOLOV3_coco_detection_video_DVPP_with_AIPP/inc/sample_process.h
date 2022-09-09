@@ -8,46 +8,38 @@
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 #pragma once
-#include "utils.h"
 #include "acl/acl.h"
-
+#include "opencv2/opencv.hpp"
+#include "opencv2/imgproc/types_c.h"
+#include "acllite/AclLiteUtils.h"
+#include "acllite/AclLiteError.h"
+#include "acllite/AclLiteResource.h"
+#include "acllite/AclLiteModel.h"
+#include "acllite/AclLiteImageProc.h"
+#include "AclLiteVideoProc.h"
+#include "AclLiteVideoCapBase.h"
 class SampleProcess {
 public:
-    /**
-    * @brief Constructor
-    */
     SampleProcess(std::string streamName);
-
-    /**
-    * @brief Destructor
-    */
     virtual ~SampleProcess();
 
-    /**
-    * @brief init reousce
-    * @return result
-    */
-    Result InitResource();
+    AclLiteError InitResource();
+    AclLiteError OpenVideoCapture();
+    AclLiteError Process();
 
-    /**
-    * @brief sample process
-    * @return result
-    */
-    Result Process();
-
-    void DrawBoundBoxToImage(std::vector<BBox>& detectionResults, PicDesc &picDesc);
-
-    void* GetInferenceOutputItem(uint32_t& itemDataSize, const aclmdlDataset* inferenceOutput, uint32_t idx);
-
-    Result Postprocess(const aclmdlDataset* modelOutput, PicDesc &picDesc, int modelWidth, int modelHeight);
+    void DrawBoundBoxToImage(std::vector<BBox>& detectionResults, cv::Mat& origImage);
+    AclLiteError Postprocess(const std::vector<InferenceOutput>& modelOutput, cv::Mat& srcImg, int modelWidth, int modelHeight);
 
 private:
     void DestroyResource();
-    int32_t deviceId_;
-    aclrtContext context_;
-    aclrtStream stream_;
     std::string streamName_;
     aclrtRunMode runMode_;
+    AclLiteResource aclDev_;
+    AclLiteImageProc dvpp_;
+    AclLiteModel model_;
+    uint32_t imageInfoSize_;
+    void*    imageInfoBuf_;
+    AclLiteVideoProc* cap_;
     cv::VideoWriter outputVideo_;
 };
 

@@ -46,10 +46,6 @@ int32_t main(int32_t argc, char *argv[])
     // Print input parameters
     print_parameter();
 
-    // Register the response function of the abnormal exit signal.
-    signal(SIGINT, vdec_handle_signal);
-    signal(SIGTERM, vdec_handle_signal);
-
     // Dvpp system init
     ret = hi_dvpp_init();
     if (ret != HI_SUCCESS) {

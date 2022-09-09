@@ -1,9 +1,9 @@
 tf_model="https://nkxiaolei88.obs.cn-north-1.myhuaweicloud.com/ATC%20Model/YoloV4/yolov4_no_postprocess.pb"
 model_name="yolov4"
 
-data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/"
+data_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/aclsample/"
 data_name="dog1_1024_683.jpg"
-verify_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/verify_image/"
+verify_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/aclsample/verify_image/"
 verify_name="out_dog1_1024_683.jpg"
 project_name="cplusplus_yolov4_coco_detection_picture"
 

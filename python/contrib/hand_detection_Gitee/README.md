@@ -47,9 +47,9 @@ pip3 install opencv-python
 
 | **Model**  |  **How to Obtain** |
 | ---------- |  ----------------- |
-| Hand_detection.pb | `wget --no-check-certificate 'https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/hand_detection_picture/Hand_detection.pb' -O model/Hand_detection.pb`  |
-| hand.jpg | `wget --no-check-certificate 'https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/hand_detection_picture/hand.jpg' -O data/hand.jpg` |
-| verify.jpg | `wget --no-check-certificate 'https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/hand_detection_picture/verify.jpg' -O data/verify.jpg` |
+| Hand_detection.pb | `wget --no-check-certificate 'https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/hand_detection_picture/Hand_detection.pb' -O model/Hand_detection.pb`  |
+| hand.jpg | `wget --no-check-certificate 'https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/hand_detection_picture/hand.jpg' -O data/hand.jpg` |
+| verify.jpg | `wget --no-check-certificate 'https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/hand_detection_picture/verify.jpg' -O data/verify.jpg` |
  
   
 

@@ -9,30 +9,29 @@
 */
 #include <iostream>
 #include "sample_process.h"
-#include "utils.h"
 using namespace std;
 
 int main(int argc, char *argv[])
 {
     //Check the input when the application executes, which takes the path to the input video file
     if((argc < 2) || (argv[1] == nullptr)){
-        ERROR_LOG("Please input: ./main <image_dir>");
-        return FAILED;
+        ACLLITE_LOG_ERROR("Please input: ./main <image_dir>");
+        return ACLLITE_ERROR;
     }
     string streamName = string(argv[1]);
     SampleProcess sampleProcess(streamName);
-    Result ret = sampleProcess.InitResource();
-    if (ret != SUCCESS) {
-        ERROR_LOG("sample init resource failed");
-        return FAILED;
+    AclLiteError ret = sampleProcess.InitResource();
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("sample init resource failed");
+        return ACLLITE_ERROR;
     }
 
     ret = sampleProcess.Process();
-    if (ret != SUCCESS) {
-        ERROR_LOG("sample process failed");
-        return FAILED;
+    if (ret != ACLLITE_OK) {
+        ACLLITE_LOG_ERROR("sample process failed");
+        return ACLLITE_ERROR;
     }
 
-    INFO_LOG("execute sample success");
-    return SUCCESS;
+    ACLLITE_LOG_INFO("execute sample success");
+    return ACLLITE_OK;
 }

@@ -1,10 +1,10 @@
-caffe_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/dege_detection/rcf_bsds.caffemodel"
-caffe_prototxt="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/dege_detection/rcf.prototxt"
+caffe_model="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/dege_detection/rcf_bsds.caffemodel"
+caffe_prototxt="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/dege_detection/rcf.prototxt"
 model_name="rcf"
 
-data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/rcf_edge_detection/"
+data_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/rcf_edge_detection/"
 data_name="ori.jpg"
-verify_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/rcf_edge_detection/"
+verify_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/rcf_edge_detection/"
 verify_name="out_ori.jpg"
 project_name="edge_detection_picture"
 

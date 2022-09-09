@@ -1,10 +1,10 @@
-caffe_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/colorization/colorization.caffemodel"
-caffe_prototxt="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/colorization/colorization.prototxt"
+caffe_model="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/colorization/colorization.caffemodel"
+caffe_prototxt="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/colorization/colorization.prototxt"
 
 model_name="colorization"
 presenter_server_name="colorization"
 
-data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/colorization_video/"
+data_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/colorization_video/"
 data_name="black-white_video.mp4"
 project_name="cplusplus_colorization_video"
 conf_file_name="colorization.conf"

@@ -1,9 +1,9 @@
-tf_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/PortraitNet%20/portrait.pb"
-aipp_cfg="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/PortraitNet%20/insert_op.cfg"
+tf_model="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/PortraitNet%20/portrait.pb"
+aipp_cfg="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/PortraitNet%20/insert_op.cfg"
 model_name="portrait"
 
-data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/Portrait/"
-verify_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/Portrait/"
+data_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/Portrait/"
+verify_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/Portrait/"
 project_name="portrait_person_pic"
 
 data_name="ori.jpg"

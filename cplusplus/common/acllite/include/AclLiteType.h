@@ -1,5 +1,5 @@
 /**
-* Copyright 2020 Huawei Technologies Co., Ltd
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2022. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -16,10 +16,13 @@
 * File utils.h
 * Description: handle file operations
 */
+#ifndef ACLLITE_TYPE_H
+#define ACLLITE_TYPE_H
 #pragma once
 
 #include <unistd.h>
 #include <string>
+#include <memory>
 #include "acl/acl.h"
 #include "acl/ops/acl_dvpp.h"
 
@@ -27,7 +30,7 @@ enum MemoryType {
     MEMORY_NORMAL = 0,
     MEMORY_HOST,
     MEMORY_DEVICE,
-    MEMORY_DVPP,    
+    MEMORY_DVPP,
     MEMORY_INVALID_TYPE
 };
 
@@ -111,3 +114,4 @@ struct InferenceOutput {
     std::shared_ptr<void> data = nullptr;
     uint32_t size;
 };
+#endif

@@ -1,5 +1,5 @@
 /**
-* Copyright 2020 Huawei Technologies Co., Ltd
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2022. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@
 #include "CarParams.h"
 #include "classifyPostprocess.h"
 #include "AclLiteApp.h"
-
+using namespace std;
 namespace {
 const uint32_t kEachResultTensorNum = 9;
 const string kCarColorClass[9] = {"black", "blue", "brown",
@@ -31,28 +31,30 @@ const uint32_t kLineSolid = 2;
 const uint32_t kLabelOffset = 11;
 const double kFountScale = 0.5;
 const cv::Scalar kFontColor(0, 0, 255);
-const vector<cv::Scalar> kColors{
-  cv::Scalar(237, 149, 100),
-  cv::Scalar(0, 215, 255),
-  cv::Scalar(50, 205, 50),
-  cv::Scalar(139, 85, 26) };
+const vector<cv::Scalar> kColors {
+    cv::Scalar(237, 149, 100),
+    cv::Scalar(0, 215, 255),
+    cv::Scalar(50, 205, 50),
+    cv::Scalar(139, 85, 26) };
 }
 
-ClassifyPostprocessThread::ClassifyPostprocessThread(const char*& configFile, int channelId): 
-configFile_(configFile),
-channelId_(channelId) {
+ClassifyPostprocessThread::ClassifyPostprocessThread(const char*& configFile, int channelId)
+    :configFile_(configFile), channelId_(channelId)
+{
 }
 
-ClassifyPostprocessThread::~ClassifyPostprocessThread() {
+ClassifyPostprocessThread::~ClassifyPostprocessThread()
+{
     configFile_ = nullptr;
 }
 
-AclLiteError ClassifyPostprocessThread::GetOutputFrameResolution(int& frameWidth, int& frameHeight, uint32_t channelId) {
+AclLiteError ClassifyPostprocessThread::GetOutputFrameResolution(int& frameWidth, int& frameHeight, uint32_t channelId)
+{
     std::string outputFrameWidthKey = "outputFrameWidth_" + to_string(channelId);
     std::string outputFrameHeightKey = "outputFrameHeight_" + to_string(channelId);
 
     std::map<std::string, std::string> config;
-    if(!ReadConfig(config, configFile_)) {
+    if (!ReadConfig(config, configFile_)) {
         return ACLLITE_ERROR;
     }
     
@@ -60,11 +62,11 @@ AclLiteError ClassifyPostprocessThread::GetOutputFrameResolution(int& frameWidth
     for (; mIter != config.end(); ++mIter) {
         if (mIter->first == outputFrameWidthKey) {
             frameWidth = atoi(mIter->second.c_str());
-            ACLLITE_LOG_INFO("video %d width %d", 
+            ACLLITE_LOG_INFO("video %d width %d",
                              channelId, frameWidth);
         } else if (mIter->first == outputFrameHeightKey) {
             frameHeight = atoi(mIter->second.c_str());
-            ACLLITE_LOG_INFO("video %d height %d", 
+            ACLLITE_LOG_INFO("video %d height %d",
                              channelId, frameHeight);
         }
     }
@@ -72,10 +74,11 @@ AclLiteError ClassifyPostprocessThread::GetOutputFrameResolution(int& frameWidth
     return ACLLITE_OK;
 }
 
-AclLiteError ClassifyPostprocessThread::GetOutputDataType(std::string& outputType, uint32_t channelId) {
+AclLiteError ClassifyPostprocessThread::GetOutputDataType(std::string& outputType, uint32_t channelId)
+{
     std::string outputTypeKey = "outputType_" + to_string(channelId);
     std::map<std::string, std::string> config;
-    if(!ReadConfig(config, configFile_)) {
+    if (!ReadConfig(config, configFile_)) {
         return ACLLITE_ERROR;
     }
 
@@ -83,7 +86,7 @@ AclLiteError ClassifyPostprocessThread::GetOutputDataType(std::string& outputTyp
     for (; mIter != config.end(); ++mIter) {
         if (mIter->first == outputTypeKey) {
             outputType.assign(mIter->second.c_str());
-            ACLLITE_LOG_INFO("device %d output type is : %s", 
+            ACLLITE_LOG_INFO("device %d output type is : %s",
                              channelId, outputType.c_str());
         }
     }
@@ -91,22 +94,24 @@ AclLiteError ClassifyPostprocessThread::GetOutputDataType(std::string& outputTyp
         outputType != "pic" && outputType != "presentagent" &&
         outputType != "stdout")) {
         ACLLITE_LOG_ERROR("device %d output type is invalid", channelId);
-        return ACLLITE_ERROR;     
+        return ACLLITE_ERROR;
     }
 
     return ACLLITE_OK;
 }
 
-AclLiteError ClassifyPostprocessThread::SetOutputVideo() {
+AclLiteError ClassifyPostprocessThread::SetOutputVideo()
+{
     stringstream sstream;
     sstream.str("");
     sstream << "../out/output/out_test" << channelId_<<".mp4";
-    outputVideo_.open(sstream.str(), cv::VideoWriter::fourcc('m', 'p', '4', 'v'), 25.0, cv::Size(outputFrameWidth_,outputFrameHeight_));
+    int fps = 25;
+    outputVideo_.open(sstream.str(), cv::VideoWriter::fourcc('m', 'p', '4', 'v'), fps, cv::Size(outputFrameWidth_, outputFrameHeight_));
     return ACLLITE_OK;
 }
 
-AclLiteError ClassifyPostprocessThread::Init() {
-
+AclLiteError ClassifyPostprocessThread::Init()
+{
     AclLiteError ret = GetOutputDataType(outputType_, channelId_);
     if (ret != ACLLITE_OK) {
         return ACLLITE_ERROR;
@@ -122,21 +127,21 @@ AclLiteError ClassifyPostprocessThread::Init() {
         if (ret != ACLLITE_OK) {
             ACLLITE_LOG_ERROR("SetOutputVideo failed, error %d", ret);
             return ACLLITE_ERROR;
-        }        
+        }
     }
 
     return ret;
 }
 
-AclLiteError ClassifyPostprocessThread::Process(int msgId, 
-                             shared_ptr<void> data) {
+AclLiteError ClassifyPostprocessThread::Process(int msgId, shared_ptr<void> data)
+{
     AclLiteError ret = ACLLITE_OK;
-    switch(msgId) {
+    switch (msgId) {
         case MSG_CLASSIFY_INFER_OUTPUT:
             InferOutputProcess(static_pointer_cast<CarDetectDataMsg>(data));
             break;
         case MSG_ENCODE_FINISH:
-            SendMessage(kMainThreadId, MSG_APP_EXIT, nullptr);
+            SendMessage(g_MainThreadId, MSG_APP_EXIT, nullptr);
             break;
         default:
             ACLLITE_LOG_INFO("Classify Postprocess thread ignore msg %d", msgId);
@@ -146,21 +151,16 @@ AclLiteError ClassifyPostprocessThread::Process(int msgId,
     return ret;
 }
 
-AclLiteError ClassifyPostprocessThread::DisplayMsgSend(shared_ptr<CarDetectDataMsg> carDetectDataMsg) {
-    while(1)
-    {
+AclLiteError ClassifyPostprocessThread::DisplayMsgSend(shared_ptr<CarDetectDataMsg> carDetectDataMsg)
+{
+    while (1) {
         AclLiteError ret = SendMessage(carDetectDataMsg->presentAgentDisplayThreadId, MSG_PRESENT_AGENT_DISPLAY, carDetectDataMsg);
-        if(ret == ACLLITE_ERROR_ENQUEUE)
-        {
+        if (ret == ACLLITE_ERROR_ENQUEUE) {
             usleep(500);
             continue;
-        }
-        else if(ret == ACLLITE_OK)
-        {
+        } else if (ret == ACLLITE_OK) {
             break;
-        }
-        else
-        {
+        } else {
             ACLLITE_LOG_ERROR("Send present agent display message failed, error %d", ret);
             return ret;
         }
@@ -169,7 +169,8 @@ AclLiteError ClassifyPostprocessThread::DisplayMsgSend(shared_ptr<CarDetectDataM
     return ACLLITE_OK;
 }
 
-AclLiteError ClassifyPostprocessThread::PrintResult(shared_ptr<CarDetectDataMsg> &carDetectDataMsg) {
+AclLiteError ClassifyPostprocessThread::PrintResult(shared_ptr<CarDetectDataMsg> &carDetectDataMsg)
+{
     cout<<"[rtsp video "<<carDetectDataMsg->channelId<<"]: { ";
     for (int i = 0; i < carDetectDataMsg->carInfo.size(); ++i) {
         cout<<"[car"<<i<<",("<<carDetectDataMsg->carInfo[i].rectangle.lt.x
@@ -182,56 +183,67 @@ AclLiteError ClassifyPostprocessThread::PrintResult(shared_ptr<CarDetectDataMsg>
     return ACLLITE_OK;
 }
 
-AclLiteError ClassifyPostprocessThread::DrawResultOnPic(shared_ptr<CarDetectDataMsg> &carDetectDataMsg) {
-    
+AclLiteError ClassifyPostprocessThread::DrawResultOnPic(shared_ptr<CarDetectDataMsg> &carDetectDataMsg)
+{
     for (int i = 0; i < carDetectDataMsg->carInfo.size(); ++i) {
-        cv::rectangle(carDetectDataMsg->frame, carDetectDataMsg->carInfo[i].rectangle.lt, carDetectDataMsg->carInfo[i].rectangle.rb,
-                      kColors[i % kColors.size()], kLineSolid);
-        cv::putText(carDetectDataMsg->frame, carDetectDataMsg->carInfo[i].detect_result, cv::Point(carDetectDataMsg->carInfo[i].rectangle.lt.x - kLabelOffset, 
-                    carDetectDataMsg->carInfo[i].rectangle.lt.y - kLabelOffset),
-                    cv::FONT_HERSHEY_COMPLEX, kFountScale, kFontColor);
-        cv::putText(carDetectDataMsg->frame, carDetectDataMsg->carInfo[i].carColor_result, cv::Point(carDetectDataMsg->carInfo[i].rectangle.lt.x, 
-                    carDetectDataMsg->carInfo[i].rectangle.lt.y + kLabelOffset),
-                    cv::FONT_HERSHEY_COMPLEX, kFountScale, kFontColor);
+        cv::rectangle(carDetectDataMsg->frame, carDetectDataMsg->carInfo[i].rectangle.lt,
+            carDetectDataMsg->carInfo[i].rectangle.rb,
+            kColors[i % kColors.size()], kLineSolid);
+        cv::putText(carDetectDataMsg->frame, carDetectDataMsg->carInfo[i].detect_result,
+            cv::Point(carDetectDataMsg->carInfo[i].rectangle.lt.x - kLabelOffset,
+            carDetectDataMsg->carInfo[i].rectangle.lt.y - kLabelOffset),
+            cv::FONT_HERSHEY_COMPLEX, kFountScale, kFontColor);
+        cv::putText(carDetectDataMsg->frame, carDetectDataMsg->carInfo[i].carColor_result,
+            cv::Point(carDetectDataMsg->carInfo[i].rectangle.lt.x,
+            carDetectDataMsg->carInfo[i].rectangle.lt.y + kLabelOffset),
+            cv::FONT_HERSHEY_COMPLEX, kFountScale, kFontColor);
     }
 
     stringstream sstream;
     sstream.str("");
-    sstream << "../out/output/device_" << carDetectDataMsg->channelId << "_out_pic_" << carDetectDataMsg->frameNum << ".jpg";
+    sstream << "../out/output/device_" << carDetectDataMsg->channelId
+        << "_out_pic_" << carDetectDataMsg->frameNum << ".jpg";
     cv::imwrite(sstream.str(), carDetectDataMsg->frame);
     return ACLLITE_OK;
 }
 
-AclLiteError ClassifyPostprocessThread::DrawResultOnVideo(shared_ptr<CarDetectDataMsg> &carDetectDataMsg) {
-    
+AclLiteError ClassifyPostprocessThread::DrawResultOnVideo(shared_ptr<CarDetectDataMsg> &carDetectDataMsg)
+{
     for (int i = 0; i < carDetectDataMsg->carInfo.size(); ++i) {
-        cv::rectangle(carDetectDataMsg->frame, carDetectDataMsg->carInfo[i].rectangle.lt, carDetectDataMsg->carInfo[i].rectangle.rb,
-                      kColors[i % kColors.size()], kLineSolid);
-        cv::putText(carDetectDataMsg->frame, carDetectDataMsg->carInfo[i].detect_result, cv::Point(carDetectDataMsg->carInfo[i].rectangle.lt.x - kLabelOffset, 
-                    carDetectDataMsg->carInfo[i].rectangle.lt.y - kLabelOffset),
-                    cv::FONT_HERSHEY_COMPLEX, kFountScale, kFontColor);
-        cv::putText(carDetectDataMsg->frame, carDetectDataMsg->carInfo[i].carColor_result, cv::Point(carDetectDataMsg->carInfo[i].rectangle.lt.x, 
-                    carDetectDataMsg->carInfo[i].rectangle.lt.y + kLabelOffset),
-                    cv::FONT_HERSHEY_COMPLEX, kFountScale, kFontColor);
+        cv::rectangle(carDetectDataMsg->frame, carDetectDataMsg->carInfo[i].rectangle.lt,
+            carDetectDataMsg->carInfo[i].rectangle.rb,
+            kColors[i % kColors.size()], kLineSolid);
+        cv::putText(carDetectDataMsg->frame, carDetectDataMsg->carInfo[i].detect_result,
+            cv::Point(carDetectDataMsg->carInfo[i].rectangle.lt.x - kLabelOffset,
+            carDetectDataMsg->carInfo[i].rectangle.lt.y - kLabelOffset),
+            cv::FONT_HERSHEY_COMPLEX, kFountScale, kFontColor);
+        cv::putText(carDetectDataMsg->frame, carDetectDataMsg->carInfo[i].carColor_result,
+            cv::Point(carDetectDataMsg->carInfo[i].rectangle.lt.x,
+            carDetectDataMsg->carInfo[i].rectangle.lt.y + kLabelOffset),
+            cv::FONT_HERSHEY_COMPLEX, kFountScale, kFontColor);
     }
-    resize(carDetectDataMsg->frame, carDetectDataMsg->frame, 
-            cv::Size(outputFrameWidth_,outputFrameHeight_),
+    resize(carDetectDataMsg->frame, carDetectDataMsg->frame,
+            cv::Size(outputFrameWidth_, outputFrameHeight_),
             0, 0, cv::INTER_LINEAR);
     outputVideo_ << carDetectDataMsg->frame;
     return ACLLITE_OK;
 }
 
-AclLiteError ClassifyPostprocessThread::SendImage(shared_ptr<CarDetectDataMsg> &carDetectDataMsg) {
+AclLiteError ClassifyPostprocessThread::SendImage(shared_ptr<CarDetectDataMsg> &carDetectDataMsg)
+{
     for (int i = 0; i < carDetectDataMsg->carInfo.size(); ++i) {
-        cv::rectangle(carDetectDataMsg->frame, carDetectDataMsg->carInfo[i].rectangle.lt, carDetectDataMsg->carInfo[i].rectangle.rb,
-                      kColors[i % kColors.size()], kLineSolid);
-        cv::putText(carDetectDataMsg->frame, carDetectDataMsg->carInfo[i].detect_result, cv::Point(carDetectDataMsg->carInfo[i].rectangle.lt.x - kLabelOffset, 
-                    carDetectDataMsg->carInfo[i].rectangle.lt.y - kLabelOffset),
-                    cv::FONT_HERSHEY_COMPLEX, kFountScale, kFontColor);
-        cv::putText(carDetectDataMsg->frame, carDetectDataMsg->carInfo[i].carColor_result, cv::Point(carDetectDataMsg->carInfo[i].rectangle.lt.x, 
-                    carDetectDataMsg->carInfo[i].rectangle.lt.y + kLabelOffset),
-                    cv::FONT_HERSHEY_COMPLEX, kFountScale, kFontColor);
-    }    
+        cv::rectangle(carDetectDataMsg->frame, carDetectDataMsg->carInfo[i].rectangle.lt,
+            carDetectDataMsg->carInfo[i].rectangle.rb,
+            kColors[i % kColors.size()], kLineSolid);
+        cv::putText(carDetectDataMsg->frame, carDetectDataMsg->carInfo[i].detect_result,
+            cv::Point(carDetectDataMsg->carInfo[i].rectangle.lt.x - kLabelOffset,
+            carDetectDataMsg->carInfo[i].rectangle.lt.y - kLabelOffset),
+            cv::FONT_HERSHEY_COMPLEX, kFountScale, kFontColor);
+        cv::putText(carDetectDataMsg->frame, carDetectDataMsg->carInfo[i].carColor_result,
+            cv::Point(carDetectDataMsg->carInfo[i].rectangle.lt.x,
+            carDetectDataMsg->carInfo[i].rectangle.lt.y + kLabelOffset),
+            cv::FONT_HERSHEY_COMPLEX, kFountScale, kFontColor);
+    }
 
     AclLiteError ret = DisplayMsgSend(carDetectDataMsg);
     if (ret != ACLLITE_OK) {
@@ -242,34 +254,40 @@ AclLiteError ClassifyPostprocessThread::SendImage(shared_ptr<CarDetectDataMsg> &
     return ACLLITE_OK;
 }
 
-AclLiteError ClassifyPostprocessThread::InferOutputProcess(shared_ptr<CarDetectDataMsg> carDetectDataMsg) {
+AclLiteError ClassifyPostprocessThread::InferOutputProcess(shared_ptr<CarDetectDataMsg> carDetectDataMsg)
+{
     if (carDetectDataMsg->isLastFrame == 1) {
-        if(outputType_ == "video"){
+        if (outputType_ == "video") {
             outputVideo_.release();
         }
-        if (outputType_ != "presentagent"){
+        if (outputType_ != "presentagent") {
             SendMessage(carDetectDataMsg->classifyPostThreadId, MSG_ENCODE_FINISH, nullptr);
             ACLLITE_LOG_INFO("it is lastframe in classifyPost without presentagent");
-            return ACLLITE_OK;            
-        }
-        else {
+            return ACLLITE_OK;
+        } else if (outputType_ == "pic") {
+        stringstream sstream;
+        sstream.str("");
+        sstream << "../out/output/device_" << carDetectDataMsg->deviceId
+            << "_out_pic_" << carDetectDataMsg->frameNum << ".jpg";
+        cv::imwrite(sstream.str(), carDetectDataMsg->frame);
+        return ACLLITE_OK;
+        } else {
             AclLiteError ret = DisplayMsgSend(carDetectDataMsg);
             if (ret != ACLLITE_OK) {
                 ACLLITE_LOG_ERROR("Send last msg in classifyPost failed, error %d", (int)ret);
                 return ACLLITE_ERROR;
             }
             ACLLITE_LOG_INFO("it is lastframe in classifyPost with presentagent");
-            return ACLLITE_OK; 
+            return ACLLITE_OK;
         }
     }
 
-    if (carDetectDataMsg->flag == 1 ) {
-        //there is no car detected
+    if (carDetectDataMsg->flag == 1) {
+        // there is no car detected
         if (outputType_ == "video") {
             outputVideo_ << carDetectDataMsg->frame;
-            return ACLLITE_OK;            
-        }
-        else if (outputType_ == "presentagent") {
+            return ACLLITE_OK;
+        } else if (outputType_ == "presentagent") {
             AclLiteError ret = DisplayMsgSend(carDetectDataMsg);
             if (ret != ACLLITE_OK) {
                 ACLLITE_LOG_ERROR("Send msg failed, error %d", (int)ret);
@@ -287,11 +305,11 @@ AclLiteError ClassifyPostprocessThread::InferOutputProcess(shared_ptr<CarDetectD
     float* outData = NULL;
     outData = reinterpret_cast<float*>(data);
 
-    for(int i = 0; i < carDetectDataMsg->carInfo.size(); i++){
+    for (int i = 0; i < carDetectDataMsg->carInfo.size(); i++) {
         int maxConfidentIndex = i * kEachResultTensorNum;
-        for(int j = 0; j < kEachResultTensorNum; j++){
+        for (int j = 0; j < kEachResultTensorNum; j++) {
             int index = i * kEachResultTensorNum + j;
-            if(outData[index] > outData[maxConfidentIndex]){
+            if (outData[index] > outData[maxConfidentIndex]) {
                 maxConfidentIndex = index;
             }
         }
@@ -305,28 +323,25 @@ AclLiteError ClassifyPostprocessThread::InferOutputProcess(shared_ptr<CarDetectD
         if (ret != ACLLITE_OK) {
             ACLLITE_LOG_ERROR("Draw classify result on video failed, error %d", ret);
             return ACLLITE_ERROR;
-        }        
-    }
-    else if (outputType_ == "presentagent") {
+        }
+    } else if (outputType_ == "presentagent") {
         ret = SendImage(carDetectDataMsg);
         if (ret != ACLLITE_OK) {
             ACLLITE_LOG_ERROR("Send image to presentAgent failed, error %d", ret);
             return ACLLITE_ERROR;
         }
-    }
-    else if (outputType_ == "stdout") {
+    } else if (outputType_ == "stdout") {
         ret = PrintResult(carDetectDataMsg);
         if (ret != ACLLITE_OK) {
             ACLLITE_LOG_ERROR("stdout result on screen failed, error %d", ret);
             return ACLLITE_ERROR;
         }
-    }
-    else {
+    } else {
         ret = DrawResultOnPic(carDetectDataMsg);
         if (ret != ACLLITE_OK) {
             ACLLITE_LOG_ERROR("Send image to presentAgent failed, error %d", ret);
             return ACLLITE_ERROR;
-        }        
+        }
     }
 
     return ACLLITE_OK;

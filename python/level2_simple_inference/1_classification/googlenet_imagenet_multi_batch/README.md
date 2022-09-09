@@ -49,9 +49,9 @@ Check whether the following requirements are met. If not, perform operations acc
     ```
     # To facilitate download, the commands for downloading the original model and converting the model are provided here. You can directly copy and run the commands. You can also refer to the above table to download the model from ModelZoo and manually convert it.    
     cd $HOME/samples/python/level2_simple_inference/1_classification/googlenet_imagenet_multi_batch/model
-    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/classification/googlenet.caffemodel    
-    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/classification/googlenet.prototxt
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_imagenet_multi_batch-python/insert_op.cfg
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/classification/googlenet.caffemodel    
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/classification/googlenet.prototxt
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/googlenet_imagenet_multi_batch-python/insert_op.cfg
     atc --input_shape="data:10,3,224,224" --weight="./googlenet.caffemodel" --input_format=NCHW --output="./googlenet_yuv" --soc_version=Ascend310 --insert_op_conf=./insert_op.cfg --framework=0 --model="./googlenet.prototxt"
     ```
 
@@ -59,7 +59,7 @@ Check whether the following requirements are met. If not, perform operations acc
     ```
     Run the following commands to go to the data folder of the sample and download the corresponding test image:
     cd $HOME/samples/python/level2_simple_inference/1_classification/googlenet_imagenet_multi_batch/data
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_imagenet_multi_batch-python/test_image/test1.jpg
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/googlenet_imagenet_multi_batch-python/test_image/test1.jpg
     cd ../src
     ```
 ### Sample Running

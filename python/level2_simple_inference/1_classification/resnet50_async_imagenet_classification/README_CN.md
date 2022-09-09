@@ -138,8 +138,8 @@ resnet50_async_imagenet_classification
     1.  登录运行环境。
     2.  准备测试数据。
         请从以下链接获取该样例的输入图片，并以运行用户将获取的文件上传至开发环境的“resnet50_async_imagenet_classification/data”目录下。如果目录不存在，需自行创建。  
-        https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/dog1_1024_683.jpg  
-        https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/dog2_1024_683.jpg  
+        https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/aclsample/dog1_1024_683.jpg  
+        https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/aclsample/dog2_1024_683.jpg  
     3.  参照[环境变量配置](#env)完成运行环境的配置。
     4.  在resnet50_async_imagenet_classification路径下执行如下命令：
         ```

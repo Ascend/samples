@@ -1,5 +1,5 @@
 /**
-* Copyright 2020 Huawei Technologies Co., Ltd
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2022. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 * File AclLiteImageProc.h
 * Description: handle dvpp process
 */
+#ifndef PNGD_HELPER_H
+#define PNGD_HELPER_H
 #pragma once
 #include <cstdint>
 
@@ -79,6 +81,7 @@ private:
 private:
     aclrtStream stream_;
     void* decodeOutBufferDev_; // decode output buffer
-    acldvppPicDesc *decodeOutputDesc_; //decode output desc
+    acldvppPicDesc *decodeOutputDesc_; // decode output desc
     acldvppChannelDesc *dvppChannelDesc_;
 };
+#endif

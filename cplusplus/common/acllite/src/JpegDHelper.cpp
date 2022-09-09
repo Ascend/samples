@@ -1,5 +1,5 @@
 /**
-* Copyright 2020 Huawei Technologies Co., Ltd
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2022. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -23,18 +23,19 @@
 
 using namespace std;
 
-JpegDHelper::JpegDHelper(aclrtStream& stream, acldvppChannelDesc *dvppChannelDesc):
-  stream_(stream),
-  decodeOutBufferDev_(nullptr),
-  decodeOutputDesc_(nullptr),
-  dvppChannelDesc_(dvppChannelDesc) {
+JpegDHelper::JpegDHelper(aclrtStream& stream, acldvppChannelDesc *dvppChannelDesc)
+    :stream_(stream), decodeOutBufferDev_(nullptr),
+    decodeOutputDesc_(nullptr), dvppChannelDesc_(dvppChannelDesc)
+{
 }
 
-JpegDHelper::~JpegDHelper() {
+JpegDHelper::~JpegDHelper()
+{
     DestroyDecodeResource();
 }
 
-AclLiteError JpegDHelper::InitDecodeOutputDesc(ImageData& inputImage) {
+AclLiteError JpegDHelper::InitDecodeOutputDesc(ImageData& inputImage)
+{
     uint32_t decodeOutWidthStride = ALIGN_UP128(inputImage.width);
     uint32_t decodeOutHeightStride = ALIGN_UP16(inputImage.height);
     if (decodeOutWidthStride == 0 || decodeOutHeightStride == 0) {
@@ -43,8 +44,8 @@ AclLiteError JpegDHelper::InitDecodeOutputDesc(ImageData& inputImage) {
         return ACLLITE_ERROR_INVALID_ARGS;
     }
  
-    uint32_t decodeOutBufferSize = 
-                YUV420SP_SIZE(decodeOutWidthStride, decodeOutHeightStride);
+    uint32_t decodeOutBufferSize =
+    YUV420SP_SIZE(decodeOutWidthStride, decodeOutHeightStride);
 
     aclError aclRet = acldvppMalloc(&decodeOutBufferDev_, decodeOutBufferSize);
     if (aclRet != ACL_SUCCESS) {
@@ -69,14 +70,15 @@ AclLiteError JpegDHelper::InitDecodeOutputDesc(ImageData& inputImage) {
     return ACLLITE_OK;
 }
 
-AclLiteError JpegDHelper::Process(ImageData& dest, ImageData& src) {
+AclLiteError JpegDHelper::Process(ImageData& dest, ImageData& src)
+{
     int ret = InitDecodeOutputDesc(src);
     if (ret != ACLLITE_OK) {
         ACLLITE_LOG_ERROR("InitDecodeOutputDesc failed");
         return ret;
     }
 
-    aclError aclRet = acldvppJpegDecodeAsync(dvppChannelDesc_, 
+    aclError aclRet = acldvppJpegDecodeAsync(dvppChannelDesc_,
                                              reinterpret_cast<void *>(src.data.get()),
                                              src.size, decodeOutputDesc_, stream_);
     if (aclRet != ACL_SUCCESS) {
@@ -100,7 +102,8 @@ AclLiteError JpegDHelper::Process(ImageData& dest, ImageData& src) {
     return ACLLITE_OK;
 }
 
-void JpegDHelper::DestroyDecodeResource() {
+void JpegDHelper::DestroyDecodeResource()
+{
     if (decodeOutputDesc_ != nullptr) {
         acldvppDestroyPicDesc(decodeOutputDesc_);
         decodeOutputDesc_ = nullptr;

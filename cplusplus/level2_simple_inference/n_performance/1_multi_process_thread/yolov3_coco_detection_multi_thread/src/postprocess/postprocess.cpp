@@ -69,7 +69,7 @@ AclLiteError Postprocess::Process(int msgId, shared_ptr<void> data) {
             ret = InferOutputProcess(inferMsg);
             break;
         case MSG_DECODE_FINISH:
-            SendMessage(kMainThreadId, MSG_APP_EXIT, nullptr);
+            SendMessage(g_MainThreadId, MSG_APP_EXIT, nullptr);
             break;
         default:
             ACLLITE_LOG_INFO("Postprocess thread ignore msg %d", msgId);

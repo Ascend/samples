@@ -14,7 +14,7 @@ function main()
     return 1
   fi
 
-  wget -O ${ModelPath}/../data/rabit.jpg https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/googlenet_imagenet_picture/rabit.jpg --no-check-certificate
+  wget -O ${ModelPath}/../data/rabit.jpg https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/googlenet_imagenet_picture/rabit.jpg --no-check-certificate
   
   find_model googlenet.om
   if [ $? -ne 0 ];then

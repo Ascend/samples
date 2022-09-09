@@ -1,5 +1,5 @@
 /**
-* Copyright 2020 Huawei Technologies Co., Ltd
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2022. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 * File AclLiteResource.h
 * Description: handle AclLiteResource operations
 */
+#ifndef ACLLITE_RESOURCE_H
+#define ACLLITE_RESOURCE_H
 #pragma once
 
 #include <unistd.h>
@@ -26,14 +28,20 @@
 class AclLiteResource {
 public:
     AclLiteResource();
-    AclLiteResource(int32_t devId, const std::string& aclConfigPath, 
-                    bool useDefaultCtx = true);   
+    AclLiteResource(int32_t devId, const std::string& aclConfigPath,
+                    bool useDefaultCtx = true);
     ~AclLiteResource();
 
     AclLiteError Init();
     void Release();
-    aclrtRunMode GetRunMode() { return runMode_; }
-    aclrtContext GetContext() { return context_; }
+    aclrtRunMode GetRunMode()
+    {
+        return runMode_;
+    }
+    aclrtContext GetContext()
+    {
+        return context_;
+    }
 
 private:
     bool isReleased_;
@@ -41,5 +49,7 @@ private:
     int32_t deviceId_;
     aclrtRunMode runMode_;
     aclrtContext context_;
-    std::string aclConfig_;  
+    std::string aclConfig_;
 };
+
+#endif

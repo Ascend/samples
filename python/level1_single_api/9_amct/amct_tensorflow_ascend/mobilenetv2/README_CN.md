@@ -10,10 +10,10 @@
 [Tensorflow-models](https://storage.googleapis.com/mobilenet_v2/checkpoints/mobilenet_v2_1.0_224.tgz)
 下载 MobileNetV2 模型文件。解压并将其中的 mobilenet_v2_1.0_224_frozen.pb 文件放入[pre_model](./pre_model)文件夹中。
 ##### 数据集准备
-可以对量化前后的模型进行推理，以测试量化对精度的影响，推理过程中需要使用和模型相匹配的数据集。请下载[测试图片](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/mobilenet_v2_calibration/classification.jpg)，并将该图片放到 [data](./data/) 目录下。
+可以对量化前后的模型进行推理，以测试量化对精度的影响，推理过程中需要使用和模型相匹配的数据集。请下载[测试图片](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/mobilenet_v2_calibration/classification.jpg)，并将该图片放到 [data](./data/) 目录下。
 ##### 校准集准备
 计算量化因子（scale, offset, shift_bit）的过程被称为“校准(calibration)”，使用一个或多个 batch 对量化后的网络模型进行推理即可完成校准，校准过程使用的数据为校准集。校准集要与模型匹配才能保证精度，一般选用测试集的一部分。请下载
-[校准集](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/mobilenet_v2_calibration/calibration.rar)，解压后将 “calibration” 文件夹放到 [data](./data/) 目录下。
+[校准集](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/mobilenet_v2_calibration/calibration.rar)，解压后将 “calibration” 文件夹放到 [data](./data/) 目录下。
 
 #### 目录结构与说明
 执行量化示例前，请先检查当前目录下是否包含以下文件及目录：  

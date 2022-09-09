@@ -1,7 +1,7 @@
 /**
  * ============================================================================
  *
- * Copyright (C) 2018, Hisilicon Technologies Co., Ltd. All Rights Reserved.
+ * Copyright (c) Huawei Technologies Co., Ltd. 2020-2022. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -31,8 +31,8 @@
  * ============================================================================
  */
 
-#ifndef VIDEO_ENCODE_H_
-#define VIDEO_ENCODE_H_
+#ifndef VIDEO_ENCODE_H
+#define VIDEO_ENCODE_H
 
 #include <dirent.h>
 #include <stdint.h>
@@ -47,7 +47,7 @@
 #include "AclLiteVideoProc.h"
 
 class VideoWriter : public AclLiteVideoCapBase {
- public:
+public:
     /**
      * @brief VideoWriter constructor
      */
@@ -66,11 +66,11 @@ class VideoWriter : public AclLiteVideoCapBase {
     AclLiteError Open();
     void DestroyResource();
 
-private:  
+private:
     AclLiteError InitResource();
     AclLiteError SetImageFormat(uint32_t format);
     AclLiteError SetStreamFormat(uint32_t format);
-	
+
 private:
     bool isReleased_;
     VencStatus status_;

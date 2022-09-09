@@ -14,7 +14,7 @@ function main()
   fi
 
   if [ ! -f "${ModelPath}/../data/test_video.mp4" ];then
-    wget -O ${ModelPath}/../data/test_video.mp4 https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/animeGAN/test_video/test_video.mp4 --no-check-certificate
+    wget -O ${ModelPath}/../data/test_video.mp4 https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/animeGAN/test_video/test_video.mp4 --no-check-certificate
   fi
 
   find_model AnimeGANv2_256.om

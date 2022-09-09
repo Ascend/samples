@@ -50,8 +50,8 @@
    # 为了方便下载，在这里直接给出原始模型下载及模型转换命令,可以直接拷贝执行。也可以参照上表在modelzoo中下载并手工转换，以了解更多细节。   
    #此处模型下载以SRCNN模型为例
    cd $HOME/samples/cplusplus/contrib/super_resolution/model     
-   wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/super_resolution/SRCNN/SRCNN.caffemodel
-   wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/super_resolution/SRCNN/SRCNN.prototxt
+   wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/super_resolution/SRCNN/SRCNN.caffemodel
+   wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/super_resolution/SRCNN/SRCNN.prototxt
    #使用SRCNN模型：
    atc --model=./SRCNN.prototxt --weight=./SRCNN.caffemodel --framework=0 --input_format=NCHW --input_shape="data: 1, 1, 768, 768" --output=./SRCNN_768_768 --soc_version=Ascend310 --output_type=FP32
    #使用FSRCNN模型：
@@ -86,7 +86,7 @@ bash sample_build.sh
 
 ### 查看结果
 运行完成后，会在样例工程的out/output目录下生成推理后的图片，显示对比结果如下所示。     
-![运行成功图片](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/super_resolution/verify_image/image-20211108112404844.png)
+![运行成功图片](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/super_resolution/verify_image/image-20211108112404844.png)
 
 ### 常见错误
 请参考[常见问题定位](https://github.com/Ascend/samples/wikis/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D/%E4%BB%8B%E7%BB%8D)对遇到的错误进行排查。如果wiki中不包含，请在samples仓提issue反馈。

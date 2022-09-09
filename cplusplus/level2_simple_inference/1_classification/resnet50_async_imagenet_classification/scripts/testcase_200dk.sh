@@ -1,6 +1,6 @@
-caffe_model="https://obs-model-ascend.obs.cn-east-2.myhuaweicloud.com/resnet50/resnet50.caffemodel"
-caffe_prototxt="https://obs-model-ascend.obs.cn-east-2.myhuaweicloud.com/resnet50/resnet50.prototxt"
-data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/aclsample/"
+caffe_model="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/resnet50/resnet50.caffemodel"
+caffe_prototxt="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/resnet50/resnet50.prototxt"
+data_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/aclsample/"
 model_name="resnet50"
 project_name="cplusplus_resnet50_async_imagenet_classification"
 

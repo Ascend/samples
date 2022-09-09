@@ -1,5 +1,5 @@
 /**
-* Copyright 2020 Huawei Technologies Co., Ltd
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2022. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 * File sample_process.h
 * Description: handle acl resource
 */
+#ifndef PRESENTAGENTDISPLAYTHREAD_H
+#define PRESENTAGENTDISPLAYTHREAD_H
 #pragma once
 #include <iostream>
 #include <mutex>
@@ -26,23 +28,22 @@
 #include "AclLiteThread.h"
 #include "CarParams.h"
 
-using namespace std;
-using namespace ascend::presenter;
 /**
 * PresentAgentDisplayThread
 */
 class PresentAgentDisplayThread : public AclLiteThread {
 public:
-    PresentAgentDisplayThread(Channel* presenterChannel);
+    PresentAgentDisplayThread(ascend::presenter::Channel* presenterChannel);
     ~PresentAgentDisplayThread();
 
     AclLiteError Init();
-    AclLiteError Process(int msgId, shared_ptr<void> data);
+    AclLiteError Process(int msgId, std::shared_ptr<void> data);
 private:
     AclLiteError VerifyPresentAgentChannel();
-    AclLiteError DisplayMsgPackage(ImageFrame& packageMsg, shared_ptr<CarDetectDataMsg> carDetectDataMsg);
-    AclLiteError DisplayMsgProcess(shared_ptr<CarDetectDataMsg> carDetectDataMsg);
+    AclLiteError DisplayMsgPackage(ascend::presenter::ImageFrame& packageMsg, std::shared_ptr<CarDetectDataMsg> carDetectDataMsg);
+    AclLiteError DisplayMsgProcess(std::shared_ptr<CarDetectDataMsg> carDetectDataMsg);
 private:
-    Channel* presenterChannel_;
+    ascend::presenter::Channel* presenterChannel_;
 };
 
+#endif

@@ -1,10 +1,10 @@
-mindspore_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com:443/003_Atc_Models/AE/ATC%20Model/garbage/mobilenetv2.air"
-aipp_cfg="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/garbage_picture/insert_op_yuv.cfg"
+mindspore_model="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com:443/003_Atc_Models/AE/ATC%20Model/garbage/mobilenetv2.air"
+aipp_cfg="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/garbage_picture/insert_op_yuv.cfg"
 model_name="garbage_yuv"
 
-data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/garbage_picture/"
+data_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/garbage_picture/"
 data_name="bottle.jpg"
-verify_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/garbage_picture/"
+verify_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/garbage_picture/"
 verify_name="out_bottle.jpg"
 project_name="garbage_picture"
 

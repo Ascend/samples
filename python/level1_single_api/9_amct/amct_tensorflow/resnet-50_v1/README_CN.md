@@ -8,11 +8,11 @@
 请至 [昇腾社区-ModelZoo](https://www.hiascend.com/zh/software/modelzoo/detail/1/7548422b6b9c4a809114435f6b128bb6) 下载 ResNet-50 V1 模型文件。解压并将其中的 resnet_v1_50.pb 文件放到 [model](./model/) 目录下。
 
 + **数据集准备**  
-使用昇腾模型压缩工具对模型完成量化后，需要对模型进行推理，以测试量化数据的精度。推理过程中需要使用和模型相匹配的数据集。请下载测试图片 [classification.jpg](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/mobilenet_v2_calibration/classification.jpg)，并将该图片放到 [data](./data/) 目录下。
+使用昇腾模型压缩工具对模型完成量化后，需要对模型进行推理，以测试量化数据的精度。推理过程中需要使用和模型相匹配的数据集。请下载测试图片 [classification.jpg](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/mobilenet_v2_calibration/classification.jpg)，并将该图片放到 [data](./data/) 目录下。
 
 + **校准集准备**  
 校准集用来产生量化因子，保证精度。
-计算量化参数的过程被称为“校准 (calibration)”。校准过程需要使用一部分测试图片来针对性计算量化参数，使用一个或多个 batch 对量化后的网络模型进行推理即可完成校准。请下载[校准集](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/mobilenet_v2_calibration/calibration.rar)，解压后将 calibration 文件夹放到 [data](./data/) 目录下。
+计算量化参数的过程被称为“校准 (calibration)”。校准过程需要使用一部分测试图片来针对性计算量化参数，使用一个或多个 batch 对量化后的网络模型进行推理即可完成校准。请下载[校准集](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/mobilenet_v2_calibration/calibration.rar)，解压后将 calibration 文件夹放到 [data](./data/) 目录下。
 
 ### 1.2 量化示例
 
@@ -64,7 +64,7 @@ Quantized Model Prediction:
 ### 2.1 量化前提
 
 + **模型准备**  
-请下载 [ResNet-50](https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/resnet-50_v1_retrain/pre_model.zip) 模型文件。解压并将 pre_model 文件夹内的文件放到 [model](./model/) 目录。其中 ResNet50_train.meta 用于重训练，ResNet50_eval.meta 用于验证。
+请下载 [ResNet-50](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/resnet-50_v1_retrain/pre_model.zip) 模型文件。解压并将 pre_model 文件夹内的文件放到 [model](./model/) 目录。其中 ResNet50_train.meta 用于重训练，ResNet50_eval.meta 用于验证。
 
 + **数据集准备**  
 由于重训练需要使用大量数据对量化参数进行进一步优化，因此重训练数据需要与模型训练数据一致。ResNet-50 的数据集是在 ImageNet 的子集 ILSVRC-2012-CLS 上训练而来，因此需要用户自己准备 TFRecord 格式的数据集。
@@ -152,7 +152,7 @@ The model after retrain top 5 accuracy = 71.0%.
 ### 3.1 稀疏前提
 
 + **模型准备**  
-请下载 [ResNet-50](https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/resnet-50_v1_retrain/pre_model.zip) 模型文件。解压并将 pre_model 文件夹内的文件放到 [model](./model/) 目录。其中 ResNet50_train.meta 用于重训练，ResNet50_eval.meta 用于验证。
+请下载 [ResNet-50](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/resnet-50_v1_retrain/pre_model.zip) 模型文件。解压并将 pre_model 文件夹内的文件放到 [model](./model/) 目录。其中 ResNet50_train.meta 用于重训练，ResNet50_eval.meta 用于验证。
 
 + **数据集准备**  
 由于重训练需要使用大量数据对量化参数进行进一步优化，因此重训练数据需要与模型训练数据一致。ResNet-50 的数据集是在 ImageNet 的子集 ILSVRC-2012-CLS 上训练而来，因此需要用户自己准备 TFRecord 格式的数据集。
@@ -171,6 +171,7 @@ The model after retrain top 5 accuracy = 71.0%.
 + [src](./src/)
   + [retrain_conf](./src/retrain_conf/)
     + [sample_prune.cfg](./src/retrain_conf/sample_prune.cfg)
+    + [sample_selective_prune.cfg](./src/retrain_conf/sample_selective_prune.cfg)
   + [resnet-50_v1_prune.py](./src/resnet-50_v1_prune.py)
 
 在当前目录执行如下命令：
@@ -184,7 +185,7 @@ python ./src/resnet-50_v1_prune.py --train_set TRAIN_SET --eval_set EVAL_SET --c
 | 参数 | 必填项 | 数据类型 | 默认值 | 参数解释 |
 | :-- | :-: | :-: | :-: | :-- |
 | -h | 否 | / | / | 显示帮助信息。 |
-| --config_defination CONFIG_defination | 是 | string | None | 稀疏的简易配置文件路径( ```./src/retrain_conf/sample_prune.cfg```)。|
+| --config_defination CONFIG_defination | 是 | string | None | 稀疏的简易配置文件路径( 通道稀疏：```./src/retrain_conf/sample_prune.cfg```或4选2结构化稀疏： ```./src/retrain_conf/sample_selective_prune.cfg```)。|
 | --batch_num BATCH_NUM | 否 | int| 2 | retrain 量化推理阶段的 batch 数。 |
 | --train_set TRAIN_SET | 是 | string | None | 测试数据集路径。 |
 | --train_keyword TRAIN_KEYWORD | 否 | string | None | 用于筛选训练集路径下包含该关键词的文件，若未定义，则默认训练集路径下所有文件作为训练集。 |

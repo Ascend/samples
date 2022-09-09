@@ -50,11 +50,17 @@ Result DvppResize::InitResizeInputDesc(ImageData& inputImage){
         ERROR_LOG("acldvppCreatePicDesc vpcInputDesc_ failed");
         return FAILED;
     }
+    uint32_t inputWidth = inputImage.width;
+    uint32_t inputHeight = inputImage.height;
+    if(inputImage.width % 2 != 0)
+        inputWidth--;
+    if(inputImage.height % 2 != 0)
+        inputHeight--;
 
     acldvppSetPicDescData(vpcInputDesc_, inputImage.data.get());
     acldvppSetPicDescFormat(vpcInputDesc_, format_);
-    acldvppSetPicDescWidth(vpcInputDesc_, inputImage.width);
-    acldvppSetPicDescHeight(vpcInputDesc_, inputImage.height);
+    acldvppSetPicDescWidth(vpcInputDesc_, inputWidth);
+    acldvppSetPicDescHeight(vpcInputDesc_, inputHeight);
     acldvppSetPicDescWidthStride(vpcInputDesc_, alignWidth);
     acldvppSetPicDescHeightStride(vpcInputDesc_, alignHeight);
     acldvppSetPicDescSize(vpcInputDesc_, inputBufferSize);

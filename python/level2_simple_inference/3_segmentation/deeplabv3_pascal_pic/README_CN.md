@@ -49,16 +49,16 @@
     ```
     # 为了方便下载，在这里直接给出原始模型下载及模型转换命令,可以直接拷贝执行。也可以参照上表在modelzoo中下载并手工转换，以了解更多细节。     
     cd ${HOME}/samples/python/level2_simple_inference/3_segmentation/deeplabv3_pascal_pic/model     
-    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com:443/003_Atc_Models/nkxiaolei/DeepLapV3_Plus/deeplabv3_plus.pb        
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com:443/003_Atc_Models/nkxiaolei/DeepLapV3_Plus/deeplabv3_plus.pb        
     atc --model=./deeplabv3_plus.pb --framework=3 --output=deeplabv3_plus --soc_version=Ascend310  --input_shape="ImageTensor:1,513,513,3" --output_type="SemanticPredictions:0:FP32" --out_nodes="SemanticPredictions:0"
     ```
 
 3. 获取样例需要的测试图片。
     ```
     cd ${HOME}/samples/python/level2_simple_inference/3_segmentation/deeplabv3_pascal_pic/data
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/deeplabv3/girl.jpg
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/deeplabv3/dog.jpg
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/deeplabv3/cat.jpg   
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/deeplabv3/girl.jpg
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/deeplabv3/dog.jpg
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/deeplabv3/cat.jpg   
     ``` 
 
 ### 样例运行

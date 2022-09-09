@@ -41,7 +41,7 @@
 
 1. 下载训练代码和数据集并上传至obs。
 
-    - 训练代码及数据集文件：mobilenetv2_garbage[点击下载](https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com:443/003_Atc_Models/AE/ATC%20Model/garbage/mobilenetv2_garbage.zip)
+    - 训练代码及数据集文件：mobilenetv2_garbage[点击下载](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com:443/003_Atc_Models/AE/ATC%20Model/garbage/mobilenetv2_garbage.zip)
     
     - 下载后解压至本地并且上传到obs桶中。     
       ![](https://images.gitee.com/uploads/images/2021/0129/113113_d163802f_5400693.png "上传obs.png")
@@ -108,7 +108,7 @@
 
     将超参中的"pretrained_ckpt"中的参数改成 "./mobilenetV2-200_1067.ckpt"
   
-    ![](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/200dk/pictures/garbage_pr_use.png)
+    ![](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/200dk/pictures/garbage_pr_use.png)
 
     依次单步执行即可，可以查看每一步的输出结果和描述来了解代码。
 
@@ -164,7 +164,7 @@
 
         **cd $HOME/models/googlenet_imagenet_picture**  
 
-        **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/garbage_picture/insert_op_yuv.cfg**
+        **wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/garbage_picture/insert_op_yuv.cfg**
 
         **atc --model=./mobilenetv2.air --framework=1 --output=garbage_yuv --soc_version=Ascend310 --insert_op_conf=./insert_op_yuv.cfg --input_shape="data:1,3,224,224" --input_format=NCHW**
 
@@ -178,11 +178,11 @@
 
         **cd $HOME/samples/python/contrib/garbage_picture/data**
 
-        **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/garbage_picture/newspaper.jpg**
+        **wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/garbage_picture/newspaper.jpg**
 
-        **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/garbage_picture/bottle.jpg**
+        **wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/garbage_picture/bottle.jpg**
 
-        **wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/garbage_picture/dirtycloth.jpg**
+        **wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/garbage_picture/dirtycloth.jpg**
 
 ### 案例运行
 

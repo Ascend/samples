@@ -45,7 +45,7 @@
 2. 模型转换。
     | **模型名称** | **模型说明**                                     | **模型下载路径**                                             |
    | ------------ | ------------------------------------------------ | ------------------------------------------------------------ |
-   | yolov4       | 图片检测推理模型。是基于tensorflow的yolov4模型。 | [https://nkxiaolei88.obs.cn-north-1.myhuaweicloud.com/ATC%20Model/YoloV4/yolov4_no_postprocess.pb](https://nkxiaolei88.obs.cn-north-1.myhuaweicloud.com/ATC%20Model/YoloV4/yolov4_no_postprocess.pb)。 |
+   | yolov4       | 图片检测推理模型。是基于tensorflow的yolov4模型。 | [https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/nkxiaolei/YoloV4/yolov4_no_postprocess.pb](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/nkxiaolei/YoloV4/yolov4_no_postprocess.pb)。 |
 
    ```
    # 为了方便下载，在这里直接给出原始模型下载及模型转换命令,可以直接拷贝执行。也可以参照上表在modelzoo中下载并手工转换，以了解更多细节。     

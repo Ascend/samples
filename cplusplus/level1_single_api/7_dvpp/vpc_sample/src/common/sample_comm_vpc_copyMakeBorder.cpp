@@ -24,12 +24,10 @@ using namespace std;
 
 int32_t sample_comm_vpc_copy_make_border(FuncInput funcInput)
 {
-    if (g_run_mode == ACL_HOST) {
-        aclError aclRet = aclrtSetCurrentContext(g_context);
-        if (aclRet != ACL_SUCCESS) {
-            SAMPLE_PRT("set current context failed, ret = %d\n", aclRet);
-            return HI_FAILURE;
-        }
+    aclError aclRet = aclrtSetCurrentContext(g_context);
+    if (aclRet != ACL_SUCCESS) {
+        SAMPLE_PRT("set current context failed, ret = %d\n", aclRet);
+        return HI_FAILURE;
     }
 
     char inputFileName[FILE_NAME_LEN];

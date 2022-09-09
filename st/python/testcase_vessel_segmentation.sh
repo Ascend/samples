@@ -1,9 +1,9 @@
-caffe_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/retina-unet/vel_hw_iter_5000.caffemodel"
-caffe_prototxt="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/retina-unet/deploy_vel_ascend.prototxt"
+caffe_model="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/retina-unet/vel_hw_iter_5000.caffemodel"
+caffe_prototxt="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/retina-unet/deploy_vel_ascend.prototxt"
 model_name="vessel"
 
-data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/vessel_segmentation/test_image/"
-verify_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/vessel_segmentation/verify_image/"
+data_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/vessel_segmentation/test_image/"
+verify_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/vessel_segmentation/verify_image/"
 project_name="gesture_recognition_picture"
 
 data_name="test1.png"

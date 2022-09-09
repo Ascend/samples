@@ -1,5 +1,5 @@
 /**
-* Copyright 2020 Huawei Technologies Co., Ltd
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2022. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 * File sample_process.h
 * Description: handle acl resource
 */
+#ifndef CLASSIFYPOSTPROCESSTHREAD_H
+#define CLASSIFYPOSTPROCESSTHREAD_H
 #pragma once
 #include <iostream>
 #include <mutex>
@@ -28,34 +30,32 @@
 #include "AclLiteImageProc.h"
 #include "CarParams.h"
 
-using namespace std;
-using namespace ascend::presenter;
-
 class ClassifyPostprocessThread : public AclLiteThread {
 public:
     ClassifyPostprocessThread(const char*& configFile, int channelId);
     ~ClassifyPostprocessThread();
 
     AclLiteError Init();
-    AclLiteError Process(int msgId, shared_ptr<void> msgData);
+    AclLiteError Process(int msgId, std::shared_ptr<void> msgData);
 
 private:
     AclLiteError GetOutputFrameResolution(int& videoWidth, int& videoHeight, uint32_t channelId);
     AclLiteError GetOutputDataType(std::string& outputType, uint32_t channelId);
     AclLiteError SetOutputVideo();
-    AclLiteError PrintResult(shared_ptr<CarDetectDataMsg> &carDetectDataMsg);
-    AclLiteError DrawResultOnPic(shared_ptr<CarDetectDataMsg> &carDetectDataMsg);
-    AclLiteError DrawResultOnVideo(shared_ptr<CarDetectDataMsg> &carDetectDataMsg);
-    AclLiteError SendImage(shared_ptr<CarDetectDataMsg> &carDetectDataMsg);
-    AclLiteError DisplayMsgSend(shared_ptr<CarDetectDataMsg> carDetectDataMsg);
-    AclLiteError InferOutputProcess(shared_ptr<CarDetectDataMsg> carDetectDataMsg);
+    AclLiteError PrintResult(std::shared_ptr<CarDetectDataMsg> &carDetectDataMsg);
+    AclLiteError DrawResultOnPic(std::shared_ptr<CarDetectDataMsg> &carDetectDataMsg);
+    AclLiteError DrawResultOnVideo(std::shared_ptr<CarDetectDataMsg> &carDetectDataMsg);
+    AclLiteError SendImage(std::shared_ptr<CarDetectDataMsg> &carDetectDataMsg);
+    AclLiteError DisplayMsgSend(std::shared_ptr<CarDetectDataMsg> carDetectDataMsg);
+    AclLiteError InferOutputProcess(std::shared_ptr<CarDetectDataMsg> carDetectDataMsg);
 
 private:
     const char* configFile_;
-    string outputType_;
+    std::string outputType_;
     int outputFrameWidth_;
     int outputFrameHeight_;
     int channelId_;
     cv::VideoWriter outputVideo_;
 };
 
+#endif

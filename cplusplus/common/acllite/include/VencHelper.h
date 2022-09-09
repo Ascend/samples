@@ -1,12 +1,14 @@
 /**
 * @file VencHelper.h
 *
-* Copyright (C) 2020. Huawei Technologies Co., Ltd. All rights reserved.
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2022. All rights reserved.
 *
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
+#ifndef VENC_HELPER_H
+#define VENC_HELPER_H
 #pragma once
 #include <cstdint>
 #include <iostream>
@@ -58,9 +60,15 @@ public:
     AclLiteError Init();
     AclLiteError Process(ImageData &image);
 
-    void SetStatus(VencStatus status) { status_ = status; }
+    void SetStatus(VencStatus status)
+    {
+        status_ = status;
+    }
     void DestroyResource();
-    VencStatus GetStatus() { return status_; }
+    VencStatus GetStatus()
+    {
+        return status_;
+    }
     
 private:
     static void AsyncVencThreadEntry(void* arg);
@@ -68,9 +76,9 @@ private:
 
 private:
     VencConfig vencInfo_;
-
     VencStatus status_;
     DvppVenc* vencProc_;
     ThreadSafeQueue<std::shared_ptr<ImageData>> frameImageQueue_;
 };
 
+#endif

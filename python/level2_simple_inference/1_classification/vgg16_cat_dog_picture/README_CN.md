@@ -48,15 +48,15 @@
     ```
     # 为了方便下载，在这里直接给出原始模型下载及模型转换命令,可以直接拷贝执行。也可以参照上表在modelzoo中下载并手工转换，以了解更多细节。     
     cd $HOME/samples/python/level2_simple_inference/1_classification/vgg16_cat_dog_picture/model
-    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/vgg16_cat_dog/vgg16_cat_dog.pb    
-    wget https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/vgg16_cat_dog/insert_op.cfg
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/vgg16_cat_dog/vgg16_cat_dog.pb    
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/vgg16_cat_dog/insert_op.cfg
     atc --output_type=FP32 --input_shape="input_1:1,224,224,3"  --input_format=NHWC --output="vgg16_cat_dog" --soc_version=Ascend310 --insert_op_conf=insert_op.cfg --framework=3 --model="./vgg16_cat_dog.pb"
     ```
 3. 获取样例需要的测试图片。
     ```
     执行以下命令，进入样例的data文件夹中，下载对应的测试图片。
     cd $HOME/samples/python/level2_simple_inference/1_classification/vgg16_cat_dog_picture/data
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/vgg16_cat_dog/test_image/cat.jpg
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/vgg16_cat_dog/test_image/cat.jpg
     cd ../src
     ```
 

@@ -1,8 +1,8 @@
-tf_model="https://modelzoo-train-atc.obs.cn-north-4.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/image_HDR_enhance/image_HDR_enhance.pb"
+tf_model="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/image_HDR_enhance/image_HDR_enhance.pb"
 model_name="image_HDR_enhance"
 
-data_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/image_HDR_enhance/"
-verify_source="https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/image_HDR_enhance/"
+data_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/image_HDR_enhance/"
+verify_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/image_HDR_enhance/"
 project_name="image_HDR_enhance"
 data_name="data0.png"
 verify_name="verify0.png"

@@ -1,8 +1,6 @@
 # ScopeBatchMultiClassNonMaxSuppressionPass Sample Reference<a name="EN-US_TOPIC_0298659575"></a>
 
-## Overview<a name="section10369751135417"></a>
-
-Click  [here](https://support.huaweicloud.com/intl/en-us/devg-fr-tensorflow/atlasfrdg_25_0011.html)  to find details about the fusion pattern development workflow. The following describes only the key steps of this sample.
+Please refer to: [https://www.hiascend.com/document](https://www.hiascend.com/document) "TensorFlow Parser Scope Fusion Rule Development" manual to find details about the fusion pattern development workflow. The following describes only the key steps of this sample.
 
 A TensorFlow neural network usually consists of a large number of operators. To optimize the inference performance, you can fuse the operators to larger ones to make full use of the hardware acceleration resources. Fusion patterns can be developed by implementing FE fusion or GE scope fusion. Scope fusion is a necessary mapping method for replacing operators in a scope with a larger operator while maintaining the functionality of the original scope.
 

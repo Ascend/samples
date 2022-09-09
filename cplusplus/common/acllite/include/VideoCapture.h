@@ -1,7 +1,7 @@
 /**
  * ============================================================================
  *
- * Copyright (C) 2018, Hisilicon Technologies Co., Ltd. All Rights Reserved.
+ * Copyright (c) Huawei Technologies Co., Ltd. 2020-2022. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -31,10 +31,10 @@
  * ============================================================================
  */
 
-#ifndef VIDEO_DECODE_H_
-#define VIDEO_DECODE_H_
-#ifndef VIDEO_FRAME_DECODE_H_
-#define VIDEO_fRAME_DECODE_H_
+#ifndef VIDEO_DECODE_H
+#define VIDEO_DECODE_H
+#ifndef VIDEO_FRAME_DECODE_H
+#define VIDEO_FRAME_DECODE_H
 
 #include <dirent.h>
 #include <stdint.h>
@@ -53,9 +53,9 @@ extern "C" {
 #include <libavformat/avformat.h>
 }
 
-#define INVALID_CHANNEL_ID -1
-#define INVALID_STREAM_FORMAT -1
-#define VIDEO_CHANNEL_MAX  32
+#define INVALID_CHANNEL_ID (-1)
+#define INVALID_STREAM_FORMAT (-1)
+#define VIDEO_CHANNEL_MAX  (32)
 #define RTSP_TRANSPORT_UDP "udp"
 #define RTSP_TRANSPORT_TCP "tcp"
 
@@ -79,14 +79,16 @@ enum DecodeStatus {
 
 class ChannelIdGenerator {
 public:
-    ChannelIdGenerator() {
+    ChannelIdGenerator()
+    {
         for (int i = 0; i < VIDEO_CHANNEL_MAX; i++) {
             channelId_[i] = INVALID_CHANNEL_ID;
         }
     }
     ~ChannelIdGenerator(){};
  
-    int GenerateChannelId(void) {
+    int GenerateChannelId(void)
+    {
         std::lock_guard<std::mutex> lock(mutex_lock_);
         for (int i = 0; i < VIDEO_CHANNEL_MAX; i++) {
             if (channelId_[i] == INVALID_CHANNEL_ID) {
@@ -98,7 +100,8 @@ public:
         return INVALID_CHANNEL_ID;
     }
 
-    void ReleaseChannelId(int channelId) {
+    void ReleaseChannelId(int channelId)
+    {
         std::lock_guard<std::mutex> lock(mutex_lock_);
         if ((channelId >= 0) && (channelId < VIDEO_CHANNEL_MAX)) {
             channelId_[channelId] = INVALID_CHANNEL_ID;
@@ -106,31 +109,52 @@ public:
     }
 
 private:
-    int channelId_[VIDEO_CHANNEL_MAX];  
+    int channelId_[VIDEO_CHANNEL_MAX];
     mutable std::mutex mutex_lock_;
 };
 
-class FFmpegDecoder{
+class FFmpegDecoder {
 public:
     FFmpegDecoder(const std::string& name);
-    ~FFmpegDecoder(){}  
-    void Decode(FrameProcessCallBack callback_func, void *callback_param);                
-    int GetFrameWidth() { return frameWidth_; }
-    int GetFrameHeight() { return frameHeight_; }
-    int GetVideoType() { return videoType_; }
-    int GetFps() { return fps_; }
-    int IsFinished() { return isFinished_; };
-    int GetProfile() { return profile_; }
+    ~FFmpegDecoder() {}
+    void Decode(FrameProcessCallBack callback_func, void *callback_param);
+    int GetFrameWidth()
+    {
+        return frameWidth_;
+    }
+    int GetFrameHeight()
+    {
+        return frameHeight_;
+    }
+    int GetVideoType()
+    {
+        return videoType_;
+    }
+    int GetFps()
+    {
+        return fps_;
+    }
+    int IsFinished()
+    {
+        return isFinished_;
+    }
+    int GetProfile()
+    {
+        return profile_;
+    }
     void SetTransport(const std::string& transportType);
-    void StopDecode(){ isStop_ = true; }
+    void StopDecode()
+    {
+        isStop_ = true;
+    }
 
-private: 
+private:
     int GetVideoIndex(AVFormatContext* av_format_context);
     void GetVideoInfo();
     void InitVideoStreamFilter(const AVBitStreamFilter* &video_filter);
     bool OpenVideo(AVFormatContext*& av_format_context);
     void SetDictForRtsp(AVDictionary* &avdic);
-    bool InitVideoParams(int videoIndex, 
+    bool InitVideoParams(int videoIndex,
                          AVFormatContext* av_format_context,
                          AVBSFContext* &bsf_ctx);
 
@@ -142,12 +166,12 @@ private:
     int videoType_;
     int profile_;
     int fps_;
-    std::string streamName_;  
+    std::string streamName_;
     std::string rtspTransport_;
 };
 
 class VideoCapture : public AclLiteVideoCapBase {
- public:
+public:
     /**
      * @brief VideoCapture constructor
      */
@@ -158,23 +182,32 @@ class VideoCapture : public AclLiteVideoCapBase {
      */
     ~VideoCapture();
 
-    static void FrameDecodeThreadFunction(void* decoderSelf); 
-    static AclLiteError FrameDecodeCallback(void* context, void* frameData, 
+    static void FrameDecodeThreadFunction(void* decoderSelf);
+    static AclLiteError FrameDecodeCallback(void* context, void* frameData,
                                           int frameSize);
-    static void DvppVdecCallback(acldvppStreamDesc *input, 
+    static void DvppVdecCallback(acldvppStreamDesc *input,
                                  acldvppPicDesc *output, void *userdata);
 
     AclLiteError DecodeH26xFrame();
     void ProcessDecodedImage(std::shared_ptr<ImageData> frameData);
     AclLiteError Read(ImageData& image);
 
-    void FFmpegDecode() { ffmpegDecoder_->Decode(&VideoCapture::FrameDecodeCallback, (void*) this); }
+    void FFmpegDecode()
+    {
+        ffmpegDecoder_->Decode(&VideoCapture::FrameDecodeCallback, (void*) this);
+    }
 
     bool IsOpened();
     AclLiteError Open();
 
-    void SetStatus(DecodeStatus status) { status_ = status; }
-    DecodeStatus GetStatus() { return status_; }
+    void SetStatus(DecodeStatus status)
+    {
+        status_ = status;
+    }
+    DecodeStatus GetStatus()
+    {
+        return status_;
+    }
     
     AclLiteError Set(StreamProperty key, int value);
     uint32_t Get(StreamProperty key);
@@ -184,19 +217,25 @@ class VideoCapture : public AclLiteVideoCapBase {
     AclLiteError Close();
     
     void DestroyResource();
-    bool IsStop() { return isStop_; }
-    bool IsJam() { return isJam_; }
+    bool IsStop()
+    {
+        return isStop_;
+    }
+    bool IsJam()
+    {
+        return isJam_;
+    }
 
-private:  
+private:
     AclLiteError InitResource();
     AclLiteError InitVdecDecoder();
     AclLiteError InitFFmpegDecoder();
-    void StartFrameDecoder();  
+    void StartFrameDecoder();
     int GetVdecType();
     AclLiteError FrameImageEnQueue(std::shared_ptr<ImageData> frameData);
     std::shared_ptr<ImageData> FrameImageOutQueue(bool noWait = false);
     AclLiteError SetRtspTransType(uint32_t transCode);
-	
+
 private:
     bool isStop_;
     bool isReleased_;

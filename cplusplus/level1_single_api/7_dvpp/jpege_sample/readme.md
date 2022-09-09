@@ -36,6 +36,8 @@ DVPP中的JPEGE功能模块，实现将YUV格式图片编码成.jpg图片。
 
 请从[https://github.com/Ascend/tools/tree/master/dvpp_sample_input_data](https://github.com/Ascend/tools/tree/master/dvpp_sample_input_data)获取该样例的输入图片、视频数据。
 
+如果使用wget方式下载图片或视频，请先进入[https://github.com/Ascend/tools/tree/master/dvpp_sample_input_data](https://github.com/Ascend/tools/tree/master/dvpp_sample_input_data)页面，单击对应的图片或视频，进入查看图片或视频的页面后，单击页面右侧的“原始数据”，在浏览器的地址栏中才是获取图片或视频的地址，再使用wget命令从该地址中获取图片或视频。
+
 ## 编译运行<a name="section3789175815018"></a>
 
 1. 以运行用户登录开发环境，编译代码。
@@ -106,14 +108,14 @@ DVPP中的JPEGE功能模块，实现将YUV格式图片编码成.jpg图片。
           - 9：YVYU422PACKED
           - 10：VYUY422PACKED
         - in\_bitwidth：图片位宽，仅支持8bit。
-        - chn\_num：创建编码通道的数目，最大不得超过128路。
+        - chn\_num：创建编码通道的数目，最大不得超过256路。
         - in\_image\_file：输入图像文件的路径，包含文件名。
         - out\_image\_file：输出文件的路径，包含文件名。
         - level：编码质量，默认值100，取值范围\[1, 100\]
         - save：是否保存输出码流。
           - 默认1，0：不保留（主要用于性能测试）
           - 非0：保留
-        - chn\_start：编码起始通道号，范围\[0, 127\]，不指定则从0开始。
+        - chn\_start：编码起始通道号，范围\[0, 255\]，不指定则从0开始。
         - performance：性能测试标识。
           - 默认0：功能测试
           - 非0：性能测试

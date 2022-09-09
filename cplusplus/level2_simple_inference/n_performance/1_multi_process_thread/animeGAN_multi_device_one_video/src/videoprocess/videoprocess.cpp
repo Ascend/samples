@@ -63,7 +63,7 @@ AclLiteError VideoprocessThread::Process(int msgId, shared_ptr<void> data) {
             cout << "shutdown_ is " << shutdown_ << endl;
             if(shutdown_ == postNum_){
                 ShutDownProcess();
-                SendMessage(kMainThreadId, MSG_APP_EXIT, nullptr);
+                SendMessage(g_MainThreadId, MSG_APP_EXIT, nullptr);
             }
             clock_gettime(CLOCK_REALTIME, &time8);
             cout << "videoprocess shutdown time is: " << (time8.tv_sec - time7.tv_sec)*1000 + (time8.tv_nsec - time7.tv_nsec)/1000000 << "ms" << endl;

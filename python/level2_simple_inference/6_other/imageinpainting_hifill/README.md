@@ -48,8 +48,8 @@ Check whether the following requirements are met. If not, perform operations acc
     |  image_inpainting | Repaire ultra-high resolution images using the ImageInpainting model. |  image_inpainting: [https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/imageinpainting_HiFill](https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/imageinpainting_HiFill)|
    ```
    cd ${HOME}/samples/python/level2_simple_inference/6_other/imageinpainting_hifill/model
-   wget https://c7xcode.obs.myhuaweicloud.com/models/imageinpainting_hifill/matmul_27648.json   
-   wget https://c7xcode.obs.myhuaweicloud.com/models/imageinpainting_hifill/hifill.pb
+   wget https://obs-9be7.obs.myhuaweicloud.com/models/imageinpainting_hifill/matmul_27648.json   
+   wget https://obs-9be7.obs.myhuaweicloud.com/models/imageinpainting_hifill/hifill.pb
    atc --output_type=FP32 --input_shape="img:1,512,512,3;mask:1,512,512,1" --input_format=NHWC --output="./hifill" --soc_version=Ascend310 --framework=3 --save_original_model=false --model="./hifill.pb"
    atc --singleop=./matmul_27648.json --output=./0_BatchMatMul_0_0_1_1_1024_1024_0_0_1_1_1024_27648_0_0_1_1_1024_27648 --soc_version=Ascend310
    ```
@@ -57,9 +57,9 @@ Check whether the following requirements are met. If not, perform operations acc
    ```
    # Run the following commands to download the test images:
    cd ${HOME}/samples/python/level2_simple_inference/6_other/imageinpainting_hifill/data
-   wget https://c7xcode.obs.myhuaweicloud.com/models/imageinpainting_hifill/data/test.jpg
+   wget https://obs-9be7.obs.myhuaweicloud.com/models/imageinpainting_hifill/data/test.jpg
    cd ${HOME}/samples/python/level2_simple_inference/6_other/imageinpainting_hifill/mask
-   wget https://c7xcode.obs.myhuaweicloud.com/models/imageinpainting_hifill/mask/test.jpg 
+   wget https://obs-9be7.obs.myhuaweicloud.com/models/imageinpainting_hifill/mask/test.jpg 
    cd ../src
    ```
 ### Sample Running

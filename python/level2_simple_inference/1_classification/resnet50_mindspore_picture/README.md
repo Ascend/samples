@@ -45,11 +45,11 @@ Check whether the following requirements are met. If not, perform operations acc
 2. Obtain the source model required by the application.
     | **Model**| **Description**                                     | **How to Obtain**                                            |
     | ------------ | ------------------------------------------------- | ------------------------------------------------------------ |
-    | resnet50     | Image classification inference model. It is a ResNet50 model based on MindSpore.| [https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/resnet50_mindspore/resnet-90_1875.air](https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/resnet50_mindspore/resnet-90_1875.air) |
+    | resnet50     | Image classification inference model. It is a ResNet50 model based on MindSpore.| [https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/resnet50_mindspore/resnet-90_1875.air](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/resnet50_mindspore/resnet-90_1875.air) |
     ```
     # To facilitate download, the commands for downloading the original model and converting the model are provided here. You can directly copy and run the commands. You can also refer to the above table to download the model from ModelZoo and manually convert it.    
     cd ${HOME}/samples/python/level2_simple_inference/1_classification/resnet50_mindspore_picture/model    
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/resnet50_mindspore/resnet-90_1875.air     
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/resnet50_mindspore/resnet-90_1875.air     
     atc --model=./resnet-90_1875.air --framework=1 --output=./resnet50 --soc_version=Ascend310
     ```
 
@@ -57,8 +57,8 @@ Check whether the following requirements are met. If not, perform operations acc
     ```
     # Run the following commands to go to the **data** folder of the sample and download the corresponding test image:
     cd ${HOME}/samples/python/level2_simple_inference/1_classification/resnet50_mindspore_picture/data
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/data/airplane.jpg
-    wget https://c7xcode.obs.cn-north-4.myhuaweicloud.com/data/car.jpg
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/data/airplane.jpg
+    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/data/car.jpg
     ```
 ### Sample Running
 

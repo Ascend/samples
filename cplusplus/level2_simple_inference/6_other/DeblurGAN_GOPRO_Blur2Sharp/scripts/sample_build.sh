@@ -14,7 +14,7 @@ function main()
   fi
   
   if [ ! -f "${ModelPath}/../data/data.jpg" ];then
-    wget -O ${ModelPath}/../data/data.jpg https://c7xcode.obs.cn-north-4.myhuaweicloud.com/models/DeblurGAN_GOPRO_Blur2Sharp/test_image/data.jpg --no-check-certificate
+    wget -O ${ModelPath}/../data/data.jpg https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/DeblurGAN_GOPRO_Blur2Sharp/test_image/data.jpg --no-check-certificate
   fi
 
   find_model blurtosharp_pad_1280_720.om

@@ -54,9 +54,9 @@ class AclLiteImage(object):
         if isinstance(image, str):
             self._instance_by_image_file(image, width, height)
         elif isinstance(image, int):
-            self._instance_by_buffer(image, width, height, size)
+            self._instance_by_buffer(image, width, height, alignWidth, alignHeight, size)
         elif isinstance(image, np.ndarray):
-            self._instance_by_nparray(image, width, height)
+            self._instance_by_nparray(image, width, height, alignWidth, alignHeight)
         else:
             acl_log.log_error("Create instance failed for "
                               "unknow image data type")
@@ -110,16 +110,20 @@ class AclLiteImage(object):
         """
         return self._load_ok
 
-    def _instance_by_buffer(self, image_buffer, width, height, size):
+    def _instance_by_buffer(self, image_buffer, width, height, alignWidth, alignHeight, size):
         self.width = width
         self.height = height
+        self.alignHeight = alignHeight
+        self.alignWidth = alignWidth
         self.size = size
         self._data = image_buffer
         self._type = const.IMAGE_DATA_BUFFER
 
-    def _instance_by_nparray(self, data, width, height):
+    def _instance_by_nparray(self, data, width, height, alignWidth, alignHeight):
         self.width = width
         self.height = height
+        self.alignHeight = alignHeight
+        self.alignWidth = alignWidth
         self.size = data.itemsize * data.size
         self._data = data
         self._type = const.IMAGE_DATA_NUMPY
