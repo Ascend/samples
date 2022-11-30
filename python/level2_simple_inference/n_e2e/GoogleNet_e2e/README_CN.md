@@ -256,13 +256,13 @@ mox.file.copy('/home/ma-user/work/googlenet/googlenet.air', 'obs://modelarts-cou
 
 在本实验中，默认已完成硬件环境和软件环境的准备工作，在此基础上进行GoogleNet图片分类应用项目的实验操作，由上图可知，本实验需要分别在Ubuntu主机PC端完成基于Python的GoogleNet图片分类应用代码的编写工作，以及GoogleNet图片分类模型转换，最后在Atlas 200 DK开发板上进行项目部署执行工作。
 
-本案例移植的源代码编写及运行以[googlenet_mindspore_picture应用](https://gitee.com/ascend/samples/tree/master/python/level2_simple_inference/1_classification/googlenet_mindspore_picture)里的源码为例进行说明，实验任务及步骤将围绕图6.2所示四个方面分别展开介绍。
+本案例移植的源代码编写及运行以[googlenet_mindspore_picture应用](https://github.com/Ascend/samples/tree/master/python/level2_simple_inference/1_classification/googlenet_mindspore_picture)里的源码为例进行说明，实验任务及步骤将围绕图6.2所示四个方面分别展开介绍。
 
 ### 6.3 实验任务及步骤
 
  **任务一 实验准备** 
 
-本实验使用Python进行开发，并使用命令行操作进行应用的部署和使用，因此我们选用官方提供的图像分类应用案例作为接下来开发的模板工程。图像分类应用案例可在[googlenet_mindspore_picture应用](https://gitee.com/ascend/samples/tree/master/python/level2_simple_inference/1_classification/googlenet_mindspore_picture)中进行下载。
+本实验使用Python进行开发，并使用命令行操作进行应用的部署和使用，因此我们选用官方提供的图像分类应用案例作为接下来开发的模板工程。图像分类应用案例可在[googlenet_mindspore_picture应用](https://github.com/Ascend/samples/tree/master/python/level2_simple_inference/1_classification/googlenet_mindspore_picture)中进行下载。
 
 参考该案例的README.md进行软件准备、部署、运行等步骤。确保环境配置无误，并能够得到正确的结果，即可进行下一步的开发。
 
@@ -388,7 +388,7 @@ atc --model=./googlenet.air --framework=1 --output=./googlenet --soc_version=Asc
  **任务四 应用运行** 
 本应用的运行过程是在开发板上执行，需要将工程文件拷贝到开发板上。
 
-我们在[googlenet_mindspore_picture应用](https://gitee.com/ascend/samples/tree/master/python/level2_simple_inference/1_classification/googlenet_mindspore_picture)的readme中详细提供了运行本案例部署和运行步骤、脚本使用方法与各参数的意义供读者阅读与实验。
+我们在[googlenet_mindspore_picture应用](https://github.com/Ascend/samples/tree/master/python/level2_simple_inference/1_classification/googlenet_mindspore_picture)的readme中详细提供了运行本案例部署和运行步骤、脚本使用方法与各参数的意义供读者阅读与实验。
 
 步骤 1 准备开发板运行环境
 

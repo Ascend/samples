@@ -23,7 +23,7 @@
 - 参考[Atlas200DK说明文档](https://www.hiascend.com/document/detail/zh/Atlas200DKDeveloperKit/1013/environment/atlased_04_0001.html)部署开发环境
 ### Atlas200DK推理平台准备
 - 参考[Atlas200DK说明文档](https://www.hiascend.com/document/detail/zh/Atlas200DKDeveloperKit/1013/environment/atlased_04_0001.html)部署运行环境
-- 参考Ascend案例如[YOLOV3_coco_detection_picture](https://gitee.com/ascend/samples/tree/master/python/level2_simple_inference/2_object_detection/YOLOV3_coco_detection_picture#yolov3_coco_detection_picture%E6%A0%B7%E4%BE%8B )测试推理平台是否搭建成功
+- 参考Ascend案例如[YOLOV3_coco_detection_picture](https://github.com/Ascend/samples/tree/master/python/level2_simple_inference/2_object_detection/YOLOV3_coco_detection_picture#yolov3_coco_detection_picture%E6%A0%B7%E4%BE%8B )测试推理平台是否搭建成功
 ### Realsense双目相机准备
 - 参考[Realsense SDK 2.0安装说明]( https://dev.intelrealsense.com/docs/compiling-librealsense-for-linux-ubuntu-guide )安装SDK
 - 参考Realsense 使用示例如[opencv_viewer_example]( https://github.com/IntelRealSense/librealsense/blob/master/wrappers/python/examples/opencv_viewer_example.py )测试SDK是否安装成功

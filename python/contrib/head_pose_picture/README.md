@@ -50,7 +50,7 @@ git clone https://github.com/Ascend/samples.git
 
 ### 3. **(OPTIONAL)** Convert the original pb model to a DaVinci offline model.
 
-   **Note: Ensure that the environment variables have been configured in [Environment Preparation and Dependency Installation](https://gitee.com/ascend/samples/tree/master/python/environment).**
+   **Note: Ensure that the environment variables have been configured in [Environment Preparation and Dependency Installation](https://github.com/Ascend/samples/tree/master/python/environment).**
 
    1. Set the ***LD_LIBRARY_PATH*** environment variable.
 

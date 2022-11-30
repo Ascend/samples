@@ -4,7 +4,7 @@
 
 ### Prerequisites
 **1. Install the CANN package according to the official guide.**    
-**2. The CANN version must be 5.0.4.alpha001 or later. If the CANN version is earlier than 5.0.4.alpha001, switch the tag and use the distribution by referring to the version description in [Ascend CANN Sample Repository](https://gitee.com/ascend/samples/tree/master).**    
+**2. The CANN version must be 5.0.4.alpha001 or later. If the CANN version is earlier than 5.0.4.alpha001, switch the tag and use the distribution by referring to the version description in [Ascend CANN Sample Repository](https://github.com/Ascend/samples/tree/master).**    
 
 ### Installation Precautions
 Some C++ samples in the **samples** repository use third-party dependencies such as OpenCV and FFmpeg for image processing. You need to install the third-party dependencies and configure the environment before running the samples.
