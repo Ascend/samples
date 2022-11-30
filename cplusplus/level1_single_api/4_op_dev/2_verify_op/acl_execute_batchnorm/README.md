@@ -10,7 +10,7 @@
 -   芯片：Ascend310、Ascend310P
 -   python及依赖的库：Python3.7.*x*（3.7.0 ~ 3.7.11）、Python3.8.*x*（3.8.0 ~ 3.8.11）
 -   已完成昇腾AI软件栈在开发环境、运行环境上的部署。
--   已参考[batch_norm](https://github.com/Ascend/samples/tree/master/cplusplus/level1_single_api/4_op_dev/4_other/singleop/tbe/impl)完成自定义算子的编译部署。
+-   已参考[batch_norm](https://gitee.com/ascend/samples/tree/master/cplusplus/level1_single_api/4_op_dev/4_other/singleop/tbe/impl)完成自定义算子的编译部署。
 
 ## Ascend EP场景下运行验证（Host侧）<a name="section115611114292"></a>
 

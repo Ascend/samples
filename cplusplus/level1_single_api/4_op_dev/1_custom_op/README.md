@@ -333,7 +333,7 @@ To execute a single-operator network test file, perform the following operations
 
 ## Fusion Pattern Verification
 
-In the inference scenario, you can use the command parameter  **enable\_scope\_fusion\_passes**  to specify the fusion pattern to take effect during model conversion to check whether the fusion pattern takes effect. The following provides the verification method based on the  [tf\_scope\_fusion\_pass](https://github.com/Ascend/samples/tree/dev/cplusplus/level1_single_api/4_op_dev/1_custom_op/framework/tf_scope_fusion_pass)  fusion pattern:
+In the inference scenario, you can use the command parameter  **enable\_scope\_fusion\_passes**  to specify the fusion pattern to take effect during model conversion to check whether the fusion pattern takes effect. The following provides the verification method based on the  [tf\_scope\_fusion\_pass](https://gitee.com/ascend/samples/tree/dev/cplusplus/level1_single_api/4_op_dev/1_custom_op/framework/tf_scope_fusion_pass)  fusion pattern:
 
 1.  Construct a model containing Decode Scope. Before constructing a model, you need to install the following third-party software and library dependencies:
 

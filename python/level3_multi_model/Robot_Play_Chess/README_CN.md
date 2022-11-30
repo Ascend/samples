@@ -24,7 +24,7 @@
 - 参考doc目录下**对弈引擎**和**中心控制**模块的README文件进行环境准备。
 ### Atlas200DK推理平台准备
 - 参考[Atlas200DK说明文档]( https://www.hiascend.com/document/detail/zh/Atlas200DKDeveloperKit/1013/environment/atlased_04_0001.html )部署运行环境
-- 参考Ascend案例如[vgg16_cat_dog_picture]( https://github.com/Ascend/samples/tree/master/python/level2_simple_inference/1_classification/vgg16_cat_dog_picture )测试推理平台是否搭建成功
+- 参考Ascend案例如[vgg16_cat_dog_picture]( https://gitee.com/ascend/samples/tree/master/python/level2_simple_inference/1_classification/vgg16_cat_dog_picture )测试推理平台是否搭建成功
 ### 棋盘理解准备
 - 将摄像头固定在棋盘上方合适高度处，可以通过摄像头捕获软件查看当前效果，在保证棋盘位于图像中心的同时，
 使棋盘尽可能大，但是也不要超过边界（可参考data目录下的图）。

@@ -17,7 +17,7 @@ Check whether the following requirements are met. If not, perform operations acc
 | ---------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | CANN version  | ≥ 5.0.4                                                     | Install the CANN by referring to [Installation](https://github.com/Ascend/samples#%E5%AE%89%E8%A3%85) in the **About Ascend Samples Repository**. If the CANN version is earlier than the required version, switch to the sample repository specific to the CANN version. See [Release Notes](https://github.com/Ascend/samples/blob/master/README.md). |
 | Hardware  | Atlas 200 DK/Atlas 300 ([AI1S](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366)) | Currently, the Atlas 200 DK and Atlas 300 have passed the test. For details about the product description, see [Hardware Platform](https://ascend.huawei.com/en/#/hardware/product). For other products, adaptation may be required.|
-| Third-party dependency| opencv, pillow, numpy, mmcv, easydict, matplotlib, python-acllite| Select required dependencies. See [Third-Party Dependency Installation Guide (Python Sample)](https://github.com/Ascend/samples/tree/master/python/environment).|
+| Third-party dependency| opencv, pillow, numpy, mmcv, easydict, matplotlib, python-acllite| Select required dependencies. See [Third-Party Dependency Installation Guide (Python Sample)](https://gitee.com/ascend/samples/tree/master/python/environment).|
 
 **Note: To run this sample, you must run the following commands to install the required Python dependencies:**
 

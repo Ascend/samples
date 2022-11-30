@@ -17,7 +17,7 @@ Output:  a Yuefu poem
 
 Before deploying this sample, ensure that:
 
-- Ensure that the environment has been set up by referring to [Environment Preparation and Dependency Installation](https://github.com/Ascend/samples/tree/master/python/environment).
+- Ensure that the environment has been set up by referring to [Environment Preparation and Dependency Installation](https://gitee.com/ascend/samples/tree/master/python/environment).
 
 - The development environment and operating environment of the corresponding product have been set up.
 

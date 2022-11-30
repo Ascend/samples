@@ -4,7 +4,7 @@
 
 ### 前置条件
 **1. 首先按照官方指导文档完成CANN包安装。**      
-**2. CANN版本需要>=5.0.4.alpha001，低于此版本请参见[昇腾CANN样例仓介绍](https://github.com/Ascend/samples/tree/master)中的版本说明切换tag并使用发行版。** 
+**2. CANN版本需要>=5.0.4.alpha001，低于此版本请参见[昇腾CANN样例仓介绍](https://gitee.com/ascend/samples/tree/master)中的版本说明切换tag并使用发行版。** 
 
 ### 安装须知
 samples仓中的部分python样例使用到opencv，ffmpeg等第三方依赖进行图像等处理，所以需要在运行之前，根据本文指导安装第三方依赖并进行环境配置。 

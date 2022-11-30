@@ -25,7 +25,7 @@ The user uses the web server to play games with the robotic arm based on the UI 
 - Prepare the environment by referring to the README files of the **game engine** and **center control** modules in the **doc** directory.
 ### Atlas 200 DK Inference Platform
 - Deploy the operating environment. For details, see the [Atlas 200 DK documentation](https://www.hiascend.com/document/detail/en/Atlas200DKDeveloperKit/1013/environment/atlased_04_0001.html).
-- Check whether the inference platform is successfully set up. See the Ascend sample [vgg16_cat_dog_picture](https://github.com/Ascend/samples/tree/master/python/level2_simple_inference/1_classification/vgg16_cat_dog_picture).
+- Check whether the inference platform is successfully set up. See the Ascend sample [vgg16_cat_dog_picture](https://gitee.com/ascend/samples/tree/master/python/level2_simple_inference/1_classification/vgg16_cat_dog_picture).
 ### Checkerboard Comprehension
 - Fix a camera at a proper location above the checkerboard. You can use the camera capture software to view the effect. Ensure that the checkerboard is in the center of the images,
 and the chessboard is as large as possible but does not exceed the boundary. (For details, see the images in the **data** directory.)

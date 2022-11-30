@@ -22,7 +22,7 @@ Use Atlas 200 DK to run the YOLOv3 model, perform inference on the RGB data stre
 - Deploy the development environment. For details, see the [Atlas 200 DK documentation](https://www.hiascend.com/document/detail/en/Atlas200DKDeveloperKit/1013/environment/atlased_04_0001.html).
 ### Atlas 200 DK Inference Platform
 - Deploy the operating environment. For details, see the [Atlas 200 DK documentation](https://www.hiascend.com/document/detail/en/Atlas200DKDeveloperKit/1013/environment/atlased_04_0001.html).
-- Check whether the inference platform is successfully set up. See the Ascend sample [YOLOV3_coco_detection_picture](https://github.com/Ascend/samples/tree/master/python/level2_simple_inference/2_object_detection/YOLOV3_coco_detection_picture#yolov3_coco_detection_picture%E6%A0%B7%E4%BE%8B).
+- Check whether the inference platform is successfully set up. See the Ascend sample [YOLOV3_coco_detection_picture](https://gitee.com/ascend/samples/tree/master/python/level2_simple_inference/2_object_detection/YOLOV3_coco_detection_picture#yolov3_coco_detection_picture%E6%A0%B7%E4%BE%8B).
 ### RealSense Binocular Cameras
 - Install the SDK by following the [RealSense SDK 2.0 Build Guide](https://dev.intelrealsense.com/docs/compiling-librealsense-for-linux-ubuntu-guide).
 - Check whether the SDK is successfully installed. See [opencv_viewer_example](https://github.com/IntelRealSense/librealsense/blob/master/wrappers/python/examples/opencv_viewer_example.py ).
