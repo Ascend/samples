@@ -9,8 +9,8 @@ else ()
     set(ASCEND_PATH /usr/local/Ascend)
 endif()
 
-set(ATC_INCLUDE_DIR ${ASCEND_PATH}/atc/include)
-set(FWK_INCLUDE_DIR ${ASCEND_PATH}/fwkacllib/include)
+set(ATC_INCLUDE_DIR ${ASCEND_PATH}/compiler/include)
+set(FWK_INCLUDE_DIR ${ASCEND_PATH}/compiler/include)
 
 set(SRC_LIST
     "src/main.cpp"
@@ -48,7 +48,7 @@ target_include_directories(ir_build PRIVATE
 )
 
 target_link_directories(ir_build PRIVATE
-    ${ASCEND_PATH}/atc/lib64/stub	
+    ${ASCEND_PATH}/compiler/lib64/stub	
 )
 
 target_link_libraries(ir_build PRIVATE
@@ -81,7 +81,7 @@ target_include_directories(fwk_ir_build PRIVATE
 )
 
 target_link_directories(fwk_ir_build PRIVATE
-    ${ASCEND_PATH}/fwkacllib/lib64/stub
+    ${ASCEND_PATH}/compiler/lib64/stub
 )
 
 target_link_libraries(fwk_ir_build PRIVATE

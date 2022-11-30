@@ -45,7 +45,8 @@ const int MSG_CLASSIFY_PREPROC_DATA = 6;
 const int MSG_CLASSIFY_INFER_OUTPUT = 7;
 const int MSG_ENCODE_FINISH = 8;
 const int MSG_PRESENT_AGENT_DISPLAY = 9;
-const int MSG_APP_EXIT = 10;
+const int MSG_RTSP_DISPLAY = 10;
+const int MSG_APP_EXIT = 11;
 
 const std::string kInferName = "inference";
 const std::string kDetectPreName = "detectPre";
@@ -53,6 +54,7 @@ const std::string kDetectPostName = "detectPost";
 const std::string kClassifyPreName = "classifyPre";
 const std::string kClassifyPostName = "classifyPost";
 const std::string kPresentAgentDisplayName = "PresentAgentDisplay";
+const std::string kRtspDisplayName = "rtspDisplay";
 }
 
 struct Rectangle {
@@ -61,10 +63,10 @@ struct Rectangle {
 };
 
 struct CarInfo {
-    ImageData cropedImgs;  // cropped image from original image
-    ImageData resizedImgs;  //resized image for inference
+    ImageData cropedImgs;  // cropped car image from original image
+    ImageData resizedImgs;  //resized image for classify inference
     Rectangle rectangle;  // recognize rectangle
-    std::string detect_result;
+    std::string detect_result;  // yolo detect output
     std::string carColor_result;
 };
 
@@ -74,17 +76,18 @@ struct CarDetectDataMsg {
     int classifyPreThreadId;
     int classifyPostThreadId;
     int presentAgentDisplayThreadId;
+    int rtspDisplayThreadId;
     uint32_t deviceId;
-    uint32_t channelId;
-    int isLastFrame;
-    int frameNum;
-    ImageData imageFrame;
-    ImageData resizedFrame;
-    cv::Mat frame;
-    std::vector<InferenceOutput> detectInferData;
-    std::vector<CarInfo> carInfo;
-    int flag;
-    std::vector<InferenceOutput> classifyInferData;
+    uint32_t channelId;  // record msg belongs to which rtsp/video channel
+    int isLastFrame;  // whether the last frame of rtsp/video of this channel has been decoded
+    int frameNum;  // record frameID in rtsp/video of this channel
+    ImageData imageFrame;  // original image (NV12)
+    ImageData resizedFrame;  // image after detect preprocess
+    cv::Mat frame;  // original image (BGR) needed by postprocess
+    std::vector<InferenceOutput> detectInferData;  // yolo detect output
+    std::vector<CarInfo> carInfo;  // save car images's info detected in frame, and save classify output
+    int flag;  // whether car is detected in frame
+    std::vector<InferenceOutput> classifyInferData;  // classify output
 };
 
 #endif

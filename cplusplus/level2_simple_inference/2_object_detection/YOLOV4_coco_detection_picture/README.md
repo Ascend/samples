@@ -31,7 +31,7 @@ Check whether the following requirements are met. If not, perform operations acc
        **Note: To switch to another tag (for example, v0.5.0), run the following command:**
        ```
        git checkout v0.5.0
-       ```   
+       ```
     - Compressed package (The download takes a short time, but the procedure is complex.)  
        **Note: If you want to download the code of another version, switch the branch of the samples repository according to the prerequisites.**  
        ``` 
@@ -40,7 +40,7 @@ Check whether the following requirements are met. If not, perform operations acc
         # 3. In the development environment, run the following commands to unzip the package:    
         cd ${HOME}    
         unzip ascend-samples-master.zip
-        ```
+       ```
 
 2. Convert the model.
     | **Model**| **Description**                                    | **How to Obtain**                                            |
@@ -50,7 +50,8 @@ Check whether the following requirements are met. If not, perform operations acc
    ```
    # To facilitate download, the commands for downloading the original model and converting the model are provided here. You can directly copy and run the commands. You can also refer to the above table to download the model from ModelZoo and manually convert it.    
    cd ${HOME}/samples/cplusplus/level2_simple_inference/2_object_detection/YOLOV4_coco_detection_picture/model     
-   wget https://nkxiaolei88.obs.cn-north-1.myhuaweicloud.com/ATC%20Model/YoloV4/yolov4_no_postprocess.pb
+   wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/nkxiaolei/YoloV4/yolov4_no_postprocess.pb
+   wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/nkxiaolei/YoloV4/insert_op.cfg
    atc --input_shape="Input:1,416,416,3" --output=./yolov4 --insert_op_conf=./insert_op.cfg --framework=3 --model=./yolov4_no_postprocess.pb --soc_version=Ascend310
    ```
 

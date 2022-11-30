@@ -15,10 +15,10 @@ function setRunEnv() {
     # 设置模型转换时需要的环境变量
     export install_path=/home/HwHiAiUser/Ascend/nnae/latest
     export LD_LIBRARY_PATH=/usr/local/Ascend/driver/lib64/common/:/usr/local/Ascend/driver/lib64/driver:/usr/local/Ascend/add-ons/:$LD_LIBRARY_PATH
-    export LD_LIBRARY_PATH=${install_path}/fwkacllib/lib64:/home/HwHiAiUser/Ascend/ascend-toolkit/20.1.rc1/arm64-linux/atc/lib64/:$LD_LIBRARY_PATH
-    export PYTHONPATH=${install_path}/fwkacllib/python/site-packages:${install_path}/fwkacllib/python/site-packages/auto_tune.egg:${install_path}/fwkacllib/python/site-packages/schedule_search.egg:$PYTHONPATH
-    export PATH=${install_path}/fwkacllib/ccec_compiler/bin:${install_path}/fwkacllib/bin:$PATH
-    export PYTHONPATH=/home/HwHiAiUser/Ascend/tfplugin/latest/tfplugin/python/site-packages:${install_path}/fwkacllib/python/site-packages/hccl:$PYTHONPATH
+    export LD_LIBRARY_PATH=${install_path}/compiler/lib64:/home/HwHiAiUser/Ascend/ascend-toolkit/20.1.rc1/arm64-linux/compiler/lib64/:$LD_LIBRARY_PATH
+    export PYTHONPATH=${install_path}/compiler/python/site-packages:${install_path}/compiler/python/site-packages/auto_tune.egg:${install_path}/compiler/python/site-packages/schedule_search.egg:$PYTHONPATH
+    export PATH=${install_path}/compiler/ccec_compiler/bin:${install_path}/compiler/bin:$PATH
+    export PYTHONPATH=/home/HwHiAiUser/Ascend/fwkplugin/latest/fwkplugin/python/site-packages:${install_path}/compiler/python/site-packages/hccl:$PYTHONPATH
     export ASCEND_OPP_PATH=/home/HwHiAiUser/Ascend/nnae/latest/opp
 
     return 0

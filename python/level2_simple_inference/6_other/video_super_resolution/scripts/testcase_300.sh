@@ -116,7 +116,7 @@ function main() {
 
     # 重新配置程序运行所需的环境变量
     export LD_LIBRARY_PATH=
-    export LD_LIBRARY_PATH=${HOME}/Ascend/nnrt/latest/acllib/lib64:${HOME}/ascend_ddk/x86/lib:${LD_LIBRARY_PATH}
+    export LD_LIBRARY_PATH=${HOME}/Ascend/nnrt/latest/runtime/lib64:${HOME}/ascend_ddk/x86/lib:${LD_LIBRARY_PATH}
     export PYTHONPATH=${HOME}/Ascend/nnrt/latest/pyACL/python/site-packages/acl:${PYTHONPATH}
 
     #安装依赖包

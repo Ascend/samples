@@ -1,20 +1,21 @@
 /*
- * Copyright(C) 2020. Huawei Technologies Co.,Ltd. All rights reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-#ifndef BLOCKING_QUEUE_H
-#define BLOCKING_QUEUE_H
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+
+* http://www.apache.org/licenses/LICENSE-2.0
+
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
+
+#ifndef YOLOV3_COCO_DETECTION_4_THREAD_INC_QUEUE_H
+#define YOLOV3_COCO_DETECTION_4_THREAD_INC_QUEUE_H
 
 #include <condition_variable>
 #include <list>
@@ -24,16 +25,14 @@
 #include "opencv2/opencv.hpp"
 
 #include "opencv2/imgproc/types_c.h"
-struct message_pre
-{
+struct message_pre {
     int videoIndex;
     int isLastFrame;
     cv::Mat frame;
     cv::Mat reiszeMat;
 };
 
-struct message
-{
+struct message {
     int videoIndex;
     int isLastFrame;
     cv::Mat frame;
@@ -41,42 +40,42 @@ struct message
     std::shared_ptr<void> boxNum;
 };
 
-struct message_video
-{
+struct message_video {
     int number;
     cv::Mat resultImage;
 };
 
+static const int APP_ERR_QUEUE_STOPED = 1;
+static const int APP_ERR_QUEUE_EMPTY = 2;
+static const int APP_ERROR_QUEUE_FULL = 3;
 static const int DEFAULT_MAX_QUEUE_SIZE = 128;
 
-template <typename T> class BlockingQueue {
-    public:
-    BlockingQueue(uint32_t maxSize = DEFAULT_MAX_QUEUE_SIZE) : max_size_(maxSize), is_stoped_(false) {}
+template <typename T> class Queue {
+public:
+    Queue(uint32_t maxSize = DEFAULT_MAX_QUEUE_SIZE) : maxSize_(maxSize), isStoped_(false) {}
 
-    ~BlockingQueue() {}
+    ~Queue() {}
 
     int Pop(T &item)
     {
         std::unique_lock<std::mutex> lock(mutex_);
 
-        while (queue_.empty() && !is_stoped_) {
-            empty_cond_.wait(lock);
+        while (queue_.empty() && !isStoped_) {
+            emptyCond_.wait(lock);
         }
 
-        if (is_stoped_) {
-            //APP_ERR_QUEUE_STOPED
-            return 1;
+        if (isStoped_) {
+            return APP_ERR_QUEUE_STOPED;
         }
 
         if (queue_.empty()) {
-            //APP_ERR_QUEUE_EMPTY
-            return 2;
+            return APP_ERR_QUEUE_EMPTY;
         } else {
             item = queue_.front();
             queue_.pop_front();
         }
 
-        full_cond_.notify_one();
+        fullCond_.notify_one();
 
         return 0;
     }
@@ -86,24 +85,22 @@ template <typename T> class BlockingQueue {
         std::unique_lock<std::mutex> lock(mutex_);
         auto realTime = std::chrono::milliseconds(timeOutMs);
 
-        while (queue_.empty() && !is_stoped_) {
-            empty_cond_.wait_for(lock, realTime);
+        while (queue_.empty() && !isStoped_) {
+            emptyCond_.wait_for(lock, realTime);
         }
 
-        if (is_stoped_) {
-            //APP_ERR_QUEUE_STOPED
-            return 1;
+        if (isStoped_) {
+            return APP_ERR_QUEUE_STOPED;
         }
 
         if (queue_.empty()) {
-            //APP_ERR_QUEUE_EMPTY
-            return 2;
+            return APP_ERR_QUEUE_EMPTY;
         } else {
             item = queue_.front();
             queue_.pop_front();
         }
 
-        full_cond_.notify_one();
+        fullCond_.notify_one();
 
         return 0;
     }
@@ -112,22 +109,20 @@ template <typename T> class BlockingQueue {
     {
         std::unique_lock<std::mutex> lock(mutex_);
 
-        while (queue_.size() >= max_size_ && isWait && !is_stoped_) {
-            full_cond_.wait(lock);
+        while (queue_.size() >= maxSize_ && isWait && !isStoped_) {
+            fullCond_.wait(lock);
         }
 
-        if (is_stoped_) {
-            //APP_ERR_QUEUE_STOPED
+        if (isStoped_) {
             return 1;
         }
 
-        if (queue_.size() >= max_size_) {
-            //APP_ERROR_QUEUE_FULL
-            return 3;
+        if (queue_.size() >= maxSize_) {
+            return APP_ERROR_QUEUE_FULL;
         }
         queue_.push_back(item);
 
-        empty_cond_.notify_one();
+        emptyCond_.notify_one();
 
         return 0;
     }
@@ -136,23 +131,21 @@ template <typename T> class BlockingQueue {
     {
         std::unique_lock<std::mutex> lock(mutex_);
 
-        while (queue_.size() >= max_size_ && isWait && !is_stoped_) {
-            full_cond_.wait(lock);
+        while (queue_.size() >= maxSize_ && isWait && !isStoped_) {
+            fullCond_.wait(lock);
         }
 
-        if (is_stoped_) {
-            //APP_ERR_QUEUE_STOPED
-            return 1;
+        if (isStoped_) {
+            return APP_ERR_QUEUE_STOPED;
         }
 
-        if (queue_.size() >= max_size_) {
-            //APP_ERROR_QUEUE_FULL
-            return 3;
+        if (queue_.size() >= maxSize_) {
+            return APP_ERROR_QUEUE_FULL;
         }
 
         queue_.push_front(item);
 
-        empty_cond_.notify_one();
+        emptyCond_.notify_one();
 
         return 0;
     }
@@ -161,18 +154,18 @@ template <typename T> class BlockingQueue {
     {
         {
             std::unique_lock<std::mutex> lock(mutex_);
-            is_stoped_ = true;
+            isStoped_ = true;
         }
 
-        full_cond_.notify_all();
-        empty_cond_.notify_all();
+        fullCond_.notify_all();
+        emptyCond_.notify_all();
     }
 
     void Restart()
     {
         {
             std::unique_lock<std::mutex> lock(mutex_);
-            is_stoped_ = false;
+            isStoped_ = false;
         }
     }
 
@@ -181,7 +174,7 @@ template <typename T> class BlockingQueue {
     {
         std::unique_lock<std::mutex> lock(mutex_);
 
-        if (!is_stoped_) {
+        if (!isStoped_) {
             return std::list<T>();
         }
 
@@ -190,14 +183,12 @@ template <typename T> class BlockingQueue {
 
     int GetBackItem(T &item)
     {
-        if (is_stoped_) {
-            //APP_ERR_QUEUE_STOPED
-            return 1;
+        if (isStoped_) {
+            return APP_ERR_QUEUE_STOPED;
         }
 
         if (queue_.empty()) {
-            //APP_ERR_QUEUE_EMPTY
-            return 2;
+            return APP_ERR_QUEUE_EMPTY;
         }
 
         item = queue_.back();
@@ -212,7 +203,7 @@ template <typename T> class BlockingQueue {
     int IsFull()
     {
         std::unique_lock<std::mutex> lock(mutex_);
-        return queue_.size() >= max_size_;
+        return queue_.size() >= maxSize_;
     }
 
     int GetSize()
@@ -231,13 +222,14 @@ template <typename T> class BlockingQueue {
         queue_.clear();
     }
 
-    private:
+private:
     std::list<T> queue_;
     std::mutex mutex_;
-    std::condition_variable empty_cond_;
-    std::condition_variable full_cond_;
-    uint32_t max_size_;
+    std::condition_variable emptyCond_;
+    std::condition_variable fullCond_;
+    uint32_t maxSize_;
 
-    bool is_stoped_;
+    bool isStoped_;
 };
-#endif // __INC_BLOCKING_QUEUE_H__
+
+#endif

@@ -36,7 +36,7 @@ DetectPreprocessThread::DetectPreprocessThread(const char*& configFile,
     selfThreadId_(INVALID_INSTANCE_ID), inferThreadId_(INVALID_INSTANCE_ID),
     detectPostThreadId_(INVALID_INSTANCE_ID), classifyPreThreadId_(INVALID_INSTANCE_ID),
     classifyPostThreadId_(INVALID_INSTANCE_ID), presentAgentDisplayThreadId_(INVALID_INSTANCE_ID),
-    frameCnt_(0), deviceId_(deviceId), channelId_(channelId)
+    rtspDisplayThreadId_(INVALID_INSTANCE_ID), frameCnt_(0), deviceId_(deviceId), channelId_(channelId)
 {
 }
 
@@ -190,6 +190,7 @@ AclLiteError DetectPreprocessThread::Init()
     detectPostThreadId_ = GetAclLiteThreadIdByName(kDetectPostName + to_string(channelId_));
     classifyPreThreadId_ = GetAclLiteThreadIdByName(kClassifyPreName + to_string(channelId_));
     classifyPostThreadId_ = GetAclLiteThreadIdByName(kClassifyPostName + to_string(channelId_));
+    rtspDisplayThreadId_ = GetAclLiteThreadIdByName(kRtspDisplayName + to_string(channelId_));
     if (display_) {
         presentAgentDisplayThreadId_ = GetAclLiteThreadIdByName(kPresentAgentDisplayName.c_str());
     }
@@ -246,6 +247,7 @@ AclLiteError DetectPreprocessThread::ReadPic(shared_ptr<CarDetectDataMsg> &carDe
     carDetectDataMsg->classifyPreThreadId = classifyPreThreadId_;
     carDetectDataMsg->classifyPostThreadId = classifyPostThreadId_;
     carDetectDataMsg->presentAgentDisplayThreadId = presentAgentDisplayThreadId_;
+    carDetectDataMsg->rtspDisplayThreadId = rtspDisplayThreadId_;
     carDetectDataMsg->deviceId = deviceId_;
     carDetectDataMsg->channelId = channelId_;
     carDetectDataMsg->frameNum = frameCnt_;
@@ -269,6 +271,7 @@ AclLiteError DetectPreprocessThread::ReadStream(shared_ptr<CarDetectDataMsg> &ca
     carDetectDataMsg->classifyPreThreadId = classifyPreThreadId_;
     carDetectDataMsg->classifyPostThreadId = classifyPostThreadId_;
     carDetectDataMsg->presentAgentDisplayThreadId = presentAgentDisplayThreadId_;
+    carDetectDataMsg->rtspDisplayThreadId = rtspDisplayThreadId_;
     carDetectDataMsg->deviceId = deviceId_;
     carDetectDataMsg->channelId = channelId_;
     carDetectDataMsg->frameNum = frameCnt_;
@@ -306,7 +309,7 @@ AclLiteError DetectPreprocessThread::ProcessPic(shared_ptr<CarDetectDataMsg> &ca
     }
 
     ret = dvpp_.ProportionPasteCenter(carDetectDataMsg->resizedFrame,
-        carDetectDataMsg->imageFrame, 0, 0, modelWidth_, modelHeight_);
+        carDetectDataMsg->imageFrame, modelWidth_, modelHeight_);
     if (ret == ACLLITE_ERROR) {
         ACLLITE_LOG_ERROR("Pic decode failed");
         return ACLLITE_ERROR;
@@ -326,7 +329,7 @@ AclLiteError DetectPreprocessThread::ProcessStreamFrame(shared_ptr<CarDetectData
         return ACLLITE_ERROR;
     }
 
-    ret = dvpp_.ProportionPasteCenter(carDetectDataMsg->resizedFrame, imageDevice, 0, 0, modelWidth_, modelHeight_);
+    ret = dvpp_.ProportionPasteCenter(carDetectDataMsg->resizedFrame, imageDevice, modelWidth_, modelHeight_);
     if (ret == ACLLITE_ERROR) {
         ACLLITE_LOG_ERROR("dvpp_cropandpaste image failed");
         return ACLLITE_ERROR;
@@ -414,6 +417,7 @@ AclLiteError DetectPreprocessThread::MsgSend(shared_ptr<CarDetectDataMsg> &carDe
             carDetectDataMsgEnd->classifyPreThreadId = classifyPreThreadId_;
             carDetectDataMsgEnd->classifyPostThreadId = classifyPostThreadId_;
             carDetectDataMsgEnd->presentAgentDisplayThreadId = presentAgentDisplayThreadId_;
+            carDetectDataMsgEnd->rtspDisplayThreadId = rtspDisplayThreadId_;
             carDetectDataMsgEnd->deviceId = deviceId_;
             carDetectDataMsgEnd->channelId = channelId_;
             carDetectDataMsgEnd->frameNum = carDetectDataMsg->frameNum;

@@ -36,7 +36,7 @@ if (NOT DEFINED ENV{NPU_HOST_LIB})
     if (${CMAKE_HOST_SYSTEM_NAME} MATCHES "Windows")
         set(LIB_PATH "C:/Program Files/HuaWei/Ascend/Acllib/lib64")
     else()
-        set(LIB_PATH "/usr/local/Ascend/acllib/lib64/stub/")
+        set(LIB_PATH "/usr/local/Ascend/runtime/lib64/stub/")
     endif()
     message(STATUS "set default LIB_PATH: ${LIB_PATH}")
 else ()
@@ -51,7 +51,8 @@ include_directories(
 
 # add host lib path
 link_directories(
-    $ENV{INSTALL_DIR}/fwkacllib/lib64/stub/
+    $ENV{INSTALL_DIR}/compiler/lib64/stub/
+    $ENV{INSTALL_DIR}/atc/lib64/
 )
 
 add_executable(main

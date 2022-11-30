@@ -116,7 +116,7 @@ if("x${ASCEND_AICPU_PATH}" STREQUAL "x")
         message(FATAL_ERROR "ENV ASCEND_AICPU_PATH is not set")
 endif()
 
-include_directories(${ASCEND_OPP_PATH}/op_impl/built-in/aicpu/aicpu_kernel/inc)
+include_directories(${ASCEND_OPP_PATH}/built-in/op_impl/aicpu/aicpu_kernel/inc)
 
 # travers subdirectory
 SUBDIRLIST(${CMAKE_CURRENT_SOURCE_DIR}/impl/third_party)
@@ -129,14 +129,15 @@ add_library(${AICPU_KERNEL_TARGET} SHARED ${KERNELS_SRCS})
 set(AICPU_SOC_VERSION $ENV{AICPU_SOC_VERSION})
 message(STATUS "AICPU_SOC_VERSION=${AICPU_SOC_VERSION}")
 
-if((AICPU_SOC_VERSION STREQUAL Ascend910B) OR (AICPU_SOC_VERSION STREQUAL Ascend910C) OR (AICPU_SOC_VERSION STREQUAL Ascend310B))
-set(AICPU_SOC_VERSION Ascend)
+set(AICPU_OPP_PATH Ascend)
+if((AICPU_SOC_VERSION STREQUAL Ascend310) OR (AICPU_SOC_VERSION STREQUAL Ascend310P) OR (AICPU_SOC_VERSION STREQUAL Ascend310RC) OR (AICPU_SOC_VERSION STREQUAL Ascend910))
+set(AICPU_OPP_PATH ${AICPU_SOC_VERSION})
 endif()
 
-if(EXISTS "${ASCEND_AICPU_PATH}/opp/op_impl/built-in/aicpu/aicpu_kernel/lib/${AICPU_SOC_VERSION}/libascend_protobuf.a")
+if(EXISTS "${ASCEND_AICPU_PATH}/opp/built-in/op_impl/aicpu/aicpu_kernel/lib/${AICPU_OPP_PATH}/libascend_protobuf.a")
     target_link_libraries(${AICPU_KERNEL_TARGET} PRIVATE
         -Wl,--whole-archive
-        ${ASCEND_AICPU_PATH}/opp/op_impl/built-in/aicpu/aicpu_kernel/lib/${AICPU_SOC_VERSION}/libascend_protobuf.a
+        ${ASCEND_AICPU_PATH}/opp/built-in/op_impl/aicpu/aicpu_kernel/lib/${AICPU_OPP_PATH}/libascend_protobuf.a
         -Wl,--no-whole-archive
         -s
         -Wl,-Bsymbolic
@@ -146,23 +147,23 @@ else()
     message(FATAL_ERROR "Can not find libascend_protobuf.a in environment. Please check whether the path of libascend_protobuf.a is correct or not")
 endif()
 
-if(EXISTS "${ASCEND_AICPU_PATH}/opp/op_impl/built-in/aicpu/aicpu_kernel/lib/${AICPU_SOC_VERSION}/libcpu_kernels_context.a")
+if(EXISTS "${ASCEND_AICPU_PATH}/opp/built-in/op_impl/aicpu/aicpu_kernel/lib/${AICPU_OPP_PATH}/libcpu_kernels_context.a")
     target_link_libraries(${AICPU_KERNEL_TARGET} PRIVATE
         -Wl,--whole-archive
-        ${ASCEND_AICPU_PATH}/opp/op_impl/built-in/aicpu/aicpu_kernel/lib/${AICPU_SOC_VERSION}/libcpu_kernels_context.a
+        ${ASCEND_AICPU_PATH}/opp/built-in/op_impl/aicpu/aicpu_kernel/lib/${AICPU_OPP_PATH}/libcpu_kernels_context.a
         -Wl,--no-whole-archive
     )
 else()
-    if(EXISTS "${ASCEND_AICPU_PATH}/opp/op_impl/built-in/aicpu/aicpu_kernel/lib/libcpu_kernels_context.a")
+    if(EXISTS "${ASCEND_AICPU_PATH}/opp/built-in/op_impl/aicpu/aicpu_kernel/lib/libcpu_kernels_context.a")
         target_link_libraries(${AICPU_KERNEL_TARGET} PRIVATE
             -Wl,--whole-archive
-            ${ASCEND_AICPU_PATH}/opp/op_impl/built-in/aicpu/aicpu_kernel/lib/libcpu_kernels_context.a
+            ${ASCEND_AICPU_PATH}/opp/built-in/op_impl/aicpu/aicpu_kernel/lib/libcpu_kernels_context.a
             -Wl,--no-whole-archive
         )
-    elseif(EXISTS "${ASCEND_OPP_PATH}/op_impl/built-in/aicpu/aicpu_kernel/lib/device/libcpu_kernels_context.so")
+    elseif(EXISTS "${ASCEND_OPP_PATH}/built-in/op_impl/aicpu/aicpu_kernel/lib/device/libcpu_kernels_context.so")
         target_link_libraries(${AICPU_KERNEL_TARGET} PRIVATE
             -Wl,--whole-archive
-            ${ASCEND_OPP_PATH}/op_impl/built-in/aicpu/aicpu_kernel/lib/device/libcpu_kernels_context.so
+            ${ASCEND_OPP_PATH}/built-in/op_impl/aicpu/aicpu_kernel/lib/device/libcpu_kernels_context.so
             -Wl,--no-whole-archive
         )
     else()

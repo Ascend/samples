@@ -6,7 +6,7 @@
 **This README file provides only guidance for running the sample in command line (CLI) mode. For details about how to run the sample in MindStudio, see [Running Image Samples in MindStudio](https://github.com/Ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E5%9B%BE%E7%89%87%E6%A0%B7%E4%BE%8B?sort_id=3164874).**
 
 ## VDEC Sample
-Function: Decodes images by calling the VDEC interface of the DVPP.   
+Function: Decodes videos by calling the VDEC interface of the DVPP.   
 Input: H.265 files to be decoded.   
 Output: YUV images generated after decoding.  
 
@@ -31,7 +31,7 @@ You can obtain the source package in either of the following ways:
      **Note: To switch to another tag (for example, v0.5.0), run the following command:**
      ```
      git checkout v0.5.0
-     ```   
+     ```
   - Compressed package (The download takes a short time, but the procedure is complex.)  
      **Note: If you want to download the code of another version, switch the branch of the samples repository according to the prerequisites.**  
      ``` 

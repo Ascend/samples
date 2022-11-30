@@ -1,6 +1,7 @@
+/*
+* Copyright (C) Huawei Technologies Co., Ltd. 2020-2022. All rights reserved.
+*/
 /**
-* Copyright 2020 Huawei Technologies Co., Ltd
-*
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
 * You may obtain a copy of the License at
@@ -18,7 +19,7 @@
 */
 
 #include <iostream>
-#include <stdlib.h>
+#include <cstdlib>
 #include <dirent.h>
 
 #include "classify_process.h"
@@ -27,8 +28,8 @@
 #include "acllite/AclLiteResource.h"
 using namespace std;
 
-int main(int argc, char *argv[]) {
-
+int main(int argc, char *argv[]) 
+{
     if((argc < 2) || (argv[1] == nullptr)){
         ACLLITE_LOG_ERROR("Please input: ./main <image_dir>");
         return ACLLITE_ERROR;
@@ -39,7 +40,7 @@ int main(int argc, char *argv[]) {
     if (ret) {
         ACLLITE_LOG_ERROR("Init resource failed, error %d", ret);
         return ACLLITE_ERROR;
-    }  
+    }
     aclrtRunMode RunMode = aclDev.GetRunMode();  
 
     ClassifyProcess classify;
@@ -61,8 +62,7 @@ int main(int argc, char *argv[]) {
     if (ret != ACLLITE_OK) {
         ACLLITE_LOG_ERROR("Classification Excute Inference failed");
         return ACLLITE_ERROR;
-    }
-    else{
+    }else {
         ACLLITE_LOG_INFO("Classification Excute Inference success");
     }
 

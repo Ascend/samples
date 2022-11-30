@@ -41,7 +41,7 @@ endif()
 include_directories(
     $ENV{THIRDPART_PATH}/include/
     $ENV{INSTALL_DIR}/driver    
-    $ENV{INSTALL_DIR}/acllib/include/
+    $ENV{INSTALL_DIR}/runtime/include/
     ../inc/
 )
 

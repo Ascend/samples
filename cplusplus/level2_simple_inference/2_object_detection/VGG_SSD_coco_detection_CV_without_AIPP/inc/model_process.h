@@ -98,11 +98,11 @@ public:
     aclmdlDesc * GetModelDesc();
 
 private:
-    bool g_loadFlag;  // model load flag
-    uint32_t g_modelId;
-    aclmdlDesc *g_modelDesc;
-    aclmdlDataset *g_input;
-    aclmdlDataset *g_output;
+    bool loadFlag_;  // model load flag
+    uint32_t modelId_;
+    aclmdlDesc *modelDesc_;
+    aclmdlDataset *input_;
+    aclmdlDataset *output_;
 };
 
 #endif

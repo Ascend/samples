@@ -40,8 +40,14 @@ void *Utils::CopyDataToDevice(void *data, uint32_t dataSize, aclrtMemcpyKind pol
 Result Utils::GetImageInfoBuffer(uint32_t imageWidth, uint32_t imageHeight, ImageMemoryInfo &imageMemInfo)
 {
     void *imageInfoBuf = nullptr;
-    const float imageInfo[4] = {(float)imageWidth, (float)imageHeight,
-        (float)imageWidth, (float)imageHeight};
+    float imageInfo[32];
+    for (size_t i = 0; i < 8; i++) {
+        imageInfo[i*4 + 0] = (float)imageWidth;
+        imageInfo[i*4 + 1] = (float)imageHeight;
+        imageInfo[i*4 + 2] = (float)imageWidth;
+        imageInfo[i*4 + 3] = (float)imageHeight;
+    }
+
     size_t imageInfoSize = sizeof(imageInfo);
     if (!g_isDevice) {
         imageInfoBuf = CopyDataToDevice((void *)imageInfo, imageInfoSize, ACL_MEMCPY_HOST_TO_DEVICE);

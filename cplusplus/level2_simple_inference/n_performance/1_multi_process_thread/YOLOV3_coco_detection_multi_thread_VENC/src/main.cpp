@@ -1,5 +1,5 @@
-/**
-* Copyright 2020 Huawei Technologies Co., Ltd
+/*
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -12,9 +12,6 @@
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 * See the License for the specific language governing permissions and
 * limitations under the License.
-
-* File main.cpp
-* Description: dvpp sample main func
 */
 
 #include <thread>
@@ -36,48 +33,51 @@
 using namespace std;
 
 namespace {
-    uint32_t kModelWidth = 416;
-    uint32_t kModelHeight = 416;
-    const char* kModelPath = "../model/yolov3.om";
-    const static std::vector<std::string> yolov3Label = { "person", "bicycle", "car", "motorbike",
-    "aeroplane","bus", "train", "truck", "boat",
-    "traffic light", "fire hydrant", "stop sign", "parking meter",
-    "bench", "bird", "cat", "dog", "horse",
-    "sheep", "cow", "elephant", "bear", "zebra",
-    "giraffe", "backpack", "umbrella", "handbag","tie",
-    "suitcase", "frisbee", "skis", "snowboard", "sports ball",
-    "kite", "baseball bat", "baseball glove", "skateboard", "surfboard",
-    "tennis racket", "bottle", "wine glass", "cup",
-    "fork", "knife", "spoon", "bowl", "banana",
-    "apple", "sandwich", "orange", "broccoli", "carrot",
-    "hot dog", "pizza", "donut", "cake", "chair",
-    "sofa", "potted plant", "bed", "dining table", "toilet",
-    "TV monitor", "laptop", "mouse", "remote", "keyboard",
-    "cell phone", "microwave", "oven", "toaster", "sink",
-    "refrigerator", "book", "clock", "vase","scissors",
-    "teddy bear", "hair drier", "toothbrush" };
-    const uint32_t kBBoxDataBufId = 0;
-    const uint32_t kBoxNumDataBufId = 1;
+    uint32_t g_modelWidth = 416;
+    uint32_t g_modelHeight = 416;
+    const char* g_modelPath = "../model/yolov3.om";
+    const static std::vector<std::string> g_yolov3Label = { "person", "bicycle", "car", "motorbike",
+        "aeroplane", "bus", "train", "truck", "boat",
+        "traffic light", "fire hydrant", "stop sign", "parking meter",
+        "bench", "bird", "cat", "dog", "horse",
+        "sheep", "cow", "elephant", "bear", "zebra",
+        "giraffe", "backpack", "umbrella", "handbag","tie",
+        "suitcase", "frisbee", "skis", "snowboard", "sports ball",
+        "kite", "baseball bat", "baseball glove", "skateboard", "surfboard",
+        "tennis racket", "bottle", "wine glass", "cup",
+        "fork", "knife", "spoon", "bowl", "banana",
+        "apple", "sandwich", "orange", "broccoli", "carrot",
+        "hot dog", "pizza", "donut", "cake", "chair",
+        "sofa", "potted plant", "bed", "dining table", "toilet",
+        "TV monitor", "laptop", "mouse", "remote", "keyboard",
+        "cell phone", "microwave", "oven", "toaster", "sink",
+        "refrigerator", "book", "clock", "vase", "scissors",
+        "teddy bear", "hair drier", "toothbrush" };
+    const uint32_t g_bBoxDataBufId = 0;
+    const uint32_t g_boxNumDataBufId = 1;
     enum BBoxIndex { TOPLEFTX = 0, TOPLEFTY, BOTTOMRIGHTX, BOTTOMRIGHTY, SCORE, LABEL };
-    const uint32_t kLineSolid = 2;
-    const string kOutputFilePrefix = "out_";
-    const double kFountScale = 0.5;
-    const cv::Scalar kFontColor(0, 0, 255);
-    const uint32_t kLabelOffset = 11;
-    const string kFileSperator = "/";
-    const vector<cv::Scalar> kColors{
+    const uint32_t g_lineSolid = 2;
+    const int timep1 = 1000;
+    const int timep2 = 5000;
+    const string g_outputFilePrefix = "out_";
+    const double FOUNT_SCALE = 0.5;
+    const cv::Scalar g_fontColor(0, 0, 255);
+    const uint32_t g_labelOffset = 11;
+    const string g_fileSperator = "/";
+    const vector<cv::Scalar> g_colors {
         cv::Scalar(237, 149, 100), cv::Scalar(0, 215, 255), cv::Scalar(50, 205, 50),
         cv::Scalar(139, 85, 26) };
 }
-int g_video_need_postprocess = VIDEONUM;
+int g_videoNeedPostprocess = VIDEONUM;
 void Preprocess(cv::VideoCapture capture, aclrtContext context, 
-                BlockingQueue<message_pre>* queue_pre, int threadNum) {
-    message_pre premsg;
+                Queue<message>* queue_pre, int threadNum)
+{
+    message premsg;
     aclrtSetCurrentContext(context);
 
-    while(1){
+    while (1) {
         cv::Mat frame;
-        if (!capture.read(frame)){
+        if (!capture.read(frame)) {
             ACLLITE_LOG_INFO("Video capture return false");
             break;
         }
@@ -85,26 +85,25 @@ void Preprocess(cv::VideoCapture capture, aclrtContext context,
         premsg.videoIndex = threadNum;
         premsg.isLastFrame = 1;
         cv::Mat reiszeMat;
-        cv::resize(frame, reiszeMat, cv::Size(kModelWidth, kModelHeight));
+        cv::resize(frame, reiszeMat, cv::Size(g_modelWidth, g_modelHeight));
         if (reiszeMat.empty()) {
             ACLLITE_LOG_ERROR("Resize image failed");
             break;
         }
         premsg.reiszeMat = reiszeMat;
-        while(1) {
+        while (1) {
             if (queue_pre->Push(premsg) != 0) {
-                usleep(1000);
-            }
-            else
+                usleep(timep1);
+            } else
                 break;
         }
     }
 
     premsg.videoIndex = threadNum;
     premsg.isLastFrame = 0;
-    while(1) {
+    while (1) {
         if (queue_pre->Push(premsg) != 0) {
-            usleep(1000);
+            usleep(timep1);
         }
         else {
             ACLLITE_LOG_INFO("preprocess end");
@@ -113,38 +112,38 @@ void Preprocess(cv::VideoCapture capture, aclrtContext context,
     }
 }
 
-void Postprocess(cv::VideoWriter& outputVideo, aclrtContext context, BlockingQueue<message>* queue_post){
+void Postprocess(cv::VideoWriter& outputVideo, aclrtContext context, Queue<message>* queue_post) {
     message postmsg;
     uint32_t* boxNum = nullptr;
     float* detectData = nullptr;
     aclrtSetCurrentContext(context);
 
-    while(1)
+    while (1)
     {
-        if(queue_post->Pop(postmsg) != 0)
-        {
-            usleep(1000);
+        if (queue_post->Pop(postmsg) != 0) {
+            usleep(timep1);
             continue;
         }
 
-        if (!postmsg.isLastFrame){
+        if (!postmsg.isLastFrame) {
             break;
         }
 
         cv::Mat frame = postmsg.frame;
         detectData = (float*)postmsg.detectData.get();
         boxNum = (uint32_t*)postmsg.boxNum.get();
-        if (detectData == nullptr || boxNum == nullptr){
+        if (detectData == nullptr || boxNum == nullptr) {
             break;
         }
         uint32_t totalBox = boxNum[0];
         vector<BBox> detectResults;
-        float widthScale = (float)(frame.cols) / kModelWidth;
-        float heightScale = (float)(frame.rows) / kModelHeight;
+        float widthScale = (float)(frame.cols) / g_modelWidth;
+        float heightScale = (float)(frame.rows) / g_modelHeight;
         for (uint32_t i = 0; i < totalBox; i++) {
             BBox boundBox;
             uint32_t score = uint32_t(detectData[totalBox * SCORE + i] * 100);
-            if (score < 90){
+            uint32_t scoreLine = 90;
+            if (score < scoreLine) {
                 continue;
             }
             boundBox.rect.ltX = detectData[totalBox * TOPLEFTX + i] * widthScale;
@@ -153,7 +152,7 @@ void Postprocess(cv::VideoWriter& outputVideo, aclrtContext context, BlockingQue
             boundBox.rect.rbY = detectData[totalBox * BOTTOMRIGHTY + i] * heightScale;
 
             uint32_t objIndex = (uint32_t)detectData[totalBox * LABEL + i];
-            boundBox.text = yolov3Label[objIndex] + std::to_string(score) + "\%";
+            boundBox.text = g_yolov3Label[objIndex] + std::to_string(score) + "\%";
             detectResults.emplace_back(boundBox);
         }
         for (int i = 0; i < detectResults.size(); ++i) {
@@ -162,28 +161,28 @@ void Postprocess(cv::VideoWriter& outputVideo, aclrtContext context, BlockingQue
             p1.y = detectResults[i].rect.ltY;
             p2.x = detectResults[i].rect.rbX;
             p2.y = detectResults[i].rect.rbY;
-            cv::rectangle(frame, p1, p2, kColors[i % kColors.size()], kLineSolid);
-            cv::putText(frame, detectResults[i].text, cv::Point(p1.x, p1.y + kLabelOffset),
-            cv::FONT_HERSHEY_COMPLEX, kFountScale, kFontColor);
+            cv::rectangle(frame, p1, p2, g_colors[i % g_colors.size()], g_lineSolid);
+            cv::putText(frame, detectResults[i].text, cv::Point(p1.x, p1.y + g_labelOffset),
+            cv::FONT_HERSHEY_COMPLEX, FOUNT_SCALE, g_fontColor);
         }
 
         outputVideo << frame;
 
     }
-    g_video_need_postprocess--;
+    g_videoNeedPostprocess--;
     outputVideo.release();
     ACLLITE_LOG_INFO("postprocess end");
 }
 
 int main(int argc, char *argv[]) {
-    //init acl resource
+    // init acl resource
     AclLiteResource aclDev;
     AclLiteError ret = aclDev.Init();
     if (ret) {
         ACLLITE_LOG_ERROR("Init resource failed, error %d", ret);
         return ACLLITE_ERROR;
     }
-    ObjectDetect detect(kModelPath, kModelWidth, kModelHeight);
+    ObjectDetect detect(g_modelPath, g_modelWidth, g_modelHeight);
 
     ret = detect.Init();
     if (ret != ACLLITE_OK) {
@@ -212,8 +211,8 @@ int main(int argc, char *argv[]) {
                         cv::Size(static_cast<int>(capture2.get(cv::CAP_PROP_FRAME_WIDTH)), 
                         static_cast<int>(capture2.get(cv::CAP_PROP_FRAME_HEIGHT))));
 
-    BlockingQueue<message_pre>queue_pre;
-    BlockingQueue<message>queue_post[VIDEONUM];
+    Queue<message>queue_pre;
+    Queue<message>queue_post[VIDEONUM];
 
     thread task1(Preprocess, ref(capture1), ref(context), &queue_pre, 0);
     thread task2(Preprocess, ref(capture2), ref(context), &queue_pre, 1);
@@ -224,19 +223,15 @@ int main(int argc, char *argv[]) {
     task2.detach();
     task3.detach();
     task4.detach();
-
-    message_pre premsg;
     message msg;
     int video_need_preprocess = VIDEONUM;
-    while(1) {
-        if(queue_pre.Pop(premsg) != 0)
+    while (1) {
+        if (queue_pre.Pop(msg) != 0)
         {
-            usleep(1000);
+            usleep(timep1);
             continue;
         }
-        msg.videoIndex = premsg.videoIndex;
-        msg.isLastFrame = premsg.isLastFrame;
-        if(msg.isLastFrame == 0)
+        if (msg.isLastFrame == 0)
         {
             video_need_preprocess = video_need_preprocess - 1;
         }
@@ -245,40 +240,37 @@ int main(int argc, char *argv[]) {
             while (1) {
                 int i = msg.videoIndex;
                 if (queue_post[i].Push(msg) != 0) {
-                    usleep(1000);
-                }
-                else {
+                    usleep(timep1);
+                } else {
                     break;
                 }
             }
             break;
         }
-        msg.frame = premsg.frame;
         std::vector<InferenceOutput> inferenceOutput;
-        ret = detect.Inference(inferenceOutput, premsg.reiszeMat);
+        ret = detect.Inference(inferenceOutput, msg.reiszeMat);
         if (ret != ACLLITE_OK) {
             ACLLITE_LOG_ERROR("Inference model inference output data failed");
             return 1;
         }
-        msg.detectData = inferenceOutput[kBBoxDataBufId].data;
-        msg.boxNum = inferenceOutput[kBoxNumDataBufId].data;
+        msg.detectData = inferenceOutput[g_bBoxDataBufId].data;
+        msg.boxNum = inferenceOutput[g_boxNumDataBufId].data;
 
         int i = msg.videoIndex;
         while (1) {
             if (queue_post[i].Push(msg) != 0) {
-                usleep(1000);
-            }
-            else {
+                usleep(timep1);
+            } else {
                 break;
             }
         }
     }
-    while(1){
-        if(!g_video_need_postprocess){
+    while (1) {
+        if (!g_videoNeedPostprocess) {
             break;
         }
     }
-    usleep(5000);
+    usleep(timep2);
     ACLLITE_LOG_INFO("Execute sample success");
     return ACLLITE_OK;
 }

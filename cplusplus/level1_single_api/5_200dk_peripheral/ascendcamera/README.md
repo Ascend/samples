@@ -73,7 +73,7 @@ In the development environment, run the following commands as a non-root user to
      
      **export DDK\_PATH=$HOME/Ascend/ascend-toolkit/latest/x86\_64-linux**
      
-     **export NPU\_HOST\_LIB=$DDK\_PATH/acllib/lib64/stub**
+     **export NPU\_HOST\_LIB=$DDK\_PATH/runtime/lib64/stub**
      
      ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") Note:
      
@@ -84,7 +84,7 @@ In the development environment, run the following commands as a non-root user to
      
      **export DDK\_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux**
      
-     **export NPU\_HOST\_LIB=$DDK\_PATH/acllib/lib64/stub**  
+     **export NPU\_HOST\_LIB=$DDK\_PATH/runtime/lib64/stub**  
 ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **Note:**
      
      > - If the version is 3.0.0, change **arm64-linux** in the **DDK\_PATH** environment variable to **arm64-linux\_gcc7.3.0**.

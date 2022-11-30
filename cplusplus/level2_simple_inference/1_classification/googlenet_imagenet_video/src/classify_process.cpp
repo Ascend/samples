@@ -1,5 +1,5 @@
 /**
-* Copyright 2020 Huawei Technologies Co., Ltd
+* Copyright (c) Huawei Technologies Co., Ltd. 2022-2022. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -30,19 +30,21 @@ namespace {
     const uint32_t kScorePercent = 100;
 }
 
-ClassifyProcess::ClassifyProcess(const char* modelPath, 
+ClassifyProcess::ClassifyProcess(const char* modelPath,
                                  uint32_t modelWidth, uint32_t modelHeight)
-:deviceId_(0), inputBuf_(nullptr), modelWidth_(modelWidth),
-modelHeight_(modelHeight), modelPath_(modelPath), 
-inputDataSize_(RGBU8_IMAGE_SIZE(modelWidth_, modelHeight_)), 
-isInited_(false){
+    :deviceId_(0), inputBuf_(nullptr), modelWidth_(modelWidth),
+    modelHeight_(modelHeight), modelPath_(modelPath),
+    inputDataSize_(RGBU8_IMAGE_SIZE(modelWidth_, modelHeight_)),
+    isInited_(false) {
 }
 
-ClassifyProcess::~ClassifyProcess() {
+ClassifyProcess::~ClassifyProcess()
+{
     DestroyResource();
 }
 
-Result ClassifyProcess::OpenPresentAgentChannel(){
+Result ClassifyProcess::OpenPresentAgentChannel()
+{
     channel_ = nullptr;
     PresenterErrorCode openChannelret = OpenChannelByConfig(channel_, "./param.conf");
     if (openChannelret != PresenterErrorCode::kNone) {
@@ -53,8 +55,9 @@ Result ClassifyProcess::OpenPresentAgentChannel(){
     return SUCCESS;
 }
 
-Result ClassifyProcess::InitResource() {
-    //ACL init
+Result ClassifyProcess::InitResource()
+{
+    // ACL init
     const char *aclConfigPath = "../src/acl.json";
     aclError ret = aclInit(aclConfigPath);
     if (ret != ACL_SUCCESS) {
@@ -63,14 +66,14 @@ Result ClassifyProcess::InitResource() {
     }
     INFO_LOG("Acl init success");
 
-    //open device
+    // open device
     ret = aclrtSetDevice(deviceId_);
     if (ret != ACL_SUCCESS) {
         ERROR_LOG("Acl open device %d failed", deviceId_);
         return FAILED;
     }
     INFO_LOG("Open device %d success", deviceId_);
-    //get runmode
+    // get runmode
     ret = aclrtGetRunMode(&runMode_);
     if (ret != ACL_SUCCESS) {
         ERROR_LOG("acl get run mode failed");
@@ -80,7 +83,8 @@ Result ClassifyProcess::InitResource() {
     return SUCCESS;
 }
 
-Result ClassifyProcess::InitModel(const char* omModelPath) {
+Result ClassifyProcess::InitModel(const char* omModelPath)
+{
     Result ret = model_.LoadModelFromFileWithMem(omModelPath);
     if (ret != SUCCESS) {
         ERROR_LOG("execute LoadModelFromFileWithMem failed");
@@ -98,7 +102,7 @@ Result ClassifyProcess::InitModel(const char* omModelPath) {
         ERROR_LOG("execute CreateOutput failed");
         return FAILED;
     }
-    //malloc input mem
+    // malloc input mem
     aclrtMalloc(&inputBuf_, (size_t)(inputDataSize_),
                 ACL_MEM_MALLOC_HUGE_FIRST);
     if (inputBuf_ == nullptr) {
@@ -115,25 +119,26 @@ Result ClassifyProcess::InitModel(const char* omModelPath) {
     return SUCCESS;
 }
 
-Result ClassifyProcess::Init() {
-    //check init flag
+Result ClassifyProcess::Init()
+{
+    // check init flag
     if (isInited_) {
         INFO_LOG("Classify instance is initied already!");
         return SUCCESS;
     }
-    //open presentagent channel
+    // open presentagent channel
     Result ret = OpenPresentAgentChannel();
     if (ret != SUCCESS) {
         ERROR_LOG("Open present agent channel failed");
         return FAILED;
     }
-    //init ACL resource
+    // init ACL resource
     ret = InitResource();
     if (ret != SUCCESS) {
         ERROR_LOG("Init acl resource failed");
         return FAILED;
     }
-    //init model resource
+    // init model resource
     ret = InitModel(modelPath_);
     if (ret != SUCCESS) {
         ERROR_LOG("Init model failed");
@@ -144,8 +149,9 @@ Result ClassifyProcess::Init() {
     return SUCCESS;
 }
 
-Result ClassifyProcess::Preprocess(cv::Mat& frame) {
-    //resize
+Result ClassifyProcess::Preprocess(cv::Mat& frame)
+{
+    // resize
     cv::Mat reiszeMat;
     cv::resize(frame, reiszeMat, cv::Size(modelWidth_, modelHeight_));
     if (reiszeMat.empty()) {
@@ -153,9 +159,9 @@ Result ClassifyProcess::Preprocess(cv::Mat& frame) {
         return FAILED;
     }
     
-    if (runMode_ == ACL_HOST) {     
-        //copy to device   
-        aclError ret = aclrtMemcpy(inputBuf_, inputDataSize_, 
+    if (runMode_ == ACL_HOST) {
+        // copy to device
+        aclError ret = aclrtMemcpy(inputBuf_, inputDataSize_,
                                    reiszeMat.ptr<uint8_t>(), inputDataSize_,
                                    ACL_MEMCPY_HOST_TO_DEVICE);
         if (ret != ACL_SUCCESS) {
@@ -163,33 +169,35 @@ Result ClassifyProcess::Preprocess(cv::Mat& frame) {
             return FAILED;
         }
     } else {
-        //copy to host
+        // copy to host
         memcpy(inputBuf_, reiszeMat.ptr<void>(), inputDataSize_);
     }
 
     return SUCCESS;
 }
 
-Result ClassifyProcess::Inference(aclmdlDataset*& inferenceOutput) {
-    //execute inference
+Result ClassifyProcess::Inference(aclmdlDataset*& inferenceOutput)
+{
+    // execute inference
     Result ret = model_.Execute();
     if (ret != SUCCESS) {
         ERROR_LOG("Execute model inference failed");
         return FAILED;
     }
-    //get output
+    // get output
     inferenceOutput = model_.GetModelOutputData();
 
     return SUCCESS;
 }
 
 Result ClassifyProcess::Postprocess(cv::Mat& frame,
-                                    aclmdlDataset* modelOutput){
-    //get data from output dataset
+                                    aclmdlDataset* modelOutput)
+{
+    // get data from output dataset
     uint32_t dataSize = 0;
     void* data = GetInferenceOutputItem(dataSize, modelOutput);
     if (data == nullptr) return FAILED;
-    //get confidence
+    // get confidence
     float* outData = reinterpret_cast<float*>(data);
     map<float, uint32_t, greater<float> > resultMap;
     for (unsigned int j = 0; j < dataSize / sizeof(float); ++j) {
@@ -197,7 +205,7 @@ Result ClassifyProcess::Postprocess(cv::Mat& frame,
         outData++;
     }
 
-    //choose highest confidence
+    // choose highest confidence
     int maxScoreCls = INVALID_IMAGE_NET_CLASS_ID;
     float maxScore = 0;
     int cnt = 0;
@@ -206,14 +214,12 @@ Result ClassifyProcess::Postprocess(cv::Mat& frame,
         if (++cnt > kTopNConfidenceLevels) {
             break;
         }
-        //INFO_LOG("top %d: index[%d] value[%lf]", cnt, it->second, it->first);
-
         if (it->first > maxScore) {
             maxScore = it->first;
             maxScoreCls = it->second;
         }
     }
-    //construct dst structure 
+    // construct dst structure
     std::vector<DetectionResult> detectionResults;
     ConstructClassifyResult(detectionResults, maxScoreCls, maxScore);
 
@@ -221,14 +227,15 @@ Result ClassifyProcess::Postprocess(cv::Mat& frame,
         delete[]((uint8_t*)data);
         data = nullptr;
     }
-    //send data
+    // send data
     SendImage(detectionResults, frame);
 
     return SUCCESS;
 }
 
 void* ClassifyProcess::GetInferenceOutputItem(uint32_t& itemDataSize,
-                                              aclmdlDataset* inferenceOutput) {
+                                              aclmdlDataset* inferenceOutput)
+{
     aclDataBuffer* dataBuffer = aclmdlGetDatasetBuffer(inferenceOutput, 0);
     if (dataBuffer == nullptr) {
         ERROR_LOG("Get the dataset buffer from model "
@@ -266,16 +273,18 @@ void* ClassifyProcess::GetInferenceOutputItem(uint32_t& itemDataSize,
 }
 
 void ClassifyProcess::EncodeImage(vector<uint8_t>& encodeImg,
-                                  cv::Mat& origImg) {
+                                  cv::Mat& origImg)
+{
     vector<int> param = vector<int>(2);
     param[0] = CV_IMWRITE_JPEG_QUALITY;
-    param[1] = 95;//default(95) 0-100
+    param[1] = 95; // default(95) 0-100
 
     cv::imencode(".jpg", origImg, encodeImg, param);
 }
 
 Result ClassifyProcess::SendImage(vector<DetectionResult>& detectionResults,
-                                  cv::Mat& origImg) {
+                                  cv::Mat& origImg)
+{
     vector<uint8_t> encodeImg;
     EncodeImage(encodeImg, origImg);
 
@@ -297,8 +306,9 @@ Result ClassifyProcess::SendImage(vector<DetectionResult>& detectionResults,
 }
 
 
-void ClassifyProcess::ConstructClassifyResult(vector<DetectionResult>& result, 
-                                              int classIdx, float score) {
+void ClassifyProcess::ConstructClassifyResult(vector<DetectionResult>& result,
+                                              int classIdx, float score)
+{
     DetectionResult dr;
 
     dr.lt.x=0;
@@ -322,11 +332,10 @@ void ClassifyProcess::ConstructClassifyResult(vector<DetectionResult>& result,
 
 void ClassifyProcess::DestroyResource()
 {
-	aclrtFree(inputBuf_);
+    aclrtFree(inputBuf_);
     inputBuf_ = nullptr;
 
     delete channel_;
-	
     aclError ret;
     ret = aclrtResetDevice(deviceId_);
     if (ret != ACL_SUCCESS) {

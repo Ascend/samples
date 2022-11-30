@@ -38,7 +38,7 @@ endif()
 
 # Header path
 include_directories(
-    $ENV{INSTALL_DIR}/acllib/include/
+    $ENV{INSTALL_DIR}/runtime/include/
     $ENV{THIRDPART_PATH}/include/
     ../inc/
 )

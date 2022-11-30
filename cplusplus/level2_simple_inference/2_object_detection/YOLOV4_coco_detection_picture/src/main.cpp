@@ -1,5 +1,5 @@
-/**
-* Copyright 2020 Huawei Technologies Co., Ltd
+/*
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -12,10 +12,8 @@
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 * See the License for the specific language governing permissions and
 * limitations under the License.
-
-* File main.cpp
-* Description: tensorflow yolov4 demo
 */
+
 #include <iostream>
 #include <fstream>
 #include <map>
@@ -31,14 +29,15 @@ using namespace std;
 
 #define CHECK_FUNCTION_RESULT(name, result) \
 { \
-    if(result != SUCCESS) \
+    if ((result) != SUCCESS) \
     { \
         ERROR_LOG(#name" failed"); \
         return -1; \
     } \
 }
 
-void BufferDeleter(void *p) {
+void BufferDeleter(void *p)
+{
     if (!RunStatus::GetDeviceStatus()) {
         if (p != nullptr) {
             (void) aclrtFreeHost(p);
@@ -53,18 +52,18 @@ void BufferDeleter(void *p) {
 * @param [in] xScale: x scale of the origin image and the model input image
 * @param [in] yScale: y scale of the origin image and the model input image
 */
-void ProcessOutput(const aclmdlDataset *output, const char *originImage, float xScale, float yScale) {
+void ProcessOutput(const aclmdlDataset *output, const char *originImage, float xScale, float yScale)
+{
     FILE *outputFile = nullptr;
     shared_ptr<void> dataBuff[2] = {nullptr, nullptr};
     size_t index = 0;
     for (size_t i = 0; (i < aclmdlGetDatasetNumBuffers(output)) && (i < 2); ++i) {
-        std::string name;
-        name = "../out/output_" + to_string(i) + ".bin";
+        std::string name = "../out/output_" + to_string(i) + ".bin";
         if (outputFile != nullptr) {
             fclose(outputFile);
         }
         outputFile = fopen(name.c_str(), "wb");
-        //get model output data
+        // get model output data
         aclDataBuffer *dataBuffer = aclmdlGetDatasetBuffer(output, i);
         void *data = aclGetDataBufferAddr(dataBuffer);
         size_t len = aclGetDataBufferSize(dataBuffer);
@@ -90,7 +89,6 @@ void ProcessOutput(const aclmdlDataset *output, const char *originImage, float x
             shared_ptr<void> ptr(outHostData, BufferDeleter);
             dataBuff[i] = ptr;
         }
-
     }
     if (outputFile != nullptr) {
         fclose(outputFile);
@@ -118,7 +116,8 @@ void ProcessOutput(const aclmdlDataset *output, const char *originImage, float x
 */
 Result GetImageResizeBuffer(const char *imageFile, int resizeWidth, int resizeHeight,
                             void *&buffer, size_t &bufferLen,
-                            float &xScale, float &yScale) {
+                            float &xScale, float &yScale)
+{
     aclrtStream stream = nullptr;
     aclError ret = aclrtCreateStream(&stream);
     if (ret != ACL_SUCCESS) {
@@ -180,8 +179,10 @@ Result GetImageResizeBuffer(const char *imageFile, int resizeWidth, int resizeHe
 * @param [in] argv: the value of arguments
 * @return process result, 0 is success, other is failure
 */
-int main(int argc, const char *argv[]) {
-    if ((argc < 3) || (argv[1] == nullptr) || (argv[2] == nullptr)) {
+int main(int argc, const char *argv[])
+{
+    int argNum = 3;
+    if ((argc < argNum) || (argv[1] == nullptr) || (argv[2] == nullptr)) {
         ERROR_LOG("Please input:./main <model_file> <image_dir>");
         return -1;
     }

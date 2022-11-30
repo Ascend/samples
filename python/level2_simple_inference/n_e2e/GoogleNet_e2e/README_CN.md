@@ -430,7 +430,7 @@ ssh HwHiAiUser@192.168.1.2 "cat ~/.bashrc | grep PATH"
 如果上述命令打印输出不包含上图中红框的内容，则需要执行如下命令更新开发板环境变量配置：
 
 ```
-ssh HwHiAiUser@192.168.1.2 "echo 'export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/acllib/lib64:/home/HwHiAiUser/ascend_ddk/arm/lib:\${LD_LIBRARY_PATH}' >> .bashrc ; echo 'export PYTHONPATH=/home/HwHiAiUser/Ascend/pyACL/python/site-packages/acl:\${PYTHONPATH}' >> .bashrc"
+ssh HwHiAiUser@192.168.1.2 "echo 'export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/runtime/lib64:/home/HwHiAiUser/ascend_ddk/arm/lib:\${LD_LIBRARY_PATH}' >> .bashrc ; echo 'export PYTHONPATH=/home/HwHiAiUser/Ascend/pyACL/python/site-packages/acl:\${PYTHONPATH}' >> .bashrc"
 ```
 
 使用如下命令确认环境变量，下图中红框中的内容为更新的内容：

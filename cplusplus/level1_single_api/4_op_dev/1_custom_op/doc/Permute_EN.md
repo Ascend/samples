@@ -53,7 +53,7 @@ Implemented by using TIK, the Permute operator is used to permute the dimension 
 
 -   Operator Implementation
 
-    For details about the implementation code of the PermuteTik operator, see  [permute\_tik.py](../tbe/custom_impl/permute_tik.py). The implementation logic of the calculation function is as follows:
+    For details about the implementation code of the PermuteTik operator, see  [permute\_tik.py](../tbe/impl/permute_tik.py). The implementation logic of the calculation function is as follows:
 
     1.  Define the  **Permute**  class and initialize the parameters used for subsequent computation in the initialization function. The key is to compute the size of each input shape and memory size to be allocated in the  Global Memory. Obtain the actual physical space of the UB by calling  **tbe\_platform.cce\_conf.get\_soc\_spec\(tbe\_platform.cce\_conf.UB\_SIZE\)**. In subsequent steps, the calculated tiling parameters \(including the shape size and size of the UB\) will be used to configure the parameters of APIs such as  **data\_move**  and  **vec\_trans\_scatter**. Separate the tiling logic from the operator compute logic to implement shape generalization of the operator. In this way, data with different shapes can be computed in the same compute logic. You only need to change the tiling parameters to optimize the number of movement and compute process times, thereby achieving generalization and high performance.
 

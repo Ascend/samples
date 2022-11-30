@@ -29,20 +29,21 @@
 
     参考[ModelArts准备工作wiki](https://github.com/Ascend/samples/wikis/ModelArts%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C?sort_id=3466403)，完成ModelArts准备工作。包括注册华为云账号、ModelArts全局配置和OBS相关操作。
 
-2. **Atlas推理准备工作（两种产品二选一即可）**
+2. <a name="1"></a>**Atlas推理准备工作**
 
     - Atlas200 DK    
-      （1）参考[制卡文档](https://support.huaweicloud.com/environment-deployment-Atlas200DK202/atlased_04_0001.html)进行SD卡制作，制卡成功后等待开发者板四个灯常亮即可。
+      （1）参考[制卡文档](https://www.hiascend.com/document/detail/zh/Atlas200DKDeveloperKit/1013/environment/atlased_04_0009.html)进行SD卡制作，制卡成功后等待开发者板四个灯常亮即可。
     
-      （2）参考[连接文档](https://support.huaweicloud.com/environment-deployment-Atlas200DK202/atlased_04_0014.html)中的**使用网线通过路由器连接Linux服务器**步骤，完成开发者板和本地机器的连接及开发者板上网配置。
+      （2）参考[连接文档](https://www.hiascend.com/document/detail/zh/Atlas200DKDeveloperKit/1013/environment/atlased_04_0012.html)中的**使用网线通过路由器连接Ubuntu服务器**步骤，完成开发者板和本地机器的连接及开发者板上网配置。
 
       （3）配置完成后，参考[环境准备和依赖安装](https://github.com/Ascend/samples/blob/master/python/environment)准备好环境。
 
-    - Atlas300（ai1s）
-      （1）参考[购买并登录Linux弹性云服务器指南](https://support.huaweicloud.com/qs-ecs/zh-cn_topic_0132727313.html)购买AI加速型（ai1s）ECS弹性云服务器，选择镜像的时候选择公共的linux镜像即可。
+    - Atlas300（ai1s）    
+      （1）参考[购买并登录Linux弹性云服务器指南](https://support.huaweicloud.com/qs-ecs/zh-cn_topic_0132727313.html)购买AI加速型（ai1s）ECS弹性云服务器，并参考[卸载驱动固件和CANN软件文档](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/60RC1alpha02/softwareinstall/instg/atlasdeploy_03_0070.html)卸载预安装的老版本。
 
-      （2）参考[环境准备和依赖安装](https://github.com/Ascend/samples/blob/master/python/environment)准备好环境。
-
+      （2）参考[CANN安装指南](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/60RC1alpha02/softwareinstall/instg/atlasdeploy_03_0002.html)配置ai1s的推理开发和运行环境。
+ 
+      （3）配置完成后，参考[环境准备和依赖安装](https://github.com/Ascend/samples/blob/master/python/environment)准备好环境。
 
 ## 5 模型训练
 这里我们选用AI开发平台ModelArts来进行训练，ModelArts是一个一站式的开发平台，能够支撑开发者从数据到AI应用的全流程开发过程。包含数据处理、模型训练、模型管理、模型部署等操作，并且提供AI Gallery功能，能够在市场内与其他开发者分享模型。
@@ -302,9 +303,9 @@ mox.file.copy('/home/ma-user/work/resnet50-90_1875.air', 'obs://modelart-xuyetao
 
 ```
 export install_path=$HOME/Ascend/ascend-toolkit/latest
-export PATH=/usr/local/python3.7.5/bin:${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
-export PYTHONPATH=${install_path}/atc/python/site-packages:${install_path}/atc/python/site-packages/auto_tune.egg/auto_tune:${install_path}/atc/python/site-packages/schedule_search.egg:$PYTHONPATH
-export LD_LIBRARY_PATH=${install_path}/atc/lib64:$LD_LIBRARY_PATH
+export PATH=/usr/local/python3.7.5/bin:${install_path}/compiler/ccec_compiler/bin:${install_path}/compiler/bin:$PATH
+export PYTHONPATH=${install_path}/compiler/python/site-packages:${install_path}/compiler/python/site-packages/auto_tune.egg/auto_tune:${install_path}/compiler/python/site-packages/schedule_search.egg:$PYTHONPATH
+export LD_LIBRARY_PATH=${install_path}/compiler/lib64:$LD_LIBRARY_PATH
 export ASCEND_OPP_PATH=${install_path}/opp
 ```
 
@@ -462,7 +463,7 @@ ssh HwHiAiUser@192.168.1.2 "cat ~/.bashrc | grep PATH"
 如果上述命令打印输出不包含上图中红框的内容，则需要执行如下命令更新开发板环境变量配置：
 
 ```
-ssh HwHiAiUser@192.168.1.2 "echo 'export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/acllib/lib64:/home/HwHiAiUser/ascend_ddk/arm/lib:\${LD_LIBRARY_PATH}' >> .bashrc ; echo 'export PYTHONPATH=/home/HwHiAiUser/Ascend/pyACL/python/site-packages/acl:\${PYTHONPATH}' >> .bashrc"
+ssh HwHiAiUser@192.168.1.2 "echo 'export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/runtime/lib64:/home/HwHiAiUser/ascend_ddk/arm/lib:\${LD_LIBRARY_PATH}' >> .bashrc ; echo 'export PYTHONPATH=/home/HwHiAiUser/Ascend/pyACL/python/site-packages/acl:\${PYTHONPATH}' >> .bashrc"
 ```
 
 使用如下命令确认环境变量，下图中红框中的内容为更新的内容：

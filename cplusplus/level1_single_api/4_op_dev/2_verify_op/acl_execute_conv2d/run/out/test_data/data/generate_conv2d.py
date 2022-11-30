@@ -9,7 +9,7 @@
 """
 import numpy as np
 
-FEATURE_MAP = np.random.uniform(-5, 5, size=(8, 512, 7, 7)).astype(np.float16)
-WEIGHT = np.random.uniform(-5, 5, size=(512, 512, 3, 3)).astype(np.float16)
+FEATURE_MAP = np.random.uniform(-5, 5, size=(8, 256, 7, 7)).astype(np.float16)
+WEIGHT = np.random.uniform(-5, 5, size=(256, 256, 3, 3)).astype(np.float16)
 FEATURE_MAP.tofile('input_0.bin')
 WEIGHT.tofile('input_1.bin')

@@ -95,9 +95,9 @@ resnet50_async_imagenet_classification
         ```
 
 -   **Atlas 200 AI加速模块（ RC场景）：**
-    1.  安装minirc版本的acllib包，以安装在默认路径“/usr/local/Ascend”为例：配置LD\_LIBRARY\_PATH，将“/usr/local/Ascend/acllib/lib64”加入到LD\_LIBRARY\_PATH中。命令示例如下：
+    1.  安装minirc版本的runtime包，以安装在默认路径“/usr/local/Ascend”为例：配置LD\_LIBRARY\_PATH，将“/usr/local/Ascend/runtime/lib64”加入到LD\_LIBRARY\_PATH中。命令示例如下：
         ```
-        export LD_LIBRARY_PATH=/usr/local/Ascend/acllib/lib64:$LD_LIBRARY_PATH
+        export LD_LIBRARY_PATH=/usr/local/Ascend/runtime/lib64:$LD_LIBRARY_PATH
         ```
 
     2.  获取aarch64架构的cann-nnrt软件包，在服务器上解压，在软件包所在目录下的解压命令如下：
@@ -117,7 +117,7 @@ resnet50_async_imagenet_classification
 
 1.  模型转换。
     1.  以HwHiAiUser（运行用户）登录开发环境。
-    2.  参见《[CANN 开发辅助工具指南](https://support.huawei.com/enterprise/zh/doc/EDOC1100206690?idPath=23710424%7C251366513%7C22892968%7C251168373)》中的“ATC工具使用指南”章节中的ATC工具使用环境搭建，获取ATC工具并设置环境变量。
+    2.  参见《[昇腾文档](https://www.hiascend.com/document?tag=commercial-developer)》中的“将已有模型通过ATC工具转换”指导中的ATC工具使用环境搭建，获取ATC工具并设置环境变量。
 
     3.  准备数据。
         从以下链接获取ResNet-50网络的权重文件（*.caffemodel）、模型文件（resnet50.prototxt），并以HwHiAiUser（运行用户）将获取的文件上传至开发环境的“resnet50_async_imagenet_classification/caffe_model”目录下。

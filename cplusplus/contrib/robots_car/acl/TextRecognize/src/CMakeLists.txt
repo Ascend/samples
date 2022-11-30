@@ -26,7 +26,7 @@ endif()
 set(LIB_PATH $ENV{NPU_HOST_LIB})
 
 if (NOT DEFINED ENV{NPU_HOST_LIB})
-    set(LIB_PATH "/usr/local/Ascend/acllib/lib64/stub/")
+    set(LIB_PATH "/usr/local/Ascend/runtime/lib64/stub/")
     message(STATUS "set default LIB_PATH: ${LIB_PATH}")
 else ()
     message(STATUS "env LIB_PATH: ${LIB_PATH}")
@@ -36,7 +36,7 @@ endif()
 include_directories(
     $ENV{HOME}/ascend_ddk/arm/include/
     $ENV{HOME}/ascend_ddk/arm/include/opencv4
-    ${INC_PATH}/acllib/include/
+    ${INC_PATH}/runtime/include/
     ../inc/
 
     $ENV{HOME}/ascend_ddk/arm/ros/melodic/include     #ROS include
@@ -51,7 +51,7 @@ endif()
 link_directories(
     ${LIB_PATH}
     $ENV{HOME}/ascend_ddk/arm/lib/
-    ${INC_PATH}/atc/lib64
+    ${INC_PATH}/compiler/lib64
 
     $ENV{HOME}/ascend_ddk/arm/ros/melodic/lib   #ROS lib
     /usr/lib/aarch64-linux-gnu                  #OpenCV lib etc.

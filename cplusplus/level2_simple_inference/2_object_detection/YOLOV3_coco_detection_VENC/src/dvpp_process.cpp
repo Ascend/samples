@@ -1,5 +1,5 @@
-/**
-* Copyright 2020 Huawei Technologies Co., Ltd
+/*
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -12,30 +12,28 @@
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 * See the License for the specific language governing permissions and
 * limitations under the License.
-
-* File dvpp_process.cpp
-* Description: handle dvpp process
 */
 
 #include <iostream>
+#include <pthread.h>
 #include "acl/acl.h"
 #include "utils.h"
-#include <pthread.h>
 #include "dvpp_process.h"
 using namespace std;
 extern FILE *outFileFp;
-bool runFlag_= true;
+bool g_runFlag = true;
 void *ThreadFunc(void *arg)
 {
     int deviceId = 0;
+    int32_t timeout = 1000;
     aclrtContext context = nullptr;
     aclrtCreateContext(&context, deviceId);
     INFO_LOG("process callback thread start ");
-    while (runFlag_) {
-        (void)aclrtProcessReport(1000);
+    while (g_runFlag) {
+        (void)aclrtProcessReport(timeout);
     }
     aclrtDestroyContext(context);
-    return (void*)0;
+    return static_cast<void*>(nullptr);
 }
 
 bool WriteToFile(FILE *outFileFp_, const void *dataDev, uint32_t dataSize)
@@ -50,23 +48,22 @@ bool WriteToFile(FILE *outFileFp_, const void *dataDev, uint32_t dataSize)
     return ret;
 }
 
-void callback(acldvppPicDesc *input, acldvppStreamDesc *outputStreamDesc, void *userdata)
+void callback(acldvppPicDesc *input, acldvppStreamDesc *g_outputStreamDesc, void *userdata)
 {
     pthread_setcancelstate(PTHREAD_CANCEL_DISABLE, NULL);
-    void *outputDev = acldvppGetStreamDescData(outputStreamDesc);
-    uint32_t streamDescSize = acldvppGetStreamDescSize(outputStreamDesc);
+    void *outputDev = acldvppGetStreamDescData(g_outputStreamDesc);
+    uint32_t streamDescSize = acldvppGetStreamDescSize(g_outputStreamDesc);
 
     bool ret;
-    aclrtRunMode runMode;
-    aclrtGetRunMode(&runMode);
-    if (runMode == ACL_HOST) {
+    aclrtRunMode g_runMode;
+    aclrtGetRunMode(&g_runMode);
+    if (g_runMode == ACL_HOST) {
         void * hostPtr = nullptr;
         aclrtMallocHost(&hostPtr, streamDescSize);
         aclrtMemcpy(hostPtr, streamDescSize, outputDev, streamDescSize, ACL_MEMCPY_DEVICE_TO_HOST);
         ret = WriteToFile(outFileFp, hostPtr, streamDescSize);
         (void)aclrtFreeHost(hostPtr);
-    }
-    else{
+    } else {
         ret = WriteToFile(outFileFp, outputDev, streamDescSize);
     }
 
@@ -77,140 +74,145 @@ void callback(acldvppPicDesc *input, acldvppStreamDesc *outputStreamDesc, void *
 }
 
 DvppProcess::DvppProcess()
-:vencChannelDesc_(nullptr), enType_(2),vencFrameConfig_(nullptr),
-vpcInputDesc_(nullptr), outputStreamDesc(nullptr), codeInputBufferDev_(nullptr){
+    : g_vencChannelDesc_(nullptr),
+      g_enType_(2),
+      g_vencFrameConfig_(nullptr),
+      g_vpcInputDesc_(nullptr),
+      g_outputStreamDesc(nullptr),
+      g_codeInputBufferDev_(nullptr)
+{
 }
 
-DvppProcess::~DvppProcess(){
-    //DestroyResource();
+DvppProcess::~DvppProcess()
+{
 }
 
-Result DvppProcess::InitResource(aclrtStream& stream, int imgWidth, int imgHeight){
-    stream_ = stream;
-    aclError ret = aclrtGetRunMode(&runMode);
+Result DvppProcess::InitResource(aclrtStream& stream, int imgWidth, int imgHeight)
+{
+    g_stream_ = stream;
+    aclError ret = aclrtGetRunMode(&g_runMode);
     if (ret != ACL_SUCCESS) {
         ERROR_LOG("acl get run mode failed");
         }
-    int createThreadErr = pthread_create(&threadId_, nullptr, ThreadFunc, nullptr);
-    (void)aclrtSubscribeReport(static_cast<uint64_t>(threadId_), stream_);
+    int createThreadErr = pthread_create(&g_threadId_, nullptr, ThreadFunc, nullptr);
+    (void)aclrtSubscribeReport(static_cast<uint64_t>(g_threadId_), g_stream_);
     int width = imgWidth;
     int height = imgHeight;
     uint32_t alignWidth = ALIGN_UP128(width);
     uint32_t alignHeight = ALIGN_UP16(height);
     if (alignWidth == 0 || alignHeight == 0) {
         ERROR_LOG("InitCodeInputDesc AlignmentHelper failed. image w %d, h %d, align w%d, h%d",
-        width, height, alignWidth, alignHeight);
+                  width, height, alignWidth, alignHeight);
         return FAILED;
     }
-    //Allocate a large enough memory
-    inputBufferSize = YUV420SP_SIZE(alignWidth, alignHeight);
-    ret = acldvppMalloc(&codeInputBufferDev_, inputBufferSize);
+    // Allocate a large enough memory
+    g_inputBufferSize = YUV420SP_SIZE(alignWidth, alignHeight);
+    ret = acldvppMalloc(&g_codeInputBufferDev_, g_inputBufferSize);
     if (ret != ACL_SUCCESS) {
         ERROR_LOG("acldvppMalloc failed");
         }
-
-    format_ = static_cast<acldvppPixelFormat>(PIXEL_FORMAT_YVU_SEMIPLANAR_420);
-    vencFrameConfig_ = aclvencCreateFrameConfig();
-    aclvencSetFrameConfigForceIFrame(vencFrameConfig_, 0);
-    if (vencFrameConfig_ == nullptr) {
+    g_format_ = static_cast<acldvppPixelFormat>(PIXEL_FORMAT_YVU_SEMIPLANAR_420);
+    g_vencFrameConfig_ = aclvencCreateFrameConfig();
+    aclvencSetFrameConfigForceIFrame(g_vencFrameConfig_, 0);
+    if (g_vencFrameConfig_ == nullptr) {
         ERROR_LOG("Dvpp init failed for create config failed");
         return FAILED;
     }
-
-    vencChannelDesc_ = aclvencCreateChannelDesc();
-    if (vencChannelDesc_ == nullptr) {
+    g_vencChannelDesc_ = aclvencCreateChannelDesc();
+    if (g_vencChannelDesc_ == nullptr) {
         ERROR_LOG("aclvencCreateChannelDesc failed");
         return FAILED;
     }
-    aclvencSetChannelDescThreadId(vencChannelDesc_, threadId_);
-    aclvencSetChannelDescCallback(vencChannelDesc_, callback);
-    aclvencSetChannelDescEnType(vencChannelDesc_, static_cast<acldvppStreamFormat>(enType_));
-    aclvencSetChannelDescPicFormat(vencChannelDesc_, format_);
-    aclvencSetChannelDescKeyFrameInterval(vencChannelDesc_, 1);
-    aclvencSetChannelDescPicWidth(vencChannelDesc_, width);
-    aclvencSetChannelDescPicHeight(vencChannelDesc_, height);
-    aclvencCreateChannel(vencChannelDesc_);
-
-    vpcInputDesc_ = acldvppCreatePicDesc();
-    if (vpcInputDesc_ == nullptr) {
-        ERROR_LOG("acldvppCreatePicDesc vpcInputDesc_ failed");
+    aclvencSetChannelDescThreadId(g_vencChannelDesc_, g_threadId_);
+    aclvencSetChannelDescCallback(g_vencChannelDesc_, callback);
+    aclvencSetChannelDescEnType(g_vencChannelDesc_, static_cast<acldvppStreamFormat>(g_enType_));
+    aclvencSetChannelDescPicFormat(g_vencChannelDesc_, g_format_);
+    aclvencSetChannelDescKeyFrameInterval(g_vencChannelDesc_, 1);
+    aclvencSetChannelDescPicWidth(g_vencChannelDesc_, width);
+    aclvencSetChannelDescPicHeight(g_vencChannelDesc_, height);
+    aclvencCreateChannel(g_vencChannelDesc_);
+    g_vpcInputDesc_ = acldvppCreatePicDesc();
+    if (g_vpcInputDesc_ == nullptr) {
+        ERROR_LOG("acldvppCreatePicDesc g_vpcInputDesc_ failed");
         return FAILED;
     }
-    acldvppSetPicDescFormat(vpcInputDesc_, format_);
-    acldvppSetPicDescWidth(vpcInputDesc_, width);
-    acldvppSetPicDescHeight(vpcInputDesc_, height);
-    acldvppSetPicDescWidthStride(vpcInputDesc_, alignWidth);
-    acldvppSetPicDescHeightStride(vpcInputDesc_, alignHeight);
+    acldvppSetPicDescFormat(g_vpcInputDesc_, g_format_);
+    acldvppSetPicDescWidth(g_vpcInputDesc_, width);
+    acldvppSetPicDescHeight(g_vpcInputDesc_, height);
+    acldvppSetPicDescWidthStride(g_vpcInputDesc_, alignWidth);
+    acldvppSetPicDescHeightStride(g_vpcInputDesc_, alignHeight);
     INFO_LOG("dvpp init resource ok");
     return SUCCESS;
 }
 
-Result DvppProcess::Venc(cv::Mat& srcImage) {
+Result DvppProcess::Venc(cv::Mat& srcImage)
+{
     aclError ret;
-    if(runMode == ACL_HOST) {
-        ret = aclrtMemcpy(codeInputBufferDev_, inputBufferSize, srcImage.data, inputBufferSize, ACL_MEMCPY_HOST_TO_DEVICE);
+    if (g_runMode == ACL_HOST) {
+        ret = aclrtMemcpy(g_codeInputBufferDev_, g_inputBufferSize, srcImage.data,
+                          g_inputBufferSize, ACL_MEMCPY_HOST_TO_DEVICE);
         if (ret != ACL_SUCCESS) {
-            //ERROR_LOG("aclrtMemcpy failed");
+            ERROR_LOG("aclrtMemcpy failed");
             }
-    }
-    else {
-        ret = aclrtMemcpy(codeInputBufferDev_, inputBufferSize, srcImage.data, inputBufferSize, ACL_MEMCPY_DEVICE_TO_DEVICE);
+    } else {
+        ret = aclrtMemcpy(g_codeInputBufferDev_, g_inputBufferSize,
+                          srcImage.data, g_inputBufferSize, ACL_MEMCPY_DEVICE_TO_DEVICE);
         if (ret != ACL_SUCCESS) {
-            //ERROR_LOG("aclrtMemcpy failed");
+            ERROR_LOG("aclrtMemcpy failed");
             }
     }
 
-    acldvppSetPicDescData(vpcInputDesc_, codeInputBufferDev_);
-    acldvppSetPicDescSize(vpcInputDesc_, inputBufferSize);
+    acldvppSetPicDescData(g_vpcInputDesc_, g_codeInputBufferDev_);
+    acldvppSetPicDescSize(g_vpcInputDesc_, g_inputBufferSize);
 
-    ret = aclvencSendFrame(vencChannelDesc_, vpcInputDesc_,
-    static_cast<void *>(outputStreamDesc), vencFrameConfig_, nullptr);
+    ret = aclvencSendFrame(g_vencChannelDesc_, g_vpcInputDesc_,
+    static_cast<void *>(g_outputStreamDesc), g_vencFrameConfig_, nullptr);
     if (ret != ACL_SUCCESS) {
         ERROR_LOG("aclvencSendFrame failed");
         }
     return SUCCESS;
 }
 
-void DvppProcess::DestroyResource(){
+void DvppProcess::DestroyResource()
+{
+    aclvencSetFrameConfigEos(g_vencFrameConfig_, 1);
+    aclvencSetFrameConfigForceIFrame(g_vencFrameConfig_, 0);
+    aclvencSendFrame(g_vencChannelDesc_, nullptr, nullptr, g_vencFrameConfig_, nullptr);
 
-    aclvencSetFrameConfigEos(vencFrameConfig_, 1);
-    aclvencSetFrameConfigForceIFrame(vencFrameConfig_, 0);
-    aclvencSendFrame(vencChannelDesc_, nullptr, nullptr, vencFrameConfig_, nullptr);
-
-    if (vencFrameConfig_ != nullptr) {
-        (void)aclvencDestroyFrameConfig(vencFrameConfig_);
-        vencFrameConfig_ = nullptr;
+    if (g_vencFrameConfig_ != nullptr) {
+        (void)aclvencDestroyFrameConfig(g_vencFrameConfig_);
+        g_vencFrameConfig_ = nullptr;
     }
 
-    if (vpcInputDesc_ != nullptr) {
-        (void)acldvppDestroyPicDesc(vpcInputDesc_);
-        vpcInputDesc_ = nullptr;
+    if (g_vpcInputDesc_ != nullptr) {
+        (void)acldvppDestroyPicDesc(g_vpcInputDesc_);
+        g_vpcInputDesc_ = nullptr;
     }
 
-    if (codeInputBufferDev_ != nullptr) {
-        (void)acldvppFree(codeInputBufferDev_);
-        codeInputBufferDev_ = nullptr;
+    if (g_codeInputBufferDev_ != nullptr) {
+        (void)acldvppFree(g_codeInputBufferDev_);
+        g_codeInputBufferDev_ = nullptr;
     }
 
-    if (outputStreamDesc != nullptr) {
-        (void)acldvppDestroyStreamDesc(outputStreamDesc);
-        outputStreamDesc = nullptr;
+    if (g_outputStreamDesc != nullptr) {
+        (void)acldvppDestroyStreamDesc(g_outputStreamDesc);
+        g_outputStreamDesc = nullptr;
     }
 
     aclError aclRet;
-    if (vencChannelDesc_ != nullptr) {
-        aclRet = aclvencDestroyChannel(vencChannelDesc_);
+    if (g_vencChannelDesc_ != nullptr) {
+        aclRet = aclvencDestroyChannel(g_vencChannelDesc_);
         if (aclRet != ACL_SUCCESS) {
             ERROR_LOG("aclvencDestroyChannel failed, aclRet = %d", aclRet);
         }
-        (void)aclvencDestroyChannelDesc(vencChannelDesc_);
-        vencChannelDesc_ = nullptr;
+        (void)aclvencDestroyChannelDesc(g_vencChannelDesc_);
+        g_vencChannelDesc_ = nullptr;
     }
 
-    (void)aclrtUnSubscribeReport(static_cast<uint64_t>(threadId_), stream_);
-    runFlag_ = false;
+    (void)aclrtUnSubscribeReport(static_cast<uint64_t>(g_threadId_), g_stream_);
+    g_runFlag = false;
     void *res = nullptr;
-    pthread_cancel(threadId_);
-    int joinThreadErr = pthread_join(threadId_, &res);
+    pthread_cancel(g_threadId_);
+    int joinThreadErr = pthread_join(g_threadId_, &res);
     INFO_LOG("end to destroy DvppProcess");
 }

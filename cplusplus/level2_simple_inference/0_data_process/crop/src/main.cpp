@@ -139,7 +139,7 @@ void DestroyResource()
 int main(int argc, char *argv[])
 {
     /* 1.ACL initialization  */
-    const char *aclConfigPath = "../acl.json";
+    const char *aclConfigPath = "../src/acl.json";
     aclInit(aclConfigPath);
 
     /* 2.Run the management resource application, including Device, Context, Stream */

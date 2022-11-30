@@ -1,4 +1,4 @@
-# Add算子运行验证
+# AddRowRanges算子运行验证
 
 ## 功能描述
 
@@ -62,22 +62,22 @@
 
   3. 开发环境上，设置环境变量，配置AscendCL单算子验证程序编译依赖的头文件与库文件路径。
 
-     设置以下环境变量后，编译脚本会根据“{DDK_PATH}环境变量值/acllib/include/acl”目录查找编译依赖的头文件，根据{NPU_HOST_LIB}环境变量指向的目录查找编译依赖的库文件。“$HOME/Ascend”请替换“Ascend-cann-toolkit”包的实际安装路径。
+     设置以下环境变量后，编译脚本会根据“{DDK_PATH}环境变量值/runtime/include/acl”目录查找编译依赖的头文件，根据{NPU_HOST_LIB}环境变量指向的目录查找编译依赖的库文件。“$HOME/Ascend”请替换“Ascend-cann-toolkit”包的实际安装路径。
 
      - 当开发环境与运行环境的操作系统架构相同时，配置示例如下所示：
 
        ```
        export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest
-       export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
+       export NPU_HOST_LIB=$DDK_PATH/runtime/lib64/stub
        ```
 
      - 当开发环境与运行环境的操作系统架构不同时，配置示例如下所示：
        
-       例如，当开发环境为X86架构、运行环境为AArch64架构时，则涉及交叉编译，需在开发环境上安装AArch64架构的软件包，将{DDK_PATH}环境变量的路径指向AArch64架构的软件包安装目录（如下所示），便于使用与运行环境架构相同的软件包中的头文件和库文件来编译代码。
+       例如，当开发环境为X86架构、运行环境为AArch64架构时，则涉及交叉编译，需在开发环境上安装AArch64架构的软件包，将{DDK_PATH}环境变量的路径指向AArch64架构的软件包安装目录（如下所示，注意arm64-linux仅作为示例说明，请以实际架构目录名称为准），便于使用与运行环境架构相同的软件包中的头文件和库文件来编译代码。
 
        ```
        export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux
-       export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
+       export NPU_HOST_LIB=$DDK_PATH/runtime/lib64/stub
        ```
 
 
@@ -108,7 +108,7 @@
 
 ## 编译运行
 
-1.  生成Add算子的单算子离线模型文件。
+1.  生成AddRowRanges算子的单算子离线模型文件。
     1.  以运行用户（例如HwHiAiUser）登录开发环境，并进入样例工程的“acl\_execute\_add/run/out“目录。
     2.  在out目录下执行如下命令，生成单算子模型文件。
 
@@ -125,7 +125,7 @@
 
         在当前目录的op\_models目录下生成单算子的模型文件**0\_AddRowRanges\_8\_16\_8\_16\_8\_2.om**，命名规范为：序号+opType + 输入的描述\(dateType\_format\_shape\)+输出的描述。
 
-        dataType以及format对应枚举值请从ATC组件所在目录下的“atc/include/graph/types.h”文件中查看，枚举值从0开始依次递增。
+        dataType以及format对应枚举值请从ATC组件所在目录下的“compiler/include/graph/types.h”文件中查看，枚举值从0开始依次递增。
 
         **说明：**模型转换时，会优先去查找自定义算子库去匹配模型文件中的算子。
 

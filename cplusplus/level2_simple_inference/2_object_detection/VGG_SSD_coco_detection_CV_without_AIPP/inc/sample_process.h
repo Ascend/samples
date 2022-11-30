@@ -66,8 +66,8 @@ public:
 private:
     void DestroyResource();
 
-    int32_t g_deviceId;
-    aclrtContext g_context;
-    aclrtStream g_stream;
+    int32_t deviceId_;
+    aclrtContext context_;
+    aclrtStream stream_;
 };
 #endif

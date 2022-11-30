@@ -234,9 +234,9 @@ AclLite公共库主要根据面向对象原则设计，按处理对象主要分�
 
 | 说明项 | 具体描述 |
 |---|---|
-| 函数 | AclLiteError Execute(std::vector<InferenceOutput>& inferOutputs, void *data, uint32_t size) |
-| 功能 | 执行模型推理，该接口针对模型只有一个输入的场景，会先用第二、三个参数构建模型输入，再送去推理 | 
-| 参数 | inferOutputs：模型推理结果<br>data：模型输入数据<br>size：模型输入数据大小 |
+| 函数 | AclLiteError Execute(std::vector<InferenceOutput>& inferOutputs, void *data, uint32_t size, uint32_t batchsize = 0) |
+| 功能 | 执行模型推理，该接口针对模型只有一个输入的场景，会先用第二、三个参数构建模型输入，再送去推理，支持动态batch特性，默认关闭 | 
+| 参数 | inferOutputs：模型推理结果<br>data：模型输入数据<br>size：模型输入数据大小<br>batchsize：动态batch模型单次推理batch数 |
 | 返回值 | ACLLITE_OK：推理成功 <br>其他：推理失败 |
 | 备注 | 推理后结果数据存储在本地，如果是模型串接或再使用dvpp功能场景需要进行拷贝<br>InferenceOutput数据结构详见[**InferenceOutput**](#InferenceOutput) |
 
@@ -253,8 +253,16 @@ AclLite公共库主要根据面向对象原则设计，按处理对象主要分�
 | 函数 | size_t GetModelInputSize(int index) |
 | 功能 | 获取模型输入数据大小 | 
 | 参数 | index：索引，标记是模型的第几个输入，index从0开始 |
-| 返回值 | 模型输入数据大小：<br>>0：获取成功<br>其他：获取失败 |
+| 返回值 | 模型输入数据大小 |
 | 备注 | size单位为Byte |
+
+| 说明项 | 具体描述 |
+|---|---|
+| 函数 | void GetModelOutputInfo(vector<ModelOutputInfo>& modelOutputInfo) |
+| 功能 | 获取模型输出数据信息 | 
+| 参数 | modelOutputInfo：存储模型的输出节点信息 |
+| 返回值 | ACLLITE_OK：获取成功 <br> ACLLITE_ERROR：获取失败 |
+| 备注 | ModelOutputInfo数据结构详见 [**ModelOutputInfo**](#ModelOutputInfo) |
 
 | 说明项 | 具体描述 |
 |---|---|
@@ -359,7 +367,7 @@ AclLite公共库主要根据面向对象原则设计，按处理对象主要分�
 | 功能 | 将图片缩放到指定大小 | 
 | 参数 | dest: 压缩后的图片<br>src: 待压缩图片<br>width: 缩放目标大小的宽度<br>height: 缩放目标大小的高度 |
 | 返回值 | ACLLITE_OK: 缩放成功<br>其他: 缩放失败 |
-| 约束 | 该接口对数据输入输出的相关约束请参考“[昇腾社区文档中心](https://www.hiascend.com/document?tag=community-developer)”中的“[VPC功能及约束说明](https://support.huaweicloud.com/aclcppdevg-cann51RC1alpha1/aclcppdevg_03_0154.html)”请注意选择配套的CANN版本<br> |
+| 约束 | 该接口对数据输入输出的相关约束请参考“[昇腾社区文档中心](https://www.hiascend.com/document?tag=community-developer)”中的“[VPC约束说明](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/60RC1alpha02/infacldevg/aclcppdevg/aclcppdevg_03_0159.html)”请注意选择配套的CANN版本<br> |
 | 备注 | acllite resize()在内部封装了对齐操作，使用的对齐参数为16x2，而对齐可能会使输出的缩放图片size与接口参数不一致，请注意<br>ImageData数据结构详见[**ImageData**](#ImageData) |
 
 | 说明项 | 具体描述 |
@@ -368,7 +376,7 @@ AclLite公共库主要根据面向对象原则设计，按处理对象主要分�
 | 功能 | 将png图片解码为rgb图片 | 
 | 参数 | destRgb：解码后的rgb图片<br>srcPng：待解码的png图片 |
 | 返回值 | ACLLITE_OK: 解码成功<br>其他: 解码失败 |
-| 约束 | 该接口对数据输入输出的相关约束请参考“[昇腾社区文档中心](https://www.hiascend.com/document?tag=community-developer)”中的“[JPEGD功能及约束说明](https://support.huaweicloud.com/aclcppdevg-cann51RC1alpha1/aclcppdevg_03_0187.html)”请注意选择配套的CANN版本 |
+| 约束 | 该接口对数据输入输出的相关约束请参考“[昇腾社区文档中心](https://www.hiascend.com/document?tag=community-developer)”中的“[pngD功能及约束说明](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/60RC1alpha02/infacldevg/aclcppdevg/aclcppdevg_03_0189.html)”请注意选择配套的CANN版本 |
 | 备注 | acllite PngD()在内部封装了对齐操作，当前使用的对齐参数为128x16，而对齐可能会使输出的解码图片size与原始图片宽高不一致，请注意<br>ImageData数据结构详见[**ImageData**](#ImageData) |
 
 | 说明项 | 具体描述 |
@@ -377,7 +385,7 @@ AclLite公共库主要根据面向对象原则设计，按处理对象主要分�
 | 功能 | 将jpeg图片解码为yuv图片 | 
 | 参数 | destYuv：解码后的yuv图片<br>srcJpeg：待解码的jpeg图片 |
 | 返回值 | ACLLITE_OK: 解码成功<br>其他: 解码失败 |
-| 约束 | 该接口对数据输入输出的相关约束请参考“[昇腾社区文档中心](https://www.hiascend.com/document?tag=community-developer)”中的“[JPEGD功能及约束说明](https://support.huaweicloud.com/aclcppdevg-cann51RC1alpha1/aclcppdevg_03_0171.html)”请注意选择配套的CANN版本 |
+| 约束 | 该接口对数据输入输出的相关约束请参考“[昇腾社区文档中心](https://www.hiascend.com/document?tag=community-developer)”中的“[JPEGD功能及约束说明](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/60RC1alpha02/infacldevg/aclcppdevg/aclcppdevg_03_0177.html)”请注意选择配套的CANN版本 |
 | 备注 | acllite JpegD()在内部封装了对齐操作，当前使用的对齐参数为128x16，而对齐可能会使输出的解码图片size与原始图片宽高不一致，请注意<br>ImageData数据结构详见[**ImageData**](#ImageData) |
 
 | 说明项 | 具体描述 |
@@ -386,7 +394,7 @@ AclLite公共库主要根据面向对象原则设计，按处理对象主要分�
 | 功能 | 将yuv图片编码为jpeg图片 | 
 | 参数 | destJpeg：编码后的jpeg图片<br>srcYuv：待编码的yuv图片 |
 | 返回值 | ACLLITE_OK: 编码成功<br>其他: 编码失败 |
-| 约束 | 该接口对数据输入输出的相关约束请参考“[昇腾社区文档中心](https://www.hiascend.com/document?tag=community-developer)”中的“[JPEGE功能及约束说明](https://support.huaweicloud.com/aclcppdevg-cann51RC1alpha1/aclcppdevg_03_0177.html)”请注意选择配套的CANN版本 |
+| 约束 | 该接口对数据输入输出的相关约束请参考“[昇腾社区文档中心](https://www.hiascend.com/document?tag=community-developer)”中的“[JPEGE功能及约束说明](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/60RC1alpha02/infacldevg/aclcppdevg/aclcppdevg_03_0184.html)”请注意选择配套的CANN版本 |
 | 备注 | acllite JpegE()在内部封装了对齐操作，当前使用的对齐参数为16x2，而对齐可能会使输出的编码图片size与原始图片宽高不一致，请注意，请注意<br>ImageData数据结构详见[**ImageData**](#ImageData) |
 
 | 说明项 | 具体描述 |
@@ -395,16 +403,16 @@ AclLite公共库主要根据面向对象原则设计，按处理对象主要分�
 | 功能 | 抠图贴图，从原图抠出(ltHorz, ltVert)、(rbHorz, rbVert)两点确定的矩形区域,并贴至贴图区域(0, 0)(rbHorz-ltHorz, ltVert-rbVert) | 
 | 参数 | dest：抠图贴图后图片数据<br>src：待处理图片数据<br>ltHorz：左上点的X坐标<br>ltVert：左上点的Y坐标<br>rbHorz：右下点的X坐标<br>rbVert：右下点的Y坐标 |
 | 返回值 | ACLLITE_OK: 处理成功<br>其他: 处理失败 |
-| 约束 | 该接口对数据输入输出的相关约束请参考“[昇腾社区文档中心](https://www.hiascend.com/document?tag=community-developer)”中的“[VPC功能及约束说明](https://support.huaweicloud.com/aclcppdevg-cann51RC1alpha1/aclcppdevg_03_0154.html)”请注意选择配套的CANN版本<br> |
+| 约束 | 该接口对数据输入输出的相关约束请参考“[昇腾社区文档中心](https://www.hiascend.com/document?tag=community-developer)”中的“[VPC约束说明](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/60RC1alpha02/infacldevg/aclcppdevg/aclcppdevg_03_0159.html)”请注意选择配套的CANN版本<br> |
 | 备注 | acllite Crop()在内部封装了对齐操作，会对传入图片的宽高及坐标偏移值做自动化处理，满足VPC功能方面约束<br>ImageData数据结构详见[**ImageData**](#ImageData) |
 
 | 说明项 | 具体描述 |
 |---|---|
 | 函数 | AclLiteError CropPaste(ImageData& dest, ImageData& src, uint32_t width, uint32_t height, uint32_t ltHorz, uint32_t ltVert, uint32_t rbHorz, uint32_t rbVert) |
 | 功能 | 抠图贴图，从原图抠出(ltHorz, ltVert)、(rbHorz, rbVert)两点确定的矩形区域，并贴至贴图区域(0, 0)(width, height) | 
-| 参数 | dest：抠图贴图后图片数据<br>src：待处理图片数据<br>width：贴图后图片宽<br>贴图后图片高<br>ltHorz：确定抠图区域的左上点的X坐标<br>ltVert：确定抠图区域的左上点的Y坐标<br>rbHorz：确定抠图区域的右下点的X坐标<br>rbVert：确定抠图区域的右下点的Y坐标 |
+| 参数 | dest：抠图贴图后图片数据<br>src：待处理图片数据<br>width：贴图后图片宽<br>height:贴图后图片高<br>ltHorz：确定抠图区域的左上点的X坐标<br>ltVert：确定抠图区域的左上点的Y坐标<br>rbHorz：确定抠图区域的右下点的X坐标<br>rbVert：确定抠图区域的右下点的Y坐标 |
 | 返回值 | ACLLITE_OK: 处理成功<br>其他: 处理失败 |
-| 约束 | 该接口对数据输入输出的相关约束请参考“[昇腾社区文档中心](https://www.hiascend.com/document?tag=community-developer)”中的“[VPC功能及约束说明](https://support.huaweicloud.com/aclcppdevg-cann51RC1alpha1/aclcppdevg_03_0154.html)”请注意选择配套的CANN版本<br> |
+| 约束 | 该接口对数据输入输出的相关约束请参考“[昇腾社区文档中心](https://www.hiascend.com/document?tag=community-developer)”中的“[VPC约束说明](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/60RC1alpha02/infacldevg/aclcppdevg/aclcppdevg_03_0159.html)<br> |
 | 备注 | 该接口处理完的图片数据，会对传入图片的宽高及坐标偏移值做自动化处理，满足VPC功能方面约束<br>ImageData数据结构详见[**ImageData**](#ImageData) |
 
 | 说明项 | 具体描述 |
@@ -413,8 +421,17 @@ AclLite公共库主要根据面向对象原则设计，按处理对象主要分�
 | 功能 | 等比例贴图, 将原始图片数据在不改变宽高比的情况下，贴至区域(0, 0)(rbHorz-ltHorz, ltVert-rbVert)| 
 | 参数 | dest：抠图贴图后图片数据<br>src：待处理图片数据<br>ltHorz：左上点的X坐标<br>ltVert：左上点的Y坐标<br>rbHorz：右下点的X坐标<br>rbVert：右下点的Y坐标 |
 | 返回值 | ACLLITE_OK: 处理成功<br>其他: 处理失败 |
-| 约束 | 该接口对数据输入输出的相关约束请参考“[昇腾社区文档中心](https://www.hiascend.com/document?tag=community-developer)”中的“[VPC功能及约束说明](https://support.huaweicloud.com/aclcppdevg-cann51RC1alpha1/aclcppdevg_03_0154.html)”请注意选择配套的CANN版本<br> |
+| 约束 | 该接口对数据输入输出的相关约束请参考“[昇腾社区文档中心](https://www.hiascend.com/document?tag=community-developer)”中的“[VPC约束说明](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/60RC1alpha02/infacldevg/aclcppdevg/aclcppdevg_03_0159.html)<br> |
 | 备注 | 该接口处理完的图片数据，会对传入图片的宽高及坐标偏移值做自动化处理，满足VPC功能方面约束，因此可能会有绿边产生，介意者需要使用AIPP功能消除<br>由于是等比例贴图，操作后贴图区域的空白区域会被绿边填充，如原始图片区域为(0,0)(200,100)，贴图区域为(0,0)(50,50)，则(0，0)(50，25)区域为有效图片数据，(0，25)(50，50)会被绿边填充(该例中dvpp对齐约束先忽略不计，以左上角为原点，x轴往右y轴往下为正方向)<br>ImageData数据结构详见[**ImageData**](#ImageData) |
+
+| 说明项 | 具体描述 |
+|---|---|
+| 函数 | AclLiteError ProportionPasteCenter(ImageData& dest, ImageData& src, uint32_t width, uint32_t height); |
+| 功能 | 中心等比例贴图, 将原始图片数据在不改变宽高比的情况下，贴至贴图区域(width,height)中央| 
+| 参数 | dest：抠图贴图后图片数据<br>src：待处理图片数据<br>width：贴图区域图片宽<br>height：贴图区域图片高 |
+| 返回值 | ACLLITE_OK: 处理成功<br>其他: 处理失败 |
+| 约束 | 该接口对数据输入输出的相关约束请参考“[昇腾社区文档中心](https://www.hiascend.com/document?tag=community-developer)”中的“[VPC约束说明](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/60RC1alpha02/infacldevg/aclcppdevg/aclcppdevg_03_0159.html)<br> |
+| 备注 | 该接口处理完的图片数据，会对传入图片的宽高及坐标偏移值做自动化处理，满足VPC功能方面约束，因此可能会有绿边产生，介意者需要使用AIPP功能消除<br>由于是等比例贴图，操作后贴图区域的空白区域会被绿边填充<br>ImageData数据结构详见[**ImageData**](#ImageData) |
 
 | 说明项 | 具体描述 |
 |---|---|
@@ -453,7 +470,7 @@ AclLite公共库主要根据面向对象原则设计，按处理对象主要分�
 | 功能 | 构造函数，创建等待解码的视频/rtsp流实例 | 
 | 参数 | videoPath：等待解码的视频文件地址/rtsp流地址<br>context：解码器使用dvpp vdec功能解码时使用的acl context；可不填，则传入参数视为nullptr，并使用当前线程的context做解码 |
 | 返回值 | 无 |
-| 约束 | 1. 请参见“[昇腾社区文档中心](https://www.hiascend.com/document?tag=community-developer)”中“应用开发”手册的[VDEC功能及约束](https://support.huaweicloud.com/aclcppdevg-cann504alpha2infer/aclcppdevg_api_04_0184.html)，请注意选择对应的CANN版本。<br>2. 在创建实例前需要初始化acl(aclInit)和设置device(aclrtSetDevice) |
+| 约束 | 1. 请参见“[昇腾社区文档中心](https://www.hiascend.com/document?tag=community-developer)”中“应用开发”手册的[VDEC功能及约束](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/60RC1alpha02/infacldevg/aclcppdevg/aclcppdevg_03_0195.html)，请注意选择对应的CANN版本。<br>2. 在创建实例前需要初始化acl(aclInit)和设置device(aclrtSetDevice) |
 
 | 说明项 | 具体描述 |
 |---|---|
@@ -461,7 +478,7 @@ AclLite公共库主要根据面向对象原则设计，按处理对象主要分�
 | 功能 |  构造函数，创建等待编码的视频实例 | 
 | 参数 | vencConfig：编码配置文件，VencConfig类型结构体，结构体详见于[**VencConfig**](#VencConfig)<br>context：解码器使用dvpp venc功能编码时使用的acl context；可不填，则传入参数视为nullptr，并使用当前线程的context做解码 |
 | 返回值 | 无 |
-| 约束 | 1. 请参见“[昇腾社区文档中心](https://www.hiascend.com/document?tag=community-developer)”中“应用开发”手册的[VENC功能及约束](https://support.huaweicloud.com/aclcppdevg-cann504alpha2infer/aclcppdevg_api_04_0189.html)，请注意选择对应的CANN版本。<br>2. 在创建实例前需要初始化acl(aclInit)和设置device(aclrtSetDevice) |
+| 约束 | 1. 请参见“[昇腾社区文档中心](https://www.hiascend.com/document?tag=community-developer)”中“应用开发”手册的[VENC功能及约束](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/60RC1alpha02/infacldevg/aclcppdevg/aclcppdevg_03_0201.html)，请注意选择对应的CANN版本。<br>2. 在创建实例前需要初始化acl(aclInit)和设置device(aclrtSetDevice) |
 
 | 说明项 | 具体描述 |
 |---|---|
@@ -1392,6 +1409,13 @@ int main()
 | 结构体 | DataInfo |
 | 功能 | 数据信息，存储数据内容及数据大小，用来生成模型输入输出 | 
 | 数据成员 | data：数据<br>size：数据大小 |
+| 备注 |  |
+
+| 说明项 | <a name="ModelOutputInfo">具体描述</a> |
+|---|---|
+| 结构体 | ModelOutputInfo |
+| 功能 | 模型输出节点数据信息，存储模型每个输出节点的具体信息 | 
+| 数据成员 | name：模型输出的输出算子名称、算子输出边下标、top名称或输出名称<br>dims：模型输出维度信息的指针<br>format：输出的Format<br>dataType：输出的数据类型 |
 | 备注 |  |
 
 | 说明项 | <a name="InferenceOutput">具体描述</a> |

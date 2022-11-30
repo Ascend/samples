@@ -46,7 +46,7 @@ The directory of a Caffe or TensorFlow custom operator sample project is organiz
 │   ├── CMakeLists.txt   // CMakeList.txt of the operator IR definition file, called by CMakeList.txt of the operator project
 ├── tbe 
 │   ├── CMakeLists.txt   
-│   ├── custom_impl    // Directory of operator implementation files
+│   ├── impl    // Directory of operator implementation files
 │   │      ├── xx.py
 │   │      ├── __init__.py      // Python package identification file
 │   ├── op_info_cfg   // Directory of operator information library files
@@ -114,8 +114,8 @@ The directory of a Caffe or TensorFlow custom operator sample project is organiz
    # Configure environment variables when installing the nnae package.
    . ${HOME}/Ascend/nnae/set_env.sh 
    
-   # Configure environment variables when installing the tfplugin package.
-   . /${HOME}/Ascend/tfplugin/set_env.sh
+   # Configure environment variables when installing the fwkplugin package.
+   . /${HOME}/Ascend/fwkplugin/set_env.sh
    
   ```
 
@@ -166,7 +166,7 @@ The directory of a Caffe or TensorFlow custom operator sample project is organiz
 
     ```
     Before You Start
-    You are advised to keep the parameter type (in bold and italic) unique and not the same as that defined in the built-in caffe.proto file in the atc/include/proto/caffe.proto directory.
+    You are advised to keep the parameter type (in bold and italic) unique and not the same as that defined in the built-in caffe.proto file in the compiler/include/proto/caffe.proto directory.
     The custom.proto file in the sample code contains the definition of the Caffe custom operator. If there are other custom operators, add their definitions to this file.
     ```
 
@@ -256,12 +256,12 @@ The directory of a Caffe or TensorFlow custom operator sample project is organiz
    │                   ├── config
    ${soc_version} // Ascend AI Processor model
    │                           ├── aic-${sos_version}-ops-info.json     // Custom TBE operator info library file
-   │                   ├── custom_impl               // Custom TBE operator implementation code
+   │                   ├── impl               // Custom TBE operator implementation code
    │                       ├── xx.py
    │           ├── vector_core   // Reserved directory, which can be ignored
    │           ├── cpu          // Directory of AI CPU custom operator implementation file and information library.
    │                ├── aicpu_kernel
-   │                    ├── custom_impl
+   │                    ├── impl
    │                        ├── libcust_aicpu_kernels.so   //Custom AI CPU operator implementation library file
    │                ├── config
    │                    ├── cust_aicpu_kernel.json         //Custom AI CPU operator information library file
@@ -410,7 +410,7 @@ In the inference scenario, you can use the command parameter  **enable\_scope\_f
 
        In the preceding command,  **soc\_version**  specifies the model of the Ascend AI Processor. Replace it with the actual version.
 
-       It is the exact name of the .ini file in  **atc/data/platform\_config**  in the ATC installation path. 
+       It is the exact name of the .ini file in  **compiler/data/platform\_config**  in the ATC installation path. 
 
 3.  Verify the result.
     1.  You can view the pattern setting in the INFO log.

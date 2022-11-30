@@ -58,9 +58,6 @@ int main(int argc, char *argv[]) {
                 continue;
             }
         }
-
-        clock_t Begin,End;
-        Begin = clock();
         //preprocess:read pic, resize to dst size
         Result ret = classify.Preprocess(imageFile);
         if (ret != SUCCESS) {
@@ -83,11 +80,6 @@ int main(int argc, char *argv[]) {
             ERROR_LOG("Process model inference output data failed");
             return FAILED;
         }
-        End = clock();
-        double duration = (End-Begin) * 1000.0 / CLOCKS_PER_SEC;
-        cout << "tick:" << End-Begin << endl;
-        cout << CLOCKS_PER_SEC << endl;
-        cout << "duration:" << duration << "(ms)" << endl;
     }
     classify.PrintMeanPSNR();
     INFO_LOG("Execute sample success");

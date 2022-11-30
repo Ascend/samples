@@ -91,9 +91,21 @@
       # 拷贝opencv相关头文件。
       sudo scp -r HwHiAiUser@X.X.X.X:/usr/include/opencv* /usr/include
       ```
-##### 安装ffmpeg+acllite
+##### 安装ffmpeg和x264、acllite
 开发环境执行以下命令源码安装ffmpeg（apt安装的ffmpeg版本较低，所以源码安装）并安装acllite。如果代码中并没有使用acllite库相关功能及函数，可以跳过此步骤。
-  1. 下载并安装ffmpeg。    
+  1. 下载并安装x264。
+     ```
+     # 下载x264
+     cd ${HOME}
+     git clone https://code.videolan.org/videolan/x264.git
+     cd x264
+     # 安装x264
+     ./configure --enable-shared --disable-asm
+     make
+     sudo make install
+     sudo cp /usr/local/lib/libx264.so.164 /lib
+     ```
+  2. 下载并安装ffmpeg。    
      ```
      # 下载ffmpeg
      cd ${HOME}
@@ -101,20 +113,20 @@
      tar -zxvf ffmpeg-4.1.3.tar.gz
      cd ffmpeg-4.1.3
      ```
-  2. 安装ffmpeg   
+  3. 安装ffmpeg   
       - **运行环境为x86**，执行以下命令安装ffmpeg    
          ```
-         ./configure --enable-shared --enable-pic --enable-static --disable-x86asm --prefix=${THIRDPART_PATH}
+         ./configure --enable-shared --enable-pic --enable-static --disable-x86asm --enable-libx264 --enable-gpl --prefix=${THIRDPART_PATH}
          make -j8
          make install
          ```
       - **运行环境为arm**。执行以下命令安装ffmpeg    
          ```
-         ./configure --enable-shared --enable-pic --enable-static --disable-x86asm --cross-prefix=aarch64-linux-gnu- --enable-cross-compile --arch=aarch64 --target-os=linux --prefix=${THIRDPART_PATH}
+         ./configure --enable-shared --enable-pic --enable-static --disable-x86asm --cross-prefix=aarch64-linux-gnu- --enable-cross-compile --arch=aarch64 --target-os=linux --enable-libx264 --enable-gpl --prefix=${THIRDPART_PATH}
          make -j8
          make install
          ```
-  3. 安装acllite并将结果文件拷贝到运行环境。    
+  4. 安装acllite并将结果文件拷贝到运行环境。    
      ```
      # 下载源码并安装git
      cd ${HOME}

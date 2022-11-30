@@ -26,7 +26,7 @@ endif()
 set(LIB_PATH $ENV{NPU_HOST_LIB})
 
 if (NOT DEFINED ENV{NPU_HOST_LIB})
-    set(LIB_PATH "/usr/local/Ascend/acllib/lib64/stub/")
+    set(LIB_PATH "/usr/local/Ascend/runtime/lib64/stub/")
     message(STATUS "set default LIB_PATH: ${LIB_PATH}")
 else ()
     message(STATUS "env LIB_PATH: ${LIB_PATH}")
@@ -36,7 +36,7 @@ endif()
 include_directories(
     ../inc/
     $ENV{HOME}/ascend_ddk/include/third_party/
-    ${INC_PATH}/acllib/include/
+    ${INC_PATH}/runtime/include/
     $ENV{HOME}/ascend_ddk/include/
     $ENV{HOME}/Ascend/
     $ENV{HOME}/Ascend/
@@ -52,7 +52,7 @@ link_directories(
     $ENV{HOME}/ascend_ddk/lib/
     $ENV{HOME}/Ascend/driver/
     $ENV{HOME}/Ascend/
-    ${INC_PATH}/atc/lib64/
+    ${INC_PATH}/compiler/lib64/
 )
 
 add_executable(main

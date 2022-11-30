@@ -1,12 +1,22 @@
-/**
-* @file dvpp_process.h
+/*
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
 *
-* Copyright (C) 2020. Huawei Technologies Co., Ltd. All rights reserved.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+
+* http://www.apache.org/licenses/LICENSE-2.0
+
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
 */
+
+#ifndef YOLOV4_COCO_DETECTION_PICTURE_INC_DVPP_PROCESS_H
+#define YOLOV4_COCO_DETECTION_PICTURE_INC_DVPP_PROCESS_H
+
 #pragma once
 
 #include <cstdint>
@@ -81,23 +91,25 @@ private:
 
     void DestroyOutputPara();
 
-    acldvppChannelDesc *dvppChannelDesc_;
-    aclrtStream stream_;
-    acldvppResizeConfig *resizeConfig_;
-    void *decodeOutDevBuffer_; // decode output buffer
-    acldvppPicDesc *decodeOutputDesc_; //decode output desc
-    acldvppPicDesc *resizeInputDesc_; // resize input desc
-    acldvppPicDesc *resizeOutputDesc_; // resize output desc
-    void *inDevBuffer_;  // decode input buffer
-    uint32_t inDevBufferSize_; // dvpp input buffer size
-    uint32_t jpegDecodeOutputSize_; // jpeg decode output size
-    uint32_t decodeOutputWidth_; // decode output width
-    uint32_t decodeOutputWidthStride_; // decode output width aligned
-    uint32_t decodeOutputHeight_; // decode output height
-    void *resizeOutBufferDev_; // resize output buffer
-    uint32_t resizeOutBufferSize_;  // resize output size
-    uint32_t modelInputWidth_; // model input width
-    uint32_t modelInputHeight_; // model input height
-    uint32_t resizeOutWidthStride_; // resize output width aligned
-    uint32_t resizeOutHeightStride_; // resize output height aligned
+    acldvppChannelDesc *g_dvppChannelDesc_;
+    aclrtStream g_stream_;
+    acldvppResizeConfig *g_resizeConfig_;
+    void *g_decodeOutDevBuffer_; // decode output buffer
+    acldvppPicDesc *g_decodeOutputDesc_; // decode output desc
+    acldvppPicDesc *g_resizeInputDesc_; // resize input desc
+    acldvppPicDesc *g_resizeOutputDesc_; // resize output desc
+    void *g_inDevBuffer_;  // decode input buffer
+    uint32_t g_inDevBufferSize_; // dvpp input buffer size
+    uint32_t g_jpegDecodeOutputSize_; // jpeg decode output size
+    uint32_t g_decodeOutputWidth_; // decode output width
+    uint32_t g_decodeOutputWidthStride_; // decode output width aligned
+    uint32_t g_decodeOutputHeight_; // decode output height
+    void *g_resizeOutBufferDev_; // resize output buffer
+    uint32_t g_resizeOutBufferSize_;  // resize output size
+    uint32_t g_modelInputWidth_; // model input width
+    uint32_t g_modelInputHeight_; // model input height
+    uint32_t g_resizeOutWidthStride_; // resize output width aligned
+    uint32_t g_resizeOutHeightStride_; // resize output height aligned
 };
+
+#endif

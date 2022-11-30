@@ -12,17 +12,17 @@ declare -i verifyResError=2
 
 function envCheck() {
     export ASCEND_INSTALL_PATH=$HOME/Ascend/ascend-toolkit/latest
-    if [ -d ${ASCEND_INSTALL_PATH}/fwkacllib ]; then
-        echo "WARNING: op online compile can only run with fwkacllib, please check it installed correctly!"
+    if [ -d ${ASCEND_INSTALL_PATH}/compiler ]; then
+        echo "WARNING: op online compile can only run with compiler, please check it installed correctly!"
     fi
 }
 
 function setEnv() {
     # set environment
-    export PYTHONPATH=${ASCEND_INSTALL_PATH}/fwkacllib/python/site-packages:${ASCEND_INSTALL_PATH}/fwkacllib/python/site-packages/auto_tune.egg/auto_tune:${ASCEND_INSTALL_PATH}/fwkacllib/python/site-packages/schedule_search.egg:$PYTHONPATH
-    export LD_LIBRARY_PATH=${ASCEND_INSTALL_PATH}/fwkacllib/lib64
+    export PYTHONPATH=${ASCEND_INSTALL_PATH}/compiler/python/site-packages:${ASCEND_INSTALL_PATH}/compiler/python/site-packages/auto_tune.egg/auto_tune:${ASCEND_INSTALL_PATH}/compiler/python/site-packages/schedule_search.egg:$PYTHONPATH
+    export LD_LIBRARY_PATH=${ASCEND_INSTALL_PATH}/compiler/lib64
     export ASCEND_OPP_PATH=${ASCEND_INSTALL_PATH}/opp
-    export PATH=${ASCEND_INSTALL_PATH}/fwkacllib/ccec_compiler/bin:${ASCEND_INSTALL_PATH}/fwkacllib/bin:$PATH
+    export PATH=${ASCEND_INSTALL_PATH}/compiler/ccec_compiler/bin:${ASCEND_INSTALL_PATH}/compiler/bin:$PATH
 }
 
 function compile() {

@@ -142,7 +142,7 @@ INFO - [AMCT]:[Utils]: The model file is saved in ./outputs/nuq/resnet-101_fake_
   + [retrain_conf](./src/retrain_conf/)
     + [retrain.cfg](./src/retrain_conf/retrain.cfg)
   + [\_\_init__.py](./src/__init__.py)
-  + [resnet-101_retrain.py](./src/resnet101_retrain.py)
+  + [resnet-101_retrain.py](./src/resnet-101_retrain.py)
   + [resnet.py](./src/resnet.py)
 
 请在当前目录执行如下命令运行示例程序：
@@ -216,7 +216,9 @@ INFO - [AMCT]:[Utils]: The model file is saved in ./outputs/nuq/resnet-101_fake_
 
 ### 4.2 示例
 
-执行稀疏示例前，请先检查当前目录下是否包含以下文件及目录：
+稀疏有两种: (a) 通道稀疏； （b) 四选二结构化稀疏; 
+
+（a）执行通道稀疏示例，请先检查当前目录下是否包含以下文件及目录：
 
 + [model](./model/)
   + [resnet101-5d3b4d8f.pth](./model/resnet101-5d3b4d8f.pth)
@@ -224,7 +226,7 @@ INFO - [AMCT]:[Utils]: The model file is saved in ./outputs/nuq/resnet-101_fake_
   + [retrain_conf](./src/retrain_conf/)
     + [prune_retrain.cfg](./src/retrain_conf/prune_retrain.cfg)
   + [\_\_init__.py](./src/__init__.py)
-  + [resnet-101_prune_retrain.py](./src/resnet101_prune_retrain.py)
+  + [resnet-101_prune_retrain.py](./src/resnet-101_prune_retrain.py)
   + [resnet.py](./src/resnet.py)
 
 请在当前目录执行如下命令运行示例程序：
@@ -240,6 +242,35 @@ INFO - [AMCT]:[Utils]: The model file is saved in ./outputs/nuq/resnet-101_fake_
   ```bash
   CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 python ./src/resnet-101_prune_retrain.py --train_set TRAIN_SET --eval_set EVAL_SET --config_defination ./src/retrain_conf/prune_retrain.cfg --train_iter 200 --distributed
   ```
+
+
+ (b) 执行四选二结构化稀疏示例，请先检查当前目录下是否包含以下文件及目录：
+
++ [model](./model/)
+  + [resnet101-5d3b4d8f.pth](./model/resnet101-5d3b4d8f.pth)
++ [src](./src/)
+  + [retrain_conf](./src/retrain_conf/)
+    + [selective_prune_retrain.cfg](./src/retrain_conf/selective_prune_retrain.cfg)
+  + [\_\_init__.py](./src/__init__.py)
+  + [resnet-101_prune_retrain.py](./src/resnet-101_prune_retrain.py)
+  + [resnet.py](./src/resnet.py)
+
+请在当前目录执行如下命令运行示例程序：
+
++ 单卡稀疏后训练
+
+  ```bash
+  CUDA_VISIBLE_DEVICES=0 python ./src/resnet-101_prune_retrain.py --train_set TRAIN_SET --eval_set EVAL_SET --config_defination ./src/retrain_conf/selective_prune_retrain.cfg --train_iter 200
+  ```
+
++ 多卡稀疏后训练
+
+  ```bash
+  CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 python ./src/resnet-101_prune_retrain.py --train_set TRAIN_SET --eval_set EVAL_SET --config_defination ./src/retrain_conf/selective_prune_retrain.cfg --train_iter 200 --distributed
+  ```
+
+
++ 多卡稀疏后训练注意事项
 
   > 仅支持 distribution 模式的多卡训练，不支持 DataParallel 模式的多卡训练。如果使用 DataParallel 模式的多卡训练，会出现如下错误信息：
   >
@@ -271,6 +302,34 @@ INFO - [AMCT]:[Utils]: The model file is saved in ./outputs/nuq/resnet-101_fake_
 ```
 说明：本示例结果与示例命令相匹配仅作为参考，不同的迭代次数精度不同，数据随机性可能导致结果微小差异。如果要恢复模型的精度，需要更大的训练迭代次数。
 
++ 自动通道稀疏搜索功能
+为了用户快捷实现通道稀疏，提供自动通道稀疏功能(该特性为试用特性)
+执行通道稀疏示例，请先检查当前目录下是否包含以下文件及目录：
+
++ [model](./model/)
+  + [resnet101-5d3b4d8f.pth](./model/resnet101-5d3b4d8f.pth)
++ [src](./src/)
+  + [retrain_conf](./src/retrain_conf/)
+    + [auto_prune_retrain.cfg](./src/retrain_conf/auto_prune_retrain.cfg)
+  + [\_\_init__.py](./src/__init__.py)
+  + [resnet-101_auto_prune_retrain.py](./src/resnet101_auto_prune_retrain.py)
+  + [resnet.py](./src/resnet.py)
+
+请在当前目录执行如下命令运行示例程序：
+
++ 单卡稀疏后训练
+
+  ```bash
+  CUDA_VISIBLE_DEVICES=0 python ./src/resnet-101_auto_prune_retrain.py --train_set TRAIN_SET --eval_set EVAL_SET --auto_prune_config ./src/retrain_conf/auto_prune_retrain.cfg --auto_output_cfg ./auto_output.cfg --train_iter 200
+  ```
+
++ 多卡稀疏后训练
+
+  ```bash
+  CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 python ./src/resnet-101_auto_prune_retrain.py --train_set TRAIN_SET --eval_set EVAL_SET --auto_prune_config ./src/retrain_conf/auto_prune_retrain.cfg --auto_output_cfg ./auto_output.cfg --train_iter 200 --distributed
+  ```
+
+
 ### 4.3 结果
 
 稀疏成功后，在当前目录会生成日志文件 [./amct_log/amct_pytorch.log](./amct_log/amct_pytorch.log) 和 [./outputs/prune_retrain](./outputs/prune_retrain/) 文件夹，该文件夹内包含以下内容：
@@ -301,7 +360,7 @@ INFO - [AMCT]:[Utils]: The model file is saved in ./outputs/nuq/resnet-101_fake_
   + [retrain_conf](./src/retrain_conf/)
     + [compressed.cfg](./src/retrain_conf/compressed.cfg)
   + [\_\_init__.py](./src/__init__.py)
-  + [resnet-101_compressed.py](./src/resnet101_compressed.py)
+  + [resnet-101_compressed.py](./src/resnet-101_compressed.py)
   + [resnet.py](./src/resnet.py)
 
 请在当前目录执行如下命令运行示例程序：

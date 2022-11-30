@@ -1,5 +1,5 @@
-/**
-* Copyright 2020 Huawei Technologies Co., Ltd
+/*
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -12,10 +12,8 @@
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 * See the License for the specific language governing permissions and
 * limitations under the License.
-
-* File sample_process.cpp
-* Description: handle acl resource
 */
+
 #include <iostream>
 #include <sys/timeb.h>
 #include "acl/acl.h"
@@ -25,18 +23,17 @@
 #include "object_detection.h"
 
 using namespace std;
-
+const int g_timep = 500;
 InferenceThread::InferenceThread(const string& modelPath,
-                     uint32_t modelWidth, uint32_t modelHeight, 
-                     aclrtContext& context) : 
-stream_(nullptr),
-context_(context),
-model_(modelPath), 
-modelWidth_(modelWidth), 
-modelHeight_(modelHeight){
+                                 uint32_t modelWidth, uint32_t modelHeight, 
+                                 aclrtContext& context)
+    : stream_(nullptr), context_(context), model_(modelPath),
+      modelWidth_(modelWidth), modelHeight_(modelHeight)
+{
 }
 
-InferenceThread::~InferenceThread() {
+InferenceThread::~InferenceThread()
+{
     aclError ret = aclrtSetCurrentContext(context_);
     if (ret != ACL_SUCCESS) {
         ACLLITE_LOG_ERROR("InferenceThread destructor set context failed, error: %d", ret);
@@ -44,8 +41,8 @@ InferenceThread::~InferenceThread() {
     model_.DestroyResource();
 }
 
-AclLiteError InferenceThread::Init() {
-
+AclLiteError InferenceThread::Init()
+{
     AclLiteError ret = aclrtCreateStream(&stream_);
     if (ret != ACL_ERROR_NONE) {
         ACLLITE_LOG_ERROR("Create acl stream failed, error %d", ret);
@@ -68,8 +65,8 @@ AclLiteError InferenceThread::Init() {
 }
 
 AclLiteError InferenceThread::ModelExecute(shared_ptr<PreprocDataMsg> preprocDataMsg,
-                                       shared_ptr<InferOutputMsg> &inferOutputMsg) {
-
+                                           shared_ptr<InferOutputMsg> &inferOutputMsg)
+{
     inferOutputMsg->isLastFrame = preprocDataMsg->isLastFrame;
     inferOutputMsg->frameNum = preprocDataMsg->frameNum;
     inferOutputMsg->imageFileName = preprocDataMsg->imageFileName;
@@ -80,7 +77,7 @@ AclLiteError InferenceThread::ModelExecute(shared_ptr<PreprocDataMsg> preprocDat
         return ACLLITE_ERROR;
     }
     ret = model_.CreateInput(imageDevice.data.get(),
-                                    imageDevice.size);
+                               imageDevice.size);
     if (ret != ACLLITE_OK) {
         ACLLITE_LOG_ERROR("Create mode input dataset failed");
         return ACLLITE_ERROR;
@@ -97,44 +94,33 @@ AclLiteError InferenceThread::ModelExecute(shared_ptr<PreprocDataMsg> preprocDat
 }
 
 AclLiteError InferenceThread::MsgSend(shared_ptr<PreprocDataMsg> preprocDataMsg,
-                                       shared_ptr<InferOutputMsg> &inferOutputMsg) {
-    while(1)
-    {
-        AclLiteError ret = SendMessage(preprocDataMsg->postprocThreadId,MSG_INFER_OUTPUT, inferOutputMsg);
-        if(ret == ACLLITE_ERROR_ENQUEUE)
-        {
-            usleep(500);
+                                      shared_ptr<InferOutputMsg> &inferOutputMsg)
+{
+    while (1) {
+        AclLiteError ret = SendMessage(preprocDataMsg->postprocThreadId, MSG_INFER_OUTPUT, inferOutputMsg);
+        if (ret == ACLLITE_ERROR_ENQUEUE) {
+            usleep(g_timep);
             continue;
-        }
-        else if(ret == ACLLITE_OK)
-        {
+        } else if (ret == ACLLITE_OK) {
             break;
-        }
-        else
-        {
+        } else {
             ACLLITE_LOG_ERROR("Send read frame message failed, error %d", ret);
             return ret;
         }
     }
-
     return ACLLITE_OK;
 }
 
-AclLiteError InferenceThread::MsgSendEnd(shared_ptr<PreprocDataMsg> preprocDataMsg) {
-    while(1)
-    {
+AclLiteError InferenceThread::MsgSendEnd(shared_ptr<PreprocDataMsg> preprocDataMsg)
+{
+    while (1) {
         AclLiteError ret = SendMessage(preprocDataMsg->postprocThreadId, MSG_ENCODE_FINISH, nullptr);
-        if(ret == ACLLITE_ERROR_ENQUEUE)
-        {
-            usleep(500);
+        if (ret == ACLLITE_ERROR_ENQUEUE) {
+            usleep(g_timep);
             continue;
-        }
-        else if(ret == ACLLITE_OK)
-        {
+        } else if (ret == ACLLITE_OK) {
             break;
-        }
-        else
-        {
+        } else {
             ACLLITE_LOG_ERROR("Send read frame message failed, error %d", ret);
             return ret;
         }
@@ -143,12 +129,13 @@ AclLiteError InferenceThread::MsgSendEnd(shared_ptr<PreprocDataMsg> preprocDataM
     return ACLLITE_OK;
 }
 
-AclLiteError InferenceThread::Process(int msgId, shared_ptr<void> data) {
+AclLiteError InferenceThread::Process(int msgId, shared_ptr<void> data)
+{
     struct timespec time3 = {0, 0};
     struct timespec time4 = {0, 0};
     shared_ptr<InferOutputMsg> inferOutputMsg = make_shared<InferOutputMsg>();
     AclLiteError ret;
-    switch(msgId) {
+    switch (msgId) {
         case MSG_PREPROC_DATA:
             clock_gettime(CLOCK_REALTIME, &time3);
             ModelExecute(static_pointer_cast<PreprocDataMsg>(data), inferOutputMsg);
@@ -166,4 +153,3 @@ AclLiteError InferenceThread::Process(int msgId, shared_ptr<void> data) {
 
     return ACLLITE_OK;
 }
-

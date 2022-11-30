@@ -361,7 +361,7 @@ The interface prototype of this module is defined in the **AclLiteImageProc.h** 
 | Feature| Resizes an image to a specified size.| 
 | Parameter| dest: Compressed image.<br>src: Image to be compressed.<br>width: Target width of scaling.<br>height: Target height of scaling.|
 | Return value| ACLLITE_OK: Scaling succeeded.<br>Other values: Failed to scale.|
-| Constraints| For details about the constraints of this interface on data input and output, see [VPC Functions and Constraints](https://support.huaweicloud.com/aclcppdevg-cann51RC1alpha1/aclcppdevg_03_0154.html) in [Ascend Community Documentation Center](https://www.hiascend.com/document?tag=community-developer). Select the correct CANN version.<br>|
+| Constraints| For details about the constraints of this interface on data input and output, see [VPC Restrictions](https://www.hiascend.com/document/detail/en/CANNCommunityEdition/51RC1alphaX/infacldevg/aclcppdevg/aclcppdevg_03_0156.html) in [Ascend Community Documentation Center](https://www.hiascend.com/document?tag=community-developer). Select the correct CANN version.<br>|
 | Remarks| acllite resize() internally encapsulates the alignment operation and uses the 16 x 2 alignment parameter. However, alignment may cause the size of the output scaled image to be inconsistent with the interface parameter.<br>For details about the ImageData data structure, see [**ImageData**](#ImageData).|
 
 | Item| Description|
@@ -370,7 +370,7 @@ The interface prototype of this module is defined in the **AclLiteImageProc.h** 
 | Feature| Decodes JPEG images into YUV images.| 
 | Parameter| destYuv: Decoded YUV image.<br>srcJpeg: JPEG image to be decoded.|
 | Return value| ACLLITE_OK: Decoding succeeded.<br>Other values: Failed to decode.|
-| Constraints| For details about the constraints of this interface on data input and output, see [JPEGD Functions and Constraints](https://support.huaweicloud.com/aclcppdevg-cann51RC1alpha1/aclcppdevg_03_0171.html) in [Ascend Community Documentation Center](https://www.hiascend.com/document?tag=community-developer). Select the correct CANN version.|
+| Constraints| For details about the constraints of this interface on data input and output, see [JPEGD Functions and Restrictions](https://www.hiascend.com/document/detail/en/CANNCommunityEdition/51RC1alphaX/infacldevg/aclcppdevg/aclcppdevg_03_0174.html) in [Ascend Community Documentation Center](https://www.hiascend.com/document?tag=community-developer). Select the correct CANN version.|
 | Remarks| acllite JpegD() encapsulates the alignment operation internally. The current alignment parameter is 128 x 16. However, alignment may cause the width and height of the output decoded image to be different from those of the original image.<br>For details about the ImageData data structure, see [**ImageData**](#ImageData).|
 
 | Item| Description|
@@ -379,7 +379,7 @@ The interface prototype of this module is defined in the **AclLiteImageProc.h** 
 | Feature| Encodes a YUV image into a JPEG image.| 
 | Parameter| destJpeg: Encoded JPEG image.<br>srcYuv: YUV image to be encoded.|
 | Return value| ACLLITE_OK: Encoding succeeded.<br>Other values: Failed to encode.|
-| Constraints| For details about the constraints of this interface on data input and output, see [JPEGD Functions and Constraints](https://support.huaweicloud.com/aclcppdevg-cann51RC1alpha1/aclcppdevg_03_0177.html) in [Ascend Community Documentation Center](https://www.hiascend.com/document?tag=community-developer). Select the correct CANN version.|
+| Constraints| For details about the constraints of this interface on data input and output, see [JPEGE Functions and Restrictions](https://www.hiascend.com/document/detail/en/CANNCommunityEdition/51RC1alphaX/infacldevg/aclcppdevg/aclcppdevg_03_0181.html) in [Ascend Community Documentation Center](https://www.hiascend.com/document?tag=community-developer). Select the correct CANN version.|
 | Remarks| acllite JpegE() internally encapsulates the alignment operation. The current alignment parameter is 16x2. However, alignment may cause the width and height of the output encoded image to be different from those of the original image.<br>For details about the ImageData data structure, see [**ImageData**](#ImageData).|
 
 | Item| Description|
@@ -388,7 +388,7 @@ The interface prototype of this module is defined in the **AclLiteImageProc.h** 
 | Feature| Crops a rectangular area determined by (ltHorz, ltVert) and (rbHorz, rbVert) from the original image, and paste the area to the overridden area (0, 0) (rbHorz-ltHorz, ltVert-rbVert).| 
 | Parameter| dest: Cropped image data.<br>src: Image to be processed.<br>ltHorz: X coordinate of the upper left point.<br>ltVert: Y coordinate of the upper left point.<br>rbHorz: X coordinate of the lower right point<br>rbVert: Y coordinate of the lower right point|
 | Return value| ACLLITE_OK: Processing succeeded.<br>Other values: Failed to process.|
-| Constraints| For details about the constraints of this interface on data input and output, see [VPC Functions and Constraints](https://support.huaweicloud.com/aclcppdevg-cann51RC1alpha1/aclcppdevg_03_0154.html) in [Ascend Community Documentation Center](https://www.hiascend.com/document?tag=community-developer). Select the correct CANN version.<br>|
+| Constraints| For details about the constraints of this interface on data input and output, see [VPC Restrictions](https://www.hiascend.com/document/detail/en/CANNCommunityEdition/51RC1alphaX/infacldevg/aclcppdevg/aclcppdevg_03_0156.html) in [Ascend Community Documentation Center](https://www.hiascend.com/document?tag=community-developer). Select the correct CANN version.<br>|
 | Remarks| acllite Crop() encapsulates the alignment operation internally. It automatically processes the width, height, and coordinate offset of the input image to meet the restrictions on the VPC function.<br>For details about the ImageData data structure, see [**ImageData**](#ImageData).|
 
 | Item| Description|
@@ -397,7 +397,7 @@ The interface prototype of this module is defined in the **AclLiteImageProc.h** 
 | Feature| Crops a rectangular area determined by (ltHorz, ltVert) or (rbHorz, rbVert) from the original image, and pastes the area to the overwritten area ((0, 0) (width, height).| 
 | Parameter| dest: Cropped image data.<br>src: Image to be processed.<br>width: Width of the pasted image.<br>Height of the image after pasting<br>ltHorz: X coordinate of the upper left point of the cropped area.<br>ltVert: Y coordinate of the upper left point of the cropped area.<br>rbHorz: X coordinate of the lower right point of the cropped area.<br>rbVert: Y coordinate of the lower right point of the cropped area.|
 | Return value| ACLLITE_OK: Processing succeeded.<br>Other values: Failed to process.|
-| Constraints| For details about the constraints of this interface on data input and output, see [VPC Functions and Constraints](https://support.huaweicloud.com/aclcppdevg-cann51RC1alpha1/aclcppdevg_03_0154.html) in [Ascend Community Documentation Center](https://www.hiascend.com/document?tag=community-developer). Select the correct CANN version.<br>|
+| Constraints| For details about the constraints of this interface on data input and output, see [VPC Restrictions](https://www.hiascend.com/document/detail/en/CANNCommunityEdition/51RC1alphaX/infacldevg/aclcppdevg/aclcppdevg_03_0156.html) in [Ascend Community Documentation Center](https://www.hiascend.com/document?tag=community-developer). Select the correct CANN version.<br>|
 | Remarks| After the image data is processed by this API, the width, height, and coordinate offset of the input image are automatically processed to meet the VPC function restrictions.<br>For details about the ImageData data structure, see [**ImageData**](#ImageData).|
 
 | Item| Description|
@@ -406,7 +406,7 @@ The interface prototype of this module is defined in the **AclLiteImageProc.h** 
 | Feature| Pastes the original image data to the area (0, 0) (rbHorz-ltHorz, ltVert-rbVert) without changing the aspect ratio.| 
 | Parameter| dest: Cropped image data.<br>src: Image to be processed.<br>ltHorz: X coordinate of the upper left point.<br>ltVert: Y coordinate of the upper left point.<br>rbHorz: X coordinate of the lower right point.<br>rbVert: Y coordinate of the lower right point.|
 | Return value| ACLLITE_OK: Processing succeeded.<br>Other values: Failed to process.|
-| Constraints| For details about the constraints of this interface on data input and output, see [VPC Functions and Constraints](https://support.huaweicloud.com/aclcppdevg-cann51RC1alpha1/aclcppdevg_03_0154.html) in [Ascend Community Documentation Center](https://www.hiascend.com/document?tag=community-developer). Select the correct CANN version.<br>|
+| Constraints| For details about the constraints of this interface on data input and output, see [VPC Restrictions](https://www.hiascend.com/document/detail/en/CANNCommunityEdition/51RC1alphaX/infacldevg/aclcppdevg/aclcppdevg_03_0156.html) in [Ascend Community Documentation Center](https://www.hiascend.com/document?tag=community-developer). Select the correct CANN version.<br>|
 | Remarks| After the image data is processed by this API, the width, height, and coordinate offset of the input image are automatically processed to meet the VPC function restrictions. Therefore, green edges may be generated. You can use the AIPP function to eliminate the green edges.<br>The blank area of the overridden area is filled with green edges after the operation. For example, if the original area is (0,0) (200,100) and the overridden area is (0,0) (50,50), the (0, 0) (50, 25) area is valid image data, (0, 25) (50, 50) is filled with green edges. In this example, the DVPP alignment constraint is ignored. The upper left corner is the origin, and the direction from the X axis to the right and from the Y axis to the bottom is positive.<br>For details about the ImageData data structure, see [**ImageData**](#ImageData).|
 
 | Item| Description|
@@ -446,7 +446,7 @@ This class is used to decode Atlas 200 DK onboard cameras, RTSP video streams, M
 | Feature| Constructor. Creates a video or RTSP stream instance to be decoded.| 
 | Parameter| videoPath: Address of the video file or RTSP stream to be decoded.<br>context: ACL context used when the decoder uses the DVPP VDEC function for decoding. If this parameter is optional, the input parameter is considered as nullptr, and the context of the current thread is used for decoding.|
 | Return value| None|
-| Constraints| 1. For details, see [VDEC Functions and Constraints](https://support.huaweicloud.com/aclcppdevg-cann504alpha2infer/aclcppdevg_api_04_0184.html) in the application development manual in [Ascend Community Documentation Center](https://www.hiascend.com/en/document?tag=community-developer). Select the correct CANN version.<br>2. Before creating an instance, you need to initialize acl (aclInit) and set device (aclrtSetDevice).|
+| Constraints| 1. For details, see [VDEC Functions and Restrictions](https://www.hiascend.com/document/detail/en/CANNCommunityEdition/51RC1alphaX/infacldevg/aclcppdevg/aclcppdevg_03_0192.html) in the application development manual in [Ascend Community Documentation Center](https://www.hiascend.com/en/document?tag=community-developer). Select the correct CANN version.<br>2. Before creating an instance, you need to initialize acl (aclInit) and set device (aclrtSetDevice).|
 
 | Item| Description|
 |---|---|
@@ -454,7 +454,7 @@ This class is used to decode Atlas 200 DK onboard cameras, RTSP video streams, M
 | Feature|  Constructor. Creates a video instance to be encoded.| 
 | Parameter| vencConfig: Encoding configuration file, VencConfig type structure. For details about the structure, see [**VencConfig**](#VencConfig).<br>context: ACL context used when the decoder uses the DVPP VENC function for encoding. If this parameter is left empty, the input parameter is considered as nullptr and the context of the current thread is used for decoding.|
 | Return value| None|
-| Constraints| 1. For details, see [VENC Functions and Constraints](https://support.huaweicloud.com/aclcppdevg-cann504alpha2infer/aclcppdevg_api_04_0189.html) in the application development manual in [Ascend Community Documentation Center](https://www.hiascend.com/en/document?tag=community-developer). Select the correct CANN version.<br>2. Before creating an instance, you need to initialize acl (aclInit) and set device (aclrtSetDevice).|
+| Constraints| 1. For details, see [VENC Functions and Restrictions](https://www.hiascend.com/document/detail/en/CANNCommunityEdition/51RC1alphaX/infacldevg/aclcppdevg/aclcppdevg_03_0198.html) in the application development manual in [Ascend Community Documentation Center](https://www.hiascend.com/en/document?tag=community-developer). Select the correct CANN version.<br>2. Before creating an instance, you need to initialize acl (aclInit) and set device (aclrtSetDevice).|
 
 | Item| Description|
 |---|---|

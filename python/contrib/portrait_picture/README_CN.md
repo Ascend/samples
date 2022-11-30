@@ -34,7 +34,7 @@
        **注：如果需要切换到其它tag版本，以v0.5.0为例，可执行以下命令。**
        ```
        git checkout v0.5.0
-       ```   
+       ```
     - 压缩包方式下载（下载时间较短，但步骤稍微复杂）。   
        **注：如果需要下载其它版本代码，请先请根据前置条件说明进行samples仓分支切换。**   
        ``` 
@@ -43,15 +43,15 @@
         # 3. 开发环境中，执行以下命令，解压zip包。     
         cd ${HOME}    
         unzip ascend-samples-master.zip
-        ```
+       ```
 
 2. 获取此应用中所需要的模型
 
 | **模型名称** | **模型说明**                   | **模型下载路径**                                             |
 | ------------ | ------------------------------ | ------------------------------------------------------------ |
 | Portrait     | 基于TensorFlow的人像分割模型。 | 请参考https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/portraitnet/ATC_PortraitNet_tf_AE 中README.md原始模型章节，下载**原始模型**及**对应的cfg文件**。 |
-    
-    
+
+
     # 为了方便下载，在这里直接给出原始模型下载及模型转换命令,可以直接拷贝执行。也可以参照上表在modelzoo中下载并手工转换，以了解更多细节。     
     cd $HOME/samples/python/contrib/portrait_picture/model
     wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/PortraitNet%20/portrait.pb   
@@ -63,7 +63,7 @@
 3. 获取样例需要的测试图片
     ```
     # 执行以下命令，进入样例的data文件夹中，下载对应的测试图片。 
-    cd $HOME/samples/python/contrib/portrait_picture/model
+    cd $HOME/samples/python/contrib/portrait_picture/data
     wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/Portrait/background.jpg
     wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/Portrait/ori.jpg
     ```

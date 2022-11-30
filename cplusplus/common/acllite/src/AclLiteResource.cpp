@@ -79,6 +79,22 @@ AclLiteError AclLiteResource::Init()
     return ACLLITE_OK;
 }
 
+aclrtContext AclLiteResource::GetContextByDevice(int32_t devId)
+{
+    aclrtContext context = nullptr;
+    aclError ret = aclrtSetDevice(devId);
+    if (ret != ACL_ERROR_NONE) {
+        ACLLITE_LOG_ERROR("Acl open device %d failed", devId);
+        return nullptr;
+    }
+    ret = aclrtCreateContext(&context, devId);
+    if (ret != ACL_ERROR_NONE) {
+        ACLLITE_LOG_ERROR("Create acl context failed, error:%d", ret);
+        return nullptr;
+    }
+    return context;
+}
+
 void AclLiteResource::Release()
 {
     if (isReleased_) {

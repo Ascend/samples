@@ -11,6 +11,7 @@
 #include <map>
 #include <sstream>
 #include <cstring>
+#include <fstream>
 #include <algorithm>
 #include <functional>
 #include "acl/acl_mdl.h"
@@ -414,6 +415,7 @@ void ModelProcess::DumpModelOutputResult()
 
     size_t outputNum = aclmdlGetDatasetNumBuffers(output_);
     static int executeNum = 0;
+
     for (size_t i = 0; i < outputNum; ++i) {
         stringstream ss;
         ss << "output" << ++executeNum << "_" << i << ".bin";
@@ -457,7 +459,6 @@ void ModelProcess::DumpModelOutputResult()
                     return;
                 }
                 fwrite(outHostData, len, sizeof(char), outputFile);
-
                 ret = aclrtFreeHost(outHostData);
                 outHostData = nullptr;
                 if (ret != ACL_SUCCESS) {
@@ -476,7 +477,6 @@ void ModelProcess::DumpModelOutputResult()
             return;
         }
     }
-
     INFO_LOG("dump data success.");
     return;
 }

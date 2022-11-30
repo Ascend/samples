@@ -39,9 +39,9 @@ CropAndPasteHelper::CropAndPasteHelper(aclrtStream& stream,
     // Change the right bottom coordinate to odd numver
     rbHorz_ = ((rbHorz >> 1) << 1) - 1;
     rbVert_ = ((rbVert >> 1) << 1) - 1;
-    // odd
-    size_.width = rbHorz_ - ltHorz_;
-    size_.height = rbVert_ - ltVert_;
+
+    size_.width = rbHorz_ - ltHorz_ + 1;
+    size_.height = rbVert_ - ltVert_ + 1;
 }
 
 CropAndPasteHelper::CropAndPasteHelper(aclrtStream& stream,
@@ -60,6 +60,7 @@ CropAndPasteHelper::CropAndPasteHelper(aclrtStream& stream,
     // Change the right bottom coordinate to odd numver
     rbHorz_ = ((rbHorz >> 1) << 1) - 1;
     rbVert_ = ((rbVert >> 1) << 1) - 1;
+
     size_.width = width;
     size_.height = height;
 }
@@ -135,7 +136,6 @@ AclLiteError CropAndPasteHelper::InitCropAndPasteOutputDesc()
         ACLLITE_LOG_ERROR("Dvpp crop create pic desc failed");
         return ACLLITE_ERROR;
     }
-
     acldvppSetPicDescData(vpcOutputDesc_, vpcOutBufferDev_);
     acldvppSetPicDescFormat(vpcOutputDesc_, PIXEL_FORMAT_YUV_SEMIPLANAR_420);
     acldvppSetPicDescWidth(vpcOutputDesc_, cropOutWidth);
@@ -190,9 +190,9 @@ AclLiteError CropAndPasteHelper::Process(ImageData& cropedImage, ImageData& srcI
     // must even
     uint32_t pasteTopOffset = 0;
     // must odd
-    uint32_t pasteRightOffset = size_.width;
+    uint32_t pasteRightOffset = rbHorz_ - ltHorz_;
     // must odd
-    uint32_t pasteBottomOffset = size_.height;
+    uint32_t pasteBottomOffset = rbVert_ - ltVert_;
 
     pasteArea_ = acldvppCreateRoiConfig(pasteLeftOffset, pasteRightOffset,
                                         pasteTopOffset, pasteBottomOffset);
@@ -316,10 +316,12 @@ AclLiteError CropAndPasteHelper::ProportionProcess(ImageData& resizedImage, Imag
         ACLLITE_LOG_ERROR("acldvppCreateRoiConfig cropArea_ failed");
         return ACLLITE_ERROR;
     }
-
+    
+    uint32_t pasteWidth = rbHorz_ - ltHorz_;
+    uint32_t pasteHeight = rbVert_ - ltVert_;
     // set crop area:
-    float rx = (float)originalImageWidth_ / (float)size_.width;
-    float ry = (float)originalImageHeight_ / (float)size_.height;
+    float rx = (float)originalImageWidth_ / (float)pasteWidth;
+    float ry = (float)originalImageHeight_ / (float)pasteHeight;
 
     int dx = 0;
     int dy = 0;
@@ -327,11 +329,11 @@ AclLiteError CropAndPasteHelper::ProportionProcess(ImageData& resizedImage, Imag
     if (rx > ry) {
         dx = 0;
         r = rx;
-        dy = (size_.height - originalImageHeight_ / r) / 2;
+        dy = (pasteHeight - originalImageHeight_ / r) / 2;
     } else {
         dy = 0;
         r = ry;
-        dx = (size_.width - originalImageWidth_ / r) / 2;
+        dx = (pasteWidth - originalImageWidth_ / r) / 2;
     }
 
     // must even
@@ -339,9 +341,9 @@ AclLiteError CropAndPasteHelper::ProportionProcess(ImageData& resizedImage, Imag
     // must even
     uint32_t pasteTopOffset = 0;
     // must odd
-    uint32_t pasteRightOffset = size_.width - 2 * dx;
+    uint32_t pasteRightOffset = pasteWidth - 2 * dx;
     // must odd
-    uint32_t pasteBottomOffset = size_.height -  2 * dy;
+    uint32_t pasteBottomOffset = pasteHeight -  2 * dy;
 
     pasteArea_ = acldvppCreateRoiConfig(pasteLeftOffset, pasteRightOffset,
                                         pasteTopOffset, pasteBottomOffset);
@@ -365,10 +367,10 @@ AclLiteError CropAndPasteHelper::ProportionProcess(ImageData& resizedImage, Imag
         return ACLLITE_ERROR;
     }
 
-    resizedImage.width = size_.width - 2 * dx;
-    resizedImage.height = size_.height -  2 * dy;
-    resizedImage.alignWidth = ALIGN_UP16(size_.width);
-    resizedImage.alignHeight = ALIGN_UP2(size_.height);
+    resizedImage.width = pasteWidth - 2 * dx;
+    resizedImage.height = pasteHeight -  2 * dy;
+    resizedImage.alignWidth = ALIGN_UP16(pasteWidth);
+    resizedImage.alignHeight = ALIGN_UP2(pasteHeight);
     resizedImage.size = vpcOutBufferSize_;
     resizedImage.data = SHARED_PTR_DVPP_BUF(vpcOutBufferDev_);
 
@@ -400,20 +402,22 @@ AclLiteError CropAndPasteHelper::ProportionCenterProcess(ImageData& resizedImage
         return ACLLITE_ERROR;
     }
 
+    uint32_t pasteWidth = rbHorz_ - ltHorz_;
+    uint32_t pasteHeight = rbVert_ - ltVert_;
     // set crop area:
-    float rx = (float)size_.width / (float)originalImageWidth_;
-    float ry = (float)size_.height / (float)originalImageHeight_;
+    float rx = (float)pasteWidth / (float)originalImageWidth_;
+    float ry = (float)pasteHeight / (float)originalImageHeight_;
     int dx = 0;
     int dy = 0;
     float r = 0.0f;
     if (rx > ry) {
         r = ry;
-        dx = (size_.width - originalImageWidth_ * r) / 2;
-        dy = (size_.height - originalImageHeight_ * r) / 2;
+        dx = (pasteWidth - originalImageWidth_ * r) / 2;
+        dy = (pasteHeight - originalImageHeight_ * r) / 2;
     } else {
         r = rx;
-        dx = (size_.width - originalImageWidth_ * r) / 2;
-        dy = (size_.height - originalImageHeight_ * r) / 2;
+        dx = (pasteWidth - originalImageWidth_ * r) / 2;
+        dy = (pasteHeight - originalImageHeight_ * r) / 2;
     }
 
     dx = (dx >> 1) << 1;
@@ -424,9 +428,9 @@ AclLiteError CropAndPasteHelper::ProportionCenterProcess(ImageData& resizedImage
     // must even
     uint32_t pasteTopOffset = dy;
     // must odd
-    uint32_t pasteRightOffset = size_.width - dx + pasteLeftOffset - dx;
+    uint32_t pasteRightOffset = pasteWidth - dx + pasteLeftOffset - dx;
     // must odd
-    uint32_t pasteBottomOffset = size_.height - dy;
+    uint32_t pasteBottomOffset = pasteHeight - dy;
 
     pasteArea_ = acldvppCreateRoiConfig(pasteLeftOffset, pasteRightOffset,
                                         pasteTopOffset, pasteBottomOffset);
@@ -450,10 +454,10 @@ AclLiteError CropAndPasteHelper::ProportionCenterProcess(ImageData& resizedImage
         return ACLLITE_ERROR;
     }
 
-    resizedImage.width = size_.width - 2 * dx;
-    resizedImage.height = size_.height -  2 * dy;
-    resizedImage.alignWidth = ALIGN_UP16(size_.width);
-    resizedImage.alignHeight = ALIGN_UP2(size_.height);
+    resizedImage.width = pasteWidth - 2 * dx;
+    resizedImage.height = pasteHeight -  2 * dy;
+    resizedImage.alignWidth = ALIGN_UP16(pasteWidth);
+    resizedImage.alignHeight = ALIGN_UP2(pasteHeight);
     resizedImage.size = vpcOutBufferSize_;
     resizedImage.data = SHARED_PTR_DVPP_BUF(vpcOutBufferDev_);
 

@@ -158,7 +158,7 @@ void DestroyResource()
 int main(int argc, char *argv[])
 {
     /* 1.ACL initialization */
-    const char *aclConfigPath = "./acl.json";
+    const char *aclConfigPath = "../src/acl.json";
     aclInit(aclConfigPath);
     INFO_LOG("acl init success");
 

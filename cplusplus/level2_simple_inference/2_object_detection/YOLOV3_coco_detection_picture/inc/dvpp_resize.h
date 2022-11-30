@@ -1,5 +1,5 @@
-/**
-* Copyright 2020 Huawei Technologies Co., Ltd
+/*
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -12,10 +12,11 @@
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 * See the License for the specific language governing permissions and
 * limitations under the License.
-
-* File dvpp_process.h
-* Description: handle dvpp process
 */
+
+#ifndef YOLOV3_COCO_DETECTION_PICTURE_INC_DVPP_RESIZE_H
+#define YOLOV3_COCO_DETECTION_PICTURE_INC_DVPP_RESIZE_H
+
 #pragma once
 #include <cstdint>
 #include "acl/acl.h"
@@ -50,7 +51,6 @@ public:
     */
     Result InitOutputPara(int modelInputWidth, int modelInputHeight);
 
-   
     /**
     * @brief gett dvpp output
     * @param [in] outputBuffer: pointer which points to dvpp output buffer
@@ -74,16 +74,17 @@ private:
     void DestroyOutputPara();
 
     aclrtStream stream_;
-    acldvppChannelDesc *dvppChannelDesc_;
-    acldvppResizeConfig *resizeConfig_;
+    acldvppChannelDesc *g_dvppChannelDesc_;
+    acldvppResizeConfig *g_resizeConfig_;
 
-    acldvppPicDesc *vpcInputDesc_; // vpc input desc
-    acldvppPicDesc *vpcOutputDesc_; // vpc output desc
+    acldvppPicDesc *g_vpcInputDesc_; // vpc input desc
+    acldvppPicDesc *g_vpcOutputDesc_; // vpc output desc
 
-    uint8_t *inDevBuffer_;  // input pic dev buffer
-    void *vpcOutBufferDev_; // vpc output buffer
-    uint32_t vpcOutBufferSize_;  // vpc output size
-    Resolution size_;
-    acldvppPixelFormat format_;
+    uint8_t *g_inDevBuffer_;  // input pic dev buffer
+    void *g_vpcOutBufferDev_; // vpc output buffer
+    uint32_t g_vpcOutBufferSize_;  // vpc output size
+    Resolution g_size_;
+    acldvppPixelFormat g_format_;
 };
 
+#endif

@@ -20,7 +20,7 @@
 #define JPEGD_HELPER_H
 #pragma once
 #include <cstdint>
-
+#include <string.h>
 #include "acl/acl.h"
 #include "acl/ops/acl_dvpp.h"
 #include "AclLiteUtils.h"
@@ -43,46 +43,21 @@ public:
     * @return result
     */
     AclLiteError InitResource();
-
-    /**
-    * @brief init dvpp output para
-    * @param [in] modelInputWidth: model input width
-    * @param [in] modelInputHeight: model input height
-    * @return result
-    */
-    AclLiteError InitOutputPara(int modelInputWidth, int modelInputHeight);
-
-    /**
-    * @brief set jpegd input
-    * @param [in] inDevBuffer: device buffer of input pic
-    * @param [in] inDevBufferSize: device buffer size of input pic
-    * @param [in] inputWidth:width of pic
-    * @param [in] inputHeight:height of pic
-    */
-    void SetInput4JpegD(uint8_t* inDevBuffer, int inDevBufferSize,
-                        int inputWidth, int inputHeight);
     AclLiteError InitDecodeOutputDesc(ImageData& inputImage);
-    /**
-    * @brief gett dvpp output
-    * @param [in] outputBuffer: pointer which points to dvpp output buffer
-    * @param [out] outputSize: output size
-    */
-    void GetOutput(void **outputBuffer, int &outputSize);
     AclLiteError Process(ImageData& dest, ImageData& src);
-   /**
-    * @brief release encode resource
-    */
-    void DestroyEncodeResource();
 
 private:
     void DestroyDecodeResource();
-    void DestroyResource();
-    void DestroyOutputPara();
 
 private:
     aclrtStream stream_;
     void* decodeOutBufferDev_; // decode output buffer
     acldvppPicDesc *decodeOutputDesc_; // decode output desc
     acldvppChannelDesc *dvppChannelDesc_;
+    uint32_t decodeOutWidth_;
+    uint32_t decodeOutHeight_;
+    uint32_t decodeOutWidthStride_;
+    uint32_t decodeOutHeightStride_;
+    uint32_t decodeOutBufferSize_;
 };
 #endif

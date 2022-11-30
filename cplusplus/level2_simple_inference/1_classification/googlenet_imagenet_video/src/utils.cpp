@@ -1,5 +1,5 @@
 /**
-* Copyright 2020 Huawei Technologies Co., Ltd
+* Copyright (c) Huawei Technologies Co., Ltd. 2022-2022. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -33,17 +33,18 @@ using namespace std;
 
 namespace {
 const std::string kImagePathSeparator = ",";
-const int kStatSuccess = 0;
+const int K_STATSUCESS = 0;
 const std::string kFileSperator = "/";
 const std::string kPathSeparator = "/";
 // output image prefix
 const std::string kOutputFilePrefix = "out_";
 }
 
-bool Utils::IsDirectory(const string &path) {
+bool Utils::IsDirectory(const string &path)
+{
     // get path stat
     struct stat buf;
-    if (stat(path.c_str(), &buf) != kStatSuccess) {
+    if (stat(path.c_str(), &buf) != K_STATSUCESS) {
         return false;
     }
 
@@ -55,7 +56,8 @@ bool Utils::IsDirectory(const string &path) {
     }
 }
 
-bool Utils::IsPathExist(const string &path) {
+bool Utils::IsPathExist(const string &path)
+{
     ifstream file(path);
     if (!file) {
         return false;
@@ -63,7 +65,8 @@ bool Utils::IsPathExist(const string &path) {
     return true;
 }
 
-void Utils::SplitPath(const string &path, vector<string> &path_vec) {
+void Utils::SplitPath(const string &path, vector<string> &path_vec)
+{
     char *char_path = const_cast<char*>(path.c_str());
     const char *char_split = kImagePathSeparator.c_str();
     char *tmp_path = strtok(char_path, char_split);
@@ -73,7 +76,8 @@ void Utils::SplitPath(const string &path, vector<string> &path_vec) {
     }
 }
 
-void Utils::GetAllFiles(const string &path, vector<string> &file_vec) {
+void Utils::GetAllFiles(const string &path, vector<string> &file_vec)
+{
     // split file path
     vector<string> path_vector;
     SplitPath(path, path_vector);
@@ -82,7 +86,7 @@ void Utils::GetAllFiles(const string &path, vector<string> &file_vec) {
         // check path exist or not
         if (!IsPathExist(path)) {
         ERROR_LOG("Failed to deal path=%s. Reason: not exist or can not access.",
-                every_path.c_str());
+                  every_path.c_str());
         continue;
         }
         // get files in path and sub-path
@@ -90,7 +94,8 @@ void Utils::GetAllFiles(const string &path, vector<string> &file_vec) {
     }
 }
 
-void Utils::GetPathFiles(const string &path, vector<string> &file_vec) {
+void Utils::GetPathFiles(const string &path, vector<string> &file_vec)
+{
     struct dirent *dirent_ptr = nullptr;
     DIR *dir = nullptr;
     if (IsDirectory(path)) {
@@ -100,7 +105,6 @@ void Utils::GetPathFiles(const string &path, vector<string> &file_vec) {
             if (dirent_ptr->d_name[0] == '.') {
             continue;
             }
-
             // file path
             string full_path = path + kPathSeparator + dirent_ptr->d_name;
             // directory need recursion
@@ -111,13 +115,13 @@ void Utils::GetPathFiles(const string &path, vector<string> &file_vec) {
                 file_vec.emplace_back(full_path);
             }
         }
-    } 
-    else {
+    } else {
         file_vec.emplace_back(path);
     }
 }
 
-void* Utils::CopyDataDeviceToLocal(void* deviceData, uint32_t dataSize) {
+void* Utils::CopyDataDeviceToLocal(void* deviceData, uint32_t dataSize)
+{
     uint8_t* hostPtr = new uint8_t[dataSize];
     if (hostPtr == nullptr) {
         ERROR_LOG("malloc host data buffer failed");

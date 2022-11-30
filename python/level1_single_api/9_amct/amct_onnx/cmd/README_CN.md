@@ -8,7 +8,7 @@ ONNX ResNet-101 分类网络模型量化
 请下载 [ResNet-101](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/amct_acl/resnet101_v11.onnx) 模型文件到 [model](./model/) 目录。
 
 + **数据集准备**  
-使用昇腾模型压缩工具对模型完成量化后，需要对模型进行推理，以测试量化数据的精度。推理过程中需要使用和模型相匹配的数据集。请下载[测试图片](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/resnet-101_nuq/images.zip)，解压后将 “images” 文件夹放到 [data](./data/) 目录下。
+使用昇腾模型压缩工具对模型完成量化后，需要对模型进行推理，以测试量化数据的精度。推理过程中需要使用和模型相匹配的数据集。请下载[测试图片](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/amct_acl/classification/imagenet_calibration.tar.gz)，解压后将 “images” 文件夹放到 [data](./data/) 目录下。
 
 + **校准集准备**  
 校准集用来产生量化因子，保证精度。本 sample 校准集与数据集相同。
@@ -26,19 +26,16 @@ ONNX ResNet-101 分类网络模型量化
 ```none
 bash ./scripts/run_calibration.sh
 ```
-执行成功会在当前目录生成output_deploy_model.onnx和output_fake_quant_model.onnx两个文件
+执行成功会在当前目录生成results文件夹，文件夹下有resnet101_v11_deploy_model.onnx和resnet101_v11_fake_quant_model.onnx两个文件
 
 ### 3.1 量化结果
 
-量化成功后，在当前目录会生成量化日志文件 [./amct_log/amct_onnx.log](./amct_log/amct_onnx.log) ，在当前目录下生成以下内容：
+量化成功后，在当前目录会生成量化日志文件 [./amct_log/amct_onnx.log](./amct_log/amct_onnx.log) ，并在当前目录下生成以下内容：
 
-+ [date](./date/): 临时文件夹，date是随机数加下划线加当前日期组成，如29978_20210930135210
-  + [config.json](./date/config.json): 量化配置文件描述了如何对模型中的每一层进行量化。
-  + [record.txt](./date/record.txt): 量化因子记录文件记录量化因子。
-  + [modified_model.onnx](./date/modified_model.onnx): 临时模型文件，即原始模型 BN 融合后导出的 ONNX 模型文件。
-+ [output_deploy_model.onnx](./output_deploy_model.onnx): 量化部署模型，即量化后的可在昇腾 AI 处理器部署的模型文件。
-+ [output_fake_quant_model.onnx](./output_fake_quant_model.onnx): 量化仿真模型，即量化后的可在 ONNX 执行框架 ONNX Runtime 进行精度仿真的模型文件。
-+ [output_quant.json](./outputs/calibration/resnet-101_quant.json)：融合信息文件。
++ [results](./results/): 存放量化后模型的文件夹。
+  + [resnet101_v11_deploy_model.onnx](./results/resnet101_v11_deploy_model.onnx): 量化部署模型，即量化后的可在昇腾 AI 处理器部署的模型文件。
+  + [resnet101_v11_fake_quant_model.onnx](./results/resnet101_v11_fake_quant_model.onnx): 量化仿真模型，即量化后的可在 ONNX 执行框架 ONNX Runtime 进行精度仿真的模型文件。
+  + [resnet101_v11_quant.json](./results/resnet101_v11_quant.json)：融合信息文件。
 
 # MobileNet V2
 

@@ -1,16 +1,23 @@
-/**
-* @file utils.cpp
+/*
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
 *
-* Copyright (C) 2020. Huawei Technologies Co., Ltd. All rights reserved.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+
+* http://www.apache.org/licenses/LICENSE-2.0
+
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
 */
-#include "utils.h"
+
 #include <iostream>
 #include <fstream>
 #include <cstring>
+#include "utils.h"
 
 #if defined(_MSC_VER)
 #include <windows.h>
@@ -75,7 +82,6 @@ Result Utils::GetDeviceBufferOfPicture(PicDesc &picDesc, void *&picDevBuffer, ui
         ERROR_LOG("picture file name is empty");
         return FAILED;
     }
-
     uint32_t inputBuffSize = 0;
     void *inputBuff = nullptr;
     Result ret = ReadBinFile(picDesc.picName, inputBuff, inputBuffSize);
@@ -89,9 +95,7 @@ Result Utils::GetDeviceBufferOfPicture(PicDesc &picDesc, void *&picDevBuffer, ui
         ERROR_LOG("get jpeg image info failed, errorCode is %d", static_cast<int32_t>(aclRet));
         if (!(RunStatus::GetDeviceStatus())) {
             (void)aclrtFreeHost(inputBuff);
-        } else {
-            (void)acldvppFree(inputBuff);
-        }
+        } else (void)acldvppFree(inputBuff);
         return FAILED;
     }
     aclRet = acldvppJpegPredictDecSize(inputBuff, inputBuffSize, PIXEL_FORMAT_YUV_SEMIPLANAR_420,
@@ -100,12 +104,9 @@ Result Utils::GetDeviceBufferOfPicture(PicDesc &picDesc, void *&picDevBuffer, ui
         ERROR_LOG("get jpeg decode size failed, errorCode is %d", static_cast<int32_t>(aclRet));
         if (!(RunStatus::GetDeviceStatus())) {
             (void)aclrtFreeHost(inputBuff);
-        } else {
-            (void)acldvppFree(inputBuff);
-        }
+        } else (void)acldvppFree(inputBuff);
         return FAILED;
     }
-
     if (!(RunStatus::GetDeviceStatus())) { // app is running in host
         aclRet = acldvppMalloc(&picDevBuffer, inputBuffSize);
         if (aclRet != ACL_SUCCESS) {
@@ -114,7 +115,6 @@ Result Utils::GetDeviceBufferOfPicture(PicDesc &picDesc, void *&picDevBuffer, ui
             (void)aclrtFreeHost(inputBuff);
             return FAILED;
         }
-
         // if app is running in host, need copy data from host to device
         aclRet = aclrtMemcpy(picDevBuffer, inputBuffSize, inputBuff, inputBuffSize, ACL_MEMCPY_HOST_TO_DEVICE);
         if (aclRet != ACL_SUCCESS) {
@@ -125,11 +125,8 @@ Result Utils::GetDeviceBufferOfPicture(PicDesc &picDesc, void *&picDevBuffer, ui
             return FAILED;
         }
         (void)aclrtFreeHost(inputBuff);
-    } else { // app is running in device
-        picDevBuffer = inputBuff;
-    }
+    } else picDevBuffer = inputBuff; // app is running in device
     devPicBufferSize = inputBuffSize;
-
     return SUCCESS;
 }
 
@@ -156,7 +153,8 @@ Result Utils::CheckPathIsFile(const std::string &fileName)
     return SUCCESS;
 }
 
-void* Utils::CopyDataToDevice(void* data, uint32_t dataSize, aclrtMemcpyKind policy) {
+void* Utils::CopyDataToDevice(void* data, uint32_t dataSize, aclrtMemcpyKind policy)
+{
     void* buffer = nullptr;
     aclError aclRet = aclrtMalloc(&buffer, dataSize, ACL_MEM_MALLOC_HUGE_FIRST);
     if (aclRet != ACL_SUCCESS) {
@@ -174,15 +172,18 @@ void* Utils::CopyDataToDevice(void* data, uint32_t dataSize, aclrtMemcpyKind pol
     return buffer;
 }
 
-void* Utils::CopyDataDeviceToDevice(void* deviceData, uint32_t dataSize) {
+void* Utils::CopyDataDeviceToDevice(void* deviceData, uint32_t dataSize)
+{
     return CopyDataToDevice(deviceData, dataSize, ACL_MEMCPY_DEVICE_TO_DEVICE);
 }
 
-void* Utils::CopyDataHostToDevice(void* deviceData, uint32_t dataSize) {
+void* Utils::CopyDataHostToDevice(void* deviceData, uint32_t dataSize)
+{
     return CopyDataToDevice(deviceData, dataSize, ACL_MEMCPY_HOST_TO_DEVICE);
 }
 
-void* Utils::CopyDataDeviceToLocal(void* deviceData, uint32_t dataSize) {
+void* Utils::CopyDataDeviceToLocal(void* deviceData, uint32_t dataSize)
+{
     uint8_t* buffer = new uint8_t[dataSize];
     if (buffer == nullptr) {
         ERROR_LOG("New malloc memory failed");

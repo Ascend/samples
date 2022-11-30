@@ -46,7 +46,7 @@ Caffe与TensorFlow共存的自定义算子样例工程的目录结构如下所�
 │   ├── CMakeLists.txt   //算子IR定义文件的CMakeList.txt，会被算子工程的CMakeList.txt调用
 ├── tbe 
 │   ├── CmakeLists.txt   
-│   ├── custom_impl    //算子实现文件目录
+│   ├── impl    //算子实现文件目录
 │   │      ├── xx.py
 │   │      ├── __init__.py      //Python中的package标识文件
 │   ├── op_info_cfg   //算子信息库文件目录
@@ -95,6 +95,9 @@ Caffe与TensorFlow共存的自定义算子样例工程的目录结构如下所�
     Scope融合算子适配插件实现文件，请参见[tf_plugin](framework/tf_plugin)：
     
     - decode_bbox_v2_scope_fussion_plugin对应为decode_bbox_v2_scope_fusion_pass融合算子的适配插件实现文件。
+-   将算子映射为子图（一对多映射）样例
+
+    将第三方框架中的一个算子映射为多个CANN算子示例，对应的算子适配插件实现文件，请参见[onnx_plugin](framework/onnx_plugin)。
 
 
 ## 环境要求
@@ -116,8 +119,8 @@ Caffe与TensorFlow共存的自定义算子样例工程的目录结构如下所�
       # 安装nnae包时配置
       . ${HOME}/Ascend/nnae/set_env.sh 
       
-      # 安装tfplugin包时配置
-      . /${HOME}/Ascend/tfplugin/set_env.sh
+      # 安装fwkplugin包时配置
+      . /${HOME}/Ascend/fwkplugin/set_env.sh
       
      ```
     
@@ -168,7 +171,7 @@ Caffe与TensorFlow共存的自定义算子样例工程的目录结构如下所�
 
     ```
     须知：
-    Parameter的类型（粗斜体部分）建议保持唯一，不与内置caffe.proto（“atc/include/proto/caffe.proto”）定义重复。
+    Parameter的类型（粗斜体部分）建议保持唯一，不与内置caffe.proto（“compiler/include/proto/caffe.proto”）定义重复。
     样例代码的custom.proto文件中已包含样例中样例中的自定义Caffe算子的定义，若有其他自定义算子，请基于此文件追加。
     ```
     
@@ -207,7 +210,7 @@ Caffe与TensorFlow共存的自定义算子样例工程的目录结构如下所�
            ```
 
 
-   -    AICPU\_SOC\_VERSION：昇腾AI处理器的类型，请配置为AI CPU组件安装路径中“opp/op_impl/built-in/aicpu/aicpu_kernel/lib”路径下的文件夹名称，即“libcpu_kernels_context.a”与“libcpu_kernels_v1.0.1.so”所在文件夹的名称。
+   -    AICPU\_SOC\_VERSION：昇腾AI处理器的类型，请配置为AI CPU组件安装路径中“opp/built-in/op_impl/aicpu/aicpu_kernel/lib”路径下的文件夹名称，即“libcpu_kernels_context.a”与“libcpu_kernels_v1.0.1.so”所在文件夹的名称。
 
 
 3.  执行算子工程编译。
@@ -260,12 +263,12 @@ Caffe与TensorFlow共存的自定义算子样例工程的目录结构如下所�
     │                    ├── config
     │                        ├── ${soc_version}     //昇腾AI处理器类型
     │                            ├── aic-${soc_version}-ops-info.json     //TBE自定义算子信息库
-    │                    ├── custom_impl               //TBE自定义算子实现代码文件
+    │                    ├── impl               //TBE自定义算子实现代码文件
     │                        ├── xx.py
     │           ├── vector_core   //此目录预留，无需关注
     │           ├── cpu          //AI CPU自定义算子实现库及算子信息库所在目录
     │                ├── aicpu_kernel
-    │                    ├── custom_impl
+    │                    ├── impl
     │                        ├── libcust_aicpu_kernels.so   //AI CPU算子实现库文件
     │                ├── config
     │                    ├── cust_aicpu_kernel.json         //AI CPU算子信息库
@@ -416,7 +419,7 @@ TBE算子：Add、ScatterNdAdd，单算子网络验证文件可参见“tbe/test
 
        其中，soc\_version：昇腾AI处理器的型号，请根据实际情况替换。
 
-       可从ATC安装路径下的“atc/data/platform\_config”目录下查看支持的昇腾AI处理器的类型，对应“\*.ini”文件的名字即为{soc\_version\}。
+       可从ATC安装路径下的“compiler/data/platform\_config”目录下查看支持的昇腾AI处理器的类型，对应“\*.ini”文件的名字即为{soc\_version\}。
 
 3.  结果验证。
     1.  在INFO日志中可以看到pass的设置情况：
@@ -445,6 +448,73 @@ TBE算子：Add、ScatterNdAdd，单算子网络验证文件可参见“tbe/test
     
         说明：
         scope多对多融合示例也可以使用此模型与方法进行验证。
+## 将算子映射为子图（一对多映射）验证
+
+用户可使用ATC模型转换工具对算子映射为子图的效果进行验证。下面给出验证方法：
+
+1.  构造包含AddN算子的onnx模型。构造模型前需要安装依赖的第三方软件onnx 1.12.0。
+
+    生成模型的方法为：
+
+    1.  假设用户工作路径为  _<work\_dir\>_，在工作路径下创建python脚本gen\_addn.py， 脚本内容参考：
 
 
+        ```
+        import os
+        import numpy as np
+        import onnx
 
+        def gen_onnx():
+            X = onnx.helper.make_tensor_value_info("X", onnx.TensorProto.FLOAT, [5])
+            Y = onnx.helper.make_tensor_value_info("Y", onnx.TensorProto.FLOAT, [5])
+            Z = onnx.helper.make_tensor_value_info("Z", onnx.TensorProto.FLOAT, [5])
+            output = onnx.helper.make_tensor_value_info("output", onnx.TensorProto.FLOAT, [5])
+
+            node0 = onnx.helper.make_node("AddN", inputs=["X", "Y", "Z"], outputs=["output"])
+
+            inputs = [X, Y, Z]
+            outputs = [output]
+
+            graph_def = onnx.helper.make_graph(
+                [node0],
+                "addn_model",
+                inputs,
+                outputs
+            )
+
+            model_def = onnx.helper.make_model(graph_def)
+            model_def.opset_import[0].version = 11
+            onnx.save(model_def, "addn_model.onnx")
+            print(model_def)
+        
+        if __name__ == "__main__":
+            gen_onnx()
+        ```
+
+    3.  执行脚本，生成的onnx模型文件"addn_model.onnx"位于  _<work\_dir\>_目录下。
+
+        **python3 gen\_addn.py**
+
+2.  通过ATC模型转换功能验证算子映射子图效果。
+    1.  设置环境变量。
+
+        完成CANN软件基础环境变量配置后，还需要额外配置如下环境变量。
+        
+        ```
+        export DUMP_GE_GRAPH=2     # 控制dump图的内容多少
+        export DUMP_GRAPH_LEVEL=2  # 控制dump图的个数
+        ```
+        
+    2. 进行模型转换。
+
+       **atc --model=./addn_model.onnx --framework=5 --output=./addn --input_format=NCHW --soc\_version=$\{soc\_version\}**
+
+       其中，soc\_version：昇腾AI处理器的型号，请根据实际情况替换。可从ATC安装路径下的“compiler/data/platform\_config”目录下查看支持的昇腾AI处理器的类型，对应“\*.ini”文件的名字即为{soc\_version\}。
+       模型转换完成后会在执行atc命令的当前目录下生成一系列按"ge_onnx*.pbtxt"命名方式命名的文件。这些文件是基于ONNX的开源模型描述结构，可以使用Netron等可视化软件打开。
+
+    3. 结果验证。
+
+       ge\_onnx\_00000000\_graph\_0\_RunCustomPassBegin.pbtxt是ge获取到的经过parse处理的整张下沉图。使用Netron等可视化软件打开原始模型和 ge\_onnx\_00000000\_graph\_0\_RunCustomPassBegin.pbtxt可以看到算子映射子图的实际效果。
+
+
+ 

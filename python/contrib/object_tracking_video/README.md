@@ -68,7 +68,7 @@ pip3 install -r requirements.txt
 
       The ***LD_LIBRARY_PATH*** environment variable conflicts with the sample when Ascend Tensor Compiler (ATC) is used. Therefore, you need to set this environment variable separately in the command line to facilitate modification.
       
-          export LD_LIBRARY_PATH=${install_path}/atc/lib64
+          export LD_LIBRARY_PATH=${install_path}/compiler/lib64
 
    For **CANN 3.3.0-alpha006**: <br/>
 

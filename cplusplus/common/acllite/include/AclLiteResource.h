@@ -28,10 +28,17 @@
 class AclLiteResource {
 public:
     AclLiteResource();
+    /**
+    * @brief Create an AclLiteResource object, and specify the device,
+    * config configuration file and thread to use context
+    * @param [in]: devId: device id
+    * @param [in]: aclConfigPath: config file path
+    * @param [in]: UseDefaultCtx: Whether to use the current thread context
+    * @return None
+    */
     AclLiteResource(int32_t devId, const std::string& aclConfigPath,
                     bool useDefaultCtx = true);
     ~AclLiteResource();
-
     AclLiteError Init();
     void Release();
     aclrtRunMode GetRunMode()
@@ -42,6 +49,7 @@ public:
     {
         return context_;
     }
+    aclrtContext GetContextByDevice(int32_t devId);
 
 private:
     bool isReleased_;

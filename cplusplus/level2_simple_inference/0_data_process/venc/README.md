@@ -6,7 +6,7 @@ English|[中文](README_CN.md)
 
 ## VENC Sample
 Function: Encode videos by calling the **venc** API of DVPP.   
-Input: source MP4 file.   
+Input: source YUV image.   
 Output: encoded H.264 file.  
 
 ### Prerequisites
@@ -29,7 +29,7 @@ You can obtain the source package in either of the following ways:
      **Note: To switch to another tag (for example, v0.5.0), run the following command:**
      ```
      git checkout v0.5.0
-     ```   
+     ```
   - Compressed package (The download takes a short time, but the procedure is complex.)  
      **Note: If you want to download the code of another version, switch the branch of the samples repository according to the prerequisites.**   
      ``` 

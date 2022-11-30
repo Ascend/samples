@@ -1,5 +1,5 @@
-/**
-* Copyright 2020 Huawei Technologies Co., Ltd
+/*
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -12,9 +12,6 @@
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 * See the License for the specific language governing permissions and
 * limitations under the License.
-
-* File dvpp_process.cpp
-* Description: handle dvpp process
 */
 
 #include <iostream>
@@ -25,23 +22,26 @@
 
 using namespace std;
 
-DvppProcess::DvppProcess():dvppChannelDesc_(nullptr){
+DvppProcess::DvppProcess():g_dvppChannelDesc_(nullptr)
+{
 }
 
-DvppProcess::~DvppProcess(){
+DvppProcess::~DvppProcess()
+{
     DestroyResource();
 }
 
-void DvppProcess::DestroyResource(){
+void DvppProcess::DestroyResource()
+{
     aclError aclRet;
-    if (dvppChannelDesc_ != nullptr) {
-        aclRet = acldvppDestroyChannel(dvppChannelDesc_);
+    if (g_dvppChannelDesc_ != nullptr) {
+        aclRet = acldvppDestroyChannel(g_dvppChannelDesc_);
         if (aclRet != ACL_SUCCESS) {
             ERROR_LOG("acldvppDestroyChannel failed, aclRet = %d", aclRet);
         }
 
-        (void)acldvppDestroyChannelDesc(dvppChannelDesc_);
-        dvppChannelDesc_ = nullptr;
+        (void)acldvppDestroyChannelDesc(g_dvppChannelDesc_);
+        g_dvppChannelDesc_ = nullptr;
     }
 }
 
@@ -49,30 +49,31 @@ Result DvppProcess::InitResource(aclrtStream& stream)
 {
     aclError aclRet;
 
-    dvppChannelDesc_ = acldvppCreateChannelDesc();
-    if (dvppChannelDesc_ == nullptr) {
+    g_dvppChannelDesc_ = acldvppCreateChannelDesc();
+    if (g_dvppChannelDesc_ == nullptr) {
         ERROR_LOG("acldvppCreateChannelDesc failed");
         return FAILED;
     }
 
-    aclRet = acldvppCreateChannel(dvppChannelDesc_);
+    aclRet = acldvppCreateChannel(g_dvppChannelDesc_);
     if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("acldvppCreateChannel failed, aclRet = %d", aclRet);
         return FAILED;
     }
-    stream_ = stream;
+    g_stream_ = stream;
     INFO_LOG("dvpp init resource ok");
     return SUCCESS;
 }
 
 Result DvppProcess::Resize(ImageData& dest, ImageData& src,
-                        uint32_t width, uint32_t height) {
-    DvppResize resizeOp(stream_, dvppChannelDesc_, width, height);
+                           uint32_t width, uint32_t height)
+{
+    DvppResize resizeOp(g_stream_, g_dvppChannelDesc_, width, height);
     return resizeOp.Process(dest, src);
 }
 
-Result DvppProcess::CvtJpegToYuv420sp(ImageData& dest, ImageData& src) {
-    DvppJpegD jpegD(stream_, dvppChannelDesc_);
+Result DvppProcess::CvtJpegToYuv420sp(ImageData& dest, ImageData& src)
+{
+    DvppJpegD jpegD(g_stream_, g_dvppChannelDesc_);
     return jpegD.Process(dest, src);
 }
-

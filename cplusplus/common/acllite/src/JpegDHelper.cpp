@@ -25,7 +25,8 @@ using namespace std;
 
 JpegDHelper::JpegDHelper(aclrtStream& stream, acldvppChannelDesc *dvppChannelDesc)
     :stream_(stream), decodeOutBufferDev_(nullptr),
-    decodeOutputDesc_(nullptr), dvppChannelDesc_(dvppChannelDesc)
+    decodeOutputDesc_(nullptr), dvppChannelDesc_(dvppChannelDesc),
+    decodeOutWidthStride_(0), decodeOutHeightStride_(0)
 {
 }
 
@@ -36,18 +37,27 @@ JpegDHelper::~JpegDHelper()
 
 AclLiteError JpegDHelper::InitDecodeOutputDesc(ImageData& inputImage)
 {
-    uint32_t decodeOutWidthStride = ALIGN_UP128(inputImage.width);
-    uint32_t decodeOutHeightStride = ALIGN_UP16(inputImage.height);
-    if (decodeOutWidthStride == 0 || decodeOutHeightStride == 0) {
+    auto socVersion = aclrtGetSocName();
+    if (strncmp(socVersion, "Ascend310P3", sizeof("Ascend310P3") - 1) == 0) {
+        decodeOutWidth_ = ALIGN_UP2(inputImage.width);
+        decodeOutHeight_ = ALIGN_UP2(inputImage.height);
+        decodeOutWidthStride_ = ALIGN_UP64(inputImage.width); // 64-byte alignment
+        decodeOutHeightStride_ = ALIGN_UP16(inputImage.height); // 16-byte alignment
+    } else {
+        decodeOutWidth_ = inputImage.width;
+        decodeOutHeight_ = inputImage.height;
+        decodeOutWidthStride_ = ALIGN_UP128(inputImage.width); // 128-byte alignment
+        decodeOutHeightStride_ = ALIGN_UP16(inputImage.height); // 16-byte alignment
+    }
+    if (decodeOutWidthStride_ == 0 || decodeOutHeightStride_ == 0) {
         ACLLITE_LOG_ERROR("Input image width %d or height %d invalid",
                           inputImage.width, inputImage.height);
         return ACLLITE_ERROR_INVALID_ARGS;
     }
- 
-    uint32_t decodeOutBufferSize =
-    YUV420SP_SIZE(decodeOutWidthStride, decodeOutHeightStride);
 
-    aclError aclRet = acldvppMalloc(&decodeOutBufferDev_, decodeOutBufferSize);
+    decodeOutBufferSize_ = YUV420SP_SIZE(decodeOutWidthStride_, decodeOutHeightStride_);
+
+    aclError aclRet = acldvppMalloc(&decodeOutBufferDev_, decodeOutBufferSize_);
     if (aclRet != ACL_SUCCESS) {
         ACLLITE_LOG_ERROR("Malloc dvpp memory failed, error:%d", aclRet);
         return ACLLITE_ERROR_MALLOC_DVPP;
@@ -61,11 +71,11 @@ AclLiteError JpegDHelper::InitDecodeOutputDesc(ImageData& inputImage)
 
     acldvppSetPicDescData(decodeOutputDesc_, decodeOutBufferDev_);
     acldvppSetPicDescFormat(decodeOutputDesc_, PIXEL_FORMAT_YUV_SEMIPLANAR_420);
-    acldvppSetPicDescWidth(decodeOutputDesc_, inputImage.width);
-    acldvppSetPicDescHeight(decodeOutputDesc_, inputImage.height);
-    acldvppSetPicDescWidthStride(decodeOutputDesc_, decodeOutWidthStride);
-    acldvppSetPicDescHeightStride(decodeOutputDesc_, decodeOutHeightStride);
-    acldvppSetPicDescSize(decodeOutputDesc_, decodeOutBufferSize);
+    acldvppSetPicDescWidth(decodeOutputDesc_, decodeOutWidth_);
+    acldvppSetPicDescHeight(decodeOutputDesc_, decodeOutHeight_);
+    acldvppSetPicDescWidthStride(decodeOutputDesc_, decodeOutWidthStride_);
+    acldvppSetPicDescHeightStride(decodeOutputDesc_, decodeOutHeightStride_);
+    acldvppSetPicDescSize(decodeOutputDesc_, decodeOutBufferSize_);
 
     return ACLLITE_OK;
 }
@@ -92,11 +102,11 @@ AclLiteError JpegDHelper::Process(ImageData& dest, ImageData& src)
         return ACLLITE_ERROR_SYNC_STREAM;
     }
     dest.format = PIXEL_FORMAT_YUV_SEMIPLANAR_420;
-    dest.width = src.width;
-    dest.height = src.height;
-    dest.alignWidth = ALIGN_UP128(src.width);
-    dest.alignHeight = ALIGN_UP16(src.height);
-    dest.size = YUV420SP_SIZE(dest.alignWidth, dest.alignHeight);
+    dest.width = decodeOutWidth_;
+    dest.height = decodeOutHeight_;
+    dest.alignWidth = decodeOutWidthStride_;
+    dest.alignHeight = decodeOutHeightStride_;
+    dest.size = decodeOutBufferSize_;
     dest.data = SHARED_PTR_DVPP_BUF(decodeOutBufferDev_);
 
     return ACLLITE_OK;

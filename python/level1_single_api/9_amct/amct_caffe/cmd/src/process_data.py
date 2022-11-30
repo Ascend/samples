@@ -21,8 +21,10 @@ import os
 import numpy as np
 from PIL import Image # pylint: disable=E0401
 
-IMAGE_PATH = './data/image/*.jpg'
-BIN_FILE = './data/image/calibration.bin'
+PATH = os.path.realpath('./')
+IMAGE_PATH = os.path.join(PATH, './data/image/*.jpg')
+BIN_PATH = os.path.join(PATH, './data/calibration')
+BIN_FILE = os.path.join(BIN_PATH, 'calibration.bin')
 CHANNEL_MEANS = [123.68, 116.78, 103.94]  # (R, G, B)
 INPUT_SHAPE = (3, 224, 224)  # (channel, height, width)
 CALIBRATION_SIZE = 1
@@ -70,9 +72,9 @@ def main():
     Images pre-processing and converting to bin file.
     """
     # preprocess data to np
-    os.system("cd data && unrar x calibration.rar && mv calibration/* image/  && cd -")
     images = image_preprocces(IMAGE_PATH)
-    os.system("rm -rf data/image/*")
+    if not os.path.exists(BIN_PATH):
+        os.mkdir(BIN_PATH)
     # save processed data to bin file
     images.tofile(BIN_FILE)
 

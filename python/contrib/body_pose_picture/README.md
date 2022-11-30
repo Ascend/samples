@@ -58,7 +58,7 @@ git clone https://github.com/Ascend/samples.git
 
     The ***LD_LIBRARY_PATH*** environment variable conflicts with the sample when Ascend Tensor Compiler (ATC) is used. Therefore, you need to set this environment variable separately in the command line to facilitate modification.
 
-    **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64**  
+    **export LD_LIBRARY_PATH=\\${install_path}/compiler/lib64**  
 
 2. Run following ATC command to convert the `.pb` to `.om` model in the project directory:
 
@@ -107,7 +107,7 @@ See result in `output/demo-yoga.mp4-*****.mp4`
 
 ### Test live-camera input
 
-1. Connect Atlas 200DK board with Raspberry Pi Camera, see [Guide](https://support.huaweicloud.com/intl/en-us/qs-atlas200dkappc32/atlased_04_0006.html)
+1. Connect Atlas 200DK board with Raspberry Pi Camera, see [Guide](https://www.hiascend.com/document/detail/en/Atlas200DKDeveloperKit/1013/environment/atlased_04_0006.html)
 
     - Test: `cv2.VideoCapture("CAMERA0")` where `CAMERA0` can be found on the boardl and `0` is the camera_id
     - Make sure id match in `src/run_live.py::56` e.g. `cap = Camera(camera_id=0, fps=10)`

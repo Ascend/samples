@@ -8,14 +8,14 @@ path = os.path.dirname(os.path.abspath(__file__))
 
 sys.path.append(os.path.join(path, ".."))
 sys.path.append(os.path.join(path, "../../../../common/"))
-sys.path.append(os.path.join(path, "../../../../common/atlas_utils"))
+sys.path.append(os.path.join(path, "../../../../common/acllite"))
 from constants import NPY_BYTE
 from constants import IMG_EXT
 from acllite_model import AclLiteModel
 from acllite_image import AclLiteImage
 from acllite_resource import AclLiteResource
-import  utils
-from acl_imageproc import AclLiteImageProc
+import acllite_utils as utils
+from acllite_imageproc import AclLiteImageProc
 import draw_predict
 from multiprocessing import Process,Queue
 import random
@@ -24,7 +24,7 @@ MODEL_WIDTH = 513
 MODEL_HEIGHT = 513
 INPUT_DIR = '../data/'
 OUTPUT_DIR = '../out/'
-model_path = '../model/deeplab_autotune_quant.om'
+model_path = '../model/deeplab_quant.om'
 OUTPUT_PATH =  os.path.join(path, '../output/')
 
 

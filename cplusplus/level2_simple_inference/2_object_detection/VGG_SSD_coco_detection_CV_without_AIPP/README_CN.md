@@ -83,7 +83,7 @@ bash sample_build.sh
 ### 查看结果
 
 运行完成后，会在运行环境的命令行中打印出推理结果,并在/out/output目录下生成推理后的图片。
-![输入图片说明](https://images.gitee.com/uploads/images/2021/1028/115857_03f86d66_8083019.png "微信图片_20211028115334without.png")
+![输入图片说明](https://share123.obs.cn-north-4.myhuaweicloud.com/AclBot/issue/out_bicycle.jpg "out_bicycle.png")
 
 ### 常见错误
 请参考[常见问题定位](https://github.com/Ascend/samples/wikis/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D/%E4%BB%8B%E7%BB%8D)对遇到的错误进行排查。如果wiki中不包含，请在samples仓提issue反馈。

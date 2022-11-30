@@ -1,12 +1,22 @@
-/**
-* @file model_process.h
+/*
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
 *
-* Copyright (C) 2020. Huawei Technologies Co., Ltd. All rights reserved.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+
+* http://www.apache.org/licenses/LICENSE-2.0
+
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
 */
+
+#ifndef YOLOV3_COCO_DETECTION_PICTURE_DVPP_WITH_AIPP_INC_MODEL_PROCESS_H
+#define YOLOV3_COCO_DETECTION_PICTURE_DVPP_WITH_AIPP_INC_MODEL_PROCESS_H
+
 #pragma once
 #include <iostream>
 #include "utils.h"
@@ -55,7 +65,7 @@ public:
     * @param [in] input2size: input buffer size
     * @return result
     */
-    Result CreateInput(void *input1, size_t input1size, void *input2, size_t input2size);
+    Result CreateInput(void *input1, size_t input1Size, void *input2, size_t input2Size);
 
     /**
     * @brief destroy input resource
@@ -92,13 +102,15 @@ public:
     Result GetModelInputWH(int &width, int &height);
 
 private:
-    uint32_t modelId_;
-    size_t modelWorkSize_; // model work memory buffer size
-    size_t modelWeightSize_; // model weight memory buffer size
-    void *modelWorkPtr_; // model work memory buffer
-    void *modelWeightPtr_; // model weight memory buffer
-    bool loadFlag_;  // model load flag
-    aclmdlDesc *modelDesc_;
-    aclmdlDataset *input_;
-    aclmdlDataset *output_;
+    uint32_t g_modelId_;
+    size_t g_modelWorkSize_; // model work memory buffer size
+    size_t g_modelWeightSize_; // model weight memory buffer size
+    void *g_modelWorkPtr_; // model work memory buffer
+    void *g_modelWeightPtr_; // model weight memory buffer
+    bool g_loadFlag_;  // model load flag
+    aclmdlDesc *g_modelDesc_;
+    aclmdlDataset *g_input_;
+    aclmdlDataset *g_output_;
 };
+
+#endif

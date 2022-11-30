@@ -1,5 +1,5 @@
-/**
-* Copyright 2020 Huawei Technologies Co., Ltd
+/*
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -12,54 +12,54 @@
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 * See the License for the specific language governing permissions and
 * limitations under the License.
-
-* File sample_process.cpp
-* Description: handle acl resource
 */
+
 #include <iostream>
 #include <pthread.h>
-#include "acl/acl.h"
 #include <time.h>
+#include "acl/acl.h"
 #include "acllite/AclLiteModel.h"
 #include "object_detect.h"
 #include "opencv2/opencv.hpp"
 
-
 using namespace std;
 
 ObjectDetect::ObjectDetect(const char* modelPath, uint32_t modelWidth,
-uint32_t modelHeight)
-: modelWidth_(modelWidth), modelHeight_(modelHeight), isInited_(false), 
- imageDataBuf_(nullptr), imageInfoBuf_(nullptr){
-    imageInfoSize_ = 0;
-    modelPath_ = modelPath;
+                           uint32_t modelHeight)
+    : g_modelWidth_(modelWidth), g_modelHeight_(modelHeight), g_isInited_(false),
+      g_imageDataBuf_(nullptr), g_imageInfoBuf_(nullptr)
+{
+    g_imageInfoSize_ = 0;
+    g_modelPath_ = modelPath;
 }
 
-ObjectDetect::~ObjectDetect() {
+ObjectDetect::~ObjectDetect()
+{
     DestroyResource();
 }
 
-AclLiteError ObjectDetect::CreateInput() {
-    //Request image data memory for input model
-    aclError aclRet = aclrtMalloc(&imageDataBuf_, (size_t)(imageDataSize_), ACL_MEM_MALLOC_HUGE_FIRST);
+AclLiteError ObjectDetect::CreateInput()
+{
+    // Request image data memory for input model
+    aclError aclRet = aclrtMalloc(&g_imageDataBuf_, (size_t)(g_imageDataSize_), ACL_MEM_MALLOC_HUGE_FIRST);
     if (aclRet != ACL_SUCCESS) {
         ACLLITE_LOG_ERROR("malloc device data buffer failed, aclRet is %d", aclRet);
         return ACLLITE_ERROR;
     }
 
-    //The second input to Yolov3 is the input image width and height parameter
-    const float imageInfo[4] = {(float)modelWidth_, (float)modelHeight_,
-    (float)modelWidth_, (float)modelHeight_};
-    imageInfoSize_ = sizeof(imageInfo);
-    imageInfoBuf_ = CopyDataToDevice((void *)imageInfo, imageInfoSize_,
-                                        runMode_, MEMORY_DEVICE);
-    if (imageInfoBuf_ == nullptr) {
+    // The second input to Yolov3 is the input image width and height parameter
+    const float imageInfo[4] = {(float)g_modelWidth_, (float)g_modelHeight_,
+                                (float)g_modelWidth_, (float)g_modelHeight_};
+     g_imageInfoSize_ = sizeof(imageInfo);
+     g_imageInfoBuf_ = CopyDataToDevice((void *)imageInfo,  g_imageInfoSize_,
+                                        g_runMode_, MEMORY_DEVICE);
+    if (g_imageInfoBuf_ == nullptr) {
         ACLLITE_LOG_ERROR("Copy image info to device failed");
         return ACLLITE_ERROR;
     }
 
-    AclLiteError ret = model_.CreateInput(imageDataBuf_, imageDataSize_, 
-                                        imageInfoBuf_, imageInfoSize_);
+    AclLiteError ret = g_model_.CreateInput(g_imageDataBuf_, g_imageDataSize_,
+                                            g_imageInfoBuf_, g_imageInfoSize_);
     if (ret != ACLLITE_OK) {
         ACLLITE_LOG_ERROR("Create mode input dataset failed");
         return ACLLITE_ERROR;
@@ -68,28 +68,29 @@ AclLiteError ObjectDetect::CreateInput() {
     return ACLLITE_OK;
 }
 
-AclLiteError ObjectDetect::Init() {
-    //If it is already initialized, it is returned
-    if (isInited_) {
+AclLiteError ObjectDetect::Init()
+{
+    // If it is already initialized, it is returned
+    if (g_isInited_) {
         ACLLITE_LOG_INFO("Classify instance is initied already!");
         return ACLLITE_OK;
     }
 
-    //Gets whether the current application is running on host or Device
-    AclLiteError ret = aclrtGetRunMode(&runMode_);
+    // Gets whether the current application is running on host or Device
+    AclLiteError ret = aclrtGetRunMode(& g_runMode_);
     if (ret != ACL_SUCCESS) {
         ACLLITE_LOG_ERROR("acl get run mode failed");
         return ACLLITE_ERROR;
     }
 
-    //Initializes the model management instance
-    ret = model_.Init(modelPath_);
+    // Initializes the model management instance
+    ret =  g_model_.Init( g_modelPath_);
     if (ret != ACLLITE_OK) {
         ACLLITE_LOG_ERROR("Init model failed");
         return ACLLITE_ERROR;
     }
 
-    imageDataSize_ = model_.GetModelInputSize(0);
+    g_imageDataSize_ = g_model_.GetModelInputSize(0);
 
     ret = CreateInput();
     if (ret != ACLLITE_OK) {
@@ -97,21 +98,21 @@ AclLiteError ObjectDetect::Init() {
         return ACLLITE_ERROR;
     }
 
-    isInited_ = true;
+    g_isInited_ = true;
     return ACLLITE_OK;
 }
 
-AclLiteError ObjectDetect::Inference(std::vector<InferenceOutput>& inferenceOutput, cv::Mat& reiszeMat) {
-
-    AclLiteError ret = CopyDataToDeviceEx(imageDataBuf_, imageDataSize_, 
-                              reiszeMat.ptr<uint8_t>(), imageDataSize_, 
-                              runMode_);
+AclLiteError ObjectDetect::Inference(std::vector<InferenceOutput>& inferenceOutput, cv::Mat& reiszeMat)
+{
+    AclLiteError ret = CopyDataToDeviceEx(g_imageDataBuf_, g_imageDataSize_,
+                                          reiszeMat.ptr<uint8_t>(), g_imageDataSize_,
+                                          g_runMode_);
     if (ret != ACLLITE_OK) {
         ACLLITE_LOG_ERROR("Copy resized image data to device failed.");
         return ACLLITE_ERROR;
     }
-    //Perform reasoning
-    ret = model_.Execute(inferenceOutput);
+    // Perform reasoning
+    ret =  g_model_.Execute(inferenceOutput);
     if (ret != ACLLITE_OK) {
         ACLLITE_LOG_ERROR("Execute model inference failed");
         return ACLLITE_ERROR;
@@ -123,10 +124,9 @@ AclLiteError ObjectDetect::Inference(std::vector<InferenceOutput>& inferenceOutp
 
 void ObjectDetect::DestroyResource()
 {
-    model_.DestroyInput();
-    model_.DestroyResource();
+    g_model_.DestroyInput();
+    g_model_.DestroyResource();
 
-    aclrtFree(imageDataBuf_);
-    aclrtFree(imageInfoBuf_);
+    aclrtFree(g_imageDataBuf_);
+    aclrtFree(g_imageInfoBuf_);
 }
-

@@ -160,7 +160,7 @@ void DestroyResource()
 int main()
 {
     /* 1.ACL initialization */
-    const char *aclConfigPath = "../acl.json";
+    const char *aclConfigPath = "../src/acl.json";
     aclError ret = aclInit(aclConfigPath);
     int channelId = 10;
 

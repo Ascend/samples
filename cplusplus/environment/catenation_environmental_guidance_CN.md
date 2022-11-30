@@ -42,8 +42,20 @@
   ```
   sudo apt-get install libopencv-dev
   ```
-##### 安装ffmpeg
+##### 安装ffmpeg及x246插件
 执行以下命令源码安装ffmpeg，由于apt安装的ffmpeg版本较低，所以需要源码安装。源码安装ffmpeg主要是为了acllite库的安装，如果代码中并没有使用ffmpeg或acllite，可以跳过此步骤。
+  ```
+  # 下载x264
+  cd ${HOME}
+  git clone https://code.videolan.org/videolan/x264.git
+  cd x264
+  # 安装x264
+  ./configure --enable-shared --disable-asm
+  make
+  sudo make install
+  sudo cp /usr/local/lib/libx264.so.164 /lib
+  ```
+
   ```
   # 下载ffmpeg
   cd ${HOME}
@@ -51,7 +63,7 @@
   tar -zxvf ffmpeg-4.1.3.tar.gz
   cd ffmpeg-4.1.3
   # 安装ffmpeg
-  ./configure --enable-shared --enable-pic --enable-static --disable-x86asm --prefix=${THIRDPART_PATH}
+  ./configure --enable-shared --enable-pic --enable-static --disable-x86asm --enable-libx264 --enable-gpl --prefix=${THIRDPART_PATH}
   make -j8
   make install
   ```

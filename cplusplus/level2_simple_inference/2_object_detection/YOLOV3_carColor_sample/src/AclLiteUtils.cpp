@@ -1,5 +1,5 @@
-/**
-* Copyright 2020 Huawei Technologies Co., Ltd
+/*
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -12,11 +12,8 @@
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 * See the License for the specific language governing permissions and
 * limitations under the License.
-
-* File utils.cpp
-* Description: handle file operations
 */
-#include "AclLiteUtils.h"
+
 #include <map>
 #include <iostream>
 #include <fstream>
@@ -28,6 +25,7 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include "AclLiteUtils.h"
 #include "acl/acl.h"
 #include "acl/ops/acl_dvpp.h"
 
@@ -39,13 +37,14 @@ using namespace std;
 #define TABLE_CHAR '\t'
 
 namespace {
-const std::string kImagePathSeparator = ",";
-const int kStatSuccess = 0;
-const std::string kFileSperator = "/";
-const std::string kPathSeparator = "/";
+const std::string g_ImagePathSeparator = ",";
+const int g_StatSuccess = 0;
+const std::string g_FileSperator = "/";
+const std::string g_PathSeparator = "/";
 }
 
-bool IsPathExist(const string &path) {
+bool IsPathExist(const string &path)
+{
     ifstream file(path);
     if (!file) {
         return false;
@@ -53,10 +52,11 @@ bool IsPathExist(const string &path) {
     return true;
 }
 
-bool IsDirectory(const string &path) {
+bool IsDirectory(const string &path)
+{
     // get path stat
     struct stat buf;
-    if (stat(path.c_str(), &buf) != kStatSuccess) {
+    if (stat(path.c_str(), &buf) != g_StatSuccess) {
         return false;
     }
 
@@ -64,9 +64,10 @@ bool IsDirectory(const string &path) {
     return S_ISDIR(buf.st_mode);
 }
 
-void SplitPath(const string &path, vector<string> &pathVec) {
+void SplitPath(const string &path, vector<string> &pathVec)
+{
     char *charPath = const_cast<char*>(path.c_str());
-    const char *charSplit = kImagePathSeparator.c_str();
+    const char *charSplit = g_ImagePathSeparator.c_str();
     char *imageFile = strtok(charPath, charSplit);
     while (imageFile) {
         pathVec.emplace_back(imageFile);
@@ -74,7 +75,8 @@ void SplitPath(const string &path, vector<string> &pathVec) {
     }
 }
 
-void GetPathFiles(const string &path, vector<string> &fileVec) {
+void GetPathFiles(const string &path, vector<string> &fileVec)
+{
     struct dirent *direntPtr = nullptr;
     DIR *dir = nullptr;
     if (IsDirectory(path)) {
@@ -86,7 +88,7 @@ void GetPathFiles(const string &path, vector<string> &fileVec) {
             }
 
             // file path
-            string fullPath = path + kPathSeparator + direntPtr->d_name;
+            string fullPath = path + g_PathSeparator + direntPtr->d_name;
             // directory need recursion
             if (IsDirectory(fullPath)) {
                 GetPathFiles(fullPath, fileVec);
@@ -95,13 +97,13 @@ void GetPathFiles(const string &path, vector<string> &fileVec) {
                 fileVec.emplace_back(fullPath);
             }
         }
-    } 
-    else {
+    } else {
         fileVec.emplace_back(path);
     }
 }
 
-void GetAllFiles(const string &pathList, vector<string> &fileVec) {
+void GetAllFiles(const string &pathList, vector<string> &fileVec)
+{
     // split file path
     vector<string> pathVec;
     SplitPath(pathList, pathVec);
@@ -118,13 +120,14 @@ void GetAllFiles(const string &pathList, vector<string> &fileVec) {
     }
 }
 
-void* MallocMemory(uint32_t dataSize, MemoryType memType) {
+void* MallocMemory(uint32_t dataSize, MemoryType memType)
+{
     void* buffer = nullptr;
     aclError aclRet = ACL_SUCCESS;
     
-    switch(memType){
+    switch (memType) {
         case MEMORY_NORMAL:
-            buffer = new uint8_t[dataSize];
+            buffer = new uint8_t[dataSize]; 
             break;
         case MEMORY_HOST:
             aclRet = aclrtMallocHost(&buffer, dataSize);
@@ -147,10 +150,11 @@ void* MallocMemory(uint32_t dataSize, MemoryType memType) {
         return nullptr;
     }
 
-    return buffer;    
+    return buffer;
 }
 
-void FreeMemory(void* mem, MemoryType memType) {
+void FreeMemory(void* mem, MemoryType memType)
+{
     switch(memType){
         case MEMORY_NORMAL:
             delete[]((uint8_t *)mem);
@@ -206,25 +210,27 @@ void* CopyDataToDevice(const void* data, uint32_t size,
 }
 
 AclLiteError CopyDataToDeviceEx(void* dest, uint32_t destSize, 
-                              const void* src, uint32_t srcSize, 
-                              aclrtRunMode runMode) {
+                                const void* src, uint32_t srcSize,
+                                aclrtRunMode runMode)
+{
     aclrtMemcpyKind policy = ACL_MEMCPY_HOST_TO_DEVICE;
     if (runMode == ACL_DEVICE) {
         policy = ACL_MEMCPY_DEVICE_TO_DEVICE;
-    }  
+    }
 
     aclError aclRet = aclrtMemcpy(dest, destSize, src, srcSize, policy);
     if (aclRet != ACL_SUCCESS) {
         ACLLITE_LOG_ERROR("Copy data to device failed, aclRet is %d", aclRet);
         return ACLLITE_ERROR;
-    } 
+    }
 
-    return ACLLITE_OK;                            
+    return ACLLITE_OK;
 }
 
-void* CopyDataToHost(const void* data, uint32_t size, 
-                     aclrtRunMode curRunMode, MemoryType memType) {                        
-    if ((data == nullptr) || (size == 0) || 
+void* CopyDataToHost(const void* data, uint32_t size,
+                     aclrtRunMode curRunMode, MemoryType memType)
+{                        
+    if ((data == nullptr) || (size == 0) ||
         ((curRunMode != ACL_HOST) && (curRunMode != ACL_DEVICE)) ||
         ((memType != MEMORY_HOST) && (memType != MEMORY_NORMAL))) {
         ACLLITE_LOG_ERROR("Copy data args invalid, data %p, "
@@ -238,8 +244,9 @@ void* CopyDataToHost(const void* data, uint32_t size,
     return CopyData(data, size, policy, memType);
 }
 
-void* CopyData(const void* data, uint32_t size, 
-               aclrtMemcpyKind policy, MemoryType memType) {
+void* CopyData(const void* data, uint32_t size,
+               aclrtMemcpyKind policy, MemoryType memType)
+{
     void* buffer = MallocMemory(size, memType);
     if (buffer == nullptr) {
         return nullptr;
@@ -255,8 +262,9 @@ void* CopyData(const void* data, uint32_t size,
     return buffer;
 }
 
-AclLiteError CopyImageToDevice(ImageData& destImage, ImageData& srcImage, 
-                             aclrtRunMode curRunMode, MemoryType memType) {
+AclLiteError CopyImageToDevice(ImageData& destImage, ImageData& srcImage,
+                               aclrtRunMode curRunMode, MemoryType memType)
+{
     void* data = CopyDataToDevice(srcImage.data.get(), srcImage.size,
                                   curRunMode, memType);
     if (data == nullptr) {
@@ -270,17 +278,17 @@ AclLiteError CopyImageToDevice(ImageData& destImage, ImageData& srcImage,
     destImage.alignWidth = srcImage.alignWidth;
     destImage.alignHeight = srcImage.alignHeight;
     
-    if(memType == MEMORY_DEVICE) {
+    if (memType == MEMORY_DEVICE) {
         destImage.data = SHARED_PTR_DEV_BUF(data);
-    }
-    else {
+        } else {
         destImage.data = SHARED_PTR_DVPP_BUF(data);
     }
 
     return ACLLITE_OK;
 }
 
-AclLiteError ReadBinFile(const string& fileName, void*& data, uint32_t& size) {
+AclLiteError ReadBinFile(const string& fileName, void*& data, uint32_t& size)
+{
     struct stat sBuf;
     int fileStatus = stat(fileName.data(), &sBuf);
     if (fileStatus == -1) {
@@ -288,15 +296,15 @@ AclLiteError ReadBinFile(const string& fileName, void*& data, uint32_t& size) {
         return ACLLITE_ERROR_ACCESS_FILE;
     }
     if (S_ISREG(sBuf.st_mode) == 0) {
-        ACLLITE_LOG_ERROR("%s is not a file, please enter a file", 
-                      fileName.c_str());
+        ACLLITE_LOG_ERROR("%s is not a file, please enter a file",
+                          fileName.c_str());
         return ACLLITE_ERROR_INVALID_FILE;
-    }
+        }
     std::ifstream binFile(fileName, std::ifstream::binary);
     if (binFile.is_open() == false) {
         ACLLITE_LOG_ERROR("open file %s failed", fileName.c_str());
         return ACLLITE_ERROR_OPEN_FILE;
-    }
+        }
 
     binFile.seekg(0, binFile.end);
     uint32_t binFileBufferLen = binFile.tellg();
@@ -323,7 +331,8 @@ AclLiteError ReadBinFile(const string& fileName, void*& data, uint32_t& size) {
     return ACLLITE_OK;
 }
 
-AclLiteError ReadJpeg(ImageData& image, const std::string& fileName) {
+AclLiteError ReadJpeg(ImageData& image, const std::string& fileName)
+{
     uint32_t size = 0;
     void* buf = nullptr;
     
@@ -331,13 +340,14 @@ AclLiteError ReadJpeg(ImageData& image, const std::string& fileName) {
 
     int32_t ch = 0;
     acldvppJpegGetImageInfo(buf, size,
-              &(image.width), &(image.height), &ch);
-    if(image.width == 0 || image.height == 0){
+                            &(image.width), &(image.height), &ch);
+    if (image.width == 0 || image.height == 0) {
         ACLLITE_LOG_ERROR("unsupported format, only Baseline JPEG");
         return ACLLITE_ERROR;
     }
-    image.data.reset((uint8_t *)buf, [](uint8_t* p) 
-                    { delete[](p); }
+    image.data.reset((uint8_t *)buf, [](uint8_t* p) { 
+        delete[](p);
+    }
                     );
     image.size = size;
 

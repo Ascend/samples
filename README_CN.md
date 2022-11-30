@@ -82,7 +82,7 @@ CANN AscendCL（Ascend Computing Language）提供Device管理、Context管理�
 
 ## 文档
 
-参考社区网站[昇腾文档](https://support.huaweicloud.com/ascend/index.html)获取相关文档。
+参考社区网站[昇腾文档](https://www.hiascend.com/zh/document)获取相关文档。
 
 ## 社区
 

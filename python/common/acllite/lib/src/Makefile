@@ -35,10 +35,10 @@ INC_DIR = \
     -I./ \
     -I../include \
     -I$(INSTALL_DIR)/driver/ \
-    -I$(INSTALL_DIR)/acllib/include/ \
+    -I$(INSTALL_DIR)/runtime/include/ \
     -I$(THIRDPART_PATH)/include/ \
     -I$(THIRDPART_PATH)/include/presenter/agent/ \
-    #-I$(DDK_PATH)/atc/include/protobuf
+    #-I$(DDK_PATH)/compiler/include/protobuf
 
 CC_FLAGS := $(INC_DIR) -DENABLE_DVPP_INTERFACE -std=c++11 -fPIC -Wall -O2
 LNK_FLAGS := \

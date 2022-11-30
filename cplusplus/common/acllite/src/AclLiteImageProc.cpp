@@ -142,11 +142,10 @@ AclLiteError AclLiteImageProc::ProportionPaste(ImageData& dest, ImageData& src,
 }
 
 AclLiteError AclLiteImageProc::ProportionPasteCenter(ImageData& dest, ImageData& src,
-                                                     uint32_t ltHorz, uint32_t ltVert,
-                                                     uint32_t rbHorz, uint32_t rbVert)
+                                                     uint32_t width, uint32_t height)
 {
     CropAndPasteHelper crop(stream_, dvppChannelDesc_,
-                            ltHorz, ltVert, rbHorz, rbVert);
+                            0, 0, width, height);
     return crop.ProportionCenterProcess(dest, src);
 }
 

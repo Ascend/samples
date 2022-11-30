@@ -17,12 +17,12 @@ set -e
 
 acl_app=amct_acl
 model_name=resnet_v1_50
-model=../model/resnet_v1_50.pb
+model=./model/resnet_v1_50.pb
 input_shape="input:16,224,224,3" # N is same with
-calibration_data=../data/calibration/calibration.bin
+calibration_data=./data/calibration/calibration.bin
 out_nodes="resnet_v1_50/predictions/Softmax:0"
 
-python3.7 ../data/process_data.py
+python3.7 ./src/process_data.py
 
 $acl_app --framework=3 --model=$model --calibration_data=$calibration_data \
 --calibration_shape=$input_shape \

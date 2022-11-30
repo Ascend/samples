@@ -72,7 +72,7 @@ The directory structure of the sample is as follows:
         If the input for model inference allows a dynamic batch size, run the following command to convert the model (taking the Ascend 310 AI Processor as an example):
 
         ```
-        atc --model=caffe_model/yolov3.prototxt --weight=caffe_model/yolov3.caffemodel --framework=0 --input_shape="data:-1,3,416,416" --input_format=NCHW --dynamic_batch_size="1,2,4,8" --soc_version=Ascend310 --output=model/yolov3_dynamic_batch 
+        atc --model=caffe_model/yolov3.prototxt --weight=caffe_model/yolov3.caffemodel --framework=0 --input_shape="data:-1,3,416,416;img_info:-1,4" --input_format=NCHW --dynamic_batch_size="1,2,4,8" --soc_version=Ascend310 --output=model/yolov3_dynamic_batch
         ```
 
         If the input for model inference allows a dynamic image size, run the following command to convert the model (taking the Ascend 310 AI Processor as an example):
@@ -129,13 +129,15 @@ The directory structure of the sample is as follows:
 
     3.  Set environment variables and configure the paths of header files and library files that the program depends on for compilation.
   
-        After the following environment variables are set, the compilation script will look for the compiled-dependent header files according to the "{DDK_PATH} environment variable value/acllib/include/acl" directory, and the compiled-independent library files according to the directory pointed to by the {NPU_HOST_LIB} environment variable. Replace "$HOME/Ascend" with the actual installation path of the "Ascend-cann-toolkit" package.
+        After the following environment variables are set, the compilation script will look for the compiled-dependent header files according to the "{DDK_PATH} environment variable value/runtime/include/acl" directory, and the compiled-independent library files according to the directory pointed to by the {NPU_HOST_LIB} environment variable. Replace "$HOME/Ascend" with the actual installation path of the "Ascend-cann-toolkit" package.
+
+       *Note**, when configuring the {NPU_HOST_LIB} environment variable, you need to use the *.so library in the "runtime/lib64/stub" directory to ensure that when compiling an application based on the AscendCL interface, it does not depend on other components (such as Driver ) *.so library, after the compilation is successful, when running the application, the system will search for the *.so library in the "Ascend-cann-toolkit installation directory/runtime/lib64" directory according to the LD_LIBRARY_PATH environment variable, and will automatically link to all *.so libraries of other components that depend on them.
   
         - When the operating system architecture of the development environment and the operating environment are the same, the configuration example is as follows:
   
            ````
            export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest
-           export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
+           export NPU_HOST_LIB=$DDK_PATH/runtime/lib64/stub
            ````
   
         - When the OS architecture of the development environment and the runtime environment are different, the configuration example is as follows:
@@ -144,7 +146,7 @@ The directory structure of the sample is as follows:
   
            ````
            export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux
-           export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
+           export NPU_HOST_LIB=$DDK_PATH/runtime/lib64/stub
            ````
        
           You can log in to the corresponding environment and run the "uname -a" command to query the architecture of its operating system.

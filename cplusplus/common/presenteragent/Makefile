@@ -37,7 +37,7 @@ INC_DIR := \
 	-I$(LOCAL_DIR)/include \
 	-I$(INSTALL_DIR)/runtime/include \
 	-I$(THIRDPART_PATH)/include \
-    -I$(INSTALL_DIR)/atc/include/protobuf \
+    -I$(INSTALL_DIR)/compiler/include/protobuf \
 	-I/usr/local/include \
 	-I$(LOCAL_DIR)/src \
 
@@ -53,9 +53,9 @@ ALL_OBJS := $(OBJS) \
 CC_FLAGS := $(INC_DIR) -std=c++11 -Wall -fPIC -O2
 
 LNK_FLAGS := \
-	-Wl,-rpath-link=$(INSTALL_DIR)/atc/lib64 \
-    -L$(INSTALL_DIR)/atc/lib64 \
-    -L$(INSTALL_DIR)/acllib/lib64 \
+	-Wl,-rpath-link=$(INSTALL_DIR)/compiler/lib64 \
+    -L$(INSTALL_DIR)/compiler/lib64 \
+    -L$(INSTALL_DIR)/runtime/lib64 \
 	-L$(THIRDPART_PATH)/lib \
 	-lprotobuf \
     -lascendcl \

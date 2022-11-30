@@ -73,6 +73,7 @@ private:
     int classifyPreThreadId_;
     int classifyPostThreadId_;
     int presentAgentDisplayThreadId_;
+    int rtspDisplayThreadId_;
     AclLiteImageProc dvpp_;
     std::vector<std::string> fileVec_;
 };

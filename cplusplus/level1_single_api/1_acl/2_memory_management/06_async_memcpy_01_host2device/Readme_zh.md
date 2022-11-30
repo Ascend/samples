@@ -86,7 +86,7 @@
     示例命令如下，请根据实际环境上\*.cpp文件所在的路径、可执行文件的名称及存放可执行文件的路径、头文件所在路径、库文件所在路径替换。
 
     ```
-    g++ -DENABLE_DVPP_INTERFACE  ./Async_Memcpy_Host2Device.cpp -o ./Async_Memcpy_Host2Device -I/usr/local/Ascend/ascend-toolkit/latest/acllib_linux.x86_64/include -I/usr/include/  -L/usr/local/Ascend/ascend-toolkit/latest/acllib_linux.x86_64/lib64/stub -lascendcl -lstdc++
+    g++ -DENABLE_DVPP_INTERFACE  ./Async_Memcpy_Host2Device.cpp -o ./Async_Memcpy_Host2Device -I/usr/local/Ascend/ascend-toolkit/latest/runtime_linux.x86_64/include -I/usr/include/  -L/usr/local/Ascend/ascend-toolkit/latest/runtime_linux.x86_64/lib64/stub -lascendcl -lstdc++
     ```
 
 4.  切换到可执行文件所在的目录，运行应用。

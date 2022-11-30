@@ -1,5 +1,5 @@
-/**
-* Copyright 2020 Huawei Technologies Co., Ltd
+/*
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -12,10 +12,11 @@
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 * See the License for the specific language governing permissions and
 * limitations under the License.
-
-* File sample_process.h
-* Description: handle acl resource
 */
+
+#ifndef ANIMEGAN_MULTI_DEVICE_ONE_VIDEO_INFERENCE_INFERENCE_H
+#define ANIMEGAN_MULTI_DEVICE_ONE_VIDEO_INFERENCE_INFERENCE_H
+
 #pragma once
 
 #include <iostream>
@@ -35,7 +36,7 @@ using namespace std;
 class InferenceThread : public AclLiteThread {
 public:
     InferenceThread(const string& modelPath,
-                    uint32_t modelWidth, uint32_t modelHeight, 
+                    uint32_t modelWidth, uint32_t modelHeight,
                     aclrtContext& contex);
     ~InferenceThread();
 
@@ -50,12 +51,13 @@ private:
                                 shared_ptr<InferOutputMsg> &inferOutputMsg);
 
     void DestroyResource();
-private:   
-    AclLiteModel model_;
-    uint32_t modelWidth_;
-    uint32_t modelHeight_;
-    aclrtRunMode runMode_;
-    aclrtStream stream_;
-    aclrtContext context_;
+private:
+    AclLiteModel g_model_;
+    uint32_t g_modelWidth_;
+    uint32_t g_modelHeight_;
+    aclrtRunMode g_runMode_;
+    aclrtStream g_stream_;
+    aclrtContext g_context_;
 };
 
+#endif

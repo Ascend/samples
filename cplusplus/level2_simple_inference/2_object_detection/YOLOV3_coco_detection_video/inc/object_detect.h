@@ -1,5 +1,5 @@
-/**
-* Copyright 2020 Huawei Technologies Co., Ltd
+/*
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -12,10 +12,11 @@
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 * See the License for the specific language governing permissions and
 * limitations under the License.
-
-* File sample_process.h
-* Description: handle acl resource
 */
+
+#ifndef YOLOV3_COCO_DETECTION_VIDEO_INC_OBJECT_DETECT_H
+#define YOLOV3_COCO_DETECTION_VIDEO_INC_OBJECT_DETECT_H
+
 #pragma once
 
 #include <memory>
@@ -37,48 +38,49 @@ public:
     ObjectDetect(const char* modelPath, uint32_t modelWidth,
     uint32_t modelHeight);
     ~ObjectDetect();
-    //Inference initialization
+    // Inference initialization
     Result Init();
-    //nference frame image preprocessing
+    // nference frame image preprocessing
     Result Preprocess(cv::Mat& frame);
-    //Inference frame picture
+    // Inference frame picture
     Result Inference(aclmdlDataset*& inferenceOutput);
-    //Inference output post-processing
+    // Inference output post-processing
     Result Postprocess(cv::Mat& frame, aclmdlDataset* modelOutput);
     
 private:
-    //Initializes the ACL resource
+    // Initializes the ACL resource
     Result InitResource();
-    //Loading reasoning model
+    // Loading reasoning model
     Result InitModel(const char* omModelPath);
     Result CreateModelInputdDataset();
-    //Establish a connection to the Presenter Server
+    // Establish a connection to the Presenter Server
     Result OpenPresenterChannel();
-    //Get data from model inference output aclmdlDataset to local
+    // Get data from model inference output aclmdlDataset to local
     void* GetInferenceOutputItem(uint32_t& itemDataSize,
     aclmdlDataset* inferenceOutput,
     uint32_t idx);
-    //Serializes a frame image into a data stream
+    // Serializes a frame image into a data stream
     void EncodeImage(vector<uint8_t>& encodeImg, cv::Mat& origImg);
     Result SendImage(std::vector<DetectionResult>& detectionResults,
                      cv::Mat& frame);
-    //Release the requested resources
+    // Release the requested resources
     void DestroyResource();
 
 private:
-    int32_t deviceId_;  //Device ID, default is 0
-    ModelProcess model_; //Inference model instance
+    int32_t g_deviceId_;  // Device ID, default is 0
+    ModelProcess g_model_; // Inference model instance
 
-    const char* modelPath_; //Offline model file path
-    uint32_t modelWidth_;   //The input width required by the model
-    uint32_t modelHeight_;  //The model requires high input
-    uint32_t imageDataSize_; //Model input data size
-    void*    imageDataBuf_;      //Model input data cache
-    uint32_t imageInfoSize_;
-    void*    imageInfoBuf_;
-    aclrtRunMode runMode_;   //Run mode, which is whether the current application is running on atlas200DK or AI1
+    const char* g_modelPath_; // Offline model file path
+    uint32_t g_modelWidth_;   // The input width required by the model
+    uint32_t g_modelHeight_;  // The model requires high input
+    uint32_t g_imageDataSize_; // Model input data size
+    void*    g_imageDataBuf_;      // Model input data cache
+    uint32_t g_imageInfoSize_;
+    void*    g_imageInfoBuf_;
+    aclrtRunMode g_runMode_;   // Run mode, which is whether the current application is running on atlas200DK or AI1
 
-    Channel* channel_;  //A channel to connect to presenter Server
-    bool isInited_;     //Initializes the tag to prevent inference instances from being initialized multiple times
+    Channel* g_channel_;  // A channel to connect to presenter Server
+    bool g_isInited_;     // Initializes the tag to prevent inference instances from being initialized multiple times
 };
 
+#endif

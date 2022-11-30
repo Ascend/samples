@@ -1,5 +1,5 @@
-/**
-* Copyright 2020 Huawei Technologies Co., Ltd
+/*
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -12,10 +12,11 @@
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 * See the License for the specific language governing permissions and
 * limitations under the License.
-
-* File model_process.h
-* Description: handle model process
 */
+
+#ifndef YOLOV3_COCO_DETECTION_VIDEO_INC_MODEL_PROCESS_H
+#define YOLOV3_COCO_DETECTION_VIDEO_INC_MODEL_PROCESS_H
+
 #pragma once
 #include <iostream>
 #include "utils.h"
@@ -70,8 +71,8 @@ public:
     * @param [in] bufferSize: input buffer size
     * @return result
     */
-    Result CreateInput(void *input1, size_t input1size,
-                       void* input2, size_t input2size);
+    Result CreateInput(void *input1, size_t input1Size,
+                       void* input2, size_t input2Size);
 
     /**
     * @brief destroy input resource
@@ -102,15 +103,16 @@ public:
     aclmdlDataset *GetModelOutputData();
 
 private:
-    bool loadFlag_;  // model load flag
-    uint32_t modelId_;
-    void *modelMemPtr_;
-    size_t modelMemSize_;
-    void *modelWeightPtr_;
-    size_t modelWeightSize_;
-    aclmdlDesc *modelDesc_;
-    aclmdlDataset *input_;
-    aclmdlDataset *output_;
-    bool isReleased_;
+    bool g_loadFlag_;  // model load flag
+    uint32_t g_modelId_;
+    void *g_modelMemPtr_;
+    size_t g_modelMemSize_;
+    void *g_modelWeightPtr_;
+    size_t g_modelWeightSize_;
+    aclmdlDesc *g_modelDesc_;
+    aclmdlDataset *g_input_;
+    aclmdlDataset *g_output_;
+    bool g_isReleased_;
 };
 
+#endif

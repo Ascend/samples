@@ -1,6 +1,7 @@
+/*
+* Copyright (C) Huawei Technologies Co., Ltd. 2020-2022. All rights reserved.
+*/
 /**
-* Copyright 2020 Huawei Technologies Co., Ltd
-*
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
 * You may obtain a copy of the License at
@@ -12,12 +13,17 @@
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 * See the License for the specific language governing permissions and
 * limitations under the License.
+
+* File sample_process.cpp
+* Description: handle acl resource
 */
 
+#ifndef RC_MAIN_H
+#define RC_MAIN_H
 #pragma once
-#include "acl/acl.h"
 #include <iostream>
 #include <cstdint>
+#include "acl/acl.h"
 #include "acl/ops/acl_dvpp.h"
 
 #define INFO_LOG(fmt, args...) fprintf(stdout, "[INFO]  " fmt "\n", ##args)
@@ -59,3 +65,5 @@ uint32_t inDevBufferSize_; // dvpp input buffer size
 uint32_t inputWidth_; // input pic width
 uint32_t inputHeight_; // input pic height
 aclrtRunMode runMode;
+
+#endif

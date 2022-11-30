@@ -1,5 +1,5 @@
-/**
-* Copyright 2020 Huawei Technologies Co., Ltd
+/*
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -12,10 +12,11 @@
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 * See the License for the specific language governing permissions and
 * limitations under the License.
-
-* File AclLiteResource.h
-* Description: handle AclLiteResource operations
 */
+
+#ifndef YOLOV3_CARCOLOR_SAMPLE_INC_ACLLITERESOURCE_H
+#define YOLOV3_CARCOLOR_SAMPLE_INC_ACLLITERESOURCE_H
+
 #pragma once
 
 #include <unistd.h>
@@ -25,17 +26,19 @@
 
 class AclLiteResource {
 public:
-    AclLiteResource(); 
+    AclLiteResource();
     ~AclLiteResource();
 
     AclLiteError Init();
     void Release();
 
 private:
-    bool isReleased_;
-    bool useDefaultCtx_;
-    int32_t deviceId_;
-    aclrtRunMode runMode_;
-    aclrtContext context_;
-    std::string aclConfig_;  
+    bool g_isReleased_;
+    bool g_useDefaultCtx_;
+    int32_t g_deviceId_;
+    aclrtRunMode g_runMode_;
+    aclrtContext g_context_;
+    std::string g_aclConfig_;
 };
+
+#endif

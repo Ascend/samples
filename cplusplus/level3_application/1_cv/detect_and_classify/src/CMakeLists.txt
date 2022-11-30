@@ -9,7 +9,15 @@ project(yolov3_colorclassify_video)
 # Compile options
 add_compile_options(-std=c++11)
 
+#添加需要依赖选项
+option(USE_LIBRARY "use library" ON)
+option(USE_PRESENT "use present" OFF)
+
 add_definitions(-DENABLE_DVPP_INTERFACE)
+if(USE_PRESENT)
+    add_definitions(-DUSE_PRESENT)
+endif()
+
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY  "../../../out")
 set(CMAKE_CXX_FLAGS_DEBUG "-fPIC -O0 -g -Wall")
 set(CMAKE_CXX_FLAGS_RELEASE "-fPIC -O2 -Wall")
@@ -37,15 +45,25 @@ if ($ENV{CPU_ARCH} MATCHES "aarch64")
     endif()
 endif()
 
+
 # Header path
 include_directories(
-    $ENV{THIRDPART_PATH}/include/
-    $ENV{THIRDPART_PATH}/include/acllite
-    $ENV{THIRDPART_PATH}/include/opencv4
-    $ENV{INSTALL_DIR}/driver    
-    $ENV{INSTALL_DIR}/acllib/include/
-    ../inc/
+        $ENV{THIRDPART_PATH}/include/
+        $ENV{THIRDPART_PATH}/include/opencv4
+        $ENV{INSTALL_DIR}/driver
+        $ENV{INSTALL_DIR}/runtime/include/
+        ../inc/
 )
+if(NOT USE_LIBRARY)
+    include_directories(
+            $ENV{HOME}/samples/cplusplus/common/acllite/include/
+    )
+else()
+    include_directories(
+            $ENV{THIRDPART_PATH}/include/acllite
+    )
+endif()
+
 
 if(target STREQUAL "Simulator_Function")
     add_compile_options(-DFUNC_SIM)
@@ -53,9 +71,9 @@ endif()
 
 # add host lib path
 link_directories(
-    $ENV{THIRDPART_PATH}/lib/
-    $ENV{INSTALL_DIR}/driver
-    $ENV{INSTALL_DIR}/runtime/lib64/stub
+        $ENV{THIRDPART_PATH}/lib/
+        $ENV{INSTALL_DIR}/driver
+        $ENV{INSTALL_DIR}/runtime/lib64/stub
 )
 
 add_executable(main
@@ -64,13 +82,33 @@ add_executable(main
         detectPostprocess/detectPostprocess.cpp
         classifyPreprocess/classifyPreprocess.cpp
         classifyPostprocess/classifyPostprocess.cpp
-        presentagentDisplay/presentagentDisplay.cpp
+	    pushrtsp/pictortsp.cpp
+        pushrtsp/pushrtspthread.cpp
         main.cpp)
+
+if(NOT USE_LIBRARY)
+    aux_source_directory($ENV{HOME}/samples/cplusplus/common/acllite/src/ aclLite)
+    target_sources(main 
+        PUBLIC
+            ${aclLite})
+endif()
+
+if(USE_PRESENT)
+    target_sources(main 
+        PUBLIC
+            presentagentDisplay/presentagentDisplay.cpp)
+endif()
 
 if(target STREQUAL "Simulator_Function")
     target_link_libraries(main funcsim)
 else()
-    target_link_libraries(main ascendcl acl_dvpp stdc++ pthread ${COMMON_DEPEND_LIB} acllite opencv_highgui opencv_core opencv_imgproc opencv_imgcodecs opencv_calib3d opencv_features2d opencv_videoio protobuf presenteragent dl rt)
+    target_link_libraries(main ascendcl acl_dvpp stdc++ pthread ${COMMON_DEPEND_LIB} opencv_highgui opencv_core opencv_imgproc opencv_imgcodecs opencv_calib3d opencv_features2d opencv_videoio protobuf  dl rt)
+    if(USE_LIBRARY)
+        target_link_libraries(main acllite)
+    endif()
+    if(USE_PRESENT)
+        target_link_libraries(main presenteragent)
+    endif()
 endif()
 
 install(TARGETS main DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})

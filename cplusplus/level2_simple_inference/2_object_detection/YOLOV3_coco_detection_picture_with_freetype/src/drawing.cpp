@@ -1,17 +1,35 @@
+/*
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+
+* http://www.apache.org/licenses/LICENSE-2.0
+
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
+
 #include <algorithm>
 #include <cmath>
 #include <iostream>
 #include <stdint.h>
 #include <string>
-#include "drawing.h"
 #include <stdio.h>
+#include "drawing.h"
 
-void DrawText(ImageData& image, int x, int y, const std::string &text, const YUVColor &color) {
+void DrawText(ImageData& image, int x, int y, const std::string &text, const YUVColor &color)
+{
     RenderText(image, x, y, text, &color);
 }
 
 void DrawRect(ImageData& image, int x1, int y1, int x2, int y2, const YUVColor &color,
-              int lineWidth) {
+              int lineWidth)
+{
     if (x1 > x2) {
         std::swap(x1, x2);
     }
@@ -21,50 +39,50 @@ void DrawRect(ImageData& image, int x1, int y1, int x2, int y2, const YUVColor &
     }
 
     int i, j;
-    int i_bound, j_bound;
-    int i_start, j_start;
+    int iBound, jBound;
+    int iStart, jStart;
     int width = (int)image.width;
     int height = (int)image.height;
 
-    j_bound = std::min(height, y1 + lineWidth);
-    i_bound = std::min(width - 1, x2);
+    jBound = std::min(height, y1 + lineWidth);
+    iBound = std::min(width - 1, x2);
 
-    for (j = y1; j < j_bound; ++j) {
-        for (i = x1; i <= i_bound; ++i) {
+    for (j = y1; j < jBound; ++j) {
+        for (i = x1; i <= iBound; ++i) {
             SetPixel(image, i, j, color);
         }
     }
 
-    j_start = std::max(0, y2 - lineWidth + 1);
-    j_bound = std::min(height - 1, y2);
+    jStart = std::max(0, y2 - lineWidth + 1);
+    jBound = std::min(height - 1, y2);
 
-    i_start = std::max(0, x1);
-    i_bound = std::min(width - 1, x2);
+    iStart = std::max(0, x1);
+    iBound = std::min(width - 1, x2);
 
-    for (j = j_start; j <= j_bound; ++j) {
-        for (i = i_start; i <= i_bound; ++i) {
+    for (j = jStart; j <= jBound; ++j) {
+        for (i = iStart; i <= iBound; ++i) {
             SetPixel(image, i, j, color);
         }
     }
 
-    i_bound = std::min(width, x1 + lineWidth);
-    j_bound = std::min(height - 1, y2);
+    iBound = std::min(width, x1 + lineWidth);
+    jBound = std::min(height - 1, y2);
 
-    for (i = x1; i < i_bound; ++i) {
-        for (j = y1; j <= j_bound; ++j) {
+    for (i = x1; i < iBound; ++i) {
+        for (j = y1; j <= jBound; ++j) {
             SetPixel(image, i, j, color);
         }
     }
 
-    i_start = std::max(0, (x2 - lineWidth + 1));
-    i_bound = std::min(width - 1, x2);
+    iStart = std::max(0, (x2 - lineWidth + 1));
+    iBound = std::min(width - 1, x2);
 
-    j_start = std::max(0, y1);
-    j_bound = std::min(height - 1, y2);
+    jStart = std::max(0, y1);
+    jBound = std::min(height - 1, y2);
 
-    for (i = i_start; i <= i_bound; ++i) {
-        for (j = j_start; j <= j_bound; ++j) {
+    for (i = iStart; i <= iBound; ++i) {
+        for (j = jStart; j <= jBound; ++j) {
             SetPixel(image, i, j, color);
         }
     }
-    }
+}

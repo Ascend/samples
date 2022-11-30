@@ -117,7 +117,7 @@ function main() {
     cd ${project_path}/run/out
 
     export LD_LIBRARY_PATH=
-    export LD_LIBRARY_PATH=${HOME}/Ascend/nnrt/latest/acllib/lib64
+    export LD_LIBRARY_PATH=${HOME}/Ascend/nnrt/latest/runtime/lib64
     
     chmod +x execute_gemm_op
     if [ $? -ne 0 ];then

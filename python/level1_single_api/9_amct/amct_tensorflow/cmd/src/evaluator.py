@@ -8,7 +8,7 @@ class Evaluator():
             sess.run(tf.global_variables_initializer())
             for data_map in data_handler.load_data(
                             {'input:0': [32, 224, 224, 3]},
-                            ['./data/calibration'],
+                            ['./data/image'],
                             ['float32'],
                             1
                             ):

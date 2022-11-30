@@ -33,7 +33,7 @@ if (NOT DEFINED ENV{NPU_HOST_LIB})
     if (${CMAKE_HOST_SYSTEM_NAME} MATCHES "Windows")
         set(LIB_PATH "C:/Program Files/HuaWei/Ascend/Acllib/lib64")
     else ()
-        set(LIB_PATH "/usr/local/Ascend/acllib/lib64/stub/")
+        set(LIB_PATH "/usr/local/Ascend/runtime/lib64/stub/")
     endif ()
     message(STATUS "set default LIB_PATH: ${LIB_PATH}")
 else ()
@@ -42,7 +42,7 @@ endif ()
 
 # Header path
 include_directories(
-    ${INC_PATH}/acllib/include/
+    ${INC_PATH}/runtime/include/
     ../inc/
 )
 

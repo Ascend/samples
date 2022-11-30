@@ -56,14 +56,14 @@ Slice算子功能：从tensor中提取切片。此操作从tensor“x”(第一�
 
        ```
        export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux
-       export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
+       export NPU_HOST_LIB=$DDK_PATH/runtime/lib64/stub
        ```
 
      - 当运行环境操作系统架构时AArch64时，配置示例如下所示：
 
        ```
        export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux
-       export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
+       export NPU_HOST_LIB=$DDK_PATH/runtime/lib64/stub
        ```
 
 - 运行环境上环境变量配置

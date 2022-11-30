@@ -1,5 +1,5 @@
-/**
-* Copyright 2020 Huawei Technologies Co., Ltd
+/*
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -12,8 +12,6 @@
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 * See the License for the specific language governing permissions and
 * limitations under the License.
-
-* File main.cpp
 */
 
 #include <iostream>
@@ -27,9 +25,10 @@
 #include "AclLiteResource.h"
 using namespace std;
 
-int main(int argc, char *argv[]) {
-
-    if((argc < 2) || (argv[1] == nullptr)){
+int main(int argc, char *argv[])
+{
+    int argNum = 2;
+    if ((argc < argNum) || (argv[1] == nullptr)) {
         ACLLITE_LOG_ERROR("Please input: ./main <image_dir>");
         return ACLLITE_ERROR;
     }
@@ -38,7 +37,7 @@ int main(int argc, char *argv[]) {
     if (ret) {
         ACLLITE_LOG_ERROR("Init resource failed, error %d", ret);
         return ACLLITE_ERROR;
-    }  
+    }
 
     ObjectDetect detect;
     ret = detect.Init();
@@ -71,10 +70,10 @@ int main(int argc, char *argv[]) {
         }
 
         ImageData resizedImage, yuvImage;
-        ret = detect.Preprocess(resizedImage, image, yuvImage);
+        ret = detect.PreProcess(resizedImage, image, yuvImage);
         if (ret != ACLLITE_OK) {
             ACLLITE_LOG_ERROR("Read file %s failed, continue to read next",
-                      imageFile.c_str());                
+                              imageFile.c_str());
             continue;
         }
         std::vector<InferenceOutput> detectInferOutput;
@@ -84,19 +83,19 @@ int main(int argc, char *argv[]) {
             return ACLLITE_ERROR;
         }
         vector<CarInfo> carInfo;
-        ret = detect.Postprocess(image, detectInferOutput, carInfo);
+        ret = detect.PostProcess(image, detectInferOutput, carInfo);
         if (ret != ACLLITE_OK) {
             ACLLITE_LOG_ERROR("Process model inference output data failed");
             return ACLLITE_ERROR;
         }
 
         int flag = 0;
-        ret = classify.Preprocess(yuvImage, carInfo, flag);
+        ret = classify.PreProcess(yuvImage, carInfo, flag);
         if (ret != ACLLITE_OK) {
             ACLLITE_LOG_ERROR("Process model inference input data failed");
             return ACLLITE_ERROR;
         }
-        if(flag ==1) {
+        if (flag ==1) {
             continue;
         }
         std::vector<InferenceOutput> classifyInferOutput;
@@ -106,12 +105,11 @@ int main(int argc, char *argv[]) {
             return ACLLITE_ERROR;
         }
         
-        ret = classify.Postprocess(classifyInferOutput, carInfo, imageFile);
+        ret = classify.PostProcess(classifyInferOutput, carInfo, imageFile);
         if (ret != ACLLITE_OK) {
             ACLLITE_LOG_ERROR("Process model inference output data failed");
             return ACLLITE_ERROR;
         }
-
     }
     ACLLITE_LOG_INFO("Execute sample success");
     return ACLLITE_OK;

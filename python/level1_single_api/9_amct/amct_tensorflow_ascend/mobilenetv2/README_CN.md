@@ -20,10 +20,9 @@
 **./**   
 ├─data：mobilenetv2的推理时所用的数据集，可选用mobilenetv2的测试集。    
 ├─pre_model： 存放mobilenetv2量化前的模型  
-&emsp;├─mobilenetv2_tf.pb   
+&emsp;├─mobilenet_v2_1.0_224_frozen.pb  
 ├─src：处理脚本   
-&emsp;├─mobilenetv2_calibration.py：执行量化的python脚本。  
-&emsp;├─preprocess_data.py：预处理image数据集的脚本，该预处理方式为mobilenetv2的预处理方式   
+&emsp;├─mobilenetv2_calibration.py：执行量化的python脚本。   
 ├─README_zh：说明文档
 └─requirements.txt: 需要安装的python库
 
@@ -38,7 +37,7 @@ python3.7.5 src/mobilenetv2_calibration.py [-h] [--cfg_define CFG_DEFINE]
 
 若出现如下信息则说明模型量化成功
 ```bash
-INFO - [AMCT]:[save_model]: The model is saved in $HOME/amct/amct_tf/ascend_sample/mobilenetv2/result/MobileNetV2_ascend_quantized.pb
+INFO - [AMCT]:[save_model]: The model is saved in $HOME/amct_tensorflow_ascend/mobilenetv2/result/MobileNetV2_ascend_quantized.pb
 Origin Model Prediction:
         category index: 443
         category prob: 0.384
@@ -59,8 +58,7 @@ Quantized Model Prediction:
 ├─result：   
 &emsp;├─MobileNetV2_quantized.pb： 量化后的模型，可在TensorFlow环境进行精度仿真,也可在昇腾AI处理器部署。   
 &emsp;├─MobileNetV2_quant.json： 量化信息文件，记录了量化模型同原始模型节点的映射关系，用于量化后模型同原始模型比对使用.   
-└─tmp：   
-&emsp;├─kernel_meta：调用TF_Adapter在NPU上在线推理时产生的文件，算子编译时生成的文件目录。    
+└─tmp：    
 &emsp;├─check_result.tf.json：调用TF_Adapter在NPU上在线推理时产生的文件，记录推理图中不支持在NPU上运行的算子。  
 &emsp;├─fusion_result.json：调用TF_Adapter在NPU上在线推理时产生的文件，记录使用的图融合、UB融合规则。   
 

@@ -1,5 +1,5 @@
-/**
-* Copyright 2020 Huawei Technologies Co., Ltd
+/*
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -12,31 +12,32 @@
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 * See the License for the specific language governing permissions and
 * limitations under the License.
-
-* File utils.cpp
-* Description: handle file operations
 */
+
 #include "AclLiteUtils.h"
 #include "AclLiteResource.h"
 
 using namespace std;
 
-AclLiteResource::AclLiteResource():
-  isReleased_(false),
-  useDefaultCtx_(true),
-  deviceId_(0),  
-  runMode_(ACL_HOST), 
-  context_(nullptr),
-  aclConfig_("") {   
+AclLiteResource::AclLiteResource()
+    : g_isReleased_(false),
+      g_useDefaultCtx_(true),
+      g_deviceId_(0),
+      g_runMode_(ACL_HOST),
+      g_context_(nullptr),
+      g_aclConfig_("")
+{   
 }
 
-AclLiteResource::~AclLiteResource() {
+AclLiteResource::~AclLiteResource()
+{
     Release();
 }
 
-AclLiteError AclLiteResource::Init() {
+AclLiteError AclLiteResource::Init()
+{
     // ACL init
-    aclError ret = aclInit(aclConfig_.c_str());
+    aclError ret = aclInit(g_aclConfig_.c_str());
     if (ret != ACL_SUCCESS) {
         ACLLITE_LOG_ERROR("Acl init failed, errorcode is: %d", ret);
         return ACLLITE_ERROR;
@@ -44,29 +45,29 @@ AclLiteError AclLiteResource::Init() {
     ACLLITE_LOG_INFO("Acl init ok");
 
     // open device
-    ret = aclrtSetDevice(deviceId_);
+    ret = aclrtSetDevice(g_deviceId_);
     if (ret != ACL_SUCCESS) {
-        ACLLITE_LOG_ERROR("Acl open device %d failed, errorCode is : %d", deviceId_, ret);
+        ACLLITE_LOG_ERROR("Acl open device %d failed, errorCode is : %d", g_deviceId_, ret);
         return ACLLITE_ERROR;
     }
-    ACLLITE_LOG_INFO("Open device %d ok", deviceId_);
+    ACLLITE_LOG_INFO("Open device %d ok", g_deviceId_);
 
-    if (useDefaultCtx_) {
+    if (g_useDefaultCtx_) {
         ACLLITE_LOG_INFO("Use default context currently");
-        ret = aclrtGetCurrentContext(&context_);
-        if ((ret != ACL_SUCCESS) || (context_ == nullptr)) {
+        ret = aclrtGetCurrentContext(&g_context_);
+        if ((ret != ACL_SUCCESS) || (g_context_ == nullptr)) {
             ACLLITE_LOG_ERROR("Get current acl context failed, errorCode is : %d", ret);
             return ACLLITE_ERROR_GET_ACL_CONTEXT;
         }
     } else {
-        ret = aclrtCreateContext(&context_, deviceId_);
+        ret = aclrtCreateContext(&g_context_, g_deviceId_);
         if (ret != ACL_SUCCESS) {
             ACLLITE_LOG_ERROR("Create acl context failed, errorCode is : %d", ret);
             return ACLLITE_ERROR_CREATE_ACL_CONTEXT;
         }
     }
 
-    ret = aclrtGetRunMode(&runMode_);
+    ret = aclrtGetRunMode(&g_runMode_);
     if (ret != ACL_SUCCESS) {
         ACLLITE_LOG_WARNING("acl get run mode failed, errorCode is : %d", ret);
     }
@@ -74,26 +75,27 @@ AclLiteError AclLiteResource::Init() {
     return ACLLITE_OK;
 }
 
-void AclLiteResource::Release() {
-    if (isReleased_) {
+void AclLiteResource::Release()
+{
+    if (g_isReleased_) {
         return;
     }
     
     aclError ret;
-    if ((!useDefaultCtx_) && (context_ != nullptr)) {
-        ret = aclrtDestroyContext(context_);
+    if ((!g_useDefaultCtx_) && (g_context_ != nullptr)) {
+        ret = aclrtDestroyContext(g_context_);
         if (ret != ACL_SUCCESS) {
             ACLLITE_LOG_ERROR("destroy context failed, errorCode is : %d", ret);
         }
-        context_ = nullptr;
+        g_context_ = nullptr;
     }
     ACLLITE_LOG_INFO("destroy context ok");
     
-    ret = aclrtResetDevice(deviceId_);
+    ret = aclrtResetDevice(g_deviceId_);
     if (ret != ACL_SUCCESS) {
         ACLLITE_LOG_ERROR("reset device failed, errorCode is : %d", ret);
     }
-    ACLLITE_LOG_INFO("Reset device %d ok", deviceId_);
+    ACLLITE_LOG_INFO("Reset device %d ok", g_deviceId_);
 
     ret = aclFinalize();
     if (ret != ACL_SUCCESS) {
@@ -101,5 +103,5 @@ void AclLiteResource::Release() {
     }
     ACLLITE_LOG_INFO("Finalize acl ok");
 
-    isReleased_ = true;
+    g_isReleased_ = true;
 }

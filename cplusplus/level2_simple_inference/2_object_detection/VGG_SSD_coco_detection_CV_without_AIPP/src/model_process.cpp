@@ -18,7 +18,7 @@
 #include "utils.h"
 using namespace std;
 
-ModelProcess::ModelProcess():g_loadFlag(false), g_modelId(0), g_modelDesc(nullptr), g_input(nullptr), g_output(nullptr)
+ModelProcess::ModelProcess():loadFlag_(false), modelId_(0), modelDesc_(nullptr), input_(nullptr), output_(nullptr)
 {
 }
 
@@ -32,32 +32,32 @@ ModelProcess::~ModelProcess()
 
 Result ModelProcess::LoadModelFromFile(const char *modelPath)
 {
-    if (g_loadFlag) {
+    if (loadFlag_) {
         ERROR_LOG("has already loaded a model");
         return FAILED;
     }
 
     // load model and get modelID.
-    aclError ret = aclmdlLoadFromFile(modelPath, &g_modelId);
+    aclError ret = aclmdlLoadFromFile(modelPath, &modelId_);
     if (ret != ACL_SUCCESS) {
         ERROR_LOG("load model from file failed, model file is %s", modelPath);
         return FAILED;
     }
 
-    g_loadFlag = true;
+    loadFlag_ = true;
     INFO_LOG("load model %s success", modelPath);
     return SUCCESS;
 }
 
 Result ModelProcess::CreateDesc()
 {
-    g_modelDesc = aclmdlCreateDesc();
-    if (g_modelDesc == nullptr) {
+    modelDesc_ = aclmdlCreateDesc();
+    if (modelDesc_ == nullptr) {
         ERROR_LOG("create model description failed");
         return FAILED;
     }
     // get modelDesc(model description) by modelID
-    aclError ret = aclmdlGetDesc(g_modelDesc, g_modelId);
+    aclError ret = aclmdlGetDesc(modelDesc_, modelId_);
     if (ret != ACL_SUCCESS) {
         ERROR_LOG("get model description failed");
         return FAILED;
@@ -69,16 +69,16 @@ Result ModelProcess::CreateDesc()
 
 void ModelProcess::DestroyDesc()
 {
-    if (g_modelDesc != nullptr) {
-        (void)aclmdlDestroyDesc(g_modelDesc);
-        g_modelDesc = nullptr;
+    if (modelDesc_ != nullptr) {
+        (void)aclmdlDestroyDesc(modelDesc_);
+        modelDesc_ = nullptr;
     }
 }
 
 Result ModelProcess::CreateInput(void *inputDataBuffer, size_t bufferSize)
 {
-    g_input = aclmdlCreateDataset();
-    if (g_input == nullptr) {
+    input_ = aclmdlCreateDataset();
+    if (input_ == nullptr) {
         ERROR_LOG("can't create dataset, create input failed");
         return FAILED;
     }
@@ -89,7 +89,7 @@ Result ModelProcess::CreateInput(void *inputDataBuffer, size_t bufferSize)
         return FAILED;
     }
 
-    aclError ret = aclmdlAddDatasetBuffer(g_input, inputData);
+    aclError ret = aclmdlAddDatasetBuffer(input_, inputData);
 
     if (inputData == nullptr) {
         ERROR_LOG("can't add data buffer, create input failed");
@@ -102,34 +102,34 @@ Result ModelProcess::CreateInput(void *inputDataBuffer, size_t bufferSize)
 
 void ModelProcess::DestroyInput()
 {
-    if (g_input == nullptr) {
+    if (input_ == nullptr) {
         return;
     }
 
-    for (size_t i = 0; i < aclmdlGetDatasetNumBuffers(g_input); ++i) {
-        aclDataBuffer* dataBuffer = aclmdlGetDatasetBuffer(g_input, i);
+    for (size_t i = 0; i < aclmdlGetDatasetNumBuffers(input_); ++i) {
+        aclDataBuffer* dataBuffer = aclmdlGetDatasetBuffer(input_, i);
         aclDestroyDataBuffer(dataBuffer);
     }
-    aclmdlDestroyDataset(g_input);
-    g_input = nullptr;
+    aclmdlDestroyDataset(input_);
+    input_ = nullptr;
 }
 
 Result ModelProcess::CreateOutput()
 {
-    if (g_modelDesc == nullptr) {
+    if (modelDesc_ == nullptr) {
         ERROR_LOG("no model description, create ouput failed");
         return FAILED;
     }
 
-    g_output = aclmdlCreateDataset();
-    if (g_output == nullptr) {
+    output_ = aclmdlCreateDataset();
+    if (output_ == nullptr) {
         ERROR_LOG("can't create dataset, create output failed");
         return FAILED;
     }
-    size_t outputSize = aclmdlGetNumOutputs(g_modelDesc);
+    size_t outputSize = aclmdlGetNumOutputs(modelDesc_);
 
     for (size_t i = 0; i < outputSize; ++i) {
-        size_t buffer_size = aclmdlGetOutputSizeByIndex(g_modelDesc, i);
+        size_t buffer_size = aclmdlGetOutputSizeByIndex(modelDesc_, i);
 
         void *outputBuffer = nullptr;
         aclError ret = aclrtMalloc(&outputBuffer, buffer_size, ACL_MEM_MALLOC_NORMAL_ONLY);
@@ -145,7 +145,7 @@ Result ModelProcess::CreateOutput()
             return FAILED;
         }
 
-        ret = aclmdlAddDatasetBuffer(g_output, outputData);
+        ret = aclmdlAddDatasetBuffer(output_, outputData);
         if (ret != ACL_SUCCESS) {
             ERROR_LOG("can't add data buffer, create output failed");
             aclrtFree(outputBuffer);
@@ -160,26 +160,26 @@ Result ModelProcess::CreateOutput()
 
 void ModelProcess::DestroyOutput()
 {
-    if (g_output == nullptr) {
+    if (output_ == nullptr) {
         return;
     }
 
-    for (size_t i = 0; i < aclmdlGetDatasetNumBuffers(g_output); ++i) {
-        aclDataBuffer* dataBuffer = aclmdlGetDatasetBuffer(g_output, i);
+    for (size_t i = 0; i < aclmdlGetDatasetNumBuffers(output_); ++i) {
+        aclDataBuffer* dataBuffer = aclmdlGetDatasetBuffer(output_, i);
         void* data = aclGetDataBufferAddr(dataBuffer);
         (void)aclrtFree(data);
         (void)aclDestroyDataBuffer(dataBuffer);
     }
 
-    (void)aclmdlDestroyDataset(g_output);
-    g_output = nullptr;
+    (void)aclmdlDestroyDataset(output_);
+    output_ = nullptr;
 }
 
 Result ModelProcess::Execute()
 {
-    aclError ret = aclmdlExecute(g_modelId, g_input, g_output);
+    aclError ret = aclmdlExecute(modelId_, input_, output_);
     if (ret != ACL_SUCCESS) {
-        ERROR_LOG("execute model failed, modelId is %u", g_modelId);
+        ERROR_LOG("execute model failed, modelId is %u", modelId_);
         return FAILED;
     }
 
@@ -189,30 +189,30 @@ Result ModelProcess::Execute()
 
 void ModelProcess::Unload()
 {
-    if (!g_loadFlag) {
+    if (!loadFlag_) {
         WARN_LOG("no model had been loaded, unload failed");
         return;
     }
 
-    aclError ret = aclmdlUnload(g_modelId);
+    aclError ret = aclmdlUnload(modelId_);
     if (ret != ACL_SUCCESS) {
-        ERROR_LOG("unload model failed, modelId is %u", g_modelId);
+        ERROR_LOG("unload model failed, modelId is %u", modelId_);
     }
 
-    if (g_modelDesc != nullptr) {
-        (void)aclmdlDestroyDesc(g_modelDesc);
-        g_modelDesc = nullptr;
+    if (modelDesc_ != nullptr) {
+        (void)aclmdlDestroyDesc(modelDesc_);
+        modelDesc_ = nullptr;
     }
 
-    g_loadFlag = false;
-    INFO_LOG("unload model success, modelId is %u", g_modelId);
+    loadFlag_ = false;
+    INFO_LOG("unload model success, modelId is %u", modelId_);
 }
 
 aclmdlDataset *ModelProcess::GetModelOutputData()
 {
-    return g_output;
+    return output_;
 }
 aclmdlDesc *ModelProcess::GetModelDesc()
 {
-    return g_modelDesc;
+    return modelDesc_;
 }

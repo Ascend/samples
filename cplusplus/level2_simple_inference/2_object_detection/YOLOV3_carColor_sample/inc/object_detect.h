@@ -1,5 +1,5 @@
-/**
-* Copyright 2020 Huawei Technologies Co., Ltd
+/*
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -12,20 +12,21 @@
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 * See the License for the specific language governing permissions and
 * limitations under the License.
-
-* File sample_process.h
-* Description: handle acl resource
 */
+
+#ifndef YOLOV3_CARCOLOR_SAMPLE_INC_OBJECT_DETECT_H
+#define YOLOV3_CARCOLOR_SAMPLE_INC_OBJECT_DETECT_H
+
 #pragma once
-#include "acl/acl.h"
 #include <memory>
+#include<opencv2/core/core.hpp>
+#include "acl/acl.h"
 #include "AclLiteModel.h"
 #include "AclLiteImageProc.h"
 #include "opencv2/opencv.hpp"
 #include "opencv2/imgproc.hpp"
 #include "opencv2/core/types_c.h"
 #include "opencv2/imgproc/types_c.h"
-#include<opencv2/core/core.hpp>
 #include "params.h"
 
 /**
@@ -36,23 +37,23 @@ public:
     ObjectDetect();
     ~ObjectDetect();
     AclLiteError Init();
-    AclLiteError Preprocess(ImageData& resizedImage, ImageData& srcImage, ImageData& yuvImage);
+    AclLiteError PreProcess(ImageData& resizedImage, ImageData& srcImage, ImageData& yuvImage);
     AclLiteError Inference(std::vector<InferenceOutput>& inferenceOutput, ImageData& resizedImage);
-    AclLiteError Postprocess(ImageData& image, std::vector<InferenceOutput>& inferenceOutput,
+    AclLiteError PostProcess(ImageData& image, std::vector<InferenceOutput>& inferenceOutput,
                              std::vector<CarInfo>& carData);
-    // void DrawCarBoxToImage(std::vector<CarInfo>& detectionResults,
-    //                          const std::string& origImagePath);
 private:
     void DestroyResource();
     AclLiteError InitModelInput();
 
 private:
-    uint32_t imageInfoSize_;
-    void*    imageInfoBuf_;
-    AclLiteModel model_;
-    const char* modelPath_;
-    AclLiteImageProc dvpp_;
-    aclrtRunMode runMode_;
-    bool isInited_;
-    bool isReleased_;
+    uint32_t g_imageInfoSize_;
+    void*    g_imageInfoBuf_;
+    AclLiteModel g_model_;
+    const char* g_modelPath_;
+    AclLiteImageProc g_dvpp_;
+    aclrtRunMode g_runMode_;
+    bool g_isInited_;
+    bool g_isReleased_;
 };
+
+#endif

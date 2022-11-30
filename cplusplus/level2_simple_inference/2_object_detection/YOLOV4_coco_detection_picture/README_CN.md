@@ -31,7 +31,7 @@
        **注：如果需要切换到其它tag版本，以v0.5.0为例，可执行以下命令。**
        ```
        git checkout v0.5.0
-       ```   
+       ```
     - 压缩包方式下载（下载时间较短，但步骤稍微复杂）。   
        **注：如果需要下载其它版本代码，请先请根据前置条件说明进行samples仓分支切换。**   
        ``` 
@@ -40,7 +40,7 @@
         # 3. 开发环境中，执行以下命令，解压zip包。     
         cd ${HOME}    
         unzip ascend-samples-master.zip
-        ```
+       ```
 
 2. 模型转换。
     | **模型名称** | **模型说明**                                     | **模型下载路径**                                             |
@@ -50,7 +50,8 @@
    ```
    # 为了方便下载，在这里直接给出原始模型下载及模型转换命令,可以直接拷贝执行。也可以参照上表在modelzoo中下载并手工转换，以了解更多细节。     
    cd ${HOME}/samples/cplusplus/level2_simple_inference/2_object_detection/YOLOV4_coco_detection_picture/model     
-   wget https://nkxiaolei88.obs.cn-north-1.myhuaweicloud.com/ATC%20Model/YoloV4/yolov4_no_postprocess.pb
+   wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/nkxiaolei/YoloV4/yolov4_no_postprocess.pb
+   wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/nkxiaolei/YoloV4/insert_op.cfg
    atc --input_shape="Input:1,416,416,3" --output=./yolov4 --insert_op_conf=./insert_op.cfg --framework=3 --model=./yolov4_no_postprocess.pb --soc_version=Ascend310
    ```
 

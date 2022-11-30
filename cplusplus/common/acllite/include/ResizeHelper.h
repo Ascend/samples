@@ -81,8 +81,6 @@ private:
     acldvppPicDesc *vpcOutputDesc_; // vpc output desc
     acldvppResizeConfig *resizeConfig_;
     acldvppChannelDesc *dvppChannelDesc_;
-
-    uint8_t *inDevBuffer_;  // input pic dev buffer
     uint32_t vpcOutBufferSize_;  // vpc output size
     Resolution size_;
 };

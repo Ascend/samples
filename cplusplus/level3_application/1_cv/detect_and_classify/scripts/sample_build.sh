@@ -37,7 +37,7 @@ function build()
   cd ${ScriptPath}/../build/intermediates/host
 
   # Start compiling
-  cmake ../../../src -DCMAKE_CXX_COMPILER=${TargetCompiler} -DCMAKE_SKIP_RPATH=TRUE
+  cmake ../../../src -DCMAKE_CXX_COMPILER=${TargetCompiler} -DCMAKE_SKIP_RPATH=TRUE -DUSE_LIBRARY=ON -DUSE_PRESENT=ON
   if [ $? -ne 0 ];then
     echo "[ERROR] cmake error, Please check your environment!"
     return 1

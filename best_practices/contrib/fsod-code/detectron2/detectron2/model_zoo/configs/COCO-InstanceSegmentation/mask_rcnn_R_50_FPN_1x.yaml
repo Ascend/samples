@@ -1,0 +1,8 @@
+_BASE_: "../Base-RCNN-FPN.yaml"
+INPUT:
+  FIX_SHAPE: (1344, 1344)
+MODEL:
+  WEIGHTS: "detectron2://ImageNetPretrained/MSRA/R-50.pkl"
+  MASK_ON: True
+  RESNETS:
+    DEPTH: 50

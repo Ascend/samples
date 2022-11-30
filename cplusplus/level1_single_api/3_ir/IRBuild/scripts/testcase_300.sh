@@ -10,16 +10,16 @@ declare -i verifyResError=2
 
 function envCheck() {
     export ASCEND_INSTALL_PATH=$HOME/Ascend/ascend-toolkit/latest
-    if [ ! -d ${ASCEND_INSTALL_PATH}/atc ]; then
-        echo "WARNING: ge_ir can only run with atc or fwkacllib, please check one of them installed correctly!"
+    if [ ! -d ${ASCEND_INSTALL_PATH}/compiler ]; then
+        echo "WARNING: ge_ir can only run with compiler, please check it installed correctly!"
     fi
 }
 
 # set environment
 function setEnv() { 
-    if [ -d ${ASCEND_INSTALL_PATH}/atc ]; then
-        export PYTHONPATH=${ASCEND_INSTALL_PATH}/atc/python/site-packages:${ASCEND_INSTALL_PATH}/atc/python/site-packages/auto_tune.egg/auto_tune:${ASCEND_INSTALL_PATH}/atc/python/site-packages/schedule_search.egg:$PYTHONPATH
-        export LD_LIBRARY_PATH=${ASCEND_INSTALL_PATH}/atc/lib64
+    if [ -d ${ASCEND_INSTALL_PATH}/compiler ]; then
+        export PYTHONPATH=${ASCEND_INSTALL_PATH}/compiler/python/site-packages:${ASCEND_INSTALL_PATH}/compiler/python/site-packages/auto_tune.egg/auto_tune:${ASCEND_INSTALL_PATH}/compiler/python/site-packages/schedule_search.egg:$PYTHONPATH
+        export LD_LIBRARY_PATH=${ASCEND_INSTALL_PATH}/compiler/lib64
     else
 	echo "can not find atc, please check one of them installed correctly!"
 	return runError

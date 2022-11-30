@@ -1,5 +1,5 @@
-/**
-* Copyright 2020 Huawei Technologies Co., Ltd
+/*
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -12,9 +12,6 @@
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 * See the License for the specific language governing permissions and
 * limitations under the License.
-
-* File main.cpp
-* Description: dvpp sample main func
 */
 
 #include <iostream>
@@ -41,23 +38,30 @@ struct timespec time9 = {0, 0};
 struct timespec time10 = {0, 0};
 
 namespace {
-uint32_t kExitCount = 0;
-uint32_t kModelWidth;
-uint32_t kModelHeight;
-const char* kModelPath;
-const char* kConfigFile = "../scripts/AnimeGANv2_video_multi_device.conf";
-const string kRegexData = "^data_addr+$";
-const string kRegexPostNum = "^postprocess_num+$";
-const string kRegexVideoHeight = "^video_height+$";
-const string kRegexVideoWidth = "^video_width+$";
-const string kRegexDeviceNum = "^device_num+$";
+uint32_t g_exitCount = 0;
+uint32_t g_height1 = 256;
+uint32_t g_width1 = 256;
+uint32_t g_height2 = 512;
+uint32_t g_width2 = 512;
+uint32_t g_height3 = 1024;
+uint32_t g_width3 = 1024;
+uint32_t g_modelWidth;
+uint32_t g_modelHeight;
+const char* g_modelPath;
+const char* g_configFile = "../scripts/AnimeGANv2_video_multi_device.conf";
+const string g_regexData = "^data_addr+$";
+const string g_regexPostNum = "^postprocess_num+$";
+const string g_regexVideoHeight = "^video_height+$";
+const string g_regexVideoWidth = "^video_width+$";
+const string g_regexDeviceNum = "^device_num+$";
 aclrtContext context;
 aclrtRunMode runMode;
-vector<aclrtContext> kContext;
+vector<aclrtContext> g_contextVector;
 }
 
-int MainThreadProcess(uint32_t msgId, 
-                      shared_ptr<void> msgData, void* userData) {
+int MainThreadProcess(uint32_t msgId,
+                      shared_ptr<void> msgData, void* userData)
+{
     if (msgId == MSG_APP_EXIT) {
         AclLiteApp& app = GetAclLiteAppInstance();
         app.WaitEnd();
@@ -67,44 +71,41 @@ int MainThreadProcess(uint32_t msgId,
 }
 
 AclLiteError ParseConfig(string& dataAddr, uint32_t& postNum, uint32_t& deviceNum,
-                       uint32_t& videoHeight, uint32_t& videoWidth) {
+                         uint32_t& videoHeight, uint32_t& videoWidth)
+{
     map<string, string> config;
-    if(!ReadConfig(config, kConfigFile)) {
+    if (!ReadConfig(config, g_configFile)) {
         return ACLLITE_ERROR;
     }
 
-    regex dataAddrRegex(kRegexData.c_str());
-    regex postNumRegex(kRegexPostNum.c_str());
-    regex videoHeightRegex(kRegexVideoHeight.c_str());
-    regex videoWidthRegex(kRegexVideoWidth.c_str());
-    regex deviceNumRegex(kRegexDeviceNum.c_str());
+    regex dataAddrRegex(g_regexData.c_str());
+    regex postNumRegex(g_regexPostNum.c_str());
+    regex videoHeightRegex(g_regexVideoHeight.c_str());
+    regex videoWidthRegex(g_regexVideoWidth.c_str());
+    regex deviceNumRegex(g_regexDeviceNum.c_str());
     map<string, string>::const_iterator mIter = config.begin();
     for (; mIter != config.end(); ++mIter) {
         printf("config item: %s=%s\n", mIter->first.c_str(), mIter->second.c_str());
         if (regex_match(mIter->first, dataAddrRegex)) {
             dataAddr = mIter->second;
-            ACLLITE_LOG_INFO("Rtsp config item: %s=%s", 
-                           mIter->first.c_str(), mIter->second.c_str());
-        }
-        else if (regex_match(mIter->first, postNumRegex)) {
+            ACLLITE_LOG_INFO("Rtsp config item: %s=%s",
+                             mIter->first.c_str(), mIter->second.c_str());
+        } else if (regex_match(mIter->first, postNumRegex)) {
             postNum = stoi(mIter->second);
-            ACLLITE_LOG_INFO("Rtsp config item: %s=%s", 
-                           mIter->first.c_str(), mIter->second.c_str());
-        }
-        else if (regex_match(mIter->first, videoHeightRegex)) {
+            ACLLITE_LOG_INFO("Rtsp config item: %s=%s",
+                             mIter->first.c_str(), mIter->second.c_str());
+        } else if (regex_match(mIter->first, videoHeightRegex)) {
             videoHeight = stoi(mIter->second);
-            ACLLITE_LOG_INFO("Rtsp config item: %s=%s", 
-                           mIter->first.c_str(), mIter->second.c_str());
-        }
-        else if (regex_match(mIter->first, videoWidthRegex)) {
+            ACLLITE_LOG_INFO("Rtsp config item: %s=%s",
+                             mIter->first.c_str(), mIter->second.c_str());
+        } else if (regex_match(mIter->first, videoWidthRegex)) {
             videoWidth = stoi(mIter->second);
-            ACLLITE_LOG_INFO("Rtsp config item: %s=%s", 
-                           mIter->first.c_str(), mIter->second.c_str());
-        }
-        else if (regex_match(mIter->first, deviceNumRegex)) {
+            ACLLITE_LOG_INFO("Rtsp config item: %s=%s",
+                             mIter->first.c_str(), mIter->second.c_str());
+        } else if (regex_match(mIter->first, deviceNumRegex)) {
             deviceNum = stoi(mIter->second);
-            ACLLITE_LOG_INFO("Data config item: %s=%s", 
-                           mIter->first.c_str(), mIter->second.c_str());
+            ACLLITE_LOG_INFO("Data config item: %s=%s",
+                             mIter->first.c_str(), mIter->second.c_str());
         }
     }
 
@@ -112,36 +113,39 @@ AclLiteError ParseConfig(string& dataAddr, uint32_t& postNum, uint32_t& deviceNu
 }
 
 void CreatePreprocessInstances(vector<AclLiteThreadParam>& threadTbl,
-                               string dataAddr, uint32_t postNum, uint32_t deviceCount, AclLiteResource& aclDev) {
+                               string dataAddr, uint32_t postNum, uint32_t deviceCount, AclLiteResource& aclDev)
+{
     aclrtContext context = aclDev.GetContext();
     AclLiteThreadParam param;
-    param.threadInst = new PreprocessThread(dataAddr, kModelWidth,
-                                      kModelHeight, postNum, deviceCount, context);
+    param.threadInst = new PreprocessThread(dataAddr, g_modelWidth,
+                                      g_modelHeight, postNum, deviceCount, context);
     param.context = aclDev.GetContext();
     param.runMode = aclDev.GetRunMode();
     threadTbl.push_back(param);
-
 }
 
-void CreateInferenceInstance(vector<AclLiteThreadParam>& threadTbl, int32_t i, aclrtContext& context, aclrtRunMode& runMode) {
+void CreateInferenceInstance(vector<AclLiteThreadParam>& threadTbl, int32_t i,
+                             aclrtContext& context, aclrtRunMode& runMode)
+{
     AclLiteThreadParam param;
 
-    param.threadInst = new InferenceThread(kModelPath, kModelWidth, 
-                                            kModelHeight, context);
-    param.threadInstName.assign(kInferName[i].c_str());
+    param.threadInst = new InferenceThread(g_modelPath, g_modelWidth, 
+                                            g_modelHeight, context);
+    param.threadInstName.assign(g_inferName[i].c_str());
     param.context = context;
     param.runMode = runMode;
     threadTbl.push_back(param);
 }
 
 void CreatePostprocessInstances(vector<AclLiteThreadParam>& threadTbl,
-                               uint32_t postNum, int32_t i,
-                               aclrtContext& context, aclrtRunMode& runMode,
-                               uint32_t videoHeight, uint32_t videoWidth) {
+                                uint32_t postNum, int32_t i,
+                                aclrtContext& context, aclrtRunMode& runMode,
+                                uint32_t videoHeight, uint32_t videoWidth)
+{
     AclLiteThreadParam param;
-    for (int j = 0; j < postNum; j++) {  
+    for (int j = 0; j < postNum; j++) {
         param.threadInst = new PostprocessThread(videoWidth, videoHeight);
-        param.threadInstName.assign(kPostprocName[i*postNum+j].c_str());
+        param.threadInstName.assign(g_postprocName[i*postNum+j].c_str());
         param.context = context;
         param.runMode = runMode;
         threadTbl.push_back(param);
@@ -150,17 +154,19 @@ void CreatePostprocessInstances(vector<AclLiteThreadParam>& threadTbl,
 
 void CreateVideoprocessInstance(vector<AclLiteThreadParam>& threadTbl,
                                 uint32_t videoHeight, uint32_t videoWidth, uint32_t postNum,
-                                AclLiteResource& aclDev) {
+                                AclLiteResource& aclDev)
+{
     AclLiteThreadParam param;
 
     param.threadInst = new VideoprocessThread(videoHeight, videoWidth, postNum);
-    param.threadInstName.assign(kVideoprocName.c_str());
+    param.threadInstName.assign(g_videoprocName.c_str());
     param.context = aclDev.GetContext();
     param.runMode = aclDev.GetRunMode();
     threadTbl.push_back(param);
 }
 
-void CreateThreadInstance(vector<AclLiteThreadParam>& threadTbl, AclLiteResource& aclDev) {
+void CreateThreadInstance(vector<AclLiteThreadParam>& threadTbl, AclLiteResource& aclDev)
+{
     string dataAddr;
     uint32_t postNum;
     uint32_t videoHeight;
@@ -173,12 +179,12 @@ void CreateThreadInstance(vector<AclLiteThreadParam>& threadTbl, AclLiteResource
     if (ret != ACLLITE_OK) {
         return;
     }
-    kExitCount = postNum * deviceNum;
+    g_exitCount = postNum * deviceNum;
 
     CreatePreprocessInstances(threadTbl, dataAddr, postNum, deviceNum, aclDev);
-    CreateVideoprocessInstance(threadTbl, videoHeight, videoWidth, kExitCount, aclDev);
+    CreateVideoprocessInstance(threadTbl, videoHeight, videoWidth, g_exitCount, aclDev);
 
-    for(int32_t i=0; i < deviceNum; i++){
+    for (int32_t i = 0; i < deviceNum; i++) {
         ret = aclrtSetDevice(i);
         if (ret != ACL_ERROR_NONE) {
             ACLLITE_LOG_ERROR("Acl open device %d failed", i);
@@ -191,28 +197,30 @@ void CreateThreadInstance(vector<AclLiteThreadParam>& threadTbl, AclLiteResource
             return;
         }
 
-        kContext.push_back(context);
+        g_contextVector.push_back(context);
 
         CreateInferenceInstance(threadTbl, i, context, runMode);
         CreatePostprocessInstances(threadTbl, postNum, i, context, runMode, videoHeight, videoWidth);
     }
 }
 
-void ExitApp(AclLiteApp& app, vector<AclLiteThreadParam>& threadTbl) {
+void ExitApp(AclLiteApp& app, vector<AclLiteThreadParam>& threadTbl)
+{
     for (int i = 0; i < threadTbl.size(); i++) {
         delete threadTbl[i].threadInst;
     }
     app.Exit();
 
-    for(int i = 0; i < kContext.size(); i++) {
-        aclrtDestroyContext(kContext[i]);
-        if(i){
+    for (int i = 0; i < g_contextVector.size(); i++) {
+        aclrtDestroyContext(g_contextVector[i]);
+        if (i) {
             aclrtResetDevice(i);
         }
     }
 }
 
-void StartApp(AclLiteResource& aclDev) {
+void StartApp(AclLiteResource& aclDev)
+{
     vector<AclLiteThreadParam> threadTbl;
     CreateThreadInstance(threadTbl, aclDev);
 
@@ -238,30 +246,32 @@ void StartApp(AclLiteResource& aclDev) {
 }
 
 
-int main(int argc, char *argv[]) {
-    if((argc < 2)){
+int main(int argc, char *argv[])
+{
+    int argNum = 2;
+    if ((argc < argNum)) {
         ACLLITE_LOG_ERROR("invalid parameter number, must input four parameters.");
         ACLLITE_LOG_ERROR("Please input: ./main size");
         return ACLLITE_ERROR;
-    }else{
+    } else {
         uint64_t width = atoll(argv[1]);
         uint64_t height = atoll(argv[1]);
-        if (!(((height == 256) && (width == 256)) ||
-            ((height == 512) && (width == 512)) ||
-            ((height == 1024) && (width == 1024)))) {
+        if (!(((height == g_height1) && (width == g_width1)) ||
+            ((height == g_height2) && (width == g_width2)) ||
+            ((height == g_height3) && (width == g_width3)))) {
             ACLLITE_LOG_ERROR("invalid dynamic hw, should be 256*256,512*512,1024*1024.");
             return ACLLITE_ERROR;
             }
     }
 
-    kModelWidth = atoi(argv[1]);
-    kModelHeight = atoi(argv[1]);
-    if(256 == atoi(argv[1])){
-        kModelPath = "../model/AnimeGANv2_256.om";
-    }else if(512 == atoi(argv[1])){ 
-        kModelPath = "../model/AnimeGANv2_512.om";
-    }else{
-        kModelPath = "../model/AnimeGANv2_1024.om";
+    g_modelWidth = atoi(argv[1]);
+    g_modelHeight = atoi(argv[1]);
+    if (g_width1 == atoi(argv[1])) {
+        g_modelPath = "../model/AnimeGANv2_256.om";
+    } else if (g_width2 == atoi(argv[1])) { 
+        g_modelPath = "../model/AnimeGANv2_512.om";
+    } else {
+        g_modelPath = "../model/AnimeGANv2_1024.om";
     }
 
     AclLiteResource aclDev = AclLiteResource();

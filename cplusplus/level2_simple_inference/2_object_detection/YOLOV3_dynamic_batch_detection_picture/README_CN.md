@@ -68,7 +68,7 @@
         如果模型推理的输入数据是动态Batch的，执行如下命令转换模型(以昇腾310 AI处理器为例)：
 
         ```
-        atc --model=caffe_model/yolov3.prototxt --weight=caffe_model/yolov3.caffemodel --framework=0 --input_shape="data:-1,3,416,416" --input_format=NCHW --dynamic_batch_size="1,2,4,8" --soc_version=Ascend310 --output=model/yolov3_dynamic_batch 
+        atc --model=caffe_model/yolov3.prototxt --weight=caffe_model/yolov3.caffemodel --framework=0 --input_shape="data:-1,3,416,416;img_info:-1,4" --input_format=NCHW --dynamic_batch_size="1,2,4,8" --soc_version=Ascend310 --output=model/yolov3_dynamic_batch
         ```
 
         如果模型推理的输入数据是动态分辨率的，执行如下命令转换模型(以昇腾310 AI处理器为例)：
@@ -123,13 +123,15 @@
 
     3. 设置环境变量，配置程序编译依赖的头文件与库文件路径。
   
-       设置以下环境变量后，编译脚本会根据“{DDK_PATH}环境变量值/acllib/include/acl”目录查找编译依赖的头文件，根据{NPU_HOST_LIB}环境变量指向的目录查找编译依赖的库文件。“$HOME/Ascend”请替换“Ascend-cann-toolkit”包的实际安装路径。
+       设置以下环境变量后，编译脚本会根据“{DDK_PATH}环境变量值/runtime/include/acl”目录查找编译依赖的头文件，根据{NPU_HOST_LIB}环境变量指向的目录查找编译依赖的库文件。“$HOME/Ascend”请替换“Ascend-cann-toolkit”包的实际安装路径。
+
+       **注意**，在配置{NPU_HOST_LIB}环境变量时，需使用的“runtime/lib64/stub”目录下*.so库，确保在编译基于AscendCL接口的应用程序时，不依赖其它组件（例如Driver）的*.so库，编译成功后，运行应用程序时，系统会根据LD_LIBRARY_PATH环境变量查找“Ascend-cann-toolkit安装目录/runtime/lib64”目录下的*.so库，同时会自动链接到所依赖的其它组件的*.so库。
   
        -   当开发环境与运行环境的操作系统架构相同时，配置示例如下所示：
   
            ```
            export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest
-           export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
+           export NPU_HOST_LIB=$DDK_PATH/runtime/lib64/stub
            ```
   
        -   当开发环境与运行环境的操作系统架构不同时，配置示例如下所示：
@@ -138,7 +140,7 @@
   
            ```
            export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux
-           export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
+           export NPU_HOST_LIB=$DDK_PATH/runtime/lib64/stub
            ```
        
        您可以登录对应的环境，执行“uname -a”命令查询其操作系统的架构。

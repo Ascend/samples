@@ -1,5 +1,5 @@
-/**
-* Copyright 2020 Huawei Technologies Co., Ltd
+/*
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -12,10 +12,11 @@
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 * See the License for the specific language governing permissions and
 * limitations under the License.
-
-* File sample_process.h
-* Description: handle acl resource
 */
+
+#ifndef DEEPLABV3_MULTI_THREAD_MULTI_DEVICE_INC_OBJECT_DETECTION_H
+#define DEEPLABV3_MULTI_THREAD_MULTI_DEVICE_INC_OBJECT_DETECTION_H
+
 #pragma once
 
 #include <iostream>
@@ -24,13 +25,13 @@
 #include <vector>
 #include <unistd.h>
 #include <sys/timeb.h>
+#include <time.h>
 #include "AclLiteType.h"
 #include "AclLiteModel.h"
 #include "AclLiteImageProc.h"
 #include<opencv2/opencv.hpp>
 #include "opencv2/opencv.hpp"
 #include "opencv2/imgproc/types_c.h"
-#include <time.h>
 #define RGBF32_CHAN_SIZE(width, height) ((width) * (height) * 4)
 
 using namespace std;
@@ -45,12 +46,12 @@ const int MSG_VIDEO_ENCODE = 6;
 const int MSG_ENCODE_FINISH = 7;
 const int MSG_PREPROC_END = 8;
 const int MSG_APP_EXIT = 10;
-const std::vector<std::string> kInferName = {"inference_0", "inference_1",
+const std::vector<std::string> g_inferName = {"inference_0", "inference_1",
     "inference_2", "inference_3"};
-const std::vector<std::string> kPostprocName = {"postprocess_0","postprocess_1",
-    "postprocess_2","postprocess_3","postprocess_4","postprocess_5",
-    "postprocess_6","postprocess_7","postprocess_8","postprocess_9",
-    "postprocess_10","postprocess_11"};
+const std::vector<std::string> g_postprocName = {"postprocess_0", "postprocess_1",
+    "postprocess_2", "postprocess_3", "postprocess_4", "postprocess_5",
+    "postprocess_6", "postprocess_7", "postprocess_8", "postprocess_9",
+    "postprocess_10", "postprocess_11"};
 }
 
 struct PreprocDataMsg {
@@ -69,3 +70,4 @@ struct InferOutputMsg {
     string imageFileName;
 };
 
+#endif

@@ -68,13 +68,13 @@ The sample directory is organized as follows:
 
     3.  Set environment variables and configure the paths of header files and library files that the program depends on for compilation.
   
-        After the following environment variables are set, the compilation script will look for the compiled-dependent header files according to the "{DDK_PATH} environment variable value/acllib/include/acl" directory, and the compiled-independent library files according to the directory pointed to by the {NPU_HOST_LIB} environment variable. Replace "$HOME/Ascend" with the actual installation path of the "Ascend-cann-toolkit" package.
+        After the following environment variables are set, the compilation script will look for the compiled-dependent header files according to the "{DDK_PATH} environment variable value/runtime/include/acl" directory, and the compiled-independent library files according to the directory pointed to by the {NPU_HOST_LIB} environment variable. Replace "$HOME/Ascend" with the actual installation path of the "Ascend-cann-toolkit" package.
   
         - When the operating system architecture of the development environment and the operating environment are the same, the configuration example is as follows:
   
            ````
            export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest
-           export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
+           export NPU_HOST_LIB=$DDK_PATH/runtime/lib64/stub
            ````
   
         - When the OS architecture of the development environment and the runtime environment are different, the configuration example is as follows:
@@ -83,7 +83,7 @@ The sample directory is organized as follows:
   
            ````
            export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux
-           export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
+           export NPU_HOST_LIB=$DDK_PATH/runtime/lib64/stub
            ````
        
           You can log in to the corresponding environment and run the "uname -a" command to query the architecture of its operating system.
@@ -173,7 +173,7 @@ The sample directory is organized as follows:
 
         After the executable file is executed successfully, a result file is generated in the directory at the same level as the  **main**  file for later query.
 
-        The child images cropped from the input image  **dvpp\_vpc\_1920×1980\_nv12.yuv**  are as follows:  **cropName0**,  **cropName1**,  **cropName2**,  **cropName3**,  **cropName4**,  **cropName5**,  **cropName6**, and  **cropName7**
+        The child images cropped from the input image  **dvpp\_vpc\_1920×1080\_nv12.yuv**  are as follows:  **cropName0**,  **cropName1**,  **cropName2**,  **cropName3**,  **cropName4**,  **cropName5**,  **cropName6**, and  **cropName7**
 
 
 

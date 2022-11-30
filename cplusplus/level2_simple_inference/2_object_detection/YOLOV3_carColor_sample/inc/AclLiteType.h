@@ -1,5 +1,5 @@
-/**
-* Copyright 2020 Huawei Technologies Co., Ltd
+/*
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -12,10 +12,11 @@
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 * See the License for the specific language governing permissions and
 * limitations under the License.
-
-* File utils.h
-* Description: handle file operations
 */
+
+#ifndef YOLOV3_CARCOLOR_SAMPLE_INC_ACLLITETYPE_H
+#define YOLOV3_CARCOLOR_SAMPLE_INC_ACLLITETYPE_H
+
 #pragma once
 
 #include <unistd.h>
@@ -27,7 +28,7 @@ enum MemoryType {
     MEMORY_NORMAL = 0,
     MEMORY_HOST,
     MEMORY_DEVICE,
-    MEMORY_DVPP,    
+    MEMORY_DVPP,
     MEMORY_INVALID_TYPE
 };
 
@@ -111,3 +112,5 @@ struct InferenceOutput {
     std::shared_ptr<void> data = nullptr;
     uint32_t size;
 };
+
+#endif

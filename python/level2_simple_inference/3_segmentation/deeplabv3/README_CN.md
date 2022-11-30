@@ -63,7 +63,7 @@
     ```
     执行以下命令，进入样例的data文件夹中，下载对应的测试图片。
     cd ${HOME}/samples/python/level2_simple_inference/3_segmentation/deeplabv3/data
-    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/deeplabv3/test_image/test.jpg
+    wget https://share123.obs.cn-north-4.myhuaweicloud.com/AclBot/issue/test.jpg
     cd ../src
     ```
 
@@ -90,7 +90,7 @@
 ### 查看结果
 
 运行完成后，会在样例工程的out/output目录下生成推理后的图片，显示对比结果如下所示。
-![输入图片说明](../figures/e7aa5a7dfdd1f9d6f7a771bbf147e7c.png)
+![输入图片说明](https://share123.obs.cn-north-4.myhuaweicloud.com/AclBot/issue/result.jpg)
 
 ### 常见错误
 请参考[常见问题定位](https://github.com/Ascend/samples/wikis/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D/%E4%BB%8B%E7%BB%8D)对遇到的错误进行排查。如果wiki中不包含，请在samples仓提issue反馈。

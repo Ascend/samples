@@ -37,20 +37,12 @@ unrar e calibration.rar
 > 如果环境中没有安装 unrar 工具，可以通过以下命令获取：
 >
 > ```bash
-> sudo apt-get unrar
+> sudo apt-get install unrar
 > ```
-
-执行如下命令将 image 目录下的 jpg 图片转换为 bin 格式数据集：
-
-```bash
-python3.7.5 ./src/process_data.py
-```
-
-执行完成后，在 [image](./data/image/) 目录生成 calibration.bin 数据集。
 
 ## 3. 执行量化
 
-执行如下命令进行量化：
+切换到该样例根目录下，执行如下命令进行量化：
 
 ```bash
 bash ./scripts/run_calibration.sh 
@@ -66,9 +58,8 @@ amct_acl generate deploy air success!
 
 量化成功后，在当前目录生成如下文件：
 
-+ [amct_log](./amct_log/)
-  + [amct_acl.log](./amct_log/amct_acl.log): 量化日志文件，记录昇腾模型压缩工具量化过程的日志信息。
++ [amct_log_时间戳](./amct_log_时间戳/)
+  + [amct_acl.log](./amct_log_时间戳/amct_acl.log): 量化日志文件，记录昇腾模型压缩工具量化过程的日志信息。
 + [fusion_result.json](./fusion_result.json): 模型编译过程中使用的融合规则。
-+ [kernel_meta](./kernel_meta/): 算子编译生成的文件目录。
 + [outputs](./outputs/)
   + [ResNet-50-model.air](./outputs/ResNet-50-model.air): 量化后的模型文件。

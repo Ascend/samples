@@ -18,3 +18,7 @@ target_compile_definitions(${ONNX_PLUGIN_TARGET} PRIVATE
 )
 
 target_link_libraries(${ONNX_PLUGIN_TARGET} ${ASCEND_INC}/../lib64/libgraph.so)
+
+target_include_directories(${ONNX_PLUGIN_TARGET} PRIVATE
+    ${ASCEND_INC}/../../opp/built-in/op_proto/inc/
+)

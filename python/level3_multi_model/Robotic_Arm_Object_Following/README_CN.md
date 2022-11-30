@@ -11,7 +11,7 @@
 ## 物料清单
 |**物料类型**|**详细描述**|
 |---|---|
-|推理平台|[Atlas200DK](https://support.huaweicloud.com/Atlas200DK202/)|
+|推理平台|[Atlas200DK](https://www.hiascend.com/document/detail/zh/Atlas200DKDeveloperKit/1013/environment/atlased_04_0001.html)|
 |双目深度相机|[Realsense D435](https://www.intelrealsense.com/depth-camera-d435/)|
 |机械臂|[Dobot-Magician](https://cn.dobot.cc/dobot-magician/product-overview.html)|
 |主控平台|Ubuntu18.04 LTS-x64-Huawei Matebook X Pro|
@@ -20,9 +20,9 @@
 
 ## 环境准备
 ### Ubuntu主控平台准备
-- 参考[Atlas200DK说明文档]( https://support.huaweicloud.com/Atlas200DK202/ )部署开发环境
+- 参考[Atlas200DK说明文档](https://www.hiascend.com/document/detail/zh/Atlas200DKDeveloperKit/1013/environment/atlased_04_0001.html)部署开发环境
 ### Atlas200DK推理平台准备
-- 参考[Atlas200DK说明文档]( https://support.huaweicloud.com/Atlas200DK202/ )部署运行环境
+- 参考[Atlas200DK说明文档](https://www.hiascend.com/document/detail/zh/Atlas200DKDeveloperKit/1013/environment/atlased_04_0001.html)部署运行环境
 - 参考Ascend案例如[YOLOV3_coco_detection_picture](https://github.com/Ascend/samples/tree/master/python/level2_simple_inference/2_object_detection/YOLOV3_coco_detection_picture#yolov3_coco_detection_picture%E6%A0%B7%E4%BE%8B )测试推理平台是否搭建成功
 ### Realsense双目相机准备
 - 参考[Realsense SDK 2.0安装说明]( https://dev.intelrealsense.com/docs/compiling-librealsense-for-linux-ubuntu-guide )安装SDK

@@ -3,7 +3,7 @@
 #define GE_OP_CONV2DTIK_H
 
 #include "graph/operator_reg.h"
-#define ERROR_LOG(fmt, args...) fprintf(stdout, "[ERROR] " fmt "\n", ##args)
+#define ERROR_LOG(fmt, args...) fprintf(stderr, "[ERROR] " fmt "\n", ##args)
 
 namespace ge {
 

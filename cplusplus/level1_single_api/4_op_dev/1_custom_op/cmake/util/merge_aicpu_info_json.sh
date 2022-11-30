@@ -2,6 +2,7 @@
 
 project_path=$1
 build_path=$2
+vendor_name=$OPP_CUSTOM_VENDOR
 echo $@
 if [[ ! -d "$project_path" ]]; then
     echo "[ERROR] No projcet path is provided"
@@ -17,9 +18,9 @@ if [[ ! -d "$ASCEND_OPP_PATH" ]]; then
     echo "[ERROR] No opp install path is provided"
     exit 1
 fi
-custom_exist_info_json=$ASCEND_OPP_PATH/op_impl/custom/cpu/config/cust_aicpu_kernel.json
-custom_new_info_json=$build_path/makepkg/packages/op_impl/custom/cpu/config/cust_aicpu_kernel.json
-temp_info_json=$build_path/makepkg/packages/op_impl/custom/cpu/config/temp_cust_aicpu_kernel.json
+custom_exist_info_json=$ASCEND_OPP_PATH/vendors/$vendor_name/op_impl/cpu/config/cust_aicpu_kernel.json
+custom_new_info_json=$build_path/makepkg/packages/vendors/$vendor_name/op_impl/cpu/config/cust_aicpu_kernel.json
+temp_info_json=$build_path/makepkg/packages/vendors/$vendor_name/op_impl/cpu/config/temp_cust_aicpu_kernel.json
 
 if [[ -f "$custom_exist_info_json" ]] && [[ -f "$custom_new_info_json" ]]; then
     cp -f $custom_exist_info_json $temp_info_json

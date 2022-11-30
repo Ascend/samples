@@ -10,7 +10,7 @@ Use Atlas 200 DK to run the YOLOv3 model, perform inference on the RGB data stre
 ## Material List
 | **Material Type**| **Description**                                                |
 | ------------ | ------------------------------------------------------------ |
-| Inference platform    | [Atlas 200 DK](https://support.huaweicloud.com/intl/en-us/Atlas200DK202/)|
+| Inference platform    | [Atlas 200 DK](https://www.hiascend.com/document/detail/en/Atlas200DKDeveloperKit/1013/environment/atlased_04_0001.html)|
 | Binocular depth camera| [RealSense D435](https://www.intelrealsense.com/depth-camera-d435/) |
 | Robotic arm      | [Dobot Magician](https://cn.dobot.cc/dobot-magician/product-overview.html) |
 | Main control platform    | Ubuntu18.04 LTS-x64-Huawei Matebook X Pro                    |
@@ -19,9 +19,9 @@ Use Atlas 200 DK to run the YOLOv3 model, perform inference on the RGB data stre
 
 ## Environment Preparation
 ### Ubuntu Main Control Platform
-- Deploy the development environment. For details, see the [Atlas 200 DK documentation](https://support.huaweicloud.com/intl/en-us/Atlas200DK202/).
+- Deploy the development environment. For details, see the [Atlas 200 DK documentation](https://www.hiascend.com/document/detail/en/Atlas200DKDeveloperKit/1013/environment/atlased_04_0001.html).
 ### Atlas 200 DK Inference Platform
-- Deploy the operating environment. For details, see the [Atlas 200 DK documentation](https://support.huaweicloud.com/intl/en-us/Atlas200DK202/).
+- Deploy the operating environment. For details, see the [Atlas 200 DK documentation](https://www.hiascend.com/document/detail/en/Atlas200DKDeveloperKit/1013/environment/atlased_04_0001.html).
 - Check whether the inference platform is successfully set up. See the Ascend sample [YOLOV3_coco_detection_picture](https://github.com/Ascend/samples/tree/master/python/level2_simple_inference/2_object_detection/YOLOV3_coco_detection_picture#yolov3_coco_detection_picture%E6%A0%B7%E4%BE%8B).
 ### RealSense Binocular Cameras
 - Install the SDK by following the [RealSense SDK 2.0 Build Guide](https://dev.intelrealsense.com/docs/compiling-librealsense-for-linux-ubuntu-guide).

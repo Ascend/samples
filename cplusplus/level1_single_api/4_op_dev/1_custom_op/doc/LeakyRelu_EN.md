@@ -64,7 +64,7 @@ The mathematical expression of the LeakyRelu operator is as follows:
 
 -   Operator Implementation
 
-    The implementation logic of the operator calculation function is as follows. For details about the complete code implementation, see  [leaky\_relu\_demo.py](../tbe/custom_impl/leaky_relu_demo.py).
+    The implementation logic of the operator calculation function is as follows. For details about the complete code implementation, see  [leaky\_relu\_demo.py](../tbe/impl/leaky_relu_demo.py).
 
     1.  When  **negative\_slope**  is  **0**, the output  **y**  is the larger value between the input  **x**  and 0.
         -   If the input data type is float16 or int8, the  **te.lang.cce.vrelu\(x\)**  API can be called for compute process.

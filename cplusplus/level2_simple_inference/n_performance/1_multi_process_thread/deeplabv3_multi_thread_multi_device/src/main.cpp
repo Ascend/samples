@@ -1,5 +1,5 @@
-/**
-* Copyright 2020 Huawei Technologies Co., Ltd
+/*
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -12,9 +12,6 @@
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 * See the License for the specific language governing permissions and
 * limitations under the License.
-
-* File main.cpp
-* Description: dvpp sample main func
 */
 
 #include <iostream>
@@ -40,78 +37,74 @@ struct timespec time9 = {0, 0};
 struct timespec time10 = {0, 0};
 
 namespace {
-uint32_t kExitCount = 0;
-uint32_t kModelWidth = 514;
-uint32_t kModelHeight = 514;
-const char* kModelPath = "../model/deeplab_quant.om";
-const char* kConfigFile = "../scripts/deeplab_multi_thread.conf";
-const string kRegexData = "^data_addr+$";
-const string kRegexPostNum = "^postprocess_num+$";
-const string kRegexOutputHeight = "^output_height+$";
-const string kRegexOutputWidth = "^output_width+$";
-const string kRegexDeviceNum = "^device_num+$";
+uint32_t g_exitCount = 0;
+uint32_t g_modelWidth = 514;
+uint32_t g_modelHeight = 514;
+const char* g_modelPath = "../model/deeplab_quant.om";
+const char* g_configFile = "../scripts/deeplab_multi_thread.conf";
+const string g_regexData = "^data_addr+$";
+const string g_regexPostNum = "^postprocess_num+$";
+const string g_regexOutputHeight = "^output_height+$";
+const string g_regexOutputWidth = "^output_width+$";
+const string g_regexDeviceNum = "^device_num+$";
 aclrtContext context;
 aclrtRunMode runMode;
-vector<aclrtContext> kContext;
+vector<aclrtContext> contextVector;
 }
 
-int MainThreadProcess(uint32_t msgId, 
-                      shared_ptr<void> msgData, void* userData) {
+int MainThreadProcess(uint32_t msgId,
+                      shared_ptr<void> msgData, void* userData)
+{
     if (msgId == MSG_APP_EXIT) {
-        kExitCount--;
-    }
-    else
+        g_exitCount--;
+    } else {
         return ACLLITE_ERROR;
-    ACLLITE_LOG_INFO("kExitCount is %d", kExitCount);
-    if(kExitCount == 0)
-    {
+    }
+    ACLLITE_LOG_INFO("g_exitCount is %d", g_exitCount);
+    if (g_exitCount == 0) {
         AclLiteApp& app = GetAclLiteAppInstance();
         app.WaitEnd();
         ACLLITE_LOG_INFO("Receive exit message, exit now");
     }
-
     return ACLLITE_OK;
 }
 
 AclLiteError ParseConfig(string& dataAddr, uint32_t& postNum, uint32_t& deviceNum,
-                       uint32_t& outputHeight, uint32_t& outputWidth) {
+                         uint32_t& outputHeight, uint32_t& outputWidth)
+{
     map<string, string> config;
-    if(!ReadConfig(config, kConfigFile)) {
+    if (!ReadConfig(config, g_configFile)) {
         return ACLLITE_ERROR;
     }
 
-    regex dataAddrRegex(kRegexData.c_str());
-    regex postNumRegex(kRegexPostNum.c_str());
-    regex outputHeightRegex(kRegexOutputHeight.c_str());
-    regex outputWidthRegex(kRegexOutputWidth.c_str());
-    regex deviceNumRegex(kRegexDeviceNum.c_str());
+    regex dataAddrRegex(g_regexData.c_str());
+    regex postNumRegex(g_regexPostNum.c_str());
+    regex outputHeightRegex(g_regexOutputHeight.c_str());
+    regex outputWidthRegex(g_regexOutputWidth.c_str());
+    regex deviceNumRegex(g_regexDeviceNum.c_str());
     map<string, string>::const_iterator mIter = config.begin();
     for (; mIter != config.end(); ++mIter) {
         printf("config item: %s=%s\n", mIter->first.c_str(), mIter->second.c_str());
         if (regex_match(mIter->first, dataAddrRegex)) {
             dataAddr = mIter->second;
-            ACLLITE_LOG_INFO("Data config item: %s=%s", 
-                           mIter->first.c_str(), mIter->second.c_str());
-        }
-        else if (regex_match(mIter->first, postNumRegex)) {
+            ACLLITE_LOG_INFO("Data config item: %s=%s",
+                             mIter->first.c_str(), mIter->second.c_str());
+        } else if (regex_match(mIter->first, postNumRegex)) {
             postNum = stoi(mIter->second);
-            ACLLITE_LOG_INFO("Data config item: %s=%s", 
-                           mIter->first.c_str(), mIter->second.c_str());
-        }
-        else if (regex_match(mIter->first, outputHeightRegex)) {
+            ACLLITE_LOG_INFO("Data config item: %s=%s",
+                             mIter->first.c_str(), mIter->second.c_str());
+        } else if (regex_match(mIter->first, outputHeightRegex)) {
             outputHeight = stoi(mIter->second);
-            ACLLITE_LOG_INFO("Data config item: %s=%s", 
-                           mIter->first.c_str(), mIter->second.c_str());
-        }
-        else if (regex_match(mIter->first, outputWidthRegex)) {
+            ACLLITE_LOG_INFO("Data config item: %s=%s",
+                             mIter->first.c_str(), mIter->second.c_str());
+        } else if (regex_match(mIter->first, outputWidthRegex)) {
             outputWidth = stoi(mIter->second);
-            ACLLITE_LOG_INFO("Data config item: %s=%s", 
-                           mIter->first.c_str(), mIter->second.c_str());
-        }
-        else if (regex_match(mIter->first, deviceNumRegex)) {
+            ACLLITE_LOG_INFO("Data config item: %s=%s",
+                             mIter->first.c_str(), mIter->second.c_str());
+        } else if (regex_match(mIter->first, deviceNumRegex)) {
             deviceNum = stoi(mIter->second);
-            ACLLITE_LOG_INFO("Data config item: %s=%s", 
-                           mIter->first.c_str(), mIter->second.c_str());
+            ACLLITE_LOG_INFO("Data config item: %s=%s",
+                             mIter->first.c_str(), mIter->second.c_str());
         }
     }
 
@@ -119,24 +112,26 @@ AclLiteError ParseConfig(string& dataAddr, uint32_t& postNum, uint32_t& deviceNu
 }
 
 void CreatePreprocessInstances(vector<AclLiteThreadParam>& threadTbl,
-                               string dataAddr, uint32_t postNum, uint32_t deviceCount, AclLiteResource& aclDev) {
+                               string dataAddr, uint32_t postNum, uint32_t deviceCount, AclLiteResource& aclDev)
+{
     aclrtContext context = aclDev.GetContext();
     AclLiteThreadParam param;
-    param.threadInst = new PreprocessThread(dataAddr, kModelWidth,
-                                      kModelHeight, postNum, deviceCount, context);
+    param.threadInst = new PreprocessThread(dataAddr, g_modelWidth,
+                                      g_modelHeight, postNum, deviceCount, context);
     param.context = aclDev.GetContext();
     param.runMode = aclDev.GetRunMode();
     ACLLITE_LOG_INFO("Preprocess context is ：%p", param.context);
     threadTbl.push_back(param);
-
 }
 
-void CreateInferenceInstance(vector<AclLiteThreadParam>& threadTbl, int32_t i, aclrtContext& context, aclrtRunMode& runMode) {
+void CreateInferenceInstance(vector<AclLiteThreadParam>& threadTbl, int32_t i,
+                             aclrtContext& context, aclrtRunMode& runMode)
+{
     AclLiteThreadParam param;
 
-    param.threadInst = new InferenceThread(kModelPath, kModelWidth, 
-                                            kModelHeight, context);
-    param.threadInstName.assign(kInferName[i].c_str());
+    param.threadInst = new InferenceThread(g_modelPath, g_modelWidth, 
+                                           g_modelHeight, context);
+    param.threadInstName.assign(g_inferName[i].c_str());
     param.context = context;
     param.runMode = runMode;
     ACLLITE_LOG_INFO("Inference context is ：%p", param.context);
@@ -144,21 +139,23 @@ void CreateInferenceInstance(vector<AclLiteThreadParam>& threadTbl, int32_t i, a
 }
 
 void CreatePostprocessInstances(vector<AclLiteThreadParam>& threadTbl,
-                               uint32_t postNum, int32_t i,
-                               aclrtContext& context, aclrtRunMode& runMode,
-                               uint32_t outputHeight, uint32_t outputWidth) {
+                                uint32_t postNum, int32_t i,
+                                aclrtContext& context, aclrtRunMode& runMode,
+                                uint32_t outputHeight, uint32_t outputWidth)
+{
     AclLiteThreadParam param;
     for (int j = 0; j < postNum; j++) {
         param.threadInst = new PostprocessThread(outputWidth, outputHeight);
-        param.threadInstName.assign(kPostprocName[i*postNum+j].c_str());
+        param.threadInstName.assign(g_postprocName[i*postNum+j].c_str());
         param.context = context;
         param.runMode = runMode;
         ACLLITE_LOG_INFO("Postprocess context is ：%p", param.context);
         threadTbl.push_back(param);
-    }    
+    }
 }
 
-void CreateThreadInstance(vector<AclLiteThreadParam>& threadTbl, AclLiteResource& aclDev) {
+void CreateThreadInstance(vector<AclLiteThreadParam>& threadTbl, AclLiteResource& aclDev)
+{
     string dataAddr;
     uint32_t postNum;
     uint32_t outputHeight;
@@ -170,7 +167,7 @@ void CreateThreadInstance(vector<AclLiteThreadParam>& threadTbl, AclLiteResource
         return;
     }
 
-    kExitCount = postNum * deviceNum;
+    g_exitCount = postNum * deviceNum;
     ret = aclrtGetRunMode(&runMode);
     if (ret != ACL_ERROR_NONE) {
         ACLLITE_LOG_ERROR("acl get run mode failed");
@@ -178,7 +175,7 @@ void CreateThreadInstance(vector<AclLiteThreadParam>& threadTbl, AclLiteResource
     }
 
     CreatePreprocessInstances(threadTbl, dataAddr, postNum, deviceNum, aclDev);
-    for(int32_t i=0; i < deviceNum; i++){
+    for (int32_t i = 0; i < deviceNum; i++) {
         ret = aclrtSetDevice(i);
         if (ret != ACL_ERROR_NONE) {
             ACLLITE_LOG_ERROR("Acl open device %d failed", i);
@@ -190,27 +187,29 @@ void CreateThreadInstance(vector<AclLiteThreadParam>& threadTbl, AclLiteResource
             ACLLITE_LOG_ERROR("Create acl context failed, error:%d", ret);
             return;
         }
-        kContext.push_back(context);
+        contextVector.push_back(context);
 
         CreateInferenceInstance(threadTbl, i, context, runMode);
         CreatePostprocessInstances(threadTbl, postNum, i, context, runMode, outputHeight, outputWidth);
     }
 }
 
-void ExitApp(AclLiteApp& app, vector<AclLiteThreadParam>& threadTbl) {
+void ExitApp(AclLiteApp& app, vector<AclLiteThreadParam>& threadTbl)
+{
     for (int i = 0; i < threadTbl.size(); i++) {
         delete threadTbl[i].threadInst;
-    }  
+    }
     app.Exit();
-    for(int i = 0; i < kContext.size(); i++) {
-        aclrtDestroyContext(kContext[i]);
-        if(i){
+    for (int i = 0; i < contextVector.size(); i++) {
+        aclrtDestroyContext(contextVector[i]);
+        if (i) {
             aclrtResetDevice(i);
         }
     }
 }
 
-void StartApp(AclLiteResource& aclDev) {
+void StartApp(AclLiteResource& aclDev)
+{
     vector<AclLiteThreadParam> threadTbl;
     CreateThreadInstance(threadTbl, aclDev);
 
@@ -235,8 +234,8 @@ void StartApp(AclLiteResource& aclDev) {
     return;
 }
 
-
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     AclLiteResource aclDev = AclLiteResource(0, "", false);
     AclLiteError ret = aclDev.Init();
     if (ret != ACLLITE_OK) {

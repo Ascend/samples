@@ -54,7 +54,7 @@ Before deploying this sample, ensure that:
      
      **export DDK\_PATH=$HOME/Ascend/ascend-toolkit/latest/x86\_64-linux**
      
-     **export NPU\_HOST\_LIB=$DDK\_PATH/acllib/lib64/stub**
+     **export NPU\_HOST\_LIB=$DDK\_PATH/runtime/lib64/stub**
      
      ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **Note:**
      
@@ -65,7 +65,7 @@ Before deploying this sample, ensure that:
      
      **export DDK\_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux**
      
-     **export NPU\_HOST\_LIB=$DDK\_PATH/acllib/lib64/stub**
+     **export NPU\_HOST\_LIB=$DDK\_PATH/runtime/lib64/stub**
      
      ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **Note:**
      

@@ -1,5 +1,5 @@
-/**
-* Copyright 2020 Huawei Technologies Co., Ltd
+/*
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -12,10 +12,8 @@
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 * See the License for the specific language governing permissions and
 * limitations under the License.
-
-* File AclLiteImageProc.cpp
-* Description: handle dvpp process
 */
+
 #include <iostream>
 #include "acl/acl.h"
 #include "ResizeHelper.h"
@@ -25,85 +23,92 @@
 
 using namespace std;
 
-AclLiteImageProc::AclLiteImageProc():
-  isReleased_(false),
-  stream_(nullptr),
-  dvppChannelDesc_(nullptr),
-  isInitOk_(false) {
+AclLiteImageProc::AclLiteImageProc()
+    : g_isReleased_(false),
+      g_stream_(nullptr),
+      g_dvppChannelDesc_(nullptr),
+      g_isInitOk_(false)
+{
 }
 
-AclLiteImageProc::~AclLiteImageProc() {
+AclLiteImageProc::~AclLiteImageProc()
+{
     DestroyResource();
 }
 
-void AclLiteImageProc::DestroyResource() {
-    if (isReleased_) {
+void AclLiteImageProc::DestroyResource()
+{
+    if (g_isReleased_) {
         return;
     }
 
     aclError aclRet;
 
-    if (dvppChannelDesc_ != nullptr) {
-        aclRet = acldvppDestroyChannel(dvppChannelDesc_);
+    if (g_dvppChannelDesc_ != nullptr) {
+        aclRet = acldvppDestroyChannel(g_dvppChannelDesc_);
         if (aclRet != ACL_SUCCESS) {
             ACLLITE_LOG_ERROR("Destroy dvpp channel error: %d", aclRet);
         }
 
-        (void)acldvppDestroyChannelDesc(dvppChannelDesc_);
-        dvppChannelDesc_ = nullptr;
+        (void)acldvppDestroyChannelDesc(g_dvppChannelDesc_);
+        g_dvppChannelDesc_ = nullptr;
     }
 
-    if (stream_ != nullptr) {
-        aclRet = aclrtDestroyStream(stream_);
+    if (g_stream_ != nullptr) {
+        aclRet = aclrtDestroyStream(g_stream_);
         if (aclRet != ACL_SUCCESS) {
             ACLLITE_LOG_ERROR("Vdec destroy stream failed, error %d", aclRet);
         }
-        stream_ = nullptr;
+        g_stream_ = nullptr;
     }
 
-    isReleased_ = true;
+    g_isReleased_ = true;
 }
 
-AclLiteError AclLiteImageProc::Init() {
-    aclError aclRet = aclrtCreateStream(&stream_);
+AclLiteError AclLiteImageProc::Init()
+{
+    aclError aclRet = aclrtCreateStream(&g_stream_);
     if (aclRet != ACL_SUCCESS) {
         ACLLITE_LOG_ERROR("Create venc stream failed, error %d", aclRet);
         return ACLLITE_ERROR_CREATE_STREAM;
     }
 
-    dvppChannelDesc_ = acldvppCreateChannelDesc();
-    if (dvppChannelDesc_ == nullptr) {
+    g_dvppChannelDesc_ = acldvppCreateChannelDesc();
+    if (g_dvppChannelDesc_ == nullptr) {
         ACLLITE_LOG_ERROR("Create dvpp channel desc failed");
         return ACLLITE_ERROR_CREATE_DVPP_CHANNEL_DESC;
     }
 
-    aclRet = acldvppCreateChannel(dvppChannelDesc_);
+    aclRet = acldvppCreateChannel(g_dvppChannelDesc_);
     if (aclRet != ACL_SUCCESS) {
         ACLLITE_LOG_ERROR("acldvppCreateChannel failed, aclRet = %d", aclRet);
         return ACLLITE_ERRROR_CREATE_DVPP_CHANNEL;
     }
 
-    isInitOk_ = true;
+    g_isInitOk_ = true;
     ACLLITE_LOG_INFO("dvpp init resource ok");
     
     return ACLLITE_OK;
 }
 
 AclLiteError AclLiteImageProc::Resize(ImageData& dest, ImageData& src,
-                                 uint32_t width, uint32_t height) {
-    ResizeHelper resizeOp(stream_, dvppChannelDesc_, width, height);
+                                 uint32_t width, uint32_t height)
+{
+    ResizeHelper resizeOp(g_stream_, g_dvppChannelDesc_, width, height);
     return resizeOp.Process(dest, src);
 }
 
-AclLiteError AclLiteImageProc::JpegD(ImageData& dest, ImageData& src) {
-    JpegDHelper jpegD(stream_, dvppChannelDesc_);
+AclLiteError AclLiteImageProc::JpegD(ImageData& dest, ImageData& src)
+{
+    JpegDHelper jpegD(g_stream_, g_dvppChannelDesc_);
     return jpegD.Process(dest, src);
 }
 
 AclLiteError AclLiteImageProc::Crop(ImageData& dest, ImageData& src,
                                     uint32_t ltHorz, uint32_t ltVert,
-                                    uint32_t rbHorz, uint32_t rbVert) {
-    CropAndPasteHelper crop(stream_, dvppChannelDesc_, 
+                                    uint32_t rbHorz, uint32_t rbVert)
+{
+    CropAndPasteHelper crop(g_stream_, g_dvppChannelDesc_,
                             ltHorz, ltVert, rbHorz, rbVert);
     return crop.Process(dest, src);
 }
@@ -111,9 +116,10 @@ AclLiteError AclLiteImageProc::Crop(ImageData& dest, ImageData& src,
 AclLiteError AclLiteImageProc::CropPaste(ImageData& dest, ImageData& src,
                                          uint32_t width, uint32_t height,
                                          uint32_t ltHorz, uint32_t ltVert,
-                                         uint32_t rbHorz, uint32_t rbVert) {
-    CropAndPasteHelper crop(stream_, dvppChannelDesc_, 
-                            width, height, ltHorz, 
+                                         uint32_t rbHorz, uint32_t rbVert)
+{
+    CropAndPasteHelper crop(g_stream_, g_dvppChannelDesc_,
+                            width, height, ltHorz,
                             ltVert, rbHorz, rbVert);
     return crop.ProcessCropPaste(dest, src);
 }

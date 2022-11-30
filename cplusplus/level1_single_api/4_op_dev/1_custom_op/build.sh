@@ -12,10 +12,10 @@
 # Uncomment and modify it when you specified installation path of AICPU.
 # export ASCEND_AICPU_PATH=/usr/local/Ascend/ascend-toolkit/latest
 
-# ASCEND_TENSOR_COMPILER_INCLUDE: The path of the header file of the ATC package, where "/usr/local/Ascend/ascend-toolkit/latest/atc/include" is the
+# ASCEND_TENSOR_COMPILER_INCLUDE: The path of the header file of the ATC package, where "/usr/local/Ascend/ascend-toolkit/latest/compiler/include" is the
 #                                 default installation path. If user defines the installation path, please modify it.
 # Uncomment and modify it when you specified installation path of ATC.
-# export ASCEND_TENSOR_COMPILER_INCLUDE=/usr/local/Ascend/ascend-toolkit/latest/atc/include
+# export ASCEND_TENSOR_COMPILER_INCLUDE=/usr/local/Ascend/ascend-toolkit/latest/compiler/include
 
 # TOOLCHAIN_DIR: The path of the cross compilation tool, where "/usr/local/Ascend/ascend-toolkit/latest/toolkit/toolchain/hcc" is the
 #                default installation path. If user defines the installation path, please modify it.
@@ -42,6 +42,13 @@ export COMPILE_KERNEL_TARGET=cpu_tbe
 # export AICPU_SOC_VERSION=Ascend910
 
 ###### The following logic can be used without modification ######
+
+# Indicates the name of the supplier to which the operator belongs. This field can be customized.
+vendor_name=customize
+if [[ "$vendor_name" = "" ]] || [[ ! "vendor_name" ]]; then
+  vendor_name=customize
+fi
+export OPP_CUSTOM_VENDOR=$vendor_name
 
 # parse input parameters
 clean=n
@@ -115,6 +122,21 @@ if [ "x$clean" == "xy" ] 2>/dev/null; then
   log "[INFO] Clean successfully."
   exit 0
 fi
+#vendor_name output script/install.sh
+vendor_name_output() {
+  scripts_file=$PWD/$1
+  found_vendor_name_field=$(grep -e "vendor_name=" "$scripts_file")
+  found_vendor_name=$(grep -e "vendor_name=" "$scripts_file" | cut --only-delimited -d"=" -f2-)
+  if [[ $found_vendor_name_field = "" ]]; then
+    sed -i "1 a vendor_name=$vendor_name" $scripts_file
+  elif [ $found_vendor_name_field != "" ] && [ $found_vendor_name != $vendor_name ]; then
+    sed -i "s/$found_vendor_name_field/vendor_name=$vendor_name/g" $scripts_file
+  fi
+}
+
+vendor_name_output scripts/install.sh
+vendor_name_output scripts/upgrade.sh
+vendor_name_output scripts/ide_customops_install.sh
 
 # specify compile target
 if [ "x$compile_component" == "xcpu" ] 2>/dev/null; then
@@ -150,12 +172,12 @@ mkdir -p $project_path/build_out
 
 ###### Environment variable settings, need to set according to your own device ######
 
-# ASCEND_TENSOR_COMPILER_INCLUDE: The path of the header file of the ATC package, where "/usr/local/Ascend/ascend-toolkit/latest/atc/include" is the
+# ASCEND_TENSOR_COMPILER_INCLUDE: The path of the header file of the ATC package, where "/usr/local/Ascend/ascend-toolkit/latest/compiler/include" is the
 #                                 default installation path. If user defines the installation path, please modify it.
 # Uncomment and modify it when you specified installation path of ATC.
 if [[ -z "${ASCEND_TENSOR_COMPILER_INCLUDE}" ]]; then
-    if [[ -d "/usr/local/Ascend/ascend-toolkit/latest/atc/include" ]];then
-        export ASCEND_TENSOR_COMPILER_INCLUDE=/usr/local/Ascend/ascend-toolkit/latest/atc/include
+    if [[ -d "/usr/local/Ascend/ascend-toolkit/latest/compiler/include" ]];then
+        export ASCEND_TENSOR_COMPILER_INCLUDE=/usr/local/Ascend/ascend-toolkit/latest/compiler/include
     else
         log "[ERROR] ENV ASCEND_TENSOR_COMPILER_INCLUDE is not set"
         exit 1

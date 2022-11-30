@@ -237,6 +237,7 @@ Result Init(int imgWidth, int imgHeight)
 Result Process()
 {
     aclError ret;
+    ret = acldvppMalloc(&g_codeInputBufferDev, inBufferSize);
     if (runMode == ACL_HOST) {
         ret = aclrtMemcpy(g_codeInputBufferDev, inBufferSize,
         g_inBufferDev, inBufferSize, ACL_MEMCPY_HOST_TO_DEVICE);

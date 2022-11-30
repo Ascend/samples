@@ -1,5 +1,5 @@
-/**
-* Copyright 2020 Huawei Technologies Co., Ltd
+/*
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -12,10 +12,11 @@
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 * See the License for the specific language governing permissions and
 * limitations under the License.
-
-* File utils.h
-* Description: handle file operations
 */
+
+#ifndef YOLOV3_CARCOLOR_SAMPLE_INC_ACLLITEERROR_H
+#define YOLOV3_CARCOLOR_SAMPLE_INC_ACLLITEERROR_H
+
 #pragma once
 #include <unistd.h>
 
@@ -39,24 +40,24 @@ const int ACLLITE_ERROR_THREAD_ABNORMAL = 14;
 const int ACLLITE_ERROR_START_THREAD = 15;
 const int ACLLITE_ERROR_ADD_THREAD = 16;
 
-//malloc or new memory failed
+// malloc or new memory failed
 const int ACLLITE_ERROR_MALLOC = 101;
-//aclrtMalloc failed
+// aclrtMalloc failed
 const int ACLLITE_ERROR_MALLOC_DEVICE = 102;
 
 const int ACLLITE_ERROR_MALLOC_DVPP = 103;
-//access file failed
+// access file failed
 const int ACLLITE_ERROR_ACCESS_FILE = 201;
-//the file is invalid
+// the file is invalid
 const int ACLLITE_ERROR_INVALID_FILE = 202;
-//open file failed
+// open file failed
 const int ACLLITE_ERROR_OPEN_FILE = 203;
 
-//load model repeated
+// load model repeated
 const int ACLLITE_ERROR_LOAD_MODEL_REPEATED = 301;
 
 const int ACLLITE_ERROR_NO_MODEL_DESC = 302;
-//load mode by acl failed
+// load mode by acl failed
 const int ACLLITE_ERROR_LOAD_MODEL = 303;
 
 const int ACLLITE_ERROR_CREATE_MODEL_DESC = 304;
@@ -91,7 +92,7 @@ const int ACLLITE_ERROR_UNSURPPORT_PROPERTY = 404;
 
 const int ACLLITE_ERROR_INVALID_PROPERTY_VALUE = 405;
 
-const int ACLLITE_ERROR_UNSURPPORT_VIDEO_CAPTURE =406;
+const int ACLLITE_ERROR_UNSURPPORT_VIDEO_CAPTURE = 406;
 
 const int ACLLITE_ERROR_CREATE_DVPP_CHANNEL_DESC = 501;
 
@@ -190,3 +191,5 @@ const int ACLLITE_ERROR_VENC_CREATE_FRAME_CONFIG = 708;
 const int ACLLITE_ERROR_VENC_SEND_FRAME = 709;
 
 const int ACLLITE_ERROR_SUBSCRIBE_REPORT = 710;
+
+#endif

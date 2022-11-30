@@ -1,5 +1,5 @@
-/**
-* Copyright 2020 Huawei Technologies Co., Ltd
+/*
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -12,10 +12,8 @@
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 * See the License for the specific language governing permissions and
 * limitations under the License.
-
-* File sample_process.cpp
-* Description: handle acl resource
 */
+
 #include <iostream>
 #include <sys/timeb.h>
 #include "object_detection.h"
@@ -31,29 +29,26 @@ vector<string>::iterator imageFile;
 struct timespec time1 = {0, 0};
 struct timespec time2 = {0, 0};
 
-PreprocessThread::PreprocessThread(string& filePath, uint32_t modelWidth, 
-                       uint32_t modelHeight, uint32_t postThreadNum, 
-                       uint32_t inferThreadNum, aclrtContext& context) : 
-filePath_(filePath),
-context_(context),
-modelWidth_(modelWidth),
-modelHeight_(modelHeight),
-selfThreadId_(INVALID_INSTANCE_ID),
-inferThreadNum_(inferThreadNum),
-postThreadNum_(postThreadNum),
-inferChannel_(0),
-postChannel_(0),
-indexCount_(postThreadNum - 1),
-frameCnt_(0) {
-    for(int i = 0; i < inferThreadNum; i++){
+PreprocessThread::PreprocessThread(string& filePath, uint32_t modelWidth,
+                                   uint32_t modelHeight, uint32_t postThreadNum,
+                                   uint32_t inferThreadNum, aclrtContext& context)
+    : filePath_(filePath), context_(context),
+      modelWidth_(modelWidth), modelHeight_(modelHeight),
+      selfThreadId_(INVALID_INSTANCE_ID), inferThreadNum_(inferThreadNum),
+      postThreadNum_(postThreadNum), inferChannel_(0),
+      postChannel_(0), indexCount_(postThreadNum - 1),
+      frameCnt_(0)
+{
+    for (int i = 0; i < inferThreadNum; i++) {
         nextThreadId_.push_back(INVALID_INSTANCE_ID);
-        for(int j = 0; j < postThreadNum; j++){
+        for (int j = 0; j < postThreadNum; j++) {
             postprocThreadId_.push_back(INVALID_INSTANCE_ID);
         }
     }
 }
 
-PreprocessThread::~PreprocessThread() {
+PreprocessThread::~PreprocessThread()
+{
     aclError ret = aclrtSetCurrentContext(context_);
     if (ret != ACL_SUCCESS) {
         ACLLITE_LOG_ERROR("PreprocessThread destructor set context failed, error: %d", ret);
@@ -61,7 +56,8 @@ PreprocessThread::~PreprocessThread() {
     dvpp_.DestroyResource();
 }
 
-AclLiteError PreprocessThread::Init() {
+AclLiteError PreprocessThread::Init()
+{
     GetAllFiles(filePath_, fileVec);
     if (fileVec.empty()) {
         ACLLITE_LOG_ERROR("Failed to deal all empty path=%s.", filePath_.c_str());
@@ -80,27 +76,25 @@ AclLiteError PreprocessThread::Init() {
         return ACLLITE_ERROR;
     }
 
-    //Get the relevant thread instance id
+    // Get the relevant thread instance id
     selfThreadId_ = SelfInstanceId();
     if (selfThreadId_ == INVALID_INSTANCE_ID) {
         ACLLITE_LOG_ERROR("Self instance id %d", selfThreadId_);
         return ACLLITE_ERROR;
     }
 
-    for(int i = 0; i < inferThreadNum_; i++)
-    {
-        nextThreadId_[i] = GetAclLiteThreadIdByName(kInferName[i]);
-        if (nextThreadId_[i] == INVALID_INSTANCE_ID){
+    for (int i = 0; i < inferThreadNum_; i++) {
+        nextThreadId_[i] = GetAclLiteThreadIdByName(g_inferName[i]);
+        if (nextThreadId_[i] == INVALID_INSTANCE_ID) {
             ACLLITE_LOG_ERROR("%d inference instance id %d",
-                        i, nextThreadId_[i]);
+                              i, nextThreadId_[i]);
             return ACLLITE_ERROR;
         }
-        for(int j = 0; j < postThreadNum_; j++)
-        {
-            postprocThreadId_[i*postThreadNum_+j] = GetAclLiteThreadIdByName(kPostprocName[i*postThreadNum_+j]);
-            if (postprocThreadId_[i*postThreadNum_+j] == INVALID_INSTANCE_ID){
+        for (int j = 0; j < postThreadNum_; j++) {
+            postprocThreadId_[i*postThreadNum_+j] = GetAclLiteThreadIdByName(g_postprocName[i*postThreadNum_+j]);
+            if (postprocThreadId_[i*postThreadNum_+j] == INVALID_INSTANCE_ID) {
                 ACLLITE_LOG_ERROR("%d postprocess instance id %d",
-                            i*postThreadNum_+j, postprocThreadId_[i*postThreadNum_+j]);
+                                  i*postThreadNum_+j, postprocThreadId_[i*postThreadNum_+j]);
                 return ACLLITE_ERROR;
             }
         }
@@ -109,11 +103,11 @@ AclLiteError PreprocessThread::Init() {
     return ACLLITE_OK;
 }
 
-AclLiteError PreprocessThread::Process(int msgId, 
-                             shared_ptr<void> msgData) {
+AclLiteError PreprocessThread::Process(int msgId, shared_ptr<void> msgData)
+{
     AclLiteError ret = ACLLITE_OK;
     shared_ptr<PreprocDataMsg> preprocDataMsg = make_shared<PreprocDataMsg>();
-    switch(msgId) {
+    switch (msgId) {
         case MSG_APP_START:
             ret = AppStart();
             break;
@@ -133,19 +127,21 @@ AclLiteError PreprocessThread::Process(int msgId,
     return ret;
 }
 
-AclLiteError PreprocessThread::AppStart() {
+AclLiteError PreprocessThread::AppStart()
+{
     AclLiteError ret = SendMessage(selfThreadId_, MSG_READ_FRAME, nullptr);
     if (ret != ACLLITE_OK) {
         ACLLITE_LOG_ERROR("Process app start message failed, error %d", ret);
-    }    
+    }
 
     return ret;
 }
 
-AclLiteError PreprocessThread::ReadFrame(shared_ptr<PreprocDataMsg> &preprocDataMsg) {
+AclLiteError PreprocessThread::ReadFrame(shared_ptr<PreprocDataMsg> &preprocDataMsg)
+{
     inferChannel_ = frameCnt_ % inferThreadNum_;
-    if(inferChannel_ == 0){
-        indexCount_ = (++indexCount_) % postThreadNum_; //postcount初始值为postnum-1;
+    if (inferChannel_ == 0) {
+        indexCount_ = (++indexCount_) % postThreadNum_; // postcount初始值为postnum-1;
     }
     postChannel_ = inferChannel_ * postThreadNum_ + indexCount_;
 
@@ -154,7 +150,7 @@ AclLiteError PreprocessThread::ReadFrame(shared_ptr<PreprocDataMsg> &preprocData
 
     preprocDataMsg->frameNum = frameCnt_;
     preprocDataMsg->isLastFrame = 0;
-    if (imageFile == fileVec.end()) { 
+    if (imageFile == fileVec.end()) {
         preprocDataMsg->isLastFrame = 1;
         return ACLLITE_OK;
     }
@@ -169,9 +165,10 @@ AclLiteError PreprocessThread::ReadFrame(shared_ptr<PreprocDataMsg> &preprocData
     return ACLLITE_OK;
 }
 
-AclLiteError PreprocessThread::MsgProcess(ImageData& imageFrame, 
-                         shared_ptr<PreprocDataMsg> &preprocDataMsg) {
-    if(preprocDataMsg->isLastFrame == 1)
+AclLiteError PreprocessThread::MsgProcess(ImageData& imageFrame,
+    shared_ptr<PreprocDataMsg> &preprocDataMsg)
+{
+    if (preprocDataMsg->isLastFrame == 1)
         return ACLLITE_OK;
     ImageData imageDevice;
     AclLiteError ret = CopyImageToDevice(imageDevice, imageFrame, runMode_, MEMORY_DVPP);
@@ -190,7 +187,7 @@ AclLiteError PreprocessThread::MsgProcess(ImageData& imageFrame,
     ImageData resizedImage;
     ret = dvpp_.Resize(resizedImage, yuvImage, modelWidth_, modelHeight_);
     if (ret == ACLLITE_ERROR) {
-        ACLLITE_LOG_ERROR("dvpp_resize image failed");
+        ACLLITE_LOG_ERROR("g_dvpp_resize image failed");
         return ACLLITE_ERROR;
     }
     ret = CopyImageToLocal(preprocDataMsg->resizedMat, resizedImage, runMode_);
@@ -202,9 +199,10 @@ AclLiteError PreprocessThread::MsgProcess(ImageData& imageFrame,
     return ACLLITE_OK;
 }
 
-AclLiteError PreprocessThread::MsgSend(shared_ptr<PreprocDataMsg> &preprocDataMsg) {
+AclLiteError PreprocessThread::MsgSend(shared_ptr<PreprocDataMsg> &preprocDataMsg)
+{
     AclLiteError ret;
-    if(preprocDataMsg->isLastFrame == 0){
+    if (preprocDataMsg->isLastFrame == 0) {
         ret = SendMessage(preprocDataMsg->inferThreadId, MSG_PREPROC_DATA, preprocDataMsg);
         if (ret != ACLLITE_OK) {
             ACLLITE_LOG_ERROR("Send preprocess data failed, error %d", ret);
@@ -213,12 +211,10 @@ AclLiteError PreprocessThread::MsgSend(shared_ptr<PreprocDataMsg> &preprocDataMs
         if (ret != ACLLITE_OK) {
             ACLLITE_LOG_ERROR("Send read frame message failed, error %d", ret);
             return ret;
-        } 
-    }
-    else{
-        for(int i = 0; i < inferThreadNum_; i++)
-        {
-            for(int j = 0; j < postThreadNum_; j++){
+        }
+    } else {
+        for (int i = 0; i < inferThreadNum_; i++) {
+            for (int j = 0; j < postThreadNum_; j++) {
                 shared_ptr<PreprocDataMsg> preprocDataMsgEnd = make_shared<PreprocDataMsg>();
                 preprocDataMsgEnd->inferThreadId = nextThreadId_[i];
                 preprocDataMsgEnd->postprocThreadId = postprocThreadId_[i*postThreadNum_+j];

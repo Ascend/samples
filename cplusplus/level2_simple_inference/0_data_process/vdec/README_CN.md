@@ -6,7 +6,7 @@
 **本README只提供命令行方式运行样例的指导，如需在Mindstudio下运行样例，请参考[Mindstudio运行图片样例wiki](https://github.com/Ascend/samples/wikis/Mindstudio%E8%BF%90%E8%A1%8C%E5%9B%BE%E7%89%87%E6%A0%B7%E4%BE%8B?sort_id=3164874)。**
 
 ## vdec样例
-功能：调用dvpp的vdec接口，实现图片解码的功能。    
+功能：调用dvpp的vdec接口，实现视频解码的功能。    
 样例输入：待解码的h265文件。    
 样例输出：解码后的YUV图片。   
 
@@ -30,7 +30,7 @@
      **注：如果需要切换到其它tag版本，以v0.5.0为例，可执行以下命令。**
      ```
      git checkout v0.5.0
-     ```   
+     ```
   - 压缩包方式下载（下载时间较短，但步骤稍微复杂）。   
      **注：如果需要下载其它版本代码，请先请根据前置条件说明进行samples仓分支切换。**   
      ``` 

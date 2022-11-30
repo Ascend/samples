@@ -2,7 +2,7 @@
 异步正常拷贝数据 原长度和目标长度相同,展示4种情况:H2H\H2D\D2D\D2H  检查是否报错
 
 编译一句话 l1 禁止使用 makefile
-g++ -DENABLE_DVPP_INTERFACE  ./Async_Memcpy_Host2Device.cpp -o ./Async_Memcpy_Host2Device -I/usr/local/Ascend/ascend-toolkit/latest/acllib_linux.x86_64/include -I/usr/include/  -L/usr/local/Ascend/ascend-toolkit/latest/acllib_linux.x86_64/lib64/stub -lascendcl -lstdc++
+g++ -DENABLE_DVPP_INTERFACE  ./Async_Memcpy_Host2Device.cpp -o ./Async_Memcpy_Host2Device -I/usr/local/Ascend/ascend-toolkit/latest/runtime_linux.x86_64/include -I/usr/include/  -L/usr/local/Ascend/ascend-toolkit/latest/runtime_linux.x86_64/lib64/stub -lascendcl -lstdc++
 
 */
 

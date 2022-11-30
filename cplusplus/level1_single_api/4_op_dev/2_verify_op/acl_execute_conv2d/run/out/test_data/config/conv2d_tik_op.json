@@ -4,19 +4,19 @@
     "input_desc": [
       {
         "format": "NCHW",
-        "shape": [8, 512, 7, 7],
+        "shape": [8, 256, 7, 7],
         "type": "float16"
       },
       {
         "format": "NCHW",
-        "shape": [512, 512, 3, 3],
+        "shape": [256, 256, 3, 3],
         "type": "float16"
       }
     ],
     "output_desc": [
       {
         "format": "NCHW",
-        "shape": [8, 512, 7, 7],
+        "shape": [8, 256, 7, 7],
         "type": "float16"
       }
     ],

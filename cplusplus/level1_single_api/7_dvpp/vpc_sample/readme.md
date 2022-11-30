@@ -39,9 +39,11 @@ DVPP中的VPC功能模块，实现图片的抠图、缩放、边界填充、色�
 
 ## 准备测试数据<a name="section13765133092318"></a>
 
-请从[https://github.com/Ascend/tools/tree/master/dvpp_sample_input_data](https://github.com/Ascend/tools/tree/master/dvpp_sample_input_data)获取该样例的输入图片、视频数据。
+请单击以下链接，获取该样例的测试图片数据。
 
-如果使用wget方式下载图片或视频，请先进入[https://github.com/Ascend/tools/tree/master/dvpp_sample_input_data](https://github.com/Ascend/tools/tree/master/dvpp_sample_input_data)页面，单击对应的图片或视频，进入查看图片或视频的页面后，单击页面右侧的“原始数据”，在浏览器的地址栏中才是获取图片或视频的地址，再使用wget命令从该地址中获取图片或视频。
+[dvpp_vpc_1920x1080_nv12.yuv](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/data/dvpp_sample_input_data/dvpp_vpc_1920x1080_nv12.yuv)
+
+[dvpp_vpc_382x300_nv12.yuv](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/data/dvpp_sample_input_data/dvpp_vpc_382x300_nv12.yuv)
 
 ## 编译运行
 
@@ -312,7 +314,7 @@ DVPP中的VPC功能模块，实现图片的抠图、缩放、边界填充、色�
 ## 金字塔<a name="section3994172425214"></a>
 
 ```
-./vpc_demo --test_type 8 --in_image_file dvpp_vpc_1920x1080_yuv400.yuv --out_image_file pyramid.yuv400 --img_width 1920 --img_height 1080 --in_format 0 --filter_level 4 --divisor 256 --pyramid_padding_mode 0 --queue_len 32
+./vpc_demo --test_type 8 --in_image_file dvpp_vpc_1920x1080_nv12.yuv --out_image_file pyramid.yuv400 --img_width 1920 --img_height 1080 --in_format 0 --filter_level 4 --divisor 256 --pyramid_padding_mode 0 --queue_len 32
 ```
 
 -   示例描述：图像金字塔功能，其中滤波器参数、输出图片数等已在代码中配置。

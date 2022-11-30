@@ -33,7 +33,7 @@ if (NOT DEFINED ENV{NPU_HOST_LIB})
     if (${CMAKE_HOST_SYSTEM_NAME} MATCHES "Windows")
         set(LIB_PATH "C:/Program Files/HuaWei/Ascend/Acllib/lib64")
     else ()
-        set(LIB_PATH "/usr/local/Ascend/acllib/lib64/stub/")
+        set(LIB_PATH "/usr/local/Ascend/runtime/lib64/stub/")
     endif ()
     message(STATUS "set default LIB_PATH: ${LIB_PATH}")
 else ()
@@ -45,7 +45,7 @@ include_directories(
     $ENV{THIRDPART_PATH}/include/
     $ENV{THIRDPART_PATH}/include/acllite
     $ENV{INSTALL_DIR}/driver    
-    $ENV{INSTALL_DIR}/acllib/include/
+    $ENV{INSTALL_DIR}/runtime/include/
     ../inc/
 )
 
@@ -74,7 +74,7 @@ else ()
             libascendcl)
     else ()
         target_link_libraries(main
-            ascendcl stdc++)
+            ascendcl stdc++ opencv_highgui opencv_core opencv_imgproc opencv_imgcodecs opencv_calib3d opencv_features2d opencv_videoio)
     endif ()
 endif ()
 

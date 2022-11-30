@@ -53,7 +53,7 @@ public:
     AclLiteError InitOutputPara(int modelInputWidth, int modelInputHeight);
 
     /**
-    * @brief set jpegd input
+    * @brief set pngd input
     * @param [in] inDevBuffer: device buffer of input pic
     * @param [in] inDevBufferSize: device buffer size of input pic
     * @param [in] inputWidth:width of pic
@@ -68,10 +68,6 @@ public:
     */
     void GetOutput(void **outputBuffer, int &outputSize);
     AclLiteError Process(ImageData& dest, ImageData& src);
-   /**
-    * @brief release encode resource
-    */
-    void DestroyEncodeResource();
 
 private:
     void DestroyDecodeResource();

@@ -1,5 +1,5 @@
-/**
-* Copyright 2020 Huawei Technologies Co., Ltd
+/*
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -12,11 +12,8 @@
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 * See the License for the specific language governing permissions and
 * limitations under the License.
-
-* File utils.cpp
-* Description: handle file operations
 */
-#include "utils.h"
+
 #include <map>
 #include <iostream>
 #include <fstream>
@@ -27,25 +24,27 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include "utils.h"
 #include "acl/acl.h"
 #include "acl/ops/acl_dvpp.h"
 
 using namespace std;
 
 namespace {
-const std::string kImagePathSeparator = ",";
-const int kStatSuccess = 0;
-const std::string kFileSperator = "/";
-const std::string kPathSeparator = "/";
+const std::string g_imagePathSeparator = ",";
+const int STATSUCCESS = 0;
+const std::string g_fileSperator = "/";
+const std::string g_pathSeparator = "/";
 // output image prefix
-const std::string kOutputFilePrefix = "out_";
+const std::string g_outputFilePrefix = "out_";
 
 }
 
-bool Utils::IsDirectory(const string &path) {
+bool Utils::IsDirectory(const string &path)
+{
     // get path stat
     struct stat buf;
-    if (stat(path.c_str(), &buf) != kStatSuccess) {
+    if (stat(path.c_str(), &buf) != STATSUCCESS) {
         return false;
     }
 
@@ -57,7 +56,8 @@ bool Utils::IsDirectory(const string &path) {
     }
 }
 
-bool Utils::IsPathExist(const string &path) {
+bool Utils::IsPathExist(const string &path)
+{
     ifstream file(path);
     if (!file) {
         return false;
@@ -65,17 +65,17 @@ bool Utils::IsPathExist(const string &path) {
     return true;
 }
 
-void Utils::SplitPath(const string &path, vector<string> &path_vec) {
-    char *char_path = const_cast<char*>(path.c_str());
-    const char *char_split = kImagePathSeparator.c_str();
-    char *tmp_path = strtok(char_path, char_split);
+void Utils::SplitPath(const string &path, vector<string> &path_vec)
+{
+    char *tmp_path = strtok(const_cast<char*>(path.c_str()), g_imagePathSeparator.c_str());
     while (tmp_path) {
         path_vec.emplace_back(tmp_path);
-        tmp_path = strtok(nullptr, char_split);
+        tmp_path = strtok(nullptr, const_cast<char*>(path.c_str()));
     }
 }
 
-void Utils::GetAllFiles(const string &path, vector<string> &file_vec) {
+void Utils::GetAllFiles(const string &path, vector<string> &file_vec)
+{
     // split file path
     vector<string> path_vector;
     SplitPath(path, path_vector);
@@ -84,7 +84,7 @@ void Utils::GetAllFiles(const string &path, vector<string> &file_vec) {
         // check path exist or not
         if (!IsPathExist(every_path)) {
             ERROR_LOG("Failed to deal path=%s. Reason: not exist "
-                      "or can not access.", every_path.c_str());                      
+                      "or can not access.", every_path.c_str());
             continue;
         }
         // get files in path and sub-path
@@ -92,7 +92,8 @@ void Utils::GetAllFiles(const string &path, vector<string> &file_vec) {
     }
 }
 
-void Utils::GetPathFiles(const string &path, vector<string> &file_vec) {
+void Utils::GetPathFiles(const string &path, vector<string> &file_vec)
+{
     struct dirent *dirent_ptr = nullptr;
     DIR *dir = nullptr;
     if (IsDirectory(path)) {
@@ -104,7 +105,7 @@ void Utils::GetPathFiles(const string &path, vector<string> &file_vec) {
             }
 
             // file path
-            string full_path = path + kPathSeparator + dirent_ptr->d_name;
+            string full_path = path + g_pathSeparator + dirent_ptr->d_name;
             // directory need recursion
             if (IsDirectory(full_path)) {
                 GetPathFiles(full_path, file_vec);
@@ -118,13 +119,14 @@ void Utils::GetPathFiles(const string &path, vector<string> &file_vec) {
     }
 }
 
-void* Utils::CopyDataHostToDvpp(void* data, int size) {
+void* Utils::CopyDataHostToDvpp(void* data, int size)
+{
     void* buffer = nullptr;
 
     auto aclRet = acldvppMalloc(&buffer, size);
     if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("acl malloc dvpp data failed, dataSize=%u, ret=%d",
-        size, aclRet);
+                  size, aclRet);
         return nullptr;
     }
     INFO_LOG("malloc dvpp memory size %d ok", size);
@@ -140,13 +142,14 @@ void* Utils::CopyDataHostToDvpp(void* data, int size) {
     return buffer;
 }
 
-void* Utils::CopyDataDeviceToDvpp(void* data, int size) {
+void* Utils::CopyDataDeviceToDvpp(void* data, int size)
+{
     void* buffer = nullptr;
 
     auto aclRet = acldvppMalloc(&buffer, size);
     if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("acl malloc dvpp data failed, dataSize=%u, ret=%d",
-        size, aclRet);
+                  size, aclRet);
         return nullptr;
     }
     INFO_LOG("malloc dvpp memory size %d ok", size);
@@ -154,7 +157,7 @@ void* Utils::CopyDataDeviceToDvpp(void* data, int size) {
     aclRet = aclrtMemcpy(buffer, size, data, size, ACL_MEMCPY_DEVICE_TO_DEVICE);
     if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("acl memcpy data to dvpp failed, size %u, error %d", size, aclRet);
-        acldvppFree(buffer);
+                  acldvppFree(buffer);
         return nullptr;
     }
     INFO_LOG("copy data to dvpp ok");
@@ -162,7 +165,8 @@ void* Utils::CopyDataDeviceToDvpp(void* data, int size) {
     return buffer;
 }
 
-Result Utils::CopyImageDataToDvpp(ImageData& imageDevice, ImageData srcImage) {
+Result Utils::CopyImageDataToDvpp(ImageData& imageDevice, ImageData srcImage)
+{
     aclrtRunMode runMode_;
     aclError ret = aclrtGetRunMode(&runMode_);
     if (ret != ACL_SUCCESS) {
@@ -171,14 +175,13 @@ Result Utils::CopyImageDataToDvpp(ImageData& imageDevice, ImageData srcImage) {
     }
 
     void* buffer = nullptr;
-    if (runMode_ == ACL_HOST){
+    if (runMode_ == ACL_HOST) {
         buffer = Utils::CopyDataHostToDvpp(srcImage.data.get(), srcImage.size);
         if (buffer == nullptr) {
             ERROR_LOG("Copy image to device failed");
             return FAILED;
         }
-    }
-    else{
+    } else {
         buffer = Utils::CopyDataDeviceToDvpp(srcImage.data.get(), srcImage.size);
         if (buffer == nullptr) {
             ERROR_LOG("Copy image to device failed");
@@ -193,7 +196,8 @@ Result Utils::CopyImageDataToDvpp(ImageData& imageDevice, ImageData srcImage) {
     return SUCCESS;
 }
 
-void* Utils::CopyDataDeviceToLocal(void* deviceData, uint32_t dataSize) {
+void* Utils::CopyDataDeviceToLocal(void* deviceData, uint32_t dataSize)
+{
     uint8_t* buffer = new uint8_t[dataSize];
     if (buffer == nullptr) {
         ERROR_LOG("New malloc memory failed");
@@ -210,7 +214,8 @@ void* Utils::CopyDataDeviceToLocal(void* deviceData, uint32_t dataSize) {
     return (void*)buffer;
 }
 
-void* Utils::CopyDataToDevice(void* data, uint32_t dataSize, aclrtMemcpyKind policy) {
+void* Utils::CopyDataToDevice(void* data, uint32_t dataSize, aclrtMemcpyKind policy)
+{
     void* buffer = nullptr;
     aclError aclRet = aclrtMalloc(&buffer, dataSize, ACL_MEM_MALLOC_HUGE_FIRST);
     if (aclRet != ACL_SUCCESS) {
@@ -228,17 +233,20 @@ void* Utils::CopyDataToDevice(void* data, uint32_t dataSize, aclrtMemcpyKind pol
     return buffer;
 }
 
-void* Utils::CopyDataDeviceToDevice(void* deviceData, uint32_t dataSize) {
+void* Utils::CopyDataDeviceToDevice(void* deviceData, uint32_t dataSize)
+{
     return CopyDataToDevice(deviceData, dataSize, ACL_MEMCPY_DEVICE_TO_DEVICE);
 }
 
-void* Utils::CopyDataHostToDevice(void* deviceData, uint32_t dataSize) {
+void* Utils::CopyDataHostToDevice(void* deviceData, uint32_t dataSize)
+{
     return CopyDataToDevice(deviceData, dataSize, ACL_MEMCPY_HOST_TO_DEVICE);
 }
 
-Result Utils::CopyImageDataToDevice(ImageData& imageDevice, 
-                                    ImageData srcImage, aclrtRunMode mode) {
-    void * buffer;
+Result Utils::CopyImageDataToDevice(ImageData& imageDevice,
+                                    ImageData srcImage, aclrtRunMode mode)
+{
+    void *buffer;
     if (mode == ACL_HOST)
         buffer = Utils::CopyDataHostToDevice(srcImage.data.get(), srcImage.size);
     else
@@ -296,7 +304,7 @@ int Utils::ReadImageFile(ImageData& image, std::string fileName)
 
     int32_t ch = 0;
     acldvppJpegGetImageInfo(binFileBufferData, binFileBufferLen,
-              &(image.width), &(image.height), &ch);
+                            &(image.width), &(image.height), &ch);
     image.data.reset(binFileBufferData, [](uint8_t* p) { delete[](p); });
     image.size = binFileBufferLen;
 

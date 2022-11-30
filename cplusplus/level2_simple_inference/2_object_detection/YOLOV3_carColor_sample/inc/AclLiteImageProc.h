@@ -1,5 +1,5 @@
-/**
-* Copyright 2020 Huawei Technologies Co., Ltd
+/*
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -12,9 +12,11 @@
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 * See the License for the specific language governing permissions and
 * limitations under the License.
-
-* File AclLiteImageProc.h
 */
+
+#ifndef YOLOV3_CARCOLOR_SAMPLE_INC_ACLLITEIMAGEPROC_H
+#define YOLOV3_CARCOLOR_SAMPLE_INC_ACLLITEIMAGEPROC_H
+
 #pragma once
 #include <cstdint>
 #include "AclLiteUtils.h"
@@ -33,7 +35,7 @@ public:
     ~AclLiteImageProc();
 
     AclLiteError Init();
-    AclLiteError Resize(ImageData& dest,ImageData& src, 
+    AclLiteError Resize(ImageData& dest, ImageData& src, 
                         uint32_t width, uint32_t height);
     AclLiteError JpegD(ImageData& destYuv, ImageData& srcJpeg);
     AclLiteError Crop(ImageData& dest, ImageData& src,
@@ -42,12 +44,14 @@ public:
     AclLiteError CropPaste(ImageData& dest, ImageData& src,
                            uint32_t width, uint32_t height,
                            uint32_t ltHorz, uint32_t ltVert,
-                           uint32_t rbHorz, uint32_t rbVert);                           
+                           uint32_t rbHorz, uint32_t rbVert);
     void DestroyResource();
 
 protected:
-    bool isReleased_;
-    aclrtStream stream_;
-    acldvppChannelDesc *dvppChannelDesc_;
-    int isInitOk_;
+    bool g_isReleased_;
+    aclrtStream g_stream_;
+    acldvppChannelDesc *g_dvppChannelDesc_;
+    int g_isInitOk_;
 };
+
+#endif

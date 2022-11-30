@@ -72,7 +72,7 @@ Before deploying this sample, ensure that:
 
         **export install_path=$HOME/Ascend/ascend-toolkit/latest**
 
-        **export LD_LIBRARY_PATH=\\${install_path}/atc/lib64**  
+        **export LD_LIBRARY_PATH=\\${install_path}/compiler/lib64**  
 
     2. Run the following commands to download the AIPP configuration file and convert the model:
 
@@ -108,7 +108,7 @@ Before deploying this sample, ensure that:
 
      **export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux**
 
-     **export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub**
+     **export NPU_HOST_LIB=$DDK_PATH/runtime/lib64/stub**
 
      ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **NOTE**  
         > - If the CANN version is 3.0.0, change **arm64-linux** in the ***DDK_PATH*** environment variable to **arm64-linux_gcc7.3.0**.    

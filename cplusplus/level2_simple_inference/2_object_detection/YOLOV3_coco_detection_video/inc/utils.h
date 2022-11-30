@@ -1,5 +1,5 @@
-/**
-* Copyright 2020 Huawei Technologies Co., Ltd
+/*
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -12,10 +12,11 @@
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 * See the License for the specific language governing permissions and
 * limitations under the License.
-
-* File utils.h
-* Description: handle file operations
 */
+
+#ifndef YOLOV3_COCO_DETECTION_VIDEO_INC_UTILS_H
+#define YOLOV3_COCO_DETECTION_VIDEO_INC_UTILS_H
+
 #pragma once
 
 #include <iostream>
@@ -31,7 +32,7 @@ using namespace std;
 
 #define INFO_LOG(fmt, args...) fprintf(stdout, "[INFO]  " fmt "\n", ##args)
 #define WARN_LOG(fmt, args...) fprintf(stdout, "[WARN]  " fmt "\n", ##args)
-#define ERROR_LOG(fmt, args...) fprintf(stdout, "[ERROR]  " fmt "\n", ##args)
+#define ERROR_LOG(fmt, args...) fprintf(stderr, "[ERROR]   " fmt "\n", ##args)
 
 #define RGBU8_IMAGE_SIZE(width, height) ((width) * (height) * 3)
 #define YUV420SP_SIZE(width, height) ((width) * (height) * 3 / 2)
@@ -45,7 +46,8 @@ using namespace std;
 #define SHARED_PTR_U8_BUF(buf) (shared_ptr<uint8_t>((uint8_t *)(buf), [](uint8_t* p) { delete[](p); }))
 
 template<class Type>
-std::shared_ptr<Type> MakeSharedNoThrow() {
+std::shared_ptr<Type> MakeSharedNoThrow()
+{
     try {
         return std::make_shared<Type>();
     }
@@ -56,8 +58,8 @@ std::shared_ptr<Type> MakeSharedNoThrow() {
 
 #define MAKE_SHARED_NO_THROW(memory, memory_type) \
     do { \
-            memory = MakeSharedNoThrow<memory_type>(); \
-    }while(0);
+            memory = MakeSharedNoThrow<(memory_type)>(); \
+    }while (0)
 
 typedef enum Result {
     SUCCESS = 0,
@@ -116,3 +118,4 @@ public:
     static Result CopyImageDataToDevice(ImageData& imageDevice, ImageData srcImage, aclrtRunMode mode);
 };
 
+#endif

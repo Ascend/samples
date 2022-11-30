@@ -1,4 +1,4 @@
-tf_model="https://nkxiaolei88.obs.cn-north-1.myhuaweicloud.com/ATC%20Model/YoloV4/yolov4_no_postprocess.pb"
+tf_model="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/nkxiaolei/YoloV4/yolov4_no_postprocess.pb"
 model_name="yolov4"
 
 data_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/aclsample/"

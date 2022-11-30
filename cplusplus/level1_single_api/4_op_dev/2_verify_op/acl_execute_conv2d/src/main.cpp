@@ -23,12 +23,12 @@ bool g_isDevice = false;
 OperatorDesc CreateOpDesc()
 {
     // define operator
-	// feature shape is [8, 512, 7, 7]
-	// kernel shape is [512, 512, 3, 3]
-	// output shape is [8, 512, 7, 7]
-    std::vector<int64_t> shape{8, 512, 7, 7};
-    std::vector<int64_t> shape1{512, 512, 3, 3};  
-    std::vector<int64_t> shape2{8, 512, 7, 7};
+	// feature shape is [8, 256, 7, 7]
+	// kernel shape is [256, 256, 3, 3]
+	// output shape is [8, 256, 7, 7]
+    std::vector<int64_t> shape{8, 256, 7, 7};
+    std::vector<int64_t> shape1{256, 256, 3, 3};  
+    std::vector<int64_t> shape2{8, 256, 7, 7};
     std::string opType = "Conv2DTik";
     aclDataType dataType = ACL_FLOAT16;
     aclFormat format = ACL_FORMAT_NCHW;

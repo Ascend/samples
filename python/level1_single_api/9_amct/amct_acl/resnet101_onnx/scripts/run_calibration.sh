@@ -17,11 +17,11 @@ set -e
 
 acl_app=amct_acl
 model_name=resnet101_v11
-model=../model/resnet101_v11.onnx
+model=./model/resnet101_v11.onnx
 input_shape="input:16,3,224,224" # N is same with calibration_data
-calibration_data=../data/images/calibration.bin
+calibration_data=./data/images/calibration.bin
 out_nodes="Gemm_353:0"
-python3.7 ../data/process_data.py
+python3.7 ./src/process_data.py
 
 $acl_app --framework=5 --model=$model --calibration_data=$calibration_data \
 --calibration_shape=$input_shape --out_nodes=$out_nodes \

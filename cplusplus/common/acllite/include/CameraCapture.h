@@ -37,7 +37,7 @@
 #include "AclLiteUtils.h"
 #include "AclLiteVideoProc.h"
 
-#define CAMERA_NUM     (2)
+#define CAMERA_NUM (2)
 #define CAMERA(i) (g_CameraMgr.cap[i])
 
 class CameraCapture : public AclLiteVideoCapBase {

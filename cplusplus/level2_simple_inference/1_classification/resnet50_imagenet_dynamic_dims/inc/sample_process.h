@@ -29,14 +29,15 @@ public:
     Result InitResource();
     Result Process();
     uint32_t ReadOneBatch(std::string inputImageDir, void *&inputBuff, int batchSize);
+    uint32_t ReadOneBatchPicHwc(std::string inputImageDir, void *&inputBuff, int batchSize, int resizeWidth, int resizeHeight);
 
 private:
     void DestroyResource();
-    bool g_isDevice;
-    int32_t g_deviceId;
-    aclrtContext g_context;
-    aclrtStream g_stream;
-    aclrtRunMode g_runMode;
-    ModelProcess g_modelProcess;
+    bool isDevice_;
+    int32_t deviceId_;
+    aclrtContext context_;
+    aclrtStream stream_;
+    aclrtRunMode runMode_;
+    ModelProcess modelProcess_;
 };
 #endif

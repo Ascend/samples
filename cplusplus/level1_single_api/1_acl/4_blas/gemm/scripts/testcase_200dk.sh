@@ -22,14 +22,14 @@ function generateData() {
 function setAtcEnv() {
     # 设置模型转换时需要的环境变量
     export install_path=$HOME/Ascend/ascend-toolkit/latest
-    export PATH=/usr/local/python3.7.5/bin:${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
+    export PATH=/usr/local/python3.7.5/bin:${install_path}/compiler/ccec_compiler/bin:${install_path}/compiler/bin:$PATH
     export ASCEND_OPP_PATH=${install_path}/opp
     if [[ ${version} = "c73" ]] || [[ ${version} = "C73" ]];then
         export PYTHONPATH=${install_path}/atc/python/site-packages/te:${install_path}/atc/python/site-packages/topi:$PYTHONPATH
     elif [[ ${version} = "c75" ]] || [[ ${version} = "C75" ]];then
         export PYTHONPATH=${install_path}/atc/python/site-packages:${install_path}/atc/python/site-packages/auto_tune.egg/auto_tune:${install_path}/atc/python/site-packages/schedule_search.egg:$PYTHONPATH
     fi
-    export LD_LIBRARY_PATH=${install_path}/atc/lib64
+    export LD_LIBRARY_PATH=${install_path}/compiler/lib64
 
     return 0
 }
@@ -106,7 +106,7 @@ function main() {
 
     # 重新配置程序运行所需的环境变量
     export LD_LIBRARY_PATH=
-    export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/acllib/lib64:$LD_LIBRARY_PATH
+    export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/runtime/lib64:$LD_LIBRARY_PATH
 
     # 运行程序
     ./execute_gemm_op > result.txt

@@ -22,7 +22,19 @@
     </div>
     <div style="width:100%;height:2px;background-color:#ccc;"></div>
     <div class="video_content">
-        <div class="video_fps" id='fpswapper' hidden><p><span> channel name: {{ channel_name }}    </span> <span>&nbsp;&nbsp;&nbsp;&nbsp;fps:</span><span id='fpsval'></span></p></div>
+        <div class="video_fps" id='fpswapper' hidden>
+            <p>
+                <span> channel name: {{ channel_name }}    </span> 
+                <span>&nbsp;&nbsp;&nbsp;&nbsp;fps:</span>
+                <span id='fpsval'></span>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <span style="cursor: pointer;" class="screenshot" id="screenshot">点击截图</span>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <span style="cursor: pointer;" class="recoder" id="recoder">点击录像</span>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <span style="cursor: pointer;" class="stoprecoder" id="stoprecoder">停止录像</span>
+            </p>
+        </div>
         <div class="video_inner">
             <img src="/static/images/loading.gif" id = "loading"   board = "1" alt=""/>
             <!-- <img  id = "load_media" hidden   width = "1024px" board = "1" alt=""/> -->
@@ -123,6 +135,44 @@ function startViewVideo(){
     }
 }
 startViewVideo();
-
+$("#screenshot").bind("click", function(){
+    var imageData = canvas.toDataURL("image/png")
+    var link = document.createElementNS("http://www.w3.org/1999/xhtml", "a")
+    link.href = imageData
+    link.download = new Date().getTime() + ".png"
+    var evt = new MouseEvent("click", {
+        bubbles: true,
+        cancelable: true,
+        view: window
+    })
+    link.dispatchEvent(evt)
+})
+var allChunks = []
+var recoder = null
+$("#recoder").bind("click", function(){
+    allChunks = []
+    var stream = canvas.captureStream(15)
+    recoder = new MediaRecorder(stream, {
+        mimeType: "video/webm"
+    })
+    recoder.start(10)
+    recoder.ondataavailable = e => {
+        allChunks.push(e.data)
+    }
+})
+$("#stoprecoder").bind("click", function(){
+    recoder.stop()
+    var link = document.createElementNS("http://www.w3.org/1999/xhtml", "a")
+    var videoBlob = new Blob(allChunks)
+    var videoUrl = window.URL.createObjectURL(videoBlob)
+    link.href = videoUrl
+    link.download = new Date().getTime() + ".webm"
+    var evt = new MouseEvent("click", {
+        bubbles: true,
+        cancelable: true,
+        view: window
+    })
+    link.dispatchEvent(evt)
+})
 </script>
 </html>

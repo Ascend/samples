@@ -24,7 +24,7 @@ endif()
 set(LIB_PATH $ENV{NPU_HOST_LIB})
 
 if (NOT DEFINED ENV{NPU_HOST_LIB})
-    set(LIB_PATH "/usr/local/Ascend/acllib/lib64/stub/")
+    set(LIB_PATH "/usr/local/Ascend/runtime/lib64/stub/")
     message(STATUS "set default LIB_PATH: ${LIB_PATH}")
 else ()
     message(STATUS "env LIB_PATH: ${LIB_PATH}")
@@ -32,7 +32,7 @@ endif()
 
 # Header path
 include_directories(
-    ${INC_PATH}/acllib/include/
+    ${INC_PATH}/runtime/include/
     ../inc
 )
 

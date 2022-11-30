@@ -27,7 +27,7 @@ using namespace std;
 
 #define INFO_LOG(fmt, args...) fprintf(stdout, "[INFO]  " fmt "\n", ##args)
 #define WARN_LOG(fmt, args...) fprintf(stdout, "[WARN]  " fmt "\n", ##args)
-#define ERROR_LOG(fmt, args...) fprintf(stdout, "[ERROR]  " fmt "\n", ##args)
+#define ERROR_LOG(fmt, args...) fprintf(stderr, "[ERROR]  " fmt "\n", ##args)
 
 #define RGBU8_IMAGE_SIZE(width, height) ((width) * (height) * 3)
 #define YUV420SP_SIZE(width, height) ((width) * (height) * 3 / 2)

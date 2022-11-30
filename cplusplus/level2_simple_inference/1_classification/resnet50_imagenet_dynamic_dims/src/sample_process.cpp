@@ -18,16 +18,18 @@
 #include <memory>
 #include <unistd.h>
 #include <string>
+#include <opencv2/opencv.hpp>
+#include <opencv2/imgproc.hpp>
+#include "opencv2/imgproc/types_c.h"
 #include "sample_process.h"
 #include "acl/acl.h"
 #include "utils.h"
 
 using namespace std;
 namespace {
-    string testFile[] = {
-        "../data/data_224_224",
-        "../data/data_200_200"};
+    string g_testFile = "../data";
     const char *g_omModelPath = "../model/resnet50.om";
+    int g_classNum = 1001;
     int g_batchSize = 2;
     int g_channels = 3;
     int g_modelWidth224 = 224;
@@ -36,7 +38,7 @@ namespace {
     int g_modelHeight200 = 200;
 }
 
-SampleProcess::SampleProcess() : g_deviceId(0), g_context(nullptr), g_stream(nullptr)
+SampleProcess::SampleProcess() : deviceId_(0), context_(nullptr), stream_(nullptr)
 {
 }
 
@@ -57,55 +59,55 @@ Result SampleProcess::InitResource()
     INFO_LOG("acl init success");
 
     // set device
-    ret = aclrtSetDevice(g_deviceId);
+    ret = aclrtSetDevice(deviceId_);
     if (ret != ACL_SUCCESS) {
-        ERROR_LOG("acl set device %d failed, errorCode = %d", g_deviceId, static_cast<int32_t>(ret));
+        ERROR_LOG("acl set device %d failed, errorCode = %d", deviceId_, static_cast<int32_t>(ret));
         return FAILED;
     }
-    INFO_LOG("set device %d success", g_deviceId);
+    INFO_LOG("set device %d success", deviceId_);
 
     // create context (set current)
-    ret = aclrtCreateContext(&g_context, g_deviceId);
+    ret = aclrtCreateContext(&context_, deviceId_);
     if (ret != ACL_SUCCESS) {
         ERROR_LOG("acl create context failed, deviceId = %d, errorCode = %d",
-                  g_deviceId, static_cast<int32_t>(ret));
+                  deviceId_, static_cast<int32_t>(ret));
         return FAILED;
     }
     INFO_LOG("create context success");
 
     // create stream
-    ret = aclrtCreateStream(&g_stream);
+    ret = aclrtCreateStream(&stream_);
     if (ret != ACL_SUCCESS) {
         ERROR_LOG("acl create stream failed, deviceId = %d, errorCode = %d",
-                  g_deviceId, static_cast<int32_t>(ret));
+                  deviceId_, static_cast<int32_t>(ret));
         return FAILED;
     }
     INFO_LOG("create stream success");
 
     // get run mode
-    ret = aclrtGetRunMode(&g_runMode);
+    ret = aclrtGetRunMode(&runMode_);
     if (ret != ACL_SUCCESS) {
         ERROR_LOG("acl get run mode failed, errorCode = %d", static_cast<int32_t>(ret));
         return FAILED;
     }
-    g_isDevice = (g_runMode == ACL_DEVICE);
-    g_modelProcess.GetRunMode(g_runMode);
+    isDevice_ = (runMode_ == ACL_DEVICE);
+    modelProcess_.GetRunMode(runMode_);
     INFO_LOG("get run mode success");
 
     // model init
-    Result modelRet = g_modelProcess.LoadModel(g_omModelPath);
+    Result modelRet = modelProcess_.LoadModel(g_omModelPath);
     if (ret != SUCCESS) {
         ERROR_LOG("execute LoadModel failed");
         return FAILED;
     }
 
-    modelRet = g_modelProcess.CreateModelDesc();
+    modelRet = modelProcess_.CreateModelDesc();
     if (ret != SUCCESS) {
         ERROR_LOG("execute CreateModelDesc failed");
         return FAILED;
     }
 
-    modelRet = g_modelProcess.CreateOutput();
+    modelRet = modelProcess_.CreateOutput();
     if (ret != SUCCESS) {
         ERROR_LOG("execute CreateOutput failed");
         return FAILED;
@@ -119,12 +121,12 @@ Result SampleProcess::Process()
     void *inputBuff = nullptr;
     int modelHeight = 0;
     int modelWidth = 0;
-    aclError ret = g_modelProcess.GetInputSizeByIndex(0, devBufferSize);
+    aclError ret = modelProcess_.GetInputSizeByIndex(0, devBufferSize);
     if (ret != SUCCESS) {
         ERROR_LOG("execute GetInputSizeByIndex failed");
         return FAILED;
     }
-    if (!g_isDevice) {
+    if (!isDevice_) {
         ret = aclrtMallocHost(&inputBuff, devBufferSize);
         if (inputBuff == nullptr) {
             ERROR_LOG("aclrtMallocHost inputBuff failed, errorCode = %d.", static_cast < int32_t > (ret));
@@ -138,8 +140,7 @@ Result SampleProcess::Process()
             return FAILED;
         }
     }
-    for (size_t index = 0; index < sizeof(testFile) / sizeof(testFile[0]); ++index) {
-        INFO_LOG("start to process file:%s", testFile[index].c_str());
+    for (size_t index = 0; index < g_batchSize; ++index) {
         if (index == 0) {
             modelHeight = g_modelHeight224;
             modelWidth = g_modelWidth224;
@@ -156,39 +157,42 @@ Result SampleProcess::Process()
         if (ret != ACL_SUCCESS) {
             ERROR_LOG("aclrtMemset failed");
         }
-        uint32_t oneBatchFileSize = ReadOneBatch(testFile[index], inputBuff, g_batchSize);
+        uint32_t oneBatchFileSize = ReadOneBatchPicHwc(g_testFile, inputBuff, g_batchSize, modelWidth, modelHeight);
+
         if (oneBatchFileSize > devBufferSize) {
             ERROR_LOG("ReadOneBatch failed");
             return FAILED;
         }
 
-        void *imageInfoBuf = Utils::MemcpyToDeviceBuffer(inputBuff, devBufferSize, g_runMode);
+        void *imageInfoBuf = Utils::MemcpyToDeviceBuffer(inputBuff, devBufferSize, runMode_);
         if (imageInfoBuf == nullptr) {
             ERROR_LOG("MemcpyToDeviceBuffer failed");
             return FAILED;
         }
         
-        ret = g_modelProcess.CreateInput(imageInfoBuf, oneBatchFileSize);
+        ret = modelProcess_.CreateInput(imageInfoBuf, oneBatchFileSize);
         if (ret != SUCCESS) {
             ERROR_LOG("execute CreateInput failed");
             return FAILED;
         }
 
-        ret = g_modelProcess.ModelSetDynamicInfo(g_batchSize, g_channels, modelHeight, modelWidth);
+        ret = modelProcess_.ModelSetDynamicInfo(g_batchSize, modelHeight, modelWidth, g_channels);
+
         if (ret != ACL_SUCCESS) {
             ERROR_LOG("ModelSetDynamicInfo  failed, errorCode is %d", static_cast<int32_t>(ret));
             return FAILED;
         }
-        ret = g_modelProcess.Execute();
+        ret = modelProcess_.Execute();
         if (ret != SUCCESS) {
             ERROR_LOG("execute inference failed");
             return FAILED;
         }
-        g_modelProcess.DestroyInput();
-        g_modelProcess.OutputModelResult();
+        modelProcess_.DestroyInput();
+        modelProcess_.OutputModelResultSoftMax(g_classNum, g_batchSize);
+
     }
     aclrtFree(inputBuff);
-    g_modelProcess.DestroyOutput();
+    modelProcess_.DestroyOutput();
     return SUCCESS;
 }
 
@@ -226,32 +230,75 @@ uint32_t SampleProcess::ReadOneBatch(string inputImageDir, void *&inputBuff, int
     return batchFileSize;
 }
 
+uint32_t SampleProcess::ReadOneBatchPicHwc(string inputImageDir, void *&inputBuff, int batchSize, int resizeWidth, int resizeHeight)
+{
+    vector<string> fileVec;
+    Utils::GetAllFiles(inputImageDir, fileVec);
+    if (fileVec.empty()) {
+        INFO_LOG("Failed to deal all empty path=%s.", inputImageDir.c_str());
+        return FAILED;
+    }
+    uint32_t fileSize = 0;
+    uint32_t batchFileSize = 0;
+
+    for (uint8_t i = 0; i < batchSize; i++) {
+        cv::Mat frame, reiszedImage, rsImageF32;
+        frame=cv::imread(fileVec[i]);
+        INFO_LOG("read pic file , file name is %s", fileVec[i].c_str());
+        cv::resize(frame, reiszedImage, cv::Size(resizeWidth, resizeHeight));
+
+        cv::Mat shipRGB;
+        cv::cvtColor(reiszedImage, shipRGB, cv::COLOR_BGR2RGB);
+        shipRGB.convertTo(rsImageF32, CV_32FC3);
+
+        std::vector<cv::Mat> channels;
+        cv::split(rsImageF32, channels);
+        channels[2] -=123.0;
+        channels[1] -=117.0;
+        channels[0] -=104.0;
+        channels[2] *=0.0142857142857143;
+        channels[1] *=0.0142857142857143;
+        channels[0] *=0.0142857142857143;
+
+        cv::Mat result;
+        cv::merge(channels, result);
+        fileSize = ((resizeWidth) * (resizeHeight) * 3 * 4);
+        memcpy(static_cast<uint8_t *>(inputBuff),  result.data, fileSize);
+
+        inputBuff = inputBuff + fileSize;
+        batchFileSize = batchFileSize + fileSize;
+    }
+
+    inputBuff = inputBuff - batchFileSize;
+    INFO_LOG("Read Pic File batchFileSize = %d", batchFileSize);
+    return batchFileSize;
+}
 void SampleProcess::DestroyResource()
 {
     aclError ret;
-    if (g_stream != nullptr) {
-        ret = aclrtDestroyStream(g_stream);
+    if (stream_ != nullptr) {
+        ret = aclrtDestroyStream(stream_);
         if (ret != ACL_SUCCESS) {
             ERROR_LOG("destroy stream failed, errorCode = %d", static_cast<int32_t>(ret));
         }
-        g_stream = nullptr;
+        stream_ = nullptr;
     }
     INFO_LOG("end to destroy stream");
 
-    if (g_context != nullptr) {
-        ret = aclrtDestroyContext(g_context);
+    if (context_ != nullptr) {
+        ret = aclrtDestroyContext(context_);
         if (ret != ACL_SUCCESS) {
             ERROR_LOG("destroy context failed, errorCode = %d", static_cast<int32_t>(ret));
         }
-        g_context = nullptr;
+        context_ = nullptr;
     }
     INFO_LOG("end to destroy context");
 
-    ret = aclrtResetDevice(g_deviceId);
+    ret = aclrtResetDevice(deviceId_);
     if (ret != ACL_SUCCESS) {
-        ERROR_LOG("reset device %d failed, errorCode = %d", g_deviceId, static_cast<int32_t>(ret));
+        ERROR_LOG("reset device %d failed, errorCode = %d", deviceId_, static_cast<int32_t>(ret));
     }
-    INFO_LOG("end to reset device %d", g_deviceId);
+    INFO_LOG("end to reset device %d", deviceId_);
 
     ret = aclFinalize();
     if (ret != ACL_SUCCESS) {

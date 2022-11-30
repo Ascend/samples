@@ -86,8 +86,8 @@ class Preprocess(object):
         self._thread_exit()        
 
     def _process_frame(self, frame):
-        resized_image = self._dvpp.resize(frame, self._resize_width, 
-                                          self._resize_height)
+        resized_image = self._dvpp.crop_and_paste(frame, frame.width, frame.height, 
+                                                  self._resize_width, self._resize_height)
         if resized_image is None:
             log_error("dvpp resize image failed")
             return

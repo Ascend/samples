@@ -35,14 +35,65 @@ public:
     AclLiteError Init(const std::string& modelPath);
     AclLiteError Init(void *modelAddr, size_t modelSize);
     void DestroyResource();
+    /**
+    * @brief create model input (scenario: model with one input)
+    * @param [in]: input: model input data
+    * @param [in]: inputsize: Model input data size
+    * @return AclLiteError ACLLITE_OK: Created successfully
+    * Other: Failed to create
+    */
     AclLiteError CreateInput(void *input, uint32_t inputsize);
+    /**
+    * @brief Create model inputs (scenario: model with two inputs)
+    * @param [in]: input1: the first input data of the model
+    * @param [in]: input1size: The size of the first input data of the model
+    * @param [in]: input2: the second input data of the model
+    * @param [in]: input2size: The second input data size of the model
+    * @return AclLiteError ACLLITE_OK: Created successfully
+    * Other: Failed to create
+    */
     AclLiteError CreateInput(void *input1, uint32_t input1size,
                              void* input2, uint32_t input2size);
+    /**
+    * @brief Create Model Inputs (Scenario: Model with Multiple Inputs)
+    * @param [in]: inputData: model input data vector
+    * @return AclLiteError ACLLITE_OK: Created successfully
+    * Other: Failed to create
+    */
     AclLiteError CreateInput(std::vector<DataInfo>& inputData);
+    /**
+    * @brief Execute model inference.
+    * This interface is for the scenario where the model has only one input.
+    * The second and third parameters are used to construct the model input
+    * before sending it to inference.
+    * It supports the dynamic batch feature and is disabled by default.
+    * @param [in]: inferOutputs: model inference results
+    * @param [in]: data: model input data
+    * @param [in]: size: model input data size
+    * @param [in]: batchsize: The number of batches for
+    * a single inference of the dynamic batch model
+    * @return AclLiteError ACLLITE_OK: Inference successfully
+    * Other: Inference failed
+    */
     AclLiteError Execute(std::vector<InferenceOutput>& inferOutputs,
                          void *data, uint32_t size, uint32_t batchsize = 0);
+    /**
+    * @brief Execute model inference.
+    * @param [in]: inferOutputs: model inference results
+    * @return AclLiteError ACLLITE_OK: Inference successfully
+    * Other: Inference failed
+    */
     AclLiteError Execute(std::vector<InferenceOutput>& inferOutputs);
+    /**
+    * @brief Get the model input data size
+    * @param [in]: index: index. The mark is the first input of the model.
+    * The index starts from 0
+    * @return Return value model input data size:
+    * >0: Getting succeeded
+    * Other: Failed to get
+    */
     size_t GetModelInputSize(int index);
+    AclLiteError GetModelOutputInfo(std::vector<ModelOutputInfo>& modelOutputInfo);
     void DestroyInput();
 
 private:

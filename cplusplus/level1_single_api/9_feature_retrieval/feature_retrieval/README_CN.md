@@ -38,20 +38,20 @@
 
             ```
             export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux
-            export NPU_HOST_LIB=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux/acllib/lib64/stub
+            export NPU_HOST_LIB=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux/runtime/lib64/stub
             ```
 
         -   当运行环境操作系统架构时arm64时，配置示例如下所示：
 
             ```
             export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux
-            export NPU_HOST_LIB=$HOME/Ascend/ascend-toolkit/latest/arm64-linux/acllib/lib64/stub
+            export NPU_HOST_LIB=$HOME/Ascend/ascend-toolkit/latest/arm64-linux/runtime/lib64/stub
             ```
 
 
         ```
         说明：
-        使用ACLlib组件安装路径下“lib64/stub”目录下的*.so库，是为了编译基于AscendCL接口的代码逻辑时，不依赖其它组件的任何*.so库。编译通过后，在Host上运行应用时，会根据“LD_LIBRARY_PATH”环境变量链接到“acllib/lib64”目录下的*.so库，并自动链接到其他组件依赖的*.so库。
+        使用ACLlib组件安装路径下“lib64/stub”目录下的*.so库，是为了编译基于AscendCL接口的代码逻辑时，不依赖其它组件的任何*.so库。编译通过后，在Host上运行应用时，会根据“LD_LIBRARY_PATH”环境变量链接到“runtime/lib64”目录下的*.so库，并自动链接到其他组件依赖的*.so库。
         ```
     
     2.  运行环境上，设置运行应用时依赖AscendCL库文件的环境变量。
@@ -59,7 +59,7 @@
         如下为设置环境变量的示例，请将$HOME/Ascend/nnrt/latest替换为Ascend-cann-nnrt包的实际安装路径。
     
         ```
-        export LD_LIBRARY_PATH=$HOME/Ascend/nnrt/latest/acllib/lib64
+        export LD_LIBRARY_PATH=$HOME/Ascend/nnrt/latest/runtime/lib64
         ```
 
 ## 编译运行（Ascend 310P）<a name="section170442411445"></a>
@@ -93,7 +93,7 @@
     
         -   “../../../src”表示CMakeLists.txt文件所在的目录，请根据实际目录层级修改。
         -   DCMAKE\_CXX\_COMPILER：编译应用程序所用的编译器。
-        -   DCMAKE\_SKIP\_RPATH：**设置为TRUE**，代表不会将rpath信息（即NPU\_HOST\_LIB配置的路径）添加到编译生成的可执行文件中去。可执行文件运行时会自动搜索实际设置的LD\_LIBRARY\_PATH（“xxx/acllib/lib64”或“xxx/fwkacllib/lib64”）中的动态链接库。
+        -   DCMAKE\_SKIP\_RPATH：**设置为TRUE**，代表不会将rpath信息（即NPU\_HOST\_LIB配置的路径）添加到编译生成的可执行文件中去。可执行文件运行时会自动搜索实际设置的LD\_LIBRARY\_PATH（“xxx/runtime/lib64”或“xxx/compiler/lib64”）中的动态链接库。
     
     4.  执行如下命令，生成可执行文件。
     

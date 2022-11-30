@@ -51,19 +51,21 @@ public:
 
     Result Execute();
 
+    void OutputModelResultSoftMax(int classNum, int batchSize);
+
     void OutputModelResult();
 
 private:
-    bool g_isDevice;
-    uint32_t g_modelId;
-    size_t g_modelWorkSize;
-    size_t g_modelWeightSize;
-    void *g_modelWorkPtr;
-    void *g_modelWeightPtr;
-    bool g_loadFlag;
-    aclmdlDesc *g_modelDesc;
-    aclmdlDataset *g_input;
-    aclmdlDataset *g_output;
-    aclmdlIODims g_currentDims;
+    bool isDevice_;
+    uint32_t modelId_;
+    size_t modelWorkSize_;
+    size_t modelWeightSize_;
+    void *modelWorkPtr_;
+    void *modelWeightPtr_;
+    bool loadFlag_;
+    aclmdlDesc *modelDesc_;
+    aclmdlDataset *input_;
+    aclmdlDataset *output_;
+    aclmdlIODims currentDims_;
 };
 #endif

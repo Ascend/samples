@@ -92,9 +92,21 @@ The OpenCV installation varies depending on the running environment. Select the 
       sudo scp -r HwHiAiUser@X.X.X.X:/usr/include/opencv* /usr/include
       ```
 
-##### Installing FFmpeg and ACLLite
+##### Installing FFmpeg, x264 and ACLLite
 In the development environment, run the following commands to install the FFmpeg source code (the FFmpeg version installed by the APT is too early) and ACLLite: If the functions related to the ACLLite library are not used in the code, skip this step.
-  1. Download and install FFmpeg.   
+  1. Download and install x264。
+     ```
+     # Download x264
+     cd ${HOME}
+     git clone https://code.videolan.org/videolan/x264.git
+     cd x264
+     # Install x264
+     ./configure --enable-shared --disable-asm
+     make
+     sudo make install
+     sudo cp /usr/local/lib/libx264.so.164 /lib
+     ```
+  2. Download and install FFmpeg.   
      ```
      # Download FFmpeg.
      cd ${HOME}
@@ -102,20 +114,20 @@ In the development environment, run the following commands to install the FFmpeg
      tar -zxvf ffmpeg-4.1.3.tar.gz
      cd ffmpeg-4.1.3
      ```
-  2. Install FFmpeg.  
+  3. Install FFmpeg.  
       - **If the operating environment is x86**, run the following command to install FFmpeg:   
          ```
-         ./configure --enable-shared --enable-pic --enable-static --disable-x86asm --prefix=${THIRDPART_PATH}
+         ./configure --enable-shared --enable-pic --enable-static --disable-x86asm --enable-libx264 --enable-gpl --prefix=${THIRDPART_PATH}
          make -j8
          make install
          ```
       - **If the running environment is ARM**, run the following command to install FFmpeg:   
          ```
-         ./configure --enable-shared --enable-pic --enable-static --disable-x86asm --cross-prefix=aarch64-linux-gnu- --enable-cross-compile --arch=aarch64 --target-os=linux --prefix=${THIRDPART_PATH}
+         ./configure --enable-shared --enable-pic --enable-static --disable-x86asm --cross-prefix=aarch64-linux-gnu- --enable-cross-compile --arch=aarch64 --target-os=linux --enable-libx264 --enable-gpl --prefix=${THIRDPART_PATH}
          make -j8
          make install
          ```
-  3. Install the ACLLite and copy the result file to the running environment.   
+  4. Install the ACLLite and copy the result file to the running environment.   
      ```
      # Download the source code and install the Git.
      cd ${HOME}

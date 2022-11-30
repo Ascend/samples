@@ -6,8 +6,8 @@ endif
 
 
 LOCAL_DIR  := ./
-ATC_INCLUDE_DIR := $(ASCEND_PATH)/atc/include
-FWK_INCLUDE_DIR := $(ASCEND_PATH)/fwkacllib/include
+ATC_INCLUDE_DIR := $(ASCEND_PATH)/compiler/include
+FWK_INCLUDE_DIR := $(ASCEND_PATH)/compiler/include
 OPP_INCLUDE_DIR := $(ASCEND_PATH)/opp/op_proto/built-in/inc
 
 LOCAL_MODULE_NAME := ir_build
@@ -20,20 +20,20 @@ INCLUDES := -I $(ASCEND_PATH)/opp/op_proto/built-in/inc \
             -I $(ATC_INCLUDE_DIR)/graph \
             -I $(ATC_INCLUDE_DIR)/ge \
             -I $(ATC_INCLUDE_DIR)/parser \
-            -I $(ASCEND_PATH)/atc/include \
+            -I $(ASCEND_PATH)/compiler/include \
 
 FWK_INCLUDES := -I $(ASCEND_PATH)/opp/op_proto/built-in/inc \
             -I $(FWK_INCLUDE_DIR)/graph \
             -I $(FWK_INCLUDE_DIR)/ge \
             -I $(FWK_INCLUDE_DIR)/parser \
-            -I $(ASCEND_PATH)/fwkacllib/include \
+            -I $(ASCEND_PATH)/compiler/include \
 
-LIBS := -L ${ASCEND_PATH}/atc/lib64/stub \
+LIBS := -L ${ASCEND_PATH}/compiler/lib64/stub \
     -lgraph \
     -lge_compiler \
     -lfmk_parser \
 
-FWK_LIBS := -L ${ASCEND_PATH}/fwkacllib/lib64/stub \
+FWK_LIBS := -L ${ASCEND_PATH}/compiler/lib64/stub \
     -lgraph \
     -lge_runner \
     -lfmk_parser \

@@ -22,8 +22,12 @@
 #include <iostream>
 #include <mutex>
 #include <unistd.h>
+
+#ifdef USE_PRESENT
 #include "presenter/agent/presenter_channel.h"
 #include "presenter/agent/presenter_types.h"
+#endif
+
 #include "acl/acl.h"
 #include "VideoCapture.h"
 #include "AclLiteThread.h"

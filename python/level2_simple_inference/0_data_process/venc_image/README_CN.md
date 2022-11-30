@@ -54,9 +54,9 @@ venc_image
         ```
 
 -   **Atlas 200 AI加速模块（ RC场景）：**
-    1.  安装minirc版本的acllib包，以安装在默认路径“/usr/local/Ascend”为例：配置LD\_LIBRARY\_PATH，将“/usr/local/Ascend/acllib/lib64”加入到LD\_LIBRARY\_PATH中。命令示例如下：
+    1.  安装minirc版本的runtime包，以安装在默认路径“/usr/local/Ascend”为例：配置LD\_LIBRARY\_PATH，将“/usr/local/Ascend/runtime/lib64”加入到LD\_LIBRARY\_PATH中。命令示例如下：
         ```
-        export LD_LIBRARY_PATH=/usr/local/Ascend/acllib/lib64:$LD_LIBRARY_PATH
+        export LD_LIBRARY_PATH=/usr/local/Ascend/runtime/lib64:$LD_LIBRARY_PATH
         ```
 
     2.  获取aarch64架构的cann-nnrt软件包，在服务器上解压，在软件包所在目录下的解压命令如下：

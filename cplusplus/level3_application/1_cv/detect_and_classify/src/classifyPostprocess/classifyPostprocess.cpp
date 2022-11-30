@@ -92,7 +92,7 @@ AclLiteError ClassifyPostprocessThread::GetOutputDataType(std::string& outputTyp
     }
     if (outputType.empty() || (outputType != "video" &&
         outputType != "pic" && outputType != "presentagent" &&
-        outputType != "stdout")) {
+        outputType != "stdout" && outputType != "rtsp")) {
         ACLLITE_LOG_ERROR("device %d output type is invalid", channelId);
         return ACLLITE_ERROR;
     }
@@ -153,8 +153,16 @@ AclLiteError ClassifyPostprocessThread::Process(int msgId, shared_ptr<void> data
 
 AclLiteError ClassifyPostprocessThread::DisplayMsgSend(shared_ptr<CarDetectDataMsg> carDetectDataMsg)
 {
+    AclLiteError ret;
     while (1) {
-        AclLiteError ret = SendMessage(carDetectDataMsg->presentAgentDisplayThreadId, MSG_PRESENT_AGENT_DISPLAY, carDetectDataMsg);
+        if (outputType_ == "presentagent") {
+            #ifdef USE_PRESENT
+            ret = SendMessage(carDetectDataMsg->presentAgentDisplayThreadId, MSG_PRESENT_AGENT_DISPLAY, carDetectDataMsg);
+            #endif
+        }
+        if (outputType_ == "rtsp") {
+            ret = SendMessage(carDetectDataMsg->rtspDisplayThreadId, MSG_RTSP_DISPLAY, carDetectDataMsg);
+        }
         if (ret == ACLLITE_ERROR_ENQUEUE) {
             usleep(500);
             continue;
@@ -260,7 +268,7 @@ AclLiteError ClassifyPostprocessThread::InferOutputProcess(shared_ptr<CarDetectD
         if (outputType_ == "video") {
             outputVideo_.release();
         }
-        if (outputType_ != "presentagent") {
+        if (outputType_ != "presentagent" && outputType_ != "rtsp") {
             SendMessage(carDetectDataMsg->classifyPostThreadId, MSG_ENCODE_FINISH, nullptr);
             ACLLITE_LOG_INFO("it is lastframe in classifyPost without presentagent");
             return ACLLITE_OK;
@@ -277,7 +285,7 @@ AclLiteError ClassifyPostprocessThread::InferOutputProcess(shared_ptr<CarDetectD
                 ACLLITE_LOG_ERROR("Send last msg in classifyPost failed, error %d", (int)ret);
                 return ACLLITE_ERROR;
             }
-            ACLLITE_LOG_INFO("it is lastframe in classifyPost with presentagent");
+            ACLLITE_LOG_INFO("it is lastframe in classifyPost with presentagent/rtsp");
             return ACLLITE_OK;
         }
     }
@@ -287,7 +295,7 @@ AclLiteError ClassifyPostprocessThread::InferOutputProcess(shared_ptr<CarDetectD
         if (outputType_ == "video") {
             outputVideo_ << carDetectDataMsg->frame;
             return ACLLITE_OK;
-        } else if (outputType_ == "presentagent") {
+        } else if (outputType_ == "presentagent" || outputType_ == "rtsp") {
             AclLiteError ret = DisplayMsgSend(carDetectDataMsg);
             if (ret != ACLLITE_OK) {
                 ACLLITE_LOG_ERROR("Send msg failed, error %d", (int)ret);
@@ -328,6 +336,12 @@ AclLiteError ClassifyPostprocessThread::InferOutputProcess(shared_ptr<CarDetectD
         ret = SendImage(carDetectDataMsg);
         if (ret != ACLLITE_OK) {
             ACLLITE_LOG_ERROR("Send image to presentAgent failed, error %d", ret);
+            return ACLLITE_ERROR;
+        }
+    } else if (outputType_ == "rtsp") {
+        ret = SendImage(carDetectDataMsg);
+        if (ret != ACLLITE_OK) {
+            ACLLITE_LOG_ERROR("Send image to rtsp failed, error %d", ret);
             return ACLLITE_ERROR;
         }
     } else if (outputType_ == "stdout") {

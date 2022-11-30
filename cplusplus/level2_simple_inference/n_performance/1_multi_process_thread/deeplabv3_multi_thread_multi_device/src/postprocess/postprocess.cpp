@@ -1,5 +1,5 @@
-/**
-* Copyright 2020 Huawei Technologies Co., Ltd
+/*
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -12,10 +12,8 @@
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 * See the License for the specific language governing permissions and
 * limitations under the License.
-
-* File sample_process.cpp
-* Description: handle acl resource
 */
+
 #include <iostream>
 #include "acl/acl.h"
 #include "object_detection.h"
@@ -37,23 +35,27 @@ namespace {
         40, 156, 177, 49, 48, 79, 89, 122};
 }
 
-PostprocessThread::PostprocessThread(uint32_t outputWidth, uint32_t outputHeight) :
-outputWidth_(outputWidth), outputHeight_(outputHeight){
+PostprocessThread::PostprocessThread(uint32_t outputWidth, uint32_t outputHeight)
+    : g_outputWidth_(outputWidth), g_outputHeight_(outputHeight)
+{
 }
 
-PostprocessThread::~PostprocessThread() {
+PostprocessThread::~PostprocessThread()
+{
 }
 
-AclLiteError PostprocessThread::Init() {
+AclLiteError PostprocessThread::Init()
+{
     return ACLLITE_OK;
 }
 
-AclLiteError PostprocessThread::Process(int msgId, shared_ptr<void> data) {
+AclLiteError PostprocessThread::Process(int msgId, shared_ptr<void> data)
+{
     struct timespec time5 = {0, 0};
     struct timespec time6 = {0, 0};
     AclLiteError ret = ACLLITE_OK;
     shared_ptr<InferOutputMsg> inferMsg = static_pointer_cast<InferOutputMsg>(data);
-    switch(msgId) {
+    switch (msgId) {
         case MSG_INFER_OUTPUT:
             clock_gettime(CLOCK_REALTIME, &time5);
             InferOutputProcess(inferMsg);
@@ -71,42 +73,41 @@ AclLiteError PostprocessThread::Process(int msgId, shared_ptr<void> data) {
     return ret;
 }
 
-AclLiteError PostprocessThread::InferOutputProcess(shared_ptr<InferOutputMsg> inferMsg) {
-
+AclLiteError PostprocessThread::InferOutputProcess(shared_ptr<InferOutputMsg> inferMsg)
+{
     float* data = (float *)inferMsg->inferData[0].data.get();
-    if(data == nullptr){
+    if (data == nullptr) {
         ACLLITE_LOG_ERROR("inferoutput is null\n");
         return ACLLITE_ERROR;
     }
     uint32_t dataSize = inferMsg->inferData[0].size;
     uint32_t size = static_cast<uint32_t>(dataSize) / sizeof(float);
 
-    //读原图宽高
+    // 读原图宽高
     cv::Mat originImage = cv::imread(inferMsg->imageFileName, CV_LOAD_IMAGE_COLOR);
     cv::Mat resizeImage;
-    cv::resize(originImage, resizeImage, cv::Size(outputWidth_, outputHeight_));
+    cv::resize(originImage, resizeImage, cv::Size(g_outputWidth_, g_outputHeight_));
 
     int pos = inferMsg->imageFileName.find_last_of("/");
     string filename(inferMsg->imageFileName.substr(pos + 1));
     cv::Mat mat_b_up, mat_g_up, mat_r_up;
 
-    //对每一张单通道图
-    for(int i = 1; i <21; i++){
-        //保存为单通道图
-        for(int j=i * (size / 21); j < (i + 1) * (size / 21); j++){
-            if(data[j] > 0.5){
-                //data[j] = kColors[i % kColors.size()];
+    // 对每一张单通道图
+    for (int i = 1; i < 21; i++) {
+        // 保存为单通道图
+        for (int j = i * (size / 21); j < (i + 1) * (size / 21); j++) {
+            if (data[j] > 0.5) {
+                // data[j] = kColors[i % kColors.size()];
                 data[j] = 1;
-            }
-            else{
+            } else {
                 data[j] = 0;
             }
         }
         cv::Mat mat_a(513, 513, CV_32FC1, const_cast<float*>((float*)data) + (size / 21)*i);
         int iVal255 = cv::countNonZero(mat_a);
-        if (iVal255){
-            cv::Mat mat_a_up(outputHeight_, outputWidth_, CV_32FC1);
-            cv::resize(mat_a, mat_a_up, cv::Size(outputWidth_, outputHeight_));        //现在拿到一个原图掩码
+        if (iVal255) {
+            cv::Mat mat_a_up(g_outputHeight_, g_outputWidth_, CV_32FC1);
+            cv::resize(mat_a, mat_a_up, cv::Size(g_outputWidth_, g_outputHeight_));        // 现在拿到一个原图掩码
 
             cv::multiply(mat_a_up, mat_a_up, mat_b_up, kColors_1[i % kColors_1.size()]);
             cv::multiply(mat_a_up, mat_a_up, mat_g_up, kColors_2[i % kColors_2.size()]);
@@ -117,7 +118,7 @@ AclLiteError PostprocessThread::InferOutputProcess(shared_ptr<InferOutputMsg> in
             cv::Mat newChannels[3] = { mat_b_up, mat_g_up, mat_r_up };
             cv::Mat resultImage;
             cv::merge(newChannels, 3, resultImage);
-            cv::addWeighted(resizeImage,1,resultImage,1,0,resizeImage);
+            cv::addWeighted(resizeImage, 1, resultImage, 1, 0, resizeImage);
         }
     }
 
@@ -129,4 +130,3 @@ AclLiteError PostprocessThread::InferOutputProcess(shared_ptr<InferOutputMsg> in
 
     return ACLLITE_OK;
 }
-

@@ -1,12 +1,22 @@
-/**
-* @file post_process.h
+/*
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
 *
-* Copyright (C) 2020. Huawei Technologies Co., Ltd. All rights reserved.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+
+* http://www.apache.org/licenses/LICENSE-2.0
+
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
 */
+
+#ifndef YOLOV4_COCO_DETECTION_PICTURE_INC_POST_PROCESS_H
+#define YOLOV4_COCO_DETECTION_PICTURE_INC_POST_PROCESS_H
+
 #pragma once
 
 #include <iostream>
@@ -33,19 +43,23 @@ public:
     * @param [in] yScale: ouput buffer for y scale
     * @param [in] originImage: origin image path
     */
-    PostProcess(void *outputClass, void *outputBox, float xScale, float yScale, std::string &originImage) :
-            outputClass_(outputClass), outputBox_(outputBox), xScale_(xScale), yScale_(yScale),
-            originImage_(originImage) {}
+    PostProcess(void *outputClass, void *outputBox, float xScale, float yScale, std::string &originImage)
+    : g_outputClass_(outputClass), g_outputBox_(outputBox), g_xScale_(xScale), g_yScale_(yScale),
+      g_originImage_(originImage)
+    {
+    }
 
     /**
     * @brief Constructor
     */
-    PostProcess() : outputClass_(nullptr), outputBox_(nullptr), xScale_(0), yScale_(0), originImage_("") {}
+    PostProcess() : g_outputClass_(nullptr), g_outputBox_(nullptr), g_xScale_(0), g_yScale_(0), g_originImage_("") {}
 
     /**
     * @brief Destructor
     */
-    virtual ~PostProcess() {}
+    virtual ~PostProcess()
+    {
+    }
 
     /**
     * @brief sort box
@@ -76,9 +90,11 @@ private:
 
     void DrawBoundBoxToImage(const std::vector <BBox> &result);
 
-    void *outputClass_;
-    void *outputBox_;
-    float xScale_;
-    float yScale_;
-    std::string originImage_;
+    void *g_outputClass_;
+    void *g_outputBox_;
+    float g_xScale_;
+    float g_yScale_;
+    std::string g_originImage_;
 };
+
+#endif

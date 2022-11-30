@@ -64,13 +64,13 @@
 
     3. 设置环境变量，配置程序编译依赖的头文件与库文件路径。
   
-       设置以下环境变量后，编译脚本会根据“{DDK_PATH}环境变量值/acllib/include/acl”目录查找编译依赖的头文件，根据{NPU_HOST_LIB}环境变量指向的目录查找编译依赖的库文件。“$HOME/Ascend”请替换“Ascend-cann-toolkit”包的实际安装路径。
+       设置以下环境变量后，编译脚本会根据“{DDK_PATH}环境变量值/runtime/include/acl”目录查找编译依赖的头文件，根据{NPU_HOST_LIB}环境变量指向的目录查找编译依赖的库文件。“$HOME/Ascend”请替换“Ascend-cann-toolkit”包的实际安装路径。
   
        -   当开发环境与运行环境的操作系统架构相同时，配置示例如下所示：
   
            ```
            export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest
-           export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
+           export NPU_HOST_LIB=$DDK_PATH/runtime/lib64/stub
            ```
   
        -   当开发环境与运行环境的操作系统架构不同时，配置示例如下所示：
@@ -79,7 +79,7 @@
   
            ```
            export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux
-           export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
+           export NPU_HOST_LIB=$DDK_PATH/runtime/lib64/stub
            ```
        
        您可以登录对应的环境，执行“uname -a”命令查询其操作系统的架构。
@@ -169,7 +169,7 @@
 
         执行可执行文件成功后，同时会在main文件同级的目录下生成结果文件，便于后期查看。
 
-        cropName0、cropName1、cropName2、cropName3、cropName4、cropName5、cropName6、cropName7这八张图片是从输入图片dvpp\_vpc\_1920×1980\_nv12.yuv中抠出的子图。
+        cropName0、cropName1、cropName2、cropName3、cropName4、cropName5、cropName6、cropName7这八张图片是从输入图片dvpp\_vpc\_1920×1080\_nv12.yuv中抠出的子图。
 
 
 ## 关键接口介绍<a name="section6271153719394"></a>

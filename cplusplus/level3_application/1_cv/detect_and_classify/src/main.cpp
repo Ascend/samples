@@ -22,7 +22,7 @@
 #include <dirent.h>
 #include <sys/time.h>
 #include <regex>
-
+#include <map>
 #include "AclLiteResource.h"
 #include "AclLiteApp.h"
 #include "AclLiteThread.h"
@@ -35,12 +35,21 @@
 #include "detectPostprocess/detectPostprocess.h"
 #include "classifyPreprocess/classifyPreprocess.h"
 #include "classifyPostprocess/classifyPostprocess.h"
+
+#ifdef USE_PRESENT
 #include "presentagentDisplay/presentagentDisplay.h"
+#endif
+
+#include "pushrtsp/pushrtspthread.h"
 
 #define NUM (1)
 #define INVALID (-1)
 using namespace std;
+
+#ifdef USE_PRESENT
 using namespace ascend::presenter;
+#endif
+
 struct timespec time0 = {0, 0};
 struct timespec time1 = {0, 0};
 
@@ -51,7 +60,12 @@ const char* kConfigFile = "../scripts/params.conf";
 const char* kPresentagentFile = "../scripts/present_start.conf";
 const string kRegexDeviceNum = "^device_num+$";
 const string kRegexRtspNumPerDevice = "^RtspNumPerDevice+$";
+string kRtspUrl;
+
+#ifdef USE_PRESENT
 Channel* kPresenterChannel;
+#endif
+
 aclrtContext context;
 aclrtRunMode runMode;
 vector<aclrtContext> kContext;
@@ -71,6 +85,7 @@ int MainThreadProcess(uint32_t msgId,
     return ACLLITE_OK;
 }
 
+#ifdef USE_PRESENT
 AclLiteError InitPresentAgent()
 {
     PresenterErrorCode ret = OpenChannelByConfig(kPresenterChannel, kPresentagentFile);
@@ -81,6 +96,7 @@ AclLiteError InitPresentAgent()
     ACLLITE_LOG_INFO("Present Agent open success");
     return ACLLITE_OK;
 }
+#endif
 
 AclLiteError ParseConfig(uint32_t& deviceNum, uint32_t& rtspNumPerDevice)
 {
@@ -139,6 +155,32 @@ void SetDisplay()
     }
 }
 
+bool readOutputTypeConfig(int channelId)
+{
+    map<string, string> config;
+    if (!ReadConfig(config, kConfigFile)) {
+        ACLLITE_LOG_ERROR("read config fail in SetDisplay");
+    }
+    string outputType;
+    string outputTypeKey = "outputType_" + to_string(channelId);
+    map<string, string>::const_iterator mIter = config.begin();
+    for (; mIter != config.end(); ++mIter) {
+        if (mIter->first == "URL") {
+            kRtspUrl.assign(mIter->second.c_str());
+        }
+        if (mIter->first == outputTypeKey) {
+            outputType.assign(mIter->second.c_str());
+            ACLLITE_LOG_INFO("channelId %d, outputType %s ", channelId, outputType.c_str());
+            if (!outputType.empty() && outputType == "rtsp") {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+    return false;
+}
+
 void CreateThreadInstance(vector<AclLiteThreadParam>& threadTbl, int32_t deviceId,
                           aclrtContext& context, aclrtRunMode& runMode, int rtspNumPerDevice)
 {
@@ -181,6 +223,16 @@ void CreateThreadInstance(vector<AclLiteThreadParam>& threadTbl, int32_t deviceI
         classifyPostThreadParam.context = context;
         classifyPostThreadParam.runMode = runMode;
         threadTbl.push_back(classifyPostThreadParam);
+
+        if (readOutputTypeConfig(channelId)) {
+            AclLiteThreadParam rtspDisplayThreadParam;
+            rtspDisplayThreadParam.threadInst = new PushRtspThread(kRtspUrl + to_string(channelId));
+            string RtspDisplayName = kRtspDisplayName + to_string(channelId);
+            rtspDisplayThreadParam.threadInstName.assign(RtspDisplayName.c_str());
+            rtspDisplayThreadParam.context = context;
+            rtspDisplayThreadParam.runMode = runMode;
+            threadTbl.push_back(rtspDisplayThreadParam);
+        }
     }
 
     AclLiteThreadParam InferParam;
@@ -205,20 +257,16 @@ void CreateALLThreadInstance(vector<AclLiteThreadParam>& threadTbl, AclLiteResou
     kExitCount = deviceNum * rtspNumPerDevice;
 
     for (int32_t i=0; i < deviceNum; i++) {
-        ret = aclrtSetDevice(i);
-        if (ret != ACL_ERROR_NONE) {
-            ACLLITE_LOG_ERROR("Acl open device %d failed", i);
-            return;
-        }
-        ret = aclrtCreateContext(&context, i);
-        if (ret != ACL_ERROR_NONE) {
-            ACLLITE_LOG_ERROR("Create acl context failed, error:%d", ret);
+        context = aclDev.GetContextByDevice(i);
+        if (context == nullptr) {
+            ACLLITE_LOG_ERROR("Get acl context in device %d failed", i);
             return;
         }
         kContext.push_back(context);
         CreateThreadInstance(threadTbl, i, context, runMode, rtspNumPerDevice);
     }
 
+    #ifdef USE_PRESENT
     if (kDisplay) {
         AclLiteThreadParam presentAgentDisplayThreadParam;
         presentAgentDisplayThreadParam.threadInst = new PresentAgentDisplayThread(kPresenterChannel);
@@ -227,6 +275,7 @@ void CreateALLThreadInstance(vector<AclLiteThreadParam>& threadTbl, AclLiteResou
         presentAgentDisplayThreadParam.runMode = runMode;
         threadTbl.push_back(presentAgentDisplayThreadParam);
     }
+    #endif
 }
 
 void ExitApp(AclLiteApp& app, vector<AclLiteThreadParam>& threadTbl)
@@ -280,12 +329,15 @@ int main()
         ACLLITE_LOG_ERROR("Init app failed");
     }
     SetDisplay();
+    
+    #ifdef USE_PRESENT
     if (kDisplay) {
         ret = InitPresentAgent();
         if (ret != ACLLITE_OK) {
             ACLLITE_LOG_ERROR("Init present agent failed");
         }
     }
+    #endif
 
     StartApp(aclDev);
     return ACLLITE_OK;

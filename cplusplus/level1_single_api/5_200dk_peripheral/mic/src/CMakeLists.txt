@@ -24,7 +24,7 @@ endif()
 
 # Header path
 include_directories(
-    $ENV{INSTALL_DIR}/acllib/include/
+    $ENV{INSTALL_DIR}/runtime/include/
     ../inc/
     $ENV{INSTALL_DIR}/driver/
 )

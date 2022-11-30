@@ -58,7 +58,7 @@
 
 -   算子实现
 
-    MatmulTik算子的实现代码请参见[matmul\_tik.py](../tbe/custom_impl/matmul_tik.py)。
+    MatmulTik算子的实现代码请参见[matmul\_tik.py](../tbe/impl/matmul_tik.py)。
 
 -   算子原型定义
 

@@ -1,16 +1,23 @@
-/**
-* @file utils.cpp
+/*
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
 *
-* Copyright (C) 2020. Huawei Technologies Co., Ltd. All rights reserved.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+
+* http://www.apache.org/licenses/LICENSE-2.0
+
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
 */
-#include "utils.h"
+
 #include <iostream>
 #include <fstream>
 #include <cstring>
+#include "utils.h"
 
 #if defined(_MSC_VER)
 #include <windows.h>
@@ -23,7 +30,8 @@
 
 bool RunStatus::isDevice_ = false;
 
-Result Utils::ReadBinFile(PicDesc &picDesc, void *&inputBuff, uint32_t &fileSize) {
+Result Utils::ReadBinFile(PicDesc &picDesc, void *&inputBuff, uint32_t &fileSize)
+{
     std::string fileName = picDesc.picName;
     if (CheckPathIsFile(fileName) == FAILED) {
         ERROR_LOG("%s is not a file", fileName.c_str());
@@ -79,7 +87,8 @@ Result Utils::ReadBinFile(PicDesc &picDesc, void *&inputBuff, uint32_t &fileSize
     return SUCCESS;
 }
 
-Result Utils::GetDeviceBufferOfPicture(PicDesc &picDesc, void *&picDevBuffer, uint32_t &devPicBufferSize) {
+Result Utils::GetDeviceBufferOfPicture(PicDesc &picDesc, void *&picDevBuffer, uint32_t &devPicBufferSize)
+{
     if (picDesc.picName.empty()) {
         ERROR_LOG("picture file name is empty");
         return FAILED;
@@ -141,7 +150,8 @@ Result Utils::GetDeviceBufferOfPicture(PicDesc &picDesc, void *&picDevBuffer, ui
     return SUCCESS;
 }
 
-Result Utils::CheckPathIsFile(const std::string &fileName) {
+Result Utils::CheckPathIsFile(const std::string &fileName)
+{
 #if defined(_MSC_VER)
     DWORD bRet = GetFileAttributes((LPCSTR)fileName.c_str());
     if (bRet == FILE_ATTRIBUTE_DIRECTORY) {

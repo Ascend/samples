@@ -63,7 +63,7 @@ Check whether the following requirements are met. If not, perform operations acc
 3. Obtain the test image required by the sample.
     ```
     # Run the following commands to go to the data folder of the sample and download the corresponding test image:
-    cd $HOME/samples/python/contrib/portrait_picture/model
+    cd $HOME/samples/python/contrib/portrait_picture/data
     wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/Portrait/background.jpg
     wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/Portrait/ori.jpg
     ```

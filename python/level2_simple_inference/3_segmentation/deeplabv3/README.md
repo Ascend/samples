@@ -63,7 +63,7 @@ Check whether the following requirements are met. If not, perform operations acc
     ```
     Run the following commands to go to the **data** folder of the sample and download the corresponding test image:
     cd ${HOME}/samples/python/level2_simple_inference/3_segmentation/deeplabv3/data
-    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/deeplabv3/test_image/test.jpg
+    wget https://share123.obs.cn-north-4.myhuaweicloud.com/AclBot/issue/test.jpg
     cd ../src
     ```
 
@@ -90,7 +90,7 @@ Check whether the following requirements are met. If not, perform operations acc
 ### Result Viewing
 
 After the running is complete, an inferred image is generated in the **out/output** directory of the sample project. The comparison is as follows:
-![Input Image Description](../figures/e7aa5a7dfdd1f9d6f7a771bbf147e7c.png)
+![Input Image Description](https://share123.obs.cn-north-4.myhuaweicloud.com/AclBot/issue/result.jpg)
 
 ### Common Errors
 For details about how to rectify the errors, see [Troubleshooting](https://github.com/Ascend/samples/wikis/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D/%E4%BB%8B%E7%BB%8D). If an error is not included in Wiki, submit an issue to the **samples** repository.

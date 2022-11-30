@@ -29,8 +29,9 @@ python3.7.5 ./src/download_models.py --close_certificate_verify
 
 ```bash
 cd data
-mkdir image
+mkdir image && cd image
 wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/amct_acl/classification/calibration.rar
+unrar e calibration.rar
 ```
 
 > 如果环境中没有安装 unrar 工具，可以通过以下命令获取：
@@ -39,24 +40,12 @@ wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/amct_acl/classifica
 > sudo apt-get install unrar
 > ```
 
-执行如下命令将 image 目录下的 jpg 图片转换为 bin 格式数据集：
-
-```bash
-python3.7.5 ./src/process_data.py
-```
-
-执行完成后，在 [image](./data/image/) 目录生成 calibration.bin 数据集。
-
 ## 3. 执行量化
 
-执行如下命令进行量化：
+切换到该样例根目录下，执行如下命令进行量化：
 
 ```bash
 bash ./scripts/run_calibration.sh 
-```
-
-```bash
-bash ./scripts/run_customized_calibration.sh 
 ```
 
 
@@ -65,7 +54,7 @@ bash ./scripts/run_customized_calibration.sh
 量化成功后，在当前目录生成如下文件：
 
 + [amct_log](./amct_log/)
-  + [amct_acl.log](./amct_log/amct_acl.log): 量化日志文件，记录昇腾模型压缩工具量化过程的日志信息。
+  + [amct_caffe.log](./amct_log/amct_caffe.log): 量化日志文件，记录昇腾模型压缩工具量化过程的日志信息。
 + [results](./results/)
   + [resnet50__deploy_model.prototxt](./results/resnet50__deploy_model.prototxt): 量化后的部署模型文件。
   + [resnet50__deploy_weights.caffemodel](./results/resnet50__deploy_weights.caffemodel): 量化后的部署权重文件。

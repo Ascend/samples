@@ -1,5 +1,5 @@
-/**
-* Copyright 2020 Huawei Technologies Co., Ltd
+/*
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -12,10 +12,8 @@
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 * See the License for the specific language governing permissions and
 * limitations under the License.
-
-* File sample_process.cpp
-* Description: handle acl resource
 */
+
 #include <iostream>
 #include "acl/acl.h"
 #include "object_detection.h"
@@ -25,29 +23,32 @@
 
 using namespace std;
 
-PostprocessThread::PostprocessThread(uint32_t outputWidth, uint32_t outputHeight) :
-outputWidth_(outputWidth), outputHeight_(outputHeight){
+PostprocessThread::PostprocessThread(uint32_t outputWidth, uint32_t outputHeight)
+    : g_outputWidth_(outputWidth), g_outputHeight_(outputHeight)
+{
 }
 
-PostprocessThread::~PostprocessThread() {
+PostprocessThread::~PostprocessThread()
+{
 }
 
-AclLiteError PostprocessThread::Init() {
+AclLiteError PostprocessThread::Init()
+{
     return ACLLITE_OK;
 }
 
-AclLiteError PostprocessThread::Process(int msgId, shared_ptr<void> data) {
+AclLiteError PostprocessThread::Process(int msgId, shared_ptr<void> data)
+{
     struct timespec time5 = {0, 0};
     struct timespec time6 = {0, 0};
     AclLiteError ret = ACLLITE_OK;
     shared_ptr<PostOutputMsg> postOutputMsg = make_shared<PostOutputMsg>();
-    switch(msgId) {
+    switch (msgId) {
         case MSG_INFER_OUTPUT:
             clock_gettime(CLOCK_REALTIME, &time5);
             InferOutputProcess(static_pointer_cast<InferOutputMsg>(data), postOutputMsg);
             MsgSend(static_pointer_cast<InferOutputMsg>(data), postOutputMsg);
             clock_gettime(CLOCK_REALTIME, &time6);
-            //cout << "postprocess time is: " << (time6.tv_sec - time5.tv_sec)*1000 + (time6.tv_nsec - time5.tv_nsec)/1000000 << "ms" << endl;
             break;
         default:
             ACLLITE_LOG_INFO("PostprocessThread thread ignore msg %d", msgId);
@@ -58,25 +59,21 @@ AclLiteError PostprocessThread::Process(int msgId, shared_ptr<void> data) {
 }
 
 AclLiteError PostprocessThread::MsgSend(shared_ptr<InferOutputMsg> inferMsg,
-                                       shared_ptr<PostOutputMsg> &postOutputMsg) {
+                                        shared_ptr<PostOutputMsg> &postOutputMsg)
+{
     int sendFlag = MSG_VIDEO_ENCODE;
-    if(inferMsg->isLastFrame == 1){
+    int timep = 500;
+    if (inferMsg->isLastFrame == 1) {
         sendFlag = MSG_ENCODE_FINISH;
     }
-    while(1)
-    {
+    while (1) {
         AclLiteError ret = SendMessage(inferMsg->videoProcessThreadId, sendFlag, postOutputMsg);
-        if(ret == ACLLITE_ERROR_ENQUEUE)
-        {
-            usleep(500);
+        if (ret == ACLLITE_ERROR_ENQUEUE) {
+            usleep(timep);
             continue;
-        }
-        else if(ret == ACLLITE_OK)
-        {
+        } else if (ret == ACLLITE_OK) {
             break;
-        }
-        else
-        {
+        } else {
             ACLLITE_LOG_ERROR("Send read frame message failed, error %d", ret);
             return ret;
         }
@@ -86,22 +83,24 @@ AclLiteError PostprocessThread::MsgSend(shared_ptr<InferOutputMsg> inferMsg,
 }
 
 AclLiteError PostprocessThread::InferOutputProcess(shared_ptr<InferOutputMsg> inferMsg,
-                                                shared_ptr<PostOutputMsg> &postOutputMsg) {
+                                                   shared_ptr<PostOutputMsg> &postOutputMsg)
+{
     postOutputMsg->isLastFrame = inferMsg->isLastFrame;
     postOutputMsg->channelId = inferMsg->channelId;
     postOutputMsg->frameNum = inferMsg->frameNum;
-    if (postOutputMsg->isLastFrame) 
+    if (postOutputMsg->isLastFrame)
         return ACLLITE_OK;
 
     void* data = inferMsg->inferData[0].data.get();
-    if(data == nullptr){
+    if (data == nullptr) {
         ACLLITE_LOG_ERROR("inferoutput is null\n");
         return ACLLITE_ERROR;
     }
     uint32_t dataSize = inferMsg->inferData[0].size;
     uint32_t size = static_cast<uint32_t>(dataSize) / sizeof(float);
 
-    cv::Mat mat_result(inferMsg->resizedMat.height, inferMsg->resizedMat.width, CV_32FC3, const_cast<float*>((float*)data));
+    cv::Mat mat_result(inferMsg->resizedMat.height, inferMsg->resizedMat.width,
+                       CV_32FC3, const_cast<float*>((float*)data));
 
     mat_result = (mat_result + 1) * 127.5;
     cv::Mat resultImage;

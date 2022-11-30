@@ -71,13 +71,15 @@ class CrowdCount(object):
         Post-processing, analysis of inference results
         """
         orig = cv2.imread(image_file, 1)
-        orig = cv2.resize(orig, (image.width, image.height))
+        w = int(MODEL_HEIGHT * image.width / image.height)
+        h = MODEL_HEIGHT
+        orig = cv2.resize(orig, (w, h))
         data = infer_output[0]
         vals = data.flatten()
         res = np.sum(vals, axis=0)
         result = round(res / 1000.0)
         data_2 = data.reshape(800, 1408)
-        heatMap = data_2[:image.height, :image.width]
+        heatMap = data_2[:h, :w]
         heatMap = heatMap.astype(np.uint8)
         heatMap = cv2.GaussianBlur(heatMap, (0, 0), 5, 5, cv2.BORDER_DEFAULT)
         cv2.normalize(heatMap, heatMap, 0, 255, cv2.NORM_MINMAX, cv2.CV_8UC1)

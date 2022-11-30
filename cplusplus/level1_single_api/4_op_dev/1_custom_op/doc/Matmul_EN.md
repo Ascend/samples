@@ -52,7 +52,7 @@ Implemented by using TIK, the Matmul operator performs matrix multiplication on 
 
 -   Operator Implementation
 
-    For details about the implementation code of the MatmulTik operator, see  [matmul\_tik.py](../tbe/custom_impl/matmul_tik.py).
+    For details about the implementation code of the MatmulTik operator, see  [matmul\_tik.py](../tbe/impl/matmul_tik.py).
 
 -   Operator Prototype Definition
 

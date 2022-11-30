@@ -24,10 +24,10 @@ function downloadData() {
 function setBuildEnv() {
     if [[ ${version} = "c73" ]] || [[ ${version} = "C73" ]];then
         export DDK_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/arm64-linux_gcc7.3.0
-        export NPU_HOST_LIB=${DDK_PATH}/acllib/lib64/stub
+        export NPU_HOST_LIB=${DDK_PATH}/runtime/lib64/stub
     elif [[ ${version} = "c75" ]] || [[ ${version} = "C75" ]];then
         export DDK_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/arm64-linux
-        export NPU_HOST_LIB=${DDK_PATH}/acllib/lib64/stub
+        export NPU_HOST_LIB=${DDK_PATH}/runtime/lib64/stub
     fi
 
     return 0
@@ -78,7 +78,7 @@ function main() {
 
     # 重新配置程序运行所需的环境变量
     export LD_LIBRARY_PATH=
-    export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/acllib/lib64:$LD_LIBRARY_PATH
+    export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/runtime/lib64:$LD_LIBRARY_PATH
 
     # 运行程序
     ./main --inImgName ../data/dvpp_vpc_1920x1080_nv12.yuv --inFormat 1 --inWidth 1920 --inHeight 1080 --cLeftOffset 0 --cRightOffset 5 --cTopOffset 0 --cBottomOffset 5 --outImgName output_224_224.yuv --outFormat 1 --outWidth 224 --outHeight 224 --pLeftOffset 0 --pRightOffset 223 --pTopOffset 0 --pBottomOffset 223 > result.txt

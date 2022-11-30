@@ -108,6 +108,13 @@
 #define ALIGN_UP16(num) ALIGN_UP(num, 16)
 
 /**
+ * @brief calculate number align with 64
+ * @param [in]: num: the original number that to aligned
+ * @return the number after aligned
+ */
+#define ALIGN_UP64(num) ALIGN_UP(num, 64)
+
+/**
  * @brief calculate number align with 128
  * @param [in]: num: the original number that to aligned
  * @return the number after aligned

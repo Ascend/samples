@@ -1,6 +1,7 @@
+/*
+* Copyright (C) Huawei Technologies Co., Ltd. 2020-2022. All rights reserved.
+*/
 /**
-* Copyright 2020 Huawei Technologies Co., Ltd
-*
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
 * You may obtain a copy of the License at
@@ -12,15 +13,18 @@
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 * See the License for the specific language governing permissions and
 * limitations under the License.
+
+* File sample_process.cpp
+* Description: handle acl resource
 */
 
 #include <iostream>
-#include "main.h"
-#include "acl/acl.h"
 #include <fstream>
 #include <dirent.h>
 #include <cstring>
 #include <sys/stat.h>
+#include "main.h"
+#include "acl/acl.h"
 #include "acl/ops/acl_dvpp.h"
 
 using namespace std;
@@ -50,7 +54,7 @@ void* GetDeviceBufferOfPicture(PicDesc &picDesc, uint32_t &devPicBufferSize)
         ERROR_LOG("need read file %s %u bytes, but only %zu readed",
         picDesc.picName.c_str(), inputBuffSize, readSize);
         delete[] inputBuff;
-		fclose(fp); 
+		fclose(fp);
         return nullptr;
     }
 
@@ -61,7 +65,7 @@ void* GetDeviceBufferOfPicture(PicDesc &picDesc, uint32_t &devPicBufferSize)
     if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("get jpeg image info failed, errorCode is %d", static_cast<int32_t>(aclRet));
         delete[] inputBuff;
-		fclose(fp); 
+		fclose(fp);
         return nullptr;
     }
 
@@ -73,7 +77,7 @@ void* GetDeviceBufferOfPicture(PicDesc &picDesc, uint32_t &devPicBufferSize)
     if (aclRet != ACL_SUCCESS) {
         ERROR_LOG("get jpeg decode size failed, errorCode is %d", static_cast<int32_t>(aclRet));
         delete[] inputBuff;
-		fclose(fp); 
+		fclose(fp);
         return nullptr;
     }    
 
@@ -82,7 +86,7 @@ void* GetDeviceBufferOfPicture(PicDesc &picDesc, uint32_t &devPicBufferSize)
     if (ret !=  ACL_SUCCESS) {
         delete[] inputBuff;
         ERROR_LOG("malloc device data buffer failed, aclRet is %d", ret);
-		fclose(fp); 
+		fclose(fp);
         return nullptr;
     }
 
@@ -97,13 +101,13 @@ void* GetDeviceBufferOfPicture(PicDesc &picDesc, uint32_t &devPicBufferSize)
         inputBuffSize);
         acldvppFree(inBufferDev);
         delete[] inputBuff;
-		fclose(fp); 
+		fclose(fp);
         return nullptr;
     }
 
     delete[] inputBuff;
     devPicBufferSize = inputBuffSize;
-	fclose(fp); 
+	fclose(fp);
     return inBufferDev;
 }
 
@@ -127,7 +131,7 @@ Result SaveDvppOutputData(const char *fileName, const void *devPtr, uint32_t dat
         aclError aclRet = aclrtMallocHost(&hostPtr, dataSize);
         if (aclRet != ACL_SUCCESS) {
             ERROR_LOG("malloc host data buffer failed, aclRet is %d", aclRet);
-			fclose(outFileFp); 
+			fclose(outFileFp);
             return FAILED;
         }
 
@@ -135,7 +139,7 @@ Result SaveDvppOutputData(const char *fileName, const void *devPtr, uint32_t dat
         if (aclRet != ACL_SUCCESS) {
             ERROR_LOG("dvpp output memcpy to host failed, aclRet is %d", aclRet);
             (void)aclrtFreeHost(hostPtr);
-			fclose(outFileFp); 
+			fclose(outFileFp);
             return FAILED;
         }
         size_t writeSize = fwrite(hostPtr, sizeof(char), dataSize, outFileFp);
@@ -143,7 +147,7 @@ Result SaveDvppOutputData(const char *fileName, const void *devPtr, uint32_t dat
             ERROR_LOG("need write %u bytes to %s, but only write %zu bytes.",
             dataSize, fileName, writeSize);
             (void)aclrtFreeHost(hostPtr);
-			fclose(outFileFp); 
+			fclose(outFileFp);
             return FAILED;
         }
         (void)aclrtFreeHost(hostPtr);
@@ -153,7 +157,7 @@ Result SaveDvppOutputData(const char *fileName, const void *devPtr, uint32_t dat
         if (writeSize != dataSize) {
             ERROR_LOG("need write %u bytes to %s, but only write %zu bytes.",
             dataSize, fileName, writeSize);
-			fclose(outFileFp); 
+			fclose(outFileFp);
             return FAILED;
         }
     }
@@ -248,7 +252,7 @@ int main(int argc, char *argv[]) {
     SetInput(picDevBuffer, devPicBufferSize, testPic.width, testPic.height);
 
     // InitDecodeOutputDesc
-    uint32_t decodeOutWidthStride = (inputWidth_ + 127) / 128 * 128; // 128-byte alignment
+    uint32_t decodeOutWidthStride = (inputWidth_ + 63) / 64 * 64; // 64-byte alignment
     uint32_t decodeOutHeightStride = (inputHeight_ + 15) / 16 * 16; // 16-byte alignment
 
     // use acldvppJpegPredictDecSize to get output size.

@@ -47,9 +47,9 @@ DVPP中的JPEGD功能模块，实现.jpg、.jpeg、.JPG、.JPEG图片的解码�
 
 ## 准备测试数据<a name="section13133171616100"></a>
 
-请从[https://github.com/Ascend/tools/tree/master/dvpp_sample_input_data](https://github.com/Ascend/tools/tree/master/dvpp_sample_input_data)获取该样例的输入图片dvpp_jpegd_decode_1920x1080.jpg，并放至"tinyjpegd/data"目录下。
+请单击以下链接，获取该样例的测试图片数据。
 
-如果使用wget方式下载图片或视频，请先进入[https://github.com/Ascend/tools/tree/master/dvpp_sample_input_data](https://github.com/Ascend/tools/tree/master/dvpp_sample_input_data)页面，单击对应的图片或视频，进入查看图片或视频的页面后，单击页面右侧的“原始数据”，在浏览器的地址栏中才是获取图片或视频的地址，再使用wget命令从该地址中获取图片或视频。
+[dvpp_jpegd_decode_1920x1080.jpg](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/data/dvpp_sample_input_data/dvpp_jpegd_decode_1920x1080.jpg)
 
 ## 编译运行<a name="section13133171616172"></a>
 
@@ -67,14 +67,14 @@ DVPP中的JPEGD功能模块，实现.jpg、.jpeg、.JPG、.JPEG图片的解码�
         
               ```
               export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/x86_64-linux
-              export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
+              export NPU_HOST_LIB=$DDK_PATH/runtime/lib64/stub
               ```
    
           -   当运行环境操作系统架构时AArch64时，配置示例如下所示：
         
               ```
               export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux
-              export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
+              export NPU_HOST_LIB=$DDK_PATH/runtime/lib64/stub
               ```
    
     4. 切换到tinyjpegd目录，创建目录用于存放编译文件，例如，本文中，创建的目录为“build“。

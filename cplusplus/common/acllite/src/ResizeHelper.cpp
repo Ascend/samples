@@ -18,6 +18,7 @@
 */
 
 #include <iostream>
+#include <string.h>
 #include "acl/acl.h"
 #include "AclLiteUtils.h"
 #include "ResizeHelper.h"
@@ -28,7 +29,7 @@ ResizeHelper::ResizeHelper(aclrtStream& stream, acldvppChannelDesc *dvppChannelD
                            uint32_t width, uint32_t height)
     :stream_(stream), vpcOutBufferDev_(nullptr), vpcInputDesc_(nullptr),
     vpcOutputDesc_(nullptr), resizeConfig_(nullptr), dvppChannelDesc_(dvppChannelDesc),
-    inDevBuffer_(nullptr), vpcOutBufferSize_(0)
+    vpcOutBufferSize_(0)
 {
     size_.width = width;
     size_.height = height;
@@ -52,6 +53,8 @@ AclLiteError ResizeHelper::InitResizeInputDesc(ImageData& inputImage)
     uint32_t inputBufferSize = 0;
     if (inputImage.format == PIXEL_FORMAT_YUV_SEMIPLANAR_420) {
         inputBufferSize = YUV420SP_SIZE(alignWidth, alignHeight);
+        inputImage.width = ALIGN_UP2(inputImage.width);
+        inputImage.height = ALIGN_UP2(inputImage.height);
     } else if (inputImage.format == PIXEL_FORMAT_RGB_888) {
         inputBufferSize = RGBU8_IMAGE_SIZE(alignWidth, alignHeight);
     } else {
@@ -77,8 +80,8 @@ AclLiteError ResizeHelper::InitResizeInputDesc(ImageData& inputImage)
 
 AclLiteError ResizeHelper::InitResizeOutputDesc()
 {
-    int resizeOutWidth = size_.width;
-    int resizeOutHeight = size_.height;
+    int resizeOutWidth = ALIGN_UP2(size_.width);
+    int resizeOutHeight = ALIGN_UP2(size_.height);
     int resizeOutWidthStride = ALIGN_UP16(resizeOutWidth);
     int resizeOutHeightStride = ALIGN_UP2(resizeOutHeight);
     if (resizeOutWidthStride == 0 || resizeOutHeightStride == 0) {

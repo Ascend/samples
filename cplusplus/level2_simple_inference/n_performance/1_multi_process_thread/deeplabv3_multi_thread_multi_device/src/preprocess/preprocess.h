@@ -1,5 +1,5 @@
-/**
-* Copyright 2020 Huawei Technologies Co., Ltd
+/*
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -12,10 +12,11 @@
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 * See the License for the specific language governing permissions and
 * limitations under the License.
-
-* File sample_process.h
-* Description: handle acl resource
 */
+
+#ifndef DEEPLABV3_MULTI_THREAD_MULTI_DEVICE_PREPROCESS_PREPROCESS_H
+#define DEEPLABV3_MULTI_THREAD_MULTI_DEVICE_PREPROCESS_PREPROCESS_H
+
 #pragma once
 #include <iostream>
 #include <mutex>
@@ -27,9 +28,9 @@
 
 class PreprocessThread : public AclLiteThread {
 public:
-    PreprocessThread(string& fileName, uint32_t modelWidth, 
-            uint32_t modelHeight, uint32_t postThreadNum, 
-            uint32_t inferThreadNum, aclrtContext& context);
+    PreprocessThread(string& fileName, uint32_t modelWidth,
+                     uint32_t modelHeight, uint32_t postThreadNum,
+                     uint32_t inferThreadNum, aclrtContext& context);
     ~PreprocessThread();
 
     AclLiteError Init();
@@ -59,3 +60,4 @@ private:
     aclrtContext context_;
 };
 
+#endif

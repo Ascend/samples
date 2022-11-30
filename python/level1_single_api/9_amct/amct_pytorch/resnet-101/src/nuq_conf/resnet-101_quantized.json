@@ -308,7 +308,7 @@
     {
       "key": "atc_cmdline",
       "value": {
-        "s": "/home/y00536826/Ascend/ascend-toolkit/latest/atc/bin/atc.bin --model=resnet-101_deploy_model.onnx --framework=5 --output=./resnet --soc_version=Ascend910A -input_shape=input:16,3,224,224 -input_format=NCHW"
+        "s": "/home/y00536826/Ascend/ascend-toolkit/latest/compiler/bin/atc.bin --model=resnet-101_deploy_model.onnx --framework=5 --output=./resnet --soc_version=Ascend910A -input_shape=input:16,3,224,224 -input_format=NCHW"
       }
     }
   ],

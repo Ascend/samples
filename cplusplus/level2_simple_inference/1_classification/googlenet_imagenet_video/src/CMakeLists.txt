@@ -42,7 +42,7 @@ endif()
 include_directories(
     $ENV{THIRDPART_PATH}/include/
     $ENV{THIRDPART_PATH}/include/include
-    $ENV{INSTALL_DIR}/acllib/include/
+    $ENV{INSTALL_DIR}/runtime/include/
     ../inc/
 )
 

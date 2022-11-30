@@ -1,12 +1,22 @@
-/**
-* @file utils.h
+/*
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
 *
-* Copyright (C) 2020. Huawei Technologies Co., Ltd. All rights reserved.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+
+* http://www.apache.org/licenses/LICENSE-2.0
+
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
 */
+
+#ifndef YOLOV4_COCO_DETECTION_PICTURE_INC_UTILS_PROCESS_H
+#define YOLOV4_COCO_DETECTION_PICTURE_INC_UTILS_PROCESS_H
+
 #pragma once
 
 #include <string>
@@ -14,7 +24,7 @@
 
 #define INFO_LOG(fmt, ...) fprintf(stdout, "[INFO]  " fmt "\n", ##__VA_ARGS__)
 #define WARN_LOG(fmt, ...) fprintf(stdout, "[WARN]  " fmt "\n", ##__VA_ARGS__)
-#define ERROR_LOG(fmt, ...) fprintf(stdout, "[ERROR] " fmt "\n", ##__VA_ARGS__)
+#define ERROR_LOG(fmt, ...) fprintf(stderr, "[ERROR]  " fmt "\n", ##__VA_ARGS__)
 
 typedef enum Result {
     SUCCESS = 0,
@@ -30,11 +40,13 @@ typedef struct PicDesc {
 
 class RunStatus {
 public:
-    static void SetDeviceStatus(bool isDevice) {
+    static void SetDeviceStatus(bool isDevice)
+    {
         isDevice_ = isDevice;
     }
 
-    static bool GetDeviceStatus() {
+    static bool GetDeviceStatus()
+    {
         return isDevice_;
     }
 
@@ -73,3 +85,5 @@ public:
     */
     static Result CheckPathIsFile(const std::string &fileName);
 };
+
+#endif

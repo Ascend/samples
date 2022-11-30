@@ -126,11 +126,12 @@ resnet50_firstapp
 
     例如，$HOME/Ascend/ascend-toolkit/latest/{arch-os},arch表示操作系统架构（需根据运行环境的架构选择），{os}表示操作系统（需根据运行环境的操作系统选择）。
     
+    **注意**，在配置{NPU_HOST_LIB}环境变量时，需使用的“runtime/lib64/stub”目录下*.so库，确保在编译基于AscendCL接口的应用程序时，不依赖其它组件（例如Driver）的*.so库，编译成功后，运行应用程序时，系统会根据LD_LIBRARY_PATH环境变量查找“Ascend-cann-toolkit安装目录/runtime/lib64”目录下的*.so库，同时会自动链接到所依赖的其它组件的*.so库。
 
     ```
     export APP_SOURCE_PATH=${SAMPLE_DIR}/resnet50_firstapp
     export DDK_PATH=${INSTALL_DIR}
-    export NPU_HOST_LIB=${INSTALL_DIR}/acllib/lib64/stub
+    export NPU_HOST_LIB=${INSTALL_DIR}/runtime/lib64/stub
     chmod +x sample_build.sh
     ./sample_build.sh
     ```

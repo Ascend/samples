@@ -83,21 +83,21 @@ add_custom_target(${RUN_TARGET} ALL DEPENDS ${ALL_MODULES})
 if (NOT "x$ENV{COMPILE_KERNEL_TARGET}" STREQUAL "xcpu")
     add_custom_command(TARGET ${RUN_TARGET}
         PRE_BUILD
-        COMMAND mkdir -p ./makepkg/packages/op_impl/${PROJECT_DIR}/ai_core/tbe/custom_impl
-        COMMAND mkdir -p ./makepkg/packages/op_impl/${PROJECT_DIR}/vector_core/tbe/custom_impl
+        COMMAND mkdir -p ./makepkg/packages/${PROJECT_DIR}/op_impl/ai_core/tbe/impl
+        COMMAND mkdir -p ./makepkg/packages/${PROJECT_DIR}/op_impl/vector_core/tbe/impl
         )
 endif()
 
 if (NOT "x$ENV{COMPILE_KERNEL_TARGET}" STREQUAL "xtbe")
     add_custom_command(TARGET ${RUN_TARGET}
         PRE_BUILD
-        COMMAND mkdir -p ./makepkg/packages/op_impl/${PROJECT_DIR}/cpu/aicpu_kernel/custom_impl
+        COMMAND mkdir -p ./makepkg/packages/${PROJECT_DIR}/op_impl/cpu/aicpu_kernel/impl
         )
 endif()
 
 add_custom_command(TARGET ${RUN_TARGET}
         PRE_BUILD
-        COMMAND mkdir -p ./makepkg/packages/fusion_rules/${PROJECT_DIR}/
+        COMMAND mkdir -p ./makepkg/packages/${PROJECT_DIR}/fusion_rules/
         COMMAND bash ${CMAKE_SOURCE_DIR}/cmake/util/gen_impl_and_mrege_json.sh ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR}
         COMMAND cp ${CMAKE_SOURCE_DIR}/scripts/install.sh ./makepkg/
         COMMAND cp ${CMAKE_SOURCE_DIR}/scripts/upgrade.sh ./makepkg/
@@ -108,7 +108,7 @@ add_custom_command(TARGET ${RUN_TARGET}
 if(EXISTS ${CMAKE_SOURCE_DIR}/custom.proto)
     add_custom_command(TARGET ${RUN_TARGET}
         PRE_BUILD
-        COMMAND cp ${CMAKE_SOURCE_DIR}/custom.proto ./makepkg/packages
+        COMMAND cp ${CMAKE_SOURCE_DIR}/custom.proto ./makepkg/packages/${PROJECT_DIR}
         )
 endif()
 

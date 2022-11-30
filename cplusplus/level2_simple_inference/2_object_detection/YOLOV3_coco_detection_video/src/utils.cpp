@@ -1,5 +1,5 @@
-/**
-* Copyright 2020 Huawei Technologies Co., Ltd
+/*
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -12,10 +12,8 @@
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 * See the License for the specific language governing permissions and
 * limitations under the License.
-
-* File utils.cpp
-* Description: handle file operations
 */
+
 #include <map>
 #include <iostream>
 #include <fstream>
@@ -32,19 +30,19 @@
 using namespace std;
 
 namespace {
-const std::string kImagePathSeparator = ",";
-const int kStatSuccess = 0;
-const std::string kFileSperator = "/";
-const std::string kPathSeparator = "/";
+const std::string g_imagePathSeparator = ",";
+const int STAT_SUCCESS = 0;
+const std::string g_fileSperator = "/";
+const std::string g_pathSeparator = "/";
 // output image prefix
-const std::string kOutputFilePrefix = "out_";
-
+const std::string g_outputFilePrefix = "out_";
 }
 
-bool Utils::IsDirectory(const string &path) {
+bool Utils::IsDirectory(const string &path)
+{
     // get path stat
     struct stat buf;
-    if (stat(path.c_str(), &buf) != kStatSuccess) {
+    if (stat(path.c_str(), &buf) != STAT_SUCCESS) {
         return false;
     }
 
@@ -56,7 +54,8 @@ bool Utils::IsDirectory(const string &path) {
     }
 }
 
-bool Utils::IsPathExist(const string &path) {
+bool Utils::IsPathExist(const string &path)
+{
     ifstream file(path);
     if (!file) {
         return false;
@@ -64,17 +63,17 @@ bool Utils::IsPathExist(const string &path) {
     return true;
 }
 
-void Utils::SplitPath(const string &path, vector<string> &path_vec) {
-    char *char_path = const_cast<char*>(path.c_str());
-    const char *char_split = kImagePathSeparator.c_str();
-    char *tmp_path = strtok(char_path, char_split);
+void Utils::SplitPath(const string &path, vector<string> &path_vec)
+{
+    char *tmp_path = strtok(const_cast<char*>(path.c_str()), g_imagePathSeparator.c_str());
     while (tmp_path) {
         path_vec.emplace_back(tmp_path);
-        tmp_path = strtok(nullptr, char_split);
+        tmp_path = strtok(nullptr, g_imagePathSeparator.c_str());
     }
 }
 
-void Utils::GetAllFiles(const string &path, vector<string> &file_vec) {
+void Utils::GetAllFiles(const string &path, vector<string> &file_vec)
+{
     // split file path
     vector<string> path_vector;
     SplitPath(path, path_vector);
@@ -83,7 +82,7 @@ void Utils::GetAllFiles(const string &path, vector<string> &file_vec) {
         // check path exist or not
         if (!IsPathExist(path)) {
         ERROR_LOG("Failed to deal path=%s. Reason: not exist or can not access.",
-                every_path.c_str());
+                  every_path.c_str());
         continue;
         }
         // get files in path and sub-path
@@ -91,7 +90,8 @@ void Utils::GetAllFiles(const string &path, vector<string> &file_vec) {
     }
 }
 
-void Utils::GetPathFiles(const string &path, vector<string> &file_vec) {
+void Utils::GetPathFiles(const string &path, vector<string> &file_vec)
+{
     struct dirent *dirent_ptr = nullptr;
     DIR *dir = nullptr;
     if (IsDirectory(path)) {
@@ -103,7 +103,7 @@ void Utils::GetPathFiles(const string &path, vector<string> &file_vec) {
             }
 
             // file path
-            string full_path = path + kPathSeparator + dirent_ptr->d_name;
+            string full_path = path + g_pathSeparator + dirent_ptr->d_name;
             // directory need recursion
             if (IsDirectory(full_path)) {
                 GetPathFiles(full_path, file_vec);
@@ -112,13 +112,13 @@ void Utils::GetPathFiles(const string &path, vector<string> &file_vec) {
                 file_vec.emplace_back(full_path);
             }
         }
-    } 
-    else {
+    } else {
         file_vec.emplace_back(path);
     }
 }
 
-void* Utils::CopyDataDeviceToLocal(void* deviceData, uint32_t dataSize) {
+void* Utils::CopyDataDeviceToLocal(void* deviceData, uint32_t dataSize)
+{
     uint8_t* buffer = new uint8_t[dataSize];
     if (buffer == nullptr) {
         ERROR_LOG("New malloc memory failed");
@@ -135,7 +135,8 @@ void* Utils::CopyDataDeviceToLocal(void* deviceData, uint32_t dataSize) {
     return (void*)buffer;
 }
 
-void* Utils::CopyDataToDevice(void* data, uint32_t dataSize, aclrtMemcpyKind policy) {
+void* Utils::CopyDataToDevice(void* data, uint32_t dataSize, aclrtMemcpyKind policy)
+{
     void* buffer = nullptr;
     aclError aclRet = aclrtMalloc(&buffer, dataSize, ACL_MEM_MALLOC_HUGE_FIRST);
     if (aclRet != ACL_SUCCESS) {
@@ -153,16 +154,19 @@ void* Utils::CopyDataToDevice(void* data, uint32_t dataSize, aclrtMemcpyKind pol
     return buffer;
 }
 
-void* Utils::CopyDataDeviceToDevice(void* deviceData, uint32_t dataSize) {
+void* Utils::CopyDataDeviceToDevice(void* deviceData, uint32_t dataSize)
+{
     return CopyDataToDevice(deviceData, dataSize, ACL_MEMCPY_DEVICE_TO_DEVICE);
 }
 
-void* Utils::CopyDataHostToDevice(void* deviceData, uint32_t dataSize) {
+void* Utils::CopyDataHostToDevice(void* deviceData, uint32_t dataSize)
+{
     return CopyDataToDevice(deviceData, dataSize, ACL_MEMCPY_HOST_TO_DEVICE);
 }
 
-Result Utils::CopyImageDataToDevice(ImageData& imageDevice, ImageData srcImage, aclrtRunMode mode) {
-    void * buffer;
+Result Utils::CopyImageDataToDevice(ImageData& imageDevice, ImageData srcImage, aclrtRunMode mode)
+{
+    void* buffer;
     if (mode == ACL_HOST)
         buffer = Utils::CopyDataHostToDevice(srcImage.data.get(), srcImage.size);
     else

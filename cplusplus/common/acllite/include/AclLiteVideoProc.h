@@ -36,9 +36,39 @@ public:
     ~AclLiteVideoProc();
 
     bool IsOpened();
+    /**
+    * @brief Set the actual value of the corresponding attribute according to the key value
+    * @param [in]: key: enumeration type StreamProperty, see the AclLiteVideoCapBase class for details
+    * @param [in]: Value: attribute value
+    * @return AclLiteError: ACLLITE_ OK: Setting succeeded
+    * Other: Setting failed
+    */
     AclLiteError Set(StreamProperty key, uint32_t value);
+    /**
+    * @brief Get the actual value of the corresponding attribute
+    * according to the key value
+    * @param [in]: key: enumeration type StreamProperty,
+    * see the AclLiteVideoCapBase class for details
+    * @return Property Value
+    */
     uint32_t Get(StreamProperty key);
+    /**
+    * @brief Acquiring a frame of image data to be processed;
+    * According to the constructor, there are three scenarios:
+    * 1. One frame data read from the camera;
+    * 2. One frame data read from video file/rtsp stream;
+    * 3. One frame data processed by dvpp venc.
+    * @param [in]: frame: input image data and attributes
+    * @return AclLiteError: ACLLITE_ OK: Read successfully
+    * Other: ACLLITE_ OK: Reading failed
+    */
     AclLiteError Read(ImageData& frame);
+    /**
+    * @brief Stop reading picture data
+    * @param [in]: None
+    * @return AclLiteError: ACLLITE_ OK: Close successfully
+    * Other: ACLLITE_ OK: Close failed
+    */
     AclLiteError Close();
 
 private:

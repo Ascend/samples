@@ -1,5 +1,5 @@
-/**
-* Copyright 2020 Huawei Technologies Co., Ltd
+/*
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -12,17 +12,17 @@
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 * See the License for the specific language governing permissions and
 * limitations under the License.
-
-* File sample_process.h
-* Description: handle acl resource
 */
+
+#ifndef YOLOV3_COCO_DETECTION_4_THREAD_INC_OBJECT_DETECT_H
+#define YOLOV3_COCO_DETECTION_4_THREAD_INC_OBJECT_DETECT_H
+
 #pragma once
 #include <memory>
+#include <opencv2/opencv.hpp>
 #include "acl/acl.h"
 #include "acllite/AclLiteModel.h"
 #include "acllite/AclLiteUtils.h"
-#include <opencv2/opencv.hpp>
-
 #include "opencv2/imgproc/types_c.h"
 
 /**
@@ -43,14 +43,16 @@ public:
 
 private:
     AclLiteError CreateInput();
-    AclLiteModel model_;
-    const char* modelPath_;
-    uint32_t modelWidth_;
-    uint32_t modelHeight_;
-    uint32_t imageDataSize_;
-    void*    imageDataBuf_;
-    uint32_t imageInfoSize_;
-    void*    imageInfoBuf_;
-    aclrtRunMode runMode_;
-    bool isInited_;
+    AclLiteModel  g_model_;
+    const char*  g_modelPath_;
+    uint32_t  g_modelWidth_;
+    uint32_t  g_modelHeight_;
+    uint32_t  g_imageDataSize_;
+    void*     g_imageDataBuf_;
+    uint32_t  g_imageInfoSize_;
+    void*     g_imageInfoBuf_;
+    aclrtRunMode  g_runMode_;
+    bool  g_isInited_;
 };
+
+#endif

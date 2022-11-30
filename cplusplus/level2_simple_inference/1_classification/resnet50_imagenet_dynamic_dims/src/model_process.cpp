@@ -17,6 +17,7 @@
 #include <iostream>
 #include <fstream>
 #include <map>
+#include <math.h>
 #include <sstream>
 #include <algorithm>
 #include <functional>
@@ -31,8 +32,8 @@ namespace {
     const int DIM_2 = 2;
     const int DIM_3 = 3;
 }
-ModelProcess::ModelProcess() : g_modelId(0), g_modelWorkSize(0), g_modelWeightSize(0), g_modelWorkPtr(nullptr),
-                               g_modelWeightPtr(nullptr), g_loadFlag(false), g_modelDesc(nullptr), g_input(nullptr), g_output(nullptr)
+ModelProcess::ModelProcess() : modelId_(0), modelWorkSize_(0), modelWeightSize_(0), modelWorkPtr_(nullptr),
+                               modelWeightPtr_(nullptr), loadFlag_(false), modelDesc_(nullptr), input_(nullptr), output_(nullptr)
 {
 }
 
@@ -45,58 +46,58 @@ ModelProcess::~ModelProcess()
 }
 void ModelProcess::GetRunMode(aclrtRunMode runMode)
 {
-    g_isDevice = (runMode == ACL_DEVICE);
+    isDevice_ = (runMode == ACL_DEVICE);
 }
 
 Result ModelProcess::LoadModel(const char *modelPath)
 {
-    if (g_loadFlag) {
+    if (loadFlag_) {
         ERROR_LOG("model has already been loaded");
         return FAILED;
     }
-    aclError ret = aclmdlQuerySize(modelPath, &g_modelWorkSize, &g_modelWeightSize);
+    aclError ret = aclmdlQuerySize(modelPath, &modelWorkSize_, &modelWeightSize_);
     if (ret != ACL_SUCCESS) {
         ERROR_LOG("query model failed, model file is %s, errorCode is %d",
                   modelPath, static_cast<int32_t>(ret));
         return FAILED;
     }
-    ret = aclrtMalloc(&g_modelWorkPtr, g_modelWorkSize, ACL_MEM_MALLOC_HUGE_FIRST);
+    ret = aclrtMalloc(&modelWorkPtr_, modelWorkSize_, ACL_MEM_MALLOC_HUGE_FIRST);
     if (ret != ACL_SUCCESS) {
         ERROR_LOG("malloc buffer for work failed, require size is %zu, errorCode is %d",
-                  g_modelWorkSize, static_cast<int32_t>(ret));
+                  modelWorkSize_, static_cast<int32_t>(ret));
         return FAILED;
     }
-    ret = aclrtMalloc(&g_modelWeightPtr, g_modelWeightSize, ACL_MEM_MALLOC_HUGE_FIRST);
+    ret = aclrtMalloc(&modelWeightPtr_, modelWeightSize_, ACL_MEM_MALLOC_HUGE_FIRST);
     if (ret != ACL_SUCCESS) {
         ERROR_LOG("malloc buffer for weight failed, require size is %zu, errorCode is %d",
-                  g_modelWeightSize, static_cast<int32_t>(ret));
+                  modelWeightSize_, static_cast<int32_t>(ret));
         return FAILED;
     }
-    ret = aclmdlLoadFromFileWithMem(modelPath, &g_modelId, g_modelWorkPtr,
-                                    g_modelWorkSize, g_modelWeightPtr, g_modelWeightSize);
+    ret = aclmdlLoadFromFileWithMem(modelPath, &modelId_, modelWorkPtr_,
+                                    modelWorkSize_, modelWeightPtr_, modelWeightSize_);
     if (ret != ACL_SUCCESS) {
         ERROR_LOG("load model from file failed, model file is %s, errorCode is %d",
                   modelPath, static_cast<int32_t>(ret));
         return FAILED;
     }
 
-    g_loadFlag = true;
+    loadFlag_ = true;
     INFO_LOG("load model %s success", modelPath);
     return SUCCESS;
 }
 
 Result ModelProcess::CreateModelDesc()
 {
-    g_modelDesc = aclmdlCreateDesc();
-    if (g_modelDesc == nullptr) {
+    modelDesc_ = aclmdlCreateDesc();
+    if (modelDesc_ == nullptr) {
         ERROR_LOG("create model description failed");
         return FAILED;
     }
 
-    aclError ret = aclmdlGetDesc(g_modelDesc, g_modelId);
+    aclError ret = aclmdlGetDesc(modelDesc_, modelId_);
     if (ret != ACL_SUCCESS) {
         ERROR_LOG("get model description failed, modelId is %u, errorCode is %d",
-                  g_modelId, static_cast<int32_t>(ret));
+                  modelId_, static_cast<int32_t>(ret));
         return FAILED;
     }
 
@@ -107,9 +108,9 @@ Result ModelProcess::CreateModelDesc()
 
 void ModelProcess::DestroyModelDesc()
 {
-    if (g_modelDesc != nullptr) {
-        (void)aclmdlDestroyDesc(g_modelDesc);
-        g_modelDesc = nullptr;
+    if (modelDesc_ != nullptr) {
+        (void)aclmdlDestroyDesc(modelDesc_);
+        modelDesc_ = nullptr;
     }
     INFO_LOG("destroy model description success");
 }
@@ -117,18 +118,18 @@ void ModelProcess::DestroyModelDesc()
 Result ModelProcess::ModelSetDynamicInfo(int dims0, int dims1, int dims2, int dims3)
 {
     size_t index;
-    aclError ret = aclmdlGetInputIndexByName(g_modelDesc, ACL_DYNAMIC_TENSOR_NAME, &index);
+    aclError ret = aclmdlGetInputIndexByName(modelDesc_, ACL_DYNAMIC_TENSOR_NAME, &index);
     if (ret != ACL_SUCCESS) {
         ERROR_LOG("get input index by name[%s] failed, errorCode = %d.",
                   ACL_DYNAMIC_TENSOR_NAME, static_cast<int32_t>(ret));
         return FAILED;
     }
-    g_currentDims.dimCount = DIM_COUNT;
-    g_currentDims.dims[DIM_0] = dims0;
-    g_currentDims.dims[DIM_1] = dims1;
-    g_currentDims.dims[DIM_2] = dims2;
-    g_currentDims.dims[DIM_3] = dims3;
-    ret = aclmdlSetInputDynamicDims(g_modelId, g_input, index, &g_currentDims);
+    currentDims_.dimCount = DIM_COUNT;
+    currentDims_.dims[DIM_0] = dims0;
+    currentDims_.dims[DIM_1] = dims1;
+    currentDims_.dims[DIM_2] = dims2;
+    currentDims_.dims[DIM_3] = dims3;
+    ret = aclmdlSetInputDynamicDims(modelId_, input_, index, &currentDims_);
     if (ret != ACL_SUCCESS) {
         ERROR_LOG("set dynamic dims failed, errorCode = %d.", static_cast<int32_t>(ret));
         return FAILED;
@@ -137,10 +138,10 @@ Result ModelProcess::ModelSetDynamicInfo(int dims0, int dims1, int dims2, int di
 }
 Result ModelProcess::Execute()
 {
-    aclError ret = aclmdlExecute(g_modelId, g_input, g_output);
+    aclError ret = aclmdlExecute(modelId_, input_, output_);
     if (ret != ACL_SUCCESS) {
         ERROR_LOG("execute model failed, modelId is %u, errorCode is %d",
-                  g_modelId, static_cast<int32_t>(ret));
+                  modelId_, static_cast<int32_t>(ret));
         return FAILED;
     }
 
@@ -150,13 +151,13 @@ Result ModelProcess::Execute()
 
 Result ModelProcess::CreateInput(void *inputDataBuffer, size_t bufferSize)
 {
-    uint32_t dataNum = aclmdlGetNumInputs(g_modelDesc);
-    if (g_modelDesc == nullptr) {
+    uint32_t dataNum = aclmdlGetNumInputs(modelDesc_);
+    if (modelDesc_ == nullptr) {
         ERROR_LOG("no model description, create input failed");
         return FAILED;
     }
-    g_input = aclmdlCreateDataset();
-    if (g_input == nullptr) {
+    input_ = aclmdlCreateDataset();
+    if (input_ == nullptr) {
         ERROR_LOG("can't create dataset, create input failed");
         return FAILED;
     }
@@ -165,7 +166,7 @@ Result ModelProcess::CreateInput(void *inputDataBuffer, size_t bufferSize)
         ERROR_LOG("can't create data buffer, create input failed");
         return FAILED;
     }
-    aclError ret = aclmdlAddDatasetBuffer(g_input, inputData);
+    aclError ret = aclmdlAddDatasetBuffer(input_, inputData);
     if (ret != ACL_SUCCESS) {
         ERROR_LOG("add input dataset buffer failed, errorCode is %d", static_cast<int32_t>(ret));
         (void)aclDestroyDataBuffer(inputData);
@@ -174,9 +175,9 @@ Result ModelProcess::CreateInput(void *inputDataBuffer, size_t bufferSize)
     }
 
     size_t dynamicIdx = 0;
-    ret = aclmdlGetInputIndexByName(g_modelDesc, ACL_DYNAMIC_TENSOR_NAME, &dynamicIdx);
+    ret = aclmdlGetInputIndexByName(modelDesc_, ACL_DYNAMIC_TENSOR_NAME, &dynamicIdx);
     if ((ret == ACL_SUCCESS) && (dynamicIdx == (dataNum - 1))) {
-        size_t dataLen = aclmdlGetInputSizeByIndex(g_modelDesc, dynamicIdx);
+        size_t dataLen = aclmdlGetInputSizeByIndex(modelDesc_, dynamicIdx);
         void *data = nullptr;
         ret = aclrtMalloc(&data, dataLen, ACL_MEM_MALLOC_HUGE_FIRST);
         if (ret != ACL_SUCCESS) {
@@ -188,7 +189,7 @@ Result ModelProcess::CreateInput(void *inputDataBuffer, size_t bufferSize)
             ERROR_LOG("Create data buffer error");
             return FAILED;
         }
-        aclError ret = aclmdlAddDatasetBuffer(g_input, dataBuf);
+        aclError ret = aclmdlAddDatasetBuffer(input_, dataBuf);
         if (ret != ACL_SUCCESS) {
             ERROR_LOG("Add dataset buffer error %d", ret);
             ret = aclDestroyDataBuffer(dataBuf);
@@ -205,44 +206,44 @@ Result ModelProcess::CreateInput(void *inputDataBuffer, size_t bufferSize)
 }
 Result ModelProcess::GetInputSizeByIndex(const size_t index, size_t &inputSize)
 {
-    if (g_modelDesc == nullptr) {
+    if (modelDesc_ == nullptr) {
         ERROR_LOG("no model description, create input failed");
         return FAILED;
     }
-    inputSize = aclmdlGetInputSizeByIndex(g_modelDesc, index);
+    inputSize = aclmdlGetInputSizeByIndex(modelDesc_, index);
     return SUCCESS;
 }
 void ModelProcess::DestroyInput()
 {
-    if (g_input == nullptr) {
+    if (input_ == nullptr) {
         return;
     }
 
-    for (size_t i = 0; i < aclmdlGetDatasetNumBuffers(g_input); ++i) {
-        aclDataBuffer *dataBuffer = aclmdlGetDatasetBuffer(g_input, i);
+    for (size_t i = 0; i < aclmdlGetDatasetNumBuffers(input_); ++i) {
+        aclDataBuffer *dataBuffer = aclmdlGetDatasetBuffer(input_, i);
         (void)aclDestroyDataBuffer(dataBuffer);
     }
-    (void)aclmdlDestroyDataset(g_input);
-    g_input = nullptr;
+    (void)aclmdlDestroyDataset(input_);
+    input_ = nullptr;
     INFO_LOG("destroy model input success");
 }
 
 Result ModelProcess::CreateOutput()
 {
-    if (g_modelDesc == nullptr) {
+    if (modelDesc_ == nullptr) {
         ERROR_LOG("no model description, create ouput failed");
         return FAILED;
     }
 
-    g_output = aclmdlCreateDataset();
-    if (g_output == nullptr) {
+    output_ = aclmdlCreateDataset();
+    if (output_ == nullptr) {
         ERROR_LOG("can't create dataset, create output failed");
         return FAILED;
     }
 
-    size_t outputSize = aclmdlGetNumOutputs(g_modelDesc);
+    size_t outputSize = aclmdlGetNumOutputs(modelDesc_);
     for (size_t i = 0; i < outputSize; ++i) {
-        size_t modelOutputSize = aclmdlGetOutputSizeByIndex(g_modelDesc, i);
+        size_t modelOutputSize = aclmdlGetOutputSizeByIndex(modelDesc_, i);
 
         void *outputBuffer = nullptr;
         aclError ret = aclrtMalloc(&outputBuffer, modelOutputSize, ACL_MEM_MALLOC_NORMAL_ONLY);
@@ -259,7 +260,7 @@ Result ModelProcess::CreateOutput()
             return FAILED;
         }
 
-        ret = aclmdlAddDatasetBuffer(g_output, outputData);
+        ret = aclmdlAddDatasetBuffer(output_, outputData);
         if (ret != ACL_SUCCESS) {
             ERROR_LOG("can't add data buffer, create output failed, errorCode is %d",
                       static_cast<int32_t>(ret));
@@ -276,15 +277,15 @@ Result ModelProcess::CreateOutput()
 
 void ModelProcess::OutputModelResult()
 {
-    for (size_t i = 0; i < aclmdlGetDatasetNumBuffers(g_output); ++i) {
-        aclDataBuffer *dataBuffer = aclmdlGetDatasetBuffer(g_output, i);
+    for (size_t i = 0; i < aclmdlGetDatasetNumBuffers(output_); ++i) {
+        aclDataBuffer *dataBuffer = aclmdlGetDatasetBuffer(output_, i);
         void *data = aclGetDataBufferAddr(dataBuffer);
         uint32_t len = aclGetDataBufferSizeV2(dataBuffer);
 
         void *outHostData = nullptr;
         aclError ret = ACL_SUCCESS;
         float *outData = nullptr;
-        if (!g_isDevice) {
+        if (!isDevice_) {
             aclError ret = aclrtMallocHost(&outHostData, len);
             if (ret != ACL_SUCCESS) {
                 ERROR_LOG("aclrtMallocHost failed, malloc len[%u], errorCode[%d]",
@@ -321,7 +322,78 @@ void ModelProcess::OutputModelResult()
                 INFO_LOG("top %d: index[%d] value[%lf] cnt= %d", cnt, it->second, it->first, cnt);
             }
         }
-        if (!g_isDevice) {
+        if (!isDevice_) {
+            ret = aclrtFreeHost(outHostData);
+            if (ret != ACL_SUCCESS) {
+                ERROR_LOG("aclrtFreeHost failed, errorCode[%d]", static_cast<int32_t>(ret));
+                return;
+            }
+        }
+    }
+
+    INFO_LOG("output data success");
+    return;
+}
+
+void ModelProcess::OutputModelResultSoftMax(int classNum, int batchSize)
+{
+    for (size_t i = 0; i < aclmdlGetDatasetNumBuffers(output_); ++i) {
+        aclDataBuffer *dataBuffer = aclmdlGetDatasetBuffer(output_, i);
+        void *data = aclGetDataBufferAddr(dataBuffer);
+        uint32_t len = aclGetDataBufferSizeV2(dataBuffer);
+
+        void *outHostData = nullptr;
+        aclError ret = ACL_SUCCESS;
+        float *outData = nullptr;
+        if (!isDevice_) {
+            aclError ret = aclrtMallocHost(&outHostData, len);
+            if (ret != ACL_SUCCESS) {
+                ERROR_LOG("aclrtMallocHost failed, malloc len[%u], errorCode[%d]",
+                          len, static_cast<int32_t>(ret));
+                return;
+            }
+
+            ret = aclrtMemcpy(outHostData, len, data, len, ACL_MEMCPY_DEVICE_TO_HOST);
+            if (ret != ACL_SUCCESS) {
+                ERROR_LOG("aclrtMemcpy failed, errorCode[%d]", static_cast<int32_t>(ret));
+                (void)aclrtFreeHost(outHostData);
+                return;
+            }
+            outData = reinterpret_cast<float *>(outHostData);
+        } else {
+            outData = reinterpret_cast<float *>(data);
+        }
+
+        double total = 0.0;
+
+        for (size_t j = 0; j < batchSize; j++)
+        {
+            for(int i = j*classNum; i < (j+1)*classNum; i++) {
+                total += exp(outData[i]);
+            }
+            for(int i = j*classNum; i < (j+1)*classNum; i++) {
+                outData[i] = exp(outData[i]) / total;
+            }
+            total = 0.0;
+        }
+
+        for (int i = 0; i < (len / sizeof(float) / classNum); i++) {
+            map<float, unsigned int, greater<float>> resultMap;
+            for (unsigned int j = 0; j < classNum; ++j) {
+                resultMap[*outData] = j;
+                outData++;
+            }
+            INFO_LOG("seq = %d---------------------", i);
+            int cnt = 0;
+            for (auto it = resultMap.begin(); it != resultMap.end(); ++it) {
+                // print top 5
+                if (++cnt > 5) {
+                    break;
+                }
+                INFO_LOG("top %d: index[%d] value[%lf] cnt= %d", cnt, it->second, it->first, cnt);
+            }
+        }
+        if (!isDevice_) {
             ret = aclrtFreeHost(outHostData);
             if (ret != ACL_SUCCESS) {
                 ERROR_LOG("aclrtFreeHost failed, errorCode[%d]", static_cast<int32_t>(ret));
@@ -336,53 +408,53 @@ void ModelProcess::OutputModelResult()
 
 void ModelProcess::DestroyOutput()
 {
-    if (g_output == nullptr) {
+    if (output_ == nullptr) {
         return;
     }
 
-    for (size_t i = 0; i < aclmdlGetDatasetNumBuffers(g_output); ++i) {
-        aclDataBuffer *dataBuffer = aclmdlGetDatasetBuffer(g_output, i);
+    for (size_t i = 0; i < aclmdlGetDatasetNumBuffers(output_); ++i) {
+        aclDataBuffer *dataBuffer = aclmdlGetDatasetBuffer(output_, i);
         void *data = aclGetDataBufferAddr(dataBuffer);
         (void)aclrtFree(data);
         (void)aclDestroyDataBuffer(dataBuffer);
     }
 
-    (void)aclmdlDestroyDataset(g_output);
-    g_output = nullptr;
+    (void)aclmdlDestroyDataset(output_);
+    output_ = nullptr;
     INFO_LOG("destroy model output success");
 }
 
 void ModelProcess::UnloadModel()
 {
-    if (!g_loadFlag) {
+    if (!loadFlag_) {
         WARN_LOG("no model had been loaded, unload failed");
         return;
     }
 
-    aclError ret = aclmdlUnload(g_modelId);
+    aclError ret = aclmdlUnload(modelId_);
     if (ret != ACL_SUCCESS) {
         ERROR_LOG("unload model failed, modelId is %u, errorCode is %d",
-                  g_modelId, static_cast<int32_t>(ret));
+                  modelId_, static_cast<int32_t>(ret));
     }
 
-    if (g_modelDesc != nullptr) {
-        (void)aclmdlDestroyDesc(g_modelDesc);
-        g_modelDesc = nullptr;
+    if (modelDesc_ != nullptr) {
+        (void)aclmdlDestroyDesc(modelDesc_);
+        modelDesc_ = nullptr;
     }
 
-    if (g_modelWorkPtr != nullptr) {
-        (void)aclrtFree(g_modelWorkPtr);
-        g_modelWorkPtr = nullptr;
-        g_modelWorkSize = 0;
+    if (modelWorkPtr_ != nullptr) {
+        (void)aclrtFree(modelWorkPtr_);
+        modelWorkPtr_ = nullptr;
+        modelWorkSize_ = 0;
     }
 
-    if (g_modelWeightPtr != nullptr) {
-        (void)aclrtFree(g_modelWeightPtr);
-        g_modelWeightPtr = nullptr;
-        g_modelWeightSize = 0;
+    if (modelWeightPtr_ != nullptr) {
+        (void)aclrtFree(modelWeightPtr_);
+        modelWeightPtr_ = nullptr;
+        modelWeightSize_ = 0;
     }
 
-    g_loadFlag = false;
-    INFO_LOG("unload model success, modelId is %u", g_modelId);
-    g_modelId = 0;
+    loadFlag_ = false;
+    INFO_LOG("unload model success, modelId is %u", modelId_);
+    modelId_ = 0;
 }

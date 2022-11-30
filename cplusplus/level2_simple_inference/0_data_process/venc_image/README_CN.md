@@ -65,13 +65,13 @@
 
     3. 设置环境变量，配置程序编译依赖的头文件与库文件路径。
   
-       设置以下环境变量后，编译脚本会根据“{DDK_PATH}环境变量值/acllib/include/acl”目录查找编译依赖的头文件，根据{NPU_HOST_LIB}环境变量指向的目录查找编译依赖的库文件。“$HOME/Ascend”请替换“Ascend-cann-toolkit”包的实际安装路径。
+       设置以下环境变量后，编译脚本会根据“{DDK_PATH}环境变量值/runtime/include/acl”目录查找编译依赖的头文件，根据{NPU_HOST_LIB}环境变量指向的目录查找编译依赖的库文件。“$HOME/Ascend”请替换“Ascend-cann-toolkit”包的实际安装路径。
   
        -   当开发环境与运行环境的操作系统架构相同时，配置示例如下所示：
   
            ```
            export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest
-           export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
+           export NPU_HOST_LIB=$DDK_PATH/runtime/lib64/stub
            ```
   
        -   当开发环境与运行环境的操作系统架构不同时，配置示例如下所示：
@@ -80,7 +80,7 @@
   
            ```
            export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux
-           export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
+           export NPU_HOST_LIB=$DDK_PATH/runtime/lib64/stub
            ```
        
        您可以登录对应的环境，执行“uname -a”命令查询其操作系统的架构。
@@ -121,15 +121,15 @@
         ```
 
 3.  运行应用。
-    1.  以运行用户将开发环境的样例目录及目录下的文件上传到运行环境（Host），例如“$HOME/acl\_venc”。
+    1.  以运行用户将开发环境的样例目录及目录下的文件上传到运行环境（Host），例如“$HOME/venc\_image”。
     2.  以运行用户登录运行环境（Host）。
-    3.  切换到可执行文件main所在的目录，例如“$HOME/acl\_venc/out”，给该目录下的main文件加执行权限。
+    3.  切换到可执行文件main所在的目录，例如“$HOME/venc\_image/out”，给该目录下的main文件加执行权限。
 
         ```
         chmod +x main
         ```
 
-    4.  切换到可执行文件main所在的目录，例如“$HOME/acl\_venc/out”，运行可执行文件。
+    4.  切换到可执行文件main所在的目录，例如“$HOME/venc\_image/out”，运行可执行文件。
 
         执行可执行文件成功后，同时会在main文件同级output目录下生成编码结果文件dvpp\_venc\_128x128.h265，便于后期查看。
 

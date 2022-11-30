@@ -57,8 +57,7 @@ quantize.png save successfully!
 ├─result：   
 &emsp;├─yolov3_quantized.pb： 量化后的模型，可在TensorFlow环境进行精度仿真,也可在昇腾AI处理器部署。   
 &emsp;├─yolov3_quant.json： 量化信息文件，记录了量化模型同原始模型节点的映射关系，用于量化后模型同原始模型比对使用。   
-└─tmp：   
-&emsp;├─kernel_meta：调用TF_Adapter在NPU上在线推理时产生的文件，算子编译时生成的文件目录。    
+└─tmp：      
 &emsp;├─check_result.tf.json：调用TF_Adapter在NPU上在线推理时产生的文件，记录推理图中不支持在NPU上运行的算子。  
 &emsp;├─fusion_result.json：调用TF_Adapter在NPU上在线推理时产生的文件，记录使用的图融合、UB融合规则。  
 

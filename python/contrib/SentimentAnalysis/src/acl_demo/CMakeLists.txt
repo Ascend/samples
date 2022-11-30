@@ -17,13 +17,13 @@ message(STATUS "ASCEND_HOME=${ASCEND_HOME}")
 
 # Header path
 include_directories(
-    ${ASCEND_HOME}/acllib/include/ 
+    ${ASCEND_HOME}/runtime/include/ 
     ../../models/jsoncpp/dist 
     ./data_process
                     )
 
 add_subdirectory(data_process)
 
-link_directories(${ASCEND_HOME}/acllib/lib64 ./data_process)
+link_directories(${ASCEND_HOME}/runtime/lib64 ./data_process)
 add_executable(inference main.cpp acl_engine.cpp)
 target_link_libraries(inference ascendcl dataprocess)

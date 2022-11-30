@@ -35,8 +35,8 @@ function setAtcEnv() {
         export PYTHONPATH=${install_path}/pyACL/python/site-packages/acl:$PYTHONPATH
         export ASCEND_OPP_PATH=${install_path}/opp
         export ASCEND_AICPU_PATH=$HOME/Ascend/ascend-toolkit/latest
-        export LD_LIBRARY_PATH=/usr/local/python3.7.5/lib:/home/HwHiAiUser/Ascend/acllib/lib64:/home/HwHiAiUser/ascend_ddk/arm/lib:$LD_LIBRARY_PATH
-        export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
+        export LD_LIBRARY_PATH=/usr/local/python3.7.5/lib:/home/HwHiAiUser/Ascend/runtime/lib64:/home/HwHiAiUser/ascend_ddk/arm/lib:$LD_LIBRARY_PATH
+        export NPU_HOST_LIB=$DDK_PATH/runtime/lib64/stub
     fi
 
     return 0
@@ -46,15 +46,15 @@ function setRunEnv() {
 
     if [[ ${version} = "c73" ]] || [[ ${version} = "C73" ]];then
         export LD_LIBRARY_PATH=
-        export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/acllib/lib64:/home/HwHiAiUser/ascend_ddk/arm/lib:${LD_LIBRARY_PATH}
+        export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/runtime/lib64:/home/HwHiAiUser/ascend_ddk/arm/lib:${LD_LIBRARY_PATH}
         export PYTHONPATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/arm64-linux_gcc7.3.0/pyACL/python/site-packages/acl:${PYTHONPATH}
     elif [[ ${version} = "c75" ]] || [[ ${version} = "C75" ]];then
         export LD_LIBRARY_PATH=
-        export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/acllib/lib64:/home/HwHiAiUser/ascend_ddk/arm/lib:${LD_LIBRARY_PATH}
+        export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/runtime/lib64:/home/HwHiAiUser/ascend_ddk/arm/lib:${LD_LIBRARY_PATH}
         export PYTHONPATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/arm64-linux/pyACL/python/site-packages/acl:${PYTHONPATH}
     elif [[ ${version} = "c78" ]] || [[ ${version} = "C75" ]];then
         export LD_LIBRARY_PATH=
-        export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/acllib/lib64:/home/HwHiAiUser/ascend_ddk/arm/lib:${LD_LIBRARY_PATH}
+        export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/runtime/lib64:/home/HwHiAiUser/ascend_ddk/arm/lib:${LD_LIBRARY_PATH}
         export PYTHONPATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/arm64-linux/pyACL/python/site-packages/acl:${PYTHONPATH}
     fi
 
@@ -116,7 +116,7 @@ function main() {
         fi
 
         # setAtcEnv
-        export LD_LIBRARY_PATH=${install_path}/atc/lib64:$LD_LIBRARY_PATH
+        export LD_LIBRARY_PATH=${install_path}/compiler/lib64:$LD_LIBRARY_PATH
         if [ $? -ne 0 ];then
             echo "ERROR: set atc environment failed"
             return ${inferenceError}

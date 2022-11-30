@@ -386,7 +386,13 @@ def main(): # pylint: disable=R0914, R0915
     saver = tf.train.import_meta_graph(ARGS.eval_model)
     saver.restore(session, ARGS.ckpt_path)
     acc_1_before, acc_5_before = evaluate(session)
-
+    # Step 2: Save the original evaluation model
+    session.run(tf.global_variables_initializer())
+    constant_graph = tf.graph_util.convert_variables_to_constants(
+        session, graph.as_graph_def(), [PREDICTIONS])
+    pb_path = os.path.join(OUTPUTS, 'resnet_v1_50_origin.pb')
+    with tf.io.gfile.GFile(pb_path, 'wb') as pb_file:
+        pb_file.write(constant_graph.SerializeToString())
     session.close()
 
     # Phase retrain the model

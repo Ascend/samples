@@ -63,22 +63,22 @@ Note: The generation of a single-operator model file depends only on the operato
 
   3. In the development environment, set environment variables and configure the header search path and library search path on which the build of the AscendCL single-operator verification program depends.
 
-     After setting the following environment variables, the compilation script will find the header file that the compilation depends on according to the directory "{DDK_PATH}/acllib/include/acl", and the library file that the compilation depends on according to the directory pointed to by the {NPU_HOST_LIB} environment variable. Please replace  **$HOME/Ascend**  with the actual component installation path.
+     After setting the following environment variables, the compilation script will find the header file that the compilation depends on according to the directory "{DDK_PATH}/runtime/include/acl", and the library file that the compilation depends on according to the directory pointed to by the {NPU_HOST_LIB} environment variable. Please replace  **$HOME/Ascend**  with the actual component installation path.
 
      -  If the operating system architecture of the  development environment is the same as that of the running environment, run the following command:
 
         ```
         export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest
-        export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
+        export NPU_HOST_LIB=$DDK_PATH/runtime/lib64/stub
         ```
 
      - If the operating system architecture of the  development environment is different from that of the running environment, a cross compiler is requird.
 
-       For example, if the development environment is x86 and the running environment is AArch64 , the configuration example is as follows:
+       For example, if the development environment is x86 and the running environment is AArch64 , the configuration example is as follows(Note that arm64-linux is only an example, replace it with the actual architecture directory name）:
 
        ```
         export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux
-        export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
+        export NPU_HOST_LIB=$DDK_PATH/runtime/lib64/stub
        ```
 
 - Configuring Environment Variables in the Running Environment
@@ -120,7 +120,7 @@ Note: The generation of a single-operator model file depends only on the operato
 
         After the model conversion is successful, the following files are generated:
 
-        The single-operator model file  **0\_Conv2DTik\_1\_0\_8\_512\_7\_7\_1\_0\_512\_512\_3\_3\_1\_0\_8\_512\_7\_7.om**  is generated in the  **op\_models**  subdirectory of the current directory. The file is named in the format of "No.+opType+input description \(dataType\_format\_shape\)+output description".
+        The single-operator model file  **0\_Conv2DTik\_1\_0\_8\_256\_7\_7\_1\_0\_256\_256\_3\_3\_1\_0\_8\_256\_7\_7.om**  is generated in the  **op\_models**  subdirectory of the current directory. The file is named in the format of "No.+opType+input description \(dataType\_format\_shape\)+output description".
 
         View the enumerated values of  **dataType **and format in the  **include/graph/types.h**  file. The enumerated values start from 0 and increase in ascending order.
 

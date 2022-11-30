@@ -1,5 +1,5 @@
-/**
-* Copyright 2020 Huawei Technologies Co., Ltd
+/*
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -12,17 +12,18 @@
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 * See the License for the specific language governing permissions and
 * limitations under the License.
-
-* File sample_process.h
-* Description: handle acl resource
 */
+
+#ifndef YOLOV3_COCO_DETECTION_DYNAMIC_AIPP_INC_OBJECT_DETECT_H
+#define YOLOV3_COCO_DETECTION_DYNAMIC_AIPP_INC_OBJECT_DETECT_H
+
 #pragma once
+#include <memory>
 #include "utils.h"
 #include "acl/acl.h"
 #include "opencv2/opencv.hpp"
 #include "model_process.h"
 #include "dvpp_process.h"
-#include <memory>
 
 using namespace std;
 
@@ -31,7 +32,7 @@ using namespace std;
 */
 class ObjectDetect {
 public:
-    ObjectDetect(const char* modelPath, 
+    ObjectDetect(const char* modelPath,
                  uint32_t modelWidth, uint32_t modelHeight);
     ~ObjectDetect();
 
@@ -39,11 +40,11 @@ public:
     Result ProcessForDvpp(ImageData& srcImage, const string& origImagePath);
     Result ProcessForOpenCV(cv::Mat& srcMat, const string& origImagePath);
     Result Preprocess(ImageData& resizedImage, ImageData& srcImage);
-    Result PreprocessOpencv(cv::Mat& srcMat, uint32_t& reiszeMatLen, 
+    Result PreprocessOpencv(cv::Mat& srcMat, uint32_t& reiszeMatLen,
                             void*& reiszeMatBuffer);
     Result Inference(aclmdlDataset*& inferenceOutput, ImageData& resizedImage);
-    Result InferenceOpenCV(aclmdlDataset*& inferenceOutput, 
-                           uint32_t& reiszeMatLen, 
+    Result InferenceOpenCV(aclmdlDataset*& inferenceOutput,
+                           uint32_t& reiszeMatLen,
                            void*& reiszeMatBuffer);
     Result Postprocess(ImageData& image, aclmdlDataset* modelOutput,
                        const string& origImagePath);
@@ -63,21 +64,22 @@ private:
     void DestroyResource();
 
 private:
-    int32_t deviceId_;
-    aclrtContext context_;
-    aclrtStream stream_;
-    uint32_t imageInfoSize_;
-    void* imageInfoBuf_;
-    ModelProcess model_;
+    int32_t g_deviceId_;
+    aclrtContext g_context_;
+    aclrtStream g_stream_;
+    uint32_t g_imageInfoSize_;
+    void* g_imageInfoBuf_;
+    ModelProcess g_model_;
 
-    const char* modelPath_;
-    uint32_t modelWidth_;
-    uint32_t modelHeight_;
-    uint32_t inputDataSize_;
-    DvppProcess dvpp_;
-    aclrtRunMode runMode_;
+    const char* g_modelPath_;
+    uint32_t g_modelWidth_;
+    uint32_t g_modelHeight_;
+    uint32_t g_inputDataSize_;
+    DvppProcess g_dvpp_;
+    aclrtRunMode g_runMode_;
 
-    bool isInited_;
-    bool isDeviceSet_;
+    bool g_isInited_;
+    bool g_isDeviceSet_;
 };
 
+#endif

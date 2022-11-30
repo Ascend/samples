@@ -14,7 +14,7 @@ declare -i verifyResError=2
 function setCustomEnv() {
     export install_path=/home/HwHiAiUser/Ascend/ascend-toolkit/latest
     export ASCEND_OPP_PATH=${install_path}/opp
-    export ASCEND_TENSOR_COMPLIER_INCLUDE=${install_path}/atc/include
+    export ASCEND_TENSOR_COMPLIER_INCLUDE=${install_path}/compiler/include
     export TOOLCHAIN_DIR=${install_path}/toolkit/toolchain/hcc
     export SYSTEM_INFO=ubuntu_x86_64
 
@@ -50,17 +50,17 @@ function setCustomRun() {
 
 function setAtcEnv() {
     export install_path=/home/HwHiAiUser/Ascend/ascend-toolkit/latest
-    export PATH=/usr/local/python3.7.5/bin:${install_path}/atc/ccec_compiler/bin:${install_path}/atc/bin:$PATH
+    export PATH=/usr/local/python3.7.5/bin:${install_path}/compiler/ccec_compiler/bin:${install_path}/compiler/bin:$PATH
     export ASCEND_OPP_PATH=${install_path}/opp
-    export PYTHONPATH=${install_path}/atc/python/site-packages:${install_path}/atc/python/site-packages/auto_tune.egg/auto_tune:${install_path}/atc/python/site-packages/schedule_search.egg:$PYTHONPATH
-    export LD_LIBRARY_PATH=${install_path}/atc/lib64:${LD_LIBRARY_PATH}
+    export PYTHONPATH=${install_path}/compiler/python/site-packages:${install_path}/compiler/python/site-packages/auto_tune.egg/auto_tune:${install_path}/compiler/python/site-packages/schedule_search.egg:$PYTHONPATH
+    export LD_LIBRARY_PATH=${install_path}/compiler/lib64:${LD_LIBRARY_PATH}
 
     return 0
 }
 
 function setBuildEnv() {
     export DDK_PATH=/home/HwHiAiUser/Ascend/ascend-toolkit/latest/x86_64-linux
-    export NPU_HOST_LIB=${DDK_PATH}/acllib/lib64/stub
+    export NPU_HOST_LIB=${DDK_PATH}/runtime/lib64/stub
 
     return 0
 }
@@ -138,7 +138,7 @@ function main() {
 
     # Reconfigure the environment variables required for the program to run
     export LD_LIBRARY_PATH=
-    export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/nnrt/latest/acllib/lib64:$LD_LIBRARY_PATH
+    export LD_LIBRARY_PATH=/home/HwHiAiUser/Ascend/nnrt/latest/runtime/lib64:$LD_LIBRARY_PATH
 
     # Run the program
     ./execute_custom_reshape_op

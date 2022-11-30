@@ -1,5 +1,5 @@
-/**
-* Copyright 2020 Huawei Technologies Co., Ltd
+/*
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -12,10 +12,11 @@
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 * See the License for the specific language governing permissions and
 * limitations under the License.
-
-* File sample_process.h
-* Description: handle acl resource
 */
+
+#ifndef ANIMEGAN_MULTI_DEVICE_ONE_VIDEO_VIDEOPROCESS_VIDEOPROCESS_H
+#define ANIMEGAN_MULTI_DEVICE_ONE_VIDEO_VIDEOPROCESS_VIDEOPROCESS_H
+
 #pragma once
 
 #include <iostream>
@@ -30,13 +31,13 @@
 
 using namespace std;
 
-class VideoprocessThread: public AclLiteThread {
+class VideoprocessThread : public AclLiteThread {
 public:
     VideoprocessThread(int videoHeight, int videoWidth, int postNum);
     ~VideoprocessThread();
 
     AclLiteError Init();
-    AclLiteError Process(int msgId, shared_ptr<void> data); 
+    AclLiteError Process(int msgId, shared_ptr<void> data);
 
 private:
     void DestroyResource();
@@ -52,6 +53,7 @@ private:
     int shutdown_;
     string outputVideoPath_;
     cv::VideoWriter outputVideo_;
-    queue<shared_ptr<PostOutputMsg>> postqueue_[16];
+    queue<shared_ptr<PostOutputMsg>> postQueue_[16];
 };
 
+#endif

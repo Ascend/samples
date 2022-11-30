@@ -61,7 +61,7 @@ pip3 install opencv-python
 
       The ***LD_LIBRARY_PATH*** environment variable conflicts with the sample when Ascend Tensor Compiler (ATC) is used. Therefore, you need to set this environment variable separately in the command line to facilitate modification.
       
-          export LD_LIBRARY_PATH=${install_path}/atc/lib64
+          export LD_LIBRARY_PATH=${install_path}/compiler/lib64
 
 
    2. Go to the project directory (hand_detection) and run the model conversion command to convert the model:

@@ -8,6 +8,7 @@ if test "$KEEP_UMASK" = n; then
     umask 077
 fi
 
+OPP_CUSTOM_VENDOR="$OPP_CUSTOM_VENDOR"
 CRCsum="$CRCsum"
 MD5="$MD5sum"
 SHA="$SHAsum"
@@ -249,14 +250,23 @@ MS_Check()
 
 MS_Uninstall()
 {
-    rm -rf \${ASCEND_OPP_PATH}/op_impl/custom/*
-    rm -rf \${ASCEND_OPP_PATH}/framework/custom/*
-    rm -rf \${ASCEND_OPP_PATH}/op_proto/custom/*
-    if [ "`ls -A \${ASCEND_OPP_PATH}/op_impl/custom`" = "" ] && [ "`ls -A \${ASCEND_OPP_PATH}/framework/custom`" = "" ] && [ "`ls -A \${ASCEND_OPP_PATH}/op_proto/custom`" = "" ];then
-        echo "uninstall SUCCESS."
+    if test x"\$OPP_CUSTOM_VENDOR" = xcustomize; then
+        rm -rf \${ASCEND_OPP_PATH}/vendors/$OPP_CUSTOM_VENDOR/op_impl
+        rm -rf \${ASCEND_OPP_PATH}/vendors/$OPP_CUSTOM_VENDOR/framework
+        rm -rf \${ASCEND_OPP_PATH}/vendors/$OPP_CUSTOM_VENDOR/op_proto
+        if [ ! -d "\${ASCEND_OPP_PATH}/vendors/$OPP_CUSTOM_VENDOR/op_impl" ] && [ ! -d "\${ASCEND_OPP_PATH}/vendors/$OPP_CUSTOM_VENDOR/framework" ] && [ ! -d "\${ASCEND_OPP_PATH}/vendors/$OPP_CUSTOM_VENDOR/op_proto" ];then
+            echo "uninstall SUCCESS."
+        else
+            echo "uninstall FAIL."
+        fi
     else
-        echo "uninstall FAIL."
-     fi
+        rm -rf \${ASCEND_OPP_PATH}/vendors/$OPP_CUSTOM_VENDOR
+        if [ ! -d "\${ASCEND_OPP_PATH}/vendors/$OPP_CUSTOM_VENDOR" ];then
+            echo "uninstall SUCCESS."
+        else
+            echo "uninstall FAIL."
+        fi
+    fi
 }
 
 UnTAR()

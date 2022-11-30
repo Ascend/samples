@@ -50,7 +50,7 @@
 
 -   算子实现
 
-    UpsampleTik算子的实现代码请参见[upsample\_tik.py](../tbe/custom_impl/upsample_tik.py)。
+    UpsampleTik算子的实现代码请参见[upsample\_tik.py](../tbe/impl/upsample_tik.py)。
 
 -   算子原型定义
 

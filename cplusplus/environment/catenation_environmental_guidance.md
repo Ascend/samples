@@ -42,8 +42,20 @@ Run the following command to install OpenCV. If OpenCV related functions are not
   ```
   sudo apt-get install libopencv-dev
   ```
-##### Installing FFmpeg
+##### Installing FFmpeg and x246
 Run the following command to install the FFmpeg source code. The FFmpeg version installed by the APT is too early, so you need to install the FFmpeg source code. Installing the FFmpeg source code is necessary for installing the ACLLite library. If the FFmpeg or ACLLite library is not used in the code, skip this step.
+  ```
+  # Download x264
+  cd ${HOME}
+  git clone https://code.videolan.org/videolan/x264.git
+  cd x264
+  # Install x264
+  ./configure --enable-shared --disable-asm
+  make
+  sudo make install
+  sudo cp /usr/local/lib/libx264.so.164 /lib
+  ```
+
   ```
   # Download FFmpeg.
   cd ${HOME}
@@ -51,7 +63,7 @@ Run the following command to install the FFmpeg source code. The FFmpeg version 
   tar -zxvf ffmpeg-4.1.3.tar.gz
   cd ffmpeg-4.1.3
   # Install FFmpeg.
-  ./configure --enable-shared --enable-pic --enable-static --disable-x86asm --prefix=${THIRDPART_PATH}
+  ./configure --enable-shared --enable-pic --enable-static --disable-x86asm --enable-libx264 --enable-gpl --prefix=${THIRDPART_PATH}
   make -j8
   make install
   ```

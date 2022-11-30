@@ -14,10 +14,10 @@ import os
 
 FEAUTRE_MAP = np.fromfile("input_0.bin", dtype=np.float16)
 WEIGHT = np.fromfile("input_1.bin", dtype=np.float16)
-FEAUTRE_MAP = FEAUTRE_MAP.reshape(8, 512, 7, 7).transpose(0, 2, 3, 1)
-WEIGHT = WEIGHT.reshape(512, 512, 3, 3).transpose(2, 3, 1, 0)
-FM_SHAPE = [8, 32, 7, 7, 16]
-W_SHAPE = [32, 3, 3, 512, 16]
+FEAUTRE_MAP = FEAUTRE_MAP.reshape(8, 256, 7, 7).transpose(0, 2, 3, 1)
+WEIGHT = WEIGHT.reshape(256, 256, 3, 3).transpose(2, 3, 1, 0)
+FM_SHAPE = [8, 16, 7, 7, 16]
+W_SHAPE = [16, 3, 3, 256, 16]
 FM_DTYPE = "float16"
 L0C_DTYPE = "float32"
 GM_DTYPE = "float16"
@@ -36,9 +36,9 @@ def tik_conv2d(feature_map_tensor_dtype, output_dtype, output_global_memory_dtyp
     tf_res = deq_dtype(output, deq, output_dtype, output_global_memory_dtype)
     tf_res = tf_res.transpose(0, 3, 1, 2)
     tik_res = np.fromfile("../../result_files/output_0.bin", dtype=np.float16)
-    tik_res = tik_res.reshape(8, 512, 7, 7)
+    tik_res = tik_res.reshape(8, 256, 7, 7)
     print("The conv2dTik result is: \n", tik_res)
-    if np.sum(abs(tik_res-tf_res) > precision_err_ratios*abs(tf_res)) > num_err_ratios*8*512*7*7:
+    if np.sum(abs(tik_res-tf_res) > precision_err_ratios*abs(tf_res)) > num_err_ratios*8*256*7*7:
         print("Compared with the tf conv2d method, the result is wrong.")  
     else:
         print("Compared with the tf conv2d method, the result is correct.")

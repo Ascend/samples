@@ -62,7 +62,7 @@ Implemented by using TIK, the Conv2d operator performs the convolution 2-D opera
     3.  Call  **conv2d\(\)**  to implement the 2-D convolution operation.
     4.  Call  **fixpipe\(\)**  to move the compute result data.
 
-    For details about the complete implementation code, see  [conv2d\_tik.py](../tbe/custom_impl/conv2d_tik.py).
+    For details about the complete implementation code, see  [conv2d\_tik.py](../tbe/impl/conv2d_tik.py).
 
 -   Operator Prototype Definition
 

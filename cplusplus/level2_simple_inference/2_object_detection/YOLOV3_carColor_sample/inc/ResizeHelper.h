@@ -1,5 +1,5 @@
-/**
-* Copyright 2020 Huawei Technologies Co., Ltd
+/*
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -12,10 +12,11 @@
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 * See the License for the specific language governing permissions and
 * limitations under the License.
-
-* File AclLiteImageProc.h
-* Description: handle dvpp process
 */
+
+#ifndef YOLOV3_CARCOLOR_SAMPLE_INC_RESIZEHELPER_H
+#define YOLOV3_CARCOLOR_SAMPLE_INC_RESIZEHELPER_H
+
 #pragma once
 #include <cstdint>
 
@@ -73,14 +74,16 @@ private:
     void DestroyResource();
     void DestroyOutputPara();
 
-    aclrtStream stream_;
-    void *vpcOutBufferDev_; // vpc output buffer
-    acldvppPicDesc *vpcInputDesc_; // vpc input desc
-    acldvppPicDesc *vpcOutputDesc_; // vpc output desc
-    acldvppResizeConfig *resizeConfig_;
-    acldvppChannelDesc *dvppChannelDesc_;
+    aclrtStream g_stream_;
+    void *g_vpcOutBufferDev_; // vpc output buffer
+    acldvppPicDesc *g_vpcInputDesc_; // vpc input desc
+    acldvppPicDesc *g_vpcOutputDesc_; // vpc output desc
+    acldvppResizeConfig *g_resizeConfig_;
+    acldvppChannelDesc *g_dvppChannelDesc_;
 
-    uint8_t *inDevBuffer_;  // input pic dev buffer
-    uint32_t vpcOutBufferSize_;  // vpc output size
-    Resolution size_;
+    uint8_t *g_inDevBuffer_;  // input pic dev buffer
+    uint32_t g_vpcOutBufferSize_;  // vpc output size
+    Resolution g_size_;
 };
+
+#endif

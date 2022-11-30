@@ -1,6 +1,7 @@
+/*
+* Copyright (C) Huawei Technologies Co., Ltd. 2020-2022. All rights reserved.
+*/
 /**
-* Copyright 2020 Huawei Technologies Co., Ltd
-*
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
 * You may obtain a copy of the License at
@@ -16,18 +17,19 @@
 * File sample_process.cpp
 * Description: handle acl resource
 */
-#include "classify_process.h"
 #include <iostream>
 #include <vector>
+#include "classify_process.h"
 #include "opencv2/opencv.hpp"
 #include "opencv2/imgproc/types_c.h"
 
-#include "acl/acl.h"
-#include "image_net_classes.h"
+
 #include <dirent.h>
 #include <string>
 #include <sys/stat.h>
 #include <stdio.h>
+#include "acl/acl.h"
+#include "image_net_classes.h"
 
 #define RGBU8_IMAGE_SIZE(width, height) ((width) * (height) * 3)
 using namespace std;
@@ -53,7 +55,8 @@ ClassifyProcess::~ClassifyProcess() {
     DestroyResource();
 }
 
-AclLiteError ClassifyProcess::Init() {
+AclLiteError ClassifyProcess::Init()
+{
     if (isInited_) {
         ACLLITE_LOG_INFO("Classify process is initied already");
         return ACLLITE_OK;
@@ -69,13 +72,13 @@ AclLiteError ClassifyProcess::Init() {
     return ACLLITE_OK;
 }
 
-AclLiteError ClassifyProcess::Process(std::vector<std::string>& fileVec, aclrtRunMode RunMode){
+AclLiteError ClassifyProcess::Process(std::vector<std::string>& fileVec, aclrtRunMode RunMode)
+{
     RunMode_ = RunMode;
     for (string imageFile : fileVec) {
         AclLiteError ret = Preprocess(imageFile);
         if (ret != ACLLITE_OK) {
-            ACLLITE_LOG_ERROR("Read file %s failed, continue to read next",
-                        imageFile.c_str());                
+            ACLLITE_LOG_ERROR("Read file %s failed, continue to read next",imageFile.c_str());                
             continue;
         }
         std::vector<InferenceOutput> inferOutputs;
@@ -94,7 +97,8 @@ AclLiteError ClassifyProcess::Process(std::vector<std::string>& fileVec, aclrtRu
     return ACLLITE_OK;
 }
 
-AclLiteError ClassifyProcess::Preprocess(const string& imageFile) {
+AclLiteError ClassifyProcess::Preprocess(const string& imageFile)
+{
     ACLLITE_LOG_INFO("Read image %s", imageFile.c_str());
     cv::Mat origMat = cv::imread(imageFile, CV_LOAD_IMAGE_COLOR);
     if (origMat.empty()) {
@@ -118,9 +122,9 @@ AclLiteError ClassifyProcess::Preprocess(const string& imageFile) {
     return ACLLITE_OK;
 }
 
-AclLiteError ClassifyProcess::Inference(std::vector<InferenceOutput>& inferOutputs) {
-    AclLiteError ret = model_.CreateInput(inputData_,
-                                       inputDataSize_);
+AclLiteError ClassifyProcess::Inference(std::vector<InferenceOutput>& inferOutputs)
+{
+    AclLiteError ret = model_.CreateInput(inputData_,inputDataSize_);
     if (ret != ACLLITE_OK) {
         ACLLITE_LOG_ERROR("Create mode input dataset failed\n");
         return ACLLITE_ERROR;
@@ -135,8 +139,8 @@ AclLiteError ClassifyProcess::Inference(std::vector<InferenceOutput>& inferOutpu
     return ret;
 }
 
-AclLiteError ClassifyProcess::Postprocess(const string& origImageFile, 
-                                    std::vector<InferenceOutput>& inferOutputs){
+AclLiteError ClassifyProcess::Postprocess(const string& origImageFile, std::vector<InferenceOutput>& inferOutputs)
+{
     uint32_t dataSize = inferOutputs[kOutputDataBufId].size;
     void* data = (void *)inferOutputs[kOutputDataBufId].data.get();
     if (data == nullptr) {
@@ -170,7 +174,8 @@ AclLiteError ClassifyProcess::Postprocess(const string& origImageFile,
     return ACLLITE_OK;
 }
 
-void ClassifyProcess::LabelClassToImage(int classIdx, const string& origImagePath) {
+void ClassifyProcess::LabelClassToImage(int classIdx, const string& origImagePath)
+{
     cv::Mat resultImage = cv::imread(origImagePath, CV_LOAD_IMAGE_COLOR);
 
     // generate colorized image

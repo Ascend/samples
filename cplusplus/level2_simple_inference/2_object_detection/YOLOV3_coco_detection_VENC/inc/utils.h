@@ -1,5 +1,5 @@
-/**
-* Copyright 2020 Huawei Technologies Co., Ltd
+/*
+* Copyright (c) Huawei Technologies Co., Ltd. 2020-2020. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -12,10 +12,11 @@
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 * See the License for the specific language governing permissions and
 * limitations under the License.
-
-* File utils.h
-* Description: handle file operations
 */
+
+#ifndef YOLOV3_COCO_DETECTION_VENC_INC_UTILS_H
+#define YOLOV3_COCO_DETECTION_VENC_INC_UTILS_H
+
 #pragma once
 #include <iostream>
 #include <vector>
@@ -28,7 +29,7 @@ using namespace std;
 
 #define INFO_LOG(fmt, args...) fprintf(stdout, "[INFO]  " fmt "\n", ##args)
 #define WARN_LOG(fmt, args...) fprintf(stdout, "[WARN]  " fmt "\n", ##args)
-#define ERROR_LOG(fmt, args...) fprintf(stdout, "[ERROR]  " fmt "\n", ##args)
+#define ERROR_LOG(fmt, args...) fprintf(stderr, "[ERROR]   " fmt "\n", ##args)
 
 #define RGBU8_IMAGE_SIZE(width, height) ((width) * (height) * 3)
 #define YUV420SP_SIZE(width, height) ((width) * (height) * 3 / 2)
@@ -91,7 +92,6 @@ public:
     static void* CopyDataDeviceToLocal(void* deviceData, uint32_t dataSize);
     static void* CopyDataHostToDevice(void* deviceData, uint32_t dataSize);
     static void* CopyDataDeviceToDevice(void* deviceData, uint32_t dataSize);
-    //static int ReadImageFile(ImageData& image, std::string fileName);
-    //static Result CopyImageDataToDevice(ImageData& imageDevice, ImageData srcImage, aclrtRunMode mode);
 };
 
+#endif

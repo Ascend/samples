@@ -73,7 +73,7 @@ AscendBot是一款面向人工智能及机器人爱好者的开源智能机器�
         由于LD_LIBRARY_PATH环境变量在转使用atc工具和运行样例时会产生冲突，所以需要在命令行单独设置此环境变量，方便修改。
 ```
         export install_path=$HOME/Ascend/ascend-toolkit/latest
-        export LD_LIBRARY_PATH=\\${install_path}/atc/lib64  
+        export LD_LIBRARY_PATH=\\${install_path}/compiler/lib64  
 ```
     2. 执行以下命令下载aipp配置文件并使用atc命令进行模型转换。
 ```
@@ -95,7 +95,7 @@ AscendBot是一款面向人工智能及机器人爱好者的开源智能机器�
 1. 开发环境命令行中设置编译依赖的环境变量。
 ```
      export DDK_PATH=$HOME/Ascend/ascend-toolkit/latest/arm64-linux
-     export NPU_HOST_LIB=$DDK_PATH/acllib/lib64/stub
+     export NPU_HOST_LIB=$DDK_PATH/runtime/lib64/stub
 ```
      ![](https://images.gitee.com/uploads/images/2020/1106/160652_6146f6a4_5395865.gif "icon-note.gif") **说明：**  
         > - 如果是3.0.0版本，此处 **DDK_PATH** 环境变量中的 **arm64-liunx** 应修改为 **arm64-linux_gcc7.3.0**。    

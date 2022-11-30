@@ -114,4 +114,13 @@ struct InferenceOutput {
     std::shared_ptr<void> data = nullptr;
     uint32_t size;
 };
+
+struct ModelOutputInfo
+{
+    const char *name;
+    aclmdlIODims *dims;
+    aclFormat format;
+    aclDataType dataType;
+};
+
 #endif
