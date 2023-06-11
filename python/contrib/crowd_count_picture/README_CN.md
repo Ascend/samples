@@ -14,7 +14,7 @@
 | 条件 | 要求 | 备注 |
 |---|---|---|
 | CANN版本 | >=5.0.4 | 请参考CANN样例仓介绍中的[安装步骤](https://github.com/Ascend/samples#%E5%AE%89%E8%A3%85)完成CANN安装，如果CANN低于要求版本请根据[版本说明](https://github.com/Ascend/samples/blob/master/README_CN.md#%E7%89%88%E6%9C%AC%E8%AF%B4%E6%98%8E)切换samples仓到对应CANN版本 |
-| 硬件要求 | Atlas200DK/Atlas300([ai1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366))  | 当前已在Atlas200DK和Atlas300测试通过，产品说明请参考[硬件平台](https://ascend.huawei.com/zh/#/hardware/product) ，其他产品可能需要另做适配|
+| 硬件要求 | Atlas200DK/Atlas 200I DK A2/Atlas300([ai1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366))  | 当前已在Atlas200DK、Atlas 200I DK A2和Atlas300测试通过，产品说明请参考[硬件平台](https://ascend.huawei.com/zh/#/hardware/product) ，其他产品可能需要另做适配|
 | 第三方依赖 |  opencv，python-acllite | 请参考[第三方依赖安装指导（python样例）](../../environment)选择需要的依赖完成安装 |
 
 ### 样例准备
@@ -53,6 +53,7 @@
     wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/crowdCount/count_person.caffe.prototxt
     wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/crowdCount/insert_op.cfg
     atc --input_shape="blob1:1,3,800,1408" --weight="count_person.caffe.caffemodel" --input_format=NCHW --output="count_person.caffe" --soc_version=Ascend310 --insert_op_conf=insert_op.cfg --framework=0 --model="count_person.caffe.prototxt" 
+    **注：如果在310B芯片上进行模型转换，修改参数--soc_version=Ascend310B1即可**
     ```
 
 3. 获取样例需要的测试图片。
@@ -65,7 +66,34 @@
 
 ### 样例运行
 
-**注：开发环境与运行环境合一部署，请跳过步骤1，直接执行[步骤2](#step_2)即可。**   
+**注1：开发环境与运行环境合一部署，请跳过步骤1，直接执行[步骤2](#step_2)即可。**   
+
+**注2：若在310B芯片上进行推理，需要修改部分代码**
+  打开程序主入口文件 main.py
+  找到函数'pre_process'，将该函数修改为如下内容保存即可：
+  ```
+      def pre_process(self, image):
+        """
+        image preprocess
+        """
+        image_dvpp = image.copy_to_dvpp()
+        yuv_image = self._dvpp.jpegd(image_dvpp)
+        return yuv_image
+  ```
+  再找到'main()'中的images_list相关for循环部分，修改为如下内容保存即可：
+  ```
+      for image_file in images_list:
+        ori_image = cv2.imread(image_file, 1)
+        ori_image = cv2.resize(ori_image,(MODEL_WIDTH,MODEL_HEIGHT))
+        save_name,ext = os.path.splitext(image_file)
+        cv2.imwrite(save_name+'resize'+ext, ori_image)
+        image = AclLiteImage(save_name+'resize'+ext)            
+        crop_and_paste_image = crowdcount.pre_process(image)
+        print("pre process end")
+        result = crowdcount.inference([crop_and_paste_image])              
+        result_img_encode = crowdcount.post_process(crop_and_paste_image, result, image_file)
+        os.remove(save_name+'resize'+ext)
+  ```
 
 1. 执行以下命令,将开发环境的 **crowd_count_picture** 目录上传到运行环境中，例如 **/home/HwHiAiUser**，并以HwHiAiUser（运行用户）登录运行环境（Host）。
     ```

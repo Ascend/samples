@@ -65,7 +65,7 @@ def main(): # pylint: disable=R0914
     graph = tf.get_default_graph()
 
     input_tensor = graph.get_tensor_by_name('input:0')
-    output_tensor = graph.get_tensor_by_name('Reshape_1:0')
+    output_tensor = graph.get_tensor_by_name('fp32_vars/final_dense:0')
 
     image_path = os.path.join(PATH, 'data/classification.jpg')
     image_test = Image.open(image_path).resize([SIDE, SIDE])
@@ -88,7 +88,7 @@ def main(): # pylint: disable=R0914
         session.run(tf.global_variables_initializer())
         session.run(output_tensor, feed_dict={input_tensor: batch})
 
-    amct.save_model(model_file, ['Reshape_1'], record_file, os.path.join(OUTPUTS, 'resnet-50_v1'))
+    amct.save_model(model_file, ['fp32_vars/final_dense'], record_file, os.path.join(OUTPUTS, 'resnet-50_v1'))
 
     # reload and test the quantized model for 'Fakequant'.
     model_file = os.path.join(OUTPUTS, 'resnet-50_v1_quantized.pb')
@@ -102,16 +102,16 @@ def main(): # pylint: disable=R0914
 
     print('inference with quantized pb====================')
     with tf.Session(graph=graph_reload) as session:
-        fakequant_prediction = session.run('Reshape_1:0', feed_dict={'input:0': image_test})
+        fakequant_prediction = session.run('fp32_vars/final_dense:0', feed_dict={'input:0': image_test})
 
     print(
         'Origin Model Prediction:\n',
         '\tcategory index: %d\n' % origin_prediction.argmax(),
-        '\tcategory prob: %.3f\n' % round(origin_prediction.max(), 3), end='')
+        '\tcategory weight: %.3f\n' % round(origin_prediction.max(), 3), end='')
     print(
         'Quantized Model Prediction:\n',
         '\tcategory index: %d\n' % fakequant_prediction.argmax(),
-        '\tcategory prob: %.3f\n' % round(fakequant_prediction.max(), 3), end='')
+        '\tcategory weight: %.3f\n' % round(fakequant_prediction.max(), 3), end='')
 
 
 if __name__ == '__main__':

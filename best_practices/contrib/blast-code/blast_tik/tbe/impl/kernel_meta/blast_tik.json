@@ -1,0 +1,15 @@
+{
+    "binFileName":"blast_tik",
+    "binFileSuffix":".o",
+    "blockDim":2,
+    "kernelName":"blast_tik__kernel0",
+    "magic":"RT_DEV_BINARY_MAGIC_ELF",
+    "opParaSize":0,
+    "parameters":[
+        0,
+        0,
+        0,
+        0
+    ],
+    "sha256":"9fedef33709d92ec5b620009d5a476cf9a002c90aa098b8718a5704136bda225"
+}

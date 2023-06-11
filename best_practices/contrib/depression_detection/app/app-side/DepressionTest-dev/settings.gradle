@@ -1,0 +1,3 @@
+rootProject.name = "DepressionTest"
+include ':app'
+include ':GazeView'

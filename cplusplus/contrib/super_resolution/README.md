@@ -63,6 +63,7 @@ Check whether the following requirements are met. If not, perform operations acc
    atc --model=./ESPCN.prototxt --weight=./ESPCN.caffemodel --framework=0 --input_format=NCHW --input_shape="data: 1, 1, 256, 256" --output=./ESPCN_256_256 --soc_version=Ascend310 --output_type=FP32
    #VDSR model:
    atc --model=./VDSR.prototxt --weight=./VDSR.caffemodel --framework=0 --input_format=NCHW --input_shape="data: 1, 1, 768, 768" --output=./VDSR_768_768 --soc_version=Ascend310 --output_type=FP32
+   **Ps: if the chip is 310B,please set the argument soc_version to --soc_version=Ascend310B1**
    ```
 
 ### Sample Deployment

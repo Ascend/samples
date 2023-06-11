@@ -38,7 +38,7 @@ In the Atlas 200 DK scenario, run the following commands to copy the .so files s
   ```
 #### Installation Process
 ##### Installing OpenCV
-Run the following command to install OpenCV. If OpenCV related functions are not used in the code, skip this step.
+Run the following command to install OpenCV. If OpenCV related functions are not used in the code, skip this step(Note:make sure the installed version is 3.x).
   ```
   sudo apt-get install libopencv-dev
   ```

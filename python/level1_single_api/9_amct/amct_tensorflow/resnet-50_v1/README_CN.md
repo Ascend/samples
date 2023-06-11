@@ -5,7 +5,8 @@
 ### 1.1 量化前提
 
 + **模型准备**  
-请至 [昇腾社区-ModelZoo](https://www.hiascend.com/zh/software/modelzoo/detail/1/7548422b6b9c4a809114435f6b128bb6) 下载 ResNet-50 V1 模型文件。解压并将其中的 resnet_v1_50.pb 文件放到 [model](./model/) 目录下。
+请下载[ResNet-50](https://gitee.com/link?target=https%3A%2F%2Fobs-9be7.obs.cn-east-2.myhuaweicloud.com%2F003_Atc_Models%2Fmodelzoo%2FOfficial%2Fcv%2FResnet50_for_ACL.zip) 模型文件。解压并将其中的 resnet50_hc_tf.pb 文件重命名为 resnet_v1_50.pb 放到 [model](./model/) 目录下。
+注：若以上模型下载链接失效，请至 [昇腾社区-ModelZoo](https://www.hiascend.com/software/modelzoo) 自行搜索并下载 ResNet-50 V1 模型文件。
 
 + **数据集准备**  
 使用昇腾模型压缩工具对模型完成量化后，需要对模型进行推理，以测试量化数据的精度。推理过程中需要使用和模型相匹配的数据集。请下载测试图片 [classification.jpg](https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/mobilenet_v2_calibration/classification.jpg)，并将该图片放到 [data](./data/) 目录下。
@@ -40,11 +41,11 @@ python ./src/resnet-50_v1_nuq.py
 ```none
 INFO - [AMCT]:[save_model]: The model is saved in ./outputs/nuq/resnet-50_v1_quantized.pb
 Origin Model Prediction:
-        category index: 111
-        category prob: 0.118
+        category index: 699
+        category weight: 6.534
 Quantized Model Prediction:
-        category index: 111
-        category prob: 0.062
+        category index: 699
+        category weight: 6.661
 ```
 
 ### 1.3 量化结果
@@ -148,7 +149,7 @@ The model after retrain top 5 accuracy = 71.0%.
 
 > 对该模型重新进行量化感知训练时，上述结果文件将会被覆盖。
 
-## 3. 通道稀疏及重训练
+## 3. 通道稀疏/四选二稀疏及重训练
 
 ### 3.1 稀疏前提
 

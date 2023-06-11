@@ -34,7 +34,7 @@ The sample directory is organized as follows:
 
 ├── out
 │   ├── op_models
-│   ├──├──op_list.json              //Description information of operators ArgMaxD and Cast
+│   ├──├──op_list.json              //Description information of operators ArgMaxV2 and Cast
 
 ├── src
 │   ├── acl.json         //Configuration file for system initialization
@@ -102,7 +102,7 @@ The sample directory is organized as follows:
 
 5.  Prepare single operator model file.
 
-    Build the operator description information \(.json files\) of the Cast and ArgMaxD operators into offline models \(.om files\) that adapt to the Ascend AI Processor for running the operators.
+    Build the operator description information \(.json files\) of the Cast and ArgMaxV2 operators into offline models \(.om files\) that adapt to the Ascend AI Processor for running the operators.
 
     Go to the sample directory and run the following command:
 
@@ -223,14 +223,14 @@ The sample directory is organized as follows:
         [INFO] Process dvpp success
         [INFO] model execute success
         [INFO] execute singleOp Cast success
-        [INFO] execute ArgMaxD success
+        [INFO] execute ArgMaxV2 success
         [INFO] singleOp process success
         [INFO] ---> index of classification result is 161
         [INFO] start to process picture:../data/dog2_1024_683.jpg
         [INFO] Process dvpp success
         [INFO] model execute success
         [INFO] execute singleOp Cast success
-        [INFO] execute ArgMaxD success
+        [INFO] execute ArgMaxV2 success
         [INFO] singleOp process success
         [INFO] ---> index of classification result is 267 
         [INFO] Unload model success, modelId is 1
@@ -294,7 +294,7 @@ The following lists the key functions and key interfaces involved in this sample
 
 -   Data postprocessing \(single-operator execution\)
 
-    **Cast**: casts the data type of the inference result from float32 to float16;  **ArgMaxD**: searches for the class indexes with the top confidence values in the inference result.
+    **Cast**: casts the data type of the inference result from float32 to float16;  **ArgMaxV2**: searches for the class indexes with the top confidence values in the inference result.
 
     **aclopExecuteV2**: loads and executes an operator.
 

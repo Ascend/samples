@@ -14,7 +14,7 @@ Check whether the following requirements are met. If not, perform operations acc
 | Item      | Requirement                                                        | Remarks                                                        |
 | ---------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | CANN version  | ≥ 5.0.4                                                     | Install the CANN by referring to [Sample Deployment](https://github.com/Ascend/samples#%E5%AE%89%E8%A3%85) in the *About Ascend Samples Repository*. If the CANN version is earlier than the required version, switch to the samples repository specific to the CANN version. See [Release Notes](https://github.com/Ascend/samples/blob/master/README.md).|
-| Hardware  | Atlas 200 DK/Atlas 300 ([AI1s](https://support.huaweicloud.com/en-us/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366))| Currently, the Atlas 200 DK and Atlas 300 have passed the test. For details about the product description, see [Hardware Platform](https://ascend.huawei.com/en/#/hardware/product). For other products, adaptation may be required.|
+| Hardware  | Atlas 200 DK/Atlas 200I DK A2/Atlas 300 ([AI1s](https://support.huaweicloud.com/en-us/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366))| Currently, the Atlas 200 DK 、Atlas 200I DK A2 and Atlas 300 have passed the test. For details about the product description, see [Hardware Platform](https://ascend.huawei.com/en/#/hardware/product). For other products, adaptation may be required.|
 | Third-party dependency| OpenCV and Python-acllite                                      | Select required dependencies. See [Third-Party Dependency Installation Guide (Python Sample)](https://github.com/Ascend/samples/tree/master/python/environment).|
 
 ### Sample Preparation
@@ -53,6 +53,7 @@ Check whether the following requirements are met. If not, perform operations acc
     wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/crowdCount/count_person.caffe.prototxt
     wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/crowdCount/insert_op.cfg
     atc --input_shape="blob1:1,3,800,1408" --weight="count_person.caffe.caffemodel" --input_format=NCHW --output="count_person.caffe" --soc_version=Ascend310 --insert_op_conf=insert_op.cfg --framework=0 --model="count_person.caffe.prototxt" 
+    **PS:If the chip model is 310B, please change the config --soc_version=Ascend310 to --soc_version=Ascend310B1**
     ```
 
 3. Obtain the test images required by the sample.
@@ -65,8 +66,57 @@ Check whether the following requirements are met. If not, perform operations acc
 
 ### Sample Running
 
-**Note: If the development environment and operating environment are set up on the same server, skip step 1 and go to [step 2](#step_2) directly.**  
+**Note: If the development environment and operating environment are set up on the same server, skip step 1 and go to [step 2](#step_2) directly.** 
+ 
+**Note: If the chip version is 310B1, please change some code in main.py.**
+   Open the file main.py first.Then change the function 'pre_process' to :
+   ```
+       def pre_process(self, image):
+        """
+        image preprocess
+        """
+        image_dvpp = image.copy_to_dvpp()
+        yuv_image = self._dvpp.jpegd(image_dvpp)
+        return yuv_image
+   ```
+   Then change the function 'main()' to :
+   ```
+   def main():    
+    """
+    main
+    """
+    if (len(sys.argv) != 2):
+        print("The App arg is invalid")
+        exit(1)
+    
+    acl_resource = AclLiteResource()
+    acl_resource.init()
 
+    crowdcount = CrowdCount(MODEL_PATH, MODEL_WIDTH, MODEL_HEIGHT)   
+    ret = crowdcount.init()
+    
+    if not os.path.isdir(os.path.join(SRC_PATH, "../out")):
+        os.mkdir(os.path.join(SRC_PATH, "../out"))
+        
+    image_dir = sys.argv[1]
+    images_list = [os.path.join(image_dir, img)
+                   for img in os.listdir(image_dir)
+                   if os.path.splitext(img)[1] in constants.IMG_EXT]
+
+    for image_file in images_list:
+        ori_image = cv2.imread(image_file, 1)
+        ori_image = cv2.resize(ori_image,(MODEL_WIDTH,MODEL_HEIGHT))
+        save_name,ext = os.path.splitext(image_file)
+        cv2.imwrite(save_name+'resize'+ext, ori_image)
+        image = AclLiteImage(save_name+'resize'+ext)            
+        crop_and_paste_image = crowdcount.pre_process(image)
+        print("pre process end")
+        result = crowdcount.inference([crop_and_paste_image])              
+        result_img_encode = crowdcount.post_process(crop_and_paste_image, result, image_file)
+        os.remove(save_name+'resize'+ext)
+
+    return result_img_encode
+   ```
 1. Run the following commands to upload the **crowd_count_picture** directory in the development environment to any directory in the operating environment, for example, **/home/HwHiAiUser**, and log in to the operating environment (host) as the running user (**HwHiAiUser**):
     ```
     # In the following information, xxx.xxx.xxx.xxx is the IP address of the operating environment. The IP address of Atlas 200 DK is 192.168.1.2 when it is connected over the USB port, and that of Atlas 300 (AI1s) is the corresponding public IP address.

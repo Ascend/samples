@@ -219,7 +219,7 @@ AclLiteError ColorizeProcess::Postprocess(cv::Mat& frame, vector<InferenceOutput
 
 void ColorizeProcess::EncodeImage(vector<uint8_t>& encodeImg, cv::Mat& origImg) {
     vector<int> param = vector<int>(2);
-    param[0] = CV_IMWRITE_JPEG_QUALITY;
+    param[0] = cv::IMWRITE_JPEG_QUALITY;
     param[1] = 95;//default(95) 0-100
 
     cv::imencode(".jpg", origImg, encodeImg, param);

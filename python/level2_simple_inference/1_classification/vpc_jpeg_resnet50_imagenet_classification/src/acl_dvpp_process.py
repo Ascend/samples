@@ -214,6 +214,8 @@ class Dvpp(object):
         ret = acl.rt.memcpy(np_output_ptr, size, self._dev_dic['encode_out'],
                             size, ACL_MEMCPY_DEVICE_TO_HOST)
         check_ret("acl.rt.memcpy", ret)
+        if "bytes_to_ptr" in dir(acl.util):
+            np_output = np.frombuffer(bytes_data, dtype=np.byte)
         return np_output
 
     def process_jpeg_dec(self, path):
@@ -253,6 +255,8 @@ class Dvpp(object):
         ret = acl.rt.memcpy(np_output_ptr, size, self._dev_dic['decode_out'],
                             size, ACL_MEMCPY_DEVICE_TO_HOST)
         check_ret("acl.rt.memcpy", ret)
+        if "bytes_to_ptr" in dir(acl.util):
+            np_output = np.frombuffer(bytes_data, dtype=np.byte)
         return np_output, acl.media.dvpp_get_pic_desc_width(pic_desc), \
             acl.media.dvpp_get_pic_desc_height(pic_desc)
 
@@ -367,15 +371,16 @@ class Dvpp(object):
         check_ret("acl.rt.synchronize_stream", ret)
 
         # copy data from device to host
-        np_output = np.zeros(self._dev_size_dic['out_resize'], dtype=np.byte)
+        np_output = np.zeros(self._dev_size_dic.get('out_resize'), dtype=np.byte)
         np_output_ptr, bytes_data = numpy_2_ptr(np_output)
         ret = acl.rt.memcpy(np_output_ptr,
-                            self._dev_size_dic['out_resize'],
-                            self._dev_dic["out_resize"],
-                            self._dev_size_dic['out_resize'],
+                            self._dev_size_dic.get('out_resize'),
+                            self._dev_dic.get("out_resize"),
+                            self._dev_size_dic.get('out_resize'),
                             ACL_MEMCPY_DEVICE_TO_HOST)
         check_ret("acl.rt.memcpy", ret)
-
+        if "bytes_to_ptr" in dir(acl.util):
+            np_output = np.frombuffer(bytes_data, dtype=np.byte)
         return np_output, self._dev_dic["out_resize"], \
             self._dev_size_dic['out_resize']
 
@@ -413,18 +418,19 @@ class Dvpp(object):
         print("[Dvpp] vpc 8k resize process success")
 
         # copy data from device to host
-        np_output = np.zeros(self._dev_size_dic['8k_out_resize'],
+        np_output = np.zeros(self._dev_size_dic.get('8k_out_resize'),
                              dtype=np.byte)
         np_output_ptr, bytes_data = numpy_2_ptr(np_output)
         ret = acl.rt.memcpy(np_output_ptr,
-                            self._dev_size_dic['8k_out_resize'],
-                            self._dev_dic["8k_out_resize"],
-                            self._dev_size_dic['8k_out_resize'],
+                            self._dev_size_dic.get('8k_out_resize'),
+                            self._dev_dic.get("8k_out_resize"),
+                            self._dev_size_dic.get('8k_out_resize'),
                             ACL_MEMCPY_DEVICE_TO_HOST)
         check_ret("acl.rt.memcpy", ret)
-
-        return np_output, self._dev_dic["8k_out_resize"], \
-            self._dev_size_dic['8k_out_resize']
+        if "bytes_to_ptr" in dir(acl.util):
+            np_output = np.frombuffer(bytes_data, dtype=np.byte)
+        return np_output, self._dev_dic.get("8k_out_resize"), \
+            self._dev_size_dic.get('8k_out_resize')
 
     def destroy_resize_resource(self):
         print("[Dvpp] resize release source start:")
@@ -485,13 +491,14 @@ class Dvpp(object):
         np_output = np.zeros(self._dev_size_dic['out_crop'], dtype=np.byte)
         np_output_ptr, bytes_data = numpy_2_ptr(np_output)
         ret = acl.rt.memcpy(np_output_ptr,
-                            self._dev_size_dic['out_crop'],
-                            self._dev_dic["out_crop"],
-                            self._dev_size_dic['out_crop'],
+                            self._dev_size_dic.get('out_crop'),
+                            self._dev_dic.get("out_crop"),
+                            self._dev_size_dic.get('out_crop'),
                             ACL_MEMCPY_DEVICE_TO_HOST)
 
         check_ret("acl.rt.memcpy", ret)
-
+        if "bytes_to_ptr" in dir(acl.util):
+            np_output = np.frombuffer(bytes_data, dtype=np.byte)
         return np_output, self._dev_dic["out_crop"], \
             self._dev_size_dic['out_crop']
 
@@ -525,10 +532,10 @@ class Dvpp(object):
                                                                   64, 215)
         ret = acl.media.dvpp_vpc_crop_and_paste_async(
                 self._dvpp_channel_desc,
-                self._pic_desc_dic['in_crop_paste'],
-                self._pic_desc_dic['out_crop_paste'],
-                self._roi_dic['crop'],
-                self._roi_dic['paste'],
+                self._pic_desc_dic.get('in_crop_paste'),
+                self._pic_desc_dic.get('out_crop_paste'),
+                self._roi_dic.get('crop'),
+                self._roi_dic.get('paste'),
                 self.stream)
         check_ret("acl.media.dvpp_vpc_crop_async", ret)
         ret = acl.rt.synchronize_stream(self.stream)
@@ -539,13 +546,14 @@ class Dvpp(object):
                              dtype=np.byte)
         np_output_ptr, bytes_data = numpy_2_ptr(np_output)
         ret = acl.rt.memcpy(np_output_ptr,
-                            self._dev_size_dic['out_crop_paste'],
-                            self._dev_dic["out_crop_paste"],
-                            self._dev_size_dic['out_crop_paste'],
+                            self._dev_size_dic.get('out_crop_paste'),
+                            self._dev_dic.get("out_crop_paste"),
+                            self._dev_size_dic.get('out_crop_paste'),
                             ACL_MEMCPY_DEVICE_TO_HOST)
 
         check_ret("acl.rt.memcpy", ret)
-
+        if "bytes_to_ptr" in dir(acl.util):
+            np_output = np.frombuffer(bytes_data, dtype=np.byte)
         return np_output, self._dev_dic["out_crop_paste"], \
             self._dev_size_dic['out_crop_paste']
 
@@ -562,6 +570,8 @@ class Dvpp(object):
                             pic_data, pic_data_size,
                             ACL_MEMCPY_DEVICE_TO_HOST)
         check_ret("acl.rt.memcpy", ret)
+        if "bytes_to_ptr" in dir(acl.util):
+            np_pic = np.frombuffer(bytes_data, dtype=np.byte)
         return np_pic
 
     def load_data_from_file(self, path, in_batch_size,
@@ -623,8 +633,8 @@ class Dvpp(object):
             roi_list[-1] = out_batch_size - total_num + roi_list[-1]
         _, ret = acl.media.dvpp_vpc_batch_crop_async(
             self._dvpp_channel_desc,
-            self._batch_pic_desc['in_batch'], roi_list,
-            self._batch_pic_desc['out_batch'],
+            self._batch_pic_desc.get('in_batch'), roi_list,
+            self._batch_pic_desc.get('out_batch'),
             self._batch_crop_roi_list, self.stream)
         check_ret("acl.media.dvpp_vpc_batch_crop_async", ret)
         ret = acl.rt.synchronize_stream(self.stream)
@@ -672,8 +682,8 @@ class Dvpp(object):
         if out_batch_size % in_batch_size != 0:
             roi_list[-1] = out_batch_size - total_num + roi_list[-1]
         _, ret = acl.media.dvpp_vpc_batch_crop_and_paste_async(
-            self._dvpp_channel_desc, self._batch_pic_desc['in_batch'],
-            roi_list, self._batch_pic_desc['out_batch'],
+            self._dvpp_channel_desc, self._batch_pic_desc.get('in_batch'),
+            roi_list, self._batch_pic_desc.get('out_batch'),
             self._batch_crop_roi_list, self._batch_crop_paste_roi_list,
             self.stream)
         check_ret("acl.media.dvpp_vpc_batch_crop_and_paste_async", ret)
@@ -683,7 +693,7 @@ class Dvpp(object):
         np_list = []
         for i in range(out_batch_size):
             output_desc = acl.media.dvpp_get_pic_desc(
-                self._batch_pic_desc['out_batch'], i)
+                self._batch_pic_desc.get('out_batch'), i)
             np_output = self.get_pic_desc_data(output_desc)
             np_list.append(np_output)
 

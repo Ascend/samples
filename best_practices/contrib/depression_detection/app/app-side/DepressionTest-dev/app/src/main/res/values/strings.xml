@@ -1,0 +1,119 @@
+<resources>
+    <string name="app_name">DepressionTest</string>
+    <string name="test_list_phq9">PHQ-9 量表（抑郁症筛查量表）</string>
+    <string name="test_list_ctq_sf">儿童期创伤问卷（CTQ-SF）</string>
+    <string name="test_list_gad7">GAD-7（广泛性焦虑量表-7）</string>
+    <string name="test_list_les">生活事件量表（LES）</string>
+    <string name="test_list_psqi">匹兹堡睡眠质量指数(PSQI)表</string>
+    <string name="test_list_ssrs">社会支持评定量表(SSRS)</string>
+    <string name="test_list_test">测试</string>
+    <string name="commit">提交</string>
+
+    <string name="camera">Camera</string>
+    <string name="capture">Capture</string>
+    <string name="stop">Stop</string>
+    <string name="pause">Pause</string>
+    <string name="Resume">Resume</string>
+    <string name="Finalize">Finalize</string>
+    <string name="Idle">Idle</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="video_viewer_tips">Tips for the page:\n\t- tap anywhere to replay\n\t- tap system back button to go back</string>
+    <string name="alpha_warning">CameraX VideoCapture is at its alpha phase:\n
+                                    \t- things might change and probably will change\n
+                                    \t- if you need something unavailable, request them now\n
+                                    \nAbout this sample:\n
+                                    \t- demonstrates VideoCapture with Recorder case\n
+                                    \t- is at alpha phase, may have rough edges too\n
+                                    \nWhat is next:\n
+                                    \t** tap anywhere to continue when you are ready **\n</string>
+    <string name="start_video_answer">开始回答</string>
+    <string name="update_video_answer">上传回答</string>
+    <string name="next_question">下一个问题</string>
+    <string name="stop_video_answer">回答结束</string>
+    <string name="start_prediction">开始预测</string>
+
+    <string name="app_tagline">Better surveys with Jetpack Compose</string>
+    <string name="email">Email</string>
+    <string name="input">Input your answer</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="sign_in">Sign in</string>
+    <string name="sign_in_guest">SIGN IN AS GUEST</string>
+    <string name="sign_in_create_account">Sign in or create an account</string>
+    <string name="or">or</string>
+    <string name="forgot_password">FORGOT PASSWORD?</string>
+    <string name="user_continue">CONTINUE</string>
+    <string name="create_account">CREATE ACCOUNT</string>
+    <string name="terms_and_conditions">By continuing, you agree to our Terms of Service. We’ll
+        handle your data according to our Privacy Policy.</string>
+    <string name="feature_not_available">Feature not available</string>
+    <string name="start">START</string>
+    <string name="dismiss">DISMISS</string>
+    <string name="next">NEXT</string>
+    <string name="previous">PREVIOUS</string>
+    <string name="done">DONE</string>
+    <string name="back">Back</string>
+    <string name="close">Close</string>
+    <string name="show_password">Show password</string>
+    <string name="hide_password">Hide password</string>
+
+    <!-- survey-->
+    <string name="which_jetpack_library">Which Jetpack library are you?</string>
+    <string name="question_count">\u00A0of %d</string>
+    <string name="select_one">Select one.</string>
+    <string name="select_all">Select all that apply.</string>
+    <string name="select_date">Select date.</string>
+
+    <!-- question 1-->
+    <string name="in_my_free_time">In my free time I like to …</string>
+    <string name="read">Read</string>
+    <string name="work_out">Work out</string>
+    <string name="draw">Draw</string>
+    <string name="play_games">Play video games</string>
+    <string name="dance">Dance</string>
+    <string name="watch_movies">Watch movies</string>
+
+    <!-- question 2 -->
+    <string name="pick_superhero">Pick a Compose comic character</string>
+    <string name="spark">Spark</string>
+    <string name="lenz">Lenz</string>
+    <string name="bugchaos">Bug of Chaos</string>
+    <string name="frag">Frag</string>
+
+    <!-- question 3  -->
+    <string name="takeaway">When was the last time you ordered takeaway because you couldn\'t be bothered to cook?</string>
+    <string name="pick_date">Pick a date</string>
+
+    <!-- question 4-->
+    <string name="selfies">How do you feel about selfies 🤳?</string>
+
+    <!-- question 5-->
+    <string name="selfie_skills">Show off your selfie skills!</string>
+    <string name="add_photo">ADD PHOTO</string>
+    <string name="retake_photo">RETAKE PHOTO</string>
+    <string name="selfie_permissions">Taking a selfie requires this app to have access to your device storage.</string>
+
+    <!-- question 6-->
+    <string name="favourite_movie">What\'s your favourite movie?</string>
+    <string name="star_trek">Star Trek</string>
+    <string name="social_network">The social network</string>
+    <string name="back_to_future">Back to the future</string>
+    <string name="outbreak">Outbreak</string>
+
+    <string name="survey_result">Congratulations, you are %s</string>
+    <string name="survey_result_description">You are a curious developer, always willing to try
+        something new. You want to stay up to date with the trends to Compose is your middle name</string>
+    <string name="strongly_dislike">Strongly\nDislike</string>
+    <string name="strongly_like">Strongly\nLike</string>
+    <string name="neutral">Neutral</string>
+
+    <!-- Permissions-->
+    <string name="permissions_rationale">This question requires some permissions. Please grant them.</string>
+    <string name="permissions_denied">Permissions were denied. Unfortunately, this question is not available at the moment. Please continue with the survey or grant access to the permissions on the Settings screen.</string>
+    <string name="request_permissions">OK!</string>
+    <string name="do_not_ask_permissions">Nope 🙅</string>
+    <string name="open_settings">Open Settings</string>
+    <string name="introduction">问题部分包含一系列需要回答的问题，请在视频播放结束后，根据视频所提问题，点按\"开始回答\"进行回答，回答结束后，点按\"回答结束\"完成当前问题的回答，继续点按\"下一个问题\"，进入下一个问题回答步骤。\n回答过程中，需要访问手机的摄像头、录音和本地存储权限，请提前允许，并在回答问题的过程中，保持正对屏幕。</string>
+
+</resources>

@@ -158,7 +158,7 @@ void PrintResult(int batchSize)
     for(int i = 0;i < batchSize;i++)
     {
         map<float, unsigned int, greater<float>> resultMap;
-        for (unsigned int j = 0; j < outputDataSize / (sizeof(float) * 2); ++j)
+        for (unsigned int j = 0; j < outputDataSize / (sizeof(float) * batchSize); ++j)
         {
             resultMap[*outFloatData] = j;
             outFloatData++;

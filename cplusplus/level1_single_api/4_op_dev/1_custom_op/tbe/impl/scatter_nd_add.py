@@ -18,7 +18,7 @@ import math
 from functools import reduce as functools_reduce
 
 from tbe import tik
-import te.platform as tbe_platform
+import tbe.common.platform as tbe_platform
 from tbe.common.platform import platform_info
 from tbe.common.utils import para_check
 

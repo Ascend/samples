@@ -58,7 +58,7 @@ Check whether the following requirements are met. If not, perform operations acc
     wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/PortraitNet%20/insert_op.cfg
     atc --model=./portrait.pb  --insert_op_conf=./insert_op.cfg  --output="./portrait" --output_type=FP32 --input_shape="Inputs/x_input:1,224,224,3" --framework=3 --soc_version=Ascend310
 
-
+* Note: If you are converting models on the 310B chip, please set the value of "soc_version" parameter as "Ascend310B1" before running the atc command.
 
 3. Obtain the test image required by the sample.
     ```
@@ -76,12 +76,23 @@ Check whether the following requirements are met. If not, perform operations acc
     # In the following information, xxx.xxx.xxx.xxx is the IP address of the operating environment. The IP address of Atlas 200 DK is 192.168.1.2 when it is connected over the USB port, and that of Atlas 300 (AI1s) is the corresponding public IP address.
     scp -r $HOME/samples/python/contrib/portrait_pictureHwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser
     ssh HwHiAiUser@xxx.xxx.xxx.xxx
-    cd ${HOME}/portrait_picture/src    
     ```
+
 2. Run the executable file.
-    ```
-    python3.6 main.py
-    ```
+
+    - If **step 1** has been performed, please run the following command
+
+      ```
+      cd ${HOME}/portrait_picture/src   
+      python3 main.py
+      ```
+
+    - If not, please run the following command
+
+      ```
+      cd $HOME/samples/python/contrib/portrait_picture/src
+      python3 main.py
+      ```
 
 ### Result Viewing
 

@@ -5,10 +5,7 @@ CREATED:  2020-6-04 20:12:13
 MODIFIED: 2020-6-28 14:04:45
 """
 import acl
-import struct
 import numpy as np
-import datetime
-import sys
 import os
 
 import constants as const
@@ -146,7 +143,7 @@ class AclLiteModel(object):
             _, ret = acl.mdl.add_dataset_buffer(self._input_dataset,
                                                 dataset_buffer)
             if ret:
-                log_error("Add input dataset buffer failed")
+                log_error("Add input dataset buffer failed, ret = ", ret)
                 acl.destroy_data_buffer(self._input_dataset)
                 ret = const.FAILED
                 break
@@ -206,7 +203,7 @@ class AclLiteModel(object):
                                     input_ptr, size,
                                     const.ACL_MEMCPY_DEVICE_TO_DEVICE)                
             if ret != const.ACL_SUCCESS:
-                log_error("Copy model %dth input to device failed" % (index))
+                log_error("Copy model %dth input to device failed, ret = %d" % (index, ret))
                 return None
             data = buffer_item['addr']
         else:
@@ -219,13 +216,13 @@ class AclLiteModel(object):
     def _set_dynamic_batch_size(self, batch):
         dynamicIdx, ret = acl.mdl.get_input_index_by_name(self._model_desc, "ascend_mbatch_shape_data")
         if ret != const.ACL_SUCCESS:
-            log_error("get_input_index_by_name failed")
+            log_error("get_input_index_by_name failed, ret = ", ret)
             return const.FAILED
         batch_dic, ret = acl.mdl.get_dynamic_batch(self._model_desc)
         if ret != const.ACL_SUCCESS:
-            log_error("get_dynamic_batch failed")
+            log_error("get_dynamic_batch failed, ret = ", ret)
             return const.FAILED
-        print("[INFO] get dynamic_batch = ", batch_dic)
+        log_info("[INFO] get dynamic_batch = ", batch_dic)
         ret = acl.mdl.set_dynamic_batch_size(self._model_id, self._input_dataset, dynamicIdx, batch)
         if ret != const.ACL_SUCCESS:
             log_error("set_dynamic_batch_size failed, ret = ", ret)
@@ -233,8 +230,7 @@ class AclLiteModel(object):
         if batch in batch_dic["batch"]:
             return const.SUCCESS
         else:
-            assert ret == ACL_ERROR_GE_DYNAMIC_BATCH_SIZE_INVALID
-            print("[INFO] [dynamic batch] {} is not in {}".format(batch, batch_dic["batch"]))
+            log_error("[INFO] [dynamic batch] {} is not in {}".format(batch, batch_dic["batch"]))
             return const.FAILED
 
     def _execute_with_dynamic_batch_size(self, input_list, batch):
@@ -252,7 +248,7 @@ class AclLiteModel(object):
                               self._input_dataset,
                               self._output_dataset)
         if ret != const.ACL_SUCCESS:
-            log_error("Execute model failed for acl.mdl.execute error ", ret)
+            log_error("Execute model failed for acl.mdl.execute error, ret = ", ret)
             return None
 
         self._release_dataset(self._input_dataset)
@@ -279,7 +275,7 @@ class AclLiteModel(object):
                               self._input_dataset,
                               self._output_dataset)
         if ret != const.ACL_SUCCESS:
-            log_error("Execute model failed for acl.mdl.execute error ", ret)
+            log_error("Execute model failed for acl.mdl.execute error, ret = ", ret)
             return None
 
         self._release_dataset(self._input_dataset)
@@ -306,7 +302,7 @@ class AclLiteModel(object):
                                 data_size,
                                 data, size, self._copy_policy)
             if ret != const.ACL_SUCCESS:
-                log_error("Memcpy inference output to local failed")
+                log_error("Memcpy inference output to local failed, ret = ", ret)
                 return None
 
             if isinstance (output_data,bytes):
@@ -371,15 +367,15 @@ class AclLiteModel(object):
                 output_tensor = np.zeros(
                     size, dtype=np_type).reshape(shape) 
             else:
-                print("Unspport model output datatype ", datatype)
+                log_error("Unspport model output datatype ", datatype)
                 return None
 
             if not output_tensor.flags['C_CONTIGUOUS']:
                 output_tensor = np.ascontiguousarray(output_tensor)
 
             if "bytes_to_ptr" in dir(acl.util):
-                bytes_data=output_tensor.tobytes()
-                tensor_ptr=acl.util.bytes_to_ptr(bytes_data)
+                bytes_data = output_tensor.tobytes()
+                tensor_ptr = acl.util.bytes_to_ptr(bytes_data)
                 output_tensor_list.append({"ptr": tensor_ptr,
                                         "tensor": bytes_data,
                                         "shape":output_tensor.shape,
@@ -403,7 +399,7 @@ class AclLiteModel(object):
 
         ret = acl.mdl.destroy_dataset(dataset)
         if ret != const.ACL_SUCCESS:
-            log_error("Destroy data buffer error ", ret)
+            log_error("Destroy data buffer error, ret = ", ret)
 
     def _release_databuffer(self, data_buffer, free_memory=False):
         if free_memory:
@@ -413,7 +409,7 @@ class AclLiteModel(object):
 
         ret = acl.destroy_data_buffer(data_buffer)
         if ret != const.ACL_SUCCESS:
-            log_error("Destroy data buffer error ", ret)
+            log_error("Destroy data buffer error, ret = ", ret)
 
     def destroy(self):
         """
@@ -430,12 +426,12 @@ class AclLiteModel(object):
         if self._model_id:
             ret = acl.mdl.unload(self._model_id)
             if ret != const.ACL_SUCCESS:
-                log_info("acl.mdl.unload error:", ret)
+                log_info("acl.mdl.unload error, ret = ", ret)
 
         if self._model_desc:
             ret = acl.mdl.destroy_desc(self._model_desc)
             if ret != const.ACL_SUCCESS:
-                log_info("acl.mdl.destroy_desc error:", ret)
+                log_info("acl.mdl.destroy_desc error, ret = ", ret)
 
         self._is_destroyed = True
         resource_list.unregister(self)

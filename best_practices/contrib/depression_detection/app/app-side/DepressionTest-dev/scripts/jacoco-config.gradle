@@ -1,0 +1,40 @@
+project.ext {
+
+    jacocoCoverageThresholdDefault = 0.60
+
+    jacocoIgnoreList = [
+    ]
+
+    // Exclude file by names, packages or types. Such files will be ignored during test coverage
+    // calculation
+    jacocoFileFilter = [
+            '**/R.class',
+            '**/R$*.class',
+            '**/BuildConfig.*',
+            '**/Manifest*.*',
+            '**/*FragmentDirections*.*',
+            '**/*FragmentArgs*.*',
+            '**/*Fragment.*',
+            '**/*Fragment$*.*',
+            '**/*App.*',
+            '**/*App$*.*',
+            '**/Manifest*.*',
+            'android/**/*.*',
+            '**/model/**',
+            '**/BuildConfig.*',
+            '**/*$ViewBinder*.*',
+            '**/*$ViewInjector*.*',
+            '**/Lambda$*.class',
+            '**/Lambda.class',
+            '**/*Lambda.class',
+            '**/*Tracker.class',
+            '**/*Lambda*.class',
+            '**/*View.*',
+            '**/*ViewGroup.*',
+            '**/*JsonAdapter.*',
+            '**/di/**',
+            '**/*Dagger.*',
+            '**/transmit/**',
+            '**/*Module.*'
+    ]
+}

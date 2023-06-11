@@ -15,14 +15,14 @@ sys.path.append(os.path.join(path, ".."))
 sys.path.append(os.path.join(path, "../../../common/"))
 sys.path.append(os.path.join(path, "../../../common/acllite"))
 
-import acl_model
+from acllite_model import AclLiteModel
 from acllite_utils import display_time  
 
 currentPath= os.path.abspath(os.path.dirname(path) + os.path.sep + ".")
 
 MODEL_PATH = os.path.join(currentPath, "model/hifill.om")
 MODEL_MATMUL_PATH =os.path.join(currentPath, 
-     "model/0_BatchMatMul_0_0_1_1_1024_1024_0_0_1_1_1024_27648_0_0_1_1_1024_27648.om")
+     "model/0_BatchMatMul_0_0_1_1_1024_1024_0_0_1_1_1024_27648_0_0_1_1_1024_27648/0_BatchMatMul_0_0_1_1_1024_1024_0_0_1_1_1024_27648_0_0_1_1_1024_27648.om")
 INPUT_SIZE = 512  
 ATTENTION_SIZE = 32 
 MULTIPLE = 6
@@ -164,8 +164,8 @@ def image_inpaint(image_dirs, masks_dirs, output_dir):
     image inpainting interface
     """
     #load model
-    model = acl_model.Model(MODEL_PATH)
-    matmul_om = acl_model.Model(MODEL_MATMUL_PATH)
+    model = AclLiteModel(MODEL_PATH)
+    matmul_om = AclLiteModel(MODEL_MATMUL_PATH)
     
     paths_img, paths_mask = get_imgs_masks_file_list(image_dirs, masks_dirs)
     for i in range(len(paths_img)):

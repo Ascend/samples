@@ -5,7 +5,7 @@ import cv2
 
 path = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.join(path, ".."))
-sys.path.append(os.path.join(path, "../../../common/"))
+sys.path.append(os.path.join(path, "../../../common/acllite/"))
 
 import acl
 import acllite_utils as utils

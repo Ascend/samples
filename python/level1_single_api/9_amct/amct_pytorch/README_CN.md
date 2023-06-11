@@ -7,7 +7,7 @@ AMCT PyTorch 包含训练后量化，量化感知训练， QAT 模型转 Ascend 
 | 网络 | 演示功能 |
 | :-: | :-: |
 | [MobileNet V2](mobilenet_v2/README_CN.md) | 训练后量化（基于精度的自动量化） |
-| [ResNet-101](./resnet-101/README_CN.md) | 训练后量化（均匀量化，非均匀量化），量化感知训练 |
+| [ResNet-101](./resnet-101/README_CN.md) | 训练后量化（均匀量化，非均匀量化），量化感知训练，稀疏，组合压缩 |
 
 ## 张量分解
 

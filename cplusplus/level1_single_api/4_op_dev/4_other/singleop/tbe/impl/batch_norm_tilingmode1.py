@@ -12,13 +12,13 @@ Apache License for more details at
 http://www.apache.org/licenses/LICENSE-2.0
 """
 
-from te import tik
-from te.platform.cce_conf import te_set_l2_mode
+import os
+import warnings
 
-te_set_l2_mode(1)
-
-#size of 310 ai core ub buffer
-UB_SIZE = 240 * 1024
+from tbe import tik
+from tbe.common.platform import UB_SIZE
+from tbe.common.platform import get_soc_spec
+from tbe.common.platform import set_current_compile_soc_info
 
 #batch for N
 MAX_BATCH = 1
@@ -70,10 +70,17 @@ class BatchNorm(object):
     -------
     None
     """
-    def __init__(self, input0, gamma0, beta0,
-                 output0, kernel_name="BatchNorm"):
+    def __init__(self, input0, gamma0, beta0, output0, kernel_name="BatchNorm"):
 
-        self.tik_instance = tik.Tik(tik.Dprofile("v100", "mini"))
+        # SET Ascend AI Processor version.
+        soc_version = os.getenv("SOC_VERSION")
+        if soc_version is None:
+            warnings.warn("SOC_VERSION no environment variable is set,"
+                          " the default value of Ascend310 will be used.")
+            soc_version = "Ascend310"
+        set_current_compile_soc_info(soc_version)
+
+        self.tik_instance = tik.Tik()
 
         self.sclar_gamma = self.tik_instance.Scalar("float16")
         self.sclar_beta = self.tik_instance.Scalar("float16")
@@ -172,8 +179,8 @@ class BatchNorm(object):
                                     align_c // 16, 0, 0)
 
         # 1/var
-        self.tik_instance.vrec(16, self.beta_ub, self.beta_ub,
-                               align_c // 16, 1, 1, 1, 1)
+        self.tik_instance.vec_rec(16, self.beta_ub, self.beta_ub,
+                                  align_c // 16, 1, 1)
         # -mean
         self.tik_instance.vec_muls(16, self.gamma_ub, self.gamma_ub,
                                    -1.0, align_c // 16, 1, 1)
@@ -199,7 +206,6 @@ class BatchNorm(object):
                                               self.param5, self.param6,
                                               self.param7, self.param8,
                                               self.param9, self.param10],
-                                   enable_l2=True,
                                    config={"double_buffer_non_reuse": True,
                                            "out_of_bound_sync_check": True})
         return self.tik_instance
@@ -222,6 +228,8 @@ class BatchNorm(object):
         -------
         None
         """
+        ub_size = get_soc_spec(UB_SIZE)
+
         with self.tik_instance.new_stmt_scope():
             chn_num = MAX_CHANNEL
             input_gm = self.input_gm
@@ -232,7 +240,7 @@ class BatchNorm(object):
             total_use_ub = \
                 chn_num*align_16*2*self.byte_fp16 + chn_num*self.byte_fp16
 
-            with self.tik_instance.if_scope(total_use_ub <= UB_SIZE):
+            with self.tik_instance.if_scope(total_use_ub <= ub_size):
 
                 align_wh = self.param2
                 align_c = self.param3
@@ -380,14 +388,14 @@ class BatchNorm(object):
                                                 self.input_c, 1,
                                                 stride_alignwh, 0)
 
-                    #[align_c, 16]
+                    #align_c & 16
                     src_list = [ping_ub[0, 0], ping_ub[1, 0], ping_ub[2, 0],
                                 ping_ub[3, 0], ping_ub[4, 0], ping_ub[5, 0],
                                 ping_ub[6, 0], ping_ub[7, 0], ping_ub[8, 0],
                                 ping_ub[9, 0], ping_ub[10, 0], ping_ub[11, 0],
                                 ping_ub[12, 0], ping_ub[13, 0], ping_ub[14, 0],
                                 ping_ub[15, 0]]
-                    #[16, align_c]
+                    #16 & align_c
                     dst_list = [trans_ub[0, 0], trans_ub[1, 0], trans_ub[2, 0],
                                 trans_ub[3, 0], trans_ub[4, 0], trans_ub[5, 0],
                                 trans_ub[6, 0], trans_ub[7, 0], trans_ub[8, 0],
@@ -408,7 +416,7 @@ class BatchNorm(object):
                                                   beta_ub, repeat_alignc,
                                                   1, 1, 1)
 
-                    #[16, align_c]
+                    #16 & align_c
                     src_list = [trans_ub[0, 0], trans_ub[1, 0], trans_ub[2, 0],
                                 trans_ub[3, 0], trans_ub[4, 0], trans_ub[5, 0],
                                 trans_ub[6, 0], trans_ub[7, 0], trans_ub[8, 0],
@@ -416,7 +424,7 @@ class BatchNorm(object):
                                 trans_ub[11, 0], trans_ub[12, 0],
                                 trans_ub[13, 0], trans_ub[14, 0],
                                 trans_ub[15, 0]]
-                    #[align_c, 16]
+                    #align_c & 16
                     dst_list = [vconv_ub[0, 0], vconv_ub[1, 0], vconv_ub[2, 0],
                                 vconv_ub[3, 0], vconv_ub[4, 0], vconv_ub[5, 0],
                                 vconv_ub[6, 0], vconv_ub[7, 0], vconv_ub[8, 0],
@@ -459,14 +467,14 @@ class BatchNorm(object):
                                                 stride_alignwh, 0)
 
                     #transfer (chn_num, 16) to (16, chn_num)
-                    #[align_c, 16]
+                    #align_c & 16
                     src_list = [ping_ub[0, 0], ping_ub[1, 0], ping_ub[2, 0],
                                 ping_ub[3, 0], ping_ub[4, 0], ping_ub[5, 0],
                                 ping_ub[6, 0], ping_ub[7, 0], ping_ub[8, 0],
                                 ping_ub[9, 0], ping_ub[10, 0], ping_ub[11, 0],
                                 ping_ub[12, 0], ping_ub[13, 0],
                                 ping_ub[14, 0], ping_ub[15, 0]]
-                    #[16, align_c]
+                    #16 & align_c
                     dst_list = [trans_ub[0, 0], trans_ub[1, 0], trans_ub[2, 0],
                                 trans_ub[3, 0], trans_ub[4, 0], trans_ub[5, 0],
                                 trans_ub[6, 0], trans_ub[7, 0], trans_ub[8, 0],
@@ -487,7 +495,7 @@ class BatchNorm(object):
                                                   tmp_ub, beta_ub,
                                                   repeat_alignc, 1, 1, 1)
 
-                    #[16, align_c]
+                    #16 & align_c
                     src_list = [trans_ub[0, 0], trans_ub[1, 0], trans_ub[2, 0],
                                 trans_ub[3, 0], trans_ub[4, 0], trans_ub[5, 0],
                                 trans_ub[6, 0], trans_ub[7, 0], trans_ub[8, 0],
@@ -495,7 +503,7 @@ class BatchNorm(object):
                                 trans_ub[11, 0], trans_ub[12, 0],
                                 trans_ub[13, 0], trans_ub[14, 0],
                                 trans_ub[15, 0]]
-                    #[align_c, 16]
+                    #align_c & 16
                     dst_list = [vconv_ub[0, 0], vconv_ub[1, 0], vconv_ub[2, 0],
                                 vconv_ub[3, 0], vconv_ub[4, 0], vconv_ub[5, 0],
                                 vconv_ub[6, 0], vconv_ub[7, 0], vconv_ub[8, 0],

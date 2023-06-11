@@ -29,7 +29,7 @@
        **注：如果需要切换到其它tag版本，以v0.5.0为例，可执行以下命令。**
        ```
        git checkout v0.5.0
-       ```   
+       ```
     - 压缩包方式下载（下载时间较短，但步骤稍微复杂）。   
        **注：如果需要下载其它版本代码，请先请根据前置条件说明进行samples仓分支切换。**   
        ``` 
@@ -38,7 +38,7 @@
         # 3. 开发环境中，执行以下命令，解压zip包。     
         cd ${HOME}    
         unzip ascend-samples-master.zip
-        ```
+       ```
 
 2. 模型转换。     
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
@@ -51,16 +51,28 @@
     wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/ARshadowGAN/model.pb
     atc --output_type=FP32 --input_shape="placeholder/input_image:1,256,256,3;placeholder/input_mask:1,256,256,1" --input_format=NHWC --output=model --soc_version=Ascend310 --framework=3 --model=./model.pb --precision_mode=allow_fp32_to_fp16
     ```
+    
+    **注：如果在310B芯片上进行转换，修改参数--soc_version=Ascend310B1即可。**
 
 ### 样例部署
+
  执行以下命令，执行编译脚本，开始样例编译。   
 ```
 cd $HOME/samples/cplusplus/contrib/ar_shadowgan/scripts   
 bash sample_build.sh
 ```
 
+**注：若环境中opencv使用的是opencv4版本，则提前创建如下软链接。**
+
+```
+# 解决编译问题fatal error: opencv2/opencv.hpp: No such file or directory
+ln -s /usr/include/opencv4/opencv2/ /usr/include/
+```
+
 ### 样例运行
+
 **注：开发环境与运行环境合一部署，请跳过步骤1，直接执行[步骤2](#step_2)即可。**      
+
 1. 执行以下命令,将开发环境的 **ar_shadowgan** 目录上传到运行环境中，例如 **/home/HwHiAiUser**，并以HwHiAiUser（运行用户）登录运行环境（Host）。     
    ```
    # 【xxx.xxx.xxx.xxx】为运行环境ip，200DK在USB连接时一般为192.168.1.2，300（ai1s）为对应的公网ip。
@@ -70,12 +82,20 @@ bash sample_build.sh
    ```
 
 2. <a name="step_2"></a>执行运行脚本，开始样例运行。            
+   
    ```
    bash sample_run.sh
    ```
 
+3. 执行后处理脚本，对推理图片进行后处理。
+
+   ```
+   cd ../
+   python3 result_process.py
+   ```
 
 ### 查看结果
+
 运行完成后，会在运行环境的命令行中打印出推理结果,并在$HOME/samples/cplusplus/contrib/ar_shadowgan/out/output目录下生成合成后的图片。
 
 ### 常见错误

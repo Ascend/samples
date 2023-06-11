@@ -1,6 +1,4 @@
 import sys
-sys.path.append("../../../../common")
-sys.path.append("../")
 import os
 import json
 import numpy as np
@@ -9,9 +7,9 @@ import cv2 as cv
 from PIL import Image
 import pickle
 import LaneFinder
-import constants as const
-from acllite_model import AclLiteModel
-from acllite_resource import AclLiteResource
+from acllite.acllite_model import AclLiteModel
+from acllite.acllite_resource import AclLiteResource
+import acllite.constants as const
 
 labels = ["person",
         "bicycle", "car", "motorbike", "aeroplane",
@@ -208,6 +206,7 @@ def main():
         print("Please input video path")
         exit(1)
     #ACL resource initialization
+    frame_count = 0
     acl_resource = AclLiteResource()
     acl_resource.init()
     #load model
@@ -262,6 +261,9 @@ def main():
                 cv.putText(frame_with_lane, out_label, p3, cv.FONT_ITALIC, 0.6, colors[i % 6], 1)
 
             outVideo.write(frame_with_lane)
+            print("FINISH PROCESSING FRAME: ", frame_count)
+            frame_count += 1
+            print('\n\n\n')
         # Break the loop
         else:
             break

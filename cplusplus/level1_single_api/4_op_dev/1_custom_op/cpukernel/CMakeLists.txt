@@ -106,6 +106,11 @@ if("x${KERNELS_SRCS}" STREQUAL "x")
     return(0)
 endif()
 
+foreach (CPP_SOURCE ${KERNELS_SRCS})
+  get_filename_component(filename ${CPP_SOURCE}, NAME)
+  set_property(SOURCE ${CPP_SOURCE} PROPERTY COMPILE_DEFINITIONS __FILE__=\"${filename}\")
+endforeach(CPP_SOURCE)
+
 set(ASCEND_OPP_PATH $ENV{ASCEND_OPP_PATH})
 if("x${ASCEND_OPP_PATH}" STREQUAL "x")
         message(FATAL_ERROR "ENV ASCEND_OPP_PATH is not set")

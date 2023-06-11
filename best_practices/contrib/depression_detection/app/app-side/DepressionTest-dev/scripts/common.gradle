@@ -1,0 +1,87 @@
+ext {
+    versionMajor = 1
+    versionMinor = 0
+    versionPatch = 1
+}
+
+def computeVersionName() {
+    return String.format('%d.%d.%d.%d', versionMajor, versionMinor, versionPatch, Integer.valueOf(System.env.BUILD_NUMBER ?: 0))
+}
+
+def computeVersionCode() {
+    return (versionMajor * 100000) + (versionMinor * 10000) + (versionPatch * 1000) + Integer.valueOf(System.env.BUILD_NUMBER ?: 0)
+}
+
+
+android {
+    compileSdk versions.compileSdk
+
+    defaultConfig {
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunnerArguments clearPackageData: 'true'
+
+        minSdk versions.minSdk
+        targetSdk versions.targetSdk
+
+        versionName computeVersionName()
+        versionCode computeVersionCode()
+    }
+
+    buildTypes {
+        debug {
+            testCoverageEnabled true
+        }
+    }
+
+    splits {
+        abi {
+            enable true
+            reset()
+            include /*"x86", "armeabi-v7a",*/ "arm64-v8a"
+            universalApk false
+        }
+    }
+
+    buildFeatures {
+        dataBinding = true
+        viewBinding = true
+        compose true
+    }
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/AL2.0'
+        exclude 'META-INF/LGPL2.1'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion versions.compose
+    }
+
+    testOptions {
+//        execution 'ANDROIDX_TEST_ORCHESTRATOR'
+        animationsDisabled true
+        unitTests {
+            returnDefaultValues = true
+            includeAndroidResources = true
+        }
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+        freeCompilerArgs += [
+                "-Xopt-in=kotlin.RequiresOptIn"
+        ]
+    }
+}

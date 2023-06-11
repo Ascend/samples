@@ -1,0 +1,23 @@
+{
+    "binFileName":"printf_gm",
+    "binFileSuffix":".o",
+    "blockDim":1,
+    "kernelName":"printf_gm__kernel0",
+    "magic":"RT_DEV_BINARY_MAGIC_ELF",
+    "opParaSize":0,
+    "parameters":[
+        0,
+        0,
+        0
+    ],
+    "sha256":"908c3e824fc22424e9980997c721a97afa7b4a97559adcd816f0a42d3f6bb6df",
+    "workspace":{
+        "num":1,
+        "size":[
+            134217728
+        ],
+        "type":[
+            0
+        ]
+    }
+}

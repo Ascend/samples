@@ -58,7 +58,7 @@ void ProcessOutput(const aclmdlDataset *output, const char *originImage, float x
     shared_ptr<void> dataBuff[2] = {nullptr, nullptr};
     size_t index = 0;
     for (size_t i = 0; (i < aclmdlGetDatasetNumBuffers(output)) && (i < 2); ++i) {
-        std::string name = "../out/output_" + to_string(i) + ".bin";
+        std::string name = "../out/output/output_" + to_string(i) + ".bin";
         if (outputFile != nullptr) {
             fclose(outputFile);
         }

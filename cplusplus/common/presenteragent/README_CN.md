@@ -1,5 +1,5 @@
 中文|[英文](README.md)  
-Presenter Agent安装步骤请参考[链接](../../environment/presenteragent_install)
+Presenter Agent安装步骤请参考[链接](https://github.com/Ascend/samples/wikis/%E9%80%9A%E7%94%A8%E7%9B%AE%E6%A0%87%E8%AF%86%E5%88%AB%E6%A0%B7%E4%BE%8B/%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87/%E4%BE%9D%E8%B5%96%E5%AE%89%E8%A3%85/PresentAgent)
 
 Presenter部署在Mind Studio所在的Linux服务器上，主要作用是推理结果的展示。
 

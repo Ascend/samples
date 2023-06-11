@@ -19,15 +19,15 @@ class AclLiteImage(object):
                       device and np array
         width: image width
         height: image height
-        alignWidth: align image width
-        alignHeight: align image height
+        align_width: align image width
+        align_height: align image height
         _encode_format: image format
         _load_ok: load image success or not
 
     """
     _run_mode, _ = acl.rt.get_run_mode()
 
-    def __init__(self, image, width=0, height=0, alignWidth=0, alignHeight=0,
+    def __init__(self, image, width=0, height=0, align_width=0, align_height=0,
                  size=0, memory_type=const.MEMORY_NORMAL):
         """Create AclLiteImage instance
         Args:
@@ -42,11 +42,12 @@ class AclLiteImage(object):
                          arg is not nesscessary
         """
         self._data = None
+        self._bytes_data = None
         self._memory_type = memory_type
         self.width = 0
         self.height = 0
-        self.alignWidth = 0
-        self.alignHeight = 0
+        self.align_width = 0
+        self.align_height = 0
         self.size = 0
         self._encode_format = const.ENCODE_FORMAT_UNKNOW
         self._load_ok = True
@@ -54,50 +55,15 @@ class AclLiteImage(object):
         if isinstance(image, str):
             self._instance_by_image_file(image, width, height)
         elif isinstance(image, int):
-            self._instance_by_buffer(image, width, height, alignWidth, alignHeight, size)
+            self._instance_by_buffer(image, width, height, align_width, align_height, size)
         elif isinstance(image, np.ndarray):
-            self._instance_by_nparray(image, width, height, alignWidth, alignHeight)
+            self._instance_by_nparray(image, width, height, align_width, align_height)
         else:
             acl_log.log_error("Create instance failed for "
                               "unknow image data type")
 
-    def _instance_by_image_file(self, image_path, width, height):
-        # Get image format by filename suffix
-        self._encode_format = self._get_image_format_by_suffix(image_path)
-        if self._encode_format == const.ENCODE_FORMAT_UNKNOW:
-            acl_log.log_error("Load image %s failed" % (image_path))
-            self._load_ok = False
-            return
-
-        # Read image data from file to memory
-        self._data = np.fromfile(image_path, dtype=np.byte)
-        self._type = const.IMAGE_DATA_NUMPY
-        self.size = self._data.itemsize * self._data.size
-        self._memory_type = const.MEMORY_NORMAL
-
-        # Get image parameters of jpeg or png file by pillow
-        if ((self._encode_format == const.ENCODE_FORMAT_JPEG) or
-                (self._encode_format == const.ENCODE_FORMAT_PNG)):
-            image = Image.open(image_path)
-            self.width, self.height = image.size
-        else:
-            # pillow can not decode yuv, so need input widht and height args
-            self.width = width
-            self.height = height
-
-    def _get_image_format_by_suffix(self, filename):
-        suffix = os.path.splitext(filename)[-1].strip().lower()
-        if (suffix == ".jpg") or (suffix == ".jpeg"):
-            image_format = const.ENCODE_FORMAT_JPEG
-        elif suffix == ".png":
-            image_format = const.ENCODE_FORMAT_PNG
-        elif suffix == ".yuv":
-            image_format = const.ENCODE_FORMAT_YUV420_SP
-        else:
-            acl_log.log_error("Unsupport image format: ", suffix)
-            image_format = const.ENCODE_FORMAT_UNKNOW
-
-        return image_format
+    def __del__(self):
+        self.destroy()
 
     def is_loaded(self):
         """Image file load result
@@ -109,25 +75,6 @@ class AclLiteImage(object):
             False: load failed
         """
         return self._load_ok
-
-    def _instance_by_buffer(self, image_buffer, width, height, alignWidth, alignHeight, size):
-        self.width = width
-        self.height = height
-        self.alignHeight = alignHeight
-        self.alignWidth = alignWidth
-        self.size = size
-        self._data = image_buffer
-        self._type = const.IMAGE_DATA_BUFFER
-
-    def _instance_by_nparray(self, data, width, height, alignWidth, alignHeight):
-        self.width = width
-        self.height = height
-        self.alignHeight = alignHeight
-        self.alignWidth = alignWidth
-        self.size = data.itemsize * data.size
-        self._data = data
-        self._type = const.IMAGE_DATA_NUMPY
-        self._memory_type = const.MEMORY_NORMAL
 
     def byte_data_to_np_array(self):
         """Trans image data to np array"""
@@ -141,10 +88,10 @@ class AclLiteImage(object):
         """Get image binary data"""
         if self._type == const.IMAGE_DATA_NUMPY:
             if "bytes_to_ptr" in dir(acl.util):
-                bytes_data=self._data.tobytes()
-                factor_ptr=acl.util.bytes_to_ptr(bytes_data)
+                self._bytes_data = self._data.tobytes()
+                factor_ptr = acl.util.bytes_to_ptr(self._bytes_data)
             else:
-                factor_ptr=acl.util.numpy_to_ptr(self._data)
+                factor_ptr = acl.util.numpy_to_ptr(self._data)
             return factor_ptr
         else:
             return self._data
@@ -215,6 +162,59 @@ class AclLiteImage(object):
         self._data = None
         self.size = 0
 
-    def __del__(self):
-        self.destroy()
+    def _instance_by_image_file(self, image_path, width, height):
+        # Get image format by filename suffix
+        self._encode_format = self._get_image_format_by_suffix(image_path)
+        if self._encode_format == const.ENCODE_FORMAT_UNKNOW:
+            acl_log.log_error("Load image %s failed" % (image_path))
+            self._load_ok = False
+            return
 
+        # Read image data from file to memory
+        self._data = np.fromfile(image_path, dtype=np.byte)
+        self._type = const.IMAGE_DATA_NUMPY
+        self.size = self._data.itemsize * self._data.size
+        self._memory_type = const.MEMORY_NORMAL
+
+        # Get image parameters of jpeg or png file by pillow
+        if ((self._encode_format == const.ENCODE_FORMAT_JPEG) or
+                (self._encode_format == const.ENCODE_FORMAT_PNG)):
+            image = Image.open(image_path)
+            self.width, self.height = image.size
+        else:
+            # pillow can not decode yuv, so need input widht and height args
+            self.width = width
+            self.height = height
+
+    def _get_image_format_by_suffix(self, filename):
+        suffix = os.path.splitext(filename)[-1].strip().lower()
+        if (suffix == ".jpg") or (suffix == ".jpeg"):
+            image_format = const.ENCODE_FORMAT_JPEG
+        elif suffix == ".png":
+            image_format = const.ENCODE_FORMAT_PNG
+        elif suffix == ".yuv":
+            image_format = const.ENCODE_FORMAT_YUV420_SP
+        else:
+            acl_log.log_error("Unsupport image format: ", suffix)
+            image_format = const.ENCODE_FORMAT_UNKNOW
+
+        return image_format
+
+    def _instance_by_buffer(self, image_buffer, width, height, align_width, align_height, size):
+        self.width = width
+        self.height = height
+        self.align_height = align_height
+        self.align_width = align_width
+        self.size = size
+        self._data = image_buffer
+        self._type = const.IMAGE_DATA_BUFFER
+
+    def _instance_by_nparray(self, data, width, height, align_width, align_height):
+        self.width = width
+        self.height = height
+        self.align_height = align_height
+        self.align_width = align_width
+        self.size = data.itemsize * data.size
+        self._data = data
+        self._type = const.IMAGE_DATA_NUMPY
+        self._memory_type = const.MEMORY_NORMAL

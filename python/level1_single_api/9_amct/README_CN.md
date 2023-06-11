@@ -16,3 +16,4 @@
 | [amct_pytorch](./amct_pytorch/README_CN.md)  | amct_pytorch相关功能样例  | [昇腾模型压缩工具使用指南（PyTorch）](https://www.hiascend.com/document)| 
 | [amct_tensorflow](./amct_tensorflow/README_CN.md)  | amct_tensorflow相关功能样例  | [昇腾模型压缩工具使用指南（TensorFlow）](https://www.hiascend.com/document)|
 | [amct_tensorflow_ascend](./amct_tensorflow_ascend/README_CN.md)  | amct_tensorflow_ascend相关功能样例  | [昇腾模型压缩工具使用指南（TensorFlow, Ascend910）](https://www.hiascend.com/document)|
+| [atc](./atc/README_CN.md)  | atc相关功能样例 |  [ATC工具使用指南](https://www.hiascend.com/document) |

@@ -8,10 +8,10 @@ import sys
 import os
 import numpy as np
 from PIL import Image
-import struct
 
 sys.path.append("../../../common/")
 sys.path.append("../")
+sys.path.append("../../../common/acllite")
 import acl
 import acllite_utils as utils
 import constants as constants
@@ -31,6 +31,13 @@ class SingleImageDehaze(object):
         self._img_width = 0
         self._img_height = 0
         self._model = None
+
+    @staticmethod
+    def sigmoid(x):
+        """
+        sigmod function
+        """
+        return 1. / (1 + np.exp(-x))
 
     def init(self):
         """
@@ -63,44 +70,37 @@ class SingleImageDehaze(object):
         """
         return self._model.execute(input_data)
 
-    def sigmoid(self, x):
-        """
-        sigmod function
-        """
-        return 1. / (1 + np.exp(-x))
-
     def post_process(self, infer_output, image_name):
         """
         Post-processing, analysis of inference results
         """
-        result = []
-        resultArray = np.array(infer_output[0])
-        resultimage=np.reshape(infer_output[0], (512, 512, 3))
-        resultimage = resultimage[:, :, ::-1]
-        resultimage = np.clip(((resultimage)+1.) / 2. * 255., 0, 255).astype(np.uint8)
-        resultimage = Image.fromarray(resultimage)
-        resultimage = resultimage.resize((self._img_width, self._img_height))
-        resultimage.save('../out/out_' + image_name)
+        np.array(infer_output[0])
+        result_image = np.reshape(infer_output[0], (512, 512, 3))
+        result_image = result_image[:, :, ::-1]
+        result_image = np.clip((result_image + 1.) / 2. * 255., 0, 255).astype(np.uint8)
+        result_image = Image.fromarray(result_image)
+        result_image = result_image.resize((self._img_width, self._img_height))
+        result_image.save('../out/out_' + image_name)
 
 
 def main():
     """
     main
     """
-    SRC_PATH = os.path.realpath(__file__).rsplit("/", 1)[0]
-    MODEL_PATH = "../model/deploy_vel.om"
-    MODEL_WIDTH = 512
-    MODEL_HEIGHT = 512
+    src_path = os.path.realpath(__file__).rsplit("/", 1)[0]
+    model_path = "../model/deploy_vel.om"
+    model_width = 512
+    model_height = 512
 
     # With picture directory parameters during program execution
-    if (len(sys.argv) != 2):
+    if len(sys.argv) != 2:
         print("The App arg is invalid")
         exit(1)
 
     acl_resource = AclLiteResource()
     acl_resource.init()
 
-    single_image_dehaze = SingleImageDehaze(MODEL_PATH, MODEL_WIDTH, MODEL_HEIGHT)
+    single_image_dehaze = SingleImageDehaze(model_path, model_width, model_height)
     ret = single_image_dehaze.init()
     utils.check_ret("single_image_dehaze init ", ret)
 
@@ -110,8 +110,8 @@ def main():
                    if os.path.splitext(img)[1] in constants.IMG_EXT]
 
     # Create a directory to save inference results
-    if not os.path.isdir(os.path.join(SRC_PATH, "../out")):
-        os.mkdir(os.path.join(SRC_PATH, "../out"))
+    if not os.path.isdir(os.path.join(src_path, "../out")):
+        os.mkdir(os.path.join(src_path, "../out"))
 
     for image_file in images_list:
         image_name = image_file.split('/')[-1]
@@ -122,7 +122,7 @@ def main():
         # Preprocess the picture 
         resized_image = single_image_dehaze.pre_process(im)
 
-        # Inferencecd 
+        # Inference
         result = single_image_dehaze.inference([resized_image, ])
 
         # # Post-processing

@@ -58,7 +58,7 @@
     wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/PortraitNet%20/insert_op.cfg
     atc --model=./portrait.pb  --insert_op_conf=./insert_op.cfg  --output="./portrait" --output_type=FP32 --input_shape="Inputs/x_input:1,224,224,3" --framework=3 --soc_version=Ascend310
 
-
+* 注意：在310B上执行atc模型转换命令前，请将“soc_version”参数设为“Ascend310B1”。
 
 3. 获取样例需要的测试图片
     ```
@@ -75,13 +75,24 @@
     ```
     # 【xxx.xxx.xxx.xxx】为运行环境ip，200DK在USB连接时一般为192.168.1.2，300（ai1s）为对应的公网ip。
     scp -r $HOME/samples/python/contrib/portrait_pictureHwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser
-    ssh HwHiAiUser@xxx.xxx.xxx.xxx
-    cd ${HOME}/portrait_picture/src    
+    ssh HwHiAiUser@xxx.xxx.xxx.xxx   
     ```
+
 2. <a name="step_2"></a>运行可执行文件。
-    ```
-    python3.6 main.py
-    ```
+
+    - 如果执行过**步骤1**，请按以下命令运行
+
+      ```
+      cd ${HOME}/portrait_picture/src 
+      python3 main.py
+      ```
+
+    - 如果没有，请按以下命令运行
+
+      ```
+      cd $HOME/samples/python/contrib/portrait_picture/src
+      python3 main.py
+      ```
 
 ### 查看结果
 

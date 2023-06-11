@@ -70,13 +70,13 @@ In the following description, the x86 environment is used as an example.
 ##### Installing OpenCV
 The OpenCV installation varies depending on the running environment. Select the following installation scenarios: If OpenCV is not involved, skip this step.
 - The development environment architecture is x86, and the running environment is x86.   
-  Run the following command to install OpenCV in both **the development environment and operating environment**:
+  Run the following command to install OpenCV in both **the development environment and operating environment** （note:make sure the installed version is 3.x）:
   ```
   sudo apt-get install libopencv-dev
   ```
 - The development environment is x86, and the running environment is ARM.
   The source code installation and cross-compilation are complex. Use the APT tool to install OpenCV in the running environment. After the installation is complete, copy the installation package to the development environment.  
-  1. Connect the **operating environment** to the network and run the following command for installation:
+  1. Connect the **operating environment** to the network and run the following command for installation（Make sure the installed version is 3.x）:
       ```
       sudo apt-get install libopencv-dev
       ```

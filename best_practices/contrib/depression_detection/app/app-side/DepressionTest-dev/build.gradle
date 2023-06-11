@@ -1,0 +1,47 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    apply from: 'keyStore.gradle'
+    apply from: './scripts/config.gradle'
+    apply from: rootProject.file('./scripts/repositories.gradle')
+    repositories.addAll(extRepo)
+
+    dependencies {
+        classpath "com.android.tools.build:gradle:$versions.gradle"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
+        classpath "org.jetbrains.kotlin:kotlin-android-extensions:$versions.kotlin"
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$versions.navigation"
+        classpath "com.diffplug.spotless:spotless-plugin-gradle:$versions.spotless"
+    }
+}
+
+subprojects {
+    apply from: rootProject.file('./scripts/repositories.gradle')
+    apply plugin: 'com.diffplug.spotless'
+
+    afterEvaluate { project ->
+        project.apply from: rootProject.file('./scripts/jacoco.gradle')
+    }
+    spotless {
+        kotlin {
+            target '**/*.kt'
+            targetExclude("$buildDir/**/*.kt")
+            targetExclude('bin/**/*.kt')
+
+            ktlint(versions.ktlint)
+            licenseHeaderFile rootProject.file('scripts/copyright.kt')
+        }
+        groovyGradle {
+            // same as groovy, but for .gradle (defaults to '*.gradle')
+            target '**/*.gradle'
+//            paddedCell() // Avoid cyclic ambiguities
+            // the Groovy Eclipse formatter extends the Java Eclipse formatter,
+            // so it formats Java files by default (unless `excludeJava` is used).
+            greclipse().configFile(project.rootProject.file('scripts/greclipse.properties'))
+        }
+        if (project.hasProperty("kapt")) {
+            kapt {
+                useBuildCache = true
+            }
+        }
+    }
+}

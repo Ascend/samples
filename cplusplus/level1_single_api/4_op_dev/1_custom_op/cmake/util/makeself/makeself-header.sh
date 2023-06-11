@@ -155,7 +155,8 @@ MS_Help()
   \$0 [options] [--] [additional arguments to embedded script]
   with following options (in that order)
   --confirm             Ask before running embedded script
-  --quiet		Do not print anything except error messages
+  --quiet               Do not print anything except error messages
+  --install-path=<path> Install package to specific dir path
   --accept              Accept the license
   --noexec              Do not run embedded script
   --target dir          Extract directly to a target directory (absolute or relative)
@@ -278,6 +279,109 @@ UnTAR()
     fi
 }
 
+Check_Path_Exist_Permission()
+{
+    # root
+    prepare_check_path=\$1
+    if [ "\$(id -u)" = "0" ]; then
+        sh -c "test -d \${prepare_check_path} 2> /dev/null"
+        if [ \$? -eq 0 ]; then
+            sh -c "test -w \${prepare_check_path} 2> /dev/null"
+            if [ \$? -eq 0 ]; then
+                return 0
+            else
+                echo "[ERROR] user do access \${prepare_check_path} failed, please check the path permission"
+                return 2
+            fi
+        else
+            echo "[DEBUG] the \${prepare_check_path} does not exist"
+            return 1
+        fi
+    # not root
+    else
+        test -d \${prepare_check_path} >> /dev/null 2>&1
+        if [ \$? -eq 0 ]; then
+            test -w \${prepare_check_path} >> /dev/null 2>&1
+            if [ \$? -eq 0 ]; then
+                return 0
+            else
+                echo "[ERROR] user do access \${prepare_check_path} failed, please check the path permission"
+                return 2
+            fi
+        else
+            return 3
+        fi
+    fi
+}
+
+Check_Install_Path()
+{
+    in_install_path_param="\$1"
+    param_name="\$2"
+
+    # empty patch check
+    if [ "x\${in_install_path_param}" = "x" ]; then
+        echo "[ERROR] parameter \${param_name} not support that the install path is empty"
+        exit 1
+    fi
+
+    # delete last "/"
+    temp_path="\${in_install_path_param}"
+    temp_path=\$(echo "\${temp_path}" | sed "s/\/*$//g")
+    if [ x"\${temp_path}" = "x" ]; then
+        temp_path="/"
+    fi
+
+    # covert relative path to absolute path
+    run_path=\$(pwd)
+    prefix=\$(echo "\${temp_path}" | cut -d"/" -f1 |cut -d"~" -f1)
+    if [ x"\${prefix}" = "x" ]; then
+        in_install_path_param="\${temp_path}"
+    else
+        prefix=\$(echo "\${run_path}" | cut -d"/" -f1 |cut -d"~" -f1)
+        if [ x"\${prefix}" = "x" ]; then
+            in_install_path_param="\${run_path}/\${temp_path}"
+        else
+            echo "[ERROR] run package path is invalid : \${run_path}"
+            exit 1
+        fi
+    fi
+
+    # covert '~' to home path
+    home=\$(echo "\${temp_path}" | cut -d"~" -f1)
+    if [ "x\${home}" = "x" ]; then
+        temp_path_value=\$(echo "\${temp_path}" | cut -d"~" -f2-)
+        if [ "\$(id -u)" -eq 0 ]; then
+            in_install_path_param="/root\$temp_path_value"
+        else
+            home_path=\$(eval echo "~\${USER}")
+            home_path=\$(echo "\${home_path}" | sed "s/\/*$//g")
+            in_install_path_param="\$home_path\$temp_path_value"
+        fi
+    fi
+
+    # check whether path valid and permission
+    penultimate_install_path=\$(dirname "\${in_install_path_param}")
+    Check_Path_Exist_Permission \${in_install_path_param}
+    # last path permission denied
+    last_status=\$?
+    if [ \${last_status} -eq 2 ]; then
+        exit 1
+    # last path does not exist or permission denied
+    elif [ \${last_status} -eq 1 ] || [ \${last_status} -eq 3 ]; then
+        # penultimate path does not exist or permission denied
+        Check_Path_Exist_Permission \${penultimate_install_path}
+        penultimate_status=\$?
+        if [ \${penultimate_status} -eq 1 ] || [ \${penultimate_status} -eq 2 ]; then
+            exit 1
+        elif [ \${penultimate_status} -eq 3 ]; then
+            echo "[ERROR] user do access \${in_install_path_param} failed, please check the path valid and permission"
+            exit 1
+        fi
+    fi
+}
+
+
 finish=true
 xterm_loop=
 noprogress=$NOPROGRESS
@@ -377,6 +481,13 @@ EOLSM
 	MS_Check "\$0" y
 	exit 0
 	;;
+    --install-path=*)
+    is_install_path=y
+    install_path=\$(echo \$1 | cut -d"=" -f2-)
+    # check path
+    Check_Install_Path "\${install_path}" "--install-path"
+    shift
+    ;;
     --uninstall)
         MS_Uninstall "\$0" y
         exit 0
@@ -444,6 +555,12 @@ if test x"\$quiet" = xy; then
     quiet_para="--quiet "
 fi
 
+install_path_para=""
+
+if test x"\$is_install_path" = xy; then
+    install_path_para="--install-path=\$in_install_path_param"
+fi
+
 keep_para=""
 
 if test x"\$keep" = xy; then 
@@ -456,8 +573,7 @@ if test x"\$verbose" = xy; then
     confirm_para="--confirm "
 fi
 
-
-scriptargs="\$scriptargs""--\$name_of_file""--\$pwd_of_file""\$quiet_para""\$keep_para""\$confirm_para"
+scriptargs="\$scriptargs""--\$name_of_file""--\$pwd_of_file""\$quiet_para""\$keep_para""\$confirm_para""\$install_path_para"
 if test x"\$quiet" = xy -a x"\$verbose" = xy; then
 	echo Cannot be verbose and quiet at the same time. >&2
 	exit 1

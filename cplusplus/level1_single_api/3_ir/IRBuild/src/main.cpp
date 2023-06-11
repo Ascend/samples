@@ -261,12 +261,12 @@ bool GenGraph(Graph& graph)
      *   we recommend this method when some node own multi out nodes and only one out edge data wanted back
      */
     auto bias_add_3 = op::BiasAdd("bias_add_3")
-        .set_input_x(matmul_2, "y")
-        .set_input_bias(bias_add_const_3, "y")
+        .set_input_x_by_name(matmul_2, "y")
+        .set_input_bias_by_name(bias_add_const_3, "y")
         .set_attr_data_format("NCHW");
     // Softmax op
     auto softmax = op::SoftmaxV2("Softmax")
-        .set_input_x(bias_add_3, "y");
+        .set_input_x_by_name(bias_add_3, "y");
 
     std::vector<Operator> inputs{ data };
     /*

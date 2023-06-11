@@ -1,0 +1,55 @@
+{
+    "params": {
+        "batch_size": 64,
+        "epoch": 20,
+        "lr": 0.0001,
+        "decay": 0.1,
+        "decay_step": 10,
+        "warmup": 3,
+        "num_workers": 8
+    },
+    "save": {
+        "metapath": "./parameters/timm_resnet18/bach64",
+        "folder": "eth",
+        "model_name": "resnet18",
+        "step": 2
+    },
+    "data": {
+        "image": "F:/DeepLearning/datasets/Gaze/ETH-XGaze/Image/train",
+        "label": "F:/DeepLearning/datasets/Gaze/ETH-XGaze/Label/train_chaifen.label",
+        "header": true,
+        "name": "eth",
+        "isFolder": false
+    },
+    "val": {
+        "image": "F:/DeepLearning/datasets/Gaze/ETH-XGaze/Image/train",
+        "label": "F:/DeepLearning/datasets/Gaze/ETH-XGaze/Label/validation.label",
+        "header": true,
+        "name": "eth",
+        "isFolder": false
+    },
+    "pretrain": {
+        "enable": false,
+        "path": "PLACEHOLDER",
+        "device": "PLACEHOLDER"
+    },
+    "device": 0,
+    "reader": "reader"
+}
+[1/20]: [0/11151] loss:0.987722635269165 lr:0.0001 rest time:14605.67h
+[1/20]: [1/11151] loss:0.7873997688293457 lr:0.0001 rest time:7319.13h
+[1/20]: [2/11151] loss:0.8300662040710449 lr:0.0001 rest time:4882.10h
+[1/20]: [3/11151] loss:0.6973831653594971 lr:0.0001 rest time:3664.16h
+[1/20]: [4/11151] loss:0.7035192251205444 lr:0.0001 rest time:2933.24h
+[1/20]: [5/11151] loss:0.5883929133415222 lr:0.0001 rest time:2446.05h
+[1/20]: [6/11151] loss:0.49734732508659363 lr:0.0001 rest time:2098.05h
+[1/20]: [7/11151] loss:0.5072530508041382 lr:0.0001 rest time:1837.02h
+[1/20]: [8/11151] loss:0.4547547698020935 lr:0.0001 rest time:1634.03h
+[1/20]: [9/11151] loss:0.5083737373352051 lr:0.0001 rest time:1471.62h
+[1/20]: [10/11151] loss:0.4010336399078369 lr:0.0001 rest time:1338.76h
+[1/20]: [11/11151] loss:0.39535146951675415 lr:0.0001 rest time:1228.01h
+[1/20]: [12/11151] loss:0.37671878933906555 lr:0.0001 rest time:1134.36h
+[1/20]: [13/11151] loss:0.43011635541915894 lr:0.0001 rest time:1054.03h
+[1/20]: [14/11151] loss:0.3522173762321472 lr:0.0001 rest time:984.44h
+[1/20]: [15/11151] loss:0.3931330442428589 lr:0.0001 rest time:923.53h
+[1/20]: [16/11151] loss:0.34572041034698486 lr:0.0001 rest time:869.69h

@@ -58,7 +58,7 @@ uint32_t g_per_count = 300;
 // Number of applied input buffer
 uint32_t g_mem_count = 100;
 // Notify user to obtain streams, 0:Single-thread and multi-channel, Non-zero:Single-thread single-channel
-uint32_t g_select_one_thread = 0;
+uint32_t g_select_one_thread = 1;
 // 1: synchronize encode mode; 0: asynchronous mode
 uint32_t g_is_syn_enc = 0;
 // Frame count of input file

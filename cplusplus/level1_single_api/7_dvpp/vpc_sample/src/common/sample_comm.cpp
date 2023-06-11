@@ -192,19 +192,15 @@ int32_t prepare_input_data(hi_vpc_pic_info& inputPic, const char inputFileName[]
 
 int32_t handle_output_data(hi_vpc_pic_info& outputPic, uint32_t dstBufferSize, const char outputFileName[])
 {
-    // write output file
-    FILE* dstFp = fopen(outputFileName, "wb");
-    if (dstFp == nullptr) {
-        SAMPLE_PRT("fopen %s failed!\n", outputFileName);
-        return HI_FAILURE;
-    }
-
+    // copy output width and height configuration
+    hi_vpc_pic_info notAlignPic = outputPic;
+    hi_vpc_pic_info outputPicHost = outputPic;
+    FILE* dstFp = nullptr;
+    size_t numWrite = 0;
     if (g_run_mode == ACL_HOST) {
-        hi_vpc_pic_info outputPicHost = outputPic;
+        // we cannot access memory on device, so we malloc memory of the same size at host and copy them
         int32_t ret = aclrtMallocHost(&outputPicHost.picture_address, outputPic.picture_buffer_size);
         if (ret != ACL_SUCCESS) {
-            fclose(dstFp);
-            dstFp = nullptr;
             SAMPLE_PRT("malloc output buffer in host failed, ret = %d!\n", ret);
             return HI_FAILURE;
         }
@@ -212,75 +208,64 @@ int32_t handle_output_data(hi_vpc_pic_info& outputPic, uint32_t dstBufferSize, c
             outputPic.picture_buffer_size, ACL_MEMCPY_DEVICE_TO_HOST);
         if (ret != ACL_SUCCESS) {
             SAMPLE_PRT("Copy memcpy to host failed, ret = %d.\n", ret);
-            fclose(dstFp);
-            dstFp = nullptr;
-            aclrtFreeHost(outputPicHost.picture_address);
-            outputPicHost.picture_address = nullptr;
-            ret = HI_FAILURE;
-            return ret;
+            goto OUT0;
         }
+    }
 
-        // Due to VPC alignment requirements, the output picture may contain redundant data.
-        // If you don't need that, use GetNotAlignBuffe to write the real output picture
-        hi_vpc_pic_info notAlignPic = outputPicHost;
-        configure_stride_and_buffer_size(notAlignPic, 1, 1, false);
-        notAlignPic.picture_address = malloc(dstBufferSize);
-        if (notAlignPic.picture_address == nullptr) {
-            SAMPLE_PRT("malloc not align buffer failed!\n");
-            fclose(dstFp);
-            dstFp = nullptr;
-            aclrtFreeHost(outputPicHost.picture_address);
-            outputPicHost.picture_address = nullptr;
-            return HI_FAILURE;
-        }
+    // malloc real output buffersize
+    notAlignPic.picture_address = nullptr;
+    notAlignPic.picture_address = malloc(dstBufferSize);
+    if (notAlignPic.picture_address == nullptr) {
+        SAMPLE_PRT("malloc align buffer failed!");
+        goto OUT0;
+    }
 
+    // The following function configs stirde, which is the real memory occupied by each line.
+    // For example, for yuv 420, width_stride = width. For rgb888, width_stride = width * 3
+    configure_stride_and_buffer_size(notAlignPic, 1, 1, false);
+
+    // Due to VPC alignment requirements, the output picture may contain redundant data.
+    // The following function writes the real output picture
+    if (g_run_mode == ACL_HOST) {
+        // write real output picture from outputPicHost to notAlignPic
         get_dst_stride_picture(outputPicHost, notAlignPic);
-        size_t numWrite = fwrite(notAlignPic.picture_address, 1, dstBufferSize, dstFp);
-        if (numWrite < dstBufferSize) {
-            SAMPLE_PRT("write output data failed, numWrite = %zu, data size = %u\n", numWrite, dstBufferSize);
-            fclose(dstFp);
-            dstFp = nullptr;
-            free(notAlignPic.picture_address);
-            notAlignPic.picture_address = nullptr;
-            aclrtFreeHost(outputPicHost.picture_address);
-            outputPicHost.picture_address = nullptr;
-            return HI_FAILURE;
-        }
-        fflush(dstFp);
-        free(notAlignPic.picture_address);
-        notAlignPic.picture_address = nullptr;
+        // free outputPicHost
         aclrtFreeHost(outputPicHost.picture_address);
         outputPicHost.picture_address = nullptr;
     } else {
-        // Due to VPC alignment requirements, the output picture may contain redundant data.
-        // If you don't need that, use GetNotAlignBuffe to write the real output picture
-        hi_vpc_pic_info notAlignPic = outputPic;
-        configure_stride_and_buffer_size(notAlignPic, 1, 1, false);
-        notAlignPic.picture_address = malloc(dstBufferSize);
-        if (notAlignPic.picture_address == nullptr) {
-            SAMPLE_PRT("malloc align buffer failed!");
-            fclose(dstFp);
-            dstFp = nullptr;
-            return HI_FAILURE;
-        }
-
+        // write real output picture from outputPic to notAlignPic
         get_dst_stride_picture(outputPic, notAlignPic);
-        size_t numWrite = fwrite(notAlignPic.picture_address, 1, dstBufferSize, dstFp);
-        if (numWrite < dstBufferSize) {
-            SAMPLE_PRT("write output data failed, numWrite = %zu, data size = %u\n", numWrite, dstBufferSize);
-            fclose(dstFp);
-            dstFp = nullptr;
-            free(notAlignPic.picture_address);
-            notAlignPic.picture_address = nullptr;
-            return HI_FAILURE;
-        }
-        fflush(dstFp);
-        free(notAlignPic.picture_address);
-        notAlignPic.picture_address = nullptr;
     }
+
+    dstFp = fopen(outputFileName, "wb");
+    if (dstFp == nullptr) {
+        SAMPLE_PRT("fopen %s failed!\n", outputFileName);
+        goto OUT1;
+    }
+    numWrite = fwrite(notAlignPic.picture_address, 1, dstBufferSize, dstFp);
+    if (numWrite < dstBufferSize) {
+        SAMPLE_PRT("write output data failed, numWrite = %zu, data size = %u\n", numWrite, dstBufferSize);
+        goto OUT2;
+    }
+    fflush(dstFp);
+    free(notAlignPic.picture_address);
+    notAlignPic.picture_address = nullptr;
     fclose(dstFp);
     dstFp = nullptr;
     return HI_SUCCESS;
+
+OUT2:
+    fclose(dstFp);
+    dstFp = nullptr;
+OUT1:
+    free(notAlignPic.picture_address);
+    notAlignPic.picture_address = nullptr;
+OUT0:
+    if (g_run_mode == ACL_HOST) {
+        aclrtFreeHost(outputPicHost.picture_address);
+        outputPicHost.picture_address = nullptr;
+    }
+    return HI_FAILURE;
 }
 
 void memset_buffer(hi_vpc_pic_info& picInfo)
@@ -478,7 +463,7 @@ int32_t get_dst_stride_picture(const hi_vpc_pic_info& srcPic, const hi_vpc_pic_i
             srcBufUV = srcBufY + srcPic.picture_width_stride * srcPic.picture_height_stride;
             dstBufUV = dstBufY + dstPic.picture_width_stride * dstPic.picture_height_stride;
             for (uint32_t i = 0; i < srcPic.picture_height; ++i) {
-                memcpy(dstBufUV + i * dstPic.picture_width_stride * 2,
+                memcpy(dstBufUV + i * dstPic.picture_width_stride * 2, // 该格式需要乘2
                     srcBufUV + i * srcPic.picture_width_stride * 2, srcPic.picture_width * 2);
             }
             break;

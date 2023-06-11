@@ -58,17 +58,17 @@ private:
     // run cast
     Result RunSigleOpCast();
 
-    // run ArgMaxD
-    Result RunSigleOpArgMaxD();
+    // run ArgMaxV2
+    Result RunSigleOpArgMaxV2();
 
     aclrtStream stream_;
     aclDataBuffer *inputBuffer_[1];
     aclDataBuffer *outputBufferCast_[1];
-    aclDataBuffer *outputBufferArgMaxD_[1];
+    aclDataBuffer *outputBufferArgMaxV2_[1];
     size_t tensorSizeCast_;
-    size_t tensorSizeArgMaxD_;
+    size_t tensorSizeArgMaxV2_;
     void *devBufferCast_;
-    void *devBufferArgMaxD_;
+    void *devBufferArgMaxV2_;
     int64_t inputShape_;
 };
 

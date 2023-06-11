@@ -8,12 +8,11 @@
 样例输出：推理后的jpg图片。
 
 ### 前置条件
-请检查以下条件要求是否满足，如不满足请按照备注进行相应处理。如果CANN版本升级，请同步检查第三方依赖是否需要重新安装（5.0.4及以上版本第三方依赖和5.0.4以下版本有差异，需要重新安装）。
-| 条件 | 要求 | 备注 |
-|---|---|---|
-| CANN版本 | >=5.0.4 | 请参考CANN样例仓介绍中的[安装步骤](https://github.com/Ascend/samples#%E5%AE%89%E8%A3%85)完成CANN安装，如果CANN低于要求版本请根据[版本说明](https://github.com/Ascend/samples/blob/master/README_CN.md#%E7%89%88%E6%9C%AC%E8%AF%B4%E6%98%8E)切换samples仓到对应CANN版本 |
-| 硬件要求 | Atlas200DK/Atlas300([ai1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366))  | 当前已在Atlas200DK和Atlas300测试通过，产品说明请参考[硬件平台](https://ascend.huawei.com/zh/#/hardware/product) ，其他产品可能需要另做适配|
-| 第三方依赖 | python-acllite | 请参考[第三方依赖安装指导（python样例）](../../../environment)选择需要的依赖完成安装 |
+请检查以下条件要求是否满足，如不满足请按照备注进行相应处理。
+
+获取Atlas 200I DK A2硬件设备。根据官方文档`https://www.hiascend.com/document/detail/zh/Atlas200IDKA2DeveloperKit/23.0.RC1/qs/qs_0003.html`获取SD卡，并完成一键制卡。
+
+本样例将通过远程登录的方式在Atlas 200I DK A2上完成。
 
 ### 样例准备
 
@@ -49,7 +48,7 @@
     cd $HOME/samples/python/level2_simple_inference/1_classification/inceptionv3_picture/model
     wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/InceptionV3/inceptionv3.onnx
     wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/InceptionV3/aipp_inceptionv3_pth.config
-    atc --model=./inceptionv3.onnx --framework=5 --output=InceptionV3 --soc_version=Ascend310 --insert_op_conf=./aipp_inceptionv3_pth.config --input_shape="actual_input_1:1,3,300,300" --input_format=NCHW
+    atc --model=./inceptionv3.onnx --framework=5 --output=InceptionV3 --soc_version=Ascend310B1 --insert_op_conf=./aipp_inceptionv3_pth.config --input_shape="actual_input_1:1,3,300,300" --input_format=NCHW
     ```
 
 3. 获取样例需要的测试图片。
@@ -74,7 +73,7 @@
 
 2. <a name="step_2"></a>运行样例。
    ```
-   python3.6 classify.py ../data/
+   python3 classify.py ../data/
    ```
 
 ### 查看结果

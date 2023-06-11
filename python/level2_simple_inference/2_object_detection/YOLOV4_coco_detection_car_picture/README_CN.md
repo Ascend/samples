@@ -43,9 +43,7 @@
         ```
 
 2. 获取此应用中所需要的原始网络模型。
-    |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
-    |---|---|---|
-    |  yolov4| 基于onnx-YOLOV4的目标检测模型。  |  请参考https://www.hiascend.com/zh/software/modelzoo/detail/1/abb7e641964c459398173248aa5353bc 下载原始模型。 |
+
     ```
     # 为了方便下载，在这里直接给出原始模型下载及模型转换命令,可以直接拷贝执行。也可以参照上表在modelzoo中下载并手工转换，以了解更多细节。     
     cd ${HOME}/samples/python/level2_simple_inference/2_object_detection/YOLOV4_coco_detection_car_picture/model    

@@ -20,6 +20,7 @@ import os
 import stat
 import sys
 
+
 def parse_ini_files(ini_files):
     '''
     init all ini files
@@ -47,7 +48,7 @@ def parse_ini_to_obj(ini_file, aicpu_ops_info):
                 key1 = line[:line.index("=")]
                 key2 = line[line.index("=")+1:]
                 key1_0, key1_1 = key1.split(".")
-                if not key1_0 in ops:
+                if key1_0 not in ops:
                     ops[key1_0] = {}
                 ops[key1_0][key1_1] = key2
 
@@ -59,7 +60,7 @@ def check_custom_op_opinfo(required_custom_op_info_keys, ops, op_key):
     op_info = ops["opInfo"]
     missing_keys = []
     for required_op_info_key in required_custom_op_info_keys:
-        if not required_op_info_key in op_info:
+        if required_op_info_key not in op_info:
             missing_keys.append(required_op_info_key)
     if len(missing_keys) > 0:
         print("op: " + op_key + " opInfo missing: " + ",".join(missing_keys))
@@ -74,7 +75,7 @@ def check_op_opinfo(required_op_info_keys, required_custom_op_info_keys,
     op_info = ops["opInfo"]
     missing_keys = []
     for required_op_info_key in required_op_info_keys:
-        if not required_op_info_key in op_info:
+        if required_op_info_key not in op_info:
             missing_keys.append(required_op_info_key)
     if len(missing_keys) > 0:
         print("op: " + op_key + " opInfo missing: " + ",".join(missing_keys))
@@ -102,7 +103,7 @@ def check_op_info(aicpu_ops):
     print("==============check valid for aicpu ops info start==============")
     required_op_info_keys = ["computeCost", "engine", "flagAsync",
                              "flagPartial", "opKernelLib"]
-    required_custom_op_info_keys = ["kernelSo", "functionName", "workspaceSize"]
+    required_custom_op_info_keys = ["kernelSo", "functionName"]
 
     for op_key in aicpu_ops:
         ops = aicpu_ops[op_key]

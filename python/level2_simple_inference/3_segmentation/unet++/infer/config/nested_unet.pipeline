@@ -1,0 +1,35 @@
+{
+    "unet++_pytorch": {
+        "stream_config": {
+            "deviceId": "0"
+        },
+        "appsrc0": {
+            "props": {
+                "blocksize": "409600"
+            },
+            "factory": "appsrc",
+            "next": "mxpi_tensorinfer0"
+        },
+        "mxpi_tensorinfer0": {
+            "props": {
+                "dataSource": "appsrc0",
+                "modelPath": "../../model/model_bs1.om"
+            },
+            "factory": "mxpi_tensorinfer",
+            "next": "mxpi_dumpdata0"
+        },
+         "mxpi_dumpdata0": {
+            "props": {
+                "requiredMetaDataKeys": "mxpi_tensorinfer0"
+            },
+            "factory": "mxpi_dumpdata",
+            "next": "appsink0"
+        },
+        "appsink0": {
+            "props": {
+                "blocksize": "409600"
+            },
+            "factory": "appsink"
+        }
+    }
+}

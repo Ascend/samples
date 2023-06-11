@@ -262,6 +262,7 @@ AclLiteError ColorClassify::PostProcess(std::vector<InferenceOutput>& inferenceO
         carInfo[i].carColor_result = g_carColorClass[colorIndex];
     }
     DrawResult(carInfo, origImagePath);
+    return ACLLITE_OK;
 }
 
 void ColorClassify::DrawResult(vector<CarInfo>& carInfo,

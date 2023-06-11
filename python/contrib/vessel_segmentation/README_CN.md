@@ -9,7 +9,7 @@
 
 功能：使用眼底视网膜分割模型对输入图片进行分割。   
 样例输入：待推理的jpg图片。    
-样例输出：推理后的jpg图片。  
+样例输出：推理后的png图片。  
 
 ### 前置条件
 请检查以下条件要求是否满足，如不满足请按照备注进行相应处理。如果CANN版本升级，请同步检查第三方依赖是否需要重新安装（5.0.4及以上版本第三方依赖和5.0.4以下版本有差异，需要重新安装）。
@@ -54,6 +54,7 @@
     wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/retina-unet/vel_hw_iter_5000.caffemodel   
     wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/retina-unet/deploy_vel_ascend.prototxt
     atc --model=./deploy_vel_ascend.prototxt --weight=./vel_hw_iter_5000.caffemodel --framework=0 --output=./vessel --soc_version=Ascend310 --input_format=NCHW --input_fp16_nodes=data -output_type=FP32
+    **注：如果在310B芯片上进行模型转换，修改参数--soc_version=Ascend310B1即可**
     ```
 
 3. 获取样例需要的测试图片。
@@ -79,12 +80,12 @@
     ```
 2. <a name="step_2"></a>运行可执行文件。
     ```
-    python3.6 main.py ../data/
+    python3 main.py 
     ```
 
 ### 查看结果
 
-运行完成后，会在out目录下生成带推理结果的jpg图片。
+运行完成后，会在out目录下生成带推理结果的png图片。
 
 ### 常见错误
 请参考[常见问题定位](https://github.com/Ascend/samples/wikis/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D/%E4%BB%8B%E7%BB%8D)对遇到的错误进行排查。如果wiki中不包含，请在samples仓提issue反馈。

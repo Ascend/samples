@@ -126,7 +126,7 @@ void PostProcess::DrawBoundBoxToImage(const vector <BBox> &result)
     string fileName(g_originImage_.substr(pos + 1));
     stringstream sstream;
     sstream.str("");
-    sstream << "../out/out_" << fileName;
+    sstream << "../out/output/out_" << fileName;
     cv::imwrite(sstream.str(), image);
     INFO_LOG("running success, you can get the running result from the %s", sstream.str().c_str());
 }

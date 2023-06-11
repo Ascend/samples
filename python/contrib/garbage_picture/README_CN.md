@@ -48,7 +48,7 @@
     |---|---|---|
     | mobilenetV2 | 图片分类推理模型。是基于mindspore的mobilenetv2模型。 | 请参考[https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/garbage_classification/ATC_mobilenetv2_mindspore_AE](https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/garbage_classification/ATC_mobilenetv2_mindspore_AE)目录中README.md下载原始模型章节下载模型和权重文件。 |
     ```
-    # 为了方便下载，在这里直接给出原始模型下载及模型转换命令,可以直接拷贝执行。也可以参照上表在modelzoo中下载并手工转换，以了解更多细节。     
+    # 为了方便下载，在这里直接给出原始模型下载及模型转换命令,可以直接拷贝执行(如果在310B芯片上进行转换，需要修改参数 --soc_version=Ascend310B1)。也可以参照上表在modelzoo中下载并手工转换，以了解更多细节。        
     cd ${HOME}/samples/python/contrib/garbage_picture/model    
     wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com:443/003_Atc_Models/AE/ATC%20Model/garbage/mobilenetv2.air   
     wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/garbage_picture/insert_op_yuv.cfg
@@ -58,7 +58,9 @@
 3. 获取样例需要的测试图片。
     ```
     # 执行以下命令，进入样例的data文件夹中，下载对应的测试图片。
-    cd $HOME/samples/python/contrib/garbage_picture/data
+    cd $HOME/samples/python/contrib/garbage_picture
+    mkdir data
+    cd data
     wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/garbage_picture/newspaper.jpg
     wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/garbage_picture/bottle.jpg    
     wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/garbage_picture/dirtycloth.jpg 
@@ -77,7 +79,7 @@
     ```
 2. <a name="step_2"></a>运行可执行文件。
     ```
-    python3.6 classify_test.py ../data/
+    python3 classify_test.py ../data/
     ```
 
 ### 查看结果

@@ -47,7 +47,7 @@ Check whether the following requirements are met. If not, perform operations acc
     | ------------ | -------------------------------- | ------------------------------------------------------------ |
     | CartoonGAN   | Convert a common image to a cartoon image.| Download the model and weight files by referring to the links in **README.md** in the [ATC_cartoonization_tf_AE](https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/cartoonization/ATC_cartoonization_tf_AE) directory of the ModelZoo repository.|
     ```
-    # To facilitate download, the commands for downloading the original model and converting the model are provided here. You can directly copy and run the commands. You can also refer to the above table to download the model from ModelZoo and manually convert it.    
+    # To facilitate download, the commands for downloading the original model and converting the model are provided here. You can directly copy and run the commands(If you are converting on the 310B chip, please change the parameter --soc_version=Ascend310B1). You can also refer to the above table to download the model from ModelZoo and manually convert it.    
     cd ${HOME}/samples/python/contrib/cartoonGAN_picture/model    
     wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/cartoonization/cartoonization.pb    
     wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/cartoonization/insert_op.cfg
@@ -76,7 +76,7 @@ Check whether the following requirements are met. If not, perform operations acc
 
 2. <a name="step_2"></a>Run the sample.
    ```
-   python3.6 cartoonization.py ../data/
+   python3 cartoonization.py ../data/
    ```
 
 ### Result Viewing

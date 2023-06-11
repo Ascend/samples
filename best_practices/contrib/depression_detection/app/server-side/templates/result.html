@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Demo</title>
+    <!-- 新 Bootstrap4 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+
+    <!-- bootstrap.bundle.min.js 用于弹窗、提示、下拉菜单，包含了 popper.min.js -->
+    <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+
+    <!-- 最新的 Bootstrap4 核心 JavaScript 文件 -->
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row clearfix">
+        <p id="beauty_score">结果：</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        post_face()
+        function post_face() {
+                $.post({
+                    url: 'http://10.69.229.93:8888/number',
+                    success: function (data) {
+                        console.log(data)
+                        if (data.msg == 'ok') {
+                            $("#beauty_score").text("结果：" + data.result)
+                        } else {
+                            $("#beauty_score").text("无结果")
+                        }
+                    },
+                    error: function (data) {
+                        post_face()
+                    }
+                })
+        }
+    </script>
+</body>
+
+</html>

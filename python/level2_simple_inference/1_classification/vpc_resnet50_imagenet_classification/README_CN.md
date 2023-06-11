@@ -28,7 +28,7 @@ vpc_resnet50_imagenet_classification
 │ └── resnet50.prototxt // resnet50模型的网络文件
 ├── op_models
 │ ├── 0_Cast_0_2_1000_1_2_1000.om //精度转换自定义算子
-│ ├── 1_ArgMaxD_1_2_1000_3_2_1.om //精度转换自定义算子
+│ ├── 1_ArgMaxV2_1_2_1000_3_2_1_3_2_1.om //精度转换自定义算子
 │ └── op_list.json //精度转换算子配置文件
 └── model
   └── resnet50_aipp.om //推理模型
@@ -148,7 +148,7 @@ vpc_resnet50_imagenet_classification
         -   --output参数：生成的resnet50_aipp.om文件存放在“vpc_resnet50_imagenet_classification/model”目录下。
         -   使用atc命令时用户需保证对vpc_resnet50_imagenet_classification目录有写权限。
 
-    5.  将Cast和ArgMaxD两个算子的算子描述信息（\*.json文件）编译成适配昇腾AI处理器的离线模型（\*.om文件），用于验证单算子的运行。  
+    5.  将Cast和ArgMaxV2两个算子的算子描述信息（\*.json文件）编译成适配昇腾AI处理器的离线模型（\*.om文件），用于验证单算子的运行。  
         切换到“vpc_resnet50_imagenet_classification”目录，执行如下命令。Ascendxxx为使用的昇腾AI处理器型号，请用户自行替换。  
         ```
         atc --singleop=op_models/op_list.json --soc_version=Ascendxxx --output=op_models/

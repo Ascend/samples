@@ -16,8 +16,8 @@ fi
 # copy ai_core operators implements
 tbe_impl_files_num=$(ls $project_path/tbe/impl/*.py 2> /dev/null | wc -l)
 if [[ "$tbe_impl_files_num" -gt 0 ]];then
-    cp -f ${project_path}/tbe/impl/*.py ${build_path}/makepkg/packages/vendors/$vendor_name/op_impl/ai_core/tbe/impl
-    cp -f ${project_path}/tbe/impl/*.py ${build_path}/makepkg/packages/vendors/$vendor_name/op_impl/vector_core/tbe/impl
+    cp -f ${project_path}/tbe/impl/*.py ${build_path}/makepkg/packages/vendors/$vendor_name/op_impl/ai_core/tbe/${vendor_name}_impl
+    cp -f ${project_path}/tbe/impl/*.py ${build_path}/makepkg/packages/vendors/$vendor_name/op_impl/vector_core/tbe/${vendor_name}_impl
 fi
 
 # copy aicpu kernel so operators

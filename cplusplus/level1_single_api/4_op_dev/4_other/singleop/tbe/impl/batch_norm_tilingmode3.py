@@ -12,12 +12,11 @@ Apache License for more details at
 http://www.apache.org/licenses/LICENSE-2.0
 """
 
-from te import tik
-from te.platform.cce_conf import te_set_l2_mode
-te_set_l2_mode(1)
+import os
+import warnings
 
-# size of 310 ai core ub buffer
-UB_SIZE = 240 * 1024
+from tbe import tik
+from tbe.common.platform import set_current_compile_soc_info
 
 # tiling mode 3 ub size
 TILING_2_UB_SIZE = 112*1024
@@ -74,10 +73,17 @@ class BatchNorm(object):
     -------
     None
     """
-    def __init__(self, input0, gamma0, beta0, output0,
-                 kernel_name="BatchNorm"):
+    def __init__(self, input0, gamma0, beta0, output0, kernel_name="BatchNorm"):
 
-        self.tik_instance = tik.Tik(tik.Dprofile("v100", "mini"))
+        # SET Ascend AI Processor version.
+        soc_version = os.getenv("SOC_VERSION")
+        if soc_version is None:
+            warnings.warn("SOC_VERSION no environment variable is set,"
+                          " the default value of Ascend310 will be used.")
+            soc_version = "Ascend310"
+        set_current_compile_soc_info(soc_version)
+
+        self.tik_instance = tik.Tik()
 
         self.sclar_gamma = self.tik_instance.Scalar("float16")
         self.sclar_beta = self.tik_instance.Scalar("float16")
@@ -171,8 +177,8 @@ class BatchNorm(object):
         self.tik_instance.data_move(self.beta_ub, self.beta_gm, 0, 1,
                                     align_c // 16, 0, 0)
 
-        self.tik_instance.vrec(16, self.beta_ub, self.beta_ub, align_c // 16,
-                               1, 1, 1, 1)  # 1/var
+        self.tik_instance.vec_rec(16, self.beta_ub, self.beta_ub,
+                                  align_c // 16, 1, 1)  # 1/var
         self.tik_instance.vec_muls(16, self.gamma_ub, self.gamma_ub, -1.0,
                                    align_c // 16, 1, 1) # -mean
 
@@ -197,7 +203,6 @@ class BatchNorm(object):
                                               self.param5, self.param6,
                                               self.param7, self.param8,
                                               self.param9, self.param10],
-                                   enable_l2=True,
                                    config={"double_buffer_non_reuse": True,
                                            "out_of_bound_sync_check": True})
         return self.tik_instance

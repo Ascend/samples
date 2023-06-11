@@ -114,7 +114,7 @@ AclLiteError ColorizeProcess::init() {
 
 AclLiteError ColorizeProcess::preprocess(const string& imageFile) {
     // read image using OPENCV
-    cv::Mat mat = cv::imread(imageFile, CV_LOAD_IMAGE_COLOR);
+    cv::Mat mat = cv::imread(imageFile, cv::IMREAD_COLOR);
     //resize
     cv::Mat reiszeMat;
     cv::resize(mat, reiszeMat, cv::Size(modelWidth_, modelHeight_));
@@ -175,7 +175,7 @@ AclLiteError ColorizeProcess::postprocess(const string& imageFile, vector<Infere
     cv::Mat mat_b(56, 56, CV_32FC1, const_cast<float*>((float*)data + size / 2));
 
     // pull out L channel in original image
-    cv::Mat mat = cv::imread(imageFile, CV_LOAD_IMAGE_COLOR);
+    cv::Mat mat = cv::imread(imageFile, cv::IMREAD_COLOR);
     mat.convertTo(mat, CV_32FC3);
     mat = 1.0 * mat / 255;
     cv::cvtColor(mat, mat, CV_BGR2Lab);

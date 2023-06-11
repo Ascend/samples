@@ -35,6 +35,8 @@
       export LD_LIBRARY_PATH=/usr/local/python3.7.5/lib:$LD_LIBRARY_PATH
       #如果用户环境存在多个python3版本，则指定使用python3.7.5版本
       export PATH=/usr/local/python3.7.5/bin:$PATH
+      #设置昇腾AI处理器型号，此处以Ascend310为例，请根据实际情况替换。
+      export SOC_VERSION=*Ascend310*
       ```
 
       Python3.7.5安装路径请根据实际情况进行替换，您也可以将以上命令写入~/.bashrc文件中，然后执行source ~/.bashrc命令使其立即生效。

@@ -79,6 +79,7 @@ uint64_t g_frame_len[VDEC_MAX_CHN_NUM][9999]; // Frame size
 uint64_t g_vdec_start_time[VDEC_MAX_CHN_NUM] = {0}; // Video decoder start time
 uint64_t g_vdec_end_time[VDEC_MAX_CHN_NUM] = {0}; // Video decoder end time
 uint64_t g_vdec_get_frame_cnt[VDEC_MAX_CHN_NUM] = {0}; // Number of decode success
+uint32_t g_device_id = 0; // Device Id
 
 aclrtRunMode g_run_mode = ACL_HOST;
 aclrtContext g_context = NULL;
@@ -551,7 +552,7 @@ void* send_stream(void* const chanNum)
 
     if (g_run_mode == ACL_HOST) {
         // alloc device inbuffer mem
-        ret = hi_mpi_dvpp_malloc(0, (void **)&dataDev, fileSize);
+        ret = hi_mpi_dvpp_malloc(g_device_id, (void **)&dataDev, fileSize);
         if (ret != 0) {
             fclose(fpInputFile);
             free(inputFileBuf);
@@ -589,7 +590,8 @@ void* send_stream(void* const chanNum)
 
     // Alloc out buffer
     for (uint32_t i = 0; i < g_alloc_num; i++) {
-        ret = hi_mpi_dvpp_malloc(0, &outBuffer, outBufferSize); // Alloc Vdec out buffer must use hi_mpi_dvpp_malloc
+        // Alloc Vdec out buffer must use hi_mpi_dvpp_malloc
+        ret = hi_mpi_dvpp_malloc(g_device_id, &outBuffer, outBufferSize);
         if (ret != HI_SUCCESS) {
             fclose(fpInputFile);
             free(inputFileBuf);
@@ -1020,31 +1022,32 @@ int32_t get_option(int32_t argc, char **argv)
     while (1) {
         int32_t optionIndex = 0;
         option longOptions[] = {
-            {"img_width", 1, 0, 'a'},
-            {"img_height", 1, 0, 'b'},
-            {"in_image_file", 1, 0, 'c'},
-            {"in_format", 1, 0, 'd'},
-            {"in_bitwidth", 1, 0, 'e'},
-            {"out_width", 1, 0, 'f'},
-            {"out_height", 1, 0, 'g'},
-            {"out_image_file", 1, 0, 'h'},
-            {"out_format", 1, 0, 'i'},
-            {"width_stride", 1, 0, 'j'},
-            {"height_stride", 1, 0, 'k'},
-            {"write_file", 1, 0, 'l'},
-            {"chn_num", 1, 0, 'm'},
-            {"ref_frame_num", 1, 0, 'n'},
-            {"dis_frame_num", 1, 0, 'o'},
-            {"output_order", 1, 0, 'p'},
-            {"send_times", 1, 0, 'q'},
-            {"send_interval", 1, 0, 'r'},
-            {"delay_time", 1, 0, 's'},
-            {"alloc_num", 1, 0, 't'},
-            {"start_chn", 1, 0, 'w'},
-            {"render", 1, 0, 'v'}
+            {"img_width", 1, nullptr, 'a'},
+            {"img_height", 1, nullptr, 'b'},
+            {"in_image_file", 1, nullptr, 'c'},
+            {"in_format", 1, nullptr, 'd'},
+            {"in_bitwidth", 1, nullptr, 'e'},
+            {"out_width", 1, nullptr, 'f'},
+            {"out_height", 1, nullptr, 'g'},
+            {"out_image_file", 1, nullptr, 'h'},
+            {"out_format", 1, nullptr, 'i'},
+            {"width_stride", 1, nullptr, 'j'},
+            {"height_stride", 1, nullptr, 'k'},
+            {"write_file", 1, nullptr, 'l'},
+            {"chn_num", 1, nullptr, 'm'},
+            {"ref_frame_num", 1, nullptr, 'n'},
+            {"dis_frame_num", 1, nullptr, 'o'},
+            {"output_order", 1, nullptr, 'p'},
+            {"send_times", 1, nullptr, 'q'},
+            {"send_interval", 1, nullptr, 'r'},
+            {"delay_time", 1, nullptr, 's'},
+            {"alloc_num", 1, nullptr, 't'},
+            {"start_chn", 1, nullptr, 'u'},
+            {"render", 1, nullptr, 'v'},
+            {"device_id", 1, nullptr, 'w'}
         };
 
-        int32_t parameter = getopt_long(argc, argv, "a:b:c:d:e:f:g:h:i:j:k:l:m:n:o:p:q:r:s:t:w:v:",
+        int32_t parameter = getopt_long(argc, argv, "a:b:c:d:e:f:g:h:i:j:k:l:m:n:o:p:q:r:s:t:u:v:w:",
             longOptions, &optionIndex);
         if (parameter == -1) {
             break;
@@ -1111,11 +1114,14 @@ int32_t get_option(int32_t argc, char **argv)
             case 't':
                 g_alloc_num = atoi(optarg);
                 break;
-            case 'w':
+            case 'u':
                 g_start_chn_num = atoi(optarg);
                 break;
             case 'v':
                 g_render = atoi(optarg);
+                break;
+            case 'w':
+                g_device_id = atoi(optarg);
                 break;
             default:
                 printf("this is default!\n");
@@ -1191,8 +1197,8 @@ int32_t check_option()
             __FUNCTION__, __LINE__, g_is_write_file);
         return HI_FAILURE;
     }
-    // Check channel number[1, 96]
-    if ((g_chn_num > 96) || (g_chn_num < 1)) {
+    // Check channel number > 1
+    if (g_chn_num < 1) {
         printf("[%s][%d] chan num is invalid, chan num = %u \n", __FUNCTION__, __LINE__, g_chn_num);
         return HI_FAILURE;
     }
@@ -1213,7 +1219,7 @@ int32_t check_option()
         return HI_FAILURE;
     }
     // Check channel start number
-    if (g_start_chn_num + g_chn_num >= VDEC_MAX_CHN_NUM) {
+    if (g_start_chn_num + g_chn_num > VDEC_MAX_CHN_NUM) {
         printf("[%s][%d] start chan num is invalid, start chan num = %u \n", __FUNCTION__, __LINE__, g_start_chn_num);
         return HI_FAILURE;
     }
@@ -1246,6 +1252,7 @@ void print_parameter()
     printf("AllocNum: %u \n", g_alloc_num);
     printf("StartChnNum: %u \n", g_start_chn_num);
     printf("Render: %u \n", g_render);
+    printf("DeviceId: %u \n", g_device_id);
     printf("/**********************************************************/\n");
 }
 
@@ -1292,18 +1299,18 @@ int32_t hi_dvpp_init()
     }
     printf("[%s][%d] aclInit Success.\n", __FUNCTION__, __LINE__);
 
-    aclRet = aclrtSetDevice(0);
+    aclRet = aclrtSetDevice(g_device_id);
     if (aclRet != ACL_SUCCESS) {
-        printf("[%s][%d] aclrtSetDevice 0 failed, error code = %d.\n", __FUNCTION__, __LINE__, aclRet);
+        printf("[%s][%d] aclrtSetDevice %u failed, error code = %d.\n", __FUNCTION__, __LINE__, g_device_id, aclRet);
         aclFinalize();
         return HI_FAILURE;
     }
-    printf("[%s][%d] aclrtSetDevice 0 Success.\n", __FUNCTION__, __LINE__);
+    printf("[%s][%d] aclrtSetDevice %u Success.\n", __FUNCTION__, __LINE__, g_device_id);
 
-    aclRet = aclrtCreateContext(&g_context, 0);
+    aclRet = aclrtCreateContext(&g_context, g_device_id);
     if (aclRet != ACL_SUCCESS) {
         printf("[%s][%d] aclrtCreateContext failed, error code = %d.\n", __FUNCTION__, __LINE__, aclRet);
-        aclrtResetDevice(0);
+        aclrtResetDevice(g_device_id);
         aclFinalize();
         return HI_FAILURE;
     }
@@ -1313,7 +1320,7 @@ int32_t hi_dvpp_init()
     if (ret != HI_SUCCESS) {
         printf("[%s][%d] hi_mpi_sys_init failed, error code = %x\n", __FUNCTION__, __LINE__, ret);
         aclrtDestroyContext(g_context);
-        aclrtResetDevice(0);
+        aclrtResetDevice(g_device_id);
         aclFinalize();
         return HI_FAILURE;
     }
@@ -1323,7 +1330,7 @@ int32_t hi_dvpp_init()
         printf("[%s][%d] aclrtGetRunMode failed, error code = %d\n", __FUNCTION__, __LINE__, aclRet);
         hi_mpi_sys_exit();
         aclrtDestroyContext(g_context);
-        aclrtResetDevice(0);
+        aclrtResetDevice(g_device_id);
         aclFinalize();
         return HI_FAILURE;
     }
@@ -1344,9 +1351,9 @@ void hi_dvpp_deinit()
         printf("[%s][%d] aclrtDestroyContext failed, error code = %d.\n", __FUNCTION__, __LINE__, aclRet);
     }
 
-    aclRet = aclrtResetDevice(0);
+    aclRet = aclrtResetDevice(g_device_id);
     if (aclRet != ACL_SUCCESS) {
-        printf("[%s][%d] aclrtResetDevice 0 failed, error code = %d.\n", __FUNCTION__, __LINE__, aclRet);
+        printf("[%s][%d] aclrtResetDevice %u failed, error code = %d.\n", __FUNCTION__, __LINE__, g_device_id, aclRet);
     }
 
     aclRet = aclFinalize();

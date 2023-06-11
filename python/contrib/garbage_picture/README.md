@@ -49,7 +49,7 @@ Check whether the following requirements are met. If not, perform operations acc
     | ------------ | ---------------------------------------------------- | ------------------------------------------------------------ |
     | mobilenetV2  | Image classification inference model. It is a MobileNetV2 model based on MindSpore.| Download the model and weight files by referring to the links in **README.md** in the [ATC_mobilenetv2_mindspore_AE](https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/garbage_classification/ATC_mobilenetv2_mindspore_AE) directory of the ModelZoo repository.|
     ```
-    # To facilitate download, the commands for downloading the original model and converting the model are provided here. You can directly copy and run the commands. You can also refer to the above table to download the model from ModelZoo and manually convert it.    
+    # To facilitate download, the commands for downloading the original model and converting the model are provided here. You can directly copy and run the commands(If you are converting on a 310B chip, you need to modify the parameter -- soc_version=Ascend310B1). You can also refer to the above table to download the model from ModelZoo and manually convert it.    
     cd ${HOME}/samples/python/contrib/garbage_picture/model    
     wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com:443/003_Atc_Models/AE/ATC%20Model/garbage/mobilenetv2.air   
     wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/garbage_picture/insert_op_yuv.cfg
@@ -59,7 +59,9 @@ Check whether the following requirements are met. If not, perform operations acc
 3. Obtain the test images required by the sample.
     ```
     # Run the following commands to go to the data folder of the sample and download the corresponding test images:
-    cd $HOME/samples/python/contrib/garbage_picture/data
+    cd $HOME/samples/python/contrib/garbage_picture
+    mkdir data
+    cd data
     wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/garbage_picture/newspaper.jpg
     wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/garbage_picture/bottle.jpg    
     wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/garbage_picture/dirtycloth.jpg 
@@ -78,7 +80,7 @@ Check whether the following requirements are met. If not, perform operations acc
     ```
 2. <a name="step_2"></a>Run the executable file.
     ```
-    python3.6 classify_test.py ../data/
+    python3 classify_test.py ../data/
     ```
 
 ### Result Viewing

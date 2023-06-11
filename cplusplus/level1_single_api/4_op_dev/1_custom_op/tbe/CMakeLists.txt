@@ -18,9 +18,9 @@ macro(GEN_OPS_INFO_FILE op_type output_dir output_file_name_prefix)
             set(output_file_name ${output_file_name_prefix}-${SUB_DIR}-ops-info.json)
             if (NOT "x${INI_FILES}" STREQUAL "x")
                 add_custom_command(OUTPUT ${output_file_name}
-                        COMMAND echo "python3.7.5 ${INI_2_JSON_PY} ${INI_FILES} ${output_dir}/${output_file_name}"
+                        COMMAND echo "python ${INI_2_JSON_PY} ${INI_FILES} ${output_dir}/${output_file_name}"
                         COMMAND mkdir -p ${output_dir}/${SUB_DIR}
-                        COMMAND python3.7.5 ${INI_2_JSON_PY} ${INI_FILES} ${output_dir}/${SUB_DIR}/${output_file_name}
+                        COMMAND python ${INI_2_JSON_PY} ${INI_FILES} ${output_dir}/${SUB_DIR}/${output_file_name}
                         COMMENT "generate configure json file")
                 set(OUTPUT_FILES ${OUTPUT_FILES} ${output_file_name})
             else()

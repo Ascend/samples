@@ -53,7 +53,7 @@ Check whether the following requirements are met. If not, perform operations acc
     wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/painting/AIPainting_v2.pb  
     atc --output_type=FP32 --input_shape="objs:9;coarse_layout:1,256,256,17"  --input_format=NHWC --output="AIPainting_v2" --soc_version=Ascend310 --framework=3  --model="./AIPainting_v2.pb"
     ```
-
+    Note: If the hardware is A200I DK A2, you need to set the parameter --soc_version=Ascend310 is modified to --soc_version=Ascend310B1。
 
 ### Sample Deployment
 Run the following commands to execute the compilation script to start sample compilation:   
@@ -61,7 +61,7 @@ Run the following commands to execute the compilation script to start sample com
 cd $HOME/samples/cplusplus/contrib/AI_painting/scripts    
 bash sample_build.sh
 ```
-
+Note: If the hardware is A200I DK A2, you need to modify the line 313 in file src/painting_process.cpp to param[0]=cv::IMWRITE_ JPEG_ QUALITY; 。
 ### Sample Running
 **Note: If the development environment and operating environment are set up on the same server, skip step 1 and go to [step 2](#step_2) directly.**     
 1. Run the following commands to upload the **AI_painting** directory in the development environment to any directory in the operating environment, for example, **/home/HwHiAiUser**, and log in to the operating environment (host) as the running user (**HwHiAiUser**):   

@@ -1,0 +1,24 @@
+{
+    "device_config":[
+        {
+            "device_id":0,
+            "model_config":[
+                {
+                    "infer_thread_name":"infer_thread_0",
+                    "model_path":"../model/yolov7x.om",
+                    "model_width":640,
+                    "model_heigth":640,
+                    "io_info":[
+                        {
+                            "input_path":"../data/car0.mp4",
+                            "input_type":"video",
+                            "output_path":"../out/outcar0.mp4",
+                            "output_type":"video",
+                            "channel_id":0
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

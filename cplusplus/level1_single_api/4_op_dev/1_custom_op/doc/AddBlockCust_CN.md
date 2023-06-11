@@ -2,7 +2,15 @@
 
 ## 功能描述
 
-本样例描述了AI CPU自定义算子AddBlockCust的实现，用以举例说明自定义AI CPU算子如何支持分块并行计算。
+本样例描述了AI CPU自定义算子AddBlockCust的实现，用以举例说明自定义AI CPU算子如何支持分块并行计算（开启多核并行计算）。
+
+1.  开启多核的条件。
+    -   数据在计算过程中，相互之间不存在关联，可以分割成多个数据块进行独立计算，若输入参数间存在数据依赖，则无法进行分块并行计算。
+    -   每一块数据生成的结果在计算前可预知存放的位置和大小，如果不能预知，需要对计算结果进行拼接，拼接过程会带来额外的性能损耗。
+
+2.  如何开启多核。
+    -   使用此功能时，需要在算子信息库定义中设置opInfo.flagSupportBlockDim=True，并设置opInfo.functionName=RunCpuKernelWithBlock。
+    -   opInfo.blockDimByIndex该字段表示根据第一个输入参数shape的某个维度来进行切分，默认为-1。
 
 AddBlockCustk算子实现了两个数据相加，返回相加结果的功能，如下所示：
 

@@ -1,0 +1,33 @@
+[
+    {
+        "op": "AddCustom",
+        "input_desc": [
+            {
+                "name": "x",
+                "param_type": "required",
+                "format": "ND",
+                "shape": [-1, -1],
+                "shape_range": [[1,-1],[1,-1]],
+                "type": "float16"
+            },
+            {
+                "name": "y",
+                "param_type": "required",
+                "format":"ND",
+                "shape": [-1, -1],
+                "shape_range": [[1,-1],[1,-1]],
+                "type": "float16"
+            }
+        ],
+        "output_desc": [
+            {
+                "name": "z",
+                "param_type": "required",
+                "format":  "ND",
+                "shape": [-1, -1],
+                "shape_range": [[1,-1],[1,-1]],
+                "type": "float16"
+            }
+        ]
+    }
+]

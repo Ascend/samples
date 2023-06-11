@@ -60,6 +60,7 @@
    atc --model=./ESPCN.prototxt --weight=./ESPCN.caffemodel --framework=0 --input_format=NCHW --input_shape="data: 1, 1, 256, 256" --output=./ESPCN_256_256 --soc_version=Ascend310 --output_type=FP32
    #使用VDSR模型：
    atc --model=./VDSR.prototxt --weight=./VDSR.caffemodel --framework=0 --input_format=NCHW --input_shape="data: 1, 1, 768, 768" --output=./VDSR_768_768 --soc_version=Ascend310 --output_type=FP32
+   **注：如果在310B芯片上进行模型转换，修改参数--soc_version=Ascend310B1即可**
    ```
 
 ### 样例部署

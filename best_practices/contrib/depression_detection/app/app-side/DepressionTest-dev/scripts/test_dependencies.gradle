@@ -1,0 +1,38 @@
+dependencies {
+    testImplementation "junit:junit:$versions.junit"
+    testImplementation "androidx.test:core:$versions.testCore"
+    testImplementation "com.squareup.okhttp3:mockwebserver:$versions.okhttp"
+    testImplementation "androidx.arch.core:core-testing:$versions.arch"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$versions.coroutinesTest"
+
+//    testImplementation "io.mockk:mockk:$versions.mockk"
+
+//    androidTestImplementation "io.mockk:mockk-android:$versions.mockk"
+    androidTestUtil "androidx.test:orchestrator:$versions.testCore"
+    androidTestImplementation "androidx.work:work-testing:$versions.work"
+    androidTestImplementation "com.squareup.okhttp3:mockwebserver:$versions.okhttp"
+    androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$versions.coroutinesTest"
+
+    // Core library
+    androidTestImplementation "androidx.test:core:$versions.testCore"
+    androidTestImplementation "androidx.test:core-ktx:$versions.testCore"
+    androidTestImplementation "androidx.arch.core:core-testing:$versions.arch"
+    // AndroidJUnitRunner and JUnit Rules
+    androidTestImplementation "androidx.test:runner:$versions.testCore"
+    androidTestImplementation "androidx.test:rules:$versions.testCore"
+    // Assertions
+    androidTestImplementation "androidx.test.ext:junit:$versions.testExtJunit"
+    androidTestImplementation "androidx.test.ext:junit-ktx:$versions.testExtJunit"
+    // Espresso dependencies
+//    androidTestImplementation "androidx.test.espresso:espresso-core:$versions.espresso"
+//    androidTestImplementation "androidx.test.espresso:espresso-contrib:$versions.espresso"
+//    androidTestImplementation "androidx.test.espresso:espresso-intents:$versions.espresso"
+//    androidTestImplementation "androidx.test.espresso:espresso-accessibility:$versions.espresso"
+//    androidTestImplementation "androidx.test.espresso:espresso-web:$versions.espresso"
+//    androidTestImplementation "androidx.test.espresso.idling:idling-concurrent:$versions.espresso"
+
+    // Robolectric dependencies
+    testImplementation "androidx.compose.ui:ui-test-junit4:$versions.compose"
+    // TODO: Bump to 4.6.* after https://github.com/robolectric/robolectric/issues/6593 is fixed
+    testImplementation 'org.robolectric:robolectric:4.5.1'
+}

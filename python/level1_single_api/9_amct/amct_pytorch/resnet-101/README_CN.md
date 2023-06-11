@@ -407,6 +407,8 @@ INFO - [AMCT]:[Utils]: The model file is saved in ./outputs/nuq/resnet-101_fake_
 [INFO] ResNet101 after compressed retrain top1:51.58% top5:78.24%
 ```
 
+说明：本示例结果与示例命令相匹配仅作为参考，不同的迭代次数精度不同，数据随机性可能导致结果微小差异。如果要恢复模型的精度，需要更大的训练迭代次数。
+
 ### 5.3 组合压缩结果
 
 组合压缩成功后，在当前目录会生成量化日志文件 [./amct_log/amct_pytorch.log](./amct_log/amct_pytorch.log) 和 [./outputs/retrain](./outputs/retrain/) 文件夹，该文件夹内包含以下内容：

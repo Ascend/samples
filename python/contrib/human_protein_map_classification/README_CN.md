@@ -49,8 +49,8 @@
     | ------------ | --------------------- | ------------------------------------------------------------ |
     | deploy_vel          | 基于Caffe的蛋白质亚细胞定位预测 | 请参考https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/hpa/ATC_hpa_caffe_AE 中README.md原始模型章节，下载**原始模型网络**及**模型权重文件**。 |
     ```
-    # 为了方便下载，在这里直接给出原始模型下载及模型转换命令,可以直接拷贝执行。也可以参照上表在modelzoo中下载并手工转换，以了解更多细节。     
-    cd ${HOME}/samples/python/level2_simple_inference/6_other/colorization_picture/model    
+    # 为了方便下载，在这里直接给出原始模型下载及模型转换命令,可以直接拷贝执行(如果在310B芯片上进行转换，需要修改参数 --soc_version=Ascend310B1)。也可以参照上表在modelzoo中下载并手工转换，以了解更多细节。     
+    cd ${HOME}/samples/python/contrib/human_protein_map_classification/model    
     wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/hpa/hpa.prototxt    
     wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/hpa/hpa.caffemodel
     atc --model=./hpa.prototxt --weight=./hpa.caffemodel --framework=0 --output=./deploy_vel  --soc_version=Ascend310 --input_format=NCHW --input_fp16_nodes=data --output_type=FP32 --out_nodes="score:0"  
@@ -75,7 +75,7 @@
     ```
 2. 运行可执行文件。
     ```
-    python3.6 main.py ../data/
+    python3 main.py ../data/
     ```
 ### 查看结果
 

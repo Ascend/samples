@@ -92,13 +92,13 @@ cd $HOME/samples/cplusplus/level3_application/1_cv/detect_and_classify
 mkdir model
 cd model
 # 下载yolov3的原始模型文件及AIPP配置文件
-wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOV3_carColor_sample/data/yolov3_t.onnx
-wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOV3_carColor_sample/data/aipp_onnx.cfg
+wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOV3_carColor_sample/data/yolov3_t.onnx --no-check-certificate
+wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOV3_carColor_sample/data/aipp_onnx.cfg --no-check-certificate
 # 执行模型转换命令，生成yolov3的适配昇腾AI处理器的离线模型文件
 atc --model=./yolov3_t.onnx --framework=5 --output=yolov3 --input_shape="images:1,3,416,416;img_info:1,4" --soc_version=Ascend310 --input_fp16_nodes="img_info" --insert_op_conf=aipp_onnx.cfg
 # 下载color模型的原始模型文件及AIPP配置文件
-wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOV3_carColor_sample/data/color.pb
-wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOV3_carColor_sample/data/aipp.cfg
+wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOV3_carColor_sample/data/color.pb --no-check-certificate
+wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOV3_carColor_sample/data/aipp.cfg --no-check-certificate
 # 执行模型转换命令，生成color的适配昇腾AI处理器的离线模型文件
 atc --input_shape="input_1:-1,224,224,3" --output=./color_dynamic_batch --soc_version=Ascend310 --framework=3 --model=./color.pb --insert_op_conf=./aipp.cfg --dynamic_batch_size="1,2,4,8"
 ```
@@ -199,7 +199,7 @@ wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Mo
 
 3. 若输出类型配置的为“presentagent”，运行可执行文件前可以参考[通用目标识别样例/样例编译运行](https://github.com/Ascend/samples/wikis/%E9%80%9A%E7%94%A8%E7%9B%AE%E6%A0%87%E8%AF%86%E5%88%AB%E6%A0%B7%E4%BE%8B/%E6%A0%B7%E4%BE%8B%E7%BC%96%E8%AF%91%E8%BF%90%E8%A1%8C)中相关内容进行 PresentServer的配置、启动和访问。若配置的其他输出类型，则此步骤可跳过。
 
-  4. 若输出类型配置的为“rtsp”，则需要先安装rtsp-simple-server，然后启动rtsp服务，再运行程序，具体可参考[通用目标识别样例/样例编译运行](https://github.com/Ascend/samples/wikis/%E9%80%9A%E7%94%A8%E7%9B%AE%E6%A0%87%E8%AF%86%E5%88%AB%E6%A0%B7%E4%BE%8B/%E6%A0%B7%E4%BE%8B%E7%BC%96%E8%AF%91%E8%BF%90%E8%A1%8C)中相关内容。若配置的其他输出类型，则此步骤可跳过。
+  4. 若输出类型配置的为“rtsp”，则需要先安装rtsp-simple-server，然后启动rtsp服务，再运行程序，具体可参考[样例参数说明](./configDemo.md)中相关内容。若配置的其他输出类型，则此步骤可跳过。
  
 5. 运行样例。
 

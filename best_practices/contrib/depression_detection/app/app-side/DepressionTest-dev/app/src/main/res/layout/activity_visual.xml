@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.visual.VisualActivity">
+
+        <TextureView
+            android:id="@+id/preview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <View
+            android:id="@+id/view_warning_tracking"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/red_border_line"
+            android:visibility="invisible" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintRight_toRightOf="parent">
+
+            <LinearLayout
+                android:layout_width="200dip"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.chris.gaze.view.EyeBlinkView
+                    android:id="@+id/view_eye_blink"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:visibility="invisible" />
+
+                <com.chris.gaze.view.AttentionView
+                    android:id="@+id/view_attention"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:visibility="invisible" />
+
+                <com.chris.gaze.view.DrowsinessView
+                    android:id="@+id/view_drowsiness"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:visibility="invisible" />
+
+            </LinearLayout>
+
+            <ScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <Button
+                        android:id="@+id/btn_init_gaze"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="init gaze" />
+
+                    <Button
+                        android:id="@+id/btn_release_gaze"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="release gaze" />
+
+                    <Button
+                        android:id="@+id/btn_start_tracking"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="start tracking" />
+
+                    <Button
+                        android:id="@+id/btn_stop_tracking"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="stop tracking" />
+
+                    <Button
+                        android:id="@+id/btn_start_calibration"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="start calibration" />
+
+                    <Button
+                        android:id="@+id/btn_stop_calibration"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="stop calibration" />
+
+                    <Button
+                        android:id="@+id/btn_set_calibration"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="set calibration" />
+
+                    <Button
+                        android:id="@+id/btn_gui_demo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="gaze path demo" />
+                </LinearLayout>
+            </ScrollView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="5dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/sw_use_gaze_filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="use gaze filter"
+                android:textColor="@android:color/holo_blue_bright" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="calibration type"
+                    android:textColor="@android:color/holo_blue_bright" />
+
+                <RadioGroup
+                    android:id="@+id/rg_calibration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.AppCompatRadioButton
+                        android:id="@+id/rb_calibration_one"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1-point"
+                        android:textColor="@android:color/holo_blue_bright" />
+
+                    <androidx.appcompat.widget.AppCompatRadioButton
+                        android:id="@+id/rb_calibration_five"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="5-point"
+                        android:textColor="@android:color/holo_blue_bright" />
+
+                    <androidx.appcompat.widget.AppCompatRadioButton
+                        android:id="@+id/rb_calibration_six"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="6-point"
+                        android:textColor="@android:color/holo_blue_bright" />
+
+                </RadioGroup>
+
+                <RadioGroup
+                    android:id="@+id/rg_accuracy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.AppCompatRadioButton
+                        android:id="@+id/rb_accuracy_default"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="default"
+                        android:textColor="@android:color/holo_blue_bright" />
+
+                    <androidx.appcompat.widget.AppCompatRadioButton
+                        android:id="@+id/rb_accuracy_low"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="low"
+                        android:textColor="@android:color/holo_blue_bright" />
+
+                    <androidx.appcompat.widget.AppCompatRadioButton
+                        android:id="@+id/rb_accuracy_high"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="high"
+                        android:textColor="@android:color/holo_blue_bright" />
+
+                </RadioGroup>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="User Status"
+                    android:textColor="@android:color/holo_blue_bright" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/sw_status_attention"
+                        android:layout_width="130dp"
+                        android:layout_height="wrap_content"
+                        android:text="Attention"
+                        android:textColor="@android:color/holo_blue_bright" />
+
+                </LinearLayout>
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/sw_status_blink"
+                    android:layout_width="130dp"
+                    android:layout_height="wrap_content"
+                    android:text="Blink"
+                    android:textColor="@android:color/holo_blue_bright" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/sw_status_drowsiness"
+                    android:layout_width="130dp"
+                    android:layout_height="wrap_content"
+                    android:text="Drowsiness"
+                    android:textColor="@android:color/holo_blue_bright" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/txt_gaze_version"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="version:"
+            android:textColor="@android:color/holo_blue_bright"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent" />
+
+        <!-- 시선 좌표 -->
+        <com.chris.gaze.view.PointView
+            android:id="@+id/view_point"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <!-- 캘리브레이션 뷰 -->
+        <com.chris.gaze.view.CalibrationViewer
+            android:id="@+id/view_calibration"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible" />
+
+        <include
+            android:id="@+id/layout_progress"
+            layout="@layout/layout_progress" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

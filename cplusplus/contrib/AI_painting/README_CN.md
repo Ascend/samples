@@ -52,6 +52,7 @@
     wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/painting/AIPainting_v2.pb  
     atc --output_type=FP32 --input_shape="objs:9;coarse_layout:1,256,256,17"  --input_format=NHWC --output="AIPainting_v2" --soc_version=Ascend310 --framework=3  --model="./AIPainting_v2.pb"
     ```
+    注：如果硬件是A200I DK A2，则需要将参数--soc_version=Ascend310修改为--soc_version=Ascend310B1。
 
 
 ### 样例部署
@@ -60,6 +61,7 @@
 cd $HOME/samples/cplusplus/contrib/AI_painting/scripts    
 bash sample_build.sh
 ```
+注：如果硬件是A200I DK A2，则需要将文件src/painting_process.cpp中313行代码修改为 param[0] = cv::IMWRITE_JPEG_QUALITY; 。
 
 ### 样例运行
 **注：开发环境与运行环境合一部署，请跳过步骤1，直接执行[步骤2](#step_2)即可。**      

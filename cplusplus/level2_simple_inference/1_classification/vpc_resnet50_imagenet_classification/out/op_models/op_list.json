@@ -29,12 +29,19 @@
   ]
 },
 {
-  "op": "ArgMaxD",
+  "op": "ArgMaxV2",
   "input_desc": [
     {
       "format": "ND",
       "shape": [1000],
       "type": "float16"
+    },
+    {
+      "format": "ND",
+      "shape": [1],
+      "type": "int32",
+      "is_const": true,
+      "const_value": [0]
     }
   ],
   "output_desc": [
@@ -42,13 +49,6 @@
       "format": "ND",
       "shape": [1],
       "type": "int32"
-    }
-  ],
-  "attr": [
-    {
-        "name": "dimension",
-        "type": "int",
-        "value": 0
     }
   ]
 }

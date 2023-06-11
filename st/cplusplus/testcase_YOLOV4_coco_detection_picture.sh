@@ -1,5 +1,6 @@
 tf_model="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/nkxiaolei/YoloV4/yolov4_no_postprocess.pb"
 model_name="yolov4"
+aipp_cfg="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/nkxiaolei/YoloV4/insert_op.cfg"
 
 data_source="https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/models/aclsample/"
 data_name="dog1_1024_683.jpg"

@@ -40,7 +40,7 @@ target_compile_definitions(ir_build PRIVATE
 )
 
 target_include_directories(ir_build PRIVATE
-    ${ASCEND_PATH}/opp/op_proto/built-in/inc
+    ${ASCEND_PATH}/opp/built-in/op_proto/inc
     ${ATC_INCLUDE_DIR}/graph
     ${ATC_INCLUDE_DIR}/ge
     ${ATC_INCLUDE_DIR}/parser    
@@ -73,7 +73,7 @@ target_compile_definitions(fwk_ir_build PRIVATE
 )
 
 target_include_directories(fwk_ir_build PRIVATE
-    ${ASCEND_PATH}/opp/op_proto/built-in/inc
+    ${ASCEND_PATH}/opp/built-in/op_proto/inc
     ${FWK_INCLUDE_DIR}/graph
     ${FWK_INCLUDE_DIR}/ge
     ${FWK_INCLUDE_DIR}/parser

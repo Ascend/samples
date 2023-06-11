@@ -455,7 +455,7 @@ AclLiteError AclLiteModel::GetModelOutputInfo(vector<ModelOutputInfo>& modelOutp
     for (size_t i = 0; i < outputsNum_; ++i) {
         ModelOutputInfo outputInfo;
         outputInfo.name = aclmdlGetOutputNameByIndex(modelDesc_, i);
-        aclmdlGetOutputDims(modelDesc_, i, outputInfo.dims);
+        aclmdlGetOutputDims(modelDesc_, i, &outputInfo.dims);
         outputInfo.format = aclmdlGetOutputFormat(modelDesc_, i);
         outputInfo.dataType = aclmdlGetOutputDataType(modelDesc_, i);
         modelOutputInfo.push_back(outputInfo);

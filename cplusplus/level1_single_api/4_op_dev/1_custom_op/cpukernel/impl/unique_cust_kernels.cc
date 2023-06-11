@@ -18,6 +18,7 @@
 #include "cpu_tensor.h"
 #include "cpu_tensor_shape.h"
 #include "cpu_types.h"
+#include "cust_cpu_utils.h"
 
 namespace {
 const char* UNIQUE_CUST = "UniqueCust";
@@ -75,6 +76,7 @@ uint32_t UniqueTask(aicpu::Tensor *x, aicpu::Tensor *y, aicpu::Tensor *idx,
 
 namespace aicpu {
 uint32_t UniqueCpuKernel::Compute(CpuKernelContext &ctx) {
+  CUST_KERNEL_LOG_DEBUG(ctx, "Start Cust UniqueCpuKernel Compute");
   Tensor *param_tensor = ctx.Input(0);
   if (param_tensor == nullptr) {
     return 1;
@@ -89,7 +91,7 @@ uint32_t UniqueCpuKernel::Compute(CpuKernelContext &ctx) {
   for (int i = 0; i < param_shape->GetDims(); ++i) {
     p_size *= param_shape->GetDimSize(i);
   }
-
+  CUST_KERNEL_LOG_DEBUG(ctx, "Cust UniqueCpuKernel Compute, p_size is %ld.", p_size);
   std::map<int, std::function<uint32_t(aicpu::Tensor *, aicpu::Tensor *,
                                        aicpu::Tensor *, int64_t)> >
       calls;

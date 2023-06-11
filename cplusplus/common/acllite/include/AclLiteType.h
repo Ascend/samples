@@ -118,7 +118,7 @@ struct InferenceOutput {
 struct ModelOutputInfo
 {
     const char *name;
-    aclmdlIODims *dims;
+    aclmdlIODims dims;
     aclFormat format;
     aclDataType dataType;
 };

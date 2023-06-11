@@ -252,9 +252,22 @@ int main(int argc, char *argv[]) {
     SetInput(picDevBuffer, devPicBufferSize, testPic.width, testPic.height);
 
     // InitDecodeOutputDesc
-    uint32_t decodeOutWidthStride = (inputWidth_ + 63) / 64 * 64; // 64-byte alignment
-    uint32_t decodeOutHeightStride = (inputHeight_ + 15) / 16 * 16; // 16-byte alignment
-
+    uint32_t alignWidth;
+    uint32_t alignHeight;
+    uint32_t decodeOutWidthStride;
+    uint32_t decodeOutHeightStride;
+    auto socVersion = aclrtGetSocName();
+    if (strncmp(socVersion, "Ascend310P3", sizeof("Ascend310P3") - 1) == 0) {
+        alignWidth = (inputWidth_ + 1) / 2 * 2; // 2-byte alignment
+        alignHeight = (inputHeight_ + 1) / 2 * 2; // 2-byte alignment
+        decodeOutWidthStride = (inputWidth_ + 63) / 64 * 64; // 64-byte alignment
+        decodeOutHeightStride = (inputHeight_ + 15) / 16 * 16; // 16-byte alignment
+    }else{
+        alignWidth = inputWidth_;
+        alignHeight = inputHeight_; 
+        decodeOutWidthStride = (inputWidth_ + 127) / 128 * 128; // 128-byte alignment
+        decodeOutHeightStride = (inputHeight_ + 15) / 16 * 16; // 16-byte alignment
+    }
     // use acldvppJpegPredictDecSize to get output size.
     // uint32_t decodeOutBufferSize = decodeOutWidthStride * decodeOutHeightStride * 3 / 2; // yuv format size
     // uint32_t decodeOutBufferSize = testPic.jpegDecodeSize;
@@ -273,8 +286,8 @@ int main(int argc, char *argv[]) {
     acldvppSetPicDescData(decodeOutputDesc_, decodeOutDevBuffer_);
     // here the format shoud be same with the value you set when you get decodeOutBufferSize from
     acldvppSetPicDescFormat(decodeOutputDesc_, PIXEL_FORMAT_YUV_SEMIPLANAR_420); 
-    acldvppSetPicDescWidth(decodeOutputDesc_, inputWidth_);
-    acldvppSetPicDescHeight(decodeOutputDesc_, inputHeight_);
+    acldvppSetPicDescWidth(decodeOutputDesc_, alignWidth);
+    acldvppSetPicDescHeight(decodeOutputDesc_, alignHeight);
     acldvppSetPicDescWidthStride(decodeOutputDesc_, decodeOutWidthStride);
     acldvppSetPicDescHeightStride(decodeOutputDesc_, decodeOutHeightStride);
     acldvppSetPicDescSize(decodeOutputDesc_, testPic.jpegDecodeSize);
@@ -302,6 +315,7 @@ int main(int argc, char *argv[]) {
     std::string outfile_path = outfile_dir + image_path.substr(dir_tail_index+5+1, image_path.rfind(".jpg")-dir_tail_index-5-1) 
         + "_jpegd_" + std::to_string(testPic.width) + "_" + std::to_string(testPic.height) + ".yuv";   
     INFO_LOG("outfile_path=%s", outfile_path.c_str());
+
 
 
     ret = SaveDvppOutputData(outfile_path.c_str(), decodeOutDevBuffer_, decodeDataSize_);

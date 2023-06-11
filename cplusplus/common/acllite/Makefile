@@ -1,9 +1,5 @@
 TOPDIR      := $(patsubst %,%,$(CURDIR))
 
-ifndef CPU_ARCH
-$(error "Can not find CPU_ARCH env, please set it in environment!.")
-endif
-
 ifndef INSTALL_DIR
 $(error "Can not find INSTALL_DIR env, please set it in environment!.")
 endif
@@ -14,23 +10,12 @@ endif
 
 media_mini_exist = $(shell if [ -f ${INSTALL_DIR}/driver/libmedia_mini.so ]; then echo "exist"; else echo "notexist"; fi;)
 
-LOCAL_ARCH = $(shell arch)
-ifeq ($(CPU_ARCH), $(LOCAL_ARCH))
-    CC := g++
-    $(info "target arch is equal to local.")
-else ifeq ($(CPU_ARCH), aarch64)
-    CC := aarch64-linux-gnu-g++
-else ifeq ($(CPU_ARCH), x86_64)
-    CC := g++
-    media_mini_exist = "notexist"
-else
-    $(error "Unsupported param: "$(CPU_ARCH))
-endif
+CC := g++
 
 LOCAL_MODULE_NAME := libacllite.so
 
 LOCAL_DIR  := .
-OUT_DIR = ./out/$(CPU_ARCH)
+OUT_DIR = ./out/x86_64
 OBJ_DIR = $(OUT_DIR)/obj
 DEPS_DIR  = $(OUT_DIR)/deps
 LOCAL_LIBRARY=$(OUT_DIR)/$(LOCAL_MODULE_NAME)
@@ -100,7 +85,7 @@ install: all
 	$(Q)echo [INSTALL] $@
 	$(Q)mkdir -p $(THIRDPART_PATH)/include/acllite
 	$(Q)mkdir -p $(THIRDPART_PATH)/lib
-	$(Q)cp -R $(LOCAL_DIR)/include/* $(THIRDPART_PATH)/include/acllite/
+	$(Q)cp -R include/* $(THIRDPART_PATH)/include/acllite/
 	$(Q)cp -R $(OUT_DIR)/lib*.so $(THIRDPART_PATH)/lib/
 
 clean:

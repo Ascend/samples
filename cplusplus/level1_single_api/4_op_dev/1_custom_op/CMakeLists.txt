@@ -83,8 +83,8 @@ add_custom_target(${RUN_TARGET} ALL DEPENDS ${ALL_MODULES})
 if (NOT "x$ENV{COMPILE_KERNEL_TARGET}" STREQUAL "xcpu")
     add_custom_command(TARGET ${RUN_TARGET}
         PRE_BUILD
-        COMMAND mkdir -p ./makepkg/packages/${PROJECT_DIR}/op_impl/ai_core/tbe/impl
-        COMMAND mkdir -p ./makepkg/packages/${PROJECT_DIR}/op_impl/vector_core/tbe/impl
+        COMMAND mkdir -p ./makepkg/packages/${PROJECT_DIR}/op_impl/ai_core/tbe/${OPP_CUSTOM_VENDOR}_impl
+        COMMAND mkdir -p ./makepkg/packages/${PROJECT_DIR}/op_impl/vector_core/tbe/${OPP_CUSTOM_VENDOR}_impl
         )
 endif()
 
@@ -103,6 +103,7 @@ add_custom_command(TARGET ${RUN_TARGET}
         COMMAND cp ${CMAKE_SOURCE_DIR}/scripts/upgrade.sh ./makepkg/
         COMMAND cp ${CMAKE_SOURCE_DIR}/scripts/uninstall.sh ./makepkg/
         COMMAND cp ${CMAKE_SOURCE_DIR}/scripts/help.sh ./makepkg/
+        COMMAND cp ${CMAKE_SOURCE_DIR}/scripts/set_env.bash ./makepkg/
         )
 
 if(EXISTS ${CMAKE_SOURCE_DIR}/custom.proto)
@@ -115,6 +116,7 @@ endif()
 add_custom_command(TARGET ${RUN_TARGET}
         PRE_BUILD
         COMMAND chmod u+x ./makepkg/*.sh
+        COMMAND chmod u+x ./makepkg/*.bash
         COMMAND ${CMAKE_SOURCE_DIR}/cmake/util/makeself/makeself.sh --gzip --complevel 4 --nomd5 --sha256 ./makepkg ${RUN_TARGET} "version:1.0" ./install.sh
         )
 

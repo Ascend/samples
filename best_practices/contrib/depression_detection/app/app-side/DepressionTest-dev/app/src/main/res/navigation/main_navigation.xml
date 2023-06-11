@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_main"
+    app:startDestination="@id/start_fragment">
+
+    <fragment
+        android:id="@+id/start_fragment"
+        android:name="com.chris.depression.ui.StartFragment"
+        android:label="StartFragment">
+        <action
+            android:id="@+id/action_start_fragment_to_question_list"
+            app:destination="@id/question_list" />
+        <action
+            android:id="@+id/action_start_fragment_to_video_viewer_fragment"
+            app:destination="@id/video_viewer_fragment" />
+        <action
+            android:id="@+id/action_start_fragment_to_visual_activity"
+            app:destination="@id/visual_activity" />
+    </fragment>
+
+    <action
+        android:id="@+id/gotoStart"
+        app:destination="@id/start_fragment"
+        app:popUpTo="@id/nav_main"
+        app:popUpToInclusive="true" />
+
+    <fragment
+        android:id="@+id/question_list"
+        android:name="com.chris.depression.ui.TestListFragment"
+        android:label="TestListFragment">
+        <action
+            android:id="@+id/action_question_list_to_video_fragment"
+            app:destination="@id/video_fragment" />
+        <action
+            android:id="@+id/action_question_list_to_question_fragment"
+            app:destination="@id/question_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/question_fragment"
+        android:name="com.chris.depression.ui.QuestionFragment"
+        android:label="QuestionFragment" />
+
+    <fragment
+        android:id="@+id/video_fragment"
+        android:name="com.chris.depression.ui.VideoFragment"
+        android:label="VideoFragment" />
+
+    <fragment
+        android:id="@+id/video_viewer_fragment"
+        android:name="com.chris.depression.ui.VideoViewerFragment"
+        android:label="fragment_video_viewer"
+        tools:layout="@layout/fragment_video_viewer" />
+
+    <activity
+        android:id="@+id/visual_activity"
+        android:name="com.chris.depression.ui.visual.VisualActivity"
+        android:label="VisualActivity"
+        tools:layout="@layout/activity_visual" />
+
+
+</navigation>

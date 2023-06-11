@@ -1,4 +1,4 @@
 opencv-python
 numpy
-onnxruntime == 1.4.0
+onnxruntime == 1.6.0
 Pillow

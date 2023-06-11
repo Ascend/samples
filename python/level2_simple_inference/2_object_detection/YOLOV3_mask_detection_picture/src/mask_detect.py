@@ -7,9 +7,9 @@ import acl
 import cv2 as cv
 from PIL import Image
 
-import constants as const
-from acllite_model import AclLiteModel
-from acllite_resource import AclLiteResource
+import acllite.constants as const
+from acllite.acllite_model import AclLiteModel
+from acllite.acllite_resource import AclLiteResource
 
 labels = ["face", "person", "mask"]
 INPUT_DIR = '../data/'

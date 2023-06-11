@@ -16,11 +16,11 @@
 using namespace std;
 
 SingleOpProcess::SingleOpProcess(aclrtStream &stream) : stream_(stream), tensorSizeCast_(0),
-    tensorSizeArgMaxD_(0), devBufferCast_(nullptr), devBufferArgMaxD_(nullptr), inputShape_(0)
+    tensorSizeArgMaxV2_(0), devBufferCast_(nullptr), devBufferArgMaxV2_(nullptr), inputShape_(0)
 {
     inputBuffer_[0] = nullptr;
     outputBufferCast_[0] = nullptr;
-    outputBufferArgMaxD_[0] = nullptr;
+    outputBufferArgMaxV2_[0] = nullptr;
 }
 
 Result SingleOpProcess::Init(const int64_t inputShape)
@@ -118,96 +118,116 @@ Result SingleOpProcess::RunSigleOpCast()
     return SUCCESS;
 }
 
-Result SingleOpProcess::RunSigleOpArgMaxD()
+Result SingleOpProcess::RunSigleOpArgMaxV2()
 {
-    std::string opTypeArgMaxD = "ArgMaxD";
-    const int inputNumArgMaxD = 1;
-    const int outputNumArgMaxD = 1;
-    aclDataType inputDataTypeArgMaxD = ACL_FLOAT16;
-    aclDataType outputDataTypeArgMaxD = ACL_INT32;
-    int inputArgMaxDShape = inputShape_;
-    int outputArgMaxDShape = 1;
-    std::vector<int64_t> inputShapeArgMaxD{ inputArgMaxDShape };
-    std::vector<int64_t> outputShapeArgMaxD{ outputArgMaxDShape };
+    std::string opTypeArgMaxV2 = "ArgMaxV2";
+    const int inputNumArgMaxV2 = 2;
+    const int outputNumArgMaxV2 = 1;
+    aclDataType inputDataTypeArgMaxV2 = ACL_FLOAT16;
+    aclDataType outputDataTypeArgMaxV2 = ACL_INT32;
+    int inputArgMaxV2Shape = inputShape_;
+    int outputArgMaxV2Shape = 1;
+    std::vector<int64_t> inputShapeArgMaxV2{ inputArgMaxV2Shape };
+    std::vector<int64_t> inputShapeArgMaxV2Second{ 1 };
+    std::vector<int64_t> outputShapeArgMaxV2{ outputArgMaxV2Shape };
 
-    // set ArgMaxD attr
+    // set ArgMaxV2 attr
     aclopAttr *opAttr = aclopCreateAttr();
     if (opAttr == nullptr) {
         ERROR_LOG("singleOp create attr failed");
         return FAILED;
     }
-    aclError ret = aclopSetAttrInt(opAttr, "dimension", 0);
+
+    // creat ArgMaxV2 input description
+    aclTensorDesc *inputDescArgMaxV2[inputNumArgMaxV2];
+    inputDescArgMaxV2[0] = aclCreateTensorDesc(inputDataTypeArgMaxV2, inputShapeArgMaxV2.size(),
+        inputShapeArgMaxV2.data(), ACL_FORMAT_ND);
+    if (inputDescArgMaxV2[0] == nullptr) {
+        ERROR_LOG("create ArgMaxV2 input desc failed");
+        aclopDestroyAttr(opAttr);
+        return FAILED;
+    }
+
+    inputDescArgMaxV2[1] = aclCreateTensorDesc(ACL_INT32, inputShapeArgMaxV2Second.size(),
+        inputShapeArgMaxV2Second.data(), ACL_FORMAT_ND);
+    if (inputDescArgMaxV2[1] == nullptr) {
+        ERROR_LOG("create ArgMaxV2 second input desc failed");
+        aclDestroyTensorDesc(inputDescArgMaxV2[0]);
+        aclopDestroyAttr(opAttr);
+        return FAILED;
+    }
+    int32_t dimension = 0;
+    aclError ret = aclSetTensorConst(inputDescArgMaxV2[1], &dimension, sizeof(dimension));
     if (ret != ACL_SUCCESS) {
-        ERROR_LOG("singleOp set attr failed");
+        ERROR_LOG("set second tensor const failed");
+        aclDestroyTensorDesc(inputDescArgMaxV2[0]);
+        aclDestroyTensorDesc(inputDescArgMaxV2[1]);
         aclopDestroyAttr(opAttr);
         return FAILED;
     }
 
-    // creat ArgMaxD input description
-    aclTensorDesc *inputDescArgMaxD[inputNumArgMaxD];
-    inputDescArgMaxD[0] = aclCreateTensorDesc(inputDataTypeArgMaxD, inputShapeArgMaxD.size(),
-        inputShapeArgMaxD.data(), ACL_FORMAT_ND);
-    if (inputDescArgMaxD[0] == nullptr) {
-        ERROR_LOG("create argMaxD input desc failed");
+    // creat ArgMaxV2 output description
+    aclTensorDesc *outputDescArgMaxV2[outputNumArgMaxV2];
+    outputDescArgMaxV2[0] = aclCreateTensorDesc(outputDataTypeArgMaxV2, outputShapeArgMaxV2.size(),
+        outputShapeArgMaxV2.data(), ACL_FORMAT_ND);
+    if (outputDescArgMaxV2[0] == nullptr) {
+        ERROR_LOG("create ArgMaxV2 output desc failed");
+        aclDestroyTensorDesc(inputDescArgMaxV2[0]);
+        aclDestroyTensorDesc(inputDescArgMaxV2[1]);
         aclopDestroyAttr(opAttr);
         return FAILED;
     }
 
-    // creat ArgMaxD output description
-    aclTensorDesc *outputDescArgMaxD[outputNumArgMaxD];
-    outputDescArgMaxD[0] = aclCreateTensorDesc(outputDataTypeArgMaxD, outputShapeArgMaxD.size(),
-        outputShapeArgMaxD.data(), ACL_FORMAT_ND);
-    if (outputDescArgMaxD[0] == nullptr) {
-        ERROR_LOG("create argMaxD output desc failed");
-        aclDestroyTensorDesc(inputDescArgMaxD[0]);
-        aclopDestroyAttr(opAttr);
-        return FAILED;
-    }
-
-    // prepare argmaxD output buffer
-    tensorSizeArgMaxD_ = aclGetTensorDescSize(outputDescArgMaxD[0]);
-    ret = aclrtMalloc(&devBufferArgMaxD_, tensorSizeArgMaxD_, ACL_MEM_MALLOC_NORMAL_ONLY);
+    // prepare ArgMaxV2 output buffer
+    tensorSizeArgMaxV2_ = aclGetTensorDescSize(outputDescArgMaxV2[0]);
+    ret = aclrtMalloc(&devBufferArgMaxV2_, tensorSizeArgMaxV2_, ACL_MEM_MALLOC_NORMAL_ONLY);
     if (ret != ACL_SUCCESS) {
-        ERROR_LOG("malloc argMaxD output data buffer failed, errorCode is %d", static_cast<int32_t>(ret));
-        aclDestroyTensorDesc(inputDescArgMaxD[0]);
-        aclDestroyTensorDesc(outputDescArgMaxD[0]);
+        ERROR_LOG("malloc ArgMaxV2 output data buffer failed, errorCode is %d", static_cast<int32_t>(ret));
+        aclDestroyTensorDesc(inputDescArgMaxV2[0]);
+        aclDestroyTensorDesc(inputDescArgMaxV2[1]);
+        aclDestroyTensorDesc(outputDescArgMaxV2[0]);
         aclopDestroyAttr(opAttr);
         return FAILED;
     }
-    outputBufferArgMaxD_[0] = aclCreateDataBuffer(devBufferArgMaxD_, tensorSizeArgMaxD_);
-    if (outputBufferArgMaxD_[0] == nullptr) {
-        ERROR_LOG("create argMaxD output buffer failed");
-        aclDestroyTensorDesc(inputDescArgMaxD[0]);
-        aclDestroyTensorDesc(outputDescArgMaxD[0]);
+    outputBufferArgMaxV2_[0] = aclCreateDataBuffer(devBufferArgMaxV2_, tensorSizeArgMaxV2_);
+    if (outputBufferArgMaxV2_[0] == nullptr) {
+        ERROR_LOG("create ArgMaxV2 output buffer failed");
+        aclDestroyTensorDesc(inputDescArgMaxV2[0]);
+        aclDestroyTensorDesc(inputDescArgMaxV2[1]);
+        aclDestroyTensorDesc(outputDescArgMaxV2[0]);
         aclopDestroyAttr(opAttr);
         return FAILED;
     }
 
-    aclDataBuffer *inputBufferArgMaxD[inputNumArgMaxD];
-    inputBufferArgMaxD[0] = outputBufferCast_[0];
-    ret = aclopExecuteV2(opTypeArgMaxD.c_str(), inputNumArgMaxD, inputDescArgMaxD, inputBufferArgMaxD,
-        outputNumArgMaxD, outputDescArgMaxD, outputBufferArgMaxD_, opAttr, stream_);
+    aclDataBuffer *inputBufferArgMaxV2[inputNumArgMaxV2];
+    inputBufferArgMaxV2[0] = outputBufferCast_[0];
+    inputBufferArgMaxV2[1] = aclCreateDataBuffer(nullptr, 0);
+    ret = aclopExecuteV2(opTypeArgMaxV2.c_str(), inputNumArgMaxV2, inputDescArgMaxV2, inputBufferArgMaxV2,
+        outputNumArgMaxV2, outputDescArgMaxV2, outputBufferArgMaxV2_, opAttr, stream_);
     if (ret != ACL_SUCCESS) {
-        ERROR_LOG("execute singleOp argMaxD failed, errorCode is %d", static_cast<int32_t>(ret));
-        aclDestroyTensorDesc(inputDescArgMaxD[0]);
-        aclDestroyTensorDesc(outputDescArgMaxD[0]);
+        ERROR_LOG("execute singleOp ArgMaxV2 failed, errorCode is %d", static_cast<int32_t>(ret));
+        aclDestroyTensorDesc(inputDescArgMaxV2[0]);
+        aclDestroyTensorDesc(inputDescArgMaxV2[1]);
+        aclDestroyTensorDesc(outputDescArgMaxV2[0]);
         aclopDestroyAttr(opAttr);
         return FAILED;
     }
 
     ret = aclrtSynchronizeStream(stream_);
     if (ret != ACL_SUCCESS) {
-        ERROR_LOG("singleOp argMaxD synchronize stream failed, errorCode is %d", static_cast<int32_t>(ret));
-        aclDestroyTensorDesc(inputDescArgMaxD[0]);
-        aclDestroyTensorDesc(outputDescArgMaxD[0]);
+        ERROR_LOG("singleOp ArgMaxV2 synchronize stream failed, errorCode is %d", static_cast<int32_t>(ret));
+        aclDestroyTensorDesc(inputDescArgMaxV2[0]);
+        aclDestroyTensorDesc(inputDescArgMaxV2[1]);
+        aclDestroyTensorDesc(outputDescArgMaxV2[0]);
         aclopDestroyAttr(opAttr);
         return FAILED;
     }
 
-    aclDestroyTensorDesc(inputDescArgMaxD[0]);
-    aclDestroyTensorDesc(outputDescArgMaxD[0]);
+    aclDestroyTensorDesc(inputDescArgMaxV2[0]);
+    aclDestroyTensorDesc(inputDescArgMaxV2[1]);
+    aclDestroyTensorDesc(outputDescArgMaxV2[0]);
     aclopDestroyAttr(opAttr);
-    INFO_LOG("execute ArgMaxD success");
+    INFO_LOG("execute ArgMaxV2 success");
 
     return SUCCESS;
 }
@@ -220,9 +240,9 @@ Result SingleOpProcess::Process()
         return FAILED;
     }
 
-    ret = RunSigleOpArgMaxD();
+    ret = RunSigleOpArgMaxV2();
     if (ret != SUCCESS) {
-        ERROR_LOG("run singleOp ArgMaxD failed");
+        ERROR_LOG("run singleOp ArgMaxV2 failed");
         return FAILED;
     }
 
@@ -233,19 +253,19 @@ Result SingleOpProcess::Process()
 void SingleOpProcess::PrintResult()
 {
     if (RunStatus::GetDeviceStatus()) {
-        int32_t *index = static_cast<int32_t *>(devBufferArgMaxD_);
+        int32_t *index = static_cast<int32_t *>(devBufferArgMaxV2_);
         INFO_LOG("---> index of classification result is %d", *index);
         return;
     }
     void* hostBuffer = nullptr;
-    aclError ret = aclrtMallocHost(&hostBuffer, tensorSizeArgMaxD_);
+    aclError ret = aclrtMallocHost(&hostBuffer, tensorSizeArgMaxV2_);
     if (ret != ACL_SUCCESS) {
         ERROR_LOG("fail to print result, malloc host failed");
         return;
     }
 
-    ret = aclrtMemcpy(hostBuffer, tensorSizeArgMaxD_, devBufferArgMaxD_,
-        tensorSizeArgMaxD_, ACL_MEMCPY_DEVICE_TO_HOST);
+    ret = aclrtMemcpy(hostBuffer, tensorSizeArgMaxV2_, devBufferArgMaxV2_,
+        tensorSizeArgMaxV2_, ACL_MEMCPY_DEVICE_TO_HOST);
     if (ret != ACL_SUCCESS) {
         ERROR_LOG("fail to print result, memcpy device to host failed, errorCode is %d", static_cast<int32_t>(ret));
         aclrtFreeHost(hostBuffer);
@@ -265,9 +285,9 @@ void SingleOpProcess::destroyResource()
         devBufferCast_ = nullptr;
     }
 
-    if (devBufferArgMaxD_ != nullptr) {
-        (void)aclrtFree(devBufferArgMaxD_);
-        devBufferArgMaxD_ = nullptr;
+    if (devBufferArgMaxV2_ != nullptr) {
+        (void)aclrtFree(devBufferArgMaxV2_);
+        devBufferArgMaxV2_ = nullptr;
     }
 
     if (outputBufferCast_[0] != nullptr) {
@@ -275,8 +295,8 @@ void SingleOpProcess::destroyResource()
         outputBufferCast_[0] = nullptr;
     }
 
-    if (outputBufferArgMaxD_[0] != nullptr) {
-        (void)aclDestroyDataBuffer(outputBufferArgMaxD_[0]);
-        outputBufferArgMaxD_[0] = nullptr;
+    if (outputBufferArgMaxV2_[0] != nullptr) {
+        (void)aclDestroyDataBuffer(outputBufferArgMaxV2_[0]);
+        outputBufferArgMaxV2_[0] = nullptr;
     }
 }

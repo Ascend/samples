@@ -13,11 +13,12 @@ CANN AscendCL（Ascend Computing Language）提供Device管理、Context管理�
 - **当前分支样例版本适配说明如下：**    
     | CANN版本 |
     |---|
-    | [>=5.1.RC2.alpha006](https://www.hiascend.com/software/cann/community) |
+    | [>=6.0.RC1.alpha005](https://www.hiascend.com/software/cann/community) |
 
 - **历史版本请参考下表使用对应发行版：**      
     | CANN版本 | cann-samples获取方式 |
     |---|---|
+    | [6.0.RC1.alpha003/6.0.RC1.alpha002<br>/6.0.RC1.alpha001/5.1.RC2.alpha008](https://www.hiascend.com/software/cann/community) | [tag v0.8.0](https://gitee.com/ascend/samples/tree/v0.8.0/)，[下载Release 0.8.0发行版](https://gitee.com/ascend/samples/releases/v0.8.0) 
     | [5.1.RC2.alpha005/5.1.RC2.alpha003<br>/5.1.RC2.alpha002/5.1.RC2.alpha001<br>/5.1.RC1.alpha006/5.1.RC1.alpha005](https://www.hiascend.com/software/cann/community) | [tag v0.7.0](https://gitee.com/ascend/samples/tree/v0.7.0/)，[下载Release 0.7.0发行版](https://gitee.com/ascend/samples/releases/v0.7.0) 
     | [5.0.4.alpha002/5.0.4.alpha003/<br>5.0.4.alpha005/5.0.5.alpha001/<br>5.1.RC1.alpha001/5.1.RC1.alpha002/<br>5.1.RC1.alpha003](https://www.hiascend.com/software/cann/community) | [tag v0.6.0](https://gitee.com/ascend/samples/tree/v0.6.0/)，[下载Release 0.6.0发行版](https://gitee.com/ascend/samples/releases/v0.6.0) |
     | [5.0.2.alpha005/5.0.3.alpha001/<br>5.0.3.alpha002/5.0.3.alpha003/<br>5.0.3.alpha005](https://www.hiascend.com/software/cann/community) | [tag v0.5.0](https://gitee.com/ascend/samples/tree/v0.5.0/)，[下载Release 0.5.0发行版](https://gitee.com/ascend/samples/releases/v0.5.0) |
@@ -90,8 +91,7 @@ CANN AscendCL（Ascend Computing Language）提供Device管理、Context管理�
 
 昇腾社区网站：hiascend.com
 
-昇腾论坛：https://bbs.huaweicloud.com/forum/forum-726-1.html
-
+昇腾论坛：https://www.hiascend.com/forum/
 昇腾官方qq群：965804873
 
 ## 贡献

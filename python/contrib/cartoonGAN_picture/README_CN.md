@@ -47,7 +47,7 @@
     |---|---|---|
     |  CartoonGAN| 将普通照片转换为卡通风格的图片。  |  请参考[https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/cartoonization/ATC_cartoonization_tf_AE](https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/cartoonization/ATC_cartoonization_tf_AE)目录中README.md下载原始模型章节下载模型和权重文件。 |
     ```
-    # 为了方便下载，在这里直接给出原始模型下载及模型转换命令,可以直接拷贝执行。也可以参照上表在modelzoo中下载并手工转换，以了解更多细节。     
+    # 为了方便下载，在这里直接给出原始模型下载及模型转换命令,可以直接拷贝执行(如果在310B芯片上进行转换，需要修改参数 --soc_version=Ascend310B1)。也可以参照上表在modelzoo中下载并手工转换，以了解更多细节。     
     cd ${HOME}/samples/python/contrib/cartoonGAN_picture/model    
     wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/cartoonization/cartoonization.pb    
     wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/cartoonization/insert_op.cfg
@@ -76,7 +76,7 @@
 
 2. <a name="step_2"></a>运行样例。
    ```
-   python3.6 cartoonization.py ../data/
+   python3 cartoonization.py ../data/
    ```
 
 ### 查看结果

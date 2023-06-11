@@ -9,6 +9,10 @@
 样例输入：原始视频文件。    
 样例输出：带推理结果的视频文件。
 
+### 测试
+
+已在Atlas 200I DK A2中完成测试，使用Atlas 200I DK A2的base镜像以及base环境即可跑通本样例
+
 ### 前置条件
 请检查以下条件要求是否满足，如不满足请按照备注进行相应处理。如果CANN版本升级，请同步检查第三方依赖是否需要重新安装（5.0.4及以上版本第三方依赖和5.0.4以下版本有差异，需要重新安装）。
 | 条件 | 要求 | 备注 |
@@ -44,15 +48,11 @@
         ```
 
 2. 获取此应用中所需要的原始网络模型。
-    |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
-    |---|---|---|
-    |  yolov4| 基于onnx-YOLOV4的目标检测模型。  |  请参考https://www.hiascend.com/zh/software/modelzoo/detail/1/abb7e641964c459398173248aa5353bc 下载原始模型。 |
-
     ```
     # 为了方便下载，在这里直接给出原始模型下载及模型转换命令,可以直接拷贝执行。也可以参照上表在modelzoo中下载并手工转换，以了解更多细节。     
     cd ${HOME}/samples/python/level2_simple_inference/2_object_detection/YOLOV4_coco_detection_car_video/model    
     wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOv4_onnx/yolov4_dynamic_bs.onnx    
-    atc --model=./yolov4_dynamic_bs.onnx --framework=5 --output=yolov4_bs1 --input_format=NCHW --soc_version=Ascend310 --input_shape="input:1,3,608,608" --out_nodes="Conv_434:0;Conv_418:0;Conv_402:0"
+    atc --model=./yolov4_dynamic_bs.onnx --framework=5 --output=yolov4_bs1 --input_format=NCHW --soc_version=Ascend310B1 --input_shape="input:1,3,608,608" --out_nodes="Conv_434:0;Conv_418:0;Conv_402:0"
     ```
 
 3. 获取样例需要的测试视频。
@@ -77,7 +77,7 @@
 
 2. <a name="step_2"></a>运行可执行文件。
     ```
-    python3.6 yolov4.py ../data/test.mp4
+    python3 yolov4.py ../data/test.mp4
     ```
 
 ### 查看结果

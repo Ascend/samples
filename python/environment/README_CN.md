@@ -42,31 +42,31 @@ samples仓中的部分python样例使用到opencv，ffmpeg等第三方依赖进�
 #### 安装opencv
 运行环境执行以下命令安装相关依赖及python-opencv。   
   ```
-  # 说明：使用pip3.7.5安装opencv，会导致视频处理功能不可用。所以使用apt安装，但apt只能安装到python3.6中，所以第三方依赖需要使用python3.6。   
+  # 说明：使用apt-get安装opencv。
   # 安装pip3
   sudo apt-get install python3-pip
   # 安装python库
-  python3.6 -m pip install --upgrade pip --user -i https://mirrors.huaweicloud.com/repository/pypi/simple
-  python3.6 -m pip install Cython numpy tornado==5.1.0 protobuf --user -i https://mirrors.huaweicloud.com/repository/pypi/simple
+  pip3 install --upgrade pip --user -i https://mirrors.huaweicloud.com/repository/pypi/simple
+  pip3 install Cython numpy tornado==5.1.0 protobuf --user -i https://mirrors.huaweicloud.com/repository/pypi/simple
   # 安装python3-opencv
   sudo apt-get install python3-opencv
   ```
 #### 安装python-acllite
 1. 运行环境安装python-acllite所需依赖
    ```
-   # 安装ffmpeg
-   sudo apt-get install -y libavformat-dev libavcodec-dev libavdevice-dev libavutil-dev libswscale-dev libavresample-dev
+   # 安装ffmpeg部分依赖
+   sudo apt-get install -y libavformat-dev libavcodec-dev libavdevice-dev libavutil-dev libswscale-dev 
    # 安装其它依赖
-   python3.6 -m pip install --upgrade pip
-   python3.6 -m pip install Cython
+   pip3 install --upgrade pip
+   pip3 install Cython
    sudo apt-get install pkg-config libxcb-shm0-dev libxcb-xfixes0-dev
-   # 安装pyav
-   python3.6 -m pip install av==6.2.0
+   # 安装av
+   pip3 install av
    # 安装pillow 的依赖
    sudo apt-get install libtiff5-dev libjpeg8-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python-tk
    # 安装numpy和PIL
-   python3.6 -m pip install numpy
-   python3.6 -m pip install Pillow
+   pip3 install numpy
+   pip3 install Pillow
    ```
 2. <a name="step_2"></a>安装python-acllite     
    **python acllite库以源码方式提供，安装时将acllite目录拷贝到运行环境的第三方库目录**

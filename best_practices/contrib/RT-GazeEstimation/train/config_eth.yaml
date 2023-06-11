@@ -1,0 +1,39 @@
+---
+train:
+    params:
+        batch_size: 64  
+        epoch: 20
+        lr: 0.0001
+        decay: 0.1
+        decay_step: 10
+        warmup: 3
+        num_workers: 8
+
+    save:
+        metapath: "./parameters/timm_resnet18/bach64"
+        folder: eth
+        model_name: resnet18
+        step: 2
+
+    data:
+        image: "F:/DeepLearning/datasets/Gaze/ETH-XGaze/Image/train"
+        label: "F:/DeepLearning/datasets/Gaze/ETH-XGaze/Label/train_chaifen.label"
+        header: True
+        name: eth
+        isFolder: False
+    val:
+        image: "F:/DeepLearning/datasets/Gaze/ETH-XGaze/Image/train"
+        label: "F:/DeepLearning/datasets/Gaze/ETH-XGaze/Label/validation.label"
+        header: True
+        name: eth
+        isFolder: False
+
+    pretrain:
+        enable: False
+        path: PLACEHOLDER
+        device: PLACEHOLDER
+
+    device: 0
+
+    reader: reader
+

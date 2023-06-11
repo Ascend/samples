@@ -31,7 +31,7 @@
        **注：如果需要切换到其它tag版本，以v0.5.0为例，可执行以下命令。**
        ```
        git checkout v0.5.0
-       ```   
+       ```
     - 压缩包方式下载（下载时间较短，但步骤稍微复杂）。   
        **注：如果需要下载其它版本代码，请先请根据前置条件说明进行samples仓分支切换。**   
        ``` 
@@ -40,7 +40,7 @@
         # 3. 开发环境中，执行以下命令，解压zip包。     
         cd ${HOME}    
         unzip ascend-samples-master.zip
-        ```
+       ```
 2. 将原始模型转换为Davinci模型。   
    | **模型名称** | **模型说明**                                     | **模型下载路径**                                             |
    | ------------ | ------------------------------------------------ | ------------------------------------------------------------ |
@@ -52,12 +52,27 @@
    wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/DeRain/insert_op.cfg
    atc --model=./frozen_graph_noDWT_V2.pb --input_shape="degradated_image:1,256,256,1" --framework=3 --output=./DeRain  --soc_version=Ascend310  --insert_op_conf=./insert_op.cfg
    ```
+   
+   **注：如果在310B芯片上进行转换，修改参数--soc_version=Ascend310B1即可。**
+
 ### 样例部署
+
 执行以下命令，执行编译脚本，开始样例编译。     
 ```
 cd $HOME/samples/cplusplus/level2_simple_inference/6_other/DeRain/scripts   
 bash sample_build.sh
 ```
+**注：若环境中opencv使用的是opencv4版本，则提前创建如下软链接，并在classify_process.cpp中添加constants_c.h头文件。**
+
+```
+# 解决编译问题fatal error: opencv2/opencv.hpp: No such file or directory
+ln -s /usr/include/opencv4/opencv2/ /usr/include/
+# 解决编译问题error: ‘CV_LOAD_IMAGE_COLOR’ was not declared in this scope
+vi ../src/classify_process.cpp
+# 添加如下内容
+#include "opencv2/imgcodecs/legacy/constants_c.h"
+```
+
 ### 样例运行
 
 **注：开发环境与运行环境合一部署，请跳过步骤1，直接执行[步骤2](#step_2)即可。**   

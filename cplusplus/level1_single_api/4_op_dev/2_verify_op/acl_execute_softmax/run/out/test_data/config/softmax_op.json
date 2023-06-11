@@ -1,0 +1,19 @@
+[
+  {
+    "op": "SoftmaxV2",
+    "input_desc": [
+      {
+        "format": "ND",
+        "shape": [8, 16],
+        "type": "float32"
+      }
+    ],
+    "output_desc": [
+      {
+        "format": "ND",
+        "shape": [8, 16],
+        "type": "float32"
+      }
+    ]
+  }
+]

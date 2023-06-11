@@ -47,7 +47,7 @@ Check whether the following requirements are met. If not, perform operations acc
     | ------------------- | -------------------------------------------------------- | ------------------------------------------------------------ |
     | gesture_recognition | It is a gesture_recognition model based on Caffe and is used to recognize 20 gestures.| Download the model and weight files by referring to the links in **README.md** in the [ATC_gesture_recognition_Caffe_AE](https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/gesture_recognition/ATC_gesture_recognition_Caffe_AE) directory of the ModelZoo repository.|
     ```
-    # To facilitate download, the commands for downloading the original model and converting the model are provided here. You can directly copy and run the commands. You can also refer to the above table to download the model from ModelZoo and manually convert it.    
+    # To facilitate download, the commands for downloading the original model and converting the model are provided here. You can directly copy and run the commands(If you are converting on the 310B chip, please change the parameter --soc_version=Ascend310B1). You can also refer to the above table to download the model from ModelZoo and manually convert it.    
     cd ${HOME}/samples/python/contrib/gesture_recognition_picture/model    
     wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/gesture_recognition/resnet18_gesture.caffemodel    
     wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/gesture_recognition/resnet18_gesture.prototxt
@@ -76,7 +76,7 @@ Check whether the following requirements are met. If not, perform operations acc
     ```
 2. <a name="step_2"></a>Run the executable file.
     ```
-    python3.6 main.py ../data/
+    python3 main.py ../data/
     ```
 
 ### Result Viewing

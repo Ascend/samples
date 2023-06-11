@@ -40,31 +40,31 @@ In 200DK scenario, run the following to copy media_mini header file and media pa
 #### Install opencv
 Run the following on operation environment to install dependencies and python-opencv   
   ```
-  # Note：using pip3.7.5 to install opencv will result in failure in video processing function，so we use apt. Apt can only be installed in python3.6, so python3.6is used in third-party dependencies   
+  # Note：use apt-get to install opencv
   # Install pip3
   sudo apt-get install python3-pip
   # Install python library
-  python3.6 -m pip install --upgrade pip --user -i https://mirrors.huaweicloud.com/repository/pypi/simple
-  python3.6 -m pip install Cython numpy tornado==5.1.0 protobuf --user -i https://mirrors.huaweicloud.com/repository/pypi/simple
+  pip3 install --upgrade pip --user -i https://mirrors.huaweicloud.com/repository/pypi/simple
+  pip3 install Cython numpy tornado==5.1.0 protobuf --user -i https://mirrors.huaweicloud.com/repository/pypi/simple
   # Install python3-opencv
   sudo apt-get install python3-opencv
   ```
 #### Install python-acllite
 1. Install python-acllite dependencies on operation environment
    ```
-   # Install ffmpeg
-   sudo apt-get install -y libavformat-dev libavcodec-dev libavdevice-dev libavutil-dev libswscale-dev libavresample-dev
+   # Install dependencies of ffmpeg
+   sudo apt-get install -y libavformat-dev libavcodec-dev libavdevice-dev libavutil-dev libswscale-dev 
    # Install other dependencies
-   python3.6 -m pip install --upgrade pip
-   python3.6 -m pip install Cython
+   pip3 install --upgrade pip
+   pip3 install Cython
    sudo apt-get install pkg-config libxcb-shm0-dev libxcb-xfixes0-dev
-   # Install pyav
-   python3.6 -m pip install av==6.2.0
+   # Install av
+   pip3 install av
    # Install pillow dependencies
    sudo apt-get install libtiff5-dev libjpeg8-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python-tk
    # Install numpy and PIL
-   python3.6 -m pip install numpy
-   python3.6 -m pip install Pillow
+   pip3 install numpy
+   pip3 install Pillow
    ```
 2. <a name="step_2"></a>install python-acllite     
    **python acllite library is delivered as source code, copy acllite directory to third party library directory on operation environment during installation**

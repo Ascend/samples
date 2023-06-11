@@ -36,7 +36,7 @@
 
 ├── out
 │   ├── op_models
-│   ├──├──op_list.json              //Cast算子和ArgMaxD算子的算子描述信息
+│   ├──├──op_list.json              //Cast算子和ArgMaxV2算子的算子描述信息
 
 ├── src
 │   ├── acl.json         //系统初始化的配置文件
@@ -102,7 +102,7 @@
 
 5.  准备单算子模型文件。
 
-    将Cast和ArgMaxD两个算子的算子描述信息（\*.json文件）编译成适配昇腾AI处理器的离线模型（\*.om文件），用于运行算子时使用。
+    将Cast和ArgMaxV2两个算子的算子描述信息（\*.json文件）编译成适配昇腾AI处理器的离线模型（\*.om文件），用于运行算子时使用。
 
     切换到样例目录，执行如下命令(以昇腾310 AI处理器为例)：
 
@@ -226,14 +226,14 @@
         [INFO] Process dvpp success
         [INFO] model execute success
         [INFO] execute singleOp Cast success
-        [INFO] execute ArgMaxD success
+        [INFO] execute ArgMaxV2 success
         [INFO] singleOp process success
         [INFO] ---> index of classification result is 161
         [INFO] start to process picture:../data/dog2_1024_683.jpg
         [INFO] Process dvpp success
         [INFO] model execute success
         [INFO] execute singleOp Cast success
-        [INFO] execute ArgMaxD success
+        [INFO] execute ArgMaxV2 success
         [INFO] singleOp process success
         [INFO] ---> index of classification result is 267 
         [INFO] Unload model success, modelId is 1
@@ -299,6 +299,6 @@
 
 -   **数据后处理（单算子调用）**
 
-    处理模型推理的结果，通过调用算子Cast将推理结果的数据类型从float32转成float16，再调用ArgMaxD算子从推理结果中查找最大置信度的类别标识。
+    处理模型推理的结果，通过调用算子Cast将推理结果的数据类型从float32转成float16，再调用ArgMaxV2算子从推理结果中查找最大置信度的类别标识。
 
     通过aclopExecuteV2接口加载与执行算子。

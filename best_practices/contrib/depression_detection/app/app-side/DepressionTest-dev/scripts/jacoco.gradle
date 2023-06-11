@@ -1,0 +1,178 @@
+apply from: rootProject.file('./scripts/jacoco-config.gradle')
+apply plugin: 'jacoco'
+
+jacoco {
+    toolVersion = "$versions.jacoco"
+}
+
+afterEvaluate { project ->
+    def ignoreList = jacocoIgnoreList
+    def projectName = project.name
+    if (ignoreList.contains(projectName)) {
+        println "Jacoco: ignoring project ${projectName}"
+        return false
+    }
+
+    def threshold = project.hasProperty('jacocoCoverageThreshold')
+            ? project.jacocoCoverageThreshold
+            : project.jacocoCoverageThresholdDefault
+    setupTestExistenceValidationTask()
+    if (isAndroidModule(project)) {
+        setupAndroidReporting()
+        setupAndroidCoverageVerification(threshold)
+    } else {
+        setupKotlinReporting()
+        setupKotlinCoverageVerification(threshold)
+    }
+}
+
+def setupTestExistenceValidationTask() {
+    task testExistenceValidation(type: TestExistenceValidation)
+}
+
+def setupAndroidReporting() {
+    tasks.withType(Test) {
+        jacoco.includeNoLocationClasses true
+    }
+    task jacocoTestReport(
+            type: JacocoReport,
+            dependsOn: [
+                    'testExistenceValidation',
+                    'testDebugUnitTest'
+            ]
+    ) {
+        reports {
+            csv.enabled false
+            xml.enabled false
+            html {
+                enabled true
+                destination file("${buildDir}/coverage-report")
+            }
+        }
+
+        final def coverageSourceDirs = [
+                "$projectDir/src/main/java",
+                "$projectDir/src/main/kotlin"
+        ]
+        final def debugTree = fileTree(
+                dir: "$buildDir/tmp/kotlin-classes/debug",
+                excludes: jacocoFileFilter
+        )
+        sourceDirectories.from = files(coverageSourceDirs)
+        classDirectories.from = files([debugTree])
+        executionData.from = fileTree(
+                dir: project.buildDir,
+                includes: ['jacoco/testDebugUnitTest.exec',
+                           'outputs/code_coverage/debugAndroidTest/connected/*coverage.ec']
+        )
+    }
+}
+
+def setupAndroidCoverageVerification(threshold) {
+    task jacocoTestCoverageVerification(
+            type: JacocoCoverageVerification,
+            dependsOn: [
+                    'testExistenceValidation',
+                    'testDebugUnitTest'
+            ]
+    ) {
+        violationRules {
+            rule {
+                limit {
+                    minimum = threshold
+                }
+            }
+        }
+
+        final def coverageSourceDirs = [
+                "$projectDir/src/main/java",
+                "$projectDir/src/main/kotlin"
+        ]
+        final def debugTree = fileTree(
+                dir: "$buildDir/tmp/kotlin-classes/debug",
+                excludes: jacocoFileFilter
+        )
+        sourceDirectories.from = files(coverageSourceDirs)
+        classDirectories.from = files([debugTree])
+        executionData.from = fileTree(
+                dir: project.buildDir,
+                includes: ['jacoco/testDebugUnitTest.exec',
+                           'outputs/code_coverage/debugAndroidTest/connected/*coverage.ec']
+        )
+    }
+}
+
+def setupKotlinReporting() {
+    jacocoTestReport {
+        dependsOn testExistenceValidation
+        dependsOn test
+        reports {
+            csv.enabled false
+            xml.enabled false
+            html {
+                enabled true
+                destination file("${buildDir}/coverage-report")
+            }
+        }
+    }
+}
+
+def setupKotlinCoverageVerification(threshold) {
+    jacocoTestCoverageVerification {
+        dependsOn testExistenceValidation
+        dependsOn test
+        violationRules {
+            rule {
+                limit {
+                    minimum = threshold
+                }
+            }
+        }
+    }
+}
+
+private static boolean isAndroidModule(Project project) {
+    def isAndroidLibrary = project.plugins.hasPlugin('com.android.library')
+    def isAndroidApp = project.plugins.hasPlugin('com.android.application')
+    return isAndroidLibrary || isAndroidApp
+}
+
+class TestExistenceValidation extends DefaultTask {
+
+    static final SRC_DIR = 'src'
+    static final JAVA_DIR = 'java'
+    static final TEST_DIRS = ['test', 'androidTest']
+
+    static final IGNORED_NAME_PATTERNS = [
+            ~/^sample-.++$/
+    ]
+
+    @TaskAction
+    void execute() {
+        if (shouldSkip(project)) return
+
+        File srcDir = new File(project.projectDir, SRC_DIR)
+        FileFilter filter = { it.isDirectory() }
+        File[] subDirs = srcDir.listFiles(filter) ?: []
+        File testsDir = subDirs.find { TEST_DIRS.contains(it.name) }
+        if (testsDir) {
+            File javaTestsDir = testsDir
+                    .listFiles(filter)
+                    .find { it.name == JAVA_DIR }
+            if (javaTestsDir && javaTestsDir.list().length > 0) {
+                return
+            }
+        }
+
+        throw new GradleException(
+                "${project.name} has no unit tests. "
+        )
+    }
+
+    private static boolean shouldSkip(Project project) {
+        def name = project.name
+        return IGNORED_NAME_PATTERNS
+                .collect { name =~ it } // convert Pattern to Matcher
+                .any { it.find() }
+    }
+}

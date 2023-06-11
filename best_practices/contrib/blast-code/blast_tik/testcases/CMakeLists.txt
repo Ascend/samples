@@ -1,0 +1,15 @@
+if(IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/ut/ops_test")
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/ut/ops_test)
+endif()
+
+if(IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/ut/aicpu_test")
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/ut/aicpu_test)
+endif()
+
+file(GLOB files "${CMAKE_CURRENT_SOURCE_DIR}/st/out/*")
+foreach(file ${files})
+  message(STATUS ${file})
+  if(IS_DIRECTORY ${file})
+      add_subdirectory(${file})
+  endif()
+endforeach()

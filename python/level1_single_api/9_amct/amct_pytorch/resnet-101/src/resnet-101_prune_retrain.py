@@ -65,6 +65,10 @@ parser.add_argument(
     help='url used to set up distributed training')
 parser.add_argument(
     '--distributed', dest='distributed', action='store_true', help='Use multi-processing distributed training')
+parser.add_argument(
+    '--save_model', dest='save_model', default=False, type=bool, help='save retrain model to onnx')
+parser.add_argument(
+    '--restore_model', dest='restore_model', default=False, type=bool, help='restore prune model')
 
 
 def args_check(args):
@@ -388,14 +392,34 @@ def main_worker(gpu_index, gpu_num, args):
     # Phase retrain the model.
     # Step 1: Generate the prune model in default graph and create the
     # prune record_file.
-    print('==> AMCT step1: create_prune_retrain_model..')
-    record_file = os.path.join(TMP, 'record.txt')
-    prune_model = amct.create_prune_retrain_model(
-        model, get_input_data([(1, 3, SIZE, SIZE)], model), args.config_defination, record_file)
+    if not args.restore_model:
+        print('==> AMCT step1: create_prune_retrain_model..')
+        record_file = os.path.join(TMP, 'record.txt')
+        prune_model = amct.create_prune_retrain_model(
+            model, get_input_data([(1, 3, SIZE, SIZE)], model), args.config_defination, record_file)
+    else:
+        print('==> AMCT step1: restore_prune_retrain_model..')
+        prune_model = amct.restore_prune_retrain_model(
+            model,
+            get_input_data([(1, 3, SIZE, SIZE)], model),
+            record_file)
 
     # Step 2: Retraining prune model and inferencing.
+    print('==> AMCT step2: retraining prune model and inferencing..')
     best_top1, best_top5 = train_and_val(prune_model, gpu_index, train_loader, train_sampler, val_loader, args)
-    
+
+    # Step 3: Save prune retrain model to onnx model
+    print('==> AMCT step3: save_prune_retrain_model..')
+    save_path = os.path.join(PATH, 'outputs/prune_retrain')
+    input_data = get_input_data([(1, 3, SIZE, SIZE)], prune_model)
+    if args.save_model:
+        amct.save_prune_retrain_model(
+            prune_model,
+            save_path,
+            input_data,
+            input_names=['input'],
+            output_names=['output'],
+            dynamic_axes=None)
 
     if not args.distributed or (args.distributed and gpu_index == 0):
         print('[INFO] ResNet-101 before prune top1:{:.2f}% top5:{:.2f}%'.format(ori_top1, ori_top5))

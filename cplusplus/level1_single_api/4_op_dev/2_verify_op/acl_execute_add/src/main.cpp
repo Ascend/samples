@@ -25,7 +25,7 @@ OperatorDesc CreateOpDesc()
 {
     // define operator
     std::vector<int64_t> shape{8, 16};
-    std::string opType = "Add";
+    std::string opType = "AddDsl";
     aclDataType dataType = ACL_INT32;
     aclFormat format = ACL_FORMAT_ND;
     OperatorDesc opDesc(opType);

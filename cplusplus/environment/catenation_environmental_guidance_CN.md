@@ -38,7 +38,7 @@
   ```
 #### 安装过程
 ##### 安装opencv
-执行以下命令安装opencv，如果代码中并没有使用opencv相关功能及函数，可以跳过此步骤。
+执行以下命令安装opencv，如果代码中并没有使用opencv相关功能及函数，可以跳过此步骤（注：请确保安装的版本是3.x）。
   ```
   sudo apt-get install libopencv-dev
   ```

@@ -77,6 +77,7 @@ Caffe与TensorFlow共存的自定义算子样例工程的目录结构如下所�
     -   Matmul算子，请参见[Matmul](doc/Matmul_CN.md)。
     -   Permute算子，请参见[Permute](doc/Permute_CN.md)。
     -   Upsample算子，请参见[Upsample](doc/Upsample_CN.md)。
+    -   Softmax算子，请参见[Softmax](doc/Softmax_CN.md)。
     -   BatchMultiClassNonMaxSuppression算子，请参见[BatchMultiClassNonMaxSuppression](doc/BatchMultiClassNonMaxSuppression_CN.md)。
 
 -   AI CPU自定义算子样例
@@ -211,6 +212,7 @@ Caffe与TensorFlow共存的自定义算子样例工程的目录结构如下所�
 
 
    -    AICPU\_SOC\_VERSION：昇腾AI处理器的类型，请配置为AI CPU组件安装路径中“opp/built-in/op_impl/aicpu/aicpu_kernel/lib”路径下的文件夹名称，即“libcpu_kernels_context.a”与“libcpu_kernels_v1.0.1.so”所在文件夹的名称。
+   -    vendor_name：标识自定义算子所属厂商的名称，默认值为“customize”。建议开发者自行指定所属厂商名称，避免和其他厂商提供的算子包冲突。当前TBE自定义算子工程中算子实现代码文件所在的目录名为impl，算子包部署后，为避免多厂商的算子实现python包名冲突，所在的目录名会修改为${vendor_name}_impl的格式。
 
 
 3.  执行算子工程编译。
@@ -249,49 +251,73 @@ Caffe与TensorFlow共存的自定义算子样例工程的目录结构如下所�
 
 2.  在编译生成的自定义算子安装包所在路径下，执行如下命令，安装自定义算子包。
 
-    **./custom\_opp\__<target os\>\_<target architecture\>_.run**
+    **./custom\_opp\__<target os\>\_<target architecture\>_.run --install-path=\<path\>**
 
-    命令执行成功后，会将编译生成的自定义算子相关文件部署到opp对应目录下的custom路径下，部署后目录结构示例如下所示：
+    --install-path为可选参数，用于指定自定义算子包的安装目录。支持指定绝对路径和相对路径，运行用户需要对指定的安装路径有可读写权限。下文描述中的<vendor_name>为算子工程编译时build.sh脚本中字段“vendor_name”的取值，默认为“customize”。
+    -  默认安装场景，不配置--install-path参数，安装成功后会将编译生成的自定义算子相关文件部署到opp/vendors/<vendor_name>目录。
+    -  指定目录安装场景，配置--install-path参数，安装成功后会将编译生成的自定义算子相关文件部署到\<path\>/<vendor_name>目录，并在\<path\>/<vendor_name>/bin目录下新增set_env.bash，写入当前自定义算子包相关的环境变量。
 
-    ```
-    ├── opp      //算子库目录
-    │   ├── op_impl
-    │       ├── built-in
-    │       ├── custom
-    │           ├── ai_core
-    │                ├── tbe
-    │                    ├── config
-    │                        ├── ${soc_version}     //昇腾AI处理器类型
-    │                            ├── aic-${soc_version}-ops-info.json     //TBE自定义算子信息库
-    │                    ├── impl               //TBE自定义算子实现代码文件
-    │                        ├── xx.py
-    │           ├── vector_core   //此目录预留，无需关注
-    │           ├── cpu          //AI CPU自定义算子实现库及算子信息库所在目录
-    │                ├── aicpu_kernel
-    │                    ├── impl
-    │                        ├── libcust_aicpu_kernels.so   //AI CPU算子实现库文件
-    │                ├── config
-    │                    ├── cust_aicpu_kernel.json         //AI CPU算子信息库
-    │   ├── framework
-    │       ├── built-in
-    │       ├── custom
-    │           ├── caffe       //存放Caffe框架的自定义算子插件库
-    │               ├── libcust_caffe_parsers.so      //算子插件库文件，包含了自定义算子的插件解析函数
-    │               ├── custom.proto  //自定义算子的原始定义，算子编译过程中会读取此文件自动解析算子原始定义
-    │           ├── onnx       //存放ONNX框架的自定义算子插件库
-    │               ├── libcust_onnx_parsers.so      //算子插件库文件，包含了自定义算子的插件解析函数
-    │           ├── tensorflow         //存放TensorFlow框架的自定义算子插件库及npu对相关自定义算子支持度的配置文件
-    │               ├── libcust_tf_parsers.so         //算子插件库文件
-    │               ├── libcust_tf_scope_fusion.so    //scope融合规则定义库文件
-    │               ├── npu_supported_ops.json   //Ascend 910场景下使用的文件
-    │   ├── op_proto
-    │       ├── built-in
-    │       ├── custom
-    │           ├── libcust_op_proto.so    //自定义算子原型库文件
+       **须知：**
+       如果部署算子包时通过配置--install-path参数指定了算子包的安装目录，则在使用自定义算子前，需要执行source \<path\>/<vendor_name>/bin/set_env.bash命令，set_env.bash脚本中将自定义算子包的安装路径追加到环境变量ASCEND_CUSTOM_OPP_PATH中，使自定义算子在当前环境中生效。
 
+    以默认安装场景为例，部署后目录结构示例如下所示：
     ```
     
-    注：其他目录与文件，自定义算子部署无需关注。
+    ├── opp    //算子库目录
+    │   ├── vendors    //自定义算子所在目录
+    │       ├── config.ini     // 自定义算子优先级配置文件
+    │       ├── vendor_name1   // 存储对应厂商部署的自定义算子，此名字为编译自定义算子安装包时配置的vendor_name，若未配置，默认值为customize
+    │           ├── op_impl
+    │               ├── ai_core    // TBE自定义算子实现文件及算子信息库所在目录
+    │                   ├── tbe      
+    │                       ├── config
+    │                           ├── ${soc_version}     //昇腾AI处理器类型
+    │                               ├── aic-${soc_version}-ops-info.json     //TBE自定义算子信息库文件
+    │                       ├── vendor_name1_impl               //TBE自定义算子实现代码文件
+    │                           ├── xx.py
+    │               ├── cpu          //AI CPU自定义算子实现库及算子信息库所在目录
+    │                   ├── aicpu_kernel
+    │                       ├── impl
+    │                           ├── libcust_aicpu_kernels.so    //AI CPU自定义算子实现库文件
+    │                   ├── config   
+    │                       ├── cust_aicpu_kernel.json          //AI CPU自定义算子信息库文件
+    │               ├── vector_core   //此目录预留，无需关注
+    │           ├── framework
+    │               ├── caffe       //存放Caffe框架的自定义算子插件库
+    │                   ├── libcust_caffe_parsers.so      //算子插件库文件，包含了自定义算子的插件解析函数
+    │                   ├── custom.proto  //自定义算子的原始定义，算子编译过程中会读取此文件自动解析算子原始定义
+    │               ├── onnx       //存放ONNX框架的自定义算子插件库
+    │                   ├── libcust_onnx_parsers.so      //算子插件库文件，包含了自定义算子的插件解析函数
+    │               ├── tensorflow         //存放TensorFlow框架的自定义算子插件库及npu对相关自定义算子支持度的配置文件
+    │                   ├── libcust_tf_parsers.so         //算子插件库文件
+    │                   ├── libcust_tf_scope_fusion.so    //scope融合规则定义库文件
+    │                   ├── npu_supported_ops.json   //Ascend 910场景下使用的文件
+    │           ├── op_proto        //自定义算子原型库所在目录
+    │               ├── libcust_op_proto.so   
+    │       ├── vendor_name2   // 存储厂商vendor_name2部署的自定义算子
+    ```
+    注：其他目录与文件，开发者无需关注。
+
+3.  配置自定义算子优先级。
+    多算子包共存的情况下，若不同的算子包目录下存在相同OpType的自定义算子，则以优先级高的算子包目录下的算子为准。下面介绍如何配置算子包优先级：
+    - 默认安装场景
+      当“opp/vendors”目录下存在多个厂商的自定义算子时，您可通过配置“opp/vendors”目录下的“config.ini”文件，配置自定义算子包的优先级。
+
+      “config.ini”文件的配置示例如下：
+      ```
+      load_priority=vendor_name1,vendor_name2,vendor_name3
+      ```
+      - “load_priority”：优先级配置序列的关键字，不允许修改。
+      - “vendor_name1,vendor_name2,vendor_name3”：自定义算子厂商的优先级序列，按照优先级从高到低的顺序进行排列。
+    - 指定目录安装场景
+      指定目录安装场景下，如果需要多个自定义算子包同时生效，分别执行各算子包安装路径下的set_env.bash脚本即可。每次脚本执行都会将当前算子包的安装路径追加到ASCEND_CUSTOM_OPP_PATH环境变量的最前面。因此可以按照脚本执行顺序确定优先级：脚本执行顺序越靠后，算子包优先级越高。
+
+      比如先执行source \<path\>/vendor_name1/bin/set_env.bash，后执行source \<path\>/vendor_name2/bin/set_env.bash，vendor_name2算子包的优先级高于vendor_name1。ASCEND_CUSTOM_OPP_PATH示例如下：
+      
+      ```
+      ASCEND_CUSTOM_OPP_PATH=\<path\>/vendor_name2:\<path\>/vendor_name1：
+      ```
+    - 指定目录安装场景下安装的算子包优先级高于默认方式安装的算子包。
 
 
 ## 算子ST验证

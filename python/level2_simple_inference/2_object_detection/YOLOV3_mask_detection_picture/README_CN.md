@@ -10,12 +10,8 @@
 样例输出：推理后的jpg图片。     
 
 ### 前置条件
-请检查以下条件要求是否满足，如不满足请按照备注进行相应处理。如果CANN版本升级，请同步检查第三方依赖是否需要重新安装（5.0.4及以上版本第三方依赖和5.0.4以下版本有差异，需要重新安装）。
-| 条件 | 要求 | 备注 |
-|---|---|---|
-| CANN版本 | >=5.0.4 | 请参考CANN样例仓介绍中的[安装步骤](https://github.com/Ascend/samples#%E5%AE%89%E8%A3%85)完成CANN安装，如果CANN低于要求版本请根据[版本说明](https://github.com/Ascend/samples/blob/master/README_CN.md#%E7%89%88%E6%9C%AC%E8%AF%B4%E6%98%8E)切换samples仓到对应CANN版本 |
-| 硬件要求 | Atlas200DK/Atlas300([ai1s](https://support.huaweicloud.com/productdesc-ecs/ecs_01_0047.html#ecs_01_0047__section78423209366))  | 当前已在Atlas200DK和Atlas300测试通过，产品说明请参考[硬件平台](https://ascend.huawei.com/zh/#/hardware/product) ，其他产品可能需要另做适配|
-| 第三方依赖 | opencv, python-acllite | 请参考[第三方依赖安装指导（python样例）](../../../environment)选择需要的依赖完成安装 |
+
+本样例请使用昇腾开发者套件Atlas 200I DK A2的基础镜像base环境运行。
 
 ### 样例准备
 
@@ -46,12 +42,12 @@
     |  **模型名称**  |  **模型说明**  |  **模型下载路径**  |
     |---|---|---|
     |  yolo3_resnet18.pb | 基于TensorFlow-YOLOV3的口罩检测模型。  |  请参考[https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/yolov3_resnet18/ATC_yolo3_resnet18_tf_AE](https://github.com/Ascend/ModelZoo-TensorFlow/tree/master/TensorFlow/contrib/cv/yolov3_resnet18/ATC_yolo3_resnet18_tf_AE)目录中README.md下载原始模型章节下载原始模型文件。 |
-    | mask_detection_quanzited.pb | 基于TensorFlow-YOLOV3的口罩检测的量化后模型。 | 下载地址:https://obs-9be7.obs.cn-east-2.myhuaweicloud.com:443/003_Atc_Models/AE/ATC%20Model/YOLOV3-RESNET18%20/yolo3_resnet18_quantized.pb (转换om离线模型的操作和未量化的pb模型是一样的,量化的具体操作可以参考：https://github.com/Ascend/samples/wikis/%E4%BD%BF%E7%94%A8AMCT%E5%B7%A5%E5%85%B7%E9%87%8F%E5%8C%96YOLOV3%E6%A8%A1%E5%9E%8B?sort_id=4402780 ,如果选择使用量化后模型请注意样例中模型名称的替换) |
+
     ```
     # 为了方便下载，在这里直接给出原始模型下载及模型转换命令,可以直接拷贝执行。也可以参照上表在modelzoo中下载并手工转换，以了解更多细节。     
     cd ${HOME}/samples/python/level2_simple_inference/2_object_detection/YOLOV3_mask_detection_picture/model    
     wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/YOLOV3-RESNET18%20/yolo3_resnet18.pb     
-    atc --input_shape="images:1,352,640,3" --input_format=NHWC --output="./mask_detection" --soc_version=Ascend310 --framework=3 --model="./yolo3_resnet18.pb"
+    atc --input_shape="images:1,352,640,3" --input_format=NHWC --output="./mask_detection" --soc_version=Ascend310B1 --framework=3 --model="./yolo3_resnet18.pb"
     ```
 
 3. 获取样例需要的测试图片。
@@ -66,17 +62,9 @@
 
 **注：开发环境与运行环境合一部署，请跳过步骤1，直接执行[步骤2](#step_2)即可。**   
 
-1. 执行以下命令,将开发环境的 **YOLOV3_mask_detection_picture** 目录上传到运行环境中，例如 **/home/HwHiAiUser**，并以HwHiAiUser（运行用户）登录运行环境（Host）。
+1. <a name="step_2"></a>运行工程。
     ```
-    # 【xxx.xxx.xxx.xxx】为运行环境ip，200DK在USB连接时一般为192.168.1.2，300（ai1s）为对应的公网ip。
-    scp -r $HOME/samples/python/level2_simple_inference/2_object_detection/YOLOV3_mask_detection_picture HwHiAiUser@xxx.xxx.xxx.xxx:/home/HwHiAiUser
-    ssh HwHiAiUser@xxx.xxx.xxx.xxx
-    cd ${HOME}/YOLOV3_mask_detection_picture/src
-    ```
-
-2. <a name="step_2"></a>运行工程。
-    ```
-    python3.6 mask_detect.py ../data/
+    python3 mask_detect.py ../data/
     ```
 ​       
 ### 查看结果

@@ -10,6 +10,7 @@
 #include "dvpp_process.h"
 #include <stdio.h>
 #include <vector>
+#include <set>
 #include <string>
 #include <string.h>
 #include <memory>
@@ -104,9 +105,11 @@ Result DvppProcess::InitResource()
 
 void DvppProcess::CalYuv400InputBufferSize(uint32_t inWidthStride, uint32_t inHeightStride, uint32_t &inBufferSize)
 {
-    auto socVersion = aclrtGetSocName();
-    INFO_LOG("Current soc version is %s", socVersion);
-    if (strncmp(socVersion, "Ascend310P3", sizeof("Ascend310P3") - 1) == 0) {
+    static std::set<std::string> oldYuvVersion{"Ascend310", "Ascend910A", "Ascend910", "Ascend910B", "Ascend910ProA",
+        "Ascend910ProB", "Ascend910PremiumA"};
+    string socVersion = string(aclrtGetSocName());
+    INFO_LOG("Current soc version is %s", socVersion.c_str());
+    if (oldYuvVersion.find(socVersion) == oldYuvVersion.end()) {
         inBufferSize = inWidthStride * inHeightStride;
     } else {
         inBufferSize = inWidthStride * inHeightStride * 3 / 2;

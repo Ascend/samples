@@ -78,6 +78,7 @@
     wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/dbnet/dbnet.pb
     atc --model=./dbnet.pb --framework=3 --output=./dbnet --soc_version=Ascend310 --output_type=FP32 --input_shape="input_images:1,736,1312,3" --input_format=NHWC
     atc --model=./crnn_static.pb --framework=3 --output=./crnn_static --soc_version=Ascend310 --input_shape="new_input:1,32,100,3" --input_format=NHWC
+    **注：如果在310B芯片上进行模型转换，修改参数--soc_version=Ascend310B1即可**
     ```
 
 ### 样例部署

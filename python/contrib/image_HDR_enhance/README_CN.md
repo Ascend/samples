@@ -32,9 +32,10 @@
        git clone https://github.com/Ascend/samples.git
        ```
        **注：如果需要切换到其它tag版本，以v0.5.0为例，可执行以下命令。**
+       
        ```
        git checkout v0.5.0
-       ```   
+       ```
     - 压缩包方式下载（下载时间较短，但步骤稍微复杂）。   
        **注：如果需要下载其它版本代码，请先请根据前置条件说明进行samples仓分支切换。**   
        ``` 
@@ -43,7 +44,7 @@
         # 3. 开发环境中，执行以下命令，解压zip包。     
         cd ${HOME}    
         unzip ascend-samples-master.zip
-        ```
+       ```
 
 2. 获取此应用中所需要的模型
     | **模型名称** | **模型说明**          | **模型下载路径**                                             |
@@ -55,7 +56,11 @@
     wget https://obs-9be7.obs.cn-east-2.myhuaweicloud.com/003_Atc_Models/AE/ATC%20Model/image_HDR_enhance/image_HDR_enhance.pb   
     atc --model=./image_HDR_enhance.pb --framework=3 --output=image_HDR_enhance --soc_version=Ascend310  --input_shape="input:1,512,512,3" --input_format=NHWC --output_type=FP32
     ```
+    
+    **注：如果在310B芯片上进行转换，修改参数--soc_version=Ascend310B1即可。**
+    
 3. 获取样例需要的测试图片并切换文件夹。
+
     ```
     # 执行以下命令，进入样例的data文件夹中，下载对应的测试图片。
     cd ${HOME}/samples/python/contrib/image_HDR_enhance/data
@@ -74,11 +79,11 @@
     ```
 2. 运行可执行文件。
     ```
-    python3.6 main.py
+    python3 main.py
     ```
 
 ### 查看结果
-运行完成后，会在运行环境的命令行中打印出推理结果。     
+运行完成后，会在运行环境的命令行中打印出推理结果，在out目录下生成结果图片。     
 ![输入图片说明](https://images.gitee.com/uploads/images/2021/1109/150638_2d471e4b_5400693.png "屏幕截图.png")
 ![输入图片说明](https://images.gitee.com/uploads/images/2021/1109/150627_b2f8f08e_5400693.png "屏幕截图.png")
 

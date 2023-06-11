@@ -1,0 +1,15 @@
+repositories {
+//    mavenLocal()
+    google()
+    mavenCentral()
+
+//    maven {
+//        url project(':core').file('libs/repo')
+//    }
+//
+//    flatDir {
+//        dirs 'libs', project(':core').file('libs')
+//    }
+}
+
+ext.extRepo = repositories

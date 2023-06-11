@@ -1,0 +1,52 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'androidx.navigation.safeargs'
+}
+apply from: rootProject.file('./scripts/common.gradle')
+apply from: rootProject.file('./scripts/test_dependencies.gradle')
+apply from: rootProject.file('./scripts/shared_dependencies.gradle')
+
+ext {
+    jacocoCoverageThreshold = 0.38
+}
+
+android {
+    defaultConfig {
+        applicationId "com.chris.depression"
+    }
+
+    signingConfigs {
+        debug {
+            v1SigningEnabled true
+            v2SigningEnabled true
+        }
+        release {
+            keyAlias releaseKeyAlias
+            keyPassword releaseKeyPassword
+            storeFile file('../Leon.key')
+            storePassword releaseKeyStorePassword
+            v1SigningEnabled true
+            v2SigningEnabled true
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        debug {
+            minifyEnabled false
+            applicationIdSuffix '.debug'
+            signingConfig signingConfigs.debug
+        }
+    }
+}
+
+dependencies {
+    implementation project(path: ':GazeView')
+    implementation fileTree(include: ['*.aar'], dir: 'libs')
+}
