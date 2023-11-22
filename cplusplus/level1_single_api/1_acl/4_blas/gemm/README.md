@@ -46,7 +46,7 @@ The sample directory is organized as follows:
 
 ## Prepare single operator model and test data <a name="section4721588590"></a>
 
-1.  To configure CANN basic environment variables and Python environment variables, see [Link](../../../environment/environment_variable_configuration.md).
+1.  To configure CANN basic environment variables and Python environment variables, see [Link](../../../../environment/environment_variable_configuration.md).
 
 2.  Log in to the  development environment  as the running user.
 
@@ -81,7 +81,7 @@ The sample directory is organized as follows:
 
 ## Build and Run <a name="section105241721131111"></a>
 
-1.  To configure CANN basic environment variables and Python environment variables, see [Link](../../../environment/environment_variable_configuration.md).
+1.  To configure CANN basic environment variables and Python environment variables, see [Link](../../../../environment/environment_variable_configuration.md).
 
 2.  Build the code.
     1.  Log in to the  development environment  as the running user.
